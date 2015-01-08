@@ -1,0 +1,27 @@
+language: php
+
+sudo: false
+
+install: composer update
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+matrix:
+  fast_finish: true
+
+before_script:
+  - echo 'date.timezone = "Europe/Berlin"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+
+script:
+  - phpunit
+
+notifications:
+  email:
+    - jerome@kreait.com

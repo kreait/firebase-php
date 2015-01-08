@@ -1,0 +1,9 @@
+*.php diff=php
+
+/.gitignore export-ignore
+/.php_cs export-ignore
+/.travis.yml export-ignore
+
+/tests export-ignore
+
+/phpunit.xml.dist export-ignore

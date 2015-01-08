@@ -1,0 +1,37 @@
+{
+  "name": "kreait/firebase-php",
+  "description": "Firebase REST API client",
+  "keywords": ["firebase", "rest", "api", "http"],
+  "homepage": "https://github.com/kreait/firebase-php",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jérôme Gamez",
+      "homepage": "https://github.com/jeromegamez",
+      "email": "jerome@kreait.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "ext-curl": "*",
+    "egeloen/http-adapter": "~0.5@dev",
+    "psr/log": "~1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.4",
+    "phpspec/prophecy-phpunit": "~1.0",
+    "monolog/monolog": "~1.12",
+    "guzzlehttp/guzzle": "~5.1"
+  },
+  "autoload": {
+    "psr-4": { "Kreait\\Firebase\\": "src/" }
+  },
+  "autoload-dev": {
+    "psr-4": { "Kreait\\Firebase\\": "tests/" }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.x-dev"
+    }
+  }
+}
