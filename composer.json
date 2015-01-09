@@ -20,8 +20,7 @@
   "require-dev": {
     "phpunit/phpunit": "~4.4",
     "phpspec/prophecy-phpunit": "~1.0",
-    "monolog/monolog": "~1.12",
-    "guzzlehttp/guzzle": "~5.1"
+    "monolog/monolog": "~1.12"
   },
   "autoload": {
     "psr-4": { "Kreait\\Firebase\\": "src/" }
