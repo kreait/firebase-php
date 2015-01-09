@@ -1,5 +1,7 @@
 # Firebase PHP Client
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kreait/firebase-php?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Latest Stable Version](https://poser.pugx.org/kreait/firebase-php/v/stable.png)](https://packagist.org/packages/kreait/firebase-php)
 [![Latest Unstable Version](https://poser.pugx.org/kreait/firebase-php/v/unstable.svg)](//packagist.org/packages/leaphly/cart-bundle)
 [![Build Status](https://secure.travis-ci.org/kreait/firebase-php.png?branch=master)](http://travis-ci.org/kreait/firebase-php)
