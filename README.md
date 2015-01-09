@@ -75,5 +75,8 @@ $firebase->delete('path/to/my/location');
 
 ### Development Notes (in Progress)
 
-- We use [chag](https://github.com/mtdowling/chag) for the changelog
-- We use the [PHP Coding Standards Fixer](http://cs.sensiolabs.org) before commiting code
+- [chag](https://github.com/mtdowling/chag) for the changelog
+- [PHP Coding Standards Fixer](http://cs.sensiolabs.org) before commiting code
+- Present tense in commit messages
+- Pull Requests should be rebased into one commit before merging
+
