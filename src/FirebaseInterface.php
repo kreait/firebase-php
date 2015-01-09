@@ -15,6 +15,12 @@ interface FirebaseInterface extends LoggerAwareInterface
     const MAX_TREE_DEPTH = 32;
     const MAX_NODE_KEY_LENGTH_IN_BYTES = 768;
     const FORBIDDEN_NODE_KEY_CHARS = '.$#[]';
+    /**
+     * Returns the base URL.
+     *
+     * @return string
+     */
+    public function getBaseUrl();
 
     /**
      * Returns the data at the given location, or null if not defined.

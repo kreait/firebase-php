@@ -34,6 +34,14 @@ class Reference implements ReferenceInterface
     /**
      * {@inheritdoc}
      */
+    public function getBaseUrl()
+    {
+        return sprintf('%s/%s', $this->firebase->getBaseUrl(), $this->referenceUrl);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function set($data, $location = null)
     {
         $fullLocation = Utils::normalizeLocation(sprintf('%s/%s', $this->referenceUrl, $location));

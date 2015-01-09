@@ -44,6 +44,14 @@ class Firebase implements FirebaseInterface
     /**
      * {@inheritdoc}
      */
+    public function getBaseUrl()
+    {
+        return $this->http->getConfiguration()->getBaseUrl();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function get($location = null)
     {
         return $this->send($location, RequestInterface::METHOD_GET);
@@ -100,6 +108,7 @@ class Firebase implements FirebaseInterface
             throw new \InvalidArgumentException(sprintf('array or object expected, %s given'), gettype($data));
         }
 
+        // When $location is null, the relative URL will be '/.json', which is okay
         $relativeUrl = sprintf('/%s.json', Utils::normalizeLocation($location));
 
         $headers = [
@@ -107,13 +116,8 @@ class Firebase implements FirebaseInterface
             'accept-charset' => 'utf-8',
         ];
 
-        $this->logger->debug(
-            sprintf(
-                '%s request to %s',
-                $method,
-                $this->http->getConfiguration()->getBaseUrl() . $relativeUrl
-            ),
-            ['data_sent' => $data]);
+        // It would have been easier to write $this->http->send(…) but this would not give us a request object
+        // to debug later
         $request = $this->http->getConfiguration()->getMessageFactory()->createRequest(
             $relativeUrl,
             $method,
@@ -122,9 +126,17 @@ class Firebase implements FirebaseInterface
             json_encode($data)
         );
 
+        $fullUrl = sprintf('%s%s', $this->getBaseUrl(), $relativeUrl);
+        $this->logger->debug(
+            sprintf('%s request to %s', $method, $fullUrl),
+            ($data) ? ['data_sent' => $data] : []
+        );
+
         try {
             $response = $this->http->sendRequest($request);
         } catch (HttpAdapterException $e) {
+            $this->logger->error($e->getMessage());
+
             $response = $e->hasResponse() ? $e->getResponse() : null;
             throw FirebaseException::httpError($request, $response);
         }
@@ -145,7 +157,7 @@ class Firebase implements FirebaseInterface
         }
 
         if (!$response->hasBody()) {
-//            $this->logger->debug(
+            //            $this->logger->debug(
 //                sprintf('Received valid, empty response from %s request to %s', $method, $relativeUrl)
 //            );
 
