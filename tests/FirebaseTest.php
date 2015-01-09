@@ -36,11 +36,4 @@ class FirebaseTest extends ProphecyTestCase
 
         $this->assertAttributeSame($http, 'http', $f);
     }
-
-    public function secretProvider()
-    {
-        return [
-            [uniqid()],
-        ];
-    }
 }
