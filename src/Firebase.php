@@ -107,7 +107,13 @@ class Firebase implements FirebaseInterface
             'accept-charset' => 'utf-8',
         ];
 
-        $this->logger->debug(sprintf('%s request to %s', $method, $relativeUrl), ['data_sent' => $data]);
+        $this->logger->debug(
+            sprintf(
+                '%s request to %s',
+                $method,
+                $this->http->getConfiguration()->getBaseUrl() . $relativeUrl
+            ),
+            ['data_sent' => $data]);
         $request = $this->http->getConfiguration()->getMessageFactory()->createRequest(
             $relativeUrl,
             $method,

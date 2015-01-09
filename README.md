@@ -7,7 +7,7 @@
 
 A PHP client library for [http://www.firebase.com](http://www.firebase.com).
 
-### Installation
+##Installation
 
 The recommended way to install Firebase is through
 [Composer](http://getcomposer.org).
@@ -29,7 +29,7 @@ After installing, you need to require Composer's autoloader:
 require 'vendor/autoload.php';
 ```
 
-### Usage
+## Usage
 
 ```php
 use Kreait\Firebase\Firebase;
@@ -59,16 +59,21 @@ $allData = $ref->get();
 $firebase->delete('path/to/my/location');
 ```
 
-#### Output
+### Output
 
 ```bash
-[2015-01-09 12:27:33] firebase.DEBUG: PUT request to /path/to/my/location.json {"data_sent":{"key":"value"}} []
-[2015-01-09 12:27:34] firebase.DEBUG: PATCH request to /path/to/my/location.json {"data_sent":{"key":"new value"}} []
-[2015-01-09 12:27:34] firebase.DEBUG: POST request to /path/to/my/location.json {"data_sent":{"key1":"value1"}} []
-[2015-01-09 12:27:35] firebase.DEBUG: POST request to /path/to/my/location.json {"data_sent":{"key2":"value2"}} []
-[2015-01-09 12:27:36] firebase.DEBUG: POST request to /path/to/my/location.json {"data_sent":{"key3":"value3"}} []
-[2015-01-09 12:27:36] firebase.DEBUG: POST request to /path/to/my/location.json {"data_sent":{"key4":"value4"}} []
-[2015-01-09 12:27:37] firebase.DEBUG: POST request to /path/to/my/location.json {"data_sent":{"key5":"value5"}} []
-[2015-01-09 12:27:37] firebase.DEBUG: GET request to /path/to/my/location.json {"data_sent":null} []
-[2015-01-09 12:27:38] firebase.DEBUG: DELETE request to /path/to/my/location.json {"data_sent":null} []
+[2015-01-09 12:42:37] firebase.DEBUG: PUT request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key":"value"}} []
+[2015-01-09 12:42:38] firebase.DEBUG: PATCH request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key":"new value"}} []
+[2015-01-09 12:42:39] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key1":"value1"}} []
+[2015-01-09 12:42:39] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key2":"value2"}} []
+[2015-01-09 12:42:40] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key3":"value3"}} []
+[2015-01-09 12:42:40] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key4":"value4"}} []
+[2015-01-09 12:42:41] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key5":"value5"}} []
+[2015-01-09 12:42:42] firebase.DEBUG: GET request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":null} []
+[2015-01-09 12:42:42] firebase.DEBUG: DELETE request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":null} []
 ```
+
+### Development Notes (in Progress)
+
+- We use [chag](https://github.com/mtdowling/chag) for the changelog
+- We use the [PHP Coding Standards Fixer](http://cs.sensiolabs.org) before commiting code
