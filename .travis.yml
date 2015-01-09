@@ -25,3 +25,9 @@ script:
 notifications:
   email:
     - jerome@kreait.com
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/619e653eb8741123550e
+    on_success: change
+    on_failure: always
+    on_start: false
