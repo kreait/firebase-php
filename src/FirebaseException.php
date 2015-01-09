@@ -56,9 +56,9 @@ class FirebaseException extends \Exception
         $this->response = $response;
     }
 
-    public static function baseUrlIsInvalid($url)
+    public static function urlIsInvalid($url)
     {
-        return new self(sprintf('The base url "%s" is invalid.', $url));
+        return new self(sprintf('The url "%s" is invalid.', $url));
     }
 
     public static function baseUrlSchemeMustBeHttps($url)
@@ -71,20 +71,20 @@ class FirebaseException extends \Exception
         return new self(sprintf('A location "%s" is invalid.', $location));
     }
 
-    public static function nodeKeyContainsForbiddenChars($key, $forbiddenChars)
+    public static function locationKeyContainsForbiddenChars($key, $forbiddenChars)
     {
         return new self(
             sprintf(
-                'The node key "%s" contains on of the following invalid characters: %s',
+                'The location key "%s" contains on of the following invalid characters: %s',
                 $key,
                 $forbiddenChars
             )
         );
     }
 
-    public static function locationKeyHasTooManyLevels($allowed, $given)
+    public static function locationHasTooManyKeys($allowed, $given)
     {
-        return new self(sprintf('A location key must not have more than %s levels, %s given.', $allowed, $given));
+        return new self(sprintf('A location key must not have more than %s keys, %s given.', $allowed, $given));
     }
 
     public static function locationKeyIsTooLong($allowed, $given)

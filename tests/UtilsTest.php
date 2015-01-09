@@ -23,12 +23,12 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testNormalizeInvalidLocation()
     {
-        $max = FirebaseInterface::MAX_TREE_DEPTH;
+        $max = FirebaseRestrictions::MAXIMUM_DEPTH_OF_CHILD_NODES;
         $maxPlusOne = $max + 1;
 
         $this->setExpectedException(
             '\Kreait\Firebase\FirebaseException',
-            sprintf('A location key must not have more than %s levels, %s given.', $max, $maxPlusOne)
+            sprintf('A location key must not have more than %s keys, %s given.', $max, $maxPlusOne)
         );
 
         Utils::normalizeLocation(str_pad('', $maxPlusOne * 2, "x/"));
@@ -43,9 +43,9 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(
             '\Kreait\Firebase\FirebaseException',
             sprintf(
-                'The node key "%s" contains on of the following invalid characters: %s',
+                'The location key "%s" contains on of the following invalid characters: %s',
                 $location,
-                FirebaseInterface::FORBIDDEN_NODE_KEY_CHARS)
+                FirebaseRestrictions::FORBIDDEN_NODE_KEY_CHARS)
         );
 
         Utils::normalizeLocation($location);
@@ -53,7 +53,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testNormalizeLocationWithTooLongNodeKey()
     {
-        $max = FirebaseInterface::MAX_NODE_KEY_LENGTH_IN_BYTES;
+        $max = FirebaseRestrictions::KEY_LENGTH_IN_BYTES;
         $maxPlusOne = $max + 1;
 
         $location = str_pad('', $maxPlusOne, 'x');
@@ -92,7 +92,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Kreait\Firebase\FirebaseException
-     * @expectedExceptionMessage The base url "invalid_base_url" is invalid.
+     * @expectedExceptionMessage The url "invalid_base_url" is invalid.
      */
     public function testNormalizeInvalidBaseUrl()
     {
@@ -120,7 +120,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 
     public function locationsWithInvalidCharProvider()
     {
-        $chars = str_split(FirebaseInterface::FORBIDDEN_NODE_KEY_CHARS);
+        $chars = str_split(FirebaseRestrictions::FORBIDDEN_NODE_KEY_CHARS);
         $array = [];
         foreach ($chars as $c) {
             $array[] = [sprintf('%s%s%s', uniqid(), $c, uniqid())];
