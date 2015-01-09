@@ -139,18 +139,17 @@ class Firebase implements FirebaseInterface
         }
 
         if (!$response->hasBody()) {
-            $this->logger->debug(
-                sprintf('Received valid, empty response from %s request to %s', $method, $relativeUrl)
-            );
+//            $this->logger->debug(
+//                sprintf('Received valid, empty response from %s request to %s', $method, $relativeUrl)
+//            );
 
             return;
         }
 
         $contents = $response->getBody()->getContents();
-        $this->logger->debug(
-            sprintf('Received valid response from %s request to %s', $method, $relativeUrl),
-            ['data_received' => $contents]
-        );
+//        $this->logger->debug(
+//            sprintf('Received valid response from %s request to %s', $method, $relativeUrl)
+//        );
 
         return json_decode($contents, true);
     }
