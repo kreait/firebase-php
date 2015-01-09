@@ -34,11 +34,41 @@ require 'vendor/autoload.php';
 ```php
 use Kreait\Firebase\Firebase;
 use Kreait\Firebase\Reference;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
-$firebase = new Firebase('https://my-application-1234.firebaseio.com');
+require __DIR__.'/vendor/autoload.php';
 
-$allData = $firebase->get();
+$logger = new Logger('firebase');
+$logger->pushHandler(new StreamHandler('php://stdout'));
 
+$firebase = new Firebase('https://brilliant-torch-1474.firebaseio.com');
+$firebase->setLogger($logger);
+
+$firebase->set(["key" => "value"], 'path/to/my/location');
+$firebase->update(["key" => "new value"], 'path/to/my/location');
+
+$ref = new Reference($firebase, 'path/to/my/location');
 for ($i = 1; $i <= 5; $i++) {
-    $firebase->set()
+    $ref->push(['key' . $i => 'value' . $i]);
+    // alternative: $firebase->push(['key' . $i => 'value' . $i], 'path/to/my/location');
 }
+
+$allData = $ref->get();
+
+$firebase->delete('path/to/my/location');
+```
+
+#### Output
+
+```bash
+[2015-01-09 12:27:33] firebase.DEBUG: PUT request to /path/to/my/location.json {"data_sent":{"key":"value"}} []
+[2015-01-09 12:27:34] firebase.DEBUG: PATCH request to /path/to/my/location.json {"data_sent":{"key":"new value"}} []
+[2015-01-09 12:27:34] firebase.DEBUG: POST request to /path/to/my/location.json {"data_sent":{"key1":"value1"}} []
+[2015-01-09 12:27:35] firebase.DEBUG: POST request to /path/to/my/location.json {"data_sent":{"key2":"value2"}} []
+[2015-01-09 12:27:36] firebase.DEBUG: POST request to /path/to/my/location.json {"data_sent":{"key3":"value3"}} []
+[2015-01-09 12:27:36] firebase.DEBUG: POST request to /path/to/my/location.json {"data_sent":{"key4":"value4"}} []
+[2015-01-09 12:27:37] firebase.DEBUG: POST request to /path/to/my/location.json {"data_sent":{"key5":"value5"}} []
+[2015-01-09 12:27:37] firebase.DEBUG: GET request to /path/to/my/location.json {"data_sent":null} []
+[2015-01-09 12:27:38] firebase.DEBUG: DELETE request to /path/to/my/location.json {"data_sent":null} []
+```
