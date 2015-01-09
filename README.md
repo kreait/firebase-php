@@ -1,7 +1,9 @@
 # Firebase PHP Client
 
 [![Latest Stable Version](https://poser.pugx.org/kreait/firebase-php/v/stable.png)](https://packagist.org/packages/kreait/firebase-php)
+[![Latest Unstable Version](https://poser.pugx.org/kreait/firebase-php/v/unstable.svg)](//packagist.org/packages/leaphly/cart-bundle)
 [![Build Status](https://secure.travis-ci.org/kreait/firebase-php.png?branch=master)](http://travis-ci.org/kreait/firebase-php)
+[![License](https://poser.pugx.org/kreait/firebase-php/license.svg)](https://packagist.org/packages/leaphly/cart-bundle)
 
 A PHP client library for [http://www.firebase.com](http://www.firebase.com).
 
