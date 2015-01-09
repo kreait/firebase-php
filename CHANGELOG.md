@@ -1,6 +1,6 @@
 # CHANGELOG
 
-# Unreleased
+## Unreleased
 
 - The logger output now is less verbose and includes full URLs
 - The README now includes an usage example
