@@ -115,15 +115,15 @@ $firebase->delete('data/users/john');
 #### Output
 
 ```bash
-[2015-01-09 12:42:37] firebase.DEBUG: PUT request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key":"value"}} []
-[2015-01-09 12:42:38] firebase.DEBUG: PATCH request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key":"new value"}} []
-[2015-01-09 12:42:39] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key1":"value1"}} []
-[2015-01-09 12:42:39] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key2":"value2"}} []
-[2015-01-09 12:42:40] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key3":"value3"}} []
-[2015-01-09 12:42:40] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key4":"value4"}} []
-[2015-01-09 12:42:41] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key5":"value5"}} []
-[2015-01-09 12:42:42] firebase.DEBUG: GET request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":null} []
-[2015-01-09 12:42:42] firebase.DEBUG: DELETE request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":null} []
+[2015-01-10 04:11:41] firebase.DEBUG: PUT request to https://brilliant-torch-1474.firebaseio.com/data/users/john.json {"data_sent":{"name":"John Doe","email":"john@doh.com"}} []
+[2015-01-10 04:11:42] firebase.DEBUG: PATCH request to https://brilliant-torch-1474.firebaseio.com/data/users/john.json {"data_sent":{"email":"john@doe.com"}} []
+[2015-01-10 04:11:43] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/data/users.json {"data_sent":{"name":"Name 1"}} []
+[2015-01-10 04:11:43] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/data/users.json {"data_sent":{"name":"Name 2"}} []
+[2015-01-10 04:11:44] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/data/users.json {"data_sent":{"name":"Name 3"}} []
+[2015-01-10 04:11:44] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/data/users.json {"data_sent":{"name":"Name 4"}} []
+[2015-01-10 04:11:45] firebase.DEBUG: POST request to https://brilliant-torch-1474.firebaseio.com/data/users.json {"data_sent":{"name":"Name 5"}} []
+[2015-01-10 04:11:46] firebase.DEBUG: GET request to https://brilliant-torch-1474.firebaseio.com/data/users.json [] []
+[2015-01-10 04:11:46] firebase.DEBUG: DELETE request to https://brilliant-torch-1474.firebaseio.com/data/users/john.json [] []
 ```
 
 
