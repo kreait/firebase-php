@@ -5,8 +5,9 @@
 [![Packagist](https://img.shields.io/packagist/l/kreait/firebase-php.svg?style=flat-square)](https://github.com/kreait/firebase-php/blob/master/LICENSE)
 [![Gitter](https://img.shields.io/badge/Gitter-Join%20Chat-45cba1.svg?style=flat-square)](https://gitter.im/kreait/firebase-php)
 
+A PHP client for [http://www.firebase.com](http://www.firebase.com).
 
-A PHP client library for [http://www.firebase.com](http://www.firebase.com).
+---
 
 ##Installation
 
@@ -24,6 +25,12 @@ Next, run the Composer command to install the latest stable version:
 composer require kreait/firebase-php
 ```
 
+Until the next version of the HTTP Adapter [with baseUrl support](https://github.com/egeloen/ivory-http-adapter/pull/52) is released, you also have to require the current development version of that:
+
+```bash
+composer require egeloen/http-adapter ~0.6@dev
+```
+
 After installing, you need to require Composer's autoloader:
 
 ```php
@@ -31,6 +38,52 @@ require 'vendor/autoload.php';
 ```
 
 ## Usage
+
+### Basic commands
+
+```php
+use Kreait\Firebase\Firebase;
+
+$firebase = new Firebase('https://brilliant-torch-1474.firebaseio.com');
+
+$firebase->set(['name' => 'John Doe', 'email' => 'john@doh.com'], 'data/users/john');
+$firebase->update(['email' => 'john@doe.com'], 'data/users/john');
+$firebase->push(['name' => 'Jane Doe', 'email' => 'jane@doe.com'], 'data/users');
+$firebase->delete('data/users/john');
+
+```
+
+### Using references
+
+A reference is a shortcut to a subtree of your Firebase data. You can use the same methods as with a `Firebase` object, with the addition of being able to omit the location parameter when performing a `push` or a `delete`.
+
+```php
+use Kreait\Firebase\Firebase;
+use Kreait\Firebase\Reference;
+
+$firebase = new Firebase('https://brilliant-torch-1474.firebaseio.com');
+
+$users = new Reference($firebase, 'data/users');
+$firebase->set(['name' => 'Jack Doe', 'email' => 'jack@doh.com'], 'jack');
+$firebase->update(['email' => 'jack@doe.com'], 'jack');
+$firebase->push(['name' => 'Jane Doe', 'email' => 'jane@doe.com']);
+$firebase->delete('jack');
+$firebase->delete();
+```
+
+### Use your own HTTP client
+
+The Firebase client uses the [HTTP Adapter](https://github.com/egeloen/ivory-http-adapter) by Eric Geloen which enables support for a multitude of HTTP clients. If you want to override the default HTTP Client (cURL) used by Firebase, you can use [one of the supported HTTP adapters](https://github.com/egeloen/ivory-http-adapter/blob/master/doc/adapters.md) and use it as the second parameter when creating a Firebase instance:
+
+```php
+use Ivory\HttpAdapter\FopenHttpAdapter;
+use Kreait\Firebase\Firebase;
+
+$http = new FopenHttpAdapter();
+$firebase = new Firebase('https://brilliant-torch-1474.firebaseio.com', $http);
+```
+
+## Extended Example
 
 ```php
 use Kreait\Firebase\Firebase;
@@ -46,21 +99,20 @@ $logger->pushHandler(new StreamHandler('php://stdout'));
 $firebase = new Firebase('https://brilliant-torch-1474.firebaseio.com');
 $firebase->setLogger($logger);
 
-$firebase->set(["key" => "value"], 'path/to/my/location');
-$firebase->update(["key" => "new value"], 'path/to/my/location');
+$firebase->set(['name' => 'John Doe', 'email' => 'john@doh.com'], 'data/users/john');
+$firebase->update(['email' => 'john@doe.com'], 'data/users/john');
 
-$ref = new Reference($firebase, 'path/to/my/location');
+$ref = new Reference($firebase, 'data/users');
 for ($i = 1; $i <= 5; $i++) {
-    $ref->push(['key' . $i => 'value' . $i]);
-    // alternative: $firebase->push(['key' . $i => 'value' . $i], 'path/to/my/location');
+    $ref->push(['name' => 'Name ' . $i]);
 }
 
-$allData = $ref->get();
+$allUsers = $ref->get();
 
-$firebase->delete('path/to/my/location');
+$firebase->delete('data/users/john');
 ```
 
-### Output
+#### Output
 
 ```bash
 [2015-01-09 12:42:37] firebase.DEBUG: PUT request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":{"key":"value"}} []
@@ -74,7 +126,8 @@ $firebase->delete('path/to/my/location');
 [2015-01-09 12:42:42] firebase.DEBUG: DELETE request to https://brilliant-torch-1474.firebaseio.com/path/to/my/location.json {"data_sent":null} []
 ```
 
-### Development Notes (in Progress)
+
+## Development Notes (in Progress)
 
 - [chag](https://github.com/mtdowling/chag) for the changelog
 - [PHP Coding Standards Fixer](http://cs.sensiolabs.org) before commiting code
