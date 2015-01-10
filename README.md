@@ -53,7 +53,7 @@ $firebase->delete('data/users/john');
 
 ```
 
-### Using references
+### References
 
 A reference is a shortcut to a subtree of your Firebase data. You can use the same methods as with a `Firebase` object, with the addition of being able to omit the location parameter when performing a `push` or a `delete`.
 
@@ -64,11 +64,11 @@ use Kreait\Firebase\Reference;
 $firebase = new Firebase('https://brilliant-torch-1474.firebaseio.com');
 
 $users = new Reference($firebase, 'data/users');
-$firebase->set(['name' => 'Jack Doe', 'email' => 'jack@doh.com'], 'jack');
-$firebase->update(['email' => 'jack@doe.com'], 'jack');
-$firebase->push(['name' => 'Jane Doe', 'email' => 'jane@doe.com']);
-$firebase->delete('jack');
-$firebase->delete();
+$users->set(['name' => 'Jack Doe', 'email' => 'jack@doh.com'], 'jack');
+$users->update(['email' => 'jack@doe.com'], 'jack');
+$users->push(['name' => 'Jane Doe', 'email' => 'jane@doe.com']);
+$users->delete('jack');
+$users->delete();
 ```
 
 ### Use your own HTTP client
