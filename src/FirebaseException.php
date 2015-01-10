@@ -92,41 +92,34 @@ class FirebaseException extends \Exception
         return new self(sprintf('A location key must not be longer than %s bytes, %s bytes given.', $allowed, $given));
     }
 
-    public static function requestMadeOverHttpsInsteadOfHttp()
-    {
-        return new self('Firebase requests HTTPS connections, HTTP connection given.');
-    }
+    public static function serverError(
+        RequestInterface $request = null,
+        ResponseInterface $response = null,
+        \Exception $previous = null
+    ) {
+        $requestBody = null;
+        $responseBody = null;
+        if ($request->hasBody()) {
+            $requestBody = (string) $request->getBody()->getContents();
+        }
+        if ($response && $response->hasBody()) {
+            $responseBody = (string) $response->getBody()->getContents();
+        }
 
-    public static function invalidDataOrLocation(RequestInterface $request = null, ResponseInterface $response = null)
-    {
-        $e = new self('Invalid location, PUT or POST data.');
-        $e->setRequest($request);
-        $e->setResponse($response);
+        $message = sprintf(
+            'Server error (%s) for URL %s with data "%s"',
+            $response->getStatusCode(),
+            $request->getUrl(),
+            $requestBody
+        );
 
-        return $e;
-    }
+        if ($responseBody && $responseData = json_decode($responseBody, true)) {
+            if (isset($responseData['error'])) {
+                $message = sprintf('%s: %s', $message, $responseData['error']);
+            }
+        }
 
-    public static function noNameSpaceSpecified(RequestInterface $request = null, ResponseInterface $response = null)
-    {
-        $e = new self('The API call did not specify a namespace.');
-        $e->setRequest($request);
-        $e->setResponse($response);
-
-        return $e;
-    }
-
-    public static function forbiddenAction(RequestInterface $request = null, ResponseInterface $response = null)
-    {
-        $e = new self('Forbidden action. Please review your client settings or check the Firebase settings.');
-        $e->setRequest($request);
-        $e->setResponse($response);
-
-        return $e;
-    }
-
-    public static function httpError(RequestInterface $request = null, ResponseInterface $response = null)
-    {
-        $e = new self('HTTP Error');
+        $e = new self($message, null, $previous);
         $e->setRequest($request);
         $e->setResponse($response);
 

@@ -126,48 +126,31 @@ class Firebase implements FirebaseInterface
             json_encode($data)
         );
 
-        $fullUrl = sprintf('%s%s', $this->getBaseUrl(), $relativeUrl);
         $this->logger->debug(
-            sprintf('%s request to %s', $method, $fullUrl),
+            sprintf('%s request to %s', $method, $request->getUrl()),
             ($data) ? ['data_sent' => $data] : []
         );
 
         try {
             $response = $this->http->sendRequest($request);
         } catch (HttpAdapterException $e) {
-            $this->logger->error($e->getMessage());
-
             $response = $e->hasResponse() ? $e->getResponse() : null;
-            throw FirebaseException::httpError($request, $response);
+
+            $fe = FirebaseException::serverError($request, $response, $e);
+            $this->logger->error($fe->getMessage());
+            throw $fe;
         }
 
-        switch ($response->getStatusCode()) {
-            case 400:
-                $this->logger->warning('Invalid location or PUT/POST data');
-                throw FirebaseException::invalidDataOrLocation($request, $response);
-            case 403:
-                $this->logger->warning('Forbidden');
-                throw FirebaseException::forbiddenAction($request, $response);
-            case 404:
-                $this->logger->warning('Request made of HTTP instead of HTTPS');
-                throw FirebaseException::requestMadeOverHttpsInsteadOfHttp($request, $response);
-            case 417:
-                $this->logger->warning('No namespace specified');
-                throw FirebaseException::noNameSpaceSpecified($request, $response);
+        if ($response->getStatusCode() >= 400) {
+            $fe = FirebaseException::serverError($request, $response);
+            $this->logger->error($fe->getMessage());
+            throw $fe;
         }
 
-        if (!$response->hasBody()) {
-            //            $this->logger->debug(
-//                sprintf('Received valid, empty response from %s request to %s', $method, $relativeUrl)
-//            );
-
-            return;
+        $contents = null;
+        if ($response->hasBody()) {
+            $contents = $response->getBody()->getContents();
         }
-
-        $contents = $response->getBody()->getContents();
-//        $this->logger->debug(
-//            sprintf('Received valid response from %s request to %s', $method, $relativeUrl)
-//        );
 
         return json_decode($contents, true);
     }
