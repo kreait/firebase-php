@@ -15,7 +15,7 @@ class Reference implements ReferenceInterface
     use \Psr\Log\LoggerAwareTrait;
 
     /**
-     * @var Firebase
+     * @var FirebaseInterface
      */
     private $firebase;
 
@@ -24,7 +24,7 @@ class Reference implements ReferenceInterface
      */
     private $referenceUrl;
 
-    public function __construct(Firebase $firebase, $referenceUrl)
+    public function __construct(FirebaseInterface $firebase, $referenceUrl)
     {
         $this->firebase = $firebase;
         $this->referenceUrl = Utils::normalizeLocation($referenceUrl);
