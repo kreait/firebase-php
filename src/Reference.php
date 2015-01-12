@@ -24,11 +24,11 @@ class Reference implements ReferenceInterface
      */
     private $referenceUrl;
 
-    public function __construct(FirebaseInterface $firebase, $referenceUrl)
+    public function __construct(FirebaseInterface $firebase, $location)
     {
         $this->firebase = $firebase;
-        $this->referenceUrl = Utils::normalizeLocation($referenceUrl);
-        $this->logger = new NullLogger();
+        $this->referenceUrl = Utils::normalizeLocation($location);
+        $this->logger = $firebase->getLogger();
     }
 
     /**
@@ -37,6 +37,14 @@ class Reference implements ReferenceInterface
     public function getBaseUrl()
     {
         return sprintf('%s/%s', $this->firebase->getBaseUrl(), $this->referenceUrl);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLogger()
+    {
+        return $this->logger;
     }
 
     /**

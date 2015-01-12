@@ -9,6 +9,7 @@
 namespace Kreait\Firebase;
 
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 
 interface FirebaseInterface extends LoggerAwareInterface
 {
@@ -20,12 +21,19 @@ interface FirebaseInterface extends LoggerAwareInterface
     public function getBaseUrl();
 
     /**
+     * Returns the logger.
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger();
+
+    /**
      * Returns the data at the given location, or null if not defined.
      *
      * @param  string|null $location The location.
      * @return array|null  The data at the given location, or null if not defined.
      */
-    public function get($location = null);
+    public function get($location);
 
     /**
      * Write or replace data at the given location.
@@ -37,18 +45,18 @@ interface FirebaseInterface extends LoggerAwareInterface
     public function set($data, $location);
 
     /**
-     * Generates a new child location using a unique key and returns the key.
+     * Generates a new child and returns its key.
      *
-     * @param  array|object $data
-     * @param  string       $location
-     * @return string       The child key.
+     * @param  array|object $data The data to be pushed.
+     * @param  string       $location The location to push the new child to.
+     * @return string       The new child's key.
      */
     public function push($data, $location);
 
     /**
-     * Update some of the keys for a defined path without replacing all of the data.
+     * Update the given fields in a .
      *
-     * @param  array|object $data
+     * @param  array|object $data The fields
      * @param  string       $location
      * @return array        The written fields. Submitted empty fields are omitted.
      */

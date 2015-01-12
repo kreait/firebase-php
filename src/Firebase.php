@@ -52,7 +52,15 @@ class Firebase implements FirebaseInterface
     /**
      * {@inheritdoc}
      */
-    public function get($location = null)
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get($location)
     {
         return $this->send($location, RequestInterface::METHOD_GET);
     }
@@ -70,7 +78,8 @@ class Firebase implements FirebaseInterface
      */
     public function push($data, $location)
     {
-        return $this->send($location, RequestInterface::METHOD_POST, $data);
+        $data = $this->send($location, RequestInterface::METHOD_POST, $data);
+        return $data['name'];
     }
 
     /**
