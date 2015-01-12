@@ -8,11 +8,11 @@
 
 namespace Kreait\Firebase;
 
-use Psr\Log\NullLogger;
+use Psr\Log\LoggerAwareTrait;
 
 class Reference implements ReferenceInterface
 {
-    use \Psr\Log\LoggerAwareTrait;
+    use LoggerAwareTrait;
 
     /**
      * @var FirebaseInterface

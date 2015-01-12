@@ -12,10 +12,12 @@ use Ivory\HttpAdapter\CurlHttpAdapter;
 use Ivory\HttpAdapter\HttpAdapterException;
 use Ivory\HttpAdapter\HttpAdapterInterface;
 use Ivory\HttpAdapter\Message\RequestInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 
 class Firebase implements FirebaseInterface
 {
-    use \Psr\Log\LoggerAwareTrait;
+    use LoggerAwareTrait;
 
     /**
      * The HTTP adapter.
@@ -33,7 +35,7 @@ class Firebase implements FirebaseInterface
      */
     public function __construct($baseUrl, HttpAdapterInterface $http = null)
     {
-        $this->logger = new \Psr\Log\NullLogger();
+        $this->logger = new NullLogger();
         $this->http = $http ?: new CurlHttpAdapter();
 
         $configuration = $this->http->getConfiguration();
