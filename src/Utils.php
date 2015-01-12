@@ -35,7 +35,7 @@ class Utils
      */
     public static function normalizeLocation($location)
     {
-        $location = trim($location, '/');
+        $location = trim((string) $location, '/');
         FirebaseRestrictions::checkLocation($location);
 
         return implode('/', explode('/', $location));
