@@ -97,7 +97,7 @@ class Firebase implements FirebaseInterface
      */
     public function delete($location)
     {
-        return $this->send($location, RequestInterface::METHOD_DELETE);
+        $this->send($location, RequestInterface::METHOD_DELETE);
     }
 
     /**

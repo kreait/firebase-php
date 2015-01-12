@@ -84,7 +84,7 @@ class Reference implements ReferenceInterface
     {
         $fullLocation = Utils::normalizeLocation(sprintf('%s/%s', $this->referenceUrl, $location));
 
-        return $this->firebase->delete($fullLocation);
+        $this->firebase->delete($fullLocation);
     }
 
     /**
