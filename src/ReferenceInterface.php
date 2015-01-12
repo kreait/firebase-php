@@ -13,7 +13,7 @@ interface ReferenceInterface extends FirebaseInterface
     /**
      * {@inheritdoc}
      */
-    public function get($location = null);
+    public function get($location = null, array $options = []);
 
     /**
      * {@inheritdoc}

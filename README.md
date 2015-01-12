@@ -50,6 +50,8 @@ $firebase->set(['name' => 'John Doe', 'email' => 'john@doh.com'], 'data/users/jo
 $firebase->update(['email' => 'john@doe.com'], 'data/users/john');
 $firebase->push(['name' => 'Jane Doe', 'email' => 'jane@doe.com'], 'data/users');
 $firebase->delete('data/users/john');
+$firebase->get('data/users');
+$firebase->get('data/users', ['shallow' => true]); // Limit the depth of the data received
 
 ```
 

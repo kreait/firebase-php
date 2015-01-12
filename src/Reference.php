@@ -90,10 +90,10 @@ class Reference implements ReferenceInterface
     /**
      * {@inheritdoc}
      */
-    public function get($location = null)
+    public function get($location = null, array $options = [])
     {
         $fullLocation = Utils::normalizeLocation(sprintf('%s/%s', $this->referenceUrl, $location));
 
-        return $this->firebase->get($fullLocation);
+        return $this->firebase->get($fullLocation, $options);
     }
 }
