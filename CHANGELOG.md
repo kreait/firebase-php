@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 0.2 - 2015-01-13
 
 - Better handling of server errors
     + Instead of using hard coded exception messages for assumed server errors, a single server error exception now includes the server's error message, if available.
