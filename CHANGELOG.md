@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+- The Firebase library now has its own base URL handling so that a stable version of the HTTP adapter can be used.
+
 ## 0.2 - 2015-01-13
 
 - Better handling of server errors
