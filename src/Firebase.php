@@ -27,6 +27,13 @@ class Firebase implements FirebaseInterface
     private $http;
 
     /**
+     * The base URL
+     *
+     * @var string
+     */
+    private $baseUrl;
+
+    /**
      * Firebase client initialization.
      *
      * @param  string               $baseUrl The Firebase app base URL.
@@ -37,9 +44,10 @@ class Firebase implements FirebaseInterface
     {
         $this->logger = new NullLogger();
         $this->http = $http ?: new CurlHttpAdapter();
+        $this->baseUrl = Utils::normalizeBaseUrl($baseUrl);
 
         $configuration = $this->http->getConfiguration();
-        $configuration->setBaseUrl(Utils::normalizeBaseUrl($baseUrl));
+
         $configuration->setKeepAlive(true);
     }
 
@@ -48,7 +56,7 @@ class Firebase implements FirebaseInterface
      */
     public function getBaseUrl()
     {
-        return $this->http->getConfiguration()->getBaseUrl();
+        return $this->baseUrl;
     }
 
     /**
@@ -128,6 +136,8 @@ class Firebase implements FirebaseInterface
             $relativeUrl = sprintf('%s?%s', $relativeUrl, http_build_query($requestParams, '', '&'));
         }
 
+        $absoluteUrl = sprintf('%s%s', $this->getBaseUrl(), $relativeUrl);
+
         $headers = [
             'accept' => 'application/json',
             'accept-charset' => 'utf-8',
@@ -136,7 +146,7 @@ class Firebase implements FirebaseInterface
         // It would have been easier to write $this->http->send(…) but this would not
         // give us a request object to debug later
         $request = $this->http->getConfiguration()->getMessageFactory()->createRequest(
-            $relativeUrl,
+            $absoluteUrl,
             $method,
             RequestInterface::PROTOCOL_VERSION_1_1,
             $headers,

@@ -105,10 +105,6 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data, $result);
     }
 
-    /**
-     * @covers Kreait\Firebase\Firebase::createRequestParams
-     * @covers Kreait\Firebase\Firebase::send
-     */
     public function testGetWithShallowOption()
     {
         $data = [
