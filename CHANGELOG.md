@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.3 - 2015-01-20
+
+- Fixed an error where the throw of an exception would throw an exception because of a wrong usage of `sprintf()`
+
 ## 0.2.2 - 2015-01-20
 
 - Fixed a case where an exception would be thrown inside an exception when no response was present.
