@@ -59,7 +59,7 @@ interface FirebaseInterface extends LoggerAwareInterface
      *
      * @param  array|object $data The fields
      * @param  string       $location
-     * @return array        The written fields. Submitted empty fields are omitted.
+     * @return array        The written fields.
      */
     public function update($data, $location);
 
