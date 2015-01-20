@@ -8,6 +8,7 @@
 
 namespace Kreait\Firebase;
 
+use Ivory\HttpAdapter\HttpAdapterException;
 use Ivory\HttpAdapter\Message\ResponseInterface;
 use Ivory\HttpAdapter\Message\RequestInterface;
 
@@ -87,7 +88,12 @@ class FirebaseException extends \Exception
         return new self(sprintf('A location key must not be longer than %s bytes, %s bytes given.', $allowed, $given));
     }
 
-    public static function serverError(
+    public static function httpAdapterError(HttpAdapterException $e)
+    {
+        return new self(sprintf('HTTP Error: %s', $e->getMessage()), null, $e);
+    }
+
+    public static function httpError(
         RequestInterface $request = null,
         ResponseInterface $response = null,
         \Exception $previous = null
