@@ -99,16 +99,18 @@ class FirebaseException extends \Exception
     ) {
         $requestBody = null;
         $responseBody = null;
+
         if ($request->hasBody()) {
             $requestBody = (string) $request->getBody()->getContents();
         }
+
         if ($response && $response->hasBody()) {
             $responseBody = (string) $response->getBody()->getContents();
         }
 
         $message = sprintf(
             'Server error (%s) for URL %s with data "%s"',
-            $response->getStatusCode(),
+            $response ? $response->getStatusCode() : 'Unknown',
             $request->getUrl(),
             $requestBody
         );
