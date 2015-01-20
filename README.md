@@ -2,6 +2,8 @@
 
 [![Packagist](https://img.shields.io/packagist/v/kreait/firebase-php.svg?style=flat-square)](https://packagist.org/packages/kreait/firebase-php)
 [![Travis](https://img.shields.io/travis/kreait/firebase-php.svg?style=flat-square)](https://travis-ci.org/kreait/firebase-php)
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/kreait/firebase-php.svg?style=flat-square)](https://scrutinizer-ci.com/g/kreait/firebase-php/)
+[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/kreait/firebase-php.svg?style=flat-square)](https://scrutinizer-ci.com/g/kreait/firebase-php/code-structure/)
 [![Packagist](https://img.shields.io/packagist/l/kreait/firebase-php.svg?style=flat-square)](https://github.com/kreait/firebase-php/blob/master/LICENSE)
 [![Gitter](https://img.shields.io/badge/Gitter-Join%20Chat-45cba1.svg?style=flat-square)](https://gitter.im/kreait/firebase-php)
 
