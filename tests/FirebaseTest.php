@@ -10,6 +10,7 @@ namespace Kreait\Firebase;
 
 use Ivory\HttpAdapter\Configuration;
 use Ivory\HttpAdapter\FopenHttpAdapter;
+use Ivory\HttpAdapter\HttpAdapterException;
 use Ivory\HttpAdapter\HttpAdapterInterface;
 use Ivory\HttpAdapter\Message\Response;
 use Ivory\HttpAdapter\Message\Stream\StringStream;
@@ -73,7 +74,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
         $http
             ->expects($this->once())
             ->method('sendRequest')
-            ->willThrowException($e = new \Ivory\HttpAdapter\HttpAdapterException('Some exception'));
+            ->willThrowException($e = new HttpAdapterException('Some exception'));
 
         $data = ['does' => 'not matter'];
 
