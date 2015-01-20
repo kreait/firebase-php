@@ -161,15 +161,13 @@ class Firebase implements FirebaseInterface
         try {
             $response = $this->http->sendRequest($request);
         } catch (HttpAdapterException $e) {
-            $response = $e->hasResponse() ? $e->getResponse() : null;
-
-            $fe = FirebaseException::serverError($request, $response, $e);
+            $fe = FirebaseException::httpAdapterError($e);
             $this->logger->error($fe->getMessage());
             throw $fe;
         }
 
         if ($response->getStatusCode() >= 400) {
-            $fe = FirebaseException::serverError($request, $response);
+            $fe = FirebaseException::httpError($request, $response);
             $this->logger->error($fe->getMessage());
             throw $fe;
         }
