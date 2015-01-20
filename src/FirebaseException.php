@@ -101,7 +101,7 @@ class FirebaseException extends \Exception
         $requestBody = null;
         $responseBody = null;
 
-        if ($request->hasBody()) {
+        if ($request && $request->hasBody()) {
             $requestBody = (string) $request->getBody()->getContents();
         }
 
