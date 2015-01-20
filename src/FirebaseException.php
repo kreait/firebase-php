@@ -112,7 +112,7 @@ class FirebaseException extends \Exception
         $message = sprintf(
             'Server error (%s) for URL %s with data "%s"',
             $response ? $response->getStatusCode() : 'Unknown',
-            $request->getUrl(),
+            $request ? $request->getUrl() : 'Unknown',
             $requestBody
         );
 
