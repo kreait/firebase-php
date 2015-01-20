@@ -125,7 +125,7 @@ class Firebase implements FirebaseInterface
         $location = (string) $location; // In case it is null
 
         if ($data && !is_array($data) && !is_object($data)) {
-            throw new \InvalidArgumentException(sprintf('array or object expected, %s given'), gettype($data));
+            throw new \InvalidArgumentException(sprintf('array or object expected, %s given', gettype($data)));
         }
 
         // When $location is null, the relative URL will be '/.json', which is okay
