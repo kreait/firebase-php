@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.2 - 2015-01-20
+
+- Fixed a case where an exception would be thrown inside an exception when no response was present.
+
 ## 0.2.1 - 2015-01-19
 
 - The Firebase library now has its own base URL handling so that a stable version of the HTTP adapter can be used.
