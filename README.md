@@ -25,12 +25,6 @@ Next, run the Composer command to install the latest stable version:
 composer require kreait/firebase-php
 ```
 
-Until the next version of the HTTP Adapter [with baseUrl support](https://github.com/egeloen/ivory-http-adapter/pull/52) is released, you also have to require the current development version of that:
-
-```bash
-composer require egeloen/http-adapter ~0.6@dev
-```
-
 After installing, you need to require Composer's autoloader:
 
 ```php
