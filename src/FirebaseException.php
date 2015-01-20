@@ -66,11 +66,6 @@ class FirebaseException extends \Exception
         return new self(sprintf('The base url must point to an https URL, "%s" given.', $url));
     }
 
-    public static function locationIsInvalid($location)
-    {
-        return new self(sprintf('A location "%s" is invalid.', $location));
-    }
-
     public static function locationKeyContainsForbiddenChars($key, $forbiddenChars)
     {
         return new self(
