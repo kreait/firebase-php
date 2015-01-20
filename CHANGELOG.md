@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-Add `ext-mbstring` as a requirement in `composer.json`
+* Add `ext-mbstring` as a requirement in `composer.json`
+* Improved test coverage and added badges to README to show it off :)
 
 ## 0.2.3 - 2015-01-20
 
