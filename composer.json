@@ -14,6 +14,7 @@
   "require": {
     "php": ">=5.4",
     "ext-curl": "*",
+    "ext-mbstring": "*",
     "psr/log": "~1.0",
     "egeloen/http-adapter": "~0.5"
   },

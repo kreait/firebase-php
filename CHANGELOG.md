@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+- Add `ext-mbstring` as a requirement in `composer.json`
+
 ## 0.2.3 - 2015-01-20
 
 - Fixed an error where the throw of an exception would throw an exception because of a wrong usage of `sprintf()`
