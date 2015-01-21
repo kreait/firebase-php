@@ -31,7 +31,7 @@ interface FirebaseInterface extends LoggerAwareInterface
      * Returns the data at the given location, or null if not defined.
      *
      * @param  string|null $location The location.
-     * @param  array $options The options.
+     * @param  array       $options  The options.
      * @return array|null  The data at the given location, or null if not defined.
      */
     public function get($location, array $options = []);
@@ -48,7 +48,7 @@ interface FirebaseInterface extends LoggerAwareInterface
     /**
      * Generates a new child and returns its key.
      *
-     * @param  array|object $data The data to be pushed.
+     * @param  array|object $data     The data to be pushed.
      * @param  string       $location The location to push the new child to.
      * @return string       The new child's key.
      */
@@ -57,7 +57,7 @@ interface FirebaseInterface extends LoggerAwareInterface
     /**
      * Update the given field(s) at the given location.
      *
-     * @param  array|object $data The fields
+     * @param  array|object $data     The fields
      * @param  string       $location
      * @return array        The written fields.
      */

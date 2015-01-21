@@ -64,7 +64,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
         $http = $this->getMockHttpAdapter();
         $f = new Firebase($this->baseUrl, $http);
 
-        $f->set('string_is_invalid', 'test/' . __METHOD__);
+        $f->set('string_is_invalid', 'test/'.__METHOD__);
     }
 
     public function testHttpCallThrowsHttpAdapterException()
@@ -82,7 +82,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('\Kreait\Firebase\FirebaseException', $expectedExceptionMessage);
 
-        $f->set($data, 'test/' . __METHOD__);
+        $f->set($data, 'test/'.__METHOD__);
     }
 
     public function testInternalServerErrorWithoutBodyThrowsFirebaseException()
@@ -98,13 +98,13 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
         $expectedExceptionMessage = sprintf(
             'Server error (%s) for URL %s.json with data "%s"',
             $response->getStatusCode(),
-            $this->baseUrl . '/test/' . __METHOD__,
+            $this->baseUrl.'/test/'.__METHOD__,
             json_encode($data)
         );
 
         $this->setExpectedException('Kreait\Firebase\FirebaseException', $expectedExceptionMessage);
 
-        $f->set($data, 'test/' . __METHOD__);
+        $f->set($data, 'test/'.__METHOD__);
     }
 
     public function testBadRequestThrowsFirebaseException()
@@ -120,13 +120,13 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
         $expectedExceptionMessage = sprintf(
             'Server error (%s) for URL %s.json with data "%s"',
             $response->getStatusCode(),
-            $this->baseUrl . '/test/' . __METHOD__,
+            $this->baseUrl.'/test/'.__METHOD__,
             json_encode($data)
         );
 
         $this->setExpectedException('Kreait\Firebase\FirebaseException', $expectedExceptionMessage);
 
-        $f->set($data, 'test/' . __METHOD__);
+        $f->set($data, 'test/'.__METHOD__);
     }
 
     public function testFirebaseException()
@@ -140,7 +140,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
         $data = ['any' => 'data'];
 
         try {
-            $f->set($data, 'test/' . __METHOD__);
+            $f->set($data, 'test/'.__METHOD__);
             $this->fail('An exception should have been thrown');
         } catch (FirebaseException $e) {
             $this->assertTrue($e->hasRequest());
@@ -156,7 +156,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     {
         $data = [
             'key' => 'value2',
-            'key2' => 'value2'
+            'key2' => 'value2',
         ];
 
         $http = $this->getMockHttpAdapter();
@@ -166,7 +166,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
 
         $f = new Firebase($this->baseUrl, $http);
 
-        $result = $f->set($data, 'test/' . __METHOD__);
+        $result = $f->set($data, 'test/'.__METHOD__);
 
         $this->assertEquals($data, $result);
     }
@@ -175,7 +175,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     {
         $data = [
             'key' => 'value2',
-            'empty' => null
+            'empty' => null,
         ];
 
         $expected = [
@@ -189,7 +189,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
 
         $f = new Firebase($this->baseUrl, $http);
 
-        $result = $f->set($data, 'test/' . __METHOD__);
+        $result = $f->set($data, 'test/'.__METHOD__);
 
         $this->assertEquals($expected, $result);
     }
@@ -208,7 +208,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
 
         $f = new Firebase($this->baseUrl, $http);
 
-        $result = $f->update($data, 'test/' . __METHOD__);
+        $result = $f->update($data, 'test/'.__METHOD__);
 
         $this->assertEquals($data, $result);
     }
@@ -222,7 +222,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
 
         $f = new Firebase($this->baseUrl, $http);
 
-        $f->delete('test/' . __METHOD__);
+        $f->delete('test/'.__METHOD__);
         // No assertion needed, the important thing is that no exception is thrown
     }
 
@@ -230,7 +230,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     {
         $data = [
             'key' => 'value2',
-            'key2' => 'value2'
+            'key2' => 'value2',
         ];
 
         $http = $this->getMockHttpAdapter();
@@ -240,7 +240,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
 
         $f = new Firebase($this->baseUrl, $http);
 
-        $result = $f->push($data, 'test/' . __METHOD__);
+        $result = $f->push($data, 'test/'.__METHOD__);
 
         $this->assertEquals('foo', $result);
     }
@@ -249,7 +249,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     {
         $data = [
             'key' => 'value2',
-            'key2' => 'value2'
+            'key2' => 'value2',
         ];
 
         $http = $this->getMockHttpAdapter();
@@ -259,7 +259,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
 
         $f = new Firebase($this->baseUrl, $http);
 
-        $result = $f->get('test/' . __METHOD__);
+        $result = $f->get('test/'.__METHOD__);
 
         $this->assertEquals($data, $result);
     }
@@ -268,7 +268,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     {
         $data = [
             'key' => 'value2',
-            'key2' => 'value2'
+            'key2' => 'value2',
         ];
 
         $http = $this->getMockHttpAdapter();
@@ -278,7 +278,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
 
         $f = new Firebase($this->baseUrl, $http);
 
-        $result = $f->get('test/' . __METHOD__, ['shallow' => true]);
+        $result = $f->get('test/'.__METHOD__, ['shallow' => true]);
 
         $this->assertEquals($data, $result);
     }
@@ -317,7 +317,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     protected function getBadRequestErrorResponse()
     {
         $data = [
-            'error' => 'Client error'
+            'error' => 'Client error',
         ];
 
         return new Response(400, 'Bad Request', Response::PROTOCOL_VERSION_1_1, [], new StringStream(json_encode($data)));

@@ -89,6 +89,7 @@ class Firebase implements FirebaseInterface
     public function push($data, $location)
     {
         $data = $this->send($location, RequestInterface::METHOD_POST, $data);
+
         return $data['name'];
     }
 
@@ -183,14 +184,14 @@ class Firebase implements FirebaseInterface
     /**
      * Returns an array of request parameters, based on the given method and options.
      *
-     * @param string $method
-     * @param array $options
-     * @return array The request params.
+     * @param  string $method
+     * @param  array  $options
+     * @return array  The request params.
      */
     private function createRequestParams($method, array $options)
     {
         $requestParams = [];
-        switch($method) {
+        switch ($method) {
             case RequestInterface::METHOD_GET:
                 if (isset($options['shallow']) && true === $options['shallow']) {
                     $requestParams['shallow'] = 'true';
