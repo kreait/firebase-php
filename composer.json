@@ -6,9 +6,9 @@
   "license": "MIT",
   "authors": [
     {
-      "name": "Jérôme Gamez",
-      "homepage": "https://github.com/jeromegamez",
-      "email": "jerome@kreait.com"
+      "name": "kreait",
+      "homepage": "https://github.com/kreait",
+      "email": "dev@kreait.com"
     }
   ],
   "require": {
