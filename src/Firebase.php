@@ -54,25 +54,19 @@ class Firebase implements FirebaseInterface
     /**
      * {@inheritdoc}
      */
-    public function getBaseUrl()
+    public function getReference($location)
     {
-        return $this->baseUrl;
+        $reference = new Reference($this, Utils::normalizeLocation($location));
+        $reference->setLogger($this->logger);
+        return $reference;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getLogger()
+    public function get($location)
     {
-        return $this->logger;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get($location, array $options = [])
-    {
-        return $this->send($location, RequestInterface::METHOD_GET, null, $options);
+        return $this->send($location, RequestInterface::METHOD_GET);
     }
 
     /**
@@ -88,9 +82,8 @@ class Firebase implements FirebaseInterface
      */
     public function push($data, $location)
     {
-        $data = $this->send($location, RequestInterface::METHOD_POST, $data);
-
-        return $data['name'];
+        $result = $this->send($location, RequestInterface::METHOD_POST, $data);
+        return $result['name'];
     }
 
     /**
@@ -115,13 +108,12 @@ class Firebase implements FirebaseInterface
      * @param string            $location The location.
      * @param string            $method   The HTTP method.
      * @param array|object|null $data     The data.
-     * @param array             $options  Request options
      *
      * @throws FirebaseException
      *
-     * @return array|string|void The processed response data.
+     * @return array|void The processed response data.
      */
-    private function send($location, $method, $data = null, array $options = [])
+    private function send($location, $method, $data = null)
     {
         $location = (string) $location; // In case it is null
 
@@ -131,13 +123,7 @@ class Firebase implements FirebaseInterface
 
         // When $location is null, the relative URL will be '/.json', which is okay
         $relativeUrl = sprintf('/%s.json', Utils::normalizeLocation($location));
-
-        $requestParams = $this->createRequestParams($method, $options);
-        if (count($requestParams)) {
-            $relativeUrl = sprintf('%s?%s', $relativeUrl, http_build_query($requestParams, '', '&'));
-        }
-
-        $absoluteUrl = sprintf('%s%s', $this->getBaseUrl(), $relativeUrl);
+        $absoluteUrl = sprintf('%s%s', $this->baseUrl, $relativeUrl);
 
         $headers = [
             'accept' => 'application/json',
@@ -178,27 +164,10 @@ class Firebase implements FirebaseInterface
             $contents = $response->getBody()->getContents();
         }
 
-        return json_decode($contents, true);
-    }
+        $rawResult = json_decode($contents, true);
 
-    /**
-     * Returns an array of request parameters, based on the given method and options.
-     *
-     * @param  string $method
-     * @param  array  $options
-     * @return array  The request params.
-     */
-    private function createRequestParams($method, array $options)
-    {
-        $requestParams = [];
-        switch ($method) {
-            case RequestInterface::METHOD_GET:
-                if (isset($options['shallow']) && true === $options['shallow']) {
-                    $requestParams['shallow'] = 'true';
-                }
-                break;
-        }
+        $result = empty($rawResult) ? [] : array_filter($rawResult, 'strlen');
 
-        return $requestParams;
+        return $result;
     }
 }

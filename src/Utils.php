@@ -19,7 +19,7 @@ class Utils
      */
     public static function normalizeBaseUrl($url)
     {
-        FirebaseRestrictions::checkBaseUrl($url);
+        Restrictions::checkBaseUrl($url);
 
         return rtrim($url, '/');
     }
@@ -36,7 +36,7 @@ class Utils
     public static function normalizeLocation($location)
     {
         $location = trim((string) $location, '/');
-        FirebaseRestrictions::checkLocation($location);
+        Restrictions::checkLocation($location);
 
         return implode('/', explode('/', $location));
     }

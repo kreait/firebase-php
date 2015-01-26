@@ -8,30 +8,51 @@
 
 namespace Kreait\Firebase;
 
-interface ReferenceInterface extends FirebaseInterface
+use Psr\Log\LoggerAwareInterface;
+
+interface ReferenceInterface extends LoggerAwareInterface, ReferenceProviderInterface
 {
     /**
-     * {@inheritdoc}
+     * Returns the Reference's data
+     *
+     * @param Filter $filter
+     * @return array
      */
-    public function get($location = null, array $options = []);
+    public function getData(Filter $filter = null);
 
     /**
-     * {@inheritdoc}
+     * Writes data to this Reference.
+     *
+     * @param array $data
+     * @return $this
      */
-    public function set($data, $location = null);
+    public function set($data);
 
     /**
-     * {@inheritdoc}
+     * Generates a new child location using a unique key and returns a Reference to it.
+     *
+     * @param array $data
+     * @return ReferenceInterface
      */
-    public function push($data, $location = null);
+    public function push($data);
 
     /**
-     * {@inheritdoc}
+     * Writes the given children to this location.
+     *
+     * @param array $data
+     * @return $this
      */
-    public function update($data, $location = null);
+    public function update($data);
 
     /**
-     * {@inheritdoc}
+     * Deletes the Reference.
      */
-    public function delete($location = null);
+    public function delete();
+
+    /**
+     * Returns the last token in the Reference's location.
+     *
+     * @return string
+     */
+    public function getKey();
 }

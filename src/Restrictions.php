@@ -11,7 +11,7 @@ namespace Kreait\Firebase;
 /**
  * @link https://www.firebase.com/docs/rest/guide/understanding-data.html#section-limitations Limitations and Restrictions
  */
-class FirebaseRestrictions
+class Restrictions
 {
     // Location
     const MAXIMUM_DEPTH_OF_CHILD_NODES = 32;

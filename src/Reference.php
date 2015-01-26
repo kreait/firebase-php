@@ -9,91 +9,129 @@
 namespace Kreait\Firebase;
 
 use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 
 class Reference implements ReferenceInterface
 {
     use LoggerAwareTrait;
 
     /**
+     * The Firebase.
+     *
      * @var FirebaseInterface
      */
     private $firebase;
 
     /**
+     * The reference's location.
+     *
      * @var string
      */
-    private $referenceUrl;
+    private $location;
+
+    /**
+     * The last token in the Reference's location.
+     *
+     * @var string
+     */
+    private $key;
+
+    /**
+     * The Reference's data.
+     *
+     * @var array
+     */
+    private $data;
 
     public function __construct(FirebaseInterface $firebase, $location)
     {
+        $this->logger = new NullLogger();
         $this->firebase = $firebase;
-        $this->referenceUrl = Utils::normalizeLocation($location);
-        $this->logger = $firebase->getLogger();
+        $this->location = Utils::normalizeLocation($location);
+        $this->data = [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getBaseUrl()
+    public function getKey()
     {
-        return sprintf('%s/%s', $this->firebase->getBaseUrl(), $this->referenceUrl);
+        if (!$this->key) {
+            $parts = explode('/', $this->location);
+            $this->key = array_pop($parts);
+        }
+
+        return $this->key;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getLogger()
+    public function getReference($location)
     {
-        return $this->logger;
+        return $this->firebase->getReference(sprintf('%s/%s', $this->location, Utils::normalizeLocation($location)));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function set($data, $location = null)
+    public function getData(Filter $filter = null)
     {
-        $fullLocation = Utils::normalizeLocation(sprintf('%s/%s', $this->referenceUrl, $location));
+        if (!$filter && !empty($this->data)) {
+            return $this->data;
+        }
 
-        return $this->firebase->set($data, $fullLocation);
+        return $this->data = $this->firebase->get($this->location);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function push($data, $location = null)
+    public function set($data)
     {
-        $fullLocation = Utils::normalizeLocation(sprintf('%s/%s', $this->referenceUrl, $location));
+        $writtenData = $this->firebase->set($data, $this->location);
+        $this->updateData($writtenData, $merge = false);
 
-        return $this->firebase->push($data, $fullLocation);
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function update($data, $location = null)
+    public function push($data)
     {
-        $fullLocation = Utils::normalizeLocation(sprintf('%s/%s', $this->referenceUrl, $location));
+        $newKey = $this->firebase->push($data, $this->location);
 
-        return $this->firebase->update($data, $fullLocation);
+        return $this->getReference($newKey);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function delete($location = null)
+    public function update($data)
     {
-        $fullLocation = Utils::normalizeLocation(sprintf('%s/%s', $this->referenceUrl, $location));
+        $writtenData = $this->firebase->update($data, $this->location);
+        $this->updateData($writtenData, $merge = true);
 
-        $this->firebase->delete($fullLocation);
+        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get($location = null, array $options = [])
+    public function delete()
     {
-        $fullLocation = Utils::normalizeLocation(sprintf('%s/%s', $this->referenceUrl, $location));
+        $this->firebase->delete($this->location);
+    }
 
-        return $this->firebase->get($fullLocation, $options);
+    private function updateData($data, $merge = false)
+    {
+        if ($merge) {
+            $this->data = array_merge($this->data, $data);
+        } else {
+            $this->data = $data;
+        }
+
+        $this->data = array_filter($this->data, 'strlen'); // Remove all null values
     }
 }

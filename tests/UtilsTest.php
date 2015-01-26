@@ -23,7 +23,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testNormalizeInvalidLocation()
     {
-        $max = FirebaseRestrictions::MAXIMUM_DEPTH_OF_CHILD_NODES;
+        $max = Restrictions::MAXIMUM_DEPTH_OF_CHILD_NODES;
         $maxPlusOne = $max + 1;
 
         $this->setExpectedException(
@@ -45,7 +45,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
             sprintf(
                 'The location key "%s" contains on of the following invalid characters: %s',
                 $location,
-                FirebaseRestrictions::FORBIDDEN_NODE_KEY_CHARS)
+                Restrictions::FORBIDDEN_NODE_KEY_CHARS)
         );
 
         Utils::normalizeLocation($location);
@@ -53,7 +53,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testNormalizeLocationWithTooLongNodeKey()
     {
-        $max = FirebaseRestrictions::KEY_LENGTH_IN_BYTES;
+        $max = Restrictions::KEY_LENGTH_IN_BYTES;
         $maxPlusOne = $max + 1;
 
         $location = str_pad('', $maxPlusOne, 'x');
@@ -120,7 +120,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 
     public function locationsWithInvalidCharProvider()
     {
-        $chars = str_split(FirebaseRestrictions::FORBIDDEN_NODE_KEY_CHARS);
+        $chars = str_split(Restrictions::FORBIDDEN_NODE_KEY_CHARS);
         $array = [];
         foreach ($chars as $c) {
             $array[] = [sprintf('%s%s%s', uniqid(), $c, uniqid())];
