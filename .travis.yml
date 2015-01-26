@@ -32,8 +32,8 @@ before_script:
   - echo 'date.timezone = "Europe/Berlin"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
 script:
-  - if [ ! $SCRUTINIZER ]; then phpunit ; fi;
-  - if [ $SCRUTINIZER ]; then phpunit --coverage-clover build/coverage.clover ; fi;
+  - if [ ! $SCRUTINIZER ]; then make tests ; fi;
+  - if [ $SCRUTINIZER ]; then make travis-tests ; fi;
 
 after_script:
   - if [ $SCRUTINIZER ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover; fi;
