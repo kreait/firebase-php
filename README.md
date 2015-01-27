@@ -50,7 +50,7 @@ $firebase->setLogger($logger);
 $simpsons = $firebase->getReference('data/simpsons');
 
 $homer = $simpsons->getReference('homer');
-$homer->set(['name' => 'Homer Simpson', 'email' => 'marge@simpson.com'], 'homer');
+$homer->set(['name' => 'Homer Simpson', 'email' => 'marge@simpson.com']);
 // Ooops, wrong email address
 $homer->update(['email' => 'homer@simpson.com']);
 
