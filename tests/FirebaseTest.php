@@ -39,15 +39,14 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        // $this->http = $this->getHttpAdapter();
         $this->http = new CurlHttpAdapter();
         $this->firebase = new Firebase($this->baseUrl, $this->http);
-        $this->baseLocation = 'test';
+        $this->baseLocation = 'test/' . uniqid();
     }
 
     protected function tearDown()
     {
-        $this->firebase->delete($this->baseLocation);
+        // $this->firebase->delete($this->baseLocation);
     }
 
     /**
@@ -56,7 +55,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidArgumentThrowsException()
     {
-        $this->firebase->set('string_is_invalid', 'test/'.__FUNCTION__);
+        $this->firebase->set('string_is_invalid', $this->getLocation(__FUNCTION__));
     }
 
     /**
@@ -66,7 +65,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     {
         $f = new Firebase('https://' . uniqid());
 
-        $f->get($this->baseLocation . '/' . $this->baseLocation);
+        $f->get($this->getLocation());
     }
 
     /**
@@ -80,7 +79,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
             ->method('sendRequest')->willReturn($response = $this->getInternalServerErrorResponse());
 
         $f = new Firebase($this->baseUrl, $http);
-        $f->get($this->baseLocation);
+        $f->get($this->getLocation());
     }
 
     public function testGet()
@@ -88,8 +87,8 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
         $data = ['key1' => 'value1', 'key2' => null];
         $expectedData = ['key1' => 'value1'];
 
-        $this->firebase->set($data, $this->baseLocation . '/' . __FUNCTION__);
-        $result = $this->firebase->get($this->baseLocation . '/' . __FUNCTION__);
+        $this->firebase->set($data, $this->getLocation(__FUNCTION__));
+        $result = $this->firebase->get($this->getLocation(__FUNCTION__));
 
         $this->assertEquals($expectedData, $result);
     }
@@ -107,7 +106,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
             'key2' => 'value2',
         ];
 
-        $result = $this->firebase->set($data, $this->baseLocation . '/' . __FUNCTION__);
+        $result = $this->firebase->set($data, $this->getLocation(__FUNCTION__));
         $this->assertEquals($expectedResult, $result);
     }
 
@@ -122,22 +121,22 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
             'key1' => 'value1',
         ];
 
-        $result = $this->firebase->update($update, $this->baseLocation . '/' . __FUNCTION__);
+        $result = $this->firebase->update($update, $this->getLocation(__FUNCTION__));
         $this->assertEquals($expectedResult, $result);
     }
 
     public function testDeletingANonExistentLocationDoesNotThrowAnException()
     {
-        $this->firebase->delete($this->baseLocation . '/' . __FUNCTION__);
+        $this->firebase->delete($this->getLocation(__FUNCTION__));
     }
 
     public function testDelete()
     {
-        $this->firebase->set(['key' => 'value'], $this->baseLocation . '/' . __FUNCTION__);
+        $this->firebase->set(['key' => 'value'], $this->getLocation(__FUNCTION__));
 
-        $this->firebase->delete($this->baseLocation . '/' . __FUNCTION__);
+        $this->firebase->delete($this->getLocation(__FUNCTION__));
 
-        $result = $this->firebase->get($this->baseLocation . '/' . __FUNCTION__);
+        $result = $this->firebase->get($this->getLocation(__FUNCTION__));
 
         $this->assertEmpty($result);
     }
@@ -146,9 +145,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     {
         $data = ['key' => 'value'];
 
-        $location = $this->baseLocation.'/'.__FUNCTION__;
-
-        $key = $this->firebase->push($data, $location);
+        $key = $this->firebase->push($data, $this->getLocation(__FUNCTION__));
 
         $this->assertStringStartsWith('-', $key);
     }
@@ -179,5 +176,14 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     protected function getInternalServerErrorResponse()
     {
         return new Response(500, 'Internal Server Error', Response::PROTOCOL_VERSION_1_1);
+    }
+
+    protected function getLocation($subLocation = null)
+    {
+        if (!$subLocation) {
+            return $this->baseLocation;
+        }
+
+        return $this->baseLocation . '/' . $subLocation;
     }
 }
