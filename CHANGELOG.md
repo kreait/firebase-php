@@ -1,13 +1,14 @@
 # CHANGELOG
 
-## Unreleased
+## 0.3 - 2015-01-27
 
 * **Breaking changes: References have changed behaviour**
-* `Reference` doesn't extend `Firebase` anymore and has changed behaviour (see the [doc/02-references.md](documentation about References))
-* Reference data can be updated with `$reference->update(['key' => 'value'])` or with `$reference['key'] = 'value'`
-* Improved test coverage
-* Added Makefile to ease test execution
-* Extended documentation and moved in to the doc folder
+* `Reference` doesn't extend `Firebase` anymore and has changed behaviour (see the [doc/02-references.md](documentation about References)).
+* Reference data can be accessed with `$reference->getData()`, which returns an array, or directly with `$reference['key']`.
+* Reference data can be updated with `$reference->update(['key' => 'value'])` or with `$reference['key'] = 'value'`.
+* Improved test coverage.
+* Added Makefile to ease test execution.
+* Extended documentation and moved in to the doc folder.
 
 ## 0.2.4 - 2015-01-21
 
