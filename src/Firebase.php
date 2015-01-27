@@ -12,6 +12,7 @@ use Ivory\HttpAdapter\CurlHttpAdapter;
 use Ivory\HttpAdapter\HttpAdapterException;
 use Ivory\HttpAdapter\HttpAdapterInterface;
 use Ivory\HttpAdapter\Message\RequestInterface;
+use Ivory\HttpAdapter\Message\ResponseInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
@@ -117,12 +118,6 @@ class Firebase implements FirebaseInterface
      */
     private function send($location, $method, array $data = null)
     {
-        $location = (string) $location; // In case it is null
-
-        if ($data && !is_array($data) && !is_object($data)) {
-            throw new \InvalidArgumentException(sprintf('array or object expected, %s given', gettype($data)));
-        }
-
         // When $location is null, the relative URL will be '/.json', which is okay
         $relativeUrl = sprintf('/%s.json', Utils::normalizeLocation($location));
         $absoluteUrl = sprintf('%s%s', $this->baseUrl, $relativeUrl);
@@ -161,14 +156,25 @@ class Firebase implements FirebaseInterface
             throw $fe;
         }
 
-        $contents = null;
+        return $this->getResultFromResponse($response);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @return array|void
+     */
+    private function getResultFromResponse(ResponseInterface $response)
+    {
+        $result = [];
+
         if ($response->hasBody()) {
             $contents = $response->getBody()->getContents();
+            $rawResult = json_decode($contents, true);
+
+            if (!empty($rawResult)) {
+                $result = array_filter($rawResult, 'strlen');
+            }
         }
-
-        $rawResult = json_decode($contents, true);
-
-        $result = empty($rawResult) ? [] : array_filter($rawResult, 'strlen');
 
         return $result;
     }
