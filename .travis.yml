@@ -2,6 +2,8 @@ language: php
 
 sudo: false
 
+before_install: composer self-update
+
 install: composer update
 
 php:
