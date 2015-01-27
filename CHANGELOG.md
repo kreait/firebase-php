@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.3.1 - 2015-01-27
+
+* Bugfix: Allow whitespaces in locations
+
 ## 0.3 - 2015-01-27
 
 * **Breaking changes: References have changed behaviour**
