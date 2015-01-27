@@ -27,7 +27,10 @@ $data = $homer->getData();
         'email' => 'homer@simpson.com'
     ]
 */
+$name = $homer['name'];
+$email = $homer['email'];
 ```
+
 
 ### Set data
 
