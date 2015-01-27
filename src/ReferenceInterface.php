@@ -22,7 +22,7 @@ interface ReferenceInterface extends LoggerAwareInterface, ReferenceProviderInte
     /**
      * Writes data to this Reference.
      *
-     * @param array $data
+     * @param  array $data
      * @return $this
      */
     public function set($data);
@@ -30,7 +30,7 @@ interface ReferenceInterface extends LoggerAwareInterface, ReferenceProviderInte
     /**
      * Generates a new child location using a unique key and returns a Reference to it.
      *
-     * @param array $data
+     * @param  array              $data
      * @return ReferenceInterface
      */
     public function push($data);
@@ -38,7 +38,7 @@ interface ReferenceInterface extends LoggerAwareInterface, ReferenceProviderInte
     /**
      * Writes the given children to this location.
      *
-     * @param array $data
+     * @param  array $data
      * @return $this
      */
     public function update($data);

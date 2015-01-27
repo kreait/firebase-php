@@ -15,36 +15,36 @@ interface FirebaseInterface extends LoggerAwareInterface, ReferenceProviderInter
     /**
      * Returns a Reference for the given location.
      *
-     * @param  string|null        $location The location.
-     * @throws FirebaseException  When the location is not available.
-     * @return array The returned data.
+     * @param  string|null       $location The location.
+     * @throws FirebaseException When the location is not available.
+     * @return array             The returned data.
      */
     public function get($location);
 
     /**
      * Write or replace data at the given location.
      *
-     * @param  array|object       $data
-     * @param  string             $location
-     * @return array The returned data.
+     * @param  array|object $data
+     * @param  string       $location
+     * @return array        The returned data.
      */
     public function set($data, $location);
 
     /**
      * Generates a new child and returns its key.
      *
-     * @param  array|object       $data     The data to be pushed.
-     * @param  string             $location The location to push the new child to.
-     * @return string The key of the new child.
+     * @param  array|object $data     The data to be pushed.
+     * @param  string       $location The location to push the new child to.
+     * @return string       The key of the new child.
      */
     public function push($data, $location);
 
     /**
      * Update the given field(s) at the given location.
      *
-     * @param  array|object       $data     The fields.
-     * @param  string             $location The location.
-     * @return array The written fields.
+     * @param  array|object $data     The fields.
+     * @param  string       $location The location.
+     * @return array        The written fields.
      */
     public function update($data, $location);
 

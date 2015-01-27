@@ -41,7 +41,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
 
         $this->http = new CurlHttpAdapter();
         $this->firebase = new Firebase($this->baseUrl, $this->http);
-        $this->baseLocation = 'test/' . uniqid();
+        $this->baseLocation = 'test/'.uniqid();
     }
 
     protected function tearDown()
@@ -63,7 +63,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
      */
     public function testHttpCallThrowsHttpAdapterException()
     {
-        $f = new Firebase('https://' . uniqid());
+        $f = new Firebase('https://'.uniqid());
 
         $f->get($this->getLocation());
     }
@@ -184,6 +184,6 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
             return $this->baseLocation;
         }
 
-        return $this->baseLocation . '/' . $subLocation;
+        return $this->baseLocation.'/'.$subLocation;
     }
 }

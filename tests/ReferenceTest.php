@@ -5,7 +5,7 @@
  * For the full copyright and license information, please read the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Kreait\Firebase;
 
 class ReferenceTest extends \PHPUnit_Framework_TestCase
@@ -35,7 +35,7 @@ class ReferenceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetReference()
     {
-        $expectedFullLocation = $this->location . '/bar';
+        $expectedFullLocation = $this->location.'/bar';
 
         $this->firebase
             ->expects($this->once())
@@ -73,7 +73,7 @@ class ReferenceTest extends \PHPUnit_Framework_TestCase
         $data = ['key1' => 'value1', 'key2' => 'value2', 'key3' => null];
         $expectedData = ['key1' => 'value1', 'key2' => 'value2'];
         $expectedKey = 'foo';
-        $childLocation = $this->location . '/' . $expectedKey;
+        $childLocation = $this->location.'/'.$expectedKey;
 
         $this->firebase
             ->expects($this->once())
@@ -201,10 +201,9 @@ class ReferenceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, count($reference));
     }
 
-
     /**
-     * @param array $predefinedData
-     * @param string|null $location
+     * @param  array       $predefinedData
+     * @param  string|null $location
      * @return Reference
      */
     protected function getReference(array $predefinedData = [], $location = null)

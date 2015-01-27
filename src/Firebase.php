@@ -58,6 +58,7 @@ class Firebase implements FirebaseInterface
     {
         $reference = new Reference($this, Utils::normalizeLocation($location));
         $reference->setLogger($this->logger);
+
         return $reference;
     }
 
@@ -83,6 +84,7 @@ class Firebase implements FirebaseInterface
     public function push($data, $location)
     {
         $result = $this->send($location, RequestInterface::METHOD_POST, $data);
+
         return $result['name'];
     }
 

@@ -93,7 +93,8 @@ class FirebaseException extends \Exception
         return new self(sprintf('HTTP Error: %s', $e->getMessage()), null, $e);
     }
 
-    public static function httpError(RequestInterface $request, ResponseInterface $response) {
+    public static function httpError(RequestInterface $request, ResponseInterface $response)
+    {
         $requestBody = null;
         $responseBody = null;
 
