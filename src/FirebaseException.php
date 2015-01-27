@@ -95,9 +95,6 @@ class FirebaseException extends \Exception
 
     public static function httpError(RequestInterface $request, ResponseInterface $response)
     {
-        $requestBody = null;
-        $responseBody = null;
-
         $requestBody = $request->hasBody() ? (string) $request->getBody()->getContents() : '';
         $responseBody = $response->hasBody() ? (string) $response->getBody()->getContents() : '';
 
