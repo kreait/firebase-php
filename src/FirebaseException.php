@@ -93,36 +93,26 @@ class FirebaseException extends \Exception
         return new self(sprintf('HTTP Error: %s', $e->getMessage()), null, $e);
     }
 
-    public static function httpError(
-        RequestInterface $request = null,
-        ResponseInterface $response = null,
-        \Exception $previous = null
-    ) {
+    public static function httpError(RequestInterface $request, ResponseInterface $response) {
         $requestBody = null;
         $responseBody = null;
 
-        if ($request && $request->hasBody()) {
-            $requestBody = (string) $request->getBody()->getContents();
-        }
-
-        if ($response && $response->hasBody()) {
-            $responseBody = (string) $response->getBody()->getContents();
-        }
+        $requestBody = $request->hasBody() ? (string) $request->getBody()->getContents() : '';
+        $responseBody = $response->hasBody() ? (string) $response->getBody()->getContents() : '';
 
         $message = sprintf(
             'Server error (%s) for URL %s with data "%s"',
-            $response ? $response->getStatusCode() : 'Unknown',
-            $request ? $request->getUrl() : 'Unknown',
+            $response->getStatusCode(),
+            $request->getUrl(),
             $requestBody
         );
 
-        if ($responseBody && $responseData = json_decode($responseBody, true)) {
-            if (isset($responseData['error'])) {
-                $message = sprintf('%s: %s', $message, $responseData['error']);
-            }
+        if ($responseData = json_decode($responseBody, true)) {
+            $specifics = isset($responseData['error']) ? $responseData['error'] : 'No specific error message';
+            $message = sprintf('%s: %s', $message, $specifics);
         }
 
-        $e = new self($message, null, $previous);
+        $e = new self($message);
         $e->setRequest($request);
         $e->setResponse($response);
 
