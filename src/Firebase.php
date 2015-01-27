@@ -73,7 +73,7 @@ class Firebase implements FirebaseInterface
     /**
      * {@inheritdoc}
      */
-    public function set($data, $location)
+    public function set(array $data, $location)
     {
         return $this->send($location, RequestInterface::METHOD_PUT, $data);
     }
@@ -81,7 +81,7 @@ class Firebase implements FirebaseInterface
     /**
      * {@inheritdoc}
      */
-    public function push($data, $location)
+    public function push(array $data, $location)
     {
         $result = $this->send($location, RequestInterface::METHOD_POST, $data);
 
@@ -91,7 +91,7 @@ class Firebase implements FirebaseInterface
     /**
      * {@inheritdoc}
      */
-    public function update($data, $location)
+    public function update(array $data, $location)
     {
         return $this->send($location, RequestInterface::METHOD_PATCH, $data);
     }
@@ -109,13 +109,13 @@ class Firebase implements FirebaseInterface
      *
      * @param string            $location The location.
      * @param string            $method   The HTTP method.
-     * @param array|object|null $data     The data.
+     * @param array|null $data     The data.
      *
      * @throws FirebaseException
      *
-     * @return array|void The processed response data.
+     * @return array The processed response data.
      */
-    private function send($location, $method, $data = null)
+    private function send($location, $method, array $data = null)
     {
         $location = (string) $location; // In case it is null
 

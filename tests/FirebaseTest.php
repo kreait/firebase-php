@@ -50,15 +50,6 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage array or object expected, string given
-     */
-    public function testInvalidArgumentThrowsException()
-    {
-        $this->firebase->set('string_is_invalid', $this->getLocation(__FUNCTION__));
-    }
-
-    /**
      * @expectedException \Kreait\Firebase\FirebaseException
      */
     public function testHttpCallThrowsHttpAdapterException()
