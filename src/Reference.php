@@ -75,9 +75,9 @@ class Reference implements ReferenceInterface
     /**
      * {@inheritdoc}
      */
-    public function getData(Filter $filter = null)
+    public function getData()
     {
-        if (!$filter && !empty($this->data)) {
+        if (!empty($this->data)) {
             return $this->data;
         }
 
@@ -133,5 +133,48 @@ class Reference implements ReferenceInterface
         }
 
         $this->data = array_filter($this->data, 'strlen'); // Remove all null values
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetExists($offset)
+    {
+        $this->getData(); // Ensure data exists
+        return isset($this->data[$offset]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetGet($offset)
+    {
+        $this->getData(); // Ensure data exists
+        return $this->data[$offset];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->data[$offset] = $value;
+        $this->update([$offset => $value]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->data[$offset]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return count($this->data);
     }
 }

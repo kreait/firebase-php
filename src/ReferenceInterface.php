@@ -10,15 +10,14 @@ namespace Kreait\Firebase;
 
 use Psr\Log\LoggerAwareInterface;
 
-interface ReferenceInterface extends LoggerAwareInterface, ReferenceProviderInterface
+interface ReferenceInterface extends LoggerAwareInterface, ReferenceProviderInterface, \ArrayAccess, \Countable
 {
     /**
      * Returns the Reference's data
      *
-     * @param Filter $filter
      * @return array
      */
-    public function getData(Filter $filter = null);
+    public function getData();
 
     /**
      * Writes data to this Reference.

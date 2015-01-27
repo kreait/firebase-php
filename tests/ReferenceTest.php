@@ -158,6 +158,50 @@ class ReferenceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data, $this->getReference()->getData());
     }
 
+    public function testArrayAccessOffsetGetAndOffsetExists()
+    {
+        $reference = $this->getReference(['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3']);
+
+        $this->assertTrue($reference->offsetExists('key1'));
+        $this->assertFalse($reference->offsetExists('nonexistent'));
+        $this->assertEquals('value1', $reference->offsetGet('key1'));
+    }
+
+    public function testOffsetGetWithUndefinedIndex()
+    {
+        $reference = $this->getReference();
+        $this->assertNull($reference->offsetGet('nonexistent'));
+    }
+
+    public function testOffsetSet()
+    {
+        $this->firebase
+            ->expects($this->once())
+            ->method('update')
+            ->willReturn(['key' => 'value'])
+        ;
+
+        $reference = $this->getReference();
+        $reference->offsetSet('key', 'value');
+        $this->assertTrue($reference->offsetExists('key'));
+    }
+
+    public function testOffsetUnset()
+    {
+        $reference = $this->getReference(['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3']);
+
+        $reference->offsetUnset('key1');
+        $this->assertAttributeNotContains('value1', 'data', $reference);
+    }
+
+    public function testCount()
+    {
+        $reference = $this->getReference(['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3']);
+
+        $this->assertEquals(3, count($reference));
+    }
+
+
     /**
      * @param array $predefinedData
      * @param string|null $location
