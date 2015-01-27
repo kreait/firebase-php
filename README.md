@@ -35,7 +35,31 @@ require 'vendor/autoload.php';
 ## Example
 
 ```php
+require __DIR__.'/vendor/autoload.php';
 
+use Kreait\Firebase\Firebase;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+
+$logger = new Logger('firebase');
+$logger->pushHandler(new StreamHandler('php://stdout'));
+
+$firebase = new Firebase('https://brilliant-torch-1474.firebaseio.com');
+$firebase->setLogger($logger);
+
+$simpsons = $firebase->getReference('data/simpsons');
+
+$homer = $simpsons->getReference('homer');
+$homer->set(['name' => 'Homer Simpson', 'email' => 'marge@simpson.com'], 'homer');
+// Ooops, wrong email address
+$homer->update(['email' => 'homer@simpson.com']);
+
+$children = $homer->getReference('children');
+$bart = $children->push(['name' => 'Bart Simpson', 'email' => 'bart@simpson.com']);
+$lisa = $children->push(['name' => 'Lisa Simpson', 'email' => 'lisa@simpson.com']);
+$maggie = $children->push(['name' => 'Maggie Simpson', 'email' => 'maggie@simpson.com']);
+
+print_r($homer->getData());
 ```
 
 ## Documentation
