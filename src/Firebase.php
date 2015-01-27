@@ -108,8 +108,8 @@ class Firebase implements FirebaseInterface
     /**
      * Sends the request and returns the processed response data.
      *
-     * @param string            $location The location.
-     * @param string            $method   The HTTP method.
+     * @param string     $location The location.
+     * @param string     $method   The HTTP method.
      * @param array|null $data     The data.
      *
      * @throws FirebaseException
@@ -160,7 +160,7 @@ class Firebase implements FirebaseInterface
     }
 
     /**
-     * @param ResponseInterface $response
+     * @param  ResponseInterface $response
      * @return array|void
      */
     private function getResultFromResponse(ResponseInterface $response)

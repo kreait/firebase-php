@@ -24,27 +24,27 @@ interface FirebaseInterface extends LoggerAwareInterface, ReferenceProviderInter
     /**
      * Write or replace data at the given location.
      *
-     * @param  array $data
-     * @param  string       $location
-     * @return array        The returned data.
+     * @param  array  $data
+     * @param  string $location
+     * @return array  The returned data.
      */
     public function set(array $data, $location);
 
     /**
      * Generates a new child and returns its key.
      *
-     * @param  array $data     The data to be pushed.
-     * @param  string       $location The location to push the new child to.
-     * @return string       The key of the new child.
+     * @param  array  $data     The data to be pushed.
+     * @param  string $location The location to push the new child to.
+     * @return string The key of the new child.
      */
     public function push(array $data, $location);
 
     /**
      * Update the given field(s) at the given location.
      *
-     * @param  array $data     The fields.
-     * @param  string       $location The location.
-     * @return array        The written fields.
+     * @param  array  $data     The fields.
+     * @param  string $location The location.
+     * @return array  The written fields.
      */
     public function update(array $data, $location);
 
