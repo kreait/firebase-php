@@ -119,7 +119,7 @@ class Firebase implements FirebaseInterface
     private function send($location, $method, array $data = null)
     {
         // When $location is null, the relative URL will be '/.json', which is okay
-        $relativeUrl = sprintf('/%s.json', Utils::normalizeLocation($location));
+        $relativeUrl = sprintf('/%s.json', Utils::prepareLocationForRequest($location));
         $absoluteUrl = sprintf('%s%s', $this->baseUrl, $relativeUrl);
 
         $headers = [
