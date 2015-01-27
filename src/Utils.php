@@ -40,4 +40,17 @@ class Utils
 
         return implode('/', explode('/', $location));
     }
+
+    public static function prepareLocationForRequest($location)
+    {
+        $location = self::normalizeLocation($location);
+
+        $parts = explode('/', $location);
+
+        foreach ($parts as &$part) {
+            $part = rawurlencode($part);
+        }
+
+        return implode('/', $parts);
+    }
 }

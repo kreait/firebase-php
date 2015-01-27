@@ -84,6 +84,12 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedData, $result);
     }
 
+    public function testGetKeyWithWhitespace()
+    {
+        // This should not throw an exception
+        $this->firebase->get($this->getLocation(__FUNCTION__.'/My Key'));
+    }
+
     public function testSet()
     {
         $data = [
