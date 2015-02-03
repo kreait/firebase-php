@@ -11,17 +11,25 @@
       "email": "dev@kreait.com"
     }
   ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/jeromegamez/ivory-http-adapter.git"
+    }
+  ],
   "require": {
     "php": ">=5.4",
     "ext-curl": "*",
     "ext-mbstring": "*",
     "psr/log": "~1.0",
-    "egeloen/http-adapter": "~0.5"
+    "egeloen/http-adapter": "dev-feature/tape-recorder-subscriber as 0.5"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.4",
     "phpspec/prophecy-phpunit": "~1.0",
-    "monolog/monolog": "~1.12"
+    "monolog/monolog": "~1.12",
+    "symfony/event-dispatcher": "~2.6",
+    "php-vcr/php-vcr": "~1.2"
   },
   "autoload": {
     "psr-4": { "Kreait\\Firebase\\": "src/" }

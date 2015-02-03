@@ -10,6 +10,7 @@ namespace Kreait\Firebase;
 
 use Ivory\HttpAdapter\Configuration;
 use Ivory\HttpAdapter\CurlHttpAdapter;
+use Ivory\HttpAdapter\Event\Subscriber\TapeRecorderSubscriber;
 use Ivory\HttpAdapter\HttpAdapterInterface;
 use Ivory\HttpAdapter\Message\Response;
 
@@ -35,18 +36,26 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
      */
     protected $baseLocation;
 
+    /**
+     * @var TapeRecorderSubscriber
+     */
+    protected $recorder;
+
     protected function setUp()
     {
         parent::setUp();
 
         $this->http = new CurlHttpAdapter();
         $this->firebase = new Firebase($this->baseUrl, $this->http);
-        $this->baseLocation = 'test/'.uniqid();
+        $this->baseLocation = 'test';
+        $this->recorder = new TapeRecorderSubscriber(__DIR__.'/fixtures');
+
+        $this->http->getConfiguration()->getEventDispatcher()->addSubscriber($this->recorder);
     }
 
     protected function tearDown()
     {
-        // $this->firebase->delete($this->baseLocation);
+        $this->recorder->eject();
     }
 
     /**
@@ -78,6 +87,8 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
         $data = ['key1' => 'value1', 'key2' => null];
         $expectedData = ['key1' => 'value1'];
 
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
         $this->firebase->set($data, $this->getLocation(__FUNCTION__));
         $result = $this->firebase->get($this->getLocation(__FUNCTION__));
 
@@ -87,6 +98,8 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     public function testGetKeyWithWhitespace()
     {
         // This should not throw an exception
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
         $this->firebase->get($this->getLocation(__FUNCTION__.'/My Key'));
     }
 
@@ -103,6 +116,8 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
             'key2' => 'value2',
         ];
 
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
         $result = $this->firebase->set($data, $this->getLocation(__FUNCTION__));
         $this->assertEquals($expectedResult, $result);
     }
@@ -118,21 +133,26 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
             'key1' => 'value1',
         ];
 
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
         $result = $this->firebase->update($update, $this->getLocation(__FUNCTION__));
         $this->assertEquals($expectedResult, $result);
     }
 
     public function testDeletingANonExistentLocationDoesNotThrowAnException()
     {
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
         $this->firebase->delete($this->getLocation(__FUNCTION__));
     }
 
     public function testDelete()
     {
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+
         $this->firebase->set(['key' => 'value'], $this->getLocation(__FUNCTION__));
-
         $this->firebase->delete($this->getLocation(__FUNCTION__));
-
         $result = $this->firebase->get($this->getLocation(__FUNCTION__));
 
         $this->assertEmpty($result);
@@ -140,6 +160,9 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
 
     public function testPush()
     {
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+
         $data = ['key' => 'value'];
 
         $key = $this->firebase->push($data, $this->getLocation(__FUNCTION__));
@@ -149,7 +172,10 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOnNonExistentLocation()
     {
-        $result = $this->firebase->get(uniqid());
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+
+        $result = $this->firebase->get('non_existing');
 
         $this->assertEmpty($result);
     }

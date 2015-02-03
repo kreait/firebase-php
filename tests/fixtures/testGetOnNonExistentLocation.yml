@@ -1,0 +1,23 @@
+-
+    request:
+        url: 'https://brilliant-torch-1474.firebaseio.com/non_existing.json'
+        method: GET
+        protocol_version: '1.1'
+        headers:
+            accept: [application/json]
+            accept-charset: [utf-8]
+            Connection: [keep-alive]
+            User-Agent: ['Ivory Http Adapter 0.6.0-DEV']
+        body: 'null'
+        parameters: {  }
+    response:
+        status_code: 200
+        reason_phrase: OK
+        protocol_version: '1.1'
+        headers:
+            Content-Length: ['4']
+            Strict-Transport-Security: ['max-age=31556926; includeSubDomains; preload']
+            Content-Type: ['application/json; charset=utf-8']
+            Cache-Control: [no-cache]
+        body: 'null'
+        parameters: {  }

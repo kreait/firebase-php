@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Use TapeRecorder subscriber in HTTP adapter to use fixtures instead of real HTTP requests.
+
 ## 0.3.1 - 2015-01-27
 
 * Bugfix: Allow whitespaces in locations
