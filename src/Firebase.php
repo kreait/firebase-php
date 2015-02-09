@@ -170,13 +170,41 @@ class Firebase implements FirebaseInterface
 
         if ($response->hasBody()) {
             $contents = $response->getBody()->getContents();
-            $rawResult = json_decode($contents, true);
-
-            if (!empty($rawResult)) {
-                $result = array_filter($rawResult, 'strlen');
-            }
+            $result = json_decode($contents, true);
         }
 
+        if (is_array($result)) {
+            $result = $this->cleanupData($result);
+        }
+
+
+
         return $result;
+    }
+
+    /**
+     * Removes empty values from the dataset.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function cleanupData(array $data)
+    {
+        $newData = [];
+
+        foreach ($data as $key => $value) {
+            if (empty($value)) {
+                continue;
+            }
+
+            if (is_array($value)) {
+                $newData[$key] = $this->cleanupData($value);
+                continue;
+            }
+
+            $newData[$key] = $value;
+        }
+
+        return $newData;
     }
 }
