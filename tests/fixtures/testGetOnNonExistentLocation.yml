@@ -1,6 +1,6 @@
 -
     request:
-        url: 'https://brilliant-torch-1474.firebaseio.com/non_existing.json'
+        url: 'https://brilliant-torch-1474.firebaseio.com/tests/non_existing.json'
         method: GET
         protocol_version: '1.1'
         headers:

@@ -1,6 +1,6 @@
 -
     request:
-        url: 'https://brilliant-torch-1474.firebaseio.com/tests/testGetKeyWithWhitespace/My%20Key.json'
+        url: 'https://brilliant-torch-1474.firebaseio.com/tests.json'
         method: GET
         protocol_version: '1.1'
         headers:
@@ -15,9 +15,9 @@
         reason_phrase: OK
         protocol_version: '1.1'
         headers:
-            Content-Length: ['4']
+            Content-Length: ['224']
             Strict-Transport-Security: ['max-age=31556926; includeSubDomains; preload']
             Content-Type: ['application/json; charset=utf-8']
             Cache-Control: [no-cache]
-        body: 'null'
+        body: '{"allow_unauthenticated":{"key":"value"},"forbidden":{"key":"value"},"testGet":{"key1":"value1"},"testPush":{"-Jhj0lf2dZL6aqLGHTXq":{"key":"value"}},"testSet":{"key1":"value1","key2":"value2"},"testUpdate":{"key1":"value1"}}'
         parameters: {  }

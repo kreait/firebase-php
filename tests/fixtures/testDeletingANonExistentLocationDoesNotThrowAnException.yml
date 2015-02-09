@@ -1,6 +1,6 @@
 -
     request:
-        url: 'https://brilliant-torch-1474.firebaseio.com/test/testDeletingANonExistentLocationDoesNotThrowAnException.json'
+        url: 'https://brilliant-torch-1474.firebaseio.com/tests/testDeletingANonExistentLocationDoesNotThrowAnException.json'
         method: DELETE
         protocol_version: '1.1'
         headers:

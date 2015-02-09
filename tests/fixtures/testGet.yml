@@ -1,6 +1,6 @@
 -
     request:
-        url: 'https://brilliant-torch-1474.firebaseio.com/test/testGet.json'
+        url: 'https://brilliant-torch-1474.firebaseio.com/tests/testGet.json'
         method: PUT
         protocol_version: '1.1'
         headers:
@@ -23,7 +23,7 @@
         parameters: {  }
 -
     request:
-        url: 'https://brilliant-torch-1474.firebaseio.com/test/testGet.json'
+        url: 'https://brilliant-torch-1474.firebaseio.com/tests/testGet.json'
         method: GET
         protocol_version: '1.1'
         headers:

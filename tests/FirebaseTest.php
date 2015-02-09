@@ -46,11 +46,13 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->baseUrl = getenv('FIREBASE_HOST');
-        $this->baseLocation = getenv('FIREBASE_BASE_LOCATION');
+        $this->baseLocation = getenv('FIREBASE_BASE_LOCATION') ?: 'tests';
+        $recordingMode = getenv('FIREBASE_TEST_RECORDING_MODE') ?: 1;
 
         $this->http = new CurlHttpAdapter();
         $this->firebase = new Firebase($this->baseUrl, $this->http);
         $this->recorder = new TapeRecorderSubscriber(__DIR__.'/fixtures');
+        $this->recorder->setRecordingMode($recordingMode);
 
         $this->http->getConfiguration()->getEventDispatcher()->addSubscriber($this->recorder);
     }
@@ -63,18 +65,28 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Kreait\Firebase\Exception\PermissionDeniedException
      */
-    public function testUnauthenticatedCallToProtectedLocationThrowsPermissionDeniedException()
+    public function testUnauthenticatedCallToForbiddenLocationThrowsPermissionDeniedException()
     {
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
-        $this->firebase->get($this->getLocation('unauthenticated/forbidden'));
+        $this->firebase->get('forbidden');
+    }
+
+    public function testUnauthenticatedCallToAllowedLocationDoesNotThrowException()
+    {
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+        $this->firebase->get($this->getLocation());
     }
 
     /**
      * @expectedException \Kreait\Firebase\Exception\FirebaseException
      */
-    public function testHttpCallThrowsHttpAdapterException()
+    public function testHttpCallToBogusDomainThrowsHttpAdapterException()
     {
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+
         $f = new Firebase('https://'.uniqid());
 
         $f->get($this->getLocation());
@@ -187,7 +199,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
-        $result = $this->firebase->get('non_existing');
+        $result = $this->firebase->get($this->getLocation('non_existing'));
 
         $this->assertEmpty($result);
     }
