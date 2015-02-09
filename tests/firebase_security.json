@@ -1,0 +1,12 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": true,
+    "tests": {
+      "forbidden": {
+        ".read": false,
+        ".write": false
+      }
+    }
+  }
+}
