@@ -51,7 +51,6 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
         $this->http = new CurlHttpAdapter();
         $this->firebase = new Firebase($this->baseUrl, $this->http);
         $this->recorder = new TapeRecorderSubscriber(__DIR__.'/fixtures');
-        $this->recorder->setRecordingMode(TapeRecorderSubscriber::RECORDING_MODE_OVERWRITE);
 
         $this->http->getConfiguration()->getEventDispatcher()->addSubscriber($this->recorder);
     }
