@@ -29,7 +29,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $baseUrl = 'https://brilliant-torch-1474.firebaseio.com';
+    protected $baseUrl;
 
     /**
      * @var string
@@ -45,10 +45,13 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
+        $this->baseUrl = getenv('FIREBASE_HOST');
+        $this->baseLocation = getenv('FIREBASE_BASE_LOCATION');
+
         $this->http = new CurlHttpAdapter();
         $this->firebase = new Firebase($this->baseUrl, $this->http);
-        $this->baseLocation = 'test';
         $this->recorder = new TapeRecorderSubscriber(__DIR__.'/fixtures');
+        $this->recorder->setRecordingMode(TapeRecorderSubscriber::RECORDING_MODE_OVERWRITE);
 
         $this->http->getConfiguration()->getEventDispatcher()->addSubscriber($this->recorder);
     }
@@ -59,7 +62,17 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kreait\Firebase\FirebaseException
+     * @expectedException \Kreait\Firebase\Exception\PermissionDeniedException
+     */
+    public function testUnauthenticatedCallToProtectedLocationThrowsPermissionDeniedException()
+    {
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+        $this->firebase->get($this->getLocation('unauthenticated/forbidden'));
+    }
+
+    /**
+     * @expectedException \Kreait\Firebase\Exception\FirebaseException
      */
     public function testHttpCallThrowsHttpAdapterException()
     {
@@ -69,7 +82,7 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kreait\Firebase\FirebaseException
+     * @expectedException \Kreait\Firebase\Exception\FirebaseException
      */
     public function testServerReturns400PlusAndThrowsFirebaseException()
     {

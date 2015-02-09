@@ -1,3 +1,4 @@
 /build
+/tests/.env
 /vendor
 /composer.lock

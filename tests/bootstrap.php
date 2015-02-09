@@ -7,3 +7,5 @@
  */
 
 $loader = require __DIR__."/../vendor/autoload.php";
+
+Dotenv::load(__DIR__);
