@@ -28,7 +28,6 @@
     "phpunit/phpunit": "~4.5",
     "monolog/monolog": "~1.12",
     "symfony/event-dispatcher": "~2.6",
-    "php-vcr/php-vcr": "~1.2"
   },
   "autoload": {
     "psr-4": { "Kreait\\Firebase\\": "src/" }
