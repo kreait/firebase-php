@@ -32,6 +32,7 @@ matrix:
 
 before_script:
   - echo 'date.timezone = "Europe/Berlin"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - cp tests/.env.example tests/.env
 
 script:
   - if [ "$SCRUTINIZER" != "true" ]; then make tests ; fi;
