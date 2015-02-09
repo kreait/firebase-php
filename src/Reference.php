@@ -87,6 +87,14 @@ class Reference implements ReferenceInterface
     /**
      * {@inheritdoc}
      */
+    public function query(Query $query)
+    {
+        return $this->firebase->query($this->location, $query);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function set($data)
     {
         $writtenData = $this->firebase->set($data, $this->location);

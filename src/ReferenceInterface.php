@@ -15,9 +15,17 @@ interface ReferenceInterface extends LoggerAwareInterface, ReferenceProviderInte
     /**
      * Returns the Reference's data
      *
-     * @return array
+     * @return array The data.
      */
     public function getData();
+
+    /**
+     * Queries the Reference.
+     *
+     * @param Query $query The query.
+     * @return array The data.
+     */
+    public function query(Query $query);
 
     /**
      * Writes data to this Reference.

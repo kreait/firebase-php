@@ -14,13 +14,24 @@ use Psr\Log\LoggerAwareInterface;
 interface FirebaseInterface extends LoggerAwareInterface, ReferenceProviderInterface
 {
     /**
-     * Returns a Reference for the given location.
+     * Returns the data of the given location.
      *
-     * @param  string|null       $location The location.
+     * @param string             $location The location.
+     *
      * @throws FirebaseException When the location is not available.
+     *
      * @return array             The returned data.
      */
     public function get($location);
+
+    /**
+     * Queries the given location.
+     *
+     * @param string $location The location.
+     * @param Query $query The query.
+     * @return array The data.
+     */
+    public function query($location, Query $query);
 
     /**
      * Write or replace data at the given location.

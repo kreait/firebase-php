@@ -75,6 +75,15 @@ class Firebase implements FirebaseInterface
     /**
      * {@inheritdoc}
      */
+    public function query($location, Query $query)
+    {
+        $queryLocation = sprintf('%s%s', $location, (string) $query);
+        return $this->get($queryLocation);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function set(array $data, $location)
     {
         return $this->send($location, RequestInterface::METHOD_PUT, $data);
