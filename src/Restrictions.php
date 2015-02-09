@@ -8,6 +8,8 @@
 
 namespace Kreait\Firebase;
 
+use Kreait\Firebase\Exception\FirebaseException;
+
 /**
  * @link https://www.firebase.com/docs/rest/guide/understanding-data.html#section-limitations Limitations and Restrictions
  */

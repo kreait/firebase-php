@@ -13,6 +13,7 @@ use Ivory\HttpAdapter\HttpAdapterException;
 use Ivory\HttpAdapter\HttpAdapterInterface;
 use Ivory\HttpAdapter\Message\RequestInterface;
 use Ivory\HttpAdapter\Message\ResponseInterface;
+use Kreait\Firebase\Exception\FirebaseException;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 

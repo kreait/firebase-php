@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Kreait\Firebase;
+namespace Kreait\Firebase\Exception;
 
 use Ivory\HttpAdapter\HttpAdapterException;
 use Ivory\HttpAdapter\Message\ResponseInterface;
@@ -110,7 +110,15 @@ class FirebaseException extends \Exception
             $message = sprintf('%s: %s', $message, $specifics);
         }
 
-        $e = new self($message);
+        switch ($response->getStatusCode()) {
+            case 401:
+                $e = new PermissionDeniedException($message);
+                break;
+            default:
+                $e = new self($message);
+                break;
+        }
+
         $e->setRequest($request);
         $e->setResponse($response);
 

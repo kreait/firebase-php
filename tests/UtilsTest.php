@@ -27,7 +27,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         $maxPlusOne = $max + 1;
 
         $this->setExpectedException(
-            '\Kreait\Firebase\FirebaseException',
+            '\Kreait\Firebase\Exception\FirebaseException',
             sprintf('A location key must not have more than %s keys, %s given.', $max, $maxPlusOne)
         );
 
@@ -41,7 +41,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     public function testNormalizeLocationWithInvalidChar($location)
     {
         $this->setExpectedException(
-            '\Kreait\Firebase\FirebaseException',
+            '\Kreait\Firebase\Exception\FirebaseException',
             sprintf(
                 'The location key "%s" contains on of the following invalid characters: %s',
                 $location,
@@ -59,7 +59,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         $location = str_pad('', $maxPlusOne, 'x');
 
         $this->setExpectedException(
-            '\Kreait\Firebase\FirebaseException',
+            '\Kreait\Firebase\Exception\FirebaseException',
             sprintf(
                 'A location key must not be longer than %s bytes, %s bytes given.',
                 $max,
@@ -82,7 +82,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kreait\Firebase\FirebaseException
+     * @expectedException \Kreait\Firebase\Exception\FirebaseException
      * @expectedExceptionMessage The base url must point to an https URL, "http://foo.bar" given.
      */
     public function testNormalizeNonHttpsBaseUrl()
@@ -91,7 +91,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Kreait\Firebase\FirebaseException
+     * @expectedException \Kreait\Firebase\Exception\FirebaseException
      * @expectedExceptionMessage The url "invalid_base_url" is invalid.
      */
     public function testNormalizeInvalidBaseUrl()

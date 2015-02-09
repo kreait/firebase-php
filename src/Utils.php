@@ -8,6 +8,8 @@
 
 namespace Kreait\Firebase;
 
+use Kreait\Firebase\Exception\FirebaseException;
+
 class Utils
 {
     /**

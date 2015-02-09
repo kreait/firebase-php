@@ -8,6 +8,7 @@
 
 namespace Kreait\Firebase;
 
+use Kreait\Firebase\Exception\FirebaseException;
 use Psr\Log\LoggerAwareInterface;
 
 interface FirebaseInterface extends LoggerAwareInterface, ReferenceProviderInterface
