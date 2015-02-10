@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 0.4.0 - 2015-02-10
 
 * Use TapeRecorder subscriber in HTTP adapter to use fixtures instead of real HTTP requests.
 * Use [dotenv](https://github.com/vlucas/phpdotenv/) for the test environment.
