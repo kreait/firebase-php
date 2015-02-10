@@ -1,0 +1,15 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "query_test": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["height"]
+    },
+    "tests": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}
