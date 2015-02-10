@@ -42,6 +42,12 @@ class Reference implements ReferenceInterface
      */
     private $data;
 
+    /**
+     * Initialize the Reference.
+     *
+     * @param FirebaseInterface $firebase The Firebase instance.
+     * @param string $location The Reference location.
+     */
     public function __construct(FirebaseInterface $firebase, $location)
     {
         $this->logger = new NullLogger();

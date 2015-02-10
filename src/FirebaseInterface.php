@@ -19,7 +19,7 @@ interface FirebaseInterface extends LoggerAwareInterface, ReferenceProviderInter
      *
      * @throws FirebaseException When the location is not available.
      *
-     * @return array The returned data.
+     * @return mixed The returned data.
      */
     public function get($location);
 
@@ -28,7 +28,7 @@ interface FirebaseInterface extends LoggerAwareInterface, ReferenceProviderInter
      *
      * @param  string $location The location.
      * @param  Query  $query    The query.
-     * @return array  The data.
+     * @return mixed  The data.
      */
     public function query($location, Query $query);
 

@@ -123,7 +123,7 @@ class Firebase implements FirebaseInterface
      *
      * @throws FirebaseException
      *
-     * @return array The processed response data.
+     * @return mixed The processed response data.
      */
     private function send($location, $method, array $data = null, Query $query = null)
     {
