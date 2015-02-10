@@ -168,21 +168,19 @@ class QueryIntegrationTest extends IntegrationTest
         $this->assertSame(['c', 'd'], array_keys($result));
     }
 
-//    public function testLimitToFirst()
-//    {
-//        $this->assertEquals('limitToFirst=2', (string) $this->query->limitToFirst(2));
-//    }
-//
-//    public function testLimitToLast()
-//    {
-//        $this->assertEquals('limitToLast=2', (string) $this->query->limitToLast(2));
-//    }
-//
-//    public function testMultipleLimitToSettingsShouldUseLastOne()
-//    {
-//        $this->query->limitToFirst(2);
-//        $this->query->limitToLast(3);
-//
-//        $this->assertEquals('limitToLast=3', (string) $this->query);
-//    }
+    public function testMultiple()
+    {
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+
+        $this->query
+            ->orderByKey()
+            ->startAt('a')
+            ->endAt('c');
+
+        $result = $this->firebase->query($this->getLocation(), $this->query);
+
+        $this->assertCount(3, $result);
+        $this->assertSame(['a', 'b', 'c'], array_keys($result));
+    }
 }
