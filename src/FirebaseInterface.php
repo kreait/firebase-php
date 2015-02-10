@@ -5,7 +5,6 @@
  * For the full copyright and license information, please read the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Kreait\Firebase;
 
 use Kreait\Firebase\Exception\FirebaseException;
@@ -16,20 +15,20 @@ interface FirebaseInterface extends LoggerAwareInterface, ReferenceProviderInter
     /**
      * Returns the data of the given location.
      *
-     * @param string             $location The location.
+     * @param string $location The location.
      *
      * @throws FirebaseException When the location is not available.
      *
-     * @return array             The returned data.
+     * @return array The returned data.
      */
     public function get($location);
 
     /**
      * Queries the given location.
      *
-     * @param string $location The location.
-     * @param Query $query The query.
-     * @return array The data.
+     * @param  string $location The location.
+     * @param  Query  $query    The query.
+     * @return array  The data.
      */
     public function query($location, Query $query);
 

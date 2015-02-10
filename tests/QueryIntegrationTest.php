@@ -5,7 +5,7 @@
  * For the full copyright and license information, please read the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Kreait\Firebase;
 
 class QueryIntegrationTest extends IntegrationTest
@@ -32,10 +32,10 @@ class QueryIntegrationTest extends IntegrationTest
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
-        $this->firebase->set(['first_name' => 'd', 'height' => 1, '.priority' => 2], $this->baseLocation . '/d');
-        $this->firebase->set(['first_name' => 'b', 'height' => 3, '.priority' => 4], $this->baseLocation . '/b');
-        $this->firebase->set(['first_name' => 'c', 'height' => 2, '.priority' => 1], $this->baseLocation . '/c');
-        $this->firebase->set(['first_name' => 'a', 'height' => 4, '.priority' => 3], $this->baseLocation . '/a');
+        $this->firebase->set(['first_name' => 'd', 'height' => 1, '.priority' => 2], $this->baseLocation.'/d');
+        $this->firebase->set(['first_name' => 'b', 'height' => 3, '.priority' => 4], $this->baseLocation.'/b');
+        $this->firebase->set(['first_name' => 'c', 'height' => 2, '.priority' => 1], $this->baseLocation.'/c');
+        $this->firebase->set(['first_name' => 'a', 'height' => 4, '.priority' => 3], $this->baseLocation.'/a');
 
         $this->recorder->stopRecording();
         $this->recorder->eject();

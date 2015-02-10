@@ -5,7 +5,6 @@
  * For the full copyright and license information, please read the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Kreait\Firebase;
 
 use Ivory\HttpAdapter\CurlHttpAdapter;
@@ -192,15 +191,13 @@ class Firebase implements FirebaseInterface
             $result = $this->cleanupData($result);
         }
 
-
-
         return $result;
     }
 
     /**
      * Removes empty values from the dataset.
      *
-     * @param array $data
+     * @param  array $data
      * @return array
      */
     private function cleanupData(array $data)

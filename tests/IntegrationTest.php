@@ -5,7 +5,7 @@
  * For the full copyright and license information, please read the LICENSE
  * file that was distributed with this source code.
  */
- 
+
 namespace Kreait\Firebase;
 
 use Ivory\HttpAdapter\CurlHttpAdapter;
@@ -56,7 +56,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->recordingMode = (int) getenv('FIREBASE_TEST_RECORDING_MODE');
 
         $r = new \ReflectionClass($this);
-        $this->fixturesDir = __DIR__ . '/fixtures/' . $r->getShortName();
+        $this->fixturesDir = __DIR__.'/fixtures/'.$r->getShortName();
 
         $this->setHttpAdapter();
     }

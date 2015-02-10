@@ -5,7 +5,6 @@
  * For the full copyright and license information, please read the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Kreait\Firebase;
 
 use Psr\Log\LoggerAwareInterface;
@@ -22,7 +21,7 @@ interface ReferenceInterface extends LoggerAwareInterface, ReferenceProviderInte
     /**
      * Queries the Reference.
      *
-     * @param Query $query The query.
+     * @param  Query $query The query.
      * @return array The data.
      */
     public function query(Query $query);

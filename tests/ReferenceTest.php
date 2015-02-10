@@ -5,7 +5,6 @@
  * For the full copyright and license information, please read the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Kreait\Firebase;
 
 class ReferenceTest extends \PHPUnit_Framework_TestCase
