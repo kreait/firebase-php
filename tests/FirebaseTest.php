@@ -118,6 +118,25 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedData, $result);
     }
 
+    public function testGetScalar()
+    {
+        $data = [
+            'string' => 'string',
+            'int' => 1,
+            'float' => 1.1,
+        ];
+
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+
+        $location = $this->getLocation(__FUNCTION__);
+        $this->firebase->set($data, $location);
+
+        $this->assertSame($data['string'], $this->firebase->get($location . '/string'));
+        $this->assertSame($data['int'], $this->firebase->get($location . '/int'));
+        $this->assertSame($data['float'], $this->firebase->get($location . '/float'));
+    }
+
     public function testGetKeyWithWhitespace()
     {
         // This should not throw an exception
