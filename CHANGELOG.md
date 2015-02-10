@@ -3,6 +3,9 @@
 ## Unreleased
 
 * Use TapeRecorder subscriber in HTTP adapter to use fixtures instead of real HTTP requests.
+* Use [dotenv](https://github.com/vlucas/phpdotenv/) for the test environment.
+* Moved `FirebaseException` to own namespace.
+* Add support for Queries.
 
 ## 0.3.1 - 2015-01-27
 
