@@ -32,16 +32,11 @@ After installing, you need to require Composer's autoloader:
 require 'vendor/autoload.php';
 ```
 
-## Todo
-
-- [ ] Implement [user authentication](https://www.firebase.com/docs/rest/guide/user-auth.html)
-- [ ] Use fixtures for tests
-- [ ] Implement Filters (see [Querying Data](https://www.firebase.com/docs/rest/guide/retrieving-data.html#section-rest-queries))
-
 ## Documentation
 
 1. [Working with the `Firebase` class](doc/firebase.md)
 1. [Working with References](doc/reference.md)
+1. [Querying data](doc/queries.md)
 1. [Use your own HTTP client](doc/http-client.md)
 
 ## Example
