@@ -59,7 +59,7 @@ class Query
      */
     public function orderByChildKey($childKey)
     {
-        $this->orderBy = $childKey;
+        $this->orderBy = sprintf('"%s"', $childKey);
 
         return $this;
     }
@@ -120,7 +120,7 @@ class Query
      */
     public function startAt($start)
     {
-        $this->startAt = $start;
+        $this->startAt = sprintf('"%s"', $start);
 
         return $this;
     }
@@ -133,7 +133,7 @@ class Query
      */
     public function endAt($end)
     {
-        $this->endAt = $end;
+        $this->endAt = sprintf('"%s"', $end);
 
         return $this;
     }

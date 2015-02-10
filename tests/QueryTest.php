@@ -28,20 +28,20 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 
     public function testStartAt()
     {
-        $this->assertEquals('startAt=foo', (string) $this->query->startAt('foo'));
-        $this->assertEquals('startAt=White%20Space', (string) $this->query->startAt('White Space'));
+        $this->assertEquals('startAt=%22foo%22', (string) $this->query->startAt('foo'));
+        $this->assertEquals('startAt=%22White%20Space%22', (string) $this->query->startAt('White Space'));
     }
 
     public function testEndAt()
     {
-        $this->assertEquals('endAt=foo', (string) $this->query->endAt('foo'));
-        $this->assertEquals('endAt=White%20Space', (string) $this->query->endAt('White Space'));
+        $this->assertEquals('endAt=%22foo%22', (string) $this->query->endAt('foo'));
+        $this->assertEquals('endAt=%22White%20Space%22', (string) $this->query->endAt('White Space'));
     }
 
     public function testOrderBy()
     {
-        $this->assertEquals('orderBy=foo', (string) $this->query->orderByChildKey('foo'));
-        $this->assertEquals('orderBy=White%20Space', (string) $this->query->orderByChildKey('White Space'));
+        $this->assertEquals('orderBy=%22foo%22', (string) $this->query->orderByChildKey('foo'));
+        $this->assertEquals('orderBy=%22White%20Space%22', (string) $this->query->orderByChildKey('White Space'));
     }
 
     public function testOrderByKey()

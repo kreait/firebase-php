@@ -77,8 +77,7 @@ class Firebase implements FirebaseInterface
      */
     public function query($location, Query $query)
     {
-        $queryLocation = sprintf('%s%s', $location, (string) $query);
-        return $this->get($queryLocation);
+        return $this->send($location, RequestInterface::METHOD_GET, null, $query);
     }
 
     /**
@@ -121,15 +120,22 @@ class Firebase implements FirebaseInterface
      * @param string     $location The location.
      * @param string     $method   The HTTP method.
      * @param array|null $data     The data.
+     * @param Query|null $query    The query.
      *
      * @throws FirebaseException
      *
      * @return array The processed response data.
      */
-    private function send($location, $method, array $data = null)
+    private function send($location, $method, array $data = null, Query $query = null)
     {
         // When $location is null, the relative URL will be '/.json', which is okay
         $relativeUrl = sprintf('/%s.json', Utils::prepareLocationForRequest($location));
+        if ($query) {
+            $queryString = (string) $query;
+            if (!empty($queryString)) {
+                $relativeUrl = sprintf('%s?%s', $relativeUrl, $queryString);
+            }
+        }
         $absoluteUrl = sprintf('%s%s', $this->baseUrl, $relativeUrl);
 
         $headers = [
