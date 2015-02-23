@@ -11,18 +11,13 @@
       "email": "dev@kreait.com"
     }
   ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/jeromegamez/ivory-http-adapter.git"
-    }
-  ],
   "require": {
     "php": ">=5.4",
     "ext-curl": "*",
     "ext-mbstring": "*",
     "psr/log": "~1.0",
-    "egeloen/http-adapter": "dev-feature/tape-recorder-subscriber as 0.5"
+    "egeloen/http-adapter": "0.6.*",
+    "kreait/tape-recorder-subscriber": "~1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.5",

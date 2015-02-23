@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Use Tape Recorder Subscriber as distinct package instead of relying on the PR branch of the Ivory HTTP Adapter.
+
 ## 0.4.0 - 2015-02-10
 
 * Use TapeRecorder subscriber in HTTP adapter to use fixtures instead of real HTTP requests.

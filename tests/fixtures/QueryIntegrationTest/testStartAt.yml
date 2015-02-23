@@ -7,7 +7,7 @@
             accept: [application/json]
             accept-charset: [utf-8]
             Connection: [keep-alive]
-            User-Agent: ['Ivory Http Adapter 0.6.0-DEV']
+            User-Agent: ['Ivory Http Adapter 0.6.0']
         body: 'null'
         parameters: {  }
     response:
