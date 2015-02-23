@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 0.4.1 - 2015-02-23
 
 * Use Tape Recorder Subscriber as distinct package instead of relying on the PR branch of the Ivory HTTP Adapter.
 
