@@ -166,17 +166,35 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdate()
     {
+        $initialData = [
+            'key1' => 'value1',
+            'key2' => 'value2',
+            'key3' => [
+                'subkey1' => 'subvalue1',
+                'subkey2' => 'subvalue2',
+            ],
+        ];
+
         $update = [
             'key1' => 'value1',
             'key2' => null,
+            'key4' => [
+                'subkey1' => 'subvalue1',
+                'subkey2' => 'subvalue2',
+            ],
         ];
 
         $expectedResult = [
             'key1' => 'value1',
+            'key4' => [
+                'subkey1' => 'subvalue1',
+                'subkey2' => 'subvalue2',
+            ],
         ];
 
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
+        $this->firebase->set($initialData, $this->getLocation(__FUNCTION__));
         $result = $this->firebase->update($update, $this->getLocation(__FUNCTION__));
         $this->assertEquals($expectedResult, $result);
     }
