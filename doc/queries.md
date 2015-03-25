@@ -4,19 +4,34 @@ You can query a location by using the `query` method of the `Firebase` or `Refer
 
 ```php
 use Kreait\Firebase\Firebase;
-use Kreait\Firebase\Reference;
 use Kreait\Firebase\Query;
+
+$firebase = new Firebase('https://brilliant-torch-1474.firebaseio.com');
+
+$reference = $firebase->getReference('path/to/my/location');
+
+$reference->set([
+    'a' => 'a',
+    'b' => 'b',
+    'c' => 'c',
+]);
 
 $query = new Query();
 $query
     ->orderByKey()
     ->startAt('a')
-    ->endAt('c');
+    ->endAt('b');
 
-$firebase->query('path/to/location', $query);
+$data = $reference->query($query);
 
-$reference = $firebase->getReference('path/to/location');
-$reference->query($query);
+print_r($data);
+
+// Output:
+// Array
+// (
+//     [a] => a
+//     [b] => b
+// )
 ```
 
 See https://www.firebase.com/docs/rest/guide/retrieving-data.html#section-rest-queries for further information.
