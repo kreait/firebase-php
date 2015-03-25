@@ -191,6 +191,11 @@ class Firebase implements FirebaseInterface
             $result = $this->cleanupData($result);
         }
 
+        // Make sure the data is an array
+        if (empty($result)) {
+            $result = [];
+        }
+
         return $result;
     }
 
