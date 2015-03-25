@@ -114,6 +114,7 @@ class Reference implements ReferenceInterface
     public function push($data)
     {
         $newKey = $this->firebase->push($data, $this->location);
+        $this->data = []; // Reset data, because it now contains new data
 
         return $this->getReference($newKey);
     }
