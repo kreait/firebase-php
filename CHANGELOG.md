@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+* Fix Query documentation
+* Use Tape Recorder Subscriber for Reference Tests
+* Make sure data returned from Firebase is an array (null responses weren't handled correctly)
+
 ## 0.4.1 - 2015-02-23
 
 * Use Tape Recorder Subscriber as distinct package instead of relying on the PR branch of the Ivory HTTP Adapter.
