@@ -7,21 +7,33 @@
  */
 namespace Kreait\Firebase;
 
-class ReferenceTest extends \PHPUnit_Framework_TestCase
+use Ivory\HttpAdapter\CurlHttpAdapter;
+use Ivory\HttpAdapter\Event\Subscriber\TapeRecorderSubscriber;
+use Ivory\HttpAdapter\HttpAdapterInterface;
+
+class ReferenceTest extends Integrationtest
 {
     /**
-     * @var FirebaseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reference
      */
-    protected $firebase;
+    protected $reference;
 
     /**
      * @var string
      */
-    protected $location = 'path/to/location';
+    protected $location;
 
     protected function setUp()
     {
-        $this->firebase = $this->getMockBuilder('Kreait\Firebase\FirebaseInterface')->getMock();
+        parent::setUp();
+
+        $this->location = 'tests/reference';
+        $this->reference = new Reference($this->firebase, $this->location);
+    }
+
+    protected function tearDown()
+    {
+        $this->recorder->eject();
     }
 
     public function testGetKey()
@@ -29,197 +41,160 @@ class ReferenceTest extends \PHPUnit_Framework_TestCase
         $locationPath = explode('/', $this->location);
         $expected = array_pop($locationPath);
 
-        $this->assertEquals($expected, $this->getReference()->getKey());
+        $this->assertEquals($expected, $this->reference->getKey());
     }
 
     public function testGetReference()
     {
         $expectedFullLocation = $this->location.'/bar';
 
-        $this->firebase
-            ->expects($this->once())
-            ->method('getReference')
-            ->with($expectedFullLocation)
-            ->willReturn(new Reference($this->firebase, $expectedFullLocation))
-        ;
-
-        $check = $this->getReference()->getReference('bar');
+        $check = $this->reference->getReference('bar');
         $this->assertAttributeEquals($expectedFullLocation, 'location', $check);
     }
 
     public function testSet()
     {
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+
         $data = ['key1' => 'value1', 'key2' => 'value2', 'key3' => null];
         $expectedData = ['key1' => 'value1', 'key2' => 'value2'];
 
-        $this->firebase
-            ->expects($this->once())
-            ->method('set')
-            ->with($data, $this->location)
-            ->willReturn($expectedData)
-        ;
+        $reference = $this->reference->set($data);
 
-        $reference = $this->getReference();
-
-        $result = $reference->set($data);
-
-        $this->assertSame($reference, $result);
-        $this->assertAttributeEquals($expectedData, 'data', $result);
+        $this->assertInstanceOf('Kreait\Firebase\Reference', $reference);
+        $this->assertAttributeEquals($expectedData, 'data', $reference);
     }
 
     public function testPush()
     {
-        $data = ['key1' => 'value1', 'key2' => 'value2', 'key3' => null];
-        $expectedData = ['key1' => 'value1', 'key2' => 'value2'];
-        $expectedKey = 'foo';
-        $childLocation = $this->location.'/'.$expectedKey;
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+        $reference = $this->reference->getReference(__FUNCTION__);
 
-        $this->firebase
-            ->expects($this->once())
-            ->method('push')
-            ->with($data, $this->location)
-            ->willReturn($expectedKey)
-        ;
 
-        $this->firebase
-            ->expects($this->once())
-            ->method('getReference')
-            ->with($childLocation)
-            ->willReturn($this->getReference($expectedData, $childLocation));
+        $initialData = ['key1' => 'value1', 'key2' => 'value2'];
+        $newItem = ['key3' => 'value3', 'key4' => null];
+        $expectedNewItemData = ['key3' => 'value3'];
 
-        $reference = $this->getReference();
+        $expectedFullData = ['key1' => 'value1', 'key2' => 'value2'];
 
-        $result = $reference->push($data);
+        $reference->set($initialData);
 
-        $this->assertInstanceOf('Kreait\Firebase\Reference', $result);
-        $this->assertNotSame($reference, $result);
-        $this->assertEquals($expectedKey, $result->getKey());
+        $newItemReference = $reference->push($newItem);
+        $newItemData = $newItemReference->getData();
+        $this->assertEquals($expectedNewItemData, $newItemData);
+
+        $expectedFullData[$newItemReference->getKey()] = $newItemReference->getData();
+
+        $this->assertEquals($expectedFullData, $reference->getData());
     }
 
     public function testUpdate()
     {
-        $existingData = ['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3'];
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+        $reference = $this->reference->getReference(__FUNCTION__);
+
+        $initialData = ['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3'];
         $update = ['key2' => 'new_value', 'key3' => null];
         $expectedData = ['key1' => 'value1', 'key2' => 'new_value', 'key3' => 'value3'];
 
-        $this->firebase
-            ->expects($this->once())
-            ->method('update')
-            ->with($update, $this->location)
-            ->willReturn($expectedData)
-        ;
+        $reference->set($initialData);
+        $reference->update($update);
 
-        $reference = $this->getReference($existingData);
-
-        $result = $reference->update($update);
-
-        $this->assertSame($reference, $result);
-        $this->assertAttributeEquals($expectedData, 'data', $result);
+        $this->assertEquals($expectedData, $reference->getData());
     }
 
     public function testDelete()
     {
-        $this->firebase
-            ->expects($this->once())
-            ->method('delete')
-            ->with($this->location)
-            ->willReturn(null)
-        ;
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+        $reference = $this->reference->getReference(__FUNCTION__);
 
-        $reference = $this->getReference();
-        $reference->delete();
+        $initialData = ['sub1' => 'value1', 'sub2' => 'value2'];
+        $expectedData = ['sub2' => 'value2'];
+        $reference->set($initialData);
+
+        $subReference = $reference->getReference('sub1');
+        $subReference->delete();
     }
 
     public function testGetExistingData()
     {
-        $existingData = ['key1' => 'value1', 'key2' => 'new_value', 'key3' => 'value3'];
-        $reference = $this->getReference($existingData);
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+        $reference = $this->reference->getReference(__FUNCTION__);
 
-        $this->firebase
-            ->expects($this->never())
-            ->method('get')
-        ;
+        $firstData = ['first' => 'value'];
+        $secondData = ['second' => 'value'];
 
-        $this->assertEquals($existingData, $reference->getData());
-    }
+        $reference->set($firstData);
+        $this->assertEquals($firstData, $reference->getData());
 
-    public function testGetDataWhichThatHasToBeFetchedFirst()
-    {
-        $data = ['key1' => 'value1', 'key2' => 'new_value', 'key3' => 'value3'];
-
-        $this->firebase
-            ->expects($this->once())
-            ->method('get')
-            ->with($this->location)
-            ->willReturn($data)
-        ;
-
-        $this->assertEquals($data, $this->getReference()->getData());
+        $reference->set($secondData);
+        $this->assertEquals($secondData, $reference->getData());
     }
 
     public function testArrayAccessOffsetGetAndOffsetExists()
     {
-        $reference = $this->getReference(['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3']);
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+        $reference = $this->reference->getReference(__FUNCTION__);
+
+        $initialData = ['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3'];
+
+        $reference->set($initialData);
 
         $this->assertTrue($reference->offsetExists('key1'));
         $this->assertFalse($reference->offsetExists('nonexistent'));
         $this->assertEquals('value1', $reference->offsetGet('key1'));
     }
 
+    /**
+     * @expectedException \PHPUnit_Framework_Error_Notice
+     */
     public function testOffsetGetWithUndefinedIndex()
     {
-        $reference = $this->getReference();
-        $this->assertNull($reference->offsetGet('nonexistent'));
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+        $reference = $this->reference;
+
+        $reference->offsetGet('nonexistent');
     }
 
     public function testOffsetSet()
     {
-        $this->firebase
-            ->expects($this->once())
-            ->method('update')
-            ->willReturn(['key' => 'value'])
-        ;
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+        $reference = $this->reference->getReference(__FUNCTION__);
 
-        $reference = $this->getReference();
         $reference->offsetSet('key', 'value');
         $this->assertTrue($reference->offsetExists('key'));
     }
 
     public function testOffsetUnset()
     {
-        $reference = $this->getReference(['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3']);
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+        $reference = $this->reference->getReference(__FUNCTION__);
 
-        $reference->offsetUnset('key1');
-        $this->assertAttributeNotContains('value1', 'data', $reference);
+        $reference->set(['key' => 'value']);
+
+        $reference->offsetUnset('key');
+        $this->assertAttributeNotContains('value', 'data', $reference);
     }
 
     public function testCount()
     {
-        $reference = $this->getReference(['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3']);
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+        $reference = $this->reference->getReference(__FUNCTION__);
+
+        $initialData = ['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3'];
+
+        $reference->set($initialData);
 
         $this->assertEquals(3, count($reference));
-    }
-
-    /**
-     * @param  array       $predefinedData
-     * @param  string|null $location
-     * @return Reference
-     */
-    protected function getReference(array $predefinedData = [], $location = null)
-    {
-        $location = $location ?: $this->location;
-        $reference = new Reference($this->firebase, $location);
-
-        if (empty($predefinedData)) {
-            return $reference;
-        }
-
-        $r = new \ReflectionObject($reference);
-        $attrData = $r->getProperty('data');
-        $attrData->setAccessible(true);
-        $attrData->setValue($reference, $predefinedData);
-        $attrData->setAccessible(false);
-
-        return $reference;
     }
 }

@@ -1,0 +1,46 @@
+-
+    request:
+        url: 'https://brilliant-torch-1474.firebaseio.com/tests/reference/testUpdate.json'
+        method: PUT
+        protocol_version: '1.1'
+        headers:
+            accept: [application/json]
+            accept-charset: [utf-8]
+            Connection: [keep-alive]
+            User-Agent: ['Ivory Http Adapter 0.6.0']
+        body: '{"key1":"value1","key2":"value2","key3":"value3"}'
+        parameters: {  }
+    response:
+        status_code: 200
+        reason_phrase: OK
+        protocol_version: '1.1'
+        headers:
+            Content-Length: ['49']
+            Strict-Transport-Security: ['max-age=31556926; includeSubDomains; preload']
+            Content-Type: ['application/json; charset=utf-8']
+            Cache-Control: [no-cache]
+        body: '{"key1":"value1","key2":"value2","key3":"value3"}'
+        parameters: {  }
+-
+    request:
+        url: 'https://brilliant-torch-1474.firebaseio.com/tests/reference/testUpdate.json'
+        method: PATCH
+        protocol_version: '1.1'
+        headers:
+            accept: [application/json]
+            accept-charset: [utf-8]
+            Connection: [keep-alive]
+            User-Agent: ['Ivory Http Adapter 0.6.0']
+        body: '{"key2":"new_value","key3":null}'
+        parameters: {  }
+    response:
+        status_code: 200
+        reason_phrase: OK
+        protocol_version: '1.1'
+        headers:
+            Content-Length: ['32']
+            Strict-Transport-Security: ['max-age=31556926; includeSubDomains; preload']
+            Content-Type: ['application/json; charset=utf-8']
+            Cache-Control: [no-cache]
+        body: '{"key2":"new_value","key3":null}'
+        parameters: {  }
