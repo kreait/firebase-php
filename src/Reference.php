@@ -82,11 +82,11 @@ class Reference implements ReferenceInterface
      */
     public function getData()
     {
-        if (!empty($this->data)) {
-            return $this->data;
+        if (empty($this->data)) {
+            $this->data = $this->firebase->get($this->location);
         }
 
-        return $this->data = $this->firebase->get($this->location);
+        return $this->data;
     }
 
     /**
@@ -103,7 +103,7 @@ class Reference implements ReferenceInterface
     public function set($data)
     {
         $writtenData = $this->firebase->set($data, $this->location);
-        $this->updateData($writtenData, $merge = false);
+        $this->data = $writtenData ?: [];
 
         return $this;
     }
