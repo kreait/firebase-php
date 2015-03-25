@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 0.4.2 - 2015-03-25
 
 * Fix Query documentation
 * Use Tape Recorder Subscriber for Reference Tests
