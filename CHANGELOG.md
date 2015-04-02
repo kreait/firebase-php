@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 0.5 - 2015-04-02
 
 * Use `Configuration` object instead of configuring `Firebase` directly.
 
