@@ -12,90 +12,64 @@
 
 namespace Kreait\Firebase;
 
-use Ivory\HttpAdapter\CurlHttpAdapter;
 use Ivory\HttpAdapter\HttpAdapterException;
-use Ivory\HttpAdapter\HttpAdapterInterface;
 use Ivory\HttpAdapter\Message\RequestInterface;
 use Ivory\HttpAdapter\Message\ResponseInterface;
 use Kreait\Firebase\Exception\FirebaseException;
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\NullLogger;
 
 class Firebase implements FirebaseInterface
 {
-    use LoggerAwareTrait;
-
     /**
-     * The HTTP adapter.
+     * The Firebase configuration.
      *
-     * @var HttpAdapterInterface
+     * @var ConfigurationInterface
      */
-    private $http;
-
-    /**
-     * The base URL.
-     *
-     * @var string
-     */
-    private $baseUrl;
+    private $configuration;
 
     /**
      * Firebase client initialization.
      *
-     * @param string               $baseUrl The Firebase app base URL.
-     * @param HttpAdapterInterface $http    The HTTP adapter.
+     * @param string                 $baseUrl       The Firebase app base URL.
+     * @param ConfigurationInterface $configuration The Firebase configuration.
      *
      * @throws FirebaseException When the base URL is not valid.
      */
-    public function __construct($baseUrl, HttpAdapterInterface $http = null)
+    public function __construct($baseUrl, ConfigurationInterface $configuration = null)
     {
-        $this->logger = new NullLogger();
-        $this->http = $http ?: new CurlHttpAdapter();
         $this->baseUrl = Utils::normalizeBaseUrl($baseUrl);
-
-        $configuration = $this->http->getConfiguration();
-
-        $configuration->setKeepAlive(true);
+        $this->configuration = $configuration ?: new Configuration();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function setConfiguration(ConfigurationInterface $configuration)
+    {
+        $this->configuration = $configuration;
+    }
+
+    public function getConfiguration()
+    {
+        return $this->configuration;
+    }
+
     public function getReference($location)
     {
-        $reference = new Reference($this, Utils::normalizeLocation($location));
-        $reference->setLogger($this->logger);
-
-        return $reference;
+        return new Reference($this, Utils::normalizeLocation($location));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get($location)
     {
         return $this->send($location, RequestInterface::METHOD_GET);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function query($location, Query $query)
     {
         return $this->send($location, RequestInterface::METHOD_GET, null, $query);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function set(array $data, $location)
     {
         return $this->send($location, RequestInterface::METHOD_PUT, $data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function push(array $data, $location)
     {
         $result = $this->send($location, RequestInterface::METHOD_POST, $data);
@@ -103,17 +77,11 @@ class Firebase implements FirebaseInterface
         return $result['name'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update(array $data, $location)
     {
         return $this->send($location, RequestInterface::METHOD_PATCH, $data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete($location)
     {
         $this->send($location, RequestInterface::METHOD_DELETE);
@@ -133,6 +101,8 @@ class Firebase implements FirebaseInterface
      */
     private function send($location, $method, array $data = null, Query $query = null)
     {
+        $logger = $this->getConfiguration()->getLogger();
+
         // When $location is null, the relative URL will be '/.json', which is okay
         $relativeUrl = sprintf('/%s.json', Utils::prepareLocationForRequest($location));
         if ($query) {
@@ -150,7 +120,9 @@ class Firebase implements FirebaseInterface
 
         // It would have been easier to write $this->http->send(…) but this would not
         // give us a request object to debug later
-        $request = $this->http->getConfiguration()->getMessageFactory()->createRequest(
+        $http = $this->getConfiguration()->getHttpAdapter();
+
+        $request = $http->getConfiguration()->getMessageFactory()->createRequest(
             $absoluteUrl,
             $method,
             RequestInterface::PROTOCOL_VERSION_1_1,
@@ -158,22 +130,22 @@ class Firebase implements FirebaseInterface
             json_encode($data)
         );
 
-        $this->logger->debug(
+        $logger->debug(
             sprintf('%s request to %s', $method, $request->getUrl()),
             ($data) ? ['data_sent' => $data] : []
         );
 
         try {
-            $response = $this->http->sendRequest($request);
+            $response = $http->sendRequest($request);
         } catch (HttpAdapterException $e) {
             $fe = FirebaseException::httpAdapterError($e);
-            $this->logger->error($fe->getMessage());
+            $logger->error($fe->getMessage());
             throw $fe;
         }
 
         if ($response->getStatusCode() >= 400) {
             $fe = FirebaseException::httpError($request, $response);
-            $this->logger->error($fe->getMessage());
+            $logger->error($fe->getMessage());
             throw $fe;
         }
 

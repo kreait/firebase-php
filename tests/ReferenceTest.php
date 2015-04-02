@@ -34,7 +34,9 @@ class ReferenceTest extends Integrationtest
 
     protected function tearDown()
     {
-        $this->recorder->eject();
+        if ($this->recorder) {
+            $this->recorder->eject();
+        }
     }
 
     public function testGetKey()

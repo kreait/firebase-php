@@ -13,9 +13,8 @@
 namespace Kreait\Firebase;
 
 use Kreait\Firebase\Exception\FirebaseException;
-use Psr\Log\LoggerAwareInterface;
 
-interface FirebaseInterface extends LoggerAwareInterface, ReferenceProviderInterface
+interface FirebaseInterface extends ReferenceProviderInterface
 {
     /**
      * Returns the data of the given location.
@@ -74,4 +73,18 @@ interface FirebaseInterface extends LoggerAwareInterface, ReferenceProviderInter
      * @param string $location
      */
     public function delete($location);
+
+    /**
+     * Sets the Firebase client configuration.
+     *
+     * @param ConfigurationInterface $configuration The Firebase configuration
+     */
+    public function setConfiguration(ConfigurationInterface $configuration);
+
+    /**
+     * Returns the Firebase client configuration.
+     *
+     * @return ConfigurationInterface
+     */
+    public function getConfiguration();
 }

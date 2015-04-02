@@ -12,13 +12,8 @@
 
 namespace Kreait\Firebase;
 
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\NullLogger;
-
 class Reference implements ReferenceInterface
 {
-    use LoggerAwareTrait;
-
     /**
      * The Firebase.
      *
@@ -55,15 +50,11 @@ class Reference implements ReferenceInterface
      */
     public function __construct(FirebaseInterface $firebase, $location)
     {
-        $this->logger = new NullLogger();
         $this->firebase = $firebase;
         $this->location = Utils::normalizeLocation($location);
         $this->data = [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getKey()
     {
         if (!$this->key) {
@@ -74,17 +65,11 @@ class Reference implements ReferenceInterface
         return $this->key;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getReference($location)
     {
         return $this->firebase->getReference(sprintf('%s/%s', $this->location, Utils::normalizeLocation($location)));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getData()
     {
         if (empty($this->data)) {
@@ -94,17 +79,11 @@ class Reference implements ReferenceInterface
         return $this->data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function query(Query $query)
     {
         return $this->firebase->query($this->location, $query);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function set($data)
     {
         $writtenData = $this->firebase->set($data, $this->location);
@@ -113,9 +92,6 @@ class Reference implements ReferenceInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function push($data)
     {
         $newKey = $this->firebase->push($data, $this->location);
@@ -124,9 +100,6 @@ class Reference implements ReferenceInterface
         return $this->getReference($newKey);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update($data)
     {
         $writtenData = $this->firebase->update($data, $this->location);
@@ -135,9 +108,6 @@ class Reference implements ReferenceInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete()
     {
         $this->firebase->delete($this->location);
@@ -154,44 +124,29 @@ class Reference implements ReferenceInterface
         $this->data = array_filter($this->data, 'strlen'); // Remove all null values
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetExists($offset)
     {
         $this->getData(); // Ensure data exists
         return isset($this->data[$offset]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetGet($offset)
     {
         $this->getData(); // Ensure data exists
         return $this->data[$offset];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetSet($offset, $value)
     {
         $this->data[$offset] = $value;
         $this->update([$offset => $value]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetUnset($offset)
     {
         unset($this->data[$offset]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function count()
     {
         return count($this->data);
