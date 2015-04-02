@@ -6,7 +6,7 @@
         headers:
             accept: [application/json]
             accept-charset: [utf-8]
-            Connection: [keep-alive]
+            Connection: [close]
             User-Agent: ['Ivory Http Adapter 0.6.0']
         body: '{"key1":"value1","key2":"value2","key3":"value3"}'
         parameters: {  }
