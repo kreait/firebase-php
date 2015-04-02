@@ -20,6 +20,13 @@ use Kreait\Firebase\Exception\FirebaseException;
 class Firebase implements FirebaseInterface
 {
     /**
+     * The Firebase app base URL.
+     *
+     * @var string
+     */
+    private $baseUrl;
+
+    /**
      * The Firebase configuration.
      *
      * @var ConfigurationInterface
