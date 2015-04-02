@@ -1,10 +1,15 @@
 <?php
-/**
+
+/*
  * This file is part of the firebase-php package.
  *
- * For the full copyright and license information, please read the LICENSE
- * file that was distributed with this source code.
+ * (c) Jérôme Gamez <jerome@kreait.com>
+ * (c) kreait GmbH <info@kreait.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
+
 namespace Kreait\Firebase;
 
 use Ivory\HttpAdapter\CurlHttpAdapter;
@@ -28,7 +33,7 @@ class Firebase implements FirebaseInterface
     private $http;
 
     /**
-     * The base URL
+     * The base URL.
      *
      * @var string
      */
@@ -37,9 +42,10 @@ class Firebase implements FirebaseInterface
     /**
      * Firebase client initialization.
      *
-     * @param  string               $baseUrl The Firebase app base URL.
-     * @param  HttpAdapterInterface $http    The HTTP adapter.
-     * @throws FirebaseException    When the base URL is not valid.
+     * @param string               $baseUrl The Firebase app base URL.
+     * @param HttpAdapterInterface $http    The HTTP adapter.
+     *
+     * @throws FirebaseException When the base URL is not valid.
      */
     public function __construct($baseUrl, HttpAdapterInterface $http = null)
     {
@@ -175,7 +181,8 @@ class Firebase implements FirebaseInterface
     }
 
     /**
-     * @param  ResponseInterface $response
+     * @param ResponseInterface $response
+     *
      * @return array|void
      */
     private function getResultFromResponse(ResponseInterface $response)
@@ -202,7 +209,8 @@ class Firebase implements FirebaseInterface
     /**
      * Removes empty values from the dataset.
      *
-     * @param  array $data
+     * @param array $data
+     *
      * @return array
      */
     private function cleanupData(array $data)

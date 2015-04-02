@@ -1,10 +1,15 @@
 <?php
-/**
+
+/*
  * This file is part of the firebase-php package.
  *
- * For the full copyright and license information, please read the LICENSE
- * file that was distributed with this source code.
+ * (c) Jérôme Gamez <jerome@kreait.com>
+ * (c) kreait GmbH <info@kreait.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
+
 namespace Kreait\Firebase;
 
 use Kreait\Firebase\Exception\FirebaseException;
@@ -12,11 +17,13 @@ use Kreait\Firebase\Exception\FirebaseException;
 class Utils
 {
     /**
-     * Checks validity of a Firebase base URL
+     * Checks validity of a Firebase base URL.
      *
-     * @param  string            $url
-     * @return string
+     * @param string $url
+     *
      * @throws FirebaseException
+     *
+     * @return string
      */
     public static function normalizeBaseUrl($url)
     {

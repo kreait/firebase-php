@@ -1,10 +1,15 @@
 <?php
-/**
+
+/*
  * This file is part of the firebase-php package.
  *
- * For the full copyright and license information, please read the LICENSE
- * file that was distributed with this source code.
+ * (c) Jérôme Gamez <jerome@kreait.com>
+ * (c) kreait GmbH <info@kreait.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
+
 namespace Kreait\Firebase;
 
 use Kreait\Firebase\Exception\FirebaseException;
@@ -47,7 +52,8 @@ class Restrictions
     /**
      * Performs checks on a location's keys.
      *
-     * @param  string            $location The location.
+     * @param string $location The location.
+     *
      * @throws FirebaseException if a key violates a restriction.
      */
     private static function checkLocationKeys($location)
@@ -63,7 +69,8 @@ class Restrictions
     /**
      * Checks if the given location exceeds the maximum depth, i.e. the number of location paths.
      *
-     * @param  string            $location The location.
+     * @param string $location The location.
+     *
      * @throws FirebaseException When the location exceeds the maximum depth.
      */
     private static function checkLocationDepth($location)
@@ -78,7 +85,8 @@ class Restrictions
     /**
      * Checks if the given key exceeds the maximum key length.
      *
-     * @param  string            $key The key.
+     * @param string $key The key.
+     *
      * @throws FirebaseException When the key exceeds the maximum key length.
      */
     private static function checkKeyLength($key)
@@ -91,7 +99,8 @@ class Restrictions
     /**
      * Checks if the given key includes forbidden characters.
      *
-     * @param  string            $key The key.
+     * @param string $key The key.
+     *
      * @throws FirebaseException When the key includes forbidden characters.
      */
     private static function checkForForbiddenChars($key)

@@ -1,10 +1,15 @@
 <?php
-/**
+
+/*
  * This file is part of the firebase-php package.
  *
- * For the full copyright and license information, please read the LICENSE
- * file that was distributed with this source code.
+ * (c) Jérôme Gamez <jerome@kreait.com>
+ * (c) kreait GmbH <info@kreait.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
+
 namespace Kreait\Firebase;
 
 use Psr\Log\LoggerAwareInterface;
@@ -12,7 +17,7 @@ use Psr\Log\LoggerAwareInterface;
 interface ReferenceInterface extends LoggerAwareInterface, ReferenceProviderInterface, \ArrayAccess, \Countable
 {
     /**
-     * Returns the Reference's data
+     * Returns the Reference's data.
      *
      * @return mixed The data.
      */
@@ -21,7 +26,8 @@ interface ReferenceInterface extends LoggerAwareInterface, ReferenceProviderInte
     /**
      * Queries the Reference.
      *
-     * @param  Query $query The query.
+     * @param Query $query The query.
+     *
      * @return mixed The data.
      */
     public function query(Query $query);
@@ -29,7 +35,8 @@ interface ReferenceInterface extends LoggerAwareInterface, ReferenceProviderInte
     /**
      * Writes data to this Reference.
      *
-     * @param  array $data
+     * @param array $data
+     *
      * @return $this
      */
     public function set($data);
@@ -37,7 +44,8 @@ interface ReferenceInterface extends LoggerAwareInterface, ReferenceProviderInte
     /**
      * Generates a new child location using a unique key and returns a Reference to it.
      *
-     * @param  array              $data
+     * @param array $data
+     *
      * @return ReferenceInterface
      */
     public function push($data);
@@ -45,7 +53,8 @@ interface ReferenceInterface extends LoggerAwareInterface, ReferenceProviderInte
     /**
      * Writes the given children to this location.
      *
-     * @param  array $data
+     * @param array $data
+     *
      * @return $this
      */
     public function update($data);

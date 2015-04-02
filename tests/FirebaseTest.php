@@ -1,10 +1,15 @@
 <?php
-/**
+
+/*
  * This file is part of the firebase-php package.
  *
- * For the full copyright and license information, please read the LICENSE
- * file that was distributed with this source code.
+ * (c) Jérôme Gamez <jerome@kreait.com>
+ * (c) kreait GmbH <info@kreait.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
+
 namespace Kreait\Firebase;
 
 use Ivory\HttpAdapter\Configuration;
@@ -132,9 +137,9 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
         $location = $this->getLocation(__FUNCTION__);
         $this->firebase->set($data, $location);
 
-        $this->assertSame($data['string'], $this->firebase->get($location . '/string'));
-        $this->assertSame($data['int'], $this->firebase->get($location . '/int'));
-        $this->assertSame($data['float'], $this->firebase->get($location . '/float'));
+        $this->assertSame($data['string'], $this->firebase->get($location.'/string'));
+        $this->assertSame($data['int'], $this->firebase->get($location.'/int'));
+        $this->assertSame($data['float'], $this->firebase->get($location.'/float'));
     }
 
     public function testGetKeyWithWhitespace()

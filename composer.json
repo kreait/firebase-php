@@ -17,7 +17,7 @@
     "ext-mbstring": "*",
     "psr/log": "~1.0",
     "egeloen/http-adapter": "0.6.*",
-    "kreait/tape-recorder-subscriber": "~1.0"
+    "kreait/tape-recorder-subscriber": "~1.0",
     "fabpot/php-cs-fixer": "~1.6"
   },
   "require-dev": {

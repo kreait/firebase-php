@@ -1,15 +1,16 @@
 <?php
-/**
+
+/*
  * This file is part of the firebase-php package.
  *
- * For the full copyright and license information, please read the LICENSE
- * file that was distributed with this source code.
+ * (c) Jérôme Gamez <jerome@kreait.com>
+ * (c) kreait GmbH <info@kreait.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
-namespace Kreait\Firebase;
 
-use Ivory\HttpAdapter\CurlHttpAdapter;
-use Ivory\HttpAdapter\Event\Subscriber\TapeRecorderSubscriber;
-use Ivory\HttpAdapter\HttpAdapterInterface;
+namespace Kreait\Firebase;
 
 class ReferenceTest extends Integrationtest
 {
@@ -71,7 +72,6 @@ class ReferenceTest extends Integrationtest
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
         $reference = $this->reference->getReference(__FUNCTION__);
-
 
         $initialData = ['key1' => 'value1', 'key2' => 'value2'];
         $newItem = ['key3' => 'value3', 'key4' => null];

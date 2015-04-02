@@ -1,10 +1,15 @@
 <?php
-/**
+
+/*
  * This file is part of the firebase-php package.
  *
- * For the full copyright and license information, please read the LICENSE
- * file that was distributed with this source code.
+ * (c) Jérôme Gamez <jerome@kreait.com>
+ * (c) kreait GmbH <info@kreait.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
+
 namespace Kreait\Firebase;
 
 /**
@@ -53,7 +58,8 @@ class Query
     /**
      * Order results by the given child key.
      *
-     * @param  string $childKey The key to order by.
+     * @param string $childKey The key to order by.
+     *
      * @return $this
      */
     public function orderByChildKey($childKey)
@@ -88,7 +94,8 @@ class Query
     /**
      * Limit the result to the first x items.
      *
-     * @param  int   $limit The number.
+     * @param int $limit The number.
+     *
      * @return $this
      */
     public function limitToFirst($limit)
@@ -101,7 +108,8 @@ class Query
     /**
      * Limit the result to the first x items.
      *
-     * @param  int   $limit The number.
+     * @param int $limit The number.
+     *
      * @return $this
      */
     public function limitToLast($limit)
@@ -114,7 +122,8 @@ class Query
     /**
      * Set starting point for the Query.
      *
-     * @param  int|string $start
+     * @param int|string $start
+     *
      * @return $this
      */
     public function startAt($start)
@@ -127,7 +136,8 @@ class Query
     /**
      * Set end point for the Query.
      *
-     * @param  int|string $end
+     * @param int|string $end
+     *
      * @return $this
      */
     public function endAt($end)
@@ -172,7 +182,7 @@ class Query
         }
 
         if ($this->shallow) {
-            $params['shallow'] = "true";
+            $params['shallow'] = 'true';
         }
 
         return http_build_query($params, null, '&', PHP_QUERY_RFC3986);
