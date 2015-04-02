@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Use `Configuration` object instead of configuring `Firebase` directly.
+
 ## 0.4.2 - 2015-03-25
 
 * Fix Query documentation
