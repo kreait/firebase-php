@@ -6,7 +6,7 @@
         headers:
             accept: [application/json]
             accept-charset: [utf-8]
-            Connection: [keep-alive]
+            Connection: [close]
             User-Agent: ['Ivory Http Adapter 0.6.0']
         body: '{"first_name":"d","height":1,".priority":2}'
         parameters: {  }
@@ -29,7 +29,7 @@
         headers:
             accept: [application/json]
             accept-charset: [utf-8]
-            Connection: [keep-alive]
+            Connection: [close]
             User-Agent: ['Ivory Http Adapter 0.6.0']
         body: '{"first_name":"b","height":3,".priority":4}'
         parameters: {  }
@@ -52,7 +52,7 @@
         headers:
             accept: [application/json]
             accept-charset: [utf-8]
-            Connection: [keep-alive]
+            Connection: [close]
             User-Agent: ['Ivory Http Adapter 0.6.0']
         body: '{"first_name":"c","height":2,".priority":1}'
         parameters: {  }
@@ -75,7 +75,7 @@
         headers:
             accept: [application/json]
             accept-charset: [utf-8]
-            Connection: [keep-alive]
+            Connection: [close]
             User-Agent: ['Ivory Http Adapter 0.6.0']
         body: '{"first_name":"a","height":4,".priority":3}'
         parameters: {  }

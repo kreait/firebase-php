@@ -12,8 +12,6 @@
 
 namespace Kreait\Firebase;
 
-use Ivory\HttpAdapter\Configuration;
-use Ivory\HttpAdapter\CurlHttpAdapter;
 use Ivory\HttpAdapter\Event\Subscriber\TapeRecorderSubscriber;
 use Ivory\HttpAdapter\HttpAdapterInterface;
 use Ivory\HttpAdapter\Message\Response;
@@ -26,9 +24,9 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     protected $firebase;
 
     /**
-     * @var HttpAdapterInterface
+     * @var ConfigurationInterface
      */
-    protected $http;
+    protected $configuration;
 
     /**
      * @var string
@@ -47,18 +45,18 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        parent::setUp();
-
         $this->baseUrl = getenv('FIREBASE_HOST');
         $this->baseLocation = getenv('FIREBASE_BASE_LOCATION') ?: 'tests';
         $recordingMode = getenv('FIREBASE_TEST_RECORDING_MODE') ?: 1;
 
-        $this->http = new CurlHttpAdapter();
-        $this->firebase = new Firebase($this->baseUrl, $this->http);
+        $this->configuration = new Configuration();
+
+        $this->firebase = new Firebase($this->baseUrl, $this->configuration);
+
         $this->recorder = new TapeRecorderSubscriber(__DIR__.'/fixtures/FirebaseTest');
         $this->recorder->setRecordingMode($recordingMode);
 
-        $this->http->getConfiguration()->getEventDispatcher()->addSubscriber($this->recorder);
+        $this->configuration->getHttpAdapter()->getConfiguration()->getEventDispatcher()->addSubscriber($this->recorder);
     }
 
     protected function tearDown()
@@ -93,20 +91,6 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
 
         $f = new Firebase('https://'.uniqid());
 
-        $f->get($this->getLocation());
-    }
-
-    /**
-     * @expectedException \Kreait\Firebase\Exception\FirebaseException
-     */
-    public function testServerReturns400PlusAndThrowsFirebaseException()
-    {
-        $http = $this->getHttpAdapter();
-        $http
-            ->expects($this->once())
-            ->method('sendRequest')->willReturn($response = $this->getInternalServerErrorResponse());
-
-        $f = new Firebase($this->baseUrl, $http);
         $f->get($this->getLocation());
     }
 

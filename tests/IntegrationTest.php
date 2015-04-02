@@ -67,17 +67,24 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $this->recorder->eject();
+        if ($this->recorder) {
+            $this->recorder->eject();
+        }
     }
 
     protected function setHttpAdapter()
     {
         $this->http = new CurlHttpAdapter();
-        $this->firebase = new Firebase($this->baseUrl, $this->http);
+
         $this->recorder = new TapeRecorderSubscriber($this->fixturesDir);
         $this->recorder->setRecordingMode($this->recordingMode);
 
         $this->http->getConfiguration()->getEventDispatcher()->addSubscriber($this->recorder);
+
+        $configuration = new Configuration();
+        $configuration->setHttpAdapter($this->http);
+
+        $this->firebase = new Firebase($this->baseUrl, $configuration);
     }
 
     protected function getLocation($subLocation = null)

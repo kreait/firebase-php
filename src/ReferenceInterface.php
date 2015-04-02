@@ -12,9 +12,7 @@
 
 namespace Kreait\Firebase;
 
-use Psr\Log\LoggerAwareInterface;
-
-interface ReferenceInterface extends LoggerAwareInterface, ReferenceProviderInterface, \ArrayAccess, \Countable
+interface ReferenceInterface extends ReferenceProviderInterface, \ArrayAccess, \Countable
 {
     /**
      * Returns the Reference's data.
