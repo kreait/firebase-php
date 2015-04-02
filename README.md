@@ -37,13 +37,14 @@ require 'vendor/autoload.php';
 1. [Working with the `Firebase` class](doc/firebase.md)
 1. [Working with References](doc/reference.md)
 1. [Querying data](doc/queries.md)
-1. [Use your own HTTP client](doc/http-client.md)
+1. [Configuration](doc/configuration.md)
 
 ## Example
 
 ```php
 require __DIR__.'/vendor/autoload.php';
 
+use Kreait\Firebase\Configuration;
 use Kreait\Firebase\Firebase;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -51,8 +52,10 @@ use Monolog\Logger;
 $logger = new Logger('firebase');
 $logger->pushHandler(new StreamHandler('php://stdout'));
 
-$firebase = new Firebase('https://brilliant-torch-1474.firebaseio.com');
-$firebase->setLogger($logger);
+$configuration = new Configuration();
+$configuration->setLogger($logger);
+
+$firebase = new Firebase('https://brilliant-torch-1474.firebaseio.com', $configuration);
 
 $simpsons = $firebase->getReference('data/simpsons');
 
