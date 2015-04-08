@@ -31,8 +31,6 @@ if (getenv('TRAVIS_PHP_VERSION')) {
     Dotenv::makeImmutable();
 }
 
-var_dump(getenv('FIREBASE_BASE_LOCATION')); exit;
-
 // Anonymous function to avoid cluttering the global namespace
 call_user_func(function () {
     // Push the firebase security rules to the configured application
