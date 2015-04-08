@@ -21,6 +21,7 @@ env:
 cache:
   directories:
     - $HOME/.composer/cache
+    - $HOME/tests/fixtures/tapes
 
 matrix:
   fast_finish: true
