@@ -46,7 +46,7 @@ after_script:
 
 notifications:
   email:
-    - jerome@kreait.com
+    - secure: "iiseqb4k4ckQkMJnZ6Tq3YP5ilTZE4CkVgarsBpPOn+c820nP9QokGpz82D4CTGy/UB1+DfCiFH9YAFrhLP5/9Go1CHP+wYkuz9W+E8q/rm9/nBO0xutoQhOfV3MxMid69E8i4QjODq3w5mOUrmpj/8gl2FyBU1Ro1xgPSYNEQ4="
   webhooks:
     urls:
       - secure: "OzJTaVZ5IDC/+3wr7KbqTd6dskQ1Cq7Db75U+9k3Kcf+5UpxQKepRnJeNhqMNMl4/Iz7aikADFxwH74bAqZor3hO8i8fEaTmxhdjZ2rfVReH5rVYJFUsx2Vm1oLTd/Jq4n09ZjBIDBd/+crrjgTZDLCu8jnRFOBCzpqT7sLCnlY="
