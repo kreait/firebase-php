@@ -27,6 +27,7 @@ call_user_func(function () {
     // Push the firebase security rules to the configured application
     $host = getenv('FIREBASE_HOST');
     $secret = getenv('FIREBASE_SECRET');
+    $baseLocation = getenv('FIREBASE_BASE_LOCATION');
 
     // Update firebase rules
     $rulesUri = sprintf('%s/.settings/rules.json?auth=%s', $host, $secret);
@@ -42,7 +43,7 @@ call_user_func(function () {
     }
 
     // Wipe data
-    $dataUri = sprintf('%s/.json?auth=%s', $host, $secret);
+    $dataUri = sprintf('%s/%s.json?auth=%s', $host, $baseLocation, $secret);
     $response = $http->delete($dataUri);
     if ($response->getStatusCode() >= 204) {
         $jsonResponse = (string) $response->getBody();
