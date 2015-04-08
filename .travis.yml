@@ -2,7 +2,9 @@ language: php
 
 sudo: false
 
-before_install: composer self-update
+before_install:
+  - openssl aes-256-cbc -K $encrypted_9bb00d0177de_key -iv $encrypted_9bb00d0177de_iv -in tests/.env.enc -out tests/.env -d
+  - composer self-update
 
 install: composer update
 
@@ -46,7 +48,7 @@ notifications:
     - jerome@kreait.com
   webhooks:
     urls:
-      - https://webhooks.gitter.im/e/619e653eb8741123550e
+      - secure: "OzJTaVZ5IDC/+3wr7KbqTd6dskQ1Cq7Db75U+9k3Kcf+5UpxQKepRnJeNhqMNMl4/Iz7aikADFxwH74bAqZor3hO8i8fEaTmxhdjZ2rfVReH5rVYJFUsx2Vm1oLTd/Jq4n09ZjBIDBd/+crrjgTZDLCu8jnRFOBCzpqT7sLCnlY="
     on_success: change
     on_failure: always
     on_start: false
