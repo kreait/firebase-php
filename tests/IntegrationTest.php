@@ -57,10 +57,10 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $this->baseUrl = getenv('FIREBASE_HOST');
         $this->baseLocation = getenv('FIREBASE_BASE_LOCATION');
-        $this->recordingMode = (int) getenv('FIREBASE_TEST_RECORDING_MODE');
+        $this->recordingMode = (int) getenv('FIREBASE_TAPE_RECORDER_RECORDING_MODE');
 
         $r = new \ReflectionClass($this);
-        $this->fixturesDir = __DIR__.'/fixtures/'.$r->getShortName();
+        $this->fixturesDir = sprintf('%s/%s/%s', __DIR__, getenv('FIREBASE_TAPE_RECORDER_TAPES_DIR'), $r->getShortName());
 
         $this->setHttpAdapter();
     }

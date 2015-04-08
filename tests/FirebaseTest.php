@@ -43,17 +43,28 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
      */
     protected $recorder;
 
+    /**
+     * The firebase secret
+     *
+     * @var string
+     */
+    protected $secret;
+
     protected function setUp()
     {
         $this->baseUrl = getenv('FIREBASE_HOST');
-        $this->baseLocation = getenv('FIREBASE_BASE_LOCATION') ?: 'tests';
-        $recordingMode = getenv('FIREBASE_TEST_RECORDING_MODE') ?: 1;
+        $this->baseLocation = getenv('FIREBASE_BASE_LOCATION');
+        $recordingMode = getenv('FIREBASE_TAPE_RECORDER_RECORDING_MODE');
+        $this->secret = getenv('FIREBASE_SECRET');
 
         $this->configuration = new Configuration();
 
         $this->firebase = new Firebase($this->baseUrl, $this->configuration);
 
-        $this->recorder = new TapeRecorderSubscriber(__DIR__.'/fixtures/FirebaseTest');
+        $r = new \ReflectionClass($this);
+        $tapesDir = sprintf('%s/%s/%s', __DIR__, getenv('FIREBASE_TAPE_RECORDER_TAPES_DIR'), $r->getShortName());
+
+        $this->recorder = new TapeRecorderSubscriber($tapesDir);
         $this->recorder->setRecordingMode($recordingMode);
 
         $this->configuration->getHttpAdapter()->getConfiguration()->getEventDispatcher()->addSubscriber($this->recorder);
