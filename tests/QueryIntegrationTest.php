@@ -28,11 +28,6 @@ class QueryIntegrationTest extends IntegrationTest
         $this->setUpQueryData();
     }
 
-    protected function getLocation($subLocation = null)
-    {
-        return sprintf('%s/%s/%s', parent::getLocation(), 'query_test/users', $subLocation);
-    }
-
     protected function setUpQueryData()
     {
         $this->recorder->insertTape(__FUNCTION__);

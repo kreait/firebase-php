@@ -19,29 +19,16 @@ class ReferenceTest extends Integrationtest
      */
     protected $reference;
 
-    /**
-     * @var string
-     */
-    protected $location;
-
     protected function setUp()
     {
         parent::setUp();
 
-        $this->location = 'tests/reference';
-        $this->reference = new Reference($this->firebase, $this->location);
-    }
-
-    protected function tearDown()
-    {
-        if ($this->recorder) {
-            $this->recorder->eject();
-        }
+        $this->reference = new Reference($this->firebase, $this->getLocation());
     }
 
     public function testGetKey()
     {
-        $locationPath = explode('/', $this->location);
+        $locationPath = explode('/', $this->getLocation());
         $expected = array_pop($locationPath);
 
         $this->assertEquals($expected, $this->reference->getKey());
@@ -49,7 +36,7 @@ class ReferenceTest extends Integrationtest
 
     public function testGetReference()
     {
-        $expectedFullLocation = $this->location.'/bar';
+        $expectedFullLocation = $this->getLocation().'/bar';
 
         $check = $this->reference->getReference('bar');
         $this->assertAttributeEquals($expectedFullLocation, 'location', $check);
@@ -115,7 +102,6 @@ class ReferenceTest extends Integrationtest
         $reference = $this->reference->getReference(__FUNCTION__);
 
         $initialData = ['sub1' => 'value1', 'sub2' => 'value2'];
-        $expectedData = ['sub2' => 'value2'];
         $reference->set($initialData);
 
         $subReference = $reference->getReference('sub1');
