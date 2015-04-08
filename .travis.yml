@@ -17,8 +17,6 @@ php:
   - 5.5
   - 5.6
   - 7
-  - hhvm
-  - hhvm-nightly
 
 cache:
   directories:
@@ -29,8 +27,6 @@ matrix:
   fast_finish: true
   allow_failures:
     - php: 7
-    - php: hhvm
-    - php: hhvm-nightly
 
 before_script:
   - echo 'date.timezone = "Europe/Berlin"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
