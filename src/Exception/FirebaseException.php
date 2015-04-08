@@ -128,4 +128,9 @@ class FirebaseException extends \Exception
 
         return $e;
     }
+
+    public static function noAuthTokenAvailable()
+    {
+        return new self('No authentication token has been set.');
+    }
 }

@@ -14,6 +14,8 @@ namespace Kreait\Firebase;
 
 use Ivory\HttpAdapter\CurlHttpAdapter;
 use Ivory\HttpAdapter\HttpAdapterInterface;
+use Kreait\Firebase\Auth\TokenGenerator;
+use Kreait\Firebase\Auth\TokenGeneratorInterface;
 use Kreait\Firebase\Exception\ConfigurationException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -34,6 +36,11 @@ class Configuration implements ConfigurationInterface
      * @var LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var TokenGeneratorInterface
+     */
+    private $authTokenGenerator;
 
     public function __construct()
     {
@@ -86,5 +93,25 @@ class Configuration implements ConfigurationInterface
     public function getLogger()
     {
         return $this->logger;
+    }
+
+    public function setAuthTokenGenerator(TokenGeneratorInterface $authTokenGenerator)
+    {
+        $this->authTokenGenerator = $authTokenGenerator;
+    }
+
+    public function getAuthTokenGenerator()
+    {
+        if ($this->authTokenGenerator) {
+            return $this->authTokenGenerator;
+        }
+
+        if (!$this->hasFirebaseSecret()) {
+            throw ConfigurationException::noSecretAvailable();
+        }
+
+        $this->authTokenGenerator = new TokenGenerator($this->getFirebaseSecret());
+
+        return $this->authTokenGenerator;
     }
 }

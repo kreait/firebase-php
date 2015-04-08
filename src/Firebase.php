@@ -15,6 +15,7 @@ namespace Kreait\Firebase;
 use Ivory\HttpAdapter\HttpAdapterException;
 use Ivory\HttpAdapter\Message\RequestInterface;
 use Ivory\HttpAdapter\Message\ResponseInterface;
+use Kreait\Firebase\Auth\TokenInterface;
 use Kreait\Firebase\Exception\FirebaseException;
 
 class Firebase implements FirebaseInterface
@@ -32,6 +33,13 @@ class Firebase implements FirebaseInterface
      * @var ConfigurationInterface
      */
     private $configuration;
+
+    /**
+     * The current authentication token.
+     *
+     * @var TokenInterface
+     */
+    private $authToken;
 
     /**
      * Firebase client initialization.
@@ -94,6 +102,30 @@ class Firebase implements FirebaseInterface
         $this->send($location, RequestInterface::METHOD_DELETE);
     }
 
+    public function setAuthToken(TokenInterface $authToken)
+    {
+        $this->authToken = $authToken;
+    }
+
+    public function getAuthToken()
+    {
+        if (!$this->hasAuthToken()) {
+            throw FirebaseException::noAuthTokenAvailable();
+        }
+
+        return $this->authToken;
+    }
+
+    public function hasAuthToken()
+    {
+        return !!$this->authToken;
+    }
+
+    public function removeAuthToken()
+    {
+        unset($this->authToken);
+    }
+
     /**
      * Sends the request and returns the processed response data.
      *
@@ -114,10 +146,22 @@ class Firebase implements FirebaseInterface
         $relativeUrl = sprintf('/%s.json', Utils::prepareLocationForRequest($location));
         if ($query) {
             $queryString = (string) $query;
+
             if (!empty($queryString)) {
                 $relativeUrl = sprintf('%s?%s', $relativeUrl, $queryString);
             }
         }
+
+        if ($this->hasAuthToken()) {
+            $authQueryString = http_build_query(['auth' => $this->getAuthToken()->getStringToken()], null, '&', PHP_QUERY_RFC3986);
+            $relativeUrl = sprintf(
+                '%s%s%s',
+                $relativeUrl,
+                strpos($relativeUrl, '?') === false ? '?' : '&',
+                $authQueryString
+            );
+        }
+
         $absoluteUrl = sprintf('%s%s', $this->baseUrl, $relativeUrl);
 
         $headers = [
