@@ -8,6 +8,10 @@ before_install:
 
 install: composer update
 
+branches:
+  only:
+    - master
+
 php:
   - 5.4
   - 5.5
