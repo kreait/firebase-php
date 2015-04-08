@@ -12,6 +12,7 @@ php:
   - 5.4
   - 5.5
   - 5.6
+  - 7
 
 env:
   - SCRUTINIZER=true
@@ -31,6 +32,7 @@ matrix:
   allow_failures:
     - php: 5.6
       env: SCRUTINIZER=true
+    - php: 7
 
 before_script:
   - echo 'date.timezone = "Europe/Berlin"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
