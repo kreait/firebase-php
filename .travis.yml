@@ -5,6 +5,7 @@ sudo: false
 before_install:
   - openssl aes-256-cbc -K $encrypted_9bb00d0177de_key -iv $encrypted_9bb00d0177de_iv -in tests/.env.enc -out tests/.env -d
   - composer self-update
+  - composer config --global github-oauth.github.com $github_oauth_token
 
 install: composer update
 
