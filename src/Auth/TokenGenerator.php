@@ -14,8 +14,18 @@ namespace Kreait\Firebase\Auth;
 
 class TokenGenerator implements TokenGeneratorInterface
 {
+    /**
+     * The Token Generator provided by Firebase themselves.
+     *
+     * @var \Services_FirebaseTokenGenerator
+     */
     private $generator;
 
+    /**
+     * Initializes the Token Generator
+     *
+     * @param string $secret The Firebase app secret.
+     */
     public function __construct($secret)
     {
         $this->generator = new \Services_FirebaseTokenGenerator($secret);
