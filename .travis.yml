@@ -17,10 +17,8 @@ php:
   - 5.5
   - 5.6
   - 7
-
-env:
-  - SCRUTINIZER=true
-  - SCRUTINIZER=false
+  - hhvm
+  - hhvm-nightly
 
 cache:
   directories:
@@ -29,27 +27,19 @@ cache:
 
 matrix:
   fast_finish: true
-  exclude:
-    - php: 5.4
-      env: SCRUTINIZER=true
-    - php: 5.5
-      env: SCRUTINIZER=true
-    - php: 7
-      env: SCRUTINIZER=true
   allow_failures:
-    - php: 5.6
-      env: SCRUTINIZER=true
     - php: 7
+    - php: hhvm
+    - php: hhvm-nightly
 
 before_script:
   - echo 'date.timezone = "Europe/Berlin"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
 script:
-  - if [ "$SCRUTINIZER" != "true" ]; then make tests ; fi;
-  - if [ "$SCRUTINIZER" == "true" ]; then make travis-tests ; fi;
+  - vendor/bin/phpunit --coverage-clover build/coverage.clover
 
 after_script:
-  - if [ "$SCRUTINIZER" == "true" ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover; fi;
+  - wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover
 
 notifications:
   email:
