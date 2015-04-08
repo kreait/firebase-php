@@ -23,7 +23,6 @@ class QueryIntegrationTest extends IntegrationTest
     {
         parent::setUp();
 
-        $this->baseLocation = 'query_test/users';
         $this->setHttpAdapter();
 
         $this->query = new Query();
@@ -31,15 +30,20 @@ class QueryIntegrationTest extends IntegrationTest
         $this->setUpQueryData();
     }
 
+    protected function getLocation($subLocation = null)
+    {
+        return sprintf('%s/%s/%s', parent::getLocation(), 'query_test/users', $subLocation);
+    }
+
     protected function setUpQueryData()
     {
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
-        $this->firebase->set(['first_name' => 'd', 'height' => 1, '.priority' => 2], $this->baseLocation.'/d');
-        $this->firebase->set(['first_name' => 'b', 'height' => 3, '.priority' => 4], $this->baseLocation.'/b');
-        $this->firebase->set(['first_name' => 'c', 'height' => 2, '.priority' => 1], $this->baseLocation.'/c');
-        $this->firebase->set(['first_name' => 'a', 'height' => 4, '.priority' => 3], $this->baseLocation.'/a');
+        $this->firebase->set(['first_name' => 'd', 'height' => 1, '.priority' => 2], $this->getLocation('d'));
+        $this->firebase->set(['first_name' => 'b', 'height' => 3, '.priority' => 4], $this->getLocation('b'));
+        $this->firebase->set(['first_name' => 'c', 'height' => 2, '.priority' => 1], $this->getLocation('c'));
+        $this->firebase->set(['first_name' => 'a', 'height' => 4, '.priority' => 3], $this->getLocation('a'));
 
         $this->recorder->stopRecording();
         $this->recorder->eject();

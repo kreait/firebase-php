@@ -36,7 +36,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $baseLocation;
+    private $baseLocation;
 
     /**
      * @var TapeRecorderSubscriber
