@@ -22,7 +22,7 @@ class TokenGenerator implements TokenGeneratorInterface
     private $generator;
 
     /**
-     * Initializes the Token Generator
+     * Initializes the Token Generator.
      *
      * @param string $secret The Firebase app secret.
      */

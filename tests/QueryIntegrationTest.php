@@ -23,8 +23,6 @@ class QueryIntegrationTest extends IntegrationTest
     {
         parent::setUp();
 
-        $this->setHttpAdapter();
-
         $this->query = new Query();
 
         $this->setUpQueryData();

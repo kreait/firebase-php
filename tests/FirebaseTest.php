@@ -12,69 +12,11 @@
 
 namespace Kreait\Firebase;
 
-use Ivory\HttpAdapter\Event\Subscriber\TapeRecorderSubscriber;
 use Ivory\HttpAdapter\HttpAdapterInterface;
 use Ivory\HttpAdapter\Message\Response;
 
-class FirebaseTest extends \PHPUnit_Framework_TestCase
+class FirebaseTest extends IntegrationTest
 {
-    /**
-     * @var Firebase
-     */
-    protected $firebase;
-
-    /**
-     * @var ConfigurationInterface
-     */
-    protected $configuration;
-
-    /**
-     * @var string
-     */
-    protected $baseUrl;
-
-    /**
-     * @var string
-     */
-    protected $baseLocation;
-
-    /**
-     * @var TapeRecorderSubscriber
-     */
-    protected $recorder;
-
-    /**
-     * The firebase secret
-     *
-     * @var string
-     */
-    protected $secret;
-
-    protected function setUp()
-    {
-        $this->baseUrl = getenv('FIREBASE_HOST');
-        $this->baseLocation = getenv('FIREBASE_BASE_LOCATION');
-        $recordingMode = getenv('FIREBASE_TAPE_RECORDER_RECORDING_MODE');
-        $this->secret = getenv('FIREBASE_SECRET');
-
-        $this->configuration = new Configuration();
-
-        $this->firebase = new Firebase($this->baseUrl, $this->configuration);
-
-        $r = new \ReflectionClass($this);
-        $tapesDir = sprintf('%s/%s/%s', __DIR__, getenv('FIREBASE_TAPE_RECORDER_TAPES_DIR'), $r->getShortName());
-
-        $this->recorder = new TapeRecorderSubscriber($tapesDir);
-        $this->recorder->setRecordingMode($recordingMode);
-
-        $this->configuration->getHttpAdapter()->getConfiguration()->getEventDispatcher()->addSubscriber($this->recorder);
-    }
-
-    protected function tearDown()
-    {
-        $this->recorder->eject();
-    }
-
     /**
      * @expectedException \Kreait\Firebase\Exception\PermissionDeniedException
      */
@@ -259,14 +201,5 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     protected function getInternalServerErrorResponse()
     {
         return new Response(500, 'Internal Server Error', Response::PROTOCOL_VERSION_1_1);
-    }
-
-    protected function getLocation($subLocation = null)
-    {
-        if (!$subLocation) {
-            return $this->baseLocation;
-        }
-
-        return $this->baseLocation.'/'.$subLocation;
     }
 }

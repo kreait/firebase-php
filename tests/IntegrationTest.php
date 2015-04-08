@@ -24,6 +24,11 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected $firebase;
 
     /**
+     * @var ConfigurationInterface
+     */
+    protected $configuration;
+
+    /**
      * @var HttpAdapterInterface
      */
     protected $http;
@@ -31,7 +36,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $baseUrl;
+    private $baseUrl;
 
     /**
      * @var string
@@ -55,11 +60,15 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $r = new \ReflectionClass($this);
+        $shortClassName = $r->getShortName();
+
         $this->baseUrl = getenv('FIREBASE_HOST');
-        $this->baseLocation = getenv('FIREBASE_BASE_LOCATION');
+        $this->baseLocation = sprintf('%s/%s', getenv('FIREBASE_BASE_LOCATION'), $shortClassName);
         $this->recordingMode = (int) getenv('FIREBASE_TAPE_RECORDER_RECORDING_MODE');
 
-        $r = new \ReflectionClass($this);
+        $this->configuration = new Configuration();
+
         $this->fixturesDir = sprintf('%s/%s/%s', __DIR__, getenv('FIREBASE_TAPE_RECORDER_TAPES_DIR'), $r->getShortName());
 
         $this->setHttpAdapter();

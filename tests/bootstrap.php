@@ -16,14 +16,14 @@ Dotenv::load(__DIR__);
 try {
     Dotenv::required([
         'FIREBASE_HOST', 'FIREBASE_BASE_LOCATION', 'FIREBASE_SECRET',
-        'FIREBASE_TAPE_RECORDER_RECORDING_MODE', 'FIREBASE_TAPE_RECORDER_TAPES_DIR'
+        'FIREBASE_TAPE_RECORDER_RECORDING_MODE', 'FIREBASE_TAPE_RECORDER_TAPES_DIR',
     ]);
 } catch (\RuntimeException $e) {
     throw new PHPUnit_Framework_Exception($e->getMessage());
 }
 
 // Anonymous function to avoid cluttering the global namespace
-call_user_func(function() {
+call_user_func(function () {
     // Push the firebase security rules to the configured application
     $host = getenv('FIREBASE_HOST');
     $secret = getenv('FIREBASE_SECRET');
