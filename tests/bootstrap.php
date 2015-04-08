@@ -22,6 +22,17 @@ try {
     throw new PHPUnit_Framework_Exception($e->getMessage());
 }
 
+// Add PHP Version to FIREBASE_BASE_LOCATION, if available
+if (getenv('TRAVIS_PHP_VERSION')) {
+    Dotenv::makeMutable();
+    Dotenv::setEnvironmentVariable('FIREBASE_BASE_LOCATION', sprintf(
+        '%s-php-%s', getenv('FIREBASE_BASE_LOCATION'), str_replace('.', '-', getenv('TRAVIS_PHP_VERSION'))
+    ));
+    Dotenv::makeImmutable();
+}
+
+var_dump(getenv('FIREBASE_BASE_LOCATION')); exit;
+
 // Anonymous function to avoid cluttering the global namespace
 call_user_func(function () {
     // Push the firebase security rules to the configured application
