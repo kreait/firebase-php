@@ -17,4 +17,7 @@ travis-tests:
 view-coverage: coverage
 	open build/coverage/index.html
 
+tests/.env.enc:
+	travis encrypt-file tests/.env tests/.env.enc -f
+
 .PHONY: tests coverage view-coverage travis-tests
