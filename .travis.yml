@@ -14,6 +14,8 @@ php:
   - 5.5
   - 5.6
   - 7.0
+  - hhvm
+  - hhvm-nightly
 
 env:
   - SCRUTINIZER=true
@@ -33,10 +35,16 @@ matrix:
       env: SCRUTINIZER=true
     - php: 7.0
       env: SCRUTINIZER=true
+    - php: hhvm
+      env: SCRUTINIZER=true
+    - php: hhvm-nightly
+      env: SCRUTINIZER=true
   allow_failures:
     - php: 5.6
       env: SCRUTINIZER=true
     - php: 7.0
+    - php: hhvm
+    - php: hhvm-nightly
 
 before_script:
   - phpenv config-add tests/fixtures/travis.ini
