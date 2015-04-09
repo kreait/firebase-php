@@ -47,7 +47,8 @@ matrix:
     - php: hhvm-nightly
 
 before_script:
-  - phpenv config-add tests/fixtures/travis.ini
+  - if [[ "$TRAVIS_PHP_VERSION" = "hhvm" || "$TRAVIS_PHP_VERSION" = "hhvm-nightly" ]]; then cat tests/fixtures/travis.ini >> /etc/hhvm/php.ini ; fi
+  - if [[ "$TRAVIS_PHP_VERSION" = "php*" ]]; then phpenv config-add tests/fixtures/travis.ini ; fi
 
 script:
   - if [ "$SCRUTINIZER" != "true" ]; then make tests ; fi;
