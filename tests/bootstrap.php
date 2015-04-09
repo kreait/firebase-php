@@ -25,9 +25,17 @@ try {
 // Add PHP Version to FIREBASE_BASE_LOCATION, if available
 if (getenv('TRAVIS_PHP_VERSION')) {
     Dotenv::makeMutable();
+
     Dotenv::setEnvironmentVariable('FIREBASE_BASE_LOCATION', sprintf(
         '%s-php-%s', getenv('FIREBASE_BASE_LOCATION'), str_replace('.', '-', getenv('TRAVIS_PHP_VERSION'))
     ));
+
+    if (getenv('SCRUTINIZER') && strtolower(getenv('SCRUTINIZER')) === 'true') {
+        Dotenv::setEnvironmentVariable('FIREBASE_BASE_LOCATION', sprintf(
+            '%s-%s', getenv('FIREBASE_BASE_LOCATION'), 'scrutinizer')
+        );
+    }
+
     Dotenv::makeImmutable();
 }
 
