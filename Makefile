@@ -9,6 +9,9 @@ help:
 tests:
 	./vendor/bin/phpunit
 
+travis-tests:
+	./vendor/bin/phpunit --coverage-clover build/coverage.clover
+
 coverage:
 	./vendor/bin/phpunit --coverage-html build/coverage
 
@@ -18,4 +21,4 @@ view-coverage: coverage
 tests/.env.enc:
 	travis encrypt-file tests/.env tests/.env.enc -f
 
-.PHONY: tests coverage view-coverage
+.PHONY: tests travis-tests coverage view-coverage

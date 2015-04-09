@@ -7,17 +7,17 @@ before_install:
   - composer self-update
   - composer config --global github-oauth.github.com $github_oauth_token
 
-install: composer update
-
-branches:
-  only:
-    - master
+install: composer install
 
 php:
   - 5.4
   - 5.5
   - 5.6
-  - 7
+  - 7.0
+
+env:
+  - SCRUTINIZER=true
+  - SCRUTINIZER=false
 
 cache:
   directories:
@@ -26,17 +26,27 @@ cache:
 
 matrix:
   fast_finish: true
+  exclude:
+    - php: 5.4
+      env: SCRUTINIZER=true
+    - php: 5.5
+      env: SCRUTINIZER=true
+    - php: 7.0
+      env: SCRUTINIZER=true
   allow_failures:
-    - php: 7
+    - php: 5.5
+      env: SCRUTINIZER=true
+    - php: 7.0
 
 before_script:
-  - echo 'date.timezone = "Europe/Berlin"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - phpenv config-add $HOME/tests/fixtures/travis.ini
 
 script:
-  - vendor/bin/phpunit --coverage-clover build/coverage.clover
+  - if [ "$SCRUTINIZER" != "true" ]; then make tests ; fi;
+  - if [ "$SCRUTINIZER" == "true" ]; then make travis-tests ; fi;
 
 after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover
+  - if [ "$SCRUTINIZER" == "true" ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover ; fi;
 
 notifications:
   email:
