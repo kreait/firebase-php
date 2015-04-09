@@ -39,7 +39,7 @@ matrix:
     - php: 7.0
 
 before_script:
-  - phpenv config-add $HOME/tests/fixtures/travis.ini
+  - phpenv config-add tests/fixtures/travis.ini
 
 script:
   - if [ "$SCRUTINIZER" != "true" ]; then make tests ; fi;
