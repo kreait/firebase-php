@@ -103,7 +103,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
 
         $this->firebase = new Firebase($this->baseUrl, $this->configuration);
 
-        $this->firebase->setAuthToken($this->firebaseSecret);
+        $this->firebase->setAuthToken($this->authTokenGenerator->createAdminToken());
     }
 
     protected function tearDown()
