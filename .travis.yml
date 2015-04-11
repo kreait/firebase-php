@@ -47,15 +47,15 @@ matrix:
     - php: hhvm-nightly
 
 before_script:
-  - if [[ "$TRAVIS_PHP_VERSION" = "hhv*" ]]; then cat tests/fixtures/travis.ini >> /etc/hhvm/php.ini ; fi
-  - if [[ "$TRAVIS_PHP_VERSION" = "php*" ]]; then phpenv config-add tests/fixtures/travis.ini ; fi
+  - [ "$TRAVIS_PHP_VERSION" = "hhv*" ] && cat tests/fixtures/travis.ini >> /etc/hhvm/php.ini
+  - [ "$TRAVIS_PHP_VERSION" = "php*" ] && phpenv config-add tests/fixtures/travis.ini
 
 script:
-  - if [ "$SCRUTINIZER" != "true" ]; then make tests ; fi;
-  - if [ "$SCRUTINIZER" == "true" ]; then make travis-tests ; fi;
+  - [ "$SCRUTINIZER" != "true" ] && make tests
+  - [ "$SCRUTINIZER" == "true" ] && make travis-tests
 
 after_script:
-  - if [ "$SCRUTINIZER" == "true" ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover ; fi;
+  - [ "$SCRUTINIZER" == "true" ] && wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover
 
 notifications:
   email:
