@@ -65,4 +65,4 @@ notifications:
       - secure: "OzJTaVZ5IDC/+3wr7KbqTd6dskQ1Cq7Db75U+9k3Kcf+5UpxQKepRnJeNhqMNMl4/Iz7aikADFxwH74bAqZor3hO8i8fEaTmxhdjZ2rfVReH5rVYJFUsx2Vm1oLTd/Jq4n09ZjBIDBd/+crrjgTZDLCu8jnRFOBCzpqT7sLCnlY="
     on_success: change
     on_failure: always
-    on_start: false
+    on_start: always
