@@ -185,4 +185,22 @@ class ReferenceTest extends Integrationtest
 
         $this->assertEquals(3, count($reference));
     }
+
+    public function testQuery()
+    {
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+        $reference = $this->reference->getReference(__FUNCTION__);
+
+        $query = new Query();
+        $query
+            ->orderByKey()
+            ->limitToFirst(1);
+
+        $referenceResult = $reference->query($query);
+        $firebaseResult = $this->firebase->query($this->getLocation(__FUNCTION__), $query);
+
+        $this->assertEquals($referenceResult, $firebaseResult);
+
+    }
 }

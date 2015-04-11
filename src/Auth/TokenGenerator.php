@@ -15,6 +15,13 @@ namespace Kreait\Firebase\Auth;
 class TokenGenerator implements TokenGeneratorInterface
 {
     /**
+     * The Firebase secret.
+     *
+     * @var string
+     */
+    private $secret;
+
+    /**
      * The Token Generator provided by Firebase themselves.
      *
      * @var \Services_FirebaseTokenGenerator
@@ -22,24 +29,70 @@ class TokenGenerator implements TokenGeneratorInterface
     private $generator;
 
     /**
+     * Whether the debug option will be set or not.
+     *
+     * @var bool
+     */
+    private $debug;
+
+    /**
      * Initializes the Token Generator.
      *
      * @param string $secret The Firebase app secret.
+     * @param bool $debug Whether the debug option will be set in generated tokens or not.
      */
-    public function __construct($secret)
+    public function __construct($secret, $debug = false)
     {
-        $this->generator = new \Services_FirebaseTokenGenerator($secret);
+        $this->secret = $secret;
+
+        $this->generator = new \Services_FirebaseTokenGenerator($this->secret);
+        $this->debug = $debug;
     }
 
-    public function generateAnonymousToken()
+    public function enableDebug()
     {
-        $uid = uniqid('firebase_');
-        $provider = 'anonymous';
-        $stringToken = $this->generator->createToken(
-            ['uid' => $uid, 'provider' => $provider],
-            ['debug' => true]
-        );
+        return new self($this->secret, true);
+    }
 
-        return new Token($uid, $provider, $stringToken);
+    public function disableDebug()
+    {
+        return new self($this->secret, false);
+    }
+
+    public function createAnonymousToken()
+    {
+        return $this->createToken(uniqid('firebasephp_'), 'anonymous');
+    }
+
+    public function createAdminToken()
+    {
+        $data = [];
+
+        $options = [
+            'debug' => $this->debug,
+            'admin' => true,
+        ];
+
+        return $this->generator->createToken($data, $options);
+    }
+
+    public function createToken($id, $provider, $isAdmin = false) {
+        $uid = sprintf('%s:%s', $provider, $id);
+
+        $data = [
+            'id' => $id,
+            'provider' => $provider,
+            'uid' => $uid,
+        ];
+
+        $options = [
+            'debug' => $this->debug
+        ];
+
+        try {
+            return $this->generator->createToken($data, $options);
+        } catch (\Exception $e) {
+            throw new \RuntimeException($e->getMessage());
+        }
     }
 }

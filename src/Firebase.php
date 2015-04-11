@@ -37,7 +37,7 @@ class Firebase implements FirebaseInterface
     /**
      * The current authentication token.
      *
-     * @var TokenInterface
+     * @var string
      */
     private $authToken;
 
@@ -102,8 +102,12 @@ class Firebase implements FirebaseInterface
         $this->send($location, RequestInterface::METHOD_DELETE);
     }
 
-    public function setAuthToken(TokenInterface $authToken)
+    public function setAuthToken($authToken)
     {
+        if (!is_string($authToken)) {
+            throw FirebaseException::invalidAuthToken($authToken);
+        }
+
         $this->authToken = $authToken;
     }
 
@@ -123,7 +127,7 @@ class Firebase implements FirebaseInterface
 
     public function removeAuthToken()
     {
-        unset($this->authToken);
+        $this->authToken = null;
     }
 
     /**
@@ -153,7 +157,7 @@ class Firebase implements FirebaseInterface
         }
 
         if ($this->hasAuthToken()) {
-            $authQueryString = http_build_query(['auth' => $this->getAuthToken()->getStringToken()], null, '&', PHP_QUERY_RFC3986);
+            $authQueryString = http_build_query(['auth' => $this->getAuthToken()], null, '&', PHP_QUERY_RFC3986);
             $relativeUrl = sprintf(
                 '%s%s%s',
                 $relativeUrl,

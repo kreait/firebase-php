@@ -15,7 +15,42 @@ namespace Kreait\Firebase\Auth;
 interface TokenGeneratorInterface
 {
     /**
-     * @return TokenInterface
+     * Enables the debug flag for the next generated token.
+     *
+     * @return TokenGeneratorInterface
      */
-    public function generateAnonymousToken();
+    public function enableDebug();
+
+    /**
+     * Disables the debug flag for the next generated token.
+     *
+     * @return TokenGeneratorInterface
+     */
+    public function disableDebug();
+
+    /**
+     * Creates a new anonymous authentication token.
+     *
+     * @return string
+     */
+    public function createAnonymousToken();
+
+    /**
+     * Creates a new admin token.
+     *
+     * @return string
+     */
+    public function createAdminToken();
+
+    /**
+     * Creates a new authentication token.
+     *
+     * @param int|string $id The user id.
+     * @param string $provider The authentication provider.
+     *
+     * @throws \RuntimeException if there was an error during the creation of the token
+     *
+     * @return string
+     */
+    public function createToken($id, $provider);
 }

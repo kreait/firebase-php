@@ -3,8 +3,6 @@
     ".read": false,
     ".write": false,
     "tests": {
-      ".read": true,
-      ".write": true,
       "local": {
         "QueryIntegrationTest": {
           ".indexOn": ["height"]

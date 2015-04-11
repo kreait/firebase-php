@@ -92,14 +92,16 @@ interface FirebaseInterface extends ReferenceProviderInterface
     /**
      * Sets an authentication token.
      *
-     * @param TokenInterface $authToken The authentication token.
+     * @throws FirebaseException if the given token is invalid.
+     *
+     * @param string $authToken The authentication token.
      */
-    public function setAuthToken(TokenInterface $authToken);
+    public function setAuthToken($authToken);
 
     /**
      * Returns the current authentication token.
      *
-     * @return TokenInterface
+     * @return string
      */
     public function getAuthToken();
 

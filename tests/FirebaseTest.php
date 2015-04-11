@@ -39,6 +39,8 @@ class FirebaseTest extends IntegrationTest
     {
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
+
+        $this->firebase->removeAuthToken();
         $this->firebase->get('forbidden');
     }
 
@@ -195,6 +197,23 @@ class FirebaseTest extends IntegrationTest
         $result = $this->firebase->get($this->getLocation('non_existing'));
 
         $this->assertEmpty($result);
+    }
+
+    /**
+     * @expectedException \Kreait\Firebase\Exception\FirebaseException
+     */
+    public function testInvalidAuthToken()
+    {
+        $this->firebase->setAuthToken([]);
+    }
+
+    /**
+     * @expectedException \Kreait\Firebase\Exception\FirebaseException
+     */
+    public function testGetAuthTokenWhenNoneIsThere()
+    {
+        $this->firebase->removeAuthToken();
+        $this->firebase->getAuthToken();
     }
 
     /**

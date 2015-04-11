@@ -12,6 +12,10 @@
 
 namespace Kreait\Firebase;
 
+use Kreait\Firebase\Auth\TokenGeneratorInterface;
+use Kreait\Firebase\Exception\ConfigurationException;
+use Prophecy\Prophecy\MethodProphecy;
+
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -66,5 +70,32 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->configuration->setLogger($logger);
 
         $this->assertSame($logger, $this->configuration->getLogger());
+    }
+
+    /**
+     * @expectedException \Kreait\Firebase\Exception\ConfigurationException
+     */
+    public function testGetAuthTokenGeneratorWithoutSecretThrowsException()
+    {
+        $configuration = new Configuration();
+        $configuration->getAuthTokenGenerator();
+    }
+
+    public function testSetAndGetAuthTokenGenerator()
+    {
+        /** @var TokenGeneratorInterface $generator */
+        $generator = $this->prophesize('Kreait\Firebase\Auth\TokenGeneratorInterface')->reveal();
+
+        $this->configuration->setAuthTokenGenerator($generator);
+        $this->assertSame($generator, $this->configuration->getAuthTokenGenerator());
+    }
+
+    public function testUnsetAuthTokenGeneratorResultsInDefaultGenerator()
+    {
+        $this->configuration->setFirebaseSecret('foo');
+
+        $generator = $this->configuration->getAuthTokenGenerator();
+
+        $this->assertInstanceOf('Kreait\Firebase\Auth\TokenGenerator', $generator);
     }
 }

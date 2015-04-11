@@ -15,6 +15,8 @@ namespace Kreait\Firebase;
 use Ivory\HttpAdapter\EventDispatcherHttpAdapter;
 use Ivory\HttpAdapter\HttpAdapterFactory;
 use Ivory\HttpAdapter\HttpAdapterInterface;
+use Kreait\Firebase\Auth\TokenGenerator;
+use Kreait\Firebase\Auth\TokenGeneratorInterface;
 use Kreait\Ivory\HttpAdapter\Event\Subscriber\TapeRecorderSubscriber;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -29,6 +31,11 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
      * @var ConfigurationInterface
      */
     protected $configuration;
+
+    /**
+     * @var TokenGeneratorInterface
+     */
+    protected $authTokenGenerator;
 
     /**
      * @var HttpAdapterInterface
@@ -60,6 +67,11 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $fixturesDir;
 
+    /**
+     * @var string
+     */
+    protected $firebaseSecret;
+
     protected function setUp()
     {
         $r = new \ReflectionClass($this);
@@ -68,23 +80,15 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->baseUrl = getenv('FIREBASE_HOST');
         $this->baseLocation = sprintf('%s/%s', getenv('FIREBASE_BASE_LOCATION'), $shortClassName);
         $this->recordingMode = (int) getenv('FIREBASE_TAPE_RECORDER_RECORDING_MODE');
+        $this->firebaseSecret = getenv('FIREBASE_SECRET');
 
         $this->configuration = new Configuration();
 
+        $this->authTokenGenerator = new TokenGenerator($this->firebaseSecret, true);
+        $this->configuration->setAuthTokenGenerator($this->authTokenGenerator);
+
         $this->fixturesDir = sprintf('%s/%s/%s', __DIR__, getenv('FIREBASE_TAPE_RECORDER_TAPES_DIR'), $r->getShortName());
 
-        $this->setHttpAdapter();
-    }
-
-    protected function tearDown()
-    {
-        if ($this->recorder) {
-            $this->recorder->eject();
-        }
-    }
-
-    protected function setHttpAdapter()
-    {
         $this->recorder = new TapeRecorderSubscriber($this->fixturesDir);
         $this->recorder->setRecordingMode($this->recordingMode);
 
@@ -98,6 +102,13 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->configuration->setHttpAdapter($this->http);
 
         $this->firebase = new Firebase($this->baseUrl, $this->configuration);
+
+        $this->firebase->setAuthToken($this->firebaseSecret);
+    }
+
+    protected function tearDown()
+    {
+        $this->recorder->eject();
     }
 
     protected function getLocation($subLocation = null)

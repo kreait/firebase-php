@@ -103,7 +103,7 @@ class Reference implements ReferenceInterface
     public function update($data)
     {
         $writtenData = $this->firebase->update($data, $this->location);
-        $this->updateData($writtenData, $merge = true);
+        $this->updateData($writtenData);
 
         return $this;
     }
@@ -113,15 +113,11 @@ class Reference implements ReferenceInterface
         $this->firebase->delete($this->location);
     }
 
-    private function updateData($data, $merge = false)
+    private function updateData($data)
     {
-        if ($merge) {
-            $this->data = array_merge($this->data, $data);
-        } else {
-            $this->data = $data;
-        }
+        $data = array_merge($this->data, $data);
 
-        $this->data = array_filter($this->data, 'strlen'); // Remove all null values
+        $this->data = array_filter($data, 'strlen'); // Remove all null values
     }
 
     public function offsetExists($offset)

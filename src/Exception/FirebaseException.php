@@ -133,4 +133,9 @@ class FirebaseException extends \Exception
     {
         return new self('No authentication token has been set.');
     }
+
+    public static function invalidAuthToken($givenToken)
+    {
+        return new self(sprintf('The authentication token must be a string, %s given.', gettype($givenToken)));
+    }
 }
