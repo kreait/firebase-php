@@ -39,7 +39,7 @@ class TokenGenerator implements TokenGeneratorInterface
      * Initializes the Token Generator.
      *
      * @param string $secret The Firebase app secret.
-     * @param bool $debug Whether the debug option will be set in generated tokens or not.
+     * @param bool   $debug  Whether the debug option will be set in generated tokens or not.
      */
     public function __construct($secret, $debug = false)
     {
@@ -81,7 +81,8 @@ class TokenGenerator implements TokenGeneratorInterface
         return $this->generator->createToken($data, $options);
     }
 
-    public function createToken($id, $provider) {
+    public function createToken($id, $provider)
+    {
         $uid = sprintf('%s:%s', $provider, $id);
 
         $data = [
@@ -91,7 +92,7 @@ class TokenGenerator implements TokenGeneratorInterface
         ];
 
         $options = [
-            'debug' => $this->debug
+            'debug' => $this->debug,
         ];
 
         try {

@@ -201,6 +201,5 @@ class ReferenceTest extends Integrationtest
         $firebaseResult = $this->firebase->query($this->getLocation(__FUNCTION__), $query);
 
         $this->assertEquals($referenceResult, $firebaseResult);
-
     }
 }

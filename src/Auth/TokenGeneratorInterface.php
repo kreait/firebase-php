@@ -52,8 +52,8 @@ interface TokenGeneratorInterface
     /**
      * Creates a new authentication token.
      *
-     * @param int|string $id The user id.
-     * @param string $provider The authentication provider.
+     * @param int|string $id       The user id.
+     * @param string     $provider The authentication provider.
      *
      * @throws \RuntimeException if there was an error during the creation of the token
      *

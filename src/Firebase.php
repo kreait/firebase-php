@@ -15,7 +15,6 @@ namespace Kreait\Firebase;
 use Ivory\HttpAdapter\HttpAdapterException;
 use Ivory\HttpAdapter\Message\RequestInterface;
 use Ivory\HttpAdapter\Message\ResponseInterface;
-use Kreait\Firebase\Auth\TokenInterface;
 use Kreait\Firebase\Exception\FirebaseException;
 
 class Firebase implements FirebaseInterface

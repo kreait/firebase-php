@@ -14,7 +14,6 @@ namespace Kreait\Firebase;
 
 use Kreait\Firebase\Auth\TokenGeneratorInterface;
 use Kreait\Firebase\Exception\ConfigurationException;
-use Prophecy\Prophecy\MethodProphecy;
 
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {

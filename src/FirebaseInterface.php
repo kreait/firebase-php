@@ -12,7 +12,6 @@
 
 namespace Kreait\Firebase;
 
-use Kreait\Firebase\Auth\TokenInterface;
 use Kreait\Firebase\Exception\FirebaseException;
 
 interface FirebaseInterface extends ReferenceProviderInterface
@@ -92,9 +91,9 @@ interface FirebaseInterface extends ReferenceProviderInterface
     /**
      * Sets an authentication token.
      *
-     * @throws FirebaseException if the given token is invalid.
      *
      * @param string $authToken The authentication token.
+     * @throws FirebaseException if the given token is invalid.
      */
     public function setAuthToken($authToken);
 

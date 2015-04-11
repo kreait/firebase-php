@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the firebase-php package.
+ *
+ * (c) Jérôme Gamez <jerome@kreait.com>
+ * (c) kreait GmbH <info@kreait.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace Kreait\Firebase\Auth;
 
@@ -87,6 +96,7 @@ class TokenGeneratorTest extends \PHPUnit_Framework_TestCase
     protected function decodeTokenToArray($token)
     {
         $obj = \JWT::decode($token);
+
         return json_decode(json_encode($obj), true);
     }
 
