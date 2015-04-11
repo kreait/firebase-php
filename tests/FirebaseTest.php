@@ -202,9 +202,17 @@ class FirebaseTest extends IntegrationTest
     /**
      * @expectedException \Kreait\Firebase\Exception\FirebaseException
      */
-    public function testInvalidAuthToken()
+    public function testInvalidAuthTokenThrowsException()
     {
         $this->firebase->setAuthToken([]);
+    }
+
+    /**
+     * @expectedException \Kreait\Firebase\Exception\FirebaseException
+     */
+    public function testUsingTheSecretAsTokenThrowsException()
+    {
+        $this->firebase->setAuthToken($this->firebaseSecret);
     }
 
     /**

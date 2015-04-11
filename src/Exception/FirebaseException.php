@@ -138,4 +138,12 @@ class FirebaseException extends \Exception
     {
         return new self(sprintf('The authentication token must be a string, %s given.', gettype($givenToken)));
     }
+
+    public static function authTokenIsIdenticalToSecret()
+    {
+        return new self(
+            'The auth token is identical to the firebase secret. Create an admin token instead '.
+            '(see TokenGeneratorInterface::createAdminToken())'
+        );
+    }
 }

@@ -108,6 +108,10 @@ class Firebase implements FirebaseInterface
             throw FirebaseException::invalidAuthToken($authToken);
         }
 
+        if ($authToken === $this->getConfiguration()->getFirebaseSecret()) {
+            throw FirebaseException::authTokenIsIdenticalToSecret();
+        }
+
         $this->authToken = $authToken;
     }
 

@@ -15,6 +15,13 @@ namespace Kreait\Firebase\Auth;
 interface TokenGeneratorInterface
 {
     /**
+     * Returns the Firebase secret.
+     *
+     * @return string
+     */
+    public function getSecret();
+
+    /**
      * Enables the debug flag for the next generated token.
      *
      * @return TokenGeneratorInterface

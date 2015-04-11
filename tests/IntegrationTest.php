@@ -83,6 +83,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->firebaseSecret = getenv('FIREBASE_SECRET');
 
         $this->configuration = new Configuration();
+        $this->configuration->setFirebaseSecret($this->firebaseSecret);
 
         $this->authTokenGenerator = new TokenGenerator($this->firebaseSecret, true);
         $this->configuration->setAuthTokenGenerator($this->authTokenGenerator);
@@ -103,7 +104,13 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
 
         $this->firebase = new Firebase($this->baseUrl, $this->configuration);
 
-        $this->firebase->setAuthToken($this->authTokenGenerator->createAdminToken());
+        // It's not allowed to use the secret as auth token, but we do it so that we can reuse
+        // the requests and responses for the Tape Subscriber
+        $reflectionObject = new \ReflectionObject($this->firebase);
+        $property = $reflectionObject->getProperty('authToken');
+        $property->setAccessible(true);
+        $property->setValue($this->firebase, $this->firebaseSecret);
+        $property->setAccessible(false);
     }
 
     protected function tearDown()

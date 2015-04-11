@@ -59,6 +59,11 @@ class TokenGenerator implements TokenGeneratorInterface
         return new self($this->secret, false);
     }
 
+    public function getSecret()
+    {
+        return $this->secret;
+    }
+
     public function createAnonymousToken()
     {
         return $this->createToken(uniqid('firebasephp_'), 'anonymous');
