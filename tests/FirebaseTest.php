@@ -17,6 +17,21 @@ use Ivory\HttpAdapter\Message\Response;
 
 class FirebaseTest extends IntegrationTest
 {
+    public function testGetDefaultConfiguration()
+    {
+        $this->assertSame($this->configuration, $this->firebase->getConfiguration());
+    }
+
+    public function testSetConfiguration()
+    {
+        $prophecy = $this->prophesize('Kreait\Firebase\ConfigurationInterface');
+        /** @var ConfigurationInterface $configuration */
+        $configuration = $prophecy->reveal();
+        $this->firebase->setConfiguration($configuration);
+
+        $this->assertSame($configuration, $this->firebase->getConfiguration());
+    }
+
     /**
      * @expectedException \Kreait\Firebase\Exception\PermissionDeniedException
      */

@@ -95,12 +95,9 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
 
         $this->http = new EventDispatcherHttpAdapter($http, $eventDispatcher);
 
+        $this->configuration->setHttpAdapter($this->http);
 
-
-        $configuration = new Configuration();
-        $configuration->setHttpAdapter($this->http);
-
-        $this->firebase = new Firebase($this->baseUrl, $configuration);
+        $this->firebase = new Firebase($this->baseUrl, $this->configuration);
     }
 
     protected function getLocation($subLocation = null)
