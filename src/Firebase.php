@@ -182,7 +182,7 @@ class Firebase implements FirebaseInterface
         );
 
         $logger->debug(
-            sprintf('%s request to %s', $method, $request->getUrl()),
+            sprintf('%s request to %s', $method, $request->getUri()),
             ($data) ? ['data_sent' => $data] : []
         );
 
@@ -210,12 +210,7 @@ class Firebase implements FirebaseInterface
      */
     private function getResultFromResponse(ResponseInterface $response)
     {
-        $result = [];
-
-        if ($response->hasBody()) {
-            $contents = $response->getBody()->getContents();
-            $result = json_decode($contents, true);
-        }
+        $result = json_decode((string) $response->getBody(), true);
 
         if (is_array($result)) {
             $result = $this->cleanupData($result);

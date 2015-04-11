@@ -12,9 +12,11 @@
 
 namespace Kreait\Firebase;
 
-use Ivory\HttpAdapter\CurlHttpAdapter;
-use Ivory\HttpAdapter\Event\Subscriber\TapeRecorderSubscriber;
+use Ivory\HttpAdapter\EventDispatcherHttpAdapter;
+use Ivory\HttpAdapter\HttpAdapterFactory;
 use Ivory\HttpAdapter\HttpAdapterInterface;
+use Kreait\Ivory\HttpAdapter\Event\Subscriber\TapeRecorderSubscriber;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,12 +85,17 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
 
     protected function setHttpAdapter()
     {
-        $this->http = new CurlHttpAdapter();
-
         $this->recorder = new TapeRecorderSubscriber($this->fixturesDir);
         $this->recorder->setRecordingMode($this->recordingMode);
 
-        $this->http->getConfiguration()->getEventDispatcher()->addSubscriber($this->recorder);
+        $http = HttpAdapterFactory::guess();
+
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addSubscriber($this->recorder);
+
+        $this->http = new EventDispatcherHttpAdapter($http, $eventDispatcher);
+
+
 
         $configuration = new Configuration();
         $configuration->setHttpAdapter($this->http);

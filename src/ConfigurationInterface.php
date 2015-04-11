@@ -35,6 +35,13 @@ interface ConfigurationInterface
     public function getFirebaseSecret();
 
     /**
+     * Returns whether a Firebase secret is available or not.
+     *
+     * @return bool
+     */
+    public function hasFirebaseSecret();
+
+    /**
      * Sets the authentication token generator.
      *
      * @param TokenGeneratorInterface $authTokenGenerator The generator.

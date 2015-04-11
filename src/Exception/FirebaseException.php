@@ -99,13 +99,13 @@ class FirebaseException extends \Exception
 
     public static function httpError(RequestInterface $request, ResponseInterface $response)
     {
-        $requestBody = $request->hasBody() ? (string) $request->getBody()->getContents() : '';
-        $responseBody = $response->hasBody() ? (string) $response->getBody()->getContents() : '';
+        $requestBody = (string) $request->getBody();
+        $responseBody = (string) $response->getBody();
 
         $message = sprintf(
             'Server error (%s) for URL %s with data "%s"',
             $response->getStatusCode(),
-            $request->getUrl(),
+            $request->getUri(),
             $requestBody
         );
 

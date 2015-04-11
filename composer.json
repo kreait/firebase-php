@@ -6,17 +6,19 @@
   "license": "MIT",
   "authors": [
     {
-      "name": "kreait",
-      "homepage": "https://github.com/kreait",
-      "email": "dev@kreait.com"
+      "name": "Jérôme Gamez",
+      "homepage": "https://github.com/jeromegamez"
     }
   ],
+  "support": {
+    "issues": "https://github.com/kreait/firebase-php/issues",
+    "source": "https://github.com/kreait/firebase-php"
+  },
   "require": {
     "php": ">=5.4",
-    "ext-curl": "*",
     "ext-mbstring": "*",
     "psr/log": "~1.0",
-    "egeloen/http-adapter": "0.6.*"
+    "egeloen/http-adapter": "dev-master as 0.7.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.5",
@@ -24,7 +26,7 @@
     "symfony/event-dispatcher": "~2.6",
     "vlucas/phpdotenv": "~1.1",
     "fabpot/php-cs-fixer": "~1.6",
-    "kreait/tape-recorder-subscriber": "~1.0",
+    "kreait/tape-recorder-subscriber": "~2.0",
     "firebase/token-generator": "~2.0"
   },
   "suggest": {
