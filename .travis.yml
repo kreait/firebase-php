@@ -52,10 +52,10 @@ before_script:
 
 script:
   - [ "$SCRUTINIZER" != "true" ] && make tests
-  - [ "$SCRUTINIZER" == "true" ] && make travis-tests
+  - [ "$SCRUTINIZER" = "true" ] && make travis-tests
 
 after_script:
-  - [ "$SCRUTINIZER" == "true" ] && wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover
+  - [ "$SCRUTINIZER" = "true" ] && wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover
 
 notifications:
   email:
