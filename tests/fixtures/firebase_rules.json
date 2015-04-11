@@ -1,0 +1,18 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "tests": {
+      "local": {
+        "QueryIntegrationTest": {
+          ".indexOn": ["height"]
+        }
+      },
+      "travis-ci": {
+        "QueryIntegrationTest": {
+          ".indexOn": ["height"]
+        }
+      }
+    }
+  }
+}

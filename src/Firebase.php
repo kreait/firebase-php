@@ -15,6 +15,7 @@ namespace Kreait\Firebase;
 use Ivory\HttpAdapter\HttpAdapterException;
 use Ivory\HttpAdapter\Message\RequestInterface;
 use Ivory\HttpAdapter\Message\ResponseInterface;
+use Kreait\Firebase\Auth\TokenInterface;
 use Kreait\Firebase\Exception\FirebaseException;
 
 class Firebase implements FirebaseInterface
@@ -32,6 +33,13 @@ class Firebase implements FirebaseInterface
      * @var ConfigurationInterface
      */
     private $configuration;
+
+    /**
+     * The current authentication token.
+     *
+     * @var string
+     */
+    private $authToken;
 
     /**
      * Firebase client initialization.
@@ -94,6 +102,38 @@ class Firebase implements FirebaseInterface
         $this->send($location, RequestInterface::METHOD_DELETE);
     }
 
+    public function setAuthToken($authToken)
+    {
+        if (!is_string($authToken)) {
+            throw FirebaseException::invalidAuthToken($authToken);
+        }
+
+        if ($authToken === $this->getConfiguration()->getFirebaseSecret()) {
+            throw FirebaseException::authTokenIsIdenticalToSecret();
+        }
+
+        $this->authToken = $authToken;
+    }
+
+    public function getAuthToken()
+    {
+        if (!$this->hasAuthToken()) {
+            throw FirebaseException::noAuthTokenAvailable();
+        }
+
+        return $this->authToken;
+    }
+
+    public function hasAuthToken()
+    {
+        return !!$this->authToken;
+    }
+
+    public function removeAuthToken()
+    {
+        $this->authToken = null;
+    }
+
     /**
      * Sends the request and returns the processed response data.
      *
@@ -114,10 +154,22 @@ class Firebase implements FirebaseInterface
         $relativeUrl = sprintf('/%s.json', Utils::prepareLocationForRequest($location));
         if ($query) {
             $queryString = (string) $query;
+
             if (!empty($queryString)) {
                 $relativeUrl = sprintf('%s?%s', $relativeUrl, $queryString);
             }
         }
+
+        if ($this->hasAuthToken()) {
+            $authQueryString = http_build_query(['auth' => $this->getAuthToken()], null, '&', PHP_QUERY_RFC3986);
+            $relativeUrl = sprintf(
+                '%s%s%s',
+                $relativeUrl,
+                strpos($relativeUrl, '?') === false ? '?' : '&',
+                $authQueryString
+            );
+        }
+
         $absoluteUrl = sprintf('%s%s', $this->baseUrl, $relativeUrl);
 
         $headers = [
@@ -138,7 +190,7 @@ class Firebase implements FirebaseInterface
         );
 
         $logger->debug(
-            sprintf('%s request to %s', $method, $request->getUrl()),
+            sprintf('%s request to %s', $method, $request->getUri()),
             ($data) ? ['data_sent' => $data] : []
         );
 
@@ -166,12 +218,7 @@ class Firebase implements FirebaseInterface
      */
     private function getResultFromResponse(ResponseInterface $response)
     {
-        $result = [];
-
-        if ($response->hasBody()) {
-            $contents = $response->getBody()->getContents();
-            $result = json_decode($contents, true);
-        }
+        $result = json_decode((string) $response->getBody(), true);
 
         if (is_array($result)) {
             $result = $this->cleanupData($result);

@@ -4,6 +4,11 @@
 
 * Use `Configuration` object instead of configuring `Firebase` directly.
 
+## Unreleased
+
+* Add Authentication support
+* Ensure PHP7 and HHVM support
+
 ## 0.4.2 - 2015-03-25
 
 * Fix Query documentation

@@ -13,6 +13,7 @@
 namespace Kreait\Firebase;
 
 use Ivory\HttpAdapter\HttpAdapterInterface;
+use Kreait\Firebase\Auth\TokenGeneratorInterface;
 use Psr\Log\LoggerInterface;
 
 interface ConfigurationInterface
@@ -34,11 +35,25 @@ interface ConfigurationInterface
     public function getFirebaseSecret();
 
     /**
-     * Returns TRUE if a Firebase Secret has been set, FALSE if not.
+     * Returns whether a Firebase secret is available or not.
      *
      * @return bool
      */
     public function hasFirebaseSecret();
+
+    /**
+     * Sets the authentication token generator.
+     *
+     * @param TokenGeneratorInterface $authTokenGenerator The generator.
+     */
+    public function setAuthTokenGenerator(TokenGeneratorInterface $authTokenGenerator);
+
+    /**
+     * Returns the authentication token generator.
+     *
+     * @return TokenGeneratorInterface
+     */
+    public function getAuthTokenGenerator();
 
     /**
      * Sets the HTTP Adapter.

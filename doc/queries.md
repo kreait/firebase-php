@@ -6,7 +6,7 @@ You can query a location by using the `query` method of the `Firebase` or `Refer
 use Kreait\Firebase\Firebase;
 use Kreait\Firebase\Query;
 
-$firebase = new Firebase('https://brilliant-torch-1474.firebaseio.com');
+$firebase = new Firebase('https://myapp.firebaseio.com');
 
 $reference = $firebase->getReference('path/to/my/location');
 

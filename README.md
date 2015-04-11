@@ -55,7 +55,7 @@ $logger->pushHandler(new StreamHandler('php://stdout'));
 $configuration = new Configuration();
 $configuration->setLogger($logger);
 
-$firebase = new Firebase('https://brilliant-torch-1474.firebaseio.com', $configuration);
+$firebase = new Firebase('https://myapp.firebaseio.com', $configuration);
 
 $simpsons = $firebase->getReference('data/simpsons');
 

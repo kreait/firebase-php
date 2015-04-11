@@ -99,13 +99,13 @@ class FirebaseException extends \Exception
 
     public static function httpError(RequestInterface $request, ResponseInterface $response)
     {
-        $requestBody = $request->hasBody() ? (string) $request->getBody()->getContents() : '';
-        $responseBody = $response->hasBody() ? (string) $response->getBody()->getContents() : '';
+        $requestBody = (string) $request->getBody();
+        $responseBody = (string) $response->getBody();
 
         $message = sprintf(
             'Server error (%s) for URL %s with data "%s"',
             $response->getStatusCode(),
-            $request->getUrl(),
+            $request->getUri(),
             $requestBody
         );
 
@@ -127,5 +127,23 @@ class FirebaseException extends \Exception
         $e->setResponse($response);
 
         return $e;
+    }
+
+    public static function noAuthTokenAvailable()
+    {
+        return new self('No authentication token has been set.');
+    }
+
+    public static function invalidAuthToken($givenToken)
+    {
+        return new self(sprintf('The authentication token must be a string, %s given.', gettype($givenToken)));
+    }
+
+    public static function authTokenIsIdenticalToSecret()
+    {
+        return new self(
+            'The auth token is identical to the firebase secret. Create an admin token instead '.
+            '(see TokenGeneratorInterface::createAdminToken())'
+        );
     }
 }

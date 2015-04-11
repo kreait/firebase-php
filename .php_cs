@@ -31,4 +31,4 @@ return Symfony\CS\Config\Config::create()
             ->exclude('build')
             ->in(__DIR__)
     )
-    ;
+;

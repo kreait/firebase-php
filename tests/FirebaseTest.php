@@ -12,56 +12,24 @@
 
 namespace Kreait\Firebase;
 
-use Ivory\HttpAdapter\Event\Subscriber\TapeRecorderSubscriber;
 use Ivory\HttpAdapter\HttpAdapterInterface;
 use Ivory\HttpAdapter\Message\Response;
 
-class FirebaseTest extends \PHPUnit_Framework_TestCase
+class FirebaseTest extends IntegrationTest
 {
-    /**
-     * @var Firebase
-     */
-    protected $firebase;
-
-    /**
-     * @var ConfigurationInterface
-     */
-    protected $configuration;
-
-    /**
-     * @var string
-     */
-    protected $baseUrl;
-
-    /**
-     * @var string
-     */
-    protected $baseLocation;
-
-    /**
-     * @var TapeRecorderSubscriber
-     */
-    protected $recorder;
-
-    protected function setUp()
+    public function testGetDefaultConfiguration()
     {
-        $this->baseUrl = getenv('FIREBASE_HOST');
-        $this->baseLocation = getenv('FIREBASE_BASE_LOCATION') ?: 'tests';
-        $recordingMode = getenv('FIREBASE_TEST_RECORDING_MODE') ?: 1;
-
-        $this->configuration = new Configuration();
-
-        $this->firebase = new Firebase($this->baseUrl, $this->configuration);
-
-        $this->recorder = new TapeRecorderSubscriber(__DIR__.'/fixtures/FirebaseTest');
-        $this->recorder->setRecordingMode($recordingMode);
-
-        $this->configuration->getHttpAdapter()->getConfiguration()->getEventDispatcher()->addSubscriber($this->recorder);
+        $this->assertSame($this->configuration, $this->firebase->getConfiguration());
     }
 
-    protected function tearDown()
+    public function testSetConfiguration()
     {
-        $this->recorder->eject();
+        $prophecy = $this->prophesize('Kreait\Firebase\ConfigurationInterface');
+        /** @var ConfigurationInterface $configuration */
+        $configuration = $prophecy->reveal();
+        $this->firebase->setConfiguration($configuration);
+
+        $this->assertSame($configuration, $this->firebase->getConfiguration());
     }
 
     /**
@@ -71,6 +39,8 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     {
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
+
+        $this->firebase->removeAuthToken();
         $this->firebase->get('forbidden');
     }
 
@@ -230,6 +200,31 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \Kreait\Firebase\Exception\FirebaseException
+     */
+    public function testInvalidAuthTokenThrowsException()
+    {
+        $this->firebase->setAuthToken([]);
+    }
+
+    /**
+     * @expectedException \Kreait\Firebase\Exception\FirebaseException
+     */
+    public function testUsingTheSecretAsTokenThrowsException()
+    {
+        $this->firebase->setAuthToken($this->firebaseSecret);
+    }
+
+    /**
+     * @expectedException \Kreait\Firebase\Exception\FirebaseException
+     */
+    public function testGetAuthTokenWhenNoneIsThere()
+    {
+        $this->firebase->removeAuthToken();
+        $this->firebase->getAuthToken();
+    }
+
+    /**
      * @return HttpAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getHttpAdapter()
@@ -248,14 +243,5 @@ class FirebaseTest extends \PHPUnit_Framework_TestCase
     protected function getInternalServerErrorResponse()
     {
         return new Response(500, 'Internal Server Error', Response::PROTOCOL_VERSION_1_1);
-    }
-
-    protected function getLocation($subLocation = null)
-    {
-        if (!$subLocation) {
-            return $this->baseLocation;
-        }
-
-        return $this->baseLocation.'/'.$subLocation;
     }
 }

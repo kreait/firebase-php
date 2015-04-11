@@ -7,7 +7,7 @@ The `Firebase` class is a wrapper around the [Firebase REST API](https://www.fir
 ```php
 use Kreait\Firebase\Firebase;
 
-$firebase = new Firebase('https://brilliant-torch-1474.firebaseio.com');
+$firebase = new Firebase('https://myapp.firebaseio.com');
 ```
 
 ### Get data

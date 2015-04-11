@@ -1,4 +1,5 @@
 /build
 /tests/.env
+/tests/fixtures/tapes
 /vendor
 /composer.lock

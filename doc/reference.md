@@ -7,7 +7,7 @@ A reference is a shortcut to a subtree of your Firebase data.
 ```php
 use Kreait\Firebase\Firebase;
 
-$firebase = new Firebase('https://brilliant-torch-1474.firebaseio.com');
+$firebase = new Firebase('https://myapp.firebaseio.com');
 $users = $firebase->getReference('users/data');
 ```
 

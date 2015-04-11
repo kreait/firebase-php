@@ -19,8 +19,6 @@ $firebase->setConfiguration($config);
 
 ## Logger
 
-Default: `Psr\Log\NullLogger`
-
 ```php
 $logger = new Logger('firebase');
 $logger->pushHandler(new StreamHandler('php://stdout'));
@@ -33,8 +31,6 @@ $firebase->setConfiguration($config);
 ```
 
 ## HTTP Adapter
-
-Default: `Ivory\HttpAdapter\CurlHttpAdapter`
 
 ```php
 use Ivory\HttpAdapter\FopenHttpAdapter;
@@ -50,7 +46,7 @@ $firebase->setConfiguration($config);
 
 ## Secret
 
-The Firebase secret can be used to generate Authentication Tokens or to authenticate requests to a Firebase app directly.
+The Firebase secret is needed to generate Authentication Tokens.
 
 Default: undefined
 
@@ -58,6 +54,22 @@ Default: undefined
 $config = new Configuration();
 $config->setFirebaseSecret('xxxxx');
 $config->getFirebaseSecret();
+
+$firebase->setConfiguration($config);
+```
+
+## AuthTokenGenerator
+
+The Authentication Token Generator is used to create authentication tokens to access a Firebase app. Normally, you
+don't have to override it yourself as the Firebase PHP client already comes with one.
+
+```php
+// Must implement Kreait\Firebase\Auth\TokenGeneratorInterface
+$myGenerator = new My\Custom\AuthTokenGenerator;
+
+$config = new Configuration();
+$config->setAuthTokenGenerator($myGenerator);
+$config->getAuthTokenGenerator();
 
 $firebase->setConfiguration($config);
 ```

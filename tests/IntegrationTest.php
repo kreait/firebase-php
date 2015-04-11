@@ -12,9 +12,13 @@
 
 namespace Kreait\Firebase;
 
-use Ivory\HttpAdapter\CurlHttpAdapter;
-use Ivory\HttpAdapter\Event\Subscriber\TapeRecorderSubscriber;
+use Ivory\HttpAdapter\EventDispatcherHttpAdapter;
+use Ivory\HttpAdapter\HttpAdapterFactory;
 use Ivory\HttpAdapter\HttpAdapterInterface;
+use Kreait\Firebase\Auth\TokenGenerator;
+use Kreait\Firebase\Auth\TokenGeneratorInterface;
+use Kreait\Ivory\HttpAdapter\Event\Subscriber\TapeRecorderSubscriber;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,6 +28,16 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected $firebase;
 
     /**
+     * @var ConfigurationInterface
+     */
+    protected $configuration;
+
+    /**
+     * @var TokenGeneratorInterface
+     */
+    protected $authTokenGenerator;
+
+    /**
      * @var HttpAdapterInterface
      */
     protected $http;
@@ -31,12 +45,12 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $baseUrl;
+    private $baseUrl;
 
     /**
      * @var string
      */
-    protected $baseLocation;
+    private $baseLocation;
 
     /**
      * @var TapeRecorderSubscriber
@@ -53,38 +67,55 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $fixturesDir;
 
+    /**
+     * @var string
+     */
+    protected $firebaseSecret;
+
     protected function setUp()
     {
-        $this->baseUrl = getenv('FIREBASE_HOST');
-        $this->baseLocation = getenv('FIREBASE_BASE_LOCATION');
-        $this->recordingMode = (int) getenv('FIREBASE_TEST_RECORDING_MODE');
-
         $r = new \ReflectionClass($this);
-        $this->fixturesDir = __DIR__.'/fixtures/'.$r->getShortName();
+        $shortClassName = $r->getShortName();
 
-        $this->setHttpAdapter();
-    }
+        $this->baseUrl = getenv('FIREBASE_HOST');
+        $this->baseLocation = sprintf('%s/%s', getenv('FIREBASE_BASE_LOCATION'), $shortClassName);
+        $this->recordingMode = (int) getenv('FIREBASE_TAPE_RECORDER_RECORDING_MODE');
+        $this->firebaseSecret = getenv('FIREBASE_SECRET');
 
-    protected function tearDown()
-    {
-        if ($this->recorder) {
-            $this->recorder->eject();
-        }
-    }
+        $this->configuration = new Configuration();
+        $this->configuration->setFirebaseSecret($this->firebaseSecret);
 
-    protected function setHttpAdapter()
-    {
-        $this->http = new CurlHttpAdapter();
+        $this->authTokenGenerator = new TokenGenerator($this->firebaseSecret, true);
+        $this->configuration->setAuthTokenGenerator($this->authTokenGenerator);
+
+        $this->fixturesDir = sprintf('%s/%s/%s', __DIR__, getenv('FIREBASE_TAPE_RECORDER_TAPES_DIR'), $r->getShortName());
 
         $this->recorder = new TapeRecorderSubscriber($this->fixturesDir);
         $this->recorder->setRecordingMode($this->recordingMode);
 
-        $this->http->getConfiguration()->getEventDispatcher()->addSubscriber($this->recorder);
+        $http = HttpAdapterFactory::guess();
 
-        $configuration = new Configuration();
-        $configuration->setHttpAdapter($this->http);
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addSubscriber($this->recorder);
 
-        $this->firebase = new Firebase($this->baseUrl, $configuration);
+        $this->http = new EventDispatcherHttpAdapter($http, $eventDispatcher);
+
+        $this->configuration->setHttpAdapter($this->http);
+
+        $this->firebase = new Firebase($this->baseUrl, $this->configuration);
+
+        // It's not allowed to use the secret as auth token, but we do it so that we can reuse
+        // the requests and responses for the Tape Subscriber
+        $reflectionObject = new \ReflectionObject($this->firebase);
+        $property = $reflectionObject->getProperty('authToken');
+        $property->setAccessible(true);
+        $property->setValue($this->firebase, $this->firebaseSecret);
+        $property->setAccessible(false);
+    }
+
+    protected function tearDown()
+    {
+        $this->recorder->eject();
     }
 
     protected function getLocation($subLocation = null)

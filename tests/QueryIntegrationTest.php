@@ -23,26 +23,22 @@ class QueryIntegrationTest extends IntegrationTest
     {
         parent::setUp();
 
-        $this->baseLocation = 'query_test/users';
-        $this->setHttpAdapter();
-
         $this->query = new Query();
-
-        $this->setUpQueryData();
     }
 
-    protected function setUpQueryData()
+    protected function setUpQueryData($method)
     {
-        $this->recorder->insertTape(__FUNCTION__);
-        $this->recorder->startRecording();
+        $this->firebase->set([
+            'd' => ['first_name' => 'd', 'height' => 1, '.priority' => 2],
+            'b' => ['first_name' => 'b', 'height' => 3, '.priority' => 4],
+            'c' => ['first_name' => 'c', 'height' => 2, '.priority' => 1],
+            'a' => ['first_name' => 'a', 'height' => 4, '.priority' => 3],
+        ], $this->getLocation($method));
+    }
 
-        $this->firebase->set(['first_name' => 'd', 'height' => 1, '.priority' => 2], $this->baseLocation.'/d');
-        $this->firebase->set(['first_name' => 'b', 'height' => 3, '.priority' => 4], $this->baseLocation.'/b');
-        $this->firebase->set(['first_name' => 'c', 'height' => 2, '.priority' => 1], $this->baseLocation.'/c');
-        $this->firebase->set(['first_name' => 'a', 'height' => 4, '.priority' => 3], $this->baseLocation.'/a');
-
-        $this->recorder->stopRecording();
-        $this->recorder->eject();
+    protected function tearDownQueryData($method)
+    {
+        $this->firebase->delete($this->getLocation($method));
     }
 
     public function testEmptyQuery()
@@ -50,12 +46,16 @@ class QueryIntegrationTest extends IntegrationTest
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
-        $result = $this->firebase->query($this->getLocation(), $this->query);
+        $this->setUpQueryData(__FUNCTION__);
+
+        $result = $this->firebase->query($this->getLocation(__FUNCTION__), $this->query);
 
         $this->assertCount(4, $result);
         foreach ($result as $key => $value) {
             $this->assertNotTrue($value);
         }
+
+        $this->tearDownQueryData(__FUNCTION__);
     }
 
     public function testShallow()
@@ -63,12 +63,16 @@ class QueryIntegrationTest extends IntegrationTest
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
+        $this->setUpQueryData(__FUNCTION__);
+
         $this->query->shallow(true);
-        $result = $this->firebase->query($this->getLocation(), $this->query);
+        $result = $this->firebase->query($this->getLocation(__FUNCTION__), $this->query);
 
         foreach ($result as $key => $value) {
             $this->assertTrue($value);
         }
+
+        $this->tearDownQueryData(__FUNCTION__);
     }
 
     public function testOrderByKey()
@@ -76,10 +80,14 @@ class QueryIntegrationTest extends IntegrationTest
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
+        $this->setUpQueryData(__FUNCTION__);
+
         $this->query->orderByKey();
-        $result = $this->firebase->query($this->getLocation(), $this->query);
+        $result = $this->firebase->query($this->getLocation(__FUNCTION__), $this->query);
 
         $this->assertSame(['a', 'b', 'c', 'd'], array_keys($result));
+
+        $this->tearDownQueryData(__FUNCTION__);
     }
 
     public function testOrderByChildKey()
@@ -88,10 +96,14 @@ class QueryIntegrationTest extends IntegrationTest
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
+        $this->setUpQueryData(__FUNCTION__);
+
         $this->query->orderByChildKey('height');
-        $result = $this->firebase->query($this->getLocation(), $this->query);
+        $result = $this->firebase->query($this->getLocation(__FUNCTION__), $this->query);
 
         $this->assertSame(['d', 'c', 'b', 'a'], array_keys($result));
+
+        $this->tearDownQueryData(__FUNCTION__);
     }
 
     /**
@@ -103,8 +115,12 @@ class QueryIntegrationTest extends IntegrationTest
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
+        $this->setUpQueryData(__FUNCTION__);
+
         $this->query->startAt('b');
-        $this->firebase->query($this->getLocation(), $this->query);
+        $this->firebase->query($this->getLocation(__FUNCTION__), $this->query);
+
+        $this->tearDownQueryData(__FUNCTION__); // Will not be called due to the thrown exception
     }
 
     public function testStartAt()
@@ -112,12 +128,16 @@ class QueryIntegrationTest extends IntegrationTest
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
+        $this->setUpQueryData(__FUNCTION__);
+
         $this->query->orderByKey();
         $this->query->startAt('b');
-        $result = $this->firebase->query($this->getLocation(), $this->query);
+        $result = $this->firebase->query($this->getLocation(__FUNCTION__), $this->query);
 
         $this->assertCount(3, $result);
         $this->assertSame(['b', 'c', 'd'], array_keys($result));
+
+        $this->tearDownQueryData(__FUNCTION__);
     }
 
     public function testEndAt()
@@ -125,12 +145,16 @@ class QueryIntegrationTest extends IntegrationTest
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
+        $this->setUpQueryData(__FUNCTION__);
+
         $this->query->orderByKey();
         $this->query->endAt('c');
-        $result = $this->firebase->query($this->getLocation(), $this->query);
+        $result = $this->firebase->query($this->getLocation(__FUNCTION__), $this->query);
 
         $this->assertCount(3, $result);
         $this->assertSame(['a', 'b', 'c'], array_keys($result));
+
+        $this->tearDownQueryData(__FUNCTION__);
     }
 
     public function testOrderByPriority()
@@ -139,11 +163,15 @@ class QueryIntegrationTest extends IntegrationTest
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
+        $this->setUpQueryData(__FUNCTION__);
+
         $this->query->orderByPriority();
-        $result = $this->firebase->query($this->getLocation(), $this->query);
+        $result = $this->firebase->query($this->getLocation(__FUNCTION__), $this->query);
 
         $this->assertCount(4, $result);
         $this->assertSame(['c', 'd', 'a', 'b'], array_keys($result));
+
+        $this->tearDownQueryData(__FUNCTION__);
     }
 
     public function testLimitToFirst()
@@ -151,12 +179,16 @@ class QueryIntegrationTest extends IntegrationTest
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
+        $this->setUpQueryData(__FUNCTION__);
+
         $this->query->orderByKey();
         $this->query->limitToFirst(2);
-        $result = $this->firebase->query($this->getLocation(), $this->query);
+        $result = $this->firebase->query($this->getLocation(__FUNCTION__), $this->query);
 
         $this->assertCount(2, $result);
         $this->assertSame(['a', 'b'], array_keys($result));
+
+        $this->tearDownQueryData(__FUNCTION__);
     }
 
     public function testLimitToLast()
@@ -164,12 +196,16 @@ class QueryIntegrationTest extends IntegrationTest
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
+        $this->setUpQueryData(__FUNCTION__);
+
         $this->query->orderByKey();
         $this->query->limitToLast(2);
-        $result = $this->firebase->query($this->getLocation(), $this->query);
+        $result = $this->firebase->query($this->getLocation(__FUNCTION__), $this->query);
 
         $this->assertCount(2, $result);
         $this->assertSame(['c', 'd'], array_keys($result));
+
+        $this->tearDownQueryData(__FUNCTION__);
     }
 
     public function testMultiple()
@@ -177,14 +213,18 @@ class QueryIntegrationTest extends IntegrationTest
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
+        $this->setUpQueryData(__FUNCTION__);
+
         $this->query
             ->orderByKey()
             ->startAt('a')
             ->endAt('c');
 
-        $result = $this->firebase->query($this->getLocation(), $this->query);
+        $result = $this->firebase->query($this->getLocation(__FUNCTION__), $this->query);
 
         $this->assertCount(3, $result);
         $this->assertSame(['a', 'b', 'c'], array_keys($result));
+
+        $this->tearDownQueryData(__FUNCTION__);
     }
 }

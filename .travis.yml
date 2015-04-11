@@ -2,7 +2,10 @@ language: php
 
 sudo: false
 
-before_install: composer self-update
+before_install:
+  - openssl aes-256-cbc -K $encrypted_9bb00d0177de_key -iv $encrypted_9bb00d0177de_iv -in tests/.env.enc -out tests/.env -d
+  - composer self-update
+  - composer config --global github-oauth.github.com $github_oauth_token
 
 install: composer update
 
@@ -10,6 +13,9 @@ php:
   - 5.4
   - 5.5
   - 5.6
+  - 7.0
+  - hhvm
+  - hhvm-nightly
 
 env:
   - SCRUTINIZER=true
@@ -18,6 +24,7 @@ env:
 cache:
   directories:
     - $HOME/.composer/cache
+    - $HOME/tests/fixtures/tapes
 
 matrix:
   fast_finish: true
@@ -26,27 +33,33 @@ matrix:
       env: SCRUTINIZER=true
     - php: 5.5
       env: SCRUTINIZER=true
+    - php: 7.0
+      env: SCRUTINIZER=true
+    - php: hhvm
+      env: SCRUTINIZER=true
+    - php: hhvm-nightly
+      env: SCRUTINIZER=true
   allow_failures:
     - php: 5.6
       env: SCRUTINIZER=true
+    - php: 7.0
+    - php: hhvm
+    - php: hhvm-nightly
 
 before_script:
-  - echo 'date.timezone = "Europe/Berlin"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  - cp tests/.env.example tests/.env
+  - if [[ "$TRAVIS_PHP_VERSION" = "hhv*" ]]; then cat tests/fixtures/travis.ini >> /etc/hhvm/php.ini ; fi
+  - if [[ "$TRAVIS_PHP_VERSION" = "php*" ]]; then phpenv config-add tests/fixtures/travis.ini ; fi
 
 script:
   - if [ "$SCRUTINIZER" != "true" ]; then make tests ; fi;
   - if [ "$SCRUTINIZER" == "true" ]; then make travis-tests ; fi;
 
 after_script:
-  - if [ "$SCRUTINIZER" == "true" ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover; fi;
+  - if [ "$SCRUTINIZER" == "true" ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover ; fi;
 
 notifications:
   email:
-    - jerome@kreait.com
+    - secure: "iiseqb4k4ckQkMJnZ6Tq3YP5ilTZE4CkVgarsBpPOn+c820nP9QokGpz82D4CTGy/UB1+DfCiFH9YAFrhLP5/9Go1CHP+wYkuz9W+E8q/rm9/nBO0xutoQhOfV3MxMid69E8i4QjODq3w5mOUrmpj/8gl2FyBU1Ro1xgPSYNEQ4="
   webhooks:
     urls:
-      - https://webhooks.gitter.im/e/619e653eb8741123550e
-    on_success: change
-    on_failure: always
-    on_start: false
+      - secure: "OzJTaVZ5IDC/+3wr7KbqTd6dskQ1Cq7Db75U+9k3Kcf+5UpxQKepRnJeNhqMNMl4/Iz7aikADFxwH74bAqZor3hO8i8fEaTmxhdjZ2rfVReH5rVYJFUsx2Vm1oLTd/Jq4n09ZjBIDBd/+crrjgTZDLCu8jnRFOBCzpqT7sLCnlY="
