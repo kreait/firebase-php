@@ -38,6 +38,7 @@ require 'vendor/autoload.php';
 1. [Working with References](doc/reference.md)
 1. [Querying data](doc/queries.md)
 1. [Configuration](doc/configuration.md)
+1. [Authentication](doc/authentication.md)
 
 ## Example
 
