@@ -81,7 +81,7 @@ class TokenGenerator implements TokenGeneratorInterface
         return $this->generator->createToken($data, $options);
     }
 
-    public function createToken($id, $provider, $isAdmin = false) {
+    public function createToken($id, $provider) {
         $uid = sprintf('%s:%s', $provider, $id);
 
         $data = [
