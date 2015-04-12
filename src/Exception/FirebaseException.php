@@ -146,4 +146,10 @@ class FirebaseException extends \Exception
             '(see TokenGeneratorInterface::createAdminToken())'
         );
     }
+
+    public static function invalidArgument($expected, $given)
+    {
+        return new self(sprintf('Expected %s, %s given', $expected, $given));
+
+    }
 }
