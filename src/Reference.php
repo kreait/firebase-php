@@ -113,7 +113,7 @@ class Reference implements ReferenceInterface
         $this->firebase->delete($this->location);
     }
 
-    private function updateData($data)
+    private function updateData(array $data)
     {
         $data = array_merge($this->data, $data);
 
