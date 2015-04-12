@@ -17,7 +17,6 @@ use Ivory\HttpAdapter\HttpAdapterInterface;
 use Ivory\HttpAdapter\Message\RequestInterface;
 use Ivory\HttpAdapter\Message\ResponseInterface;
 use Kreait\Firebase\Exception\FirebaseException;
-use Phly\Http\Stream;
 
 class Firebase implements FirebaseInterface
 {
@@ -182,15 +181,15 @@ class Firebase implements FirebaseInterface
     /**
      * Sends the request and returns the processed response data.
      *
-     * @param string     $url      The full URL to send the request to.
-     * @param string     $method   The HTTP method.
-     * @param array|null $data     The data.
+     * @param string            $url    The full URL to send the request to.
+     * @param string            $method The HTTP method.
+     * @param array|object|null $data   The data.
      *
      * @throws FirebaseException
      *
      * @return ResponseInterface The response.
      */
-    private function send($url, $method, array $data = null)
+    private function send($url, $method, $data = null)
     {
         $logger = $this->getConfiguration()->getLogger();
         $messageFactory = $this->getConfiguration()->getHttpAdapter()->getConfiguration()->getMessageFactory();
@@ -241,7 +240,7 @@ class Firebase implements FirebaseInterface
         }
 
         if (count($params)) {
-            $url .= '?' . http_build_query($params, null, '&', PHP_QUERY_RFC3986);
+            $url .= '?'.http_build_query($params, null, '&', PHP_QUERY_RFC3986);
         }
 
         return $url;

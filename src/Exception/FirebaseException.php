@@ -150,6 +150,5 @@ class FirebaseException extends \Exception
     public static function invalidArgument($expected, $given)
     {
         return new self(sprintf('Expected %s, %s given', $expected, $given));
-
     }
 }

@@ -1,10 +1,16 @@
 <?php
 
+/*
+ * This file is part of the firebase-php package.
+ *
+ * (c) Jérôme Gamez <jerome@kreait.com>
+ * (c) kreait GmbH <info@kreait.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace Kreait\Firebase;
-
-
-use Prophecy\Argument;
 
 class DataSnapshotTest extends \PHPUnit_Framework_TestCase
 {
@@ -186,9 +192,11 @@ class DataSnapshotTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param mixed $data
+     *
      * @return DataSnapshot
      */
-    private function createDataSnapshot($data){
+    private function createDataSnapshot($data)
+    {
         return new DataSnapshot($this->referenceProphecy->reveal(), $data);
     }
 
@@ -209,18 +217,18 @@ class DataSnapshotTest extends \PHPUnit_Framework_TestCase
                 [
                     'a' => [
                         'b' => [
-                            'c' => 'd'
-                        ]
-                    ]
-                ]
-            ]
+                            'c' => 'd',
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
     public function stringDataProvider()
     {
         return [
-            ['string']
+            ['string'],
         ];
     }
 }

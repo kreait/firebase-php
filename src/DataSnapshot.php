@@ -1,9 +1,19 @@
 <?php
 
+/*
+ * This file is part of the firebase-php package.
+ *
+ * (c) Jérôme Gamez <jerome@kreait.com>
+ * (c) kreait GmbH <info@kreait.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Kreait\Firebase;
 
 /**
- * Data Snapshot
+ * Data Snapshot.
  *
  * DataSnapshots are efficiently-generated immutable copies of the data at a Firebase location.
  * They can't be modified and will never change. To modify data, you always use a Firebase reference.
@@ -27,9 +37,10 @@ class DataSnapshot
     private $data;
 
     /**
-     * Constructor
+     * Constructor.
+     *
      * @param ReferenceInterface $reference
-     * @param mixed|null $data
+     * @param mixed|null         $data
      */
     public function __construct(ReferenceInterface $reference, $data = null)
     {
@@ -53,7 +64,7 @@ class DataSnapshot
     }
 
     /**
-     * Alias for {@see key()}
+     * Alias for {@see key()}.
      *
      * @return string The key of the location that generated this snapshot.
      */
@@ -89,7 +100,7 @@ class DataSnapshot
      *
      * This can either
      *
-     * @return object|string|number|boolean|null
+     * @return object|string|number|bool|null
      */
     public function val()
     {
@@ -101,7 +112,7 @@ class DataSnapshot
      *
      * @param string $path A relative path to the location of a potential child.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasChild($path)
     {
@@ -111,7 +122,7 @@ class DataSnapshot
     /**
      * Returns true if the DataSnapshot has any children.
      *
-     * @return boolean true if this snapshot has any children; else false.
+     * @return bool true if this snapshot has any children; else false.
      */
     public function hasChildren()
     {
@@ -141,11 +152,10 @@ class DataSnapshot
             return new self($this->reference->getReference($path), $child);
         }
 
-        return null;
+        return;
     }
 
     /**
-     *
      * @param string $path A relative path to the location of a potential child.
      *
      * @return mixed|null
@@ -153,6 +163,7 @@ class DataSnapshot
     private function searchChildByPath($path)
     {
         $expression = implode('.', explode('/', $path));
+
         return $this->search($expression);
     }
 
@@ -164,7 +175,7 @@ class DataSnapshot
     private function search($expression)
     {
         if (!is_array($this->data)) {
-            return null;
+            return;
         }
 
         return \JmesPath\Env::search($expression, $this->data);

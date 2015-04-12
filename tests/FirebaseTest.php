@@ -12,9 +12,6 @@
 
 namespace Kreait\Firebase;
 
-use Ivory\HttpAdapter\HttpAdapterInterface;
-use Ivory\HttpAdapter\Message\Response;
-
 class FirebaseTest extends IntegrationTest
 {
     public function testGetDefaultConfiguration()

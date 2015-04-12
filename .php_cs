@@ -13,7 +13,7 @@ EOF;
 Symfony\CS\Fixer\Contrib\HeaderCommentFixer::setHeader($header);
 
 return Symfony\CS\Config\Config::create()
-    ->level(Symfony\CS\FixerInterface::SYMFONY_LEVEL)
+    ->level(Symfony\CS\FixerInterface::PSR2_LEVEL)
     ->fixers([
         'header_comment',
         'multiline_spaces_before_semicolon',

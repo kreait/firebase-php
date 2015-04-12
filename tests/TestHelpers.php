@@ -1,11 +1,21 @@
 <?php
+
+/*
+ * This file is part of the firebase-php package.
+ *
+ * (c) Jérôme Gamez <jerome@kreait.com>
+ * (c) kreait GmbH <info@kreait.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 /**
  * This file is part of the firebase-php package.
  *
  * For the full copyright and license information, please read the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Kreait\Firebase;
 
 use Prophecy\Argument;
@@ -14,10 +24,11 @@ use Prophecy\Prophet;
 class TestHelpers
 {
     /**
-     * Creates a mock reference
+     * Creates a mock reference.
      *
      * @param string|null $location
      * @param string|null $subLocation
+     *
      * @return \Prophecy\Prophecy\ObjectProphecy
      */
     public static function createMockReference($location = null, $subLocation = null)
