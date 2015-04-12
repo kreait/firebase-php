@@ -68,4 +68,11 @@ interface ReferenceInterface extends ReferenceProviderInterface, \ArrayAccess, \
      * @return string
      */
     public function getKey();
+
+    /**
+     * Returns the Reference's full location.
+     *
+     * @return string
+     */
+    public function getLocation();
 }

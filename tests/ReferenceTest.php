@@ -34,6 +34,11 @@ class ReferenceTest extends Integrationtest
         $this->assertEquals($expected, $this->reference->getKey());
     }
 
+    public function testGetLocation()
+    {
+        $this->assertSame($this->getLocation(), $this->reference->getLocation());
+    }
+
     public function testGetReference()
     {
         $expectedFullLocation = $this->getLocation().'/bar';

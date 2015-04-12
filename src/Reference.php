@@ -65,6 +65,11 @@ class Reference implements ReferenceInterface
         return $this->key;
     }
 
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
     public function getReference($location)
     {
         return $this->firebase->getReference(sprintf('%s/%s', $this->location, Utils::normalizeLocation($location)));
