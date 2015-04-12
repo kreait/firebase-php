@@ -54,6 +54,11 @@ class Firebase implements FirebaseInterface
         $this->configuration = $configuration ?: new Configuration();
     }
 
+    public function getBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+
     public function setConfiguration(ConfigurationInterface $configuration)
     {
         $this->configuration = $configuration;

@@ -17,6 +17,13 @@ use Kreait\Firebase\Exception\FirebaseException;
 interface FirebaseInterface extends ReferenceProviderInterface
 {
     /**
+     * Returns the base url.
+     *
+     * @return string
+     */
+    public function getBaseUrl();
+
+    /**
      * Returns the data of the given location.
      *
      * @param string $location The location.
