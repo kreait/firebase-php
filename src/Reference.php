@@ -38,7 +38,7 @@ class Reference implements ReferenceInterface
     /**
      * The Reference's data.
      *
-     * @var array
+     * @var mixed
      */
     private $data;
 
