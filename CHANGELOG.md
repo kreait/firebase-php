@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 0.6 - 2015-04-12
 
 * Added Authentication support
 * Ensure PHP7 and HHVM support
