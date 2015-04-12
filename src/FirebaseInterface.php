@@ -47,32 +47,32 @@ interface FirebaseInterface extends ReferenceProviderInterface
     /**
      * Write or replace data at the given location.
      *
-     * @param array  $data
+     * @param array|object  $data
      * @param string $location
      *
      * @return array The returned data.
      */
-    public function set(array $data, $location);
+    public function set($data, $location);
 
     /**
      * Generates a new child and returns its key.
      *
-     * @param array  $data     The data to be pushed.
+     * @param array|object  $data     The data to be pushed.
      * @param string $location The location to push the new child to.
      *
      * @return string The key of the new child.
      */
-    public function push(array $data, $location);
+    public function push($data, $location);
 
     /**
      * Update the given field(s) at the given location.
      *
-     * @param array  $data     The fields.
+     * @param array|object  $data     The fields.
      * @param string $location The location.
      *
      * @return array The written fields.
      */
-    public function update(array $data, $location);
+    public function update($data, $location);
 
     /**
      * Deletes the given location.

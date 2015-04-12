@@ -13,9 +13,11 @@
 namespace Kreait\Firebase;
 
 use Ivory\HttpAdapter\HttpAdapterException;
+use Ivory\HttpAdapter\HttpAdapterInterface;
 use Ivory\HttpAdapter\Message\RequestInterface;
 use Ivory\HttpAdapter\Message\ResponseInterface;
 use Kreait\Firebase\Exception\FirebaseException;
+use Phly\Http\Stream;
 
 class Firebase implements FirebaseInterface
 {
@@ -41,6 +43,11 @@ class Firebase implements FirebaseInterface
     private $authToken;
 
     /**
+     * @var HttpAdapterInterface
+     */
+    private $http;
+
+    /**
      * Firebase client initialization.
      *
      * @param string                 $baseUrl       The Firebase app base URL.
@@ -52,6 +59,8 @@ class Firebase implements FirebaseInterface
     {
         $this->baseUrl = Utils::normalizeBaseUrl($baseUrl);
         $this->configuration = $configuration ?: new Configuration();
+
+        $this->http = $this->configuration->getHttpAdapter();
     }
 
     public function getBaseUrl()
@@ -76,34 +85,66 @@ class Firebase implements FirebaseInterface
 
     public function get($location)
     {
-        return $this->send($location, RequestInterface::METHOD_GET);
+        $url = $this->createRequestUrl($location);
+        $response = $this->send($url, RequestInterface::METHOD_GET);
+        $data = json_decode((string) $response->getBody(), true);
+
+        return $data;
     }
 
     public function query($location, Query $query)
     {
-        return $this->send($location, RequestInterface::METHOD_GET, null, $query);
+        $url = $this->createRequestUrl($location, $query);
+        $response = $this->send($url, RequestInterface::METHOD_GET);
+        $data = json_decode((string) $response->getBody(), true);
+
+        return $data;
     }
 
-    public function set(array $data, $location)
+    public function set($data, $location)
     {
-        return $this->send($location, RequestInterface::METHOD_PUT, $data);
+        if (!is_array($data) && !is_object($data)) {
+            throw FirebaseException::invalidArgument('array or object', gettype($data));
+        }
+
+        $url = $this->createRequestUrl($location);
+        $response = $this->send($url, RequestInterface::METHOD_PUT, $data);
+
+        $data = json_decode((string) $response->getBody(), true);
+
+        return $data;
     }
 
-    public function push(array $data, $location)
+    public function push($data, $location)
     {
-        $result = $this->send($location, RequestInterface::METHOD_POST, $data);
+        if (!is_array($data) && !is_object($data)) {
+            throw FirebaseException::invalidArgument('array or object', gettype($data));
+        }
 
-        return $result['name'];
+        $url = $this->createRequestUrl($location);
+        $response = $this->send($url, RequestInterface::METHOD_POST, $data);
+        $data = json_decode((string) $response->getBody(), true);
+
+        return $data['name'];
     }
 
-    public function update(array $data, $location)
+    public function update($data, $location)
     {
-        return $this->send($location, RequestInterface::METHOD_PATCH, $data);
+        if (!is_array($data) && !is_object($data)) {
+            throw FirebaseException::invalidArgument('array or object', gettype($data));
+        }
+
+        $url = $this->createRequestUrl($location);
+        $response = $this->send($url, RequestInterface::METHOD_PATCH, $data);
+        $data = json_decode((string) $response->getBody(), true);
+
+        return $data;
     }
 
     public function delete($location)
     {
-        $this->send($location, RequestInterface::METHOD_DELETE);
+        $url = $this->createRequestUrl($location);
+        $this->send($url, RequestInterface::METHOD_DELETE);
     }
 
     public function setAuthToken($authToken)
@@ -141,65 +182,36 @@ class Firebase implements FirebaseInterface
     /**
      * Sends the request and returns the processed response data.
      *
-     * @param string     $location The location.
+     * @param string     $url      The full URL to send the request to.
      * @param string     $method   The HTTP method.
      * @param array|null $data     The data.
-     * @param Query|null $query    The query.
      *
      * @throws FirebaseException
      *
-     * @return mixed The processed response data.
+     * @return ResponseInterface The response.
      */
-    private function send($location, $method, array $data = null, Query $query = null)
+    private function send($url, $method, array $data = null)
     {
         $logger = $this->getConfiguration()->getLogger();
+        $messageFactory = $this->getConfiguration()->getHttpAdapter()->getConfiguration()->getMessageFactory();
 
-        // When $location is null, the relative URL will be '/.json', which is okay
-        $relativeUrl = sprintf('/%s.json', Utils::prepareLocationForRequest($location));
-        if ($query) {
-            $queryString = (string) $query;
+        /** @var RequestInterface $request */
+        $request = $messageFactory
+            ->createRequest($url, $method)
+            ->withHeader('accept', 'application/json')
+            ->withHeader('accept-charset', 'utf-8');
 
-            if (!empty($queryString)) {
-                $relativeUrl = sprintf('%s?%s', $relativeUrl, $queryString);
-            }
+        if ($data) {
+            $request->getBody()->write(json_encode($data));
         }
-
-        if ($this->hasAuthToken()) {
-            $authQueryString = http_build_query(['auth' => $this->getAuthToken()], null, '&', PHP_QUERY_RFC3986);
-            $relativeUrl = sprintf(
-                '%s%s%s',
-                $relativeUrl,
-                strpos($relativeUrl, '?') === false ? '?' : '&',
-                $authQueryString
-            );
-        }
-
-        $absoluteUrl = sprintf('%s%s', $this->baseUrl, $relativeUrl);
-
-        $headers = [
-            'accept' => 'application/json',
-            'accept-charset' => 'utf-8',
-        ];
-
-        // It would have been easier to write $this->http->send(…) but this would not
-        // give us a request object to debug later
-        $http = $this->getConfiguration()->getHttpAdapter();
-
-        $request = $http->getConfiguration()->getMessageFactory()->createRequest(
-            $absoluteUrl,
-            $method,
-            RequestInterface::PROTOCOL_VERSION_1_1,
-            $headers,
-            json_encode($data)
-        );
 
         $logger->debug(
             sprintf('%s request to %s', $method, $request->getUri()),
-            ($data) ? ['data_sent' => $data] : []
+            is_null($data) ? [] : ['data' => (string) $request->getBody()]
         );
 
         try {
-            $response = $http->sendRequest($request);
+            $response = $this->http->sendRequest($request);
         } catch (HttpAdapterException $e) {
             $fe = FirebaseException::httpAdapterError($e);
             $logger->error($fe->getMessage());
@@ -212,54 +224,26 @@ class Firebase implements FirebaseInterface
             throw $fe;
         }
 
-        return $this->getResultFromResponse($response);
+        return $response;
     }
 
-    /**
-     * @param ResponseInterface $response
-     *
-     * @return array|void
-     */
-    private function getResultFromResponse(ResponseInterface $response)
+    private function createRequestUrl($location, Query $query = null)
     {
-        $result = json_decode((string) $response->getBody(), true);
+        $url = sprintf('%s/%s.json', $this->getBaseUrl(), Utils::normalizeLocation($location));
 
-        if (is_array($result)) {
-            $result = $this->cleanupData($result);
+        $params = [];
+        if ($query) {
+            $params = array_merge($params, $query->toArray());
         }
 
-        // Make sure the data is an array
-        if (empty($result)) {
-            $result = [];
+        if ($this->hasAuthToken()) {
+            $params['auth'] = $this->getAuthToken();
         }
 
-        return $result;
-    }
-
-    /**
-     * Removes empty values from the dataset.
-     *
-     * @param array $data
-     *
-     * @return array
-     */
-    private function cleanupData(array $data)
-    {
-        $newData = [];
-
-        foreach ($data as $key => $value) {
-            if (empty($value)) {
-                continue;
-            }
-
-            if (is_array($value)) {
-                $newData[$key] = $this->cleanupData($value);
-                continue;
-            }
-
-            $newData[$key] = $value;
+        if (count($params)) {
+            $url .= '?' . http_build_query($params, null, '&', PHP_QUERY_RFC3986);
         }
 
-        return $newData;
+        return $url;
     }
 }
