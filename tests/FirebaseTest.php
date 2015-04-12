@@ -263,25 +263,4 @@ class FirebaseTest extends IntegrationTest
         $this->firebase->removeAuthToken();
         $this->firebase->getAuthToken();
     }
-
-    /**
-     * @return HttpAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getHttpAdapter()
-    {
-        $http = $this->getMockBuilder('Ivory\HttpAdapter\HttpAdapterInterface')
-            ->getMock();
-
-        $http
-            ->expects($this->any())
-            ->method('getConfiguration')
-            ->willReturn(new Configuration());
-
-        return $http;
-    }
-
-    protected function getInternalServerErrorResponse()
-    {
-        return new Response(500, 'Internal Server Error', Response::PROTOCOL_VERSION_1_1);
-    }
 }
