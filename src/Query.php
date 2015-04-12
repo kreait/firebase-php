@@ -49,13 +49,6 @@ class Query
     private $endAt;
 
     /**
-     * If the result should be shallow or not.
-     *
-     * @var bool
-     */
-    private $shallow;
-
-    /**
      * Order results by the given child key.
      *
      * @param string $childKey The key to order by.
@@ -122,13 +115,13 @@ class Query
     /**
      * Set starting point for the Query.
      *
-     * @param int|string $start
+     * @param int|string $startAt
      *
      * @return $this
      */
-    public function startAt($start)
+    public function startAt($startAt)
     {
-        $this->startAt = sprintf('"%s"', $start);
+        $this->startAt = $startAt;
 
         return $this;
     }
@@ -136,55 +129,46 @@ class Query
     /**
      * Set end point for the Query.
      *
-     * @param int|string $end
+     * @param int|string $endAt
      *
      * @return $this
      */
-    public function endAt($end)
+    public function endAt($endAt)
     {
-        $this->endAt = sprintf('"%s"', $end);
+        $this->endAt = $endAt;
 
         return $this;
     }
 
     /**
-     * Let the result be shallow.
+     * Returns an array representation of this query.
      *
-     * @param bool $shallow
-     *
-     * @return $this
+     * @return array
      */
-    public function shallow($shallow = true)
+    public function toArray()
     {
-        $this->shallow = $shallow;
+        $result = [];
 
-        return $this;
+        // An orderBy must be set for the other parameters to work
+        $result['orderBy'] = $this->orderBy ?: '"$key"';
+
+        if ($this->limitTo) {
+            $result[$this->limitTo[0]] = $this->limitTo[1];
+        }
+
+        if ($this->startAt) {
+            $result['startAt'] = sprintf('"%s"', $this->startAt);
+        }
+
+        if ($this->endAt) {
+            $result['endAt'] = sprintf('"%s"', $this->endAt);
+        }
+
+        return $result;
     }
 
     public function __toString()
     {
-        $params = [];
-
-        if ($this->orderBy) {
-            $params['orderBy'] = $this->orderBy;
-        }
-
-        if ($this->limitTo) {
-            $params[$this->limitTo[0]] = $this->limitTo[1];
-        }
-
-        if ($this->startAt) {
-            $params['startAt'] = $this->startAt;
-        }
-
-        if ($this->endAt) {
-            $params['endAt'] = $this->endAt;
-        }
-
-        if ($this->shallow) {
-            $params['shallow'] = 'true';
-        }
-
-        return http_build_query($params, null, '&', PHP_QUERY_RFC3986);
+        return http_build_query($this->toArray(), null, '&', PHP_QUERY_RFC3986);
     }
 }
