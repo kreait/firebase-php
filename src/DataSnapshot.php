@@ -152,7 +152,7 @@ class DataSnapshot
             return new self($this->reference->getReference($path), $child);
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -175,7 +175,7 @@ class DataSnapshot
     private function search($expression)
     {
         if (!is_array($this->data)) {
-            return;
+            return null;
         }
 
         return \JmesPath\Env::search($expression, $this->data);
