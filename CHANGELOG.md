@@ -2,8 +2,9 @@
 
 ## Unreleased
 
-* Add Authentication support
+* Added Authentication support
 * Ensure PHP7 and HHVM support
+* Improved tests and general code quality
 
 ## 0.5 - 2015-04-02
 
