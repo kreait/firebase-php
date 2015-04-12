@@ -1,13 +1,13 @@
 # CHANGELOG
 
-## 0.5 - 2015-04-02
-
-* Use `Configuration` object instead of configuring `Firebase` directly.
-
 ## Unreleased
 
 * Add Authentication support
 * Ensure PHP7 and HHVM support
+
+## 0.5 - 2015-04-02
+
+* Use `Configuration` object instead of configuring `Firebase` directly.
 
 ## 0.4.2 - 2015-03-25
 
