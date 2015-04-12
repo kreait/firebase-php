@@ -119,8 +119,18 @@ class FirebaseTest extends IntegrationTest
 
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
-        $result = $this->firebase->set($data, $this->getLocation(__FUNCTION__));
-        $this->assertEquals($expectedResult, $result);
+        $this->firebase->set($data, $this->getLocation(__FUNCTION__));
+
+        $check = $this->firebase->get($this->getLocation(__FUNCTION__));
+        $this->assertEquals($expectedResult, $check);
+    }
+
+    /**
+     * @expectedException \Kreait\Firebase\Exception\FirebaseException
+     */
+    public function testSetWithInvalidData()
+    {
+        $this->firebase->set('string', $this->getLocation(__FUNCTION__));
     }
 
     public function testUpdate()
@@ -145,6 +155,10 @@ class FirebaseTest extends IntegrationTest
 
         $expectedResult = [
             'key1' => 'value1',
+            'key3' => [
+                'subkey1' => 'subvalue1',
+                'subkey2' => 'subvalue2',
+            ],
             'key4' => [
                 'subkey1' => 'subvalue1',
                 'subkey2' => 'subvalue2',
@@ -154,8 +168,19 @@ class FirebaseTest extends IntegrationTest
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
         $this->firebase->set($initialData, $this->getLocation(__FUNCTION__));
-        $result = $this->firebase->update($update, $this->getLocation(__FUNCTION__));
-        $this->assertEquals($expectedResult, $result);
+        $this->firebase->update($update, $this->getLocation(__FUNCTION__));
+
+        $check = $this->firebase->get($this->getLocation(__FUNCTION__));
+
+        $this->assertEquals($expectedResult, $check);
+    }
+
+    /**
+     * @expectedException \Kreait\Firebase\Exception\FirebaseException
+     */
+    public function testUpdateWithInvalidData()
+    {
+        $this->firebase->update('string', $this->getLocation(__FUNCTION__));
     }
 
     public function testDeletingANonExistentLocationDoesNotThrowAnException()
@@ -189,6 +214,14 @@ class FirebaseTest extends IntegrationTest
         $this->assertStringStartsWith('-', $key);
     }
 
+    /**
+     * @expectedException \Kreait\Firebase\Exception\FirebaseException
+     */
+    public function testPushWithInvalidData()
+    {
+        $this->firebase->push('string', $this->getLocation(__FUNCTION__));
+    }
+
     public function testGetOnNonExistentLocation()
     {
         $this->recorder->insertTape(__FUNCTION__);
@@ -197,6 +230,13 @@ class FirebaseTest extends IntegrationTest
         $result = $this->firebase->get($this->getLocation('non_existing'));
 
         $this->assertEmpty($result);
+    }
+
+    public function testSetAuthToken()
+    {
+        $this->firebase->setAuthToken('foo');
+
+        $this->assertSame('foo', $this->firebase->getAuthToken());
     }
 
     /**

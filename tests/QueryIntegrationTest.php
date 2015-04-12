@@ -58,23 +58,6 @@ class QueryIntegrationTest extends IntegrationTest
         $this->tearDownQueryData(__FUNCTION__);
     }
 
-    public function testShallow()
-    {
-        $this->recorder->insertTape(__FUNCTION__);
-        $this->recorder->startRecording();
-
-        $this->setUpQueryData(__FUNCTION__);
-
-        $this->query->shallow(true);
-        $result = $this->firebase->query($this->getLocation(__FUNCTION__), $this->query);
-
-        foreach ($result as $key => $value) {
-            $this->assertTrue($value);
-        }
-
-        $this->tearDownQueryData(__FUNCTION__);
-    }
-
     public function testOrderByKey()
     {
         $this->recorder->insertTape(__FUNCTION__);
@@ -104,23 +87,6 @@ class QueryIntegrationTest extends IntegrationTest
         $this->assertSame(['d', 'c', 'b', 'a'], array_keys($result));
 
         $this->tearDownQueryData(__FUNCTION__);
-    }
-
-    /**
-     * @expectedException \Kreait\Firebase\Exception\FirebaseException
-     * @expectedExceptionMessage orderBy must be defined when other query parameters are defined
-     */
-    public function testStartAtWithoutOrderByThrowsException()
-    {
-        $this->recorder->insertTape(__FUNCTION__);
-        $this->recorder->startRecording();
-
-        $this->setUpQueryData(__FUNCTION__);
-
-        $this->query->startAt('b');
-        $this->firebase->query($this->getLocation(__FUNCTION__), $this->query);
-
-        $this->tearDownQueryData(__FUNCTION__); // Will not be called due to the thrown exception
     }
 
     public function testStartAt()

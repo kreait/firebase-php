@@ -87,7 +87,7 @@ class ReferenceTest extends Integrationtest
 
         $initialData = ['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3'];
         $update = ['key2' => 'new_value', 'key3' => null];
-        $expectedData = ['key1' => 'value1', 'key2' => 'new_value', 'key3' => 'value3'];
+        $expectedData = ['key1' => 'value1', 'key2' => 'new_value'];
 
         $reference->set($initialData);
         $reference->update($update);
