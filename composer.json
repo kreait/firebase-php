@@ -18,7 +18,7 @@
     "php": ">=5.4",
     "ext-mbstring": "*",
     "psr/log": "~1.0",
-    "egeloen/http-adapter": "dev-master",
+    "egeloen/http-adapter": "~0.7.0",
     "mtdowling/jmespath.php": "~2.1"
   },
   "require-dev": {
