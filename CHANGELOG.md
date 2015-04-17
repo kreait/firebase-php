@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.6.1 - 2015-04-17
+
+* Fixed a bug where `Reference::update()` would throw an error with multidimensional data.
+
 ## 0.6 - 2015-04-12
 
 * Added Authentication support
