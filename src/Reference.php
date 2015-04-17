@@ -122,7 +122,7 @@ class Reference implements ReferenceInterface
     {
         $data = array_merge($this->data, $data);
 
-        $this->data = $this->arrayFilterRecursive($data); // Remove all null values
+        $this->data = $this->removeNullValues($data);
     }
 
     public function offsetExists($offset)
@@ -154,24 +154,24 @@ class Reference implements ReferenceInterface
     }
 
     /**
-     * Recursive version of "array_filter" function.
+     * Removes null values from a dataset.
      *
-     * @param mixed $haystack Array to filter.
-     * @return mixed Filtered result.
+     * @param array $data The data.
+     * @return array The cleaned data.
      */
-    private function arrayFilterRecursive($haystack)
+    private function removeNullValues(array $data)
     {
-        foreach ($haystack as $key => $value) {
+        foreach ($data as $key => $value) {
 
             if (is_array($value)) {
-                $haystack[$key] = $this->arrayFilterRecursive($haystack[$key]);
+                $data[$key] = $this->removeNullValues($data[$key]);
             }
 
-            if (empty($haystack[$key])) {
-                unset($haystack[$key]);
+            if (null === $data[$key]) {
+                unset($data[$key]);
             }
         }
 
-        return $haystack;
+        return $data;
     }
 }
