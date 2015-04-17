@@ -122,7 +122,7 @@ class Reference implements ReferenceInterface
     {
         $data = array_merge($this->data, $data);
 
-        $this->data = array_filter($data, 'strlen'); // Remove all null values
+        $this->data = $this->arrayFilterRecursive($data); // Remove all null values
     }
 
     public function offsetExists($offset)
@@ -151,5 +151,27 @@ class Reference implements ReferenceInterface
     public function count()
     {
         return count($this->data);
+    }
+
+    /**
+     * Recursive version of "array_filter" function.
+     *
+     * @param mixed $haystack Array to filter.
+     * @return mixed Filtered result.
+     */
+    private function arrayFilterRecursive($haystack)
+    {
+        foreach ($haystack as $key => $value) {
+
+            if (is_array($value)) {
+                $haystack[$key] = $this->arrayFilterRecursive($haystack[$key]);
+            }
+
+            if (empty($haystack[$key])) {
+                unset($haystack[$key]);
+            }
+        }
+
+        return $haystack;
     }
 }
