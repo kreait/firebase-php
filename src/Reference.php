@@ -122,7 +122,7 @@ class Reference implements ReferenceInterface
     {
         $data = array_merge($this->data, $data);
 
-        $this->data = array_filter($data, 'strlen'); // Remove all null values
+        $this->data = $this->removeNullValues($data);
     }
 
     public function offsetExists($offset)
@@ -151,5 +151,27 @@ class Reference implements ReferenceInterface
     public function count()
     {
         return count($this->data);
+    }
+
+    /**
+     * Removes null values from a dataset.
+     *
+     * @param array $data The data.
+     * @return array The cleaned data.
+     */
+    private function removeNullValues(array $data)
+    {
+        foreach ($data as $key => $value) {
+
+            if (is_array($value)) {
+                $data[$key] = $this->removeNullValues($data[$key]);
+            }
+
+            if (null === $data[$key]) {
+                unset($data[$key]);
+            }
+        }
+
+        return $data;
     }
 }

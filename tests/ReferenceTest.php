@@ -100,6 +100,58 @@ class ReferenceTest extends Integrationtest
         $this->assertEquals($expectedData, $reference->getData());
     }
 
+    public function testUpdateWithMultiDimensonalData()
+    {
+        $initialData = [
+            'key' => 'value',
+        ];
+
+        $update = [
+            'key' => [
+                'string' => 'string',
+                'int' => 1,
+                'float' => 1.1,
+                'bool_false' => false,
+                'bool_true' => true,
+                'null' => null,
+                'subkey' => [
+                    'string' => 'string',
+                    'int' => 1,
+                    'float' => 1.1,
+                    'bool_false' => false,
+                    'bool_true' => true,
+                    'null' => null,
+                ]
+            ]
+        ];
+
+        $expectedResult = [
+            'key' => [
+                'string' => 'string',
+                'int' => 1,
+                'float' => 1.1,
+                'bool_false' => false,
+                'bool_true' => true,
+                'subkey' => [
+                    'string' => 'string',
+                    'int' => 1,
+                    'float' => 1.1,
+                    'bool_false' => false,
+                    'bool_true' => true,
+                ]
+            ]
+        ];
+
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+        $reference = $this->reference->getReference(__FUNCTION__);
+
+        $reference->set($initialData);
+        $reference->update($update);
+
+        $this->assertEquals($expectedResult, $reference->getData());
+    }
+
     public function testDelete()
     {
         $this->recorder->insertTape(__FUNCTION__);
