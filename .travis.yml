@@ -5,9 +5,9 @@ sudo: false
 before_install:
   - openssl aes-256-cbc -K $encrypted_9bb00d0177de_key -iv $encrypted_9bb00d0177de_iv -in tests/.env.enc -out tests/.env -d
   - composer config --global github-oauth.github.com $github_oauth_token
-  - composer self-update
+  - travis_retry composer self-update
 
-install: composer update
+install: travis_retry composer update
 
 php:
   - 5.4
