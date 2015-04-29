@@ -15,11 +15,6 @@ php:
   - 5.6
   - 7.0
   - hhvm
-  - hhvm-nightly
-
-env:
-  - SCRUTINIZER=true
-  - SCRUTINIZER=false
 
 cache:
   directories:
@@ -28,34 +23,24 @@ cache:
 
 matrix:
   fast_finish: true
-  exclude:
-    - php: 5.4
-      env: SCRUTINIZER=true
-    - php: 5.5
-      env: SCRUTINIZER=true
-    - php: 7.0
-      env: SCRUTINIZER=true
-    - php: hhvm
-      env: SCRUTINIZER=true
-    - php: hhvm-nightly
-      env: SCRUTINIZER=true
-  allow_failures:
+  include:
     - php: 5.6
-      env: SCRUTINIZER=true
+      env: COVERAGE=true PHPUNIT_FLAGS="--coverage-clover build/coverage.clover"
+  allow_failures:
     - php: 7.0
     - php: hhvm
-    - php: hhvm-nightly
+    - env: COVERAGE=true PHPUNIT_FLAGS="--coverage-clover build/coverage.clover"
 
 before_script:
-  - if [[ "$TRAVIS_PHP_VERSION" = "hhv*" ]]; then cat tests/fixtures/travis.ini >> /etc/hhvm/php.ini ; fi
-  - if [[ "$TRAVIS_PHP_VERSION" = "php*" ]]; then phpenv config-add tests/fixtures/travis.ini ; fi
+  - if [ "$TRAVIS_PHP_VERSION" = "hhv*" ]; then cat tests/fixtures/travis.ini >> /etc/hhvm/php.ini; fi;
+  - if [ "$TRAVIS_PHP_VERSION" = "php*" ]; then phpenv config-add tests/fixtures/travis.ini ; fi;
 
 script:
-  - if [ "$SCRUTINIZER" != "true" ]; then make tests ; fi;
-  - if [ "$SCRUTINIZER" == "true" ]; then make travis-tests ; fi;
+  - vendor/bin/phpunit ${PHPUNIT_FLAGS}
 
 after_script:
-  - if [ "$SCRUTINIZER" == "true" ]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover ; fi;
+  - if [ $COVERAGE ]; then wget https://scrutinizer-ci.com/ocular.phar ; fi;
+  - if [ $COVERAGE ]; then php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover ; fi;
 
 notifications:
   email:
