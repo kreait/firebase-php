@@ -12,7 +12,7 @@
 
 namespace Kreait\Firebase;
 
-use Ivory\HttpAdapter\CurlHttpAdapter;
+use Ivory\HttpAdapter\HttpAdapterFactory;
 use Ivory\HttpAdapter\HttpAdapterInterface;
 use Kreait\Firebase\Auth\TokenGenerator;
 use Kreait\Firebase\Auth\TokenGeneratorInterface;
@@ -46,7 +46,7 @@ class Configuration implements ConfigurationInterface
     {
         $this->logger = new NullLogger();
 
-        $this->httpAdapter = new CurlHttpAdapter();
+        $this->httpAdapter = HttpAdapterFactory::guess();
         $this->httpAdapter->getConfiguration()->setKeepAlive(true);
     }
 
