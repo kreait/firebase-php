@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 0.6.2 - 2015-05-04
 
 * Guess best HTTP adapter instead of using fixed CurlHttpAdapter.
 
