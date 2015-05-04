@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Guess best HTTP adapter instead of using fixed CurlHttpAdapter.
+
 ## 0.6.1 - 2015-04-17
 
 * Fixed a bug where `Reference::update()` would throw an error with multidimensional data.
