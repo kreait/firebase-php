@@ -25,7 +25,7 @@
     "phpunit/phpunit": "~4.5",
     "monolog/monolog": "~1.12",
     "symfony/event-dispatcher": "~2.6",
-    "vlucas/phpdotenv": "~1.1",
+    "vlucas/phpdotenv": "~2.0",
     "fabpot/php-cs-fixer": "~1.6",
     "kreait/tape-recorder-subscriber": "~2.0",
     "firebase/token-generator": "~2.0"

@@ -12,35 +12,36 @@
 
 $loader = require __DIR__.'/../vendor/autoload.php';
 
-Dotenv::load(__DIR__);
-try {
-    Dotenv::required([
-        'FIREBASE_HOST', 'FIREBASE_BASE_LOCATION', 'FIREBASE_SECRET',
-        'FIREBASE_TAPE_RECORDER_RECORDING_MODE', 'FIREBASE_TAPE_RECORDER_TAPES_DIR',
-    ]);
-} catch (\RuntimeException $e) {
-    throw new PHPUnit_Framework_Exception($e->getMessage());
-}
-
-// Add PHP Version to FIREBASE_BASE_LOCATION, if available
-if (getenv('TRAVIS_PHP_VERSION')) {
-    Dotenv::makeMutable();
-
-    Dotenv::setEnvironmentVariable('FIREBASE_BASE_LOCATION', sprintf(
-        '%s-php-%s', getenv('FIREBASE_BASE_LOCATION'), str_replace('.', '-', getenv('TRAVIS_PHP_VERSION'))
-    ));
-
-    if (getenv('SCRUTINIZER') && strtolower(getenv('SCRUTINIZER')) === 'true') {
-        Dotenv::setEnvironmentVariable('FIREBASE_BASE_LOCATION', sprintf(
-            '%s-%s', getenv('FIREBASE_BASE_LOCATION'), 'scrutinizer')
-        );
-    }
-
-    Dotenv::makeImmutable();
-}
-
 // Anonymous function to avoid cluttering the global namespace
 call_user_func(function () {
+    // Add PHP Version to FIREBASE_BASE_LOCATION, if available
+    if (getenv('TRAVIS_PHP_VERSION')) {
+
+        $firebaseLocation = sprintf(
+            '%s-php-%s', getenv('FIREBASE_BASE_LOCATION'), str_replace('.', '-', getenv('TRAVIS_PHP_VERSION'))
+        );
+
+        if (getenv('SCRUTINIZER') && strtolower(getenv('SCRUTINIZER')) === 'true') {
+            $firebaseLocation = sprintf('%s-%s', getenv('FIREBASE_BASE_LOCATION'), 'scrutinizer');
+        }
+
+        putenv("FIREBASE_BASE_LOCATION=$firebaseLocation");
+        $_ENV['FIREBASE_BASE_LOCATION'] = $firebaseLocation;
+        $_SERVER['FIREBASE_BASE_LOCATION'] = $firebaseLocation;
+    }
+
+    $dotenv = new Dotenv\Dotenv(__DIR__);
+    $dotenv->load();
+
+    try {
+        $dotenv->required([
+            'FIREBASE_HOST', 'FIREBASE_BASE_LOCATION', 'FIREBASE_SECRET',
+            'FIREBASE_TAPE_RECORDER_RECORDING_MODE', 'FIREBASE_TAPE_RECORDER_TAPES_DIR',
+        ])->notEmpty();
+    } catch (\RuntimeException $e) {
+        throw new PHPUnit_Framework_Exception($e->getMessage());
+    }
+
     // Push the firebase security rules to the configured application
     $host = getenv('FIREBASE_HOST');
     $secret = getenv('FIREBASE_SECRET');
