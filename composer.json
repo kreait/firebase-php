@@ -27,7 +27,7 @@
     "vlucas/phpdotenv": "~2.0",
     "fabpot/php-cs-fixer": "~1.6",
     "kreait/tape-recorder-subscriber": "~2.0",
-    "firebase/token-generator": "~2.0"
+    "firebase/token-generator": "~2.1"
   },
   "suggest": {
     "firebase/token-generator": "If you want to authenticate requests to a Firebase application"
