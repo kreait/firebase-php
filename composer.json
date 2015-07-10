@@ -19,18 +19,15 @@
     "ext-mbstring": "*",
     "psr/log": "~1.0",
     "egeloen/http-adapter": "~0.7.0",
-    "mtdowling/jmespath.php": "~2.1"
+    "mtdowling/jmespath.php": "~2.1",
+    "firebase/token-generator": "~2.1"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.5",
     "symfony/event-dispatcher": "~2.6",
     "vlucas/phpdotenv": "~2.0",
     "fabpot/php-cs-fixer": "~1.6",
-    "kreait/tape-recorder-subscriber": "~2.0",
-    "firebase/token-generator": "~2.1"
-  },
-  "suggest": {
-    "firebase/token-generator": "If you want to authenticate requests to a Firebase application"
+    "kreait/tape-recorder-subscriber": "~2.0"
   },
   "autoload": {
     "psr-4": { "Kreait\\Firebase\\": "src/" }
