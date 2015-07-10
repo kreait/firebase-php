@@ -12,6 +12,9 @@
 
 namespace Kreait\Firebase\Auth;
 
+use Firebase\Token\TokenException;
+use Firebase\Token\TokenGenerator as BaseTokenGenerator;
+
 class TokenGenerator implements TokenGeneratorInterface
 {
     /**
@@ -24,7 +27,7 @@ class TokenGenerator implements TokenGeneratorInterface
     /**
      * The Token Generator provided by Firebase themselves.
      *
-     * @var \Services_FirebaseTokenGenerator
+     * @var BaseTokenGenerator
      */
     private $generator;
 
@@ -45,7 +48,7 @@ class TokenGenerator implements TokenGeneratorInterface
     {
         $this->secret = $secret;
 
-        $this->generator = new \Services_FirebaseTokenGenerator($this->secret);
+        $this->generator = new BaseTokenGenerator($this->secret);
         $this->debug = $debug;
     }
 
@@ -71,14 +74,18 @@ class TokenGenerator implements TokenGeneratorInterface
 
     public function createAdminToken()
     {
-        $data = [];
-
         $options = [
             'debug' => $this->debug,
             'admin' => true,
         ];
 
-        return $this->generator->createToken($data, $options);
+        try {
+            return $this->generator
+                ->setOptions($options)
+                ->create();
+        } catch (TokenException $e) {
+            throw new \RuntimeException($e->getMessage(), null, $e);
+        }
     }
 
     public function createToken($id, $provider)
@@ -96,9 +103,12 @@ class TokenGenerator implements TokenGeneratorInterface
         ];
 
         try {
-            return $this->generator->createToken($data, $options);
-        } catch (\Exception $e) {
-            throw new \RuntimeException($e->getMessage());
+            return $this->generator
+                ->setOptions($options)
+                ->setData($data)
+                ->create();
+        } catch (TokenException $e) {
+            throw new \RuntimeException($e->getMessage(), null, $e);
         }
     }
 }
