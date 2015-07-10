@@ -5,13 +5,17 @@
     "tests": {
       "local": {
         "QueryIntegrationTest": {
-          ".indexOn": ["height"]
+            "testOrderByChildKey" : {
+                ".indexOn": "height"
+            }
         }
       },
       "travis-ci": {
-        "QueryIntegrationTest": {
-          ".indexOn": ["height"]
-        }
+          "QueryIntegrationTest": {
+              "testOrderByChildKey" : {
+                  ".indexOn": "height"
+              }
+          }
       }
     }
   }
