@@ -24,6 +24,7 @@ return Symfony\CS\Config\Config::create()
         'short_array_syntax',
         'strict',
         'strict_param',
+        'unused_use',
     ])
     ->finder(
         Symfony\CS\Finder\DefaultFinder::create()
