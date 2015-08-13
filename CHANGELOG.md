@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 0.7 - 2015-08-13
 
 * Update Ivory HTTP Adapter and Tape Recorder Subscriber to current versions.
 
