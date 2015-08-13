@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Update Ivory HTTP Adapter and Tape Recorder Subscriber to current versions.
+
 ## 0.6.2 - 2015-05-04
 
 * Guess best HTTP adapter instead of using fixed CurlHttpAdapter.
