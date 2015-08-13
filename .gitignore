@@ -3,3 +3,4 @@
 /tests/fixtures/tapes
 /vendor
 /composer.lock
+/phpunit.xml
