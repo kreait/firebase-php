@@ -9,7 +9,6 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-
 namespace Kreait\Firebase;
 
 class Reference implements ReferenceInterface
@@ -162,7 +161,6 @@ class Reference implements ReferenceInterface
     private function removeNullValues(array $data)
     {
         foreach ($data as $key => $value) {
-
             if (is_array($value)) {
                 $data[$key] = $this->removeNullValues($data[$key]);
             }

@@ -16,7 +16,6 @@ $loader = require __DIR__.'/../vendor/autoload.php';
 call_user_func(function () {
     // Add PHP Version to FIREBASE_BASE_LOCATION, if available
     if (getenv('TRAVIS_PHP_VERSION')) {
-
         $firebaseLocation = sprintf(
             '%s-php-%s', getenv('FIREBASE_BASE_LOCATION'), str_replace('.', '-', getenv('TRAVIS_PHP_VERSION'))
         );
