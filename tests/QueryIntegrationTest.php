@@ -193,4 +193,22 @@ class QueryIntegrationTest extends IntegrationTest
 
         $this->tearDownQueryData(__FUNCTION__);
     }
+
+    public function testShallow()
+    {
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+
+        $this->setUpQueryData(__FUNCTION__);
+
+        $this->query
+            ->orderByKey()
+            ->shallow(true);
+
+        $result = $this->firebase->query($this->getLocation(__FUNCTION__), $this->query);
+
+        $this->assertEquals(['a' => true, 'b' => true, 'c' => true, 'd' => true], $result);
+
+        $this->tearDownQueryData(__FUNCTION__);
+    }
 }

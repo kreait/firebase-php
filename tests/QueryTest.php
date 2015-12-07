@@ -69,4 +69,11 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertStringEndsWith('limitToLast=3', (string) $this->query);
     }
+
+    public function testShallow()
+    {
+        $this->query->shallow(true);
+
+        $this->assertStringEndsWith('shallow=true', (string) $this->query);
+    }
 }

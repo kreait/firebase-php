@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* Added support for shallow queries (thanks to [@famersbs](https://github.com/famersbs) for the initial 
+  implementation in [#17](https://github.com/kreait/firebase-php/pull/17))
+
 ## 0.8 - 2015-12-07
 
 * Allow usage of phpunit/phpunit ^5.0
