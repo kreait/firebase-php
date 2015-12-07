@@ -15,160 +15,171 @@ namespace Kreait\Firebase;
 /**
  * @link https://www.firebase.com/docs/rest/guide/retrieving-data.html#section-rest-queries Querying data.
  */
-class Query
-{
-    const LIMIT_TO_FIRST = 'limitToFirst';
-    const LIMIT_TO_LAST  = 'limitToLast';
+class Query {
+	const LIMIT_TO_FIRST = 'limitToFirst';
+	const LIMIT_TO_LAST  = 'limitToLast';
 
-    /**
-     * A key to order by.
-     *
-     * @var string
-     */
-    private $orderBy;
+	/**
+	 * A key to order by.
+	 *
+	 * @var string
+	 */
+	private $orderBy;
 
-    /**
-     * A limitation.
-     *
-     * @var array
-     */
-    private $limitTo;
+	/**
+	 * A limitation.
+	 *
+	 * @var array
+	 */
+	private $limitTo;
 
-    /**
-     * The starting point for the query.
-     *
-     * @var int|string
-     */
-    private $startAt;
+	/**
+	 * The starting point for the query.
+	 *
+	 * @var int|string
+	 */
+	private $startAt;
 
-    /**
-     * The end point for the query.
-     *
-     * @var int|string
-     */
-    private $endAt;
+	/**
+	 * The end point for the query.
+	 *
+	 * @var int|string
+	 */
+	private $endAt;
 
-    /**
-     * Order results by the given child key.
-     *
-     * @param string $childKey The key to order by.
-     *
-     * @return $this
-     */
-    public function orderByChildKey($childKey)
-    {
-        $this->orderBy = sprintf('"%s"', $childKey);
+	/**
+	 * Request Shallow.
+	 *
+	 */
+	private $shallow;
 
-        return $this;
-    }
+	/**
+	 * Order results by the given child key.
+	 *
+	 * @param string $childKey The key to order by.
+	 *
+	 * @return $this
+	 */
+	public function orderByChildKey($childKey) {
+		$this->orderBy = sprintf('"%s"', $childKey);
 
-    /**
-     * @return $this
-     */
-    public function orderByKey()
-    {
-        $this->orderBy = '"$key"';
+		return $this;
+	}
 
-        return $this;
-    }
+	/**
+	 * @return $this
+	 */
+	public function orderByKey() {
+		$this->orderBy = '"$key"';
 
-    /**
-     * Order results by priority.
-     *
-     * @return $this
-     */
-    public function orderByPriority()
-    {
-        $this->orderBy = '"$priority"';
+		return $this;
+	}
 
-        return $this;
-    }
+	/**
+	 * Order results by priority.
+	 *
+	 * @return $this
+	 */
+	public function orderByPriority() {
+		$this->orderBy = '"$priority"';
 
-    /**
-     * Limit the result to the first x items.
-     *
-     * @param int $limit The number.
-     *
-     * @return $this
-     */
-    public function limitToFirst($limit)
-    {
-        $this->limitTo = [self::LIMIT_TO_FIRST, $limit];
+		return $this;
+	}
 
-        return $this;
-    }
+	/**
+	 * Limit the result to the first x items.
+	 *
+	 * @param int $limit The number.
+	 *
+	 * @return $this
+	 */
+	public function limitToFirst($limit) {
+		$this->limitTo = [self::LIMIT_TO_FIRST, $limit];
 
-    /**
-     * Limit the result to the first x items.
-     *
-     * @param int $limit The number.
-     *
-     * @return $this
-     */
-    public function limitToLast($limit)
-    {
-        $this->limitTo = [self::LIMIT_TO_LAST, $limit];
+		return $this;
+	}
 
-        return $this;
-    }
+	/**
+	 * Limit the result to the first x items.
+	 *
+	 * @param int $limit The number.
+	 *
+	 * @return $this
+	 */
+	public function limitToLast($limit) {
+		$this->limitTo = [self::LIMIT_TO_LAST, $limit];
 
-    /**
-     * Set starting point for the Query.
-     *
-     * @param int|string $startAt
-     *
-     * @return $this
-     */
-    public function startAt($startAt)
-    {
-        $this->startAt = $startAt;
+		return $this;
+	}
 
-        return $this;
-    }
+	/**
+	 * Set starting point for the Query.
+	 *
+	 * @param int|string $startAt
+	 *
+	 * @return $this
+	 */
+	public function startAt($startAt) {
+		$this->startAt = $startAt;
 
-    /**
-     * Set end point for the Query.
-     *
-     * @param int|string $endAt
-     *
-     * @return $this
-     */
-    public function endAt($endAt)
-    {
-        $this->endAt = $endAt;
+		return $this;
+	}
 
-        return $this;
-    }
+	/**
+	 * Set end point for the Query.
+	 *
+	 * @param int|string $endAt
+	 *
+	 * @return $this
+	 */
+	public function endAt($endAt) {
+		$this->endAt = $endAt;
 
-    /**
-     * Returns an array representation of this query.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        $result = [];
+		return $this;
+	}
 
-        // An orderBy must be set for the other parameters to work
-        $result['orderBy'] = $this->orderBy ?: '"$key"';
+	/**
+	 * Shallow
+	 * 	if you use this option, ignored every querys
+	 * @param  boolean $shallow
+	 * @return $this
+	 */
+	public function shallow($shallow) {
+		$this->shallow = $shallow;
+		return $this;
+	}
 
-        if ($this->limitTo) {
-            $result[$this->limitTo[0]] = $this->limitTo[1];
-        }
+	/**
+	 * Returns an array representation of this query.
+	 *
+	 * @return array
+	 */
+	public function toArray() {
+		$result = [];
 
-        if ($this->startAt) {
-            $result['startAt'] = sprintf('"%s"', $this->startAt);
-        }
+		if ($this->shallow) {
+			$result['shallow'] = "true";
+		} else {
+			// An orderBy must be set for the other parameters to work
+			$result['orderBy'] = $this->orderBy?:'"$key"';
 
-        if ($this->endAt) {
-            $result['endAt'] = sprintf('"%s"', $this->endAt);
-        }
+			if ($this->limitTo) {
+				$result[$this->limitTo[0]] = $this->limitTo[1];
+			}
 
-        return $result;
-    }
+			if ($this->startAt) {
+				$result['startAt'] = sprintf('"%s"', $this->startAt);
+			}
 
-    public function __toString()
-    {
-        return http_build_query($this->toArray(), null, '&', PHP_QUERY_RFC3986);
-    }
+			if ($this->endAt) {
+				$result['endAt'] = sprintf('"%s"', $this->endAt);
+			}
+		}
+
+		return $result;
+	}
+
+	public function __toString() {
+		return http_build_query($this->toArray(), null, '&', PHP_QUERY_RFC3986);
+	}
 }
