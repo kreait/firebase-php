@@ -12,6 +12,8 @@
 
 namespace Kreait\Firebase\Auth;
 
+use Firebase\JWT\JWT;
+
 class TokenGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -22,6 +24,11 @@ class TokenGeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->generator = new TokenGenerator('foo');
+    }
+
+    public function testSecretIsSet()
+    {
+        $this->assertEquals('foo', $this->generator->getSecret());
     }
 
     public function testDebugFlagIsDisabledByDefault()
@@ -95,7 +102,7 @@ class TokenGeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function decodeTokenToArray($token)
     {
-        $obj = \JWT::decode($token);
+        $obj = JWT::decode($token, 'foo', ['HS256']);
 
         return json_decode(json_encode($obj), true);
     }
