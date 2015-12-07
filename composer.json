@@ -15,7 +15,7 @@
         "source": "https://github.com/kreait/firebase-php"
     },
     "require": {
-        "php": ">=5.5.0",
+        "php": "^5.5|^7.0",
         "ext-mbstring": "*",
         "psr/log": "^1.0",
         "egeloen/http-adapter": "^0.8.0",
