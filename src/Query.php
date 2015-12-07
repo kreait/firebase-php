@@ -18,7 +18,7 @@ namespace Kreait\Firebase;
 class Query
 {
     const LIMIT_TO_FIRST = 'limitToFirst';
-    const LIMIT_TO_LAST  = 'limitToLast';
+    const LIMIT_TO_LAST = 'limitToLast';
 
     /**
      * A key to order by.
@@ -47,6 +47,13 @@ class Query
      * @var int|string
      */
     private $endAt;
+
+    /**
+     * Whether the query is shallow or not.
+     *
+     * @var bool
+     */
+    private $shallow;
 
     /**
      * Order results by the given child key.
@@ -141,12 +148,30 @@ class Query
     }
 
     /**
+     * Mark query as shallow.
+     *
+     * @param bool $shallow
+     *
+     * @return $this
+     */
+    public function shallow($shallow)
+    {
+        $this->shallow = $shallow;
+
+        return $this;
+    }
+
+    /**
      * Returns an array representation of this query.
      *
      * @return array
      */
     public function toArray()
     {
+        if ($this->shallow) {
+            return ['shallow' => 'true'];
+        }
+
         $result = [];
 
         // An orderBy must be set for the other parameters to work
