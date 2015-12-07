@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.8 - 2015-12-07
+
+* Allow usage of phpunit/phpunit ^5.0
+* Allow usage of symfony/event-dispatcher ^3.0
+* Be more specific about PHP versions (^5.5|^7.0)
+
 ## 0.7 - 2015-08-13
 
 * Update Ivory HTTP Adapter and Tape Recorder Subscriber to current versions.
