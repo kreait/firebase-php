@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 0.9.1 - 2016-03-18
 
 * Added magic reference methods, to allow writing `$firebase->foo()`  
   instead of `$firebase->getReference('foo')`
