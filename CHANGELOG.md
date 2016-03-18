@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* Added magic reference methods, to allow writing `$firebase->foo()`  
+  instead of `$firebase->getReference('foo')`
+
 ## 0.9 - 2015-12-07
 
 * Added support for shallow queries (thanks to [@famersbs](https://github.com/famersbs) for the initial 

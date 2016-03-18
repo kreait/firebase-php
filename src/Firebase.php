@@ -61,6 +61,21 @@ class Firebase implements FirebaseInterface
         $this->http = $this->configuration->getHttpAdapter();
     }
 
+    /**
+     * Shorthand magic method for {@see getReference()}
+     *
+     * Makes it possible to write `$firebase->foo()` instead of `$firebase->getReference('foo')`
+     *
+     * @param string $name
+     * @param array $arguments
+     *
+     * @return Reference
+     */
+    public function __call($name, $arguments)
+    {
+        return $this->getReference($name);
+    }
+
     public function getBaseUrl()
     {
         return $this->baseUrl;

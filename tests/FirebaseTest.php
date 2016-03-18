@@ -60,6 +60,20 @@ class FirebaseTest extends IntegrationTest
         $f->get($this->getLocation());
     }
 
+    public function testGetReference()
+    {
+        $reference = $this->firebase->getReference('foo');
+        $this->assertInstanceOf(ReferenceInterface::class, $reference);
+        $this->assertEquals('foo', $reference->getLocation());
+    }
+
+    public function testGetMagicReference()
+    {
+        $reference = $this->firebase->foo();
+        $this->assertInstanceOf(ReferenceInterface::class, $reference);
+        $this->assertEquals('foo', $reference->getLocation());
+    }
+
     public function testGet()
     {
         $data = ['key1' => 'value1', 'key2' => null];

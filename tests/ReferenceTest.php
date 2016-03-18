@@ -11,7 +11,7 @@
  */
 namespace Kreait\Firebase;
 
-class ReferenceTest extends Integrationtest
+class ReferenceTest extends IntegrationTest
 {
     /**
      * @var Reference
@@ -42,8 +42,20 @@ class ReferenceTest extends Integrationtest
     {
         $expectedFullLocation = $this->getLocation().'/bar';
 
-        $check = $this->reference->getReference('bar');
-        $this->assertAttributeEquals($expectedFullLocation, 'location', $check);
+        $reference = $this->reference->getReference('bar');
+
+        $this->assertInstanceOf(ReferenceInterface::class, $reference);
+        $this->assertEquals($expectedFullLocation, $reference->getLocation());
+    }
+
+    public function testGetMagicReference()
+    {
+        $reference = $this->reference->foo();
+
+        $expectedFullLocation = $this->getLocation().'/foo';
+
+        $this->assertInstanceOf(ReferenceInterface::class, $reference);
+        $this->assertEquals($expectedFullLocation, $reference->getLocation());
     }
 
     public function testSet()

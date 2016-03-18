@@ -54,6 +54,21 @@ class Reference implements ReferenceInterface
         $this->data = [];
     }
 
+    /**
+     * Shorthand magic method for {@see getReference()}
+     *
+     * Makes it possible to write `$reference->foo()` instead of `$reference->getReference('foo')`
+     *
+     * @param string $name
+     * @param array $arguments
+     *
+     * @return Reference
+     */
+    public function __call($name, $arguments)
+    {
+        return $this->getReference($name);
+    }
+
     public function getKey()
     {
         if (!$this->key) {

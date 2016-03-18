@@ -10,26 +10,31 @@ A PHP client for [http://www.firebase.com](http://www.firebase.com).
 
 ---
 
-## Installation
+## Quick usage example
 
-The recommended way to install Firebase is through
-[Composer](http://getcomposer.org).
+```php
 
-```bash
-# Install Composer
-curl -sS https://getcomposer.org/installer | php
+$firebase->simpsons()->set(['name' => 'The Simpsons', 'hometown' => 'Springfield']);
+
+$firebase->simpsons()->members()->marge()->set(['name' => 'Marge', 'age' => 46]);
+$firebase->simpsons()->members()->homer()->set(['name' => 'Homer', 'age' => 38]);
+$firebase->simpsons()->members()->crusty()->set(['name' => 'Crusty the Clown', 'age' => 52]);
+
+$firebase->simpsons()->members()->marge()->update(['age' => 36]);
+$firebase->simpsons()->members()->crusty()->delete();
+
+$query = (new Query())->orderByKey();
+
+print_r($firebase->simpsons()->members()->query($query));
 ```
 
-Next, run the Composer command to install the latest stable version:
+
+## Installation
+
+The recommended way to install Firebase is through [Composer](http://getcomposer.org).
 
 ```bash
 composer require kreait/firebase-php
-```
-
-After installing, you need to require Composer's autoloader:
-
-```php
-require 'vendor/autoload.php';
 ```
 
 ## Documentation
@@ -40,7 +45,7 @@ require 'vendor/autoload.php';
 1. [Configuration](doc/configuration.md)
 1. [Authentication](doc/authentication.md)
 
-## Example
+## Verbose Example
 
 ```php
 require __DIR__.'/vendor/autoload.php';
