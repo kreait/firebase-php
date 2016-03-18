@@ -13,6 +13,7 @@ A PHP client for [http://www.firebase.com](http://www.firebase.com).
 ## Quick usage example
 
 ```php
+$firebase = new Firebase('https://the-simpsons.firebaseio.com');
 
 $firebase->simpsons()->set(['name' => 'The Simpsons', 'hometown' => 'Springfield']);
 
