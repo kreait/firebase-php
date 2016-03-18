@@ -45,6 +45,7 @@ composer require kreait/firebase-php
 1. [Querying data](doc/queries.md)
 1. [Configuration](doc/configuration.md)
 1. [Authentication](doc/authentication.md)
+1. [Using this library with Symfony](doc/symfony.md)
 
 ## Verbose Example
 
