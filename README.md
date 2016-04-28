@@ -15,18 +15,18 @@ A PHP client for [http://www.firebase.com](http://www.firebase.com).
 ```php
 $firebase = new Firebase('https://the-simpsons.firebaseio.com');
 
-$firebase->simpsons()->set(['name' => 'The Simpsons', 'hometown' => 'Springfield']);
+$firebase->simpsons->set(['name' => 'The Simpsons', 'hometown' => 'Springfield']);
 
-$firebase->simpsons()->members()->marge()->set(['name' => 'Marge', 'age' => 46]);
-$firebase->simpsons()->members()->homer()->set(['name' => 'Homer', 'age' => 38]);
-$firebase->simpsons()->members()->crusty()->set(['name' => 'Crusty the Clown', 'age' => 52]);
+$firebase->simpsons->members->marge->set(['name' => 'Marge', 'age' => 46]);
+$firebase->simpsons->members->homer->set(['name' => 'Homer', 'age' => 38]);
+$firebase->simpsons->members->crusty->set(['name' => 'Crusty the Clown', 'age' => 52]);
 
-$firebase->simpsons()->members()->marge()->update(['age' => 36]);
-$firebase->simpsons()->members()->crusty()->delete();
+$firebase->simpsons->members->marge->update(['age' => 36]);
+$firebase->simpsons->members->crusty->delete();
 
 $query = (new Query())->orderByKey();
 
-print_r($firebase->simpsons()->members()->query($query));
+print_r($firebase->simpsons->members->query($query));
 ```
 
 

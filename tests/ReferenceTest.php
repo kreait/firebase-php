@@ -50,7 +50,7 @@ class ReferenceTest extends IntegrationTest
 
     public function testGetMagicReference()
     {
-        $reference = $this->reference->foo();
+        $reference = $this->reference->foo;
 
         $expectedFullLocation = $this->getLocation().'/foo';
 

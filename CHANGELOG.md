@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* Added magic getters, allowing to write `$firebase->foo` instead of instead of `$firebase->getReference('foo')`
+* Deprecated magic callers to allow writing `$firebase->foo()`
+
 ## 0.9.1 - 2016-03-18
 
 * Added magic reference methods, to allow writing `$firebase->foo()`  

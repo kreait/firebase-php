@@ -69,7 +69,7 @@ class FirebaseTest extends IntegrationTest
 
     public function testGetMagicReference()
     {
-        $reference = $this->firebase->foo();
+        $reference = $this->firebase->foo;
         $this->assertInstanceOf(ReferenceInterface::class, $reference);
         $this->assertEquals('foo', $reference->getLocation());
     }

@@ -59,12 +59,29 @@ class Reference implements ReferenceInterface
      *
      * Makes it possible to write `$reference->foo()` instead of `$reference->getReference('foo')`
      *
+     * @deprecated 0.10.0 use __get() instead.
+     * @codeCoverageIgnore
+     * 
      * @param string $name
      * @param array $arguments
      *
      * @return Reference
      */
     public function __call($name, $arguments)
+    {
+        return $this->getReference($name);
+    }
+
+    /**
+     * Shorthand magic method for {@see getReference()}
+     *
+     * Makes it possible to write `$reference->foo` instead of `$reference->getReference('foo')`
+     *
+     * @param string $name
+     *
+     * @return Reference
+     */
+    public function __get($name)
     {
         return $this->getReference($name);
     }

@@ -66,12 +66,29 @@ class Firebase implements FirebaseInterface
      *
      * Makes it possible to write `$firebase->foo()` instead of `$firebase->getReference('foo')`
      *
+     * @deprecated 0.10.0 use __get() instead.
+     * @codeCoverageIgnore
+     *
      * @param string $name
      * @param array $arguments
      *
      * @return Reference
      */
     public function __call($name, $arguments)
+    {
+        return $this->getReference($name);
+    }
+
+    /**
+     * Shorthand magic method for {@see getReference()}
+     *
+     * Makes it possible to write `$firebase->foo` instead of `$firebase->getReference('foo')`
+     *
+     * @param string $name
+     *
+     * @return Reference
+     */
+    public function __get($name)
     {
         return $this->getReference($name);
     }
