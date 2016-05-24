@@ -6,7 +6,7 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
 [![Gitter](https://img.shields.io/badge/Gitter-Join%20Chat-45cba1.svg)](https://gitter.im/kreait/firebase-php)
 
-A PHP client for [http://www.firebase.com](http://www.firebase.com).
+A PHP client for [Firebase](https://firebase.google.com) [https://firebase.google.com](https://firebase.google.com).
 
 ---
 
@@ -17,16 +17,16 @@ $firebase = new Firebase('https://the-simpsons.firebaseio.com');
 
 $firebase->simpsons->set(['name' => 'The Simpsons', 'hometown' => 'Springfield']);
 
-$firebase->simpsons->members->marge->set(['name' => 'Marge', 'age' => 46]);
-$firebase->simpsons->members->homer->set(['name' => 'Homer', 'age' => 38]);
-$firebase->simpsons->members->crusty->set(['name' => 'Crusty the Clown', 'age' => 52]);
+$family = $firebase->simpsons;
 
-$firebase->simpsons->members->marge->update(['age' => 36]);
-$firebase->simpsons->members->crusty->delete();
+$family->marge->set(['name' => 'Marge', 'age' => 46]);
+$family->homer->set(['name' => 'Homer', 'age' => 38]);
 
-$query = (new Query())->orderByKey();
+$family->children->push(['name' => 'Maggie']);
+$family->children->push(['name' => 'Bart']);
+$family->children->push(['name' => 'Maggie']);
 
-print_r($firebase->simpsons->members->query($query));
+$family->delete();
 ```
 
 
