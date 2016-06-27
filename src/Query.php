@@ -105,7 +105,7 @@ class Query
     }
 
     /**
-     * Limit the result to the first x items.
+     * Limit the result to the last x items.
      *
      * @param int $limit The number.
      *
