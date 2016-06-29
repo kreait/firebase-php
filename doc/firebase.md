@@ -14,6 +14,9 @@ $firebase = new Firebase('https://myapp.firebaseio.com');
 
 ```php
 $userData = $firebase->get('data/users');
+// or
+$userData = $firebase->data->users;
+
 print_r($userData);
 /*
 [

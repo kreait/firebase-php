@@ -36,9 +36,9 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $this->get('firebase')->my()->reference()->set(['some' => 'data']);
+        $this->get('firebase')->my->reference->set(['some' => 'data']);
         
-        $data = $this->get('firebase')->my()->reference()->getData();
+        $data = $this->get('firebase')->my->reference->getData();
 
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),

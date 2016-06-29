@@ -11,11 +11,25 @@ $firebase = new Firebase('https://myapp.firebaseio.com');
 $users = $firebase->getReference('users/data');
 ```
 
+You can also get a reference by using the magic getter:
+
+```php
+$users = $firebase->users->data;
+```
+ 
+
 ### Get a child references
 
 ```php
 $homer = $users->getReference('homer');
 ```
+
+or
+
+```php
+$homer = $users->homer;
+```
+
 
 ### Get data
 
