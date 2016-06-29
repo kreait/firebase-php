@@ -1,5 +1,6 @@
 /build
 /tests/.env
+/tests/google-service-account.json
 /tests/fixtures/tapes
 /vendor
 /composer.lock
