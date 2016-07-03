@@ -6,11 +6,10 @@
 ## Firebase SDK 3.x
 
 To create custom tokens with the Firebase server SDKs, you must have a service account. 
-Follow the [server SDK setup instructions](https://firebase.google.com/docs/server/setup/)
-for more information on how to initialize your server SDK with a service account.
+Follow the [server SDK setup instructions](https://firebase.google.com/docs/server/setup#add_firebase_to_your_app)
+for more information on how to provision your Firebase app with a service account.
 
-Once you have downloaded the service account's key file, you can generate authenticate requests
-to the Firebase app's database like this:
+Once you have downloaded the service account's key file, you can set up your application like this:
 
 ```php
 use Kreait\Firebase\Configuration;
