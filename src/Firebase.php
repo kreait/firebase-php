@@ -231,6 +231,17 @@ class Firebase implements FirebaseInterface
             ->withHeader('accept', 'application/json')
             ->withHeader('accept-charset', 'utf-8');
 
+        if ($this->getConfiguration()->hasGoogleClient()) {
+            $googleClient = $this->getConfiguration()->getGoogleClient();
+
+            $token = $googleClient->isAccessTokenExpired()
+                ? $googleClient->refreshTokenWithAssertion()
+                : $googleClient->getAccessToken()
+            ;
+
+            $request = $request->withHeader('Authorization', 'Bearer '.$token['access_token']);
+        }
+
         if ($data) {
             $request->getBody()->write(json_encode($data));
         }
@@ -266,7 +277,7 @@ class Firebase implements FirebaseInterface
             $params = array_merge($params, $query->toArray());
         }
 
-        if ($this->hasAuthToken()) {
+        if (!$this->getConfiguration()->hasGoogleClient() && $this->hasAuthToken()) {
             $params['auth'] = $this->getAuthToken();
         }
 

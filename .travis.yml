@@ -3,7 +3,8 @@ language: php
 sudo: false
 
 before_install:
-  - openssl aes-256-cbc -K $encrypted_9bb00d0177de_key -iv $encrypted_9bb00d0177de_iv -in tests/.env.enc -out tests/.env -d
+  - openssl aes-256-cbc -K $encrypted_12c8071d2874_key -iv $encrypted_12c8071d2874_iv -in tests/secrets.tar.enc -out tests/secrets.tar -d
+  - tar -C tests -xvf tests/secrets.tar
   - composer config --global github-oauth.github.com $github_oauth_token
   - travis_retry composer self-update
 
@@ -19,28 +20,17 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-matrix:
-  fast_finish: true
-  include:
-    - php: 5.6
-      env: COVERAGE=true PHPUNIT_FLAGS="--coverage-clover build/coverage.clover"
-  allow_failures:
-    - env: COVERAGE=true PHPUNIT_FLAGS="--coverage-clover build/coverage.clover"
-
 before_script:
   - if [ "$TRAVIS_PHP_VERSION" = "hhv*" ]; then cat tests/fixtures/travis.ini >> /etc/hhvm/php.ini; fi;
   - if [ "$TRAVIS_PHP_VERSION" = "php*" ]; then phpenv config-add tests/fixtures/travis.ini ; fi;
 
 script:
-  - vendor/bin/phpunit ${PHPUNIT_FLAGS}
+  - vendor/bin/phpunit --coverage-clover build/coverage.clover
 
 after_script:
-  - if [ $COVERAGE ]; then wget https://scrutinizer-ci.com/ocular.phar ; fi;
-  - if [ $COVERAGE ]; then php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover ; fi;
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover
 
 notifications:
   email:
     - secure: "iiseqb4k4ckQkMJnZ6Tq3YP5ilTZE4CkVgarsBpPOn+c820nP9QokGpz82D4CTGy/UB1+DfCiFH9YAFrhLP5/9Go1CHP+wYkuz9W+E8q/rm9/nBO0xutoQhOfV3MxMid69E8i4QjODq3w5mOUrmpj/8gl2FyBU1Ro1xgPSYNEQ4="
-  webhooks:
-    urls:
-      - secure: "OzJTaVZ5IDC/+3wr7KbqTd6dskQ1Cq7Db75U+9k3Kcf+5UpxQKepRnJeNhqMNMl4/Iz7aikADFxwH74bAqZor3hO8i8fEaTmxhdjZ2rfVReH5rVYJFUsx2Vm1oLTd/Jq4n09ZjBIDBd/+crrjgTZDLCu8jnRFOBCzpqT7sLCnlY="

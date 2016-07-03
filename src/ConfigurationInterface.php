@@ -13,6 +13,7 @@ namespace Kreait\Firebase;
 
 use Ivory\HttpAdapter\HttpAdapterInterface;
 use Kreait\Firebase\Auth\TokenGeneratorInterface;
+use Kreait\Firebase\Exception\ConfigurationException;
 use Psr\Log\LoggerInterface;
 
 interface ConfigurationInterface
@@ -85,4 +86,31 @@ interface ConfigurationInterface
      * @return LoggerInterface
      */
     public function getLogger();
+
+    /**
+     * Sets the path to the Google auth configuration file.
+     *
+     * This structure should match the file downloaded from
+     * the "Download JSON" button on in the Google Developer
+     * Console.
+     *
+     * @param string $path Path to the auth config file.
+     */
+    public function setAuthConfigFile($path);
+
+    /**
+     * Returns the Google Client.
+     *
+     * @throws ConfigurationException if no auth config file has been set.
+     *
+     * @return \Google_Client
+     */
+    public function getGoogleClient();
+
+    /**
+     * Returns whether a Google Client is set or not.
+     *
+     * @return bool
+     */
+    public function hasGoogleClient();
 }

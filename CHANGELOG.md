@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.10.1 - 2016-07-03
+
+* Added support for authentication with a Google Service account
+
 ## 0.10.0 - 2016-04-28
 
 * Added magic getters, allowing to write `$firebase->foo` instead of instead of `$firebase->getReference('foo')`

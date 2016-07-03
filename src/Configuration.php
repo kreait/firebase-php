@@ -41,6 +41,16 @@ class Configuration implements ConfigurationInterface
      */
     private $authTokenGenerator;
 
+    /**
+     * @var \Google_Client
+     */
+    private $googleClient;
+
+    /**
+     * @var string
+     */
+    private $authConfigFilePath;
+
     public function __construct()
     {
         $this->logger = new NullLogger();
@@ -112,5 +122,41 @@ class Configuration implements ConfigurationInterface
         $this->authTokenGenerator = new TokenGenerator($this->getFirebaseSecret());
 
         return $this->authTokenGenerator;
+    }
+
+    public function setAuthConfigFile($path)
+    {
+        $this->authConfigFilePath = $path;
+    }
+
+    public function getGoogleClient()
+    {
+        if ($this->googleClient) {
+            return $this->googleClient;
+        }
+
+        if (!$this->authConfigFilePath) {
+            throw new ConfigurationException('No auth config file provided.');
+        }
+
+        $client = new \Google_Client();
+        $client->setAuthConfigFile($this->authConfigFilePath);
+        $client->addScope([
+            'https://www.googleapis.com/auth/userinfo.email',
+            'https://www.googleapis.com/auth/firebase.database'
+        ]);
+
+        $this->googleClient = $client;
+
+        return $client;
+    }
+
+    public function hasGoogleClient()
+    {
+        try {
+            return !!$this->getGoogleClient();
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

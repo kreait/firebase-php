@@ -87,6 +87,21 @@ class FirebaseTest extends IntegrationTest
         $this->assertEquals($expectedData, $result);
     }
 
+    public function testGetWithServiceAccountAuthentication()
+    {
+        $this->configuration->setAuthConfigFile(__DIR__.'/google-service-account.json');
+
+        $data = ['key1' => 'value1', 'key2' => null];
+        $expectedData = ['key1' => 'value1'];
+
+        $this->recorder->insertTape(__FUNCTION__);
+        $this->recorder->startRecording();
+        $this->firebase->set($data, $this->getLocation(__FUNCTION__));
+        $result = $this->firebase->get($this->getLocation(__FUNCTION__));
+
+        $this->assertEquals($expectedData, $result);
+    }
+
     public function testGetScalar()
     {
         $data = [

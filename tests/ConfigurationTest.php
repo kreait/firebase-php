@@ -95,4 +95,20 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Kreait\Firebase\Auth\TokenGenerator', $generator);
     }
+
+    public function testSetAuthConfigFile()
+    {
+        $this->configuration->setAuthConfigFile(__DIR__ . '/google-service-account.json');
+        $this->assertTrue($this->configuration->hasGoogleClient());
+        $this->assertInstanceOf(\Google_Client::class, $this->configuration->getGoogleClient());
+    }
+
+    /**
+     * @expectedException \Kreait\Firebase\Exception\ConfigurationException
+     */
+    public function testGetGoogleClientWithoutAuthConfigFile()
+    {
+        $this->assertFalse($this->configuration->hasGoogleClient());
+        $this->configuration->getGoogleClient();
+    }
 }
