@@ -4,7 +4,6 @@
 [![Build Status](https://travis-ci.org/kreait/firebase-php.svg?branch=master)](https://travis-ci.org/kreait/firebase-php)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
-[![Gitter](https://img.shields.io/badge/Gitter-Join%20Chat-45cba1.svg)](https://gitter.im/kreait/firebase-php)
 
 A PHP client for [Firebase](https://firebase.google.com) [https://firebase.google.com](https://firebase.google.com).
 
