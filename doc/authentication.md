@@ -1,7 +1,7 @@
 # Authenticating requests to a Firebase app
 
-- [Firebase SDK 3.x)](#firebase-sdk-3x)
-- [Firebase SDK 1.x/2.x)](#firebase-sdk-1x-2x)
+- [Firebase SDK 3.x](#firebase-sdk-3x)
+- [Firebase SDK 1.x/2.x](#firebase-sdk-1x-2x)
 
 ## Firebase SDK 3.x
 
