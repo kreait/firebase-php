@@ -12,7 +12,15 @@ A PHP client for [Firebase](https://firebase.google.com) [https://firebase.googl
 ## Quick usage example
 
 ```php
-$firebase = new Firebase('https://the-simpsons.firebaseio.com');
+use Kreait\Firebase\Configuration;
+use Kreait\Firebase\Firebase;
+
+$config = new Configuration();
+$config->setAuthConfigFile('/path/to/google-service-account.json');
+// or
+$config->setFirebaseSecret('my-firebase-secret');
+
+$firebase = new Firebase('https://the-simpsons.firebaseio.com', $config);
 
 $firebase->simpsons->set(['name' => 'The Simpsons', 'hometown' => 'Springfield']);
 
@@ -27,7 +35,6 @@ $family->children->push(['name' => 'Maggie']);
 
 $family->delete();
 ```
-
 
 ## Installation
 
