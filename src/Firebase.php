@@ -191,7 +191,7 @@ class Firebase implements FirebaseInterface
     public function getAuthToken()
     {
         if (!$this->authToken) {
-            throw FirebaseException::noAuthTokenAvailable();
+            throw new FirebaseException('No authentication token has been set.');
         }
 
         return $this->authToken;
@@ -282,9 +282,10 @@ class Firebase implements FirebaseInterface
         try {
             $response = $this->http->sendRequest($request);
         } catch (HttpAdapterException $e) {
-            $fe = FirebaseException::httpAdapterError($e);
-            $logger->error($fe->getMessage());
-            throw $fe;
+            $message = sprintf('HTTP Error: %s', $e->getMessage());
+
+            $logger->error($message);
+            throw new FirebaseException($message, $e->getCode(), $e);
         }
 
         if ($response->getStatusCode() >= 400) {

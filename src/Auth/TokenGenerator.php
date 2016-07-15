@@ -81,13 +81,9 @@ class TokenGenerator implements TokenGeneratorInterface
             'admin' => true,
         ];
 
-        try {
-            return $this->generator
-                ->setOptions($options)
-                ->create();
-        } catch (TokenException $e) {
-            throw new \RuntimeException($e->getMessage(), null, $e);
-        }
+        return $this->generator
+            ->setOptions($options)
+            ->create();
     }
 
     public function createToken($id, $provider)

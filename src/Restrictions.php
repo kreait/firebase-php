@@ -31,7 +31,7 @@ class Restrictions
         self::checkValidity($url);
 
         if ('https' !== parse_url($url, PHP_URL_SCHEME)) {
-            throw FirebaseException::baseUrlSchemeMustBeHttps($url);
+            throw new FirebaseException(sprintf('The base url must point to an https URL, "%s" given.', $url));
         }
     }
 
@@ -44,7 +44,7 @@ class Restrictions
     private static function checkValidity($url)
     {
         if ((($parts = parse_url($url)) === false) || !isset($parts['scheme']) || !isset($parts['host'])) {
-            throw FirebaseException::urlIsInvalid($url);
+            throw new FirebaseException(sprintf('The url "%s" is invalid.', $url));
         }
     }
 
@@ -77,7 +77,10 @@ class Restrictions
         $parts = explode('/', trim($location, '/'));
 
         if (($count = count($parts)) > self::MAXIMUM_DEPTH_OF_CHILD_NODES) {
-            throw FirebaseException::locationHasTooManyKeys(self::MAXIMUM_DEPTH_OF_CHILD_NODES, $count);
+            throw new FirebaseException(sprintf(
+                'A location key must not have more than %s keys, %s given.',
+                self::MAXIMUM_DEPTH_OF_CHILD_NODES, $count
+            ));
         }
     }
 
@@ -91,7 +94,9 @@ class Restrictions
     private static function checkKeyLength($key)
     {
         if (($length = mb_strlen($key, '8bit')) > self::KEY_LENGTH_IN_BYTES) {
-            throw FirebaseException::locationKeyIsTooLong(self::KEY_LENGTH_IN_BYTES, $length);
+            throw new FirebaseException(sprintf(
+                'A location key must not be longer than %s bytes, %s bytes given.', self::KEY_LENGTH_IN_BYTES, $length
+            ));
         }
     }
 
@@ -107,7 +112,10 @@ class Restrictions
         $pattern = sprintf('/[%s]/', preg_quote(self::FORBIDDEN_NODE_KEY_CHARS, '/'));
 
         if (preg_match($pattern, $key)) {
-            throw FirebaseException::locationKeyContainsForbiddenChars($key, self::FORBIDDEN_NODE_KEY_CHARS);
+            throw new FirebaseException(sprintf(
+                'The location key "%s" contains on of the following invalid characters: %s',
+                $key, self::FORBIDDEN_NODE_KEY_CHARS
+            ));
         }
     }
 }
