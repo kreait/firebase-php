@@ -1,4 +1,6 @@
 /build
+/docs/_build
+/docs/*.pyc
 /tests/.env
 /tests/fixtures/tapes
 /vendor

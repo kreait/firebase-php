@@ -17,38 +17,16 @@ use Kreait\Firebase\Firebase;
 
 $config = new Configuration();
 $config->setAuthConfigFile('/path/to/google-service-account.json');
-// or
-$config->setFirebaseSecret('my-firebase-secret');
 
-$firebase = new Firebase('https://the-simpsons.firebaseio.com', $config);
+$firebase = new Firebase('https://my-app.firebaseio.com', $config);
 
-$firebase->simpsons->set(['name' => 'The Simpsons', 'hometown' => 'Springfield']);
+$firebase->set(['key' => 'value'], 'my/data');
 
-$family = $firebase->simpsons;
+print_r($firebase->get('my/data'));
 
-$family->marge->set(['name' => 'Marge', 'age' => 46]);
-$family->homer->set(['name' => 'Homer', 'age' => 38]);
-
-$family->children->push(['name' => 'Maggie']);
-$family->children->push(['name' => 'Bart']);
-$family->children->push(['name' => 'Maggie']);
-
-$family->delete();
-```
-
-## Installation
-
-The recommended way to install Firebase is through [Composer](http://getcomposer.org).
-
-```bash
-composer require kreait/firebase-php
+$firebase->delete('my/data');
 ```
 
 ## Documentation
 
-1. [Working with the `Firebase` class](doc/firebase.md)
-1. [Working with References](doc/reference.md)
-1. [Querying data](doc/queries.md)
-1. [Configuration](doc/configuration.md)
-1. [Authentication](doc/authentication.md)
-1. [Using this library with Symfony](doc/symfony.md)
+You can find the documentation at http://firebase-php.readthedocs.io
