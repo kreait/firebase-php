@@ -76,13 +76,10 @@ class FirebaseException extends \Exception
             $message = sprintf('%s: %s', $message, $specifics);
         }
 
-        switch ($response->getStatusCode()) {
-            case 401:
-                $e = new PermissionDeniedException($message);
-                break;
-            default:
-                $e = new self($message);
-                break;
+        if ($response->getStatusCode() === 401) {
+            $e = new PermissionDeniedException($message);
+        } else {
+            $e = new self($message);
         }
 
         $e->setRequest($request);

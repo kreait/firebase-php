@@ -77,7 +77,7 @@ class Configuration implements ConfigurationInterface
 
     public function hasFirebaseSecret()
     {
-        return !!($this->firebaseSecret);
+        return (bool) $this->firebaseSecret;
     }
 
     public function setHttpAdapter(HttpAdapterInterface $httpAdapter)
@@ -154,7 +154,7 @@ class Configuration implements ConfigurationInterface
     public function hasGoogleClient()
     {
         try {
-            return !!$this->getGoogleClient();
+            return (bool) $this->getGoogleClient();
         } catch (\Exception $e) {
             return false;
         }

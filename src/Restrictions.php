@@ -43,7 +43,9 @@ class Restrictions
 
     private static function checkValidity($url)
     {
-        if ((($parts = parse_url($url)) === false) || !isset($parts['scheme']) || !isset($parts['host'])) {
+        $parts = parse_url($url);
+
+        if (!$parts || !array_key_exists('scheme', $parts) || !array_key_exists('host', $parts)) {
             throw new FirebaseException(sprintf('The url "%s" is invalid.', $url));
         }
     }

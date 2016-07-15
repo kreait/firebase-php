@@ -11,6 +11,8 @@
  */
 namespace Kreait\Firebase;
 
+use Kreait\Firebase\Exception\FirebaseException;
+
 class Reference implements ReferenceInterface
 {
     /**
@@ -46,12 +48,13 @@ class Reference implements ReferenceInterface
      *
      * @param FirebaseInterface $firebase The Firebase instance.
      * @param string            $location The Reference location.
+     *
+     * @throws FirebaseException If the location violates restrictions imposed by Firebase.
      */
     public function __construct(FirebaseInterface $firebase, $location)
     {
         $this->firebase = $firebase;
         $this->location = Utils::normalizeLocation($location);
-        $this->data = [];
     }
 
     /**
@@ -90,7 +93,7 @@ class Reference implements ReferenceInterface
 
     public function getData()
     {
-        if (empty($this->data)) {
+        if (!$this->data) {
             $this->data = $this->firebase->get($this->location);
         }
 
@@ -104,8 +107,7 @@ class Reference implements ReferenceInterface
 
     public function set($data)
     {
-        $writtenData = $this->firebase->set($data, $this->location);
-        $this->data = $writtenData ?: [];
+        $this->data = $this->firebase->set($data, $this->location);
 
         return $this;
     }
@@ -113,7 +115,7 @@ class Reference implements ReferenceInterface
     public function push($data)
     {
         $newKey = $this->firebase->push($data, $this->location);
-        $this->data = []; // Reset data, because it now contains new data
+        $this->data = null; // Reset data, because it now contains new data
 
         return $this->getReference($newKey);
     }
@@ -133,7 +135,9 @@ class Reference implements ReferenceInterface
 
     private function updateData(array $data)
     {
-        $data = array_merge($this->data, $data);
+        if (is_array($this->data)) {
+            $data += $this->data;
+        }
 
         $this->data = $this->removeNullValues($data);
     }
@@ -141,12 +145,14 @@ class Reference implements ReferenceInterface
     public function offsetExists($offset)
     {
         $this->getData(); // Ensure data exists
-        return isset($this->data[$offset]);
+
+        return is_array($this->data) && array_key_exists($offset, $this->data);
     }
 
     public function offsetGet($offset)
     {
         $this->getData(); // Ensure data exists
+
         return $this->data[$offset];
     }
 

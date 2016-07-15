@@ -234,7 +234,7 @@ class Firebase implements FirebaseInterface
 
         $logger->debug(
             sprintf('%s request to %s', $method, $request->getUri()),
-            is_null($data) ? [] : ['data' => (string) $request->getBody()]
+            $data === null ? [] : ['data' => (string) $request->getBody()]
         );
 
         try {
