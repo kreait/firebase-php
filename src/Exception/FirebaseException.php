@@ -11,7 +11,6 @@
  */
 namespace Kreait\Firebase\Exception;
 
-use Ivory\HttpAdapter\HttpAdapterException;
 use Ivory\HttpAdapter\Message\RequestInterface;
 use Ivory\HttpAdapter\Message\ResponseInterface;
 
@@ -32,7 +31,7 @@ class FirebaseException extends \Exception
 
     public function hasRequest()
     {
-        return $this->request !== null;
+        return (bool) $this->request;
     }
 
     public function getRequest()
@@ -47,7 +46,7 @@ class FirebaseException extends \Exception
 
     public function hasResponse()
     {
-        return $this->response !== null;
+        return (bool) $this->response;
     }
 
     public function getResponse()
@@ -58,42 +57,6 @@ class FirebaseException extends \Exception
     public function setResponse(ResponseInterface $response = null)
     {
         $this->response = $response;
-    }
-
-    public static function urlIsInvalid($url)
-    {
-        return new self(sprintf('The url "%s" is invalid.', $url));
-    }
-
-    public static function baseUrlSchemeMustBeHttps($url)
-    {
-        return new self(sprintf('The base url must point to an https URL, "%s" given.', $url));
-    }
-
-    public static function locationKeyContainsForbiddenChars($key, $forbiddenChars)
-    {
-        return new self(
-            sprintf(
-                'The location key "%s" contains on of the following invalid characters: %s',
-                $key,
-                $forbiddenChars
-            )
-        );
-    }
-
-    public static function locationHasTooManyKeys($allowed, $given)
-    {
-        return new self(sprintf('A location key must not have more than %s keys, %s given.', $allowed, $given));
-    }
-
-    public static function locationKeyIsTooLong($allowed, $given)
-    {
-        return new self(sprintf('A location key must not be longer than %s bytes, %s bytes given.', $allowed, $given));
-    }
-
-    public static function httpAdapterError(HttpAdapterException $e)
-    {
-        return new self(sprintf('HTTP Error: %s', $e->getMessage()), null, $e);
     }
 
     public static function httpError(RequestInterface $request, ResponseInterface $response)
@@ -126,24 +89,6 @@ class FirebaseException extends \Exception
         $e->setResponse($response);
 
         return $e;
-    }
-
-    public static function noAuthTokenAvailable()
-    {
-        return new self('No authentication token has been set.');
-    }
-
-    public static function invalidAuthToken($givenToken)
-    {
-        return new self(sprintf('The authentication token must be a string, %s given.', gettype($givenToken)));
-    }
-
-    public static function authTokenIsIdenticalToSecret()
-    {
-        return new self(
-            'The auth token is identical to the firebase secret. Create an admin token instead '.
-            '(see TokenGeneratorInterface::createAdminToken())'
-        );
     }
 
     public static function invalidArgument($expected, $given)
