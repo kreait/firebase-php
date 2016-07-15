@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Removed deprecated methods and revisited the code and documentation.
+
 ## 0.10.2 - 2016-07-15
 
 * Added support for authentication overrides when using a Google Service account
