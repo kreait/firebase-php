@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 0.10.2 - 2016-07-15
 
 * Added support for authentication overrides when using a Google Service account
 * It is now easier to override authentication credentials through
