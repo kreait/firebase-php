@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 1.0 - 2016-07-15
 
 * Removed deprecated methods and revisited the code and documentation.
 
