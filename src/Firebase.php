@@ -34,11 +34,22 @@ class Firebase implements FirebaseInterface
     private $configuration;
 
     /**
-     * The current authentication token.
+     * The current authentication token to be used when Firebase was configured
+     * with a database secret.
      *
      * @var string
      */
     private $authToken;
+
+    /**
+     * The current authentication override to be used when Firebase was configured
+     * with a service account.
+     *
+     * This is a JSON string with the keys 'uid' and 'token'.
+     *
+     * @var string
+     */
+    private $overrideAuthToken;
 
     /**
      * @var HttpAdapterInterface
@@ -117,18 +128,16 @@ class Firebase implements FirebaseInterface
     {
         $url = $this->createRequestUrl($location);
         $response = $this->send($url, RequestInterface::METHOD_GET);
-        $data = json_decode((string) $response->getBody(), true);
 
-        return $data;
+        return json_decode((string) $response->getBody(), true);
     }
 
     public function query($location, Query $query)
     {
         $url = $this->createRequestUrl($location, $query);
         $response = $this->send($url, RequestInterface::METHOD_GET);
-        $data = json_decode((string) $response->getBody(), true);
 
-        return $data;
+        return json_decode((string) $response->getBody(), true);
     }
 
     public function set($data, $location)
@@ -140,9 +149,7 @@ class Firebase implements FirebaseInterface
         $url = $this->createRequestUrl($location);
         $response = $this->send($url, RequestInterface::METHOD_PUT, $data);
 
-        $data = json_decode((string) $response->getBody(), true);
-
-        return $data;
+        return json_decode((string) $response->getBody(), true);
     }
 
     public function push($data, $location)
@@ -166,9 +173,8 @@ class Firebase implements FirebaseInterface
 
         $url = $this->createRequestUrl($location);
         $response = $this->send($url, RequestInterface::METHOD_PATCH, $data);
-        $data = json_decode((string) $response->getBody(), true);
 
-        return $data;
+        return json_decode((string) $response->getBody(), true);
     }
 
     public function delete($location)
@@ -179,20 +185,12 @@ class Firebase implements FirebaseInterface
 
     public function setAuthToken($authToken)
     {
-        if (!is_string($authToken)) {
-            throw FirebaseException::invalidAuthToken($authToken);
-        }
-
-        if ($authToken === $this->getConfiguration()->getFirebaseSecret()) {
-            throw FirebaseException::authTokenIsIdenticalToSecret();
-        }
-
-        $this->authToken = $authToken;
+        $this->authToken = (string) $authToken;
     }
 
     public function getAuthToken()
     {
-        if (!$this->hasAuthToken()) {
+        if (!$this->authToken) {
             throw FirebaseException::noAuthTokenAvailable();
         }
 
@@ -201,12 +199,42 @@ class Firebase implements FirebaseInterface
 
     public function hasAuthToken()
     {
-        return !!$this->authToken;
+        return (bool) $this->authToken;
     }
 
     public function removeAuthToken()
     {
         $this->authToken = null;
+    }
+
+    public function setAuthOverride($uid, array $claims = [])
+    {
+        $config = $this->getConfiguration();
+
+        if ($config->hasGoogleClient()) {
+            $this->authToken = null;
+            $this->overrideAuthToken = json_encode([
+                'uid' => $uid,
+                'token' => $claims,
+            ]);
+
+            return;
+        }
+
+        if ($config->hasFirebaseSecret()) {
+            $this->authToken = $config->getAuthTokenGenerator()->createCustomToken($uid, $claims);
+            $this->overrideAuthToken = null;
+
+            return;
+        }
+
+        throw new FirebaseException('You have to configure Firebase with a database secret or a service account to be able to set an auth override.');
+    }
+
+    public function removeAuthOverride()
+    {
+        $this->authToken = null;
+        $this->overrideAuthToken = null;
     }
 
     /**
@@ -277,8 +305,10 @@ class Firebase implements FirebaseInterface
             $params = array_merge($params, $query->toArray());
         }
 
-        if (!$this->getConfiguration()->hasGoogleClient() && $this->hasAuthToken()) {
-            $params['auth'] = $this->getAuthToken();
+        if ($this->authToken) {
+            $params['auth'] = $this->authToken;
+        } elseif ($this->overrideAuthToken) {
+            $params['auth_variable_override'] = $this->overrideAuthToken;
         }
 
         if (count($params)) {
