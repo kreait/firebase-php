@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## Unreleased
+
+* Added support for authentication overrides when using a Google Service account
+* It is now easier to override authentication credentials through
+  `$firebase->setAuthOverride($uid, array $claims = [])`.
+  * There's no need to create and set the needed custom tokens yourself.
+  * The new method works regardless of whether you use a database secret or
+    a Google Service Account for the basic authentication.
+* Updated authentication docs
+* Added methods:
+  * `Firebase::setAuthOverride(string $uid, array $claims = [])`
+  * `Firebase::removeAuthOverride()`
+* Deprecated methods:
+  * `Firebase::setAuthToken()`
+  * `Firebase::getAuthToken()`
+  * `Firebase::hasAuthToken()`
+  * `Firebase::removeAuthToken()`
+
 ## 0.10.1 - 2016-07-03
 
 * Added support for authentication with a Google Service account

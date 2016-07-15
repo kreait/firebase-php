@@ -68,7 +68,10 @@ class TokenGenerator implements TokenGeneratorInterface
 
     public function createAnonymousToken()
     {
-        return $this->createToken(uniqid('firebasephp_'), 'anonymous');
+        return $this->createCustomToken(
+            'anonymous:'.uniqid('firebasephp_', true),
+            ['provider' => 'anonymous']
+        );
     }
 
     public function createAdminToken()
@@ -97,9 +100,16 @@ class TokenGenerator implements TokenGeneratorInterface
             'uid' => $uid,
         ];
 
+        return $this->createCustomToken($uid, $data);
+    }
+
+    public function createCustomToken($uid, array $claims = [])
+    {
         $options = [
-            'debug' => $this->debug,
+            'debug' => $this->debug
         ];
+
+        $data = array_merge($claims, ['uid' => $uid]);
 
         try {
             return $this->generator

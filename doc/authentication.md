@@ -1,15 +1,8 @@
 # Authenticating requests to a Firebase app
 
-- [Firebase SDK 3.x](#firebase-sdk-3x)
-- [Firebase SDK 1.x/2.x](#firebase-sdk-1x-2x)
-
-## Firebase SDK 3.x
-
-To create custom tokens with the Firebase server SDKs, you must have a service account. 
-Follow the [server SDK setup instructions](https://firebase.google.com/docs/server/setup#add_firebase_to_your_app)
-for more information on how to provision your Firebase app with a service account.
-
-Once you have downloaded the service account's key file, you can set up your application like this:
+You can authenticate requests either with a 
+[Google Service Account JSON File](https://firebase.google.com/docs/server/setup#add_firebase_to_your_app)
+or a database secret, which you can find in your Firebase project's settings.
 
 ```php
 use Kreait\Firebase\Configuration;
@@ -17,45 +10,23 @@ use Kreait\Firebase\Firebase;
 
 $config = new Configuration();
 $config->setAuthConfigFile('/path/to/google-service-account.json');
+// or
+$config->setFirebaseSecret('my-firebase-secret');
 
 $firebase = new Firebase('https://myapp.firebaseio.com', $config);
 ```
 
-## Firebase SDK 1.x/2.x
+## Overriding authentication credentials
 
-To authenticate the requests to a Firebase app, you have to provide your firebase secret:
+By default, Firebase transactions will be executed with the permissions defined for the Service Account, 
+or as an admin user if you use the database secret.
 
-```php
-use Kreait\Firebase\Configuration;
-use Kreait\Firebase\Firebase;
-
-$config = new Configuration();
-$config->setFirebaseSecret('xxx');
-
-$firebase = new Firebase('https://myapp.firebaseio.com', $config);
-```
-
-If you then want to start authenticating requests, you can do it by generating tokens:
+You can override the authentication credentials with `setAuthOverride()`: 
  
 ```php
-use Kreait\Firebase\Configuration;
-use Kreait\Firebase\Firebase;
 
-$config = new Configuration();
-$config->setFirebaseSecret('xxx');
-
-$firebase = new Firebase('https://myapp.firebaseio.com', $config);
-
-$tokenGenerator = $firebase->getConfiguration()->getAuthTokenGenerator();
-
-$customToken    = $tokenGenerator->createToken('12345', 'custom');
-$anonymousToken = $tokenGenerator->createAnonymousToken();
-$adminToken     = $tokenGenerator->createAdminToken();
-
-
-$firebase->setAuthToken($adminToken);
-
-// Perform some authenticated requests
-
-$firebase->removeAuthToken();
+$firebase->setAuthOverride($uid, $claims = []);
+$firebase->removeAuthOverride();
 ```
+
+The `$claims` variable is optional. If set, it must be an associative array.

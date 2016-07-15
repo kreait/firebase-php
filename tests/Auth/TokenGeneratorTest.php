@@ -16,7 +16,7 @@ use Firebase\JWT\JWT;
 class TokenGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var TokenGeneratorInterface
+     * @var TokenGenerator
      */
     protected $generator;
 
@@ -97,6 +97,15 @@ class TokenGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $invalid = str_pad('', 1024, 'x');
         $this->generator->createToken($invalid, $invalid);
+    }
+
+    public function testCreateCustomToken()
+    {
+        $token = $this->generator->createCustomToken('uid', ['foo' => 'bar']);
+        $data = $this->decodeTokenToArray($token);
+
+        $this->assertEquals('uid', $data['d']['uid']);
+        $this->assertEquals('bar', $data['d']['foo']);
     }
 
     protected function decodeTokenToArray($token)
