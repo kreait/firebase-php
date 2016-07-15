@@ -86,19 +86,6 @@ class TokenGenerator implements TokenGeneratorInterface
             ->create();
     }
 
-    public function createToken($id, $provider)
-    {
-        $uid = sprintf('%s:%s', $provider, $id);
-
-        $data = [
-            'id' => $id,
-            'provider' => $provider,
-            'uid' => $uid,
-        ];
-
-        return $this->createCustomToken($uid, $data);
-    }
-
     public function createCustomToken($uid, array $claims = [])
     {
         $options = [

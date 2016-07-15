@@ -49,20 +49,6 @@ interface TokenGeneratorInterface
     public function createAdminToken();
 
     /**
-     * Creates a new authentication token.
-     *
-     * @deprecated Use {@see createCustomToken} instead.
-     *
-     * @param int|string $id       The user id.
-     * @param string     $provider The authentication provider.
-     *
-     * @throws \RuntimeException if there was an error during the creation of the token
-     *
-     * @return string
-     */
-    public function createToken($id, $provider);
-
-    /**
      * Creates a new custom token.
      *
      * @param string $uid

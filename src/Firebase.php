@@ -75,24 +75,6 @@ class Firebase implements FirebaseInterface
     /**
      * Shorthand magic method for {@see getReference()}
      *
-     * Makes it possible to write `$firebase->foo()` instead of `$firebase->getReference('foo')`
-     *
-     * @deprecated 0.10.0 use __get() instead.
-     * @codeCoverageIgnore
-     *
-     * @param string $name
-     * @param array $arguments
-     *
-     * @return Reference
-     */
-    public function __call($name, $arguments)
-    {
-        return $this->getReference($name);
-    }
-
-    /**
-     * Shorthand magic method for {@see getReference()}
-     *
      * Makes it possible to write `$firebase->foo` instead of `$firebase->getReference('foo')`
      *
      * @param string $name
@@ -181,30 +163,6 @@ class Firebase implements FirebaseInterface
     {
         $url = $this->createRequestUrl($location);
         $this->send($url, RequestInterface::METHOD_DELETE);
-    }
-
-    public function setAuthToken($authToken)
-    {
-        $this->authToken = (string) $authToken;
-    }
-
-    public function getAuthToken()
-    {
-        if (!$this->authToken) {
-            throw new FirebaseException('No authentication token has been set.');
-        }
-
-        return $this->authToken;
-    }
-
-    public function hasAuthToken()
-    {
-        return (bool) $this->authToken;
-    }
-
-    public function removeAuthToken()
-    {
-        $this->authToken = null;
     }
 
     public function setAuthOverride($uid, array $claims = [])

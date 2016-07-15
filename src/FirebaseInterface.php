@@ -95,42 +95,6 @@ interface FirebaseInterface extends ReferenceProviderInterface
     public function getConfiguration();
 
     /**
-     * Sets an authentication token.
-     *
-     * @deprecated Use {@see setAuthOverride()} instead
-     *
-     * @param string $authToken The authentication token.
-     */
-    public function setAuthToken($authToken);
-
-    /**
-     * Returns the current authentication token.
-     *
-     * @internal
-     * @deprecated
-     *
-     * @return string
-     */
-    public function getAuthToken();
-
-    /**
-     * Returns whether an authentication token is set or not.
-     *
-     * @internal
-     * @deprecated
-     *
-     * @return bool
-     */
-    public function hasAuthToken();
-
-    /**
-     * Removes the current authentication token.
-     *
-     * @deprecated Use {@see removeAuthOverride()} instead
-     */
-    public function removeAuthToken();
-
-    /**
      * Sets the given authentication override credentials.
      *
      * @param string $uid

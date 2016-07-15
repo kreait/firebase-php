@@ -32,7 +32,7 @@ class TokenGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testDebugFlagIsDisabledByDefault()
     {
-        $this->assertDebugFlagIsFalse($this->generator->createToken('foo', 'bar'));
+        $this->assertDebugFlagIsFalse($this->generator->createCustomToken('foo'));
     }
 
     public function testEnableDebugOnlyWorksForTheNextGeneratedToken()
@@ -41,12 +41,12 @@ class TokenGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $token = $generator
             ->enableDebug()
-            ->createToken('foo', 'bar');
+            ->createCustomToken('foo');
 
         $this->assertDebugFlagIsTrue($token);
 
         // Check that the next token has the previous setting again
-        $this->assertDebugFlagIsFalse($generator->createToken('foo', 'bar'));
+        $this->assertDebugFlagIsFalse($generator->createCustomToken('foo'));
     }
 
     public function testDisableDebugOnlyWorksForTheNextGeneratedToken()
@@ -55,12 +55,12 @@ class TokenGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $token = $generator
             ->disableDebug()
-            ->createToken('foo', 'bar');
+            ->createCustomToken('foo');
 
         $this->assertDebugFlagIsFalse($token);
 
         // Check that the next token has the previous setting again
-        $this->assertDebugFlagIsTrue($generator->createToken('foo', 'bar'));
+        $this->assertDebugFlagIsTrue($generator->createCustomToken('foo'));
     }
 
     public function testCreateAnonymousToken()
@@ -96,7 +96,7 @@ class TokenGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testInvalidCredentialsWillThrowRuntimeException()
     {
         $invalid = str_pad('', 1024, 'x');
-        $this->generator->createToken($invalid, $invalid);
+        $this->generator->createCustomToken($invalid);
     }
 
     public function testCreateCustomToken()
