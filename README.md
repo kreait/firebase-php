@@ -5,7 +5,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
 
-A PHP client for [Firebase](https://firebase.google.com) [https://firebase.google.com](https://firebase.google.com).
+A PHP client for the [Google Firebase](https://firebase.google.com) Realtime Database
 
 ---
 

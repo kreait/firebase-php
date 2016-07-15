@@ -1,6 +1,6 @@
 {
     "name": "kreait/firebase-php",
-    "description": "Firebase REST API client",
+    "description": "A PHP client for the Google Firebase Realtime Database",
     "keywords": ["firebase", "rest", "api", "http"],
     "homepage": "https://github.com/kreait/firebase-php",
     "license": "MIT",
