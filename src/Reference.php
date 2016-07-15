@@ -166,24 +166,10 @@ class Reference implements ReferenceInterface
         return count($this->data);
     }
 
-    /**
-     * Removes null values from a dataset.
-     *
-     * @param array $data The data.
-     * @return array The cleaned data.
-     */
     private function removeNullValues(array $data)
     {
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                $data[$key] = $this->removeNullValues($data[$key]);
-            }
-
-            if (null === $data[$key]) {
-                unset($data[$key]);
-            }
-        }
-
-        return $data;
+        return array_filter($data, function($value) {
+            return $value !== null;
+        });
     }
 }
