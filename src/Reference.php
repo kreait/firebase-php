@@ -174,7 +174,7 @@ class Reference implements ReferenceInterface
 
     private function removeNullValues(array $data)
     {
-        return array_filter($data, function($value) {
+        return array_filter($data, function ($value) {
             return $value !== null;
         });
     }

@@ -1,9 +1,9 @@
 # Firebase PHP Client
 
 [![Latest Stable Version](https://poser.pugx.org/kreait/firebase-php/version)](https://packagist.org/packages/kreait/firebase-php)
-[![Build Status](https://travis-ci.org/kreait/firebase-php.svg?branch=master)](https://travis-ci.org/kreait/firebase-php)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
+[![Build Status](https://travis-ci.org/kreait/firebase-php.svg?branch=1.x)](https://travis-ci.org/kreait/firebase-php)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/quality-score.png?b=1.x)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=1.x)
+[![Code Coverage](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/coverage.png?b=1.x)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=1.x)
 
 A PHP client for the [Google Firebase](https://firebase.google.com) Realtime Database
 
