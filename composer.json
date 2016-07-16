@@ -18,7 +18,7 @@
         "php": "^5.5|^7.0",
         "ext-mbstring": "*",
         "psr/log": "^1.0",
-        "egeloen/http-adapter": "^0.8.0",
+        "egeloen/http-adapter": "^0.8|^1.0",
         "mtdowling/jmespath.php": "^2.1",
         "firebase/token-generator": "^3.0",
         "google/apiclient": "^2.0"
