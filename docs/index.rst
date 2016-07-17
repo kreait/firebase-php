@@ -32,4 +32,5 @@ User Guide
    authentication
    retrieving-data
    writing-data
+   configuration
    about
