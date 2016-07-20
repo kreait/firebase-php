@@ -75,4 +75,16 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertStringEndsWith('shallow=true', (string) $this->query);
     }
+
+    public function testEqualTo()
+    {
+        $this->query->equalTo(2);
+        $this->assertStringEndsWith('equalTo=2', (string) $this->query);
+    }
+
+    public function testStringsAreWrappedWithQuotationMarks()
+    {
+        $this->query->equalTo('string');
+        $this->assertStringEndsWith('equalTo=%22string%22', (string) $this->query);
+    }
 }

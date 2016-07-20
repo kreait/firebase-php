@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.1 - 2016-07-20
+
+* Adds support for "equalTo" queries
+
+## 1.0.1 - 2016-07-16
+
+* Enables the usage of egeleon/http-adapter ^1.0 in addition to ^0.8.
+
 ## 1.0 - 2016-07-15
 
 * Removed deprecated methods and revisited the code and documentation.

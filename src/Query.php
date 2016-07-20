@@ -48,6 +48,11 @@ class Query
     private $endAt;
 
     /**
+     * @var bool|int|string
+     */
+    private $equalTo;
+
+    /**
      * Whether the query is shallow or not.
      *
      * @var bool
@@ -161,6 +166,20 @@ class Query
     }
 
     /**
+     * Return items equal to the specified key or value, depending on the order-by method chosen.
+     *
+     * @param int|string|bool $equalTo
+     *
+     * @return $this
+     */
+    public function equalTo($equalTo)
+    {
+        $this->equalTo = $equalTo;
+
+        return $this;
+    }
+
+    /**
      * Returns an array representation of this query.
      *
      * @return array
@@ -181,14 +200,23 @@ class Query
         }
 
         if ($this->startAt) {
-            $result['startAt'] = sprintf('"%s"', $this->startAt);
+            $result['startAt'] = $this->wrapValue($this->startAt);
         }
 
         if ($this->endAt) {
-            $result['endAt'] = sprintf('"%s"', $this->endAt);
+            $result['endAt'] = $this->wrapValue($this->endAt);
+        }
+
+        if ($this->equalTo) {
+            $result['equalTo'] = $this->wrapValue($this->equalTo);
         }
 
         return $result;
+    }
+
+    private function wrapValue($value)
+    {
+        return is_string($value) ? sprintf('"%s"', $value) : $value;
     }
 
     public function __toString()
