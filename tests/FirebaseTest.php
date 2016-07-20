@@ -89,6 +89,9 @@ class FirebaseTest extends IntegrationTest
 
     public function testGetWithServiceAccountAuthentication()
     {
+        if (!file_exists(__DIR__.'/google-service-account.json')) {
+            $this->markTestSkipped();
+        }
         $this->configuration->setAuthConfigFile(__DIR__.'/google-service-account.json');
 
         $data = ['key1' => 'value1', 'key2' => null];

@@ -98,6 +98,10 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAuthConfigFile()
     {
+        if (!file_exists(__DIR__ . '/google-service-account.json')) {
+            $this->markTestSkipped();
+        }
+
         $this->configuration->setAuthConfigFile(__DIR__ . '/google-service-account.json');
         $this->assertTrue($this->configuration->hasGoogleClient());
         $this->assertInstanceOf(\Google_Client::class, $this->configuration->getGoogleClient());
