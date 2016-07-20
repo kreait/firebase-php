@@ -67,4 +67,5 @@ Filtering results
     $query->limitToLast($limit);
     $query->startAt($start);
     $query->endAt($end);
+    $query->equalTo($value);
     $query->shallow();
