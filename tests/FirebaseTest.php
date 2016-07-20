@@ -164,43 +164,23 @@ class FirebaseTest extends IntegrationTest
     public function testUpdate()
     {
         $initialData = [
-            'key' => 'value',
+            'key' => [
+                'sub_key_1' => 'value',
+                'sub_key_2' => 'value',
+                'sub_key_3' => 'value',
+            ],
         ];
 
         $update = [
-            'key' => [
-                'string' => 'string',
-                'int' => 1,
-                'float' => 1.1,
-                'bool_false' => false,
-                'bool_true' => true,
-                'null' => null,
-                'subkey' => [
-                    'string' => 'string',
-                    'int' => 1,
-                    'float' => 1.1,
-                    'bool_false' => false,
-                    'bool_true' => true,
-                    'null' => null,
-                ]
-            ]
+            'key/sub_key_2' => 'new_value',
         ];
 
         $expectedResult = [
             'key' => [
-                'string' => 'string',
-                'int' => 1,
-                'float' => 1.1,
-                'bool_false' => false,
-                'bool_true' => true,
-                'subkey' => [
-                    'string' => 'string',
-                    'int' => 1,
-                    'float' => 1.1,
-                    'bool_false' => false,
-                    'bool_true' => true,
-                ]
-            ]
+                'sub_key_1' => 'value',
+                'sub_key_2' => 'new_value',
+                'sub_key_3' => 'value',
+            ],
         ];
 
         $this->recorder->insertTape(__FUNCTION__);
