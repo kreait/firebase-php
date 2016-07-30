@@ -1,0 +1,8 @@
+/build
+/vendor
+/docs/_build
+/docs/*.pyc
+
+/composer.lock
+/phpunit.xml
+/google-service-account.json

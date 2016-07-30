@@ -1,0 +1,43 @@
+{
+    "name": "kreait/firebase",
+    "description": "PHP SDK for Google Firebase",
+    "keywords": ["firebase", "google", "sdk", "api", "database"],
+    "homepage": "https://github.com/kreait/firebase-php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jérôme Gamez",
+            "homepage": "https://github.com/jeromegamez"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "ext-mbstring": "*",
+        "firebase/token-generator": "^3.0",
+        "google/auth": "^0.9.0",
+        "guzzlehttp/guzzle": "^6.2.1",
+        "mtdowling/jmespath.php": "^2.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Firebase\\": "src/Firebase"
+        },
+        "files": [
+            "src/Firebase.php"
+        ]
+    },
+    "config": {
+        "platform": {
+            "php": "7.0"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-1.0": "1.x-dev",
+            "dev-master": "2.x-dev"
+        }
+    }
+}

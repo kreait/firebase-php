@@ -1,0 +1,12 @@
+{
+    "type": "service_account",
+    "project_id": "project",
+    "private_key_id": "private_key_id",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nsome gibberish\n-----END PRIVATE KEY-----\n",
+    "client_email": "client@email.tld",
+    "client_id": "1234567890",
+    "auth_uri": "https://some.google.tld/o/oauth2/auth",
+    "token_uri": "https://some.google.tld/o/oauth2/token",
+    "auth_provider_x509_cert_url": "https://some.google.tld/oauth2/v1/certs",
+    "client_x509_cert_url": "https://some.google.tld/robot/v1/metadata/x509/master%40kreait-firebase-php.iam.gserviceaccount.com"
+}
