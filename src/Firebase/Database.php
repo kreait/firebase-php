@@ -8,7 +8,6 @@ use Firebase\Exception\InvalidArgumentException;
 use Firebase\Exception\OutOfRangeException;
 use Firebase\Http\Auth;
 use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\UriInterface;
 
 /**
