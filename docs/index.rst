@@ -4,17 +4,6 @@
 Firebase PHP SDK Documentation
 ##############################
 
-.. image:: https://poser.pugx.org/kreait/firebase-php/v/stable
-   :target: https://packagist.org/packages/kreait/firebase-php
-.. image:: https://poser.pugx.org/kreait/firebase-php/downloads
-   :target: https://packagist.org/packages/kreait/firebase-php
-.. image:: https://travis-ci.org/kreait/firebase-php.svg?branch=master
-   :target: https://travis-ci.org/kreait/firebase-php
-.. image:: https://scrutinizer-ci.com/g/kreait/firebase-php/badges/quality-score.png?b=master
-   :target: https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master
-.. image:: https://scrutinizer-ci.com/g/kreait/firebase-php/badges/coverage.png?b=master
-   :target: https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master
-
 This SDK makes it easy to interact with `Google Firebase <https://firebase.google.com>`_
 applications.
 
