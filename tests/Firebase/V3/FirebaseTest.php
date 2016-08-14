@@ -53,6 +53,5 @@ class FirebaseTest extends FirebaseTestCase
         $firebase = $this->firebase->asUserWithClaims('uid');
         $this->assertInstanceOf(Firebase::class, $firebase);
         $this->assertNotSame($this->firebase, $firebase);
-
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Firebase\Database\Query\Sorter;
 
 use Firebase\Database\Query\Sorter\OrderByChild;

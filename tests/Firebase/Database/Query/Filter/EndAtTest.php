@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Firebase\Database\Query\Filter;
-
 
 use Firebase\Database\Query\Filter\EndAt;
 use Firebase\Exception\InvalidArgumentException;
@@ -18,7 +16,7 @@ class EndAtTest extends FirebaseTestCase
         new EndAt(null);
     }
 
-    function testModifyUri()
+    public function testModifyUri()
     {
         $filter = new EndAt('value');
 

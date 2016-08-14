@@ -1,10 +1,7 @@
 <?php
 
-
 namespace Tests\Firebase\Database\Query\Sorter;
 
-use Firebase\Database\Query\Sorter\OrderByChild;
-use Firebase\Database\Query\Sorter\OrderByKey;
 use Firebase\Database\Query\Sorter\OrderByValue;
 use GuzzleHttp\Psr7\Uri;
 use Tests\FirebaseTestCase;

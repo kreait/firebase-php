@@ -20,7 +20,7 @@ final class CustomToken implements Auth
             return $value !== null;
         });
 
-        $claims = array_filter(['uid' => $uid] + $claims, function($value) {
+        $claims = array_filter(['uid' => $uid] + $claims, function ($value) {
             return $value !== null;
         });
 

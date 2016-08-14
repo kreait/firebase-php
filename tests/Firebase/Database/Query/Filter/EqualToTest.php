@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Firebase\Database\Query\Filter;
-
 
 use Firebase\Database\Query\Filter\EqualTo;
 use Firebase\Exception\InvalidArgumentException;
@@ -18,7 +16,7 @@ class EqualToTest extends FirebaseTestCase
         new EqualTo(new \stdClass);
     }
 
-    function testModifyUri()
+    public function testModifyUri()
     {
         $filter = new EqualTo('value');
 

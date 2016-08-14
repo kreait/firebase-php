@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Firebase\Database\Query\Filter;
-
 
 use Firebase\Database\Query\Filter\StartAt;
 use Firebase\Exception\InvalidArgumentException;
@@ -18,7 +16,7 @@ class StartAtTest extends FirebaseTestCase
         new StartAt(null);
     }
 
-    function testModifyUri()
+    public function testModifyUri()
     {
         $filter = new StartAt('value');
 

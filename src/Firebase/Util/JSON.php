@@ -58,5 +58,4 @@ class JSON
 
         return $data;
     }
-
 }

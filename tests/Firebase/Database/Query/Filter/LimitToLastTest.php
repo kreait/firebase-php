@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Firebase\Database\Query\Filter;
-
 
 use Firebase\Database\Query\Filter\LimitToLast;
 use Firebase\Exception\InvalidArgumentException;
@@ -18,7 +16,7 @@ class LimitToLastTest extends FirebaseTestCase
         new LimitToLast(0);
     }
 
-    function testModifyUri()
+    public function testModifyUri()
     {
         $filter = new LimitToLast(3);
 

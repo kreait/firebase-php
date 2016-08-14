@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Firebase\Exception;
 
 use Firebase\Database\Query;
@@ -48,5 +47,4 @@ class QueryExceptionTest extends FirebaseTestCase
 
         $this->assertNotSame($apiException->getMessage(), $e->getMessage());
     }
-
 }

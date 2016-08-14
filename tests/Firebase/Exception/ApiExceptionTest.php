@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Firebase\Exception;
-
 
 use Firebase\Exception\ApiException;
 use Tests\FirebaseTestCase;

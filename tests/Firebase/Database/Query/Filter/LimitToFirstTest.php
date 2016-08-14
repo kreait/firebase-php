@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Firebase\Database\Query\Filter;
-
 
 use Firebase\Database\Query\Filter\LimitToFirst;
 use Firebase\Exception\InvalidArgumentException;
@@ -18,7 +16,7 @@ class LimitToFirstTest extends FirebaseTestCase
         new LimitToFirst(0);
     }
 
-    function testModifyUri()
+    public function testModifyUri()
     {
         $filter = new LimitToFirst(3);
 

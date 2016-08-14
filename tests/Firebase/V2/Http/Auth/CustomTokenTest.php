@@ -3,8 +3,8 @@
 namespace Tests\Firebase\V2\Http\Auth;
 
 use Firebase\V2\Http\Auth\CustomToken;
-use Tests\FirebaseTestCase;
 use GuzzleHttp\Psr7;
+use Tests\FirebaseTestCase;
 
 class CustomTokenTest extends FirebaseTestCase
 {
