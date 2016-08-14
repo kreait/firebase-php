@@ -1,5 +1,43 @@
 # CHANGELOG
 
+## Unreleased
+
+* Adds documentation for Version 2.x at http://firebase-php.readthedocs.io/
+
+## 2.0.0-beta1 - 2016-08-14
+
+* Rewrite, beta status due to missing documentation for the new version.
+
+## 1.1 - 2016-07-20
+
+* Adds support for "equalTo" queries
+
+## 1.0.1 - 2016-07-16
+
+* Enables the usage of egeleon/http-adapter ^1.0 in addition to ^0.8.
+
+## 1.0 - 2016-07-15
+
+* Removed deprecated methods and revisited the code and documentation.
+
+## 0.10.2 - 2016-07-15
+
+* Added support for authentication overrides when using a Google Service account
+* It is now easier to override authentication credentials through
+  `$firebase->setAuthOverride($uid, array $claims = [])`.
+  * There's no need to create and set the needed custom tokens yourself.
+  * The new method works regardless of whether you use a database secret or
+    a Google Service Account for the basic authentication.
+* Updated authentication docs
+* Added methods:
+  * `Firebase::setAuthOverride(string $uid, array $claims = [])`
+  * `Firebase::removeAuthOverride()`
+* Deprecated methods:
+  * `Firebase::setAuthToken()`
+  * `Firebase::getAuthToken()`
+  * `Firebase::hasAuthToken()`
+  * `Firebase::removeAuthToken()`
+
 ## 0.10.1 - 2016-07-03
 
 * Added support for authentication with a Google Service account
