@@ -34,7 +34,7 @@ You can add the Firebase SDK as a dependency using the composer.phar CLI:
 
 .. code-block:: bash
 
-    php composer.phar require require kreait/firebase-php ^2.0@beta
+    php composer.phar require kreait/firebase-php ^2.0@beta
 
 .. note::
     The ``@beta`` version constraint is only needed until the documentation is
