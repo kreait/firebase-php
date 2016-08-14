@@ -1,0 +1,25 @@
+language: php
+
+before_install:
+  - composer config --global github-oauth.github.com $github_oauth_token
+  - travis_retry composer self-update
+
+install: travis_retry composer install
+
+php:
+  - 7.0
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+script:
+  - vendor/bin/phpunit --coverage-clover build/coverage.clover
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover
+
+notifications:
+  email:
+    - secure: "iiseqb4k4ckQkMJnZ6Tq3YP5ilTZE4CkVgarsBpPOn+c820nP9QokGpz82D4CTGy/UB1+DfCiFH9YAFrhLP5/9Go1CHP+wYkuz9W+E8q/rm9/nBO0xutoQhOfV3MxMid69E8i4QjODq3w5mOUrmpj/8gl2FyBU1Ro1xgPSYNEQ4="
