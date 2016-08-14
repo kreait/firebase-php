@@ -79,7 +79,7 @@ class Snapshot
      *
      * @return Snapshot
      */
-    public function getChild(string $path): self
+    public function getChild(string $path): Snapshot
     {
         $path = trim($path, '/');
         $expression = str_replace('/', '.', $path);

@@ -67,12 +67,12 @@ class Firebase
         return $this->database;
     }
 
-    public function asUserWithClaims(string $uid, array $claims = []): self
+    public function asUserWithClaims(string $uid, array $claims = []): Firebase
     {
         return $this->withCustomAuth(new CustomToken($uid, $claims));
     }
 
-    private function withCustomAuth(Auth $override): self
+    private function withCustomAuth(Auth $override): Firebase
     {
         $firebase = new self($this->serviceAccount, $this->databaseUri);
         $firebase->database = $this->getDatabase()->withCustomAuth($override);

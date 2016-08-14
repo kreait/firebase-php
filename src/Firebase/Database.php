@@ -48,7 +48,7 @@ class Database
      *
      * @return Database
      */
-    public function withCustomAuth(Auth $auth): self
+    public function withCustomAuth(Auth $auth): Database
     {
         return new self($this->uri, $this->client->withCustomAuth($auth));
     }

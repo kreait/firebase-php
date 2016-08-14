@@ -42,7 +42,7 @@ class Firebase
         $this->auth = $auth;
     }
 
-    public static function fromDatabaseUriAndSecret($databaseUri, string $secret): self
+    public static function fromDatabaseUriAndSecret($databaseUri, string $secret): Firebase
     {
         $auth = new AdminToken($secret);
 
@@ -58,12 +58,12 @@ class Firebase
         return $this->database;
     }
 
-    public function asUserWithClaims(string $uid, array $claims = []): self
+    public function asUserWithClaims(string $uid, array $claims = []): Firebase
     {
         return $this->withCustomAuth(new CustomToken($this->secret, $uid, $claims));
     }
 
-    private function withCustomAuth(Auth $override): self
+    private function withCustomAuth(Auth $override): Firebase
     {
         return new self($this->databaseUri, $this->secret, $override);
     }
