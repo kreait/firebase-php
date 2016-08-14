@@ -136,18 +136,6 @@ class ApiClientTest extends FirebaseTestCase
         $client->remove($this->targetUrl);
     }
 
-    public function testApiExceptionWithDebugMessage()
-    {
-        $client = $this->createApiClientForClientExceptionTesting();
-
-        try {
-            $client->remove($this->targetUrl);
-        } catch (ApiException $e) {
-            $this->assertTrue($e->hasDebugMessage());
-            $this->assertSame('some debug message', $e->getDebugMessage());
-        }
-    }
-
     private function createApiClient(ResponseInterface $response = null)
     {
         $client = $this->createMock(ClientInterface::class);

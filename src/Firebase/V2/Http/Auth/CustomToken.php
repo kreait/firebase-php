@@ -20,12 +20,9 @@ final class CustomToken implements Auth
             return $value !== null;
         });
 
-        $options = ['debug' => true];
-
         $claims = ['uid' => $uid] + $claims;
 
         $this->token = (new TokenGenerator($databaseSecret))
-            ->setOptions($options)
             ->setData($claims)
             ->create();
     }

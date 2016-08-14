@@ -16,7 +16,7 @@ class AdminToken implements Auth
 
     public function __construct(string $databaseSecret)
     {
-        $options = ['admin' => true, 'debug' => true];
+        $options = ['admin' => true];
 
         $this->token = (new TokenGenerator($databaseSecret))
             ->setOptions($options)

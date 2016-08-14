@@ -100,28 +100,32 @@ class ApiClient
      *
      * @throws ApiException
      */
-    protected function handleThrowable(\Throwable $e)
+    private function handleThrowable(\Throwable $e)
     {
-        $errorMessage = $e->getMessage();
-        $debugMessage = null;
+        if ($e instanceof ClientException) {
+            $this->handleClientException($e);
+        }
 
-        if ($e instanceof ClientException && $e->hasResponse()) {
+        throw new ApiException($e->getMessage(), $e->getCode(), $e);
+    }
+
+    /**
+     * @param ClientException $e
+     *
+     * @throws ApiException
+     */
+    private function handleClientException(ClientException $e)
+    {
+        $message = $e->getMessage();
+
+        if ($e->hasResponse()) {
             $response = $e->getResponse();
 
             if ($apiError = JSON::decode((string) $response->getBody(), true)['error'] ?? null) {
-                $errorMessage = $apiError;
-            }
-
-            if ($response->hasHeader('X-Firebase-Auth-Debug')) { // Currently only with the V2 Client
-                $debugMessage = $response->getHeaderLine('X-Firebase-Auth-Debug');
+                $message = $apiError;
             }
         }
 
-        $apiException = new ApiException($errorMessage, $e->getCode(), $e);
-        if ($debugMessage) {
-            $apiException->setDebugMessage($debugMessage);
-        }
-
-        throw $apiException;
+        throw new ApiException($message, $e->getCode(), $e);
     }
 }
