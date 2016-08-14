@@ -60,8 +60,6 @@ class Database
      *
      * @param string $path
      *
-     * @throws InvalidArgumentException if the path is invalid
-     *
      * @return Reference
      */
     public function getReference(string $path = ''): Reference
