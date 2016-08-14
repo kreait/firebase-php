@@ -1,15 +1,20 @@
 # Firebase PHP SDK
 
-A PHP SDK for [Google Firebase](https://firebase.google.com)
+[![Latest Stable Version](https://poser.pugx.org/kreait/firebase-php/v/stable)](https://packagist.org/packages/kreait/firebase-php)
+[![Total Downloads](https://poser.pugx.org/kreait/firebase-php/downloads)](https://packagist.org/packages/kreait/firebase-php)
+[![Latest Unstable Version](https://poser.pugx.org/kreait/firebase-php/v/unstable)](https://packagist.org/packages/kreait/firebase-php)
+[![Build Status](https://travis-ci.org/kreait/firebase-php.svg?branch=master)](https://travis-ci.org/kreait/firebase-php)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
 
----
-
-This SDK leverages the Firebase REST API and provides a fluent interface to your Firebase
-Application, similar to the [Web SDK](https://firebase.google.com/docs/database/web/start).
+This SDK provides a fluent interface to your [Google Firebase](https://firebase.google.com) Application.
 
 It supports Firebase V3 (authentication with a Google Service account) as
 well as V2 (authentication with a database secret) and removes some limitations of the 
 REST API, e.g. correct ordering of returned results.
+
+Starting with version 2.0, this SDK requires PHP 7 - for PHP 5.5/5.6 support, please use
+[Version 1.x](http://firebase-php.readthedocs.io/en/1.x/).
 
 ## Quickstart
 
