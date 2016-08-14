@@ -24,7 +24,7 @@ class Database
     private $client;
 
     /**
-     * @var Uri
+     * @var UriInterface
      */
     private $uri;
 
