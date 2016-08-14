@@ -5,8 +5,6 @@ use Firebase\V3;
 
 /**
  * Convenience class to comfortably create new Firebase instances.
- *
- * @codeCoverageIgnore
  */
 final class Firebase
 {
