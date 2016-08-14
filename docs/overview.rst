@@ -2,28 +2,54 @@
 Overview
 ########
 
-.. _requirements:
-
 ************
 Requirements
 ************
 
-#. PHP 7.0
-#. A Firebase Project at `<https://firebase.google.com>`_
-#. A Google Service Account JSON config file
-
-.. _installation:
+* PHP >= 7.0
+* The `mbstring PHP extension <http://php.net/manual/en/book.mbstring.php>`_
+* A Firebase project - create a new project in the `Firebase console <https://firebase.google.com/console/>`_,
+  if you don't already have one.
+* A Google service account, follow the instructions in the
+  `official Firebase Server documentation <https://firebase.google.com/docs/server/setup#add_firebase_to_your_app>`_
+  and place the JSON configuration file somewhere in your project's path.
 
 ************
 Installation
 ************
 
-The recommended way to install the Firebase PHP SDK is with
-`Composer <http://getcomposer.org>`_.
+The recommended way to install the Firebase SDK is with
+`Composer <http://getcomposer.org>`_. Composer is a dependency management tool
+for PHP that allows you to declare the dependencies your project needs and
+installs them into your project.
 
 .. code-block:: bash
 
-    composer require kreait/firebase-php
+    # Install Composer
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    php composer-setup.php
+    php -r "unlink('composer-setup.php');"
+
+You can add the Firebase SDK as a dependency using the composer.phar CLI:
+
+.. code-block:: bash
+
+    php composer.phar require require kreait/firebase-php ^2.0@beta
+
+.. note::
+    The ``@beta`` version constraint is only needed until the documentation is
+    finished.
+
+Alternatively, you can specify the Firebase SDK as a dependency in your
+project's existing composer.json file:
+
+.. code-block:: js
+
+    {
+      "require": {
+         "kreait/firebase-php": "^2.0@beta"
+      }
+   }
 
 After installing, you need to require Composer's autoloader:
 
@@ -32,9 +58,8 @@ After installing, you need to require Composer's autoloader:
     require 'vendor/autoload.php';
 
 You can find out more on how to install Composer, configure autoloading, and
-other best-practices for defining dependencies at `getcomposer.org <http://getcomposer.org>`_.
-
-.. _license:
+other best-practices for defining dependencies at
+`getcomposer.org <http://getcomposer.org>`_.
 
 *******
 License
@@ -42,7 +67,7 @@ License
 
 Licensed using the `MIT license <http://opensource.org/licenses/MIT>`_.
 
-    Copyright (c) 2016 Jérôme Gamez <https://github.com/jeromegamez>
+    Copyright (c) 2016 Jérôme Gamez <https://github.com/jeromegamez> <jerome@gamez.name>
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -62,14 +87,48 @@ Licensed using the `MIT license <http://opensource.org/licenses/MIT>`_.
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 
-.. acknowledgments:
+************
+Contributing
+************
 
-***************
-Acknowledgments
-***************
+Guidelines
+==========
 
-- This library would not be possible without the continuous support of
-  `kreait <http://www.kreait.com>`_, the company I work for.
-  Give us a shout on `Twitter <https://www.twitter.com/kreait>`_, or
-  join us at `jobs.kreait.com <http://jobs.kreait.com/en>`_!
+#. The SDK utilizes PSR-1, PSR-2, PSR-4, and PSR-7.
+#. This SDK has a minimum PHP version requirement of PHP 7.0. Pull requests must
+   not require a PHP version greater than PHP 7.0 unless the feature is only
+   utilized conditionally.
+#. All pull requests must include unit tests to ensure the change works as
+   expected and to prevent regressions.
 
+Running the tests
+=================
+
+The SDK is unit tested with PHPUnit. Run the tests using the Makefile:
+
+.. code-block:: bash
+
+    make tests
+
+Coding standards
+================
+
+The SDK uses the `PHP Coding Standars Fixer <https://github.com/FriendsOfPHP/PHP-CS-Fixer>`_
+to ensure a uniform coding style. Apply coding standard fixed using the Makefile:
+
+.. code-block:: bash
+
+    make cs
+
+from the root of the project.
+
+
+
+****************
+Acknowledgements
+****************
+
+* The structure and wording of this documentation is loosely based on the
+  official Firebase documentation at `<https://firebase.google.com/docs/>`_.
+* The index and overview page are adapted from
+  `Guzzle's documentation <http://guzzle.readthedocs.io/en/latest/>`_.

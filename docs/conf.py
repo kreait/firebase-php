@@ -16,6 +16,8 @@ html_short_title = u'Firebase PHP SDK'
 exclude_patterns = ['_build']
 html_static_path = ['_static']
 
+suppress_warnings = ['image.nonlocal_uri']
+
 ### Theme settings
 import sphinx_rtd_theme
 
@@ -36,7 +38,7 @@ html_context = {
   "display_github": True,
   "github_user": "kreait",
   "github_repo": "firebase-php",
-  "github_version": "2.x",
+  "github_version": "master",
   "conf_py_path": "/docs/",
   "source_suffix": ".rst",
 }

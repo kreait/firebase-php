@@ -1,31 +1,54 @@
-.. title:: Firebase PHP
+.. title:: Firebase PHP SDK
 
-#################
-Firebase PHP SDK
-#################
+##############################
+Firebase PHP SDK Documentation
+##############################
 
-The Firebase PHP SDK makes it easy to work with Google
-Firebase Realtime Databases and Storages.
+.. image:: https://poser.pugx.org/kreait/firebase-php/v/stable
+   :target: https://packagist.org/packages/kreait/firebase-php
+.. image:: https://poser.pugx.org/kreait/firebase-php/downloads
+   :target: https://packagist.org/packages/kreait/firebase-php
+.. image:: https://travis-ci.org/kreait/firebase-php.svg?branch=master
+   :target: https://travis-ci.org/kreait/firebase-php
+.. image:: https://scrutinizer-ci.com/g/kreait/firebase-php/badges/quality-score.png?b=master
+   :target: https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master
+.. image:: https://scrutinizer-ci.com/g/kreait/firebase-php/badges/coverage.png?b=master
+   :target: https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master
+
+This SDK makes it easy to interact with `Google Firebase <https://firebase.google.com>`_
+applications.
+
+- Simple and fluent interface to work with References, Querys and Data snapshots
+- Abstracts away the underlying communication with the Firebase REST API
+- Uses official Google libraries where possible
+- Supports authentication with a Google service account (V3) or a database secret (V2)
+- Removes limitations of the REST API (e.g.
+  `sorted results <https://firebase.google.com/docs/database/rest/retrieve-data#section-rest-ordered-data>`_)
 
 .. code-block:: php
 
-    use Kreait\Firebase;
+    $firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json');
 
-    $firebase = Firebase::create(__DIR__.'/google-service-account.json');
+    $database = $firebase->getDatabase();
 
-    $db = $firebase->getDatabase();
+    $root = $database->getReference('/');
 
-    try {
-        $db->set('blog', ['title' => 'My blog']);
-        $id = $db->push('blog/posts', ['title' => 'My first post']);
-        $db->update('blog/posts/'.$id, ['tags' => ['first', 'post']]);
+    $completeSnapshot = $root->getSnapshot();
 
-        echo $db->get('blog');
+    $root->getChild('users')->push([
+        'username' => uniqid('user', true),
+        'email' => uniqid('email', true).'@domain.tld'
+    ]);
 
-        $db->delete('blog');
-    } catch (Firebase\Exception\Database $e) {
-        echo $e->getMessage();
-    }
+    $users = $database->getReference('users');
+
+    $sortedUsers = $users
+        ->orderByChild('username', SORT_DESC)
+        ->limitToFirst(10)
+        ->getValue(); // shortcut for ->getSnapshot()->getValue()
+
+    $users->remove();
+
 
 **********
 User Guide
@@ -35,6 +58,3 @@ User Guide
    :maxdepth: 2
 
    overview
-   quickstart
-   realtime-database
-   storage
