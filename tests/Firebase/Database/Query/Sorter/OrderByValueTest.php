@@ -84,10 +84,10 @@ class OrderByValueTest extends FirebaseTestCase
             ],
             'array' => [
                 'expected' => [
-                    'third' => 4,
-                    'fourth' => 3,
-                    'first' => 2,
-                    'second' => 1,
+                    'second' => 4,
+                    'first' => 3,
+                    'fourth' => 2,
+                    'third' => 1,
                 ],
                 'given' => [
                     'first' => 3,
