@@ -7,12 +7,11 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
 
-This SDK makes it easy to interact with `Google Firebase <https://firebase.google.com>`_
+This SDK makes it easy to interact with [Google Firebase](https://firebase.google.com>)
 applications.
 
 - Simple and fluent interface to work with References, Querys and Data snapshots
 - Abstracts away the underlying communication with the Firebase REST API
-- Uses official Google libraries where possible
 - Supports authentication with a Google service account (V3) or a database secret (V2)
 - Removes limitations of the REST API (e.g.
   [sorted results](https://firebase.google.com/docs/database/rest/retrieve-data#section-rest-ordered-data))

@@ -9,7 +9,6 @@ applications.
 
 - Simple and fluent interface to work with References, Querys and Data snapshots
 - Abstracts away the underlying communication with the Firebase REST API
-- Uses official Google libraries where possible
 - Supports authentication with a Google service account (V3) or a database secret (V2)
 - Removes limitations of the REST API (e.g.
   `sorted results <https://firebase.google.com/docs/database/rest/retrieve-data#section-rest-ordered-data>`_)
