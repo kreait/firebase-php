@@ -20,9 +20,7 @@ final class CustomToken implements Auth
             return $value !== null;
         });
 
-        $claims = array_filter(['uid' => $uid] + $claims, function ($value) {
-            return $value !== null;
-        });
+        $claims = ['uid' => $uid] + $claims;
 
         $this->token = JSON::encode($claims);
     }
