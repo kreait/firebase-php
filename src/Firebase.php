@@ -1,18 +1,41 @@
 <?php
 
+use Firebase\Exception\InvalidArgumentException;
+use Firebase\ServiceAccount;
 use Firebase\V2;
 use Firebase\V3;
+use Psr\Http\Message\UriInterface;
 
 /**
  * Convenience class to comfortably create new Firebase instances.
  */
 final class Firebase
 {
-    public static function fromServiceAccount($serviceAccount): V3\Firebase
+    /**
+     * Creates a new Firebase V3 instance.
+     *
+     * @param string|ServiceAccount $serviceAccount Path to service account JSON config or a ServiceAccount instance
+     * @param string|UriInterface|null $databaseUri Database URI
+     *
+     * @throws InvalidArgumentException
+     *
+     * @return V3\Firebase
+     */
+    public static function fromServiceAccount($serviceAccount, $databaseUri = null): V3\Firebase
     {
-        return V3\Firebase::fromServiceAccount($serviceAccount);
+        return V3\Firebase::fromServiceAccount($serviceAccount, $databaseUri);
     }
 
+    /**
+     * Creates a new Firebase V2 instance.
+     *
+     * @param string|UriInterface $databaseUri Database URI as a string or an instance of UriInterface
+     * @param string $secret
+     *
+     * @throws InvalidArgumentException
+     *
+     * @return V2\Firebase
+     */
     public static function fromDatabaseUriAndSecret($databaseUri, string $secret): V2\Firebase
     {
         return V2\Firebase::fromDatabaseUriAndSecret($databaseUri, $secret);
