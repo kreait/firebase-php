@@ -1,6 +1,5 @@
 <?php
 
-use Firebase\Exception\InvalidArgumentException;
 use Firebase\ServiceAccount;
 use Firebase\V2;
 use Firebase\V3;
@@ -17,7 +16,7 @@ final class Firebase
      * @param string|ServiceAccount $serviceAccount Path to service account JSON config or a ServiceAccount instance
      * @param string|UriInterface|null $databaseUri Database URI
      *
-     * @throws InvalidArgumentException
+     * @throws \Firebase\Exception\InvalidArgumentException
      *
      * @return V3\Firebase
      */
@@ -32,7 +31,7 @@ final class Firebase
      * @param string|UriInterface $databaseUri Database URI as a string or an instance of UriInterface
      * @param string $secret
      *
-     * @throws InvalidArgumentException
+     * @throws \Firebase\Exception\InvalidArgumentException
      *
      * @return V2\Firebase
      */
