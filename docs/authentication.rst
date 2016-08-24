@@ -113,7 +113,7 @@ a user id as the first parameter, and an optional array with claims as the secon
         'premium-user' => true
     ]);
 
-If you want to be more explicit, you can also only override the authentication on a database connection:
+If you want to be more explicit, you can also override the authentication just on a database connection:
 
 .. code-block:: php
 
@@ -126,8 +126,8 @@ If you want to be more explicit, you can also only override the authentication o
 
 .. note::
     Under the hood, the SDK creates a
-    `**Custom Token** <https://firebase.google.com/docs/auth/server/create-custom-tokens>`_ and uses to apply
+    `Custom Token <https://firebase.google.com/docs/auth/server/create-custom-tokens>`_ and uses to apply
     the `Security rules <https://firebase.google.com/docs/database/security/>`_ to the connection.
 
-    Custom Tokens are different depending on whether you authenticate with a Google Service Account or a
-    database secret.
+    Authentication overrides are performed differently, depending on whether you authenticate with a
+    Google Service Account or a database secret.
