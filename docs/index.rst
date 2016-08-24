@@ -43,8 +43,9 @@ User Guide
 **********
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   overview
-   authentication
+    overview
+    authentication
+    realtime-database
 
