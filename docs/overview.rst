@@ -78,7 +78,7 @@ The following planned features are not in a particular order:
 - Support for listening to the
   `Firebase event stream <https://firebase.google.com/docs/reference/rest/database/#section-streaming>`_
 - PHP Object Serialization and Deserialization
-- …
+- Use parallel requests where possible to speed up operations
 
 *******
 License
