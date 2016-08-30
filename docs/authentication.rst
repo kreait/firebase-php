@@ -100,9 +100,7 @@ You can create and retrieve Database secrets when you navigation to **Project Se
 Authentication overrides (a.k.a. Custom Tokens)
 ***********************************************
 
-Unlike the `official SDKs, which provide multiple ways to authenticate users with your Firebase project <https://firebase.google.com/docs/auth/web/manage-users>`_,
-applications based on 3rd party SDKs have to authenticate users manually. After making sure that a user is
-indeed authenticated, you can impersonate them through the the ``asUserWithClaims()`` method, which requires
+You can impersonate users of your Firebase application through the the ``asUserWithClaims()`` method, which requires
 a user id as the first parameter, and an optional array with claims as the second.
 
 .. code-block:: php
