@@ -61,24 +61,6 @@ You can find out more on how to install Composer, configure autoloading, and
 other best-practices for defining dependencies at
 `getcomposer.org <http://getcomposer.org>`_.
 
-**************************
-Featureset and Performance
-**************************
-
-As every 3rd party Firebase library, the PHP SDK relies on the Firebase REST API and the features it provides. This
-means that some features available in the official Web/iOS/Android SDKs can not be implemented or only by using
-workarounds. As an example, `Firebase Storage <https://firebase.google.com/docs/storage/>`_ is documented to be
-accessible via the official SDKs only, but as it is backed by Google Cloud Storage, it can still be supported through
-this SDK (in an upcoming release).
-
-Also, the official SDKs are using `WebSockets <https://en.wikipedia.org/wiki/WebSocket>`_ for the communication
-between an application and the Firebase servers, which is a huge advantage latency- and performancewise. As an example,
-multiple actions on a Realtime Database can be performed within one open connection, whereas an SDK based on the
-REST API has to perform as many HTTP requests as actions.
-
-Of course, the goal is to get this PHP SDK as close as possible to the experience of the official SDKs. The Firebase
-platform is continuously developed, and this PHP SDK is actively maintained with many planned
-
 *******
 Roadmap
 *******
