@@ -17,28 +17,54 @@ class ServiceAccount
         return $this->projectId;
     }
 
-    /**
-     * @return string
-     */
+    public function withProjectId(string $value): ServiceAccount
+    {
+        $serviceAccount = clone $this;
+        $serviceAccount->projectId = $value;
+
+        return $serviceAccount;
+    }
+
     public function getClientId(): string
     {
         return $this->clientId;
     }
 
-    /**
-     * @return string
-     */
+    public function withClientId(string $value): ServiceAccount
+    {
+        $serviceAccount = clone $this;
+        $serviceAccount->clientId = $value;
+
+        return $serviceAccount;
+    }
+
     public function getClientEmail(): string
     {
         return $this->clientEmail;
     }
 
-    /**
-     * @return string
-     */
+    public function withClientEmail(string $value): ServiceAccount
+    {
+        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidArgumentException(sprintf('"%s" is not a valid email.', $value));
+        }
+        $serviceAccount = clone $this;
+        $serviceAccount->clientEmail = $value;
+
+        return $serviceAccount;
+    }
+
     public function getPrivateKey(): string
     {
         return $this->privateKey;
+    }
+
+    public function withPrivateKey(string $value): ServiceAccount
+    {
+        $serviceAccount = clone $this;
+        $serviceAccount->privateKey = $value;
+
+        return $serviceAccount;
     }
 
     /**
@@ -71,13 +97,12 @@ class ServiceAccount
             throw new InvalidArgumentException('Missing/empty values in Service Account Config.');
         }
 
-        $account = new self();
-        $account->projectId = $config['project_id'];
-        $account->clientId = $config['client_id'];
-        $account->clientEmail = $config['client_email'];
-        $account->privateKey = $config['private_key'];
-
-        return $account;
+        return (new self())
+            ->withProjectId($config['project_id'])
+            ->withClientId($config['client_id'])
+            ->withClientEmail($config['client_email'])
+            ->withPrivateKey($config['private_key'])
+        ;
     }
 
     private static function fromJson(string $json): ServiceAccount

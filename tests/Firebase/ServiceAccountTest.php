@@ -78,4 +78,11 @@ class ServiceAccountTest extends FirebaseTestCase
         $this->expectException(InvalidArgumentException::class);
         ServiceAccount::fromValue(false);
     }
+
+    public function testCreateWithInvalidClientEmail()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        (new ServiceAccount())->withClientEmail('foo');
+    }
 }
