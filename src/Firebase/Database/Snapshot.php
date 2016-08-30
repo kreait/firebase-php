@@ -121,7 +121,7 @@ class Snapshot
     }
 
     /**
-     * Returns true if the Snapshot child properties.
+     * Returns true if the Snapshot has any child properties.
      *
      * You can use {@see hasChildren()} to determine if a Snappshot has any children. If it does,
      * you can enumerate them using foreach(). If it does not, then either this snapshot
@@ -138,7 +138,7 @@ class Snapshot
     }
 
     /**
-     * Return the number of child properties of this Snapshot.
+     * Returns the number of child properties of this Snapshot.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#numChildren
      *
@@ -149,6 +149,11 @@ class Snapshot
         return is_array($this->value) ? count($this->value) : 0;
     }
 
+    /**
+     * Returns the data contained in this Snapshot.
+     *
+     * @return mixed
+     */
     public function getValue()
     {
         return $this->value;
