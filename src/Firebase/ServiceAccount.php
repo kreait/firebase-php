@@ -101,8 +101,7 @@ class ServiceAccount
             ->withProjectId($config['project_id'])
             ->withClientId($config['client_id'])
             ->withClientEmail($config['client_email'])
-            ->withPrivateKey($config['private_key'])
-        ;
+            ->withPrivateKey($config['private_key']);
     }
 
     private static function fromJson(string $json): ServiceAccount
