@@ -8,8 +8,11 @@ before_install:
 
 install: travis_retry composer install
 
-php:
-  - 7.0
+matrix:
+  fast_finish: true
+  include:
+    - php: 7.0
+    - php: 7.1
 
 cache:
   directories:
