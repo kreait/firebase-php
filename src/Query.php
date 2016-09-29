@@ -199,15 +199,15 @@ class Query
             $result[$this->limitTo[0]] = $this->limitTo[1];
         }
 
-        if ($this->startAt) {
+        if ($this->startAt !== null) {
             $result['startAt'] = $this->wrapValue($this->startAt);
         }
 
-        if ($this->endAt) {
+        if ($this->endAt !== null) {
             $result['endAt'] = $this->wrapValue($this->endAt);
         }
 
-        if ($this->equalTo) {
+        if ($this->equalTo !== null) {
             $result['equalTo'] = $this->wrapValue($this->equalTo);
         }
 
@@ -216,6 +216,10 @@ class Query
 
     private function wrapValue($value)
     {
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
         return is_string($value) ? sprintf('"%s"', $value) : $value;
     }
 

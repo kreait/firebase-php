@@ -27,12 +27,16 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertStringEndsWith('startAt=%22foo%22', (string) $this->query->startAt('foo'));
         $this->assertStringEndsWith('startAt=%22White%20Space%22', (string) $this->query->startAt('White Space'));
+        $this->assertStringEndsWith('startAt=true', (string) $this->query->startAt(true));
+        $this->assertStringEndsWith('startAt=false', (string) $this->query->startAt(false));
     }
 
     public function testEndAt()
     {
         $this->assertStringEndsWith('endAt=%22foo%22', (string) $this->query->endAt('foo'));
         $this->assertStringEndsWith('endAt=%22White%20Space%22', (string) $this->query->endAt('White Space'));
+        $this->assertStringEndsWith('endAt=true', (string) $this->query->endAt(true));
+        $this->assertStringEndsWith('endAt=false', (string) $this->query->endAt(false));
     }
 
     public function testOrderBy()
@@ -78,8 +82,11 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 
     public function testEqualTo()
     {
-        $this->query->equalTo(2);
-        $this->assertStringEndsWith('equalTo=2', (string) $this->query);
+        $this->assertStringEndsWith('equalTo=%22foo%22', (string) $this->query->equalTo('foo'));
+        $this->assertStringEndsWith('equalTo=%22White%20Space%22', (string) $this->query->equalTo('White Space'));
+        $this->assertStringEndsWith('equalTo=2', (string) $this->query->equalTo(2));
+        $this->assertStringEndsWith('equalTo=true', (string) $this->query->equalTo(true));
+        $this->assertStringEndsWith('equalTo=false', (string) $this->query->equalTo(false));
     }
 
     public function testStringsAreWrappedWithQuotationMarks()
