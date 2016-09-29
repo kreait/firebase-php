@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.1 - 2016-09-29
+
+* Fixed a bug that prevented querying by boolean values.
+
 ## 1.1 - 2016-07-20
 
 * Adds support for "equalTo" queries
