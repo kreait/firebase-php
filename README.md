@@ -30,4 +30,4 @@ $firebase->delete('my/data');
 
 ## Documentation
 
-You can find the documentation at http://firebase-php.readthedocs.io
+You can find the documentation at http://firebase-php.readthedocs.io/en/1.x/
