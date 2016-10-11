@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 2.0.0-beta2 - 2016-10-11
 
 * Adds documentation for Version 2.x at http://firebase-php.readthedocs.io/
 * Allows the database URI to be overriden when creating a Firebase instance through the factory
