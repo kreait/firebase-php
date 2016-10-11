@@ -25,57 +25,27 @@ application: `Add Firebase to your app <https://firebase.google.com/docs/server/
 You can now create a new Firebase instance with ``Firebase::fromServiceAccount($value)`` which accepts one of the
 following values:
 
-- the path to a Google Account JSON configuration file
+- the path to a Google Service Account JSON configuration file (recommended)
 - a JSON string
 - an array
 - an instance of ``Firebase\ServiceAccount``
-
-Alternatively, you can create a ``Firebase\ServiceAccount`` instance and pass it to the factory method:
-
-.. code-block:: php
-
-    $serviceAccount = Firebase\ServiceAccount::fromValue($value);
-    $firebase = Firebase::fromServiceAccount($serviceAccount);
-
-
-From a JSON configuration file
-==============================
-
-After having downloaded the JSON configuration file, you can initialize a Firebase instance with it:
 
 .. code-block:: php
 
     $firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json');
 
-From a JSON string
-==================
+If the project ID in the JSON file does not match the URL of your Firebase application, or if you want to
+be explicit, you can specify the Database URI either as a second parameter or an additional method call:
 
 .. code-block:: php
 
-    $value = <<<JSON
-    {
-        "project_id": "my-project-id",
-        "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
-        "client_email": "account@my-project-id.iam.gserviceaccount.com",
-        "client_id": "11223344556677889900",
-    }
-    JSON;
+    $firebase = Firebase::fromServiceAccount(
+        __DIR__.'/google-service-account.json',
+        'https://my-project.firebaseio.com'
+    );
 
-    $firebase = Firebase::fromServiceAccount($value);
-
-From an array
-=============
-
-.. code-block:: php
-
-    $value = [
-        'project_id' => 'my-project-id',
-        'private_key' =>  "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
-        'client_email' =>  'account@my-project-id.iam.gserviceaccount.com',
-        'client_id' = '11223344556677889900',
-    ];
-
-    $firebase = Firebase::fromServiceAccount($value);
+    $firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json');
+        ->withDatabaseUri('https://my-project.firebaseio.com');
 
 
 **********************
