@@ -58,6 +58,11 @@ class Firebase
         return new self($serviceAccount, $databaseUri);
     }
 
+    public function withDatabaseUri($databaseUri): Firebase
+    {
+        return new self($this->serviceAccount, Psr7\uri_for($databaseUri));
+    }
+
     public function getDatabase(): Database
     {
         if (!$this->database) {

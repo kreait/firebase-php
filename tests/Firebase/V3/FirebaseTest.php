@@ -40,12 +40,19 @@ class FirebaseTest extends FirebaseTestCase
         $this->assertInstanceOf(Firebase::class, Firebase::fromServiceAccount($this->serviceAccount, (string) $this->databaseUri));
     }
 
+    public function testWithDatabaseUri()
+    {
+        $firebase = $this->firebase->withDatabaseUri('https://some-other-uri.tld');
+
+        $this->assertInstanceOf(Firebase::class, $firebase);
+        $this->assertNotSame($this->firebase, $firebase);
+    }
+
     public function testGetDatabase()
     {
         $db = $this->firebase->getDatabase();
 
         $this->assertInstanceOf(Database::class, $db);
-        $this->assertSame($db, $this->firebase->getDatabase());
     }
 
     public function testAsUserWithClaims()
