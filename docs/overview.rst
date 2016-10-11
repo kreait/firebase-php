@@ -61,6 +61,14 @@ You can find out more on how to install Composer, configure autoloading, and
 other best-practices for defining dependencies at
 `getcomposer.org <http://getcomposer.org>`_.
 
+**************
+Issues/Support
+**************
+
+- `Github issue tracker <https://github.com/kreait/firebase-php/issues/>`_
+- Join the Firebase Community Slack at https://firebase-community.appspot.com, join the #php channel and look
+  for @jeromegamez.
+
 *******
 Roadmap
 *******

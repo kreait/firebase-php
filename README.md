@@ -19,6 +19,9 @@ applications.
 Starting with version 2.0, this SDK requires PHP 7 - for PHP 5.5/5.6 support, please use
 [Version 1.x](http://firebase-php.readthedocs.io/en/1.x/).
 
+For support, please use the [issue tracker](https://github.com/kreait/firebase-php/issues/),
+or join the Firebase Community Slack at https://firebase-community.appspot.com and join the #php channel. 
+
 # Installation
 
 The recommended way to install the Firebase SDK is with [Composer](http://getcomposer.org).
