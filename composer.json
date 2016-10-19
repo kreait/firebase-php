@@ -14,7 +14,7 @@
         "php": "^7.0",
         "ext-mbstring": "*",
         "firebase/token-generator": "^3.0",
-        "google/auth": "^0.9.0",
+        "google/auth": "^0.11.0",
         "guzzlehttp/guzzle": "^6.2.1",
         "mtdowling/jmespath.php": "^2.3"
     },
