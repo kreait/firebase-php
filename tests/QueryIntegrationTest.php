@@ -124,7 +124,7 @@ class QueryIntegrationTest extends IntegrationTest
 
     public function testOrderByPriority()
     {
-        $this->markTestSkipped('Ordering by child key does not seem to be working right now.');
+        $this->markTestSkipped('Ordering by priority does not seem to be working right now.');
         $this->recorder->insertTape(__FUNCTION__);
         $this->recorder->startRecording();
 
