@@ -46,8 +46,8 @@ interface FirebaseInterface extends ReferenceProviderInterface
     /**
      * Write or replace data at the given location.
      *
-     * @param array|object $data
-     * @param string       $location
+     * @param mixed  $data
+     * @param string $location
      *
      * @return array The returned data.
      */
@@ -56,8 +56,8 @@ interface FirebaseInterface extends ReferenceProviderInterface
     /**
      * Generates a new child and returns its key.
      *
-     * @param array|object $data     The data to be pushed.
-     * @param string       $location The location to push the new child to.
+     * @param mixed  $data     The data to be pushed.
+     * @param string $location The location to push the new child to.
      *
      * @return string The key of the new child.
      */
@@ -66,8 +66,8 @@ interface FirebaseInterface extends ReferenceProviderInterface
     /**
      * Update the given field(s) at the given location.
      *
-     * @param array|object $data     The fields.
-     * @param string       $location The location.
+     * @param mixed  $data     The fields.
+     * @param string $location The location.
      *
      * @return array The written fields.
      */

@@ -124,10 +124,6 @@ class Firebase implements FirebaseInterface
 
     public function set($data, $location)
     {
-        if (!is_array($data) && !is_object($data)) {
-            throw FirebaseException::invalidArgument('array or object', gettype($data));
-        }
-
         $url = $this->createRequestUrl($location);
         $response = $this->send($url, RequestInterface::METHOD_PUT, $data);
 
@@ -136,10 +132,6 @@ class Firebase implements FirebaseInterface
 
     public function push($data, $location)
     {
-        if (!is_array($data) && !is_object($data)) {
-            throw FirebaseException::invalidArgument('array or object', gettype($data));
-        }
-
         $url = $this->createRequestUrl($location);
         $response = $this->send($url, RequestInterface::METHOD_POST, $data);
         $data = json_decode((string) $response->getBody(), true);
@@ -149,10 +141,6 @@ class Firebase implements FirebaseInterface
 
     public function update($data, $location)
     {
-        if (!is_array($data) && !is_object($data)) {
-            throw FirebaseException::invalidArgument('array or object', gettype($data));
-        }
-
         $url = $this->createRequestUrl($location);
         $response = $this->send($url, RequestInterface::METHOD_PATCH, $data);
 
@@ -227,7 +215,7 @@ class Firebase implements FirebaseInterface
             $request = $request->withHeader('Authorization', 'Bearer '.$token['access_token']);
         }
 
-        if ($data) {
+        if ($data !== null) {
             $request->getBody()->write(json_encode($data));
         }
 

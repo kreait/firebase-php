@@ -153,14 +153,6 @@ class FirebaseTest extends IntegrationTest
         $this->assertEquals($expectedResult, $check);
     }
 
-    /**
-     * @expectedException \Kreait\Firebase\Exception\FirebaseException
-     */
-    public function testSetWithInvalidData()
-    {
-        $this->firebase->set('string', $this->getLocation(__FUNCTION__));
-    }
-
     public function testUpdate()
     {
         $initialData = [
@@ -230,14 +222,6 @@ class FirebaseTest extends IntegrationTest
         $key = $this->firebase->push($data, $this->getLocation(__FUNCTION__));
 
         $this->assertStringStartsWith('-', $key);
-    }
-
-    /**
-     * @expectedException \Kreait\Firebase\Exception\FirebaseException
-     */
-    public function testPushWithInvalidData()
-    {
-        $this->firebase->push('string', $this->getLocation(__FUNCTION__));
     }
 
     public function testGetOnNonExistentLocation()
