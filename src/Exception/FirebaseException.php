@@ -76,7 +76,7 @@ class FirebaseException extends \Exception
             $message = sprintf('%s: %s', $message, $specifics);
         }
 
-        if ($response->getStatusCode() === 401) {
+        if (in_array($response->getStatusCode(), [401, 403])) {
             $e = new PermissionDeniedException($message);
         } else {
             $e = new self($message);
