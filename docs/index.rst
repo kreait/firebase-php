@@ -15,6 +15,7 @@ A PHP client for the `Google Firebase <https://firebase.google.com>`_ Realtime D
     $firebase = new Firebase('https://my-app.firebaseio.com', $config);
 
     $firebase->set(['key' => 'value'], 'my/data');
+    $firebase->set('new value', 'my/data/key');
 
     print_r($firebase->get('my/data'));
 

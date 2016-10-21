@@ -32,11 +32,15 @@ Write/Replace
         'key_2' => 'value_2',
         ], 'my/data');
 
+    $firebase->set('my/data/key_1', 'value_1');
+
 ******
 Update
 ******
 
 .. code-block:: php
+
+    $firebase->update('value_1_1', 'key_1/key_1_1');
 
     $firebase->update([
         'key_1/key_1_1' => 'value_1_1',
