@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2 - 2016-10-21
+
+* Authorization and permission errors are now thrown as `\Kreait\Firebase\Exception\PermissionDeniedException`
+
 ## 1.1.1 - 2016-09-29
 
 * Fixed a bug that prevented querying by boolean values.
