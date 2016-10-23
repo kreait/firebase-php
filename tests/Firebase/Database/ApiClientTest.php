@@ -4,6 +4,7 @@ namespace Tests\Firebase\Database;
 
 use Firebase\Database\ApiClient;
 use Firebase\Exception\ApiException;
+use Firebase\Exception\PermissionDenied;
 use Firebase\Http\Auth;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
@@ -136,6 +137,16 @@ class ApiClientTest extends FirebaseTestCase
         $client->remove($this->targetUrl);
     }
 
+    public function testPermissionDenied()
+    {
+        $this->expectException(PermissionDenied::class);
+        $client = $this->createApiClientForClientExceptionTesting(
+            new Response(401, [], json_encode(['error' => 'Permission denied']))
+        );
+
+        $client->get('any');
+    }
+
     private function createApiClient(ResponseInterface $response = null)
     {
         $client = $this->createMock(ClientInterface::class);
@@ -150,15 +161,19 @@ class ApiClientTest extends FirebaseTestCase
     }
 
     /**
+     * @param ResponseInterface|null $response
+     *
      * @return ApiClient
      */
-    private function createApiClientForClientExceptionTesting()
+    private function createApiClientForClientExceptionTesting(ResponseInterface $response = null)
     {
         $client = $this->createMock(ClientInterface::class);
+        $response = $response
+            ?? new Response(400, ['X-Firebase-Auth-Debug' => 'some debug message'], '{"error": "Some error"}');
 
         $requestException = RequestException::create(
             new Request('METHOD', $this->targetUrl),
-            new Response(400, ['X-Firebase-Auth-Debug' => 'some debug message'], '{"error": "Some error"}')
+            $response
         );
 
         $client->expects($this->any())

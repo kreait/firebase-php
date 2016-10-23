@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* A `PermissionDenied` exception is thrown when a request violates the 
+  [Firebase Realtime Database rules](https://firebase.google.com/docs/database/security/securing-data)
+
 ## 2.0.0-beta2 - 2016-10-11
 
 * Adds documentation for Version 2.x at http://firebase-php.readthedocs.io/

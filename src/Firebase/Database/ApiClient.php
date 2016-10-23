@@ -3,6 +3,7 @@
 namespace Firebase\Database;
 
 use Firebase\Exception\ApiException;
+use Firebase\Exception\PermissionDenied;
 use Firebase\Http\Auth;
 use Firebase\Http\Middleware;
 use Firebase\Util\JSON;
@@ -123,6 +124,10 @@ class ApiClient
 
             if ($apiError = JSON::decode((string) $response->getBody(), true)['error'] ?? null) {
                 $message = $apiError;
+            }
+
+            if (in_array($response->getStatusCode(), [401, 403])) {
+                throw new PermissionDenied($message, $e->getCode(), $e);
             }
         }
 
