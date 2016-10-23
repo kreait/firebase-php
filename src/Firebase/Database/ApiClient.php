@@ -3,6 +3,7 @@
 namespace Firebase\Database;
 
 use Firebase\Exception\ApiException;
+use Firebase\Exception\IndexNotDefined;
 use Firebase\Exception\PermissionDenied;
 use Firebase\Http\Auth;
 use Firebase\Http\Middleware;
@@ -121,13 +122,18 @@ class ApiClient
 
         if ($e->hasResponse()) {
             $response = $e->getResponse();
+            $statusCode = $response->getStatusCode();
 
             if ($apiError = JSON::decode((string) $response->getBody(), true)['error'] ?? null) {
                 $message = $apiError;
             }
 
-            if (in_array($response->getStatusCode(), [401, 403])) {
+            if (in_array($statusCode, [401, 403])) {
                 throw new PermissionDenied($message, $e->getCode(), $e);
+            }
+
+            if ($statusCode === 400 && stripos($message, 'index not defined') !== false) {
+                throw new IndexNotDefined($message, $e->getCode(), $e);
             }
         }
 

@@ -4,6 +4,7 @@
 
 * A `PermissionDenied` exception is thrown when a request violates the 
   [Firebase Realtime Database rules](https://firebase.google.com/docs/database/security/securing-data)
+* An `IndexNotDefined` exception is thrown when a Query is performed on an unindexed subtree
 
 ## 2.0.0-beta2 - 2016-10-11
 

@@ -4,6 +4,7 @@ namespace Tests\Firebase\Database;
 
 use Firebase\Database\ApiClient;
 use Firebase\Exception\ApiException;
+use Firebase\Exception\IndexNotDefined;
 use Firebase\Exception\PermissionDenied;
 use Firebase\Http\Auth;
 use GuzzleHttp\ClientInterface;
@@ -142,6 +143,17 @@ class ApiClientTest extends FirebaseTestCase
         $this->expectException(PermissionDenied::class);
         $client = $this->createApiClientForClientExceptionTesting(
             new Response(401, [], json_encode(['error' => 'Permission denied']))
+        );
+
+        $client->get('any');
+    }
+
+    public function testIndexNotDefined()
+    {
+        $this->expectException(IndexNotDefined::class);
+
+        $client = $this->createApiClientForClientExceptionTesting(
+            new Response(400, [], json_encode(['error' => 'Index not defined foobar']))
         );
 
         $client->get('any');
