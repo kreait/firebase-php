@@ -7,6 +7,7 @@ use Firebase\Database\Query;
 use Firebase\Database\Reference;
 use Firebase\Database\Snapshot;
 use Firebase\Exception\ApiException;
+use Firebase\Exception\IndexNotDefined;
 use Firebase\Exception\QueryException;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\UriInterface;
@@ -106,6 +107,22 @@ class QueryTest extends FirebaseTestCase
             ->willThrowException(new ApiException());
 
         $this->expectException(QueryException::class);
+
+        $this->query->getSnapshot();
+    }
+
+    public function testIndexNotDefined()
+    {
+        $this->apiClient
+            ->expects($this->any())
+            ->method('get')->with($this->anything())
+            ->willThrowException(
+                new ApiException(
+                    'Index not defined, add ".indexOn": "keyName", for path "/path/to/child", to the rules'
+                )
+            );
+
+        $this->expectException(IndexNotDefined::class);
 
         $this->query->getSnapshot();
     }

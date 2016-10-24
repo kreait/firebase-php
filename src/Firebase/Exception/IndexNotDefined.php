@@ -2,7 +2,6 @@
 
 namespace Firebase\Exception;
 
-class IndexNotDefined extends ApiException
+class IndexNotDefined extends QueryException
 {
-
 }
