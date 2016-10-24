@@ -68,8 +68,8 @@ class OrderByKeyTest extends FirebaseTestCase
                     'a' => 'any',
                     'd' => 'any',
                     'b' => 'any',
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
@@ -92,8 +92,8 @@ class OrderByKeyTest extends FirebaseTestCase
                     'a' => 'any',
                     'd' => 'any',
                     'b' => 'any',
-                ]
-            ]
+                ],
+            ],
         ];
     }
 }

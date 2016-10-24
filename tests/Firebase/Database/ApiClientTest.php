@@ -45,9 +45,7 @@ class ApiClientTest extends FirebaseTestCase
         $this->http
             ->expects($this->any())
             ->method('getConfig')
-            ->willReturn([
-                'handler' => $this->createMock(HandlerStack::class)
-            ]);
+            ->willReturn(['handler' => $this->createMock(HandlerStack::class)]);
 
         $this->assertInstanceOf(ApiClient::class, $this->client->withCustomAuth($auth));
         $this->assertNotSame($this->client, $this->client->withCustomAuth($auth));

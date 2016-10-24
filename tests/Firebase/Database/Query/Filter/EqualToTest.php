@@ -13,7 +13,7 @@ class EqualToTest extends FirebaseTestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        new EqualTo(new \stdClass);
+        new EqualTo(new \stdClass());
     }
 
     public function testModifyUri()

@@ -67,8 +67,8 @@ class OrderByChildTest extends FirebaseTestCase
                     'second' => ['key' => 4],
                     'third' => ['key' => 1],
                     'fourth' => ['key' => 2],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
@@ -91,8 +91,8 @@ class OrderByChildTest extends FirebaseTestCase
                     'second' => ['key' => 4],
                     'third' => ['key' => 1],
                     'fourth' => ['key' => 2],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 }

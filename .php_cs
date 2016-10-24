@@ -4,26 +4,20 @@ $header = '';
 
 Symfony\CS\Fixer\Contrib\HeaderCommentFixer::setHeader($header);
 
-return Symfony\CS\Config\Config::create()
-    ->level(Symfony\CS\FixerInterface::PSR2_LEVEL)
+return Symfony\CS\Config::create()
+    ->setUsingCache(true)
+    ->level(Symfony\CS\FixerInterface::SYMFONY_LEVEL)
     ->fixers([
         '-psr0',
-        'psr2',
-        'header_comment',
+        //'header_comment',
+        '-phpdoc_params',
+        '-blankline_after_open_tag',
         'multiline_spaces_before_semicolon',
-        'newline_after_open_tag',
         'ordered_use',
-        'phpdoc_order',
         'short_array_syntax',
-        'strict',
-        'strict_param',
-        'unalign_double_arrow',
-        'unalign_equals',
-        'unused_use',
-        'extra_empty_lines',
     ])
     ->finder(
-        Symfony\CS\Finder\DefaultFinder::create()
+        Symfony\CS\Finder::create()
             ->exclude('vendor')
             ->exclude('build')
             ->in(__DIR__)

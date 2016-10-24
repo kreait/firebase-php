@@ -15,9 +15,9 @@ class JSON
      *
      * @param mixed $value   The value being encoded
      * @param int    $options JSON encode option bitmask
-     * @param int    $depth   Set the maximum depth. Must be greater than zero.
+     * @param int    $depth   Set the maximum depth. Must be greater than zero
      *
-     * @throws InvalidArgumentException if the JSON cannot be encoded.
+     * @throws InvalidArgumentException if the JSON cannot be encoded
      *
      * @return string
      */
@@ -26,7 +26,7 @@ class JSON
         $json = \json_encode($value, $options, $depth);
         if (JSON_ERROR_NONE !== json_last_error()) {
             throw new InvalidArgumentException(
-                'json_encode error: ' . json_last_error_msg());
+                'json_encode error: '.json_last_error_msg());
         }
 
         return $json;
@@ -40,11 +40,11 @@ class JSON
      * @see \GuzzleHttp\json_encode()
      *
      * @param string $json JSON data to parse
-     * @param bool $assoc  When true, returned objects will be converted into associative arrays.
-     * @param int $depth User specified recursion depth.
-     * @param int $options Bitmask of JSON decode options.
+     * @param bool $assoc  When true, returned objects will be converted into associative arrays
+     * @param int $depth User specified recursion depth
+     * @param int $options Bitmask of JSON decode options
      *
-     * @throws \InvalidArgumentException if the JSON cannot be decoded.
+     * @throws \InvalidArgumentException if the JSON cannot be decoded
      *
      * @return mixed
      */
@@ -53,7 +53,7 @@ class JSON
         $data = \json_decode($json, $assoc, $depth, $options);
         if (JSON_ERROR_NONE !== json_last_error()) {
             throw new InvalidArgumentException(
-                'json_decode error: ' . json_last_error_msg());
+                'json_decode error: '.json_last_error_msg());
         }
 
         return $data;

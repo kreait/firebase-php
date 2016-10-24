@@ -73,8 +73,8 @@ class Database
      *
      * @param string|UriInterface $uri
      *
-     * @throws InvalidArgumentException If the URL is invalid.
-     * @throws OutOfRangeException If the URL is not in the same domain as the current database.
+     * @throws InvalidArgumentException If the URL is invalid
+     * @throws OutOfRangeException If the URL is not in the same domain as the current database
      *
      * @return Reference
      */

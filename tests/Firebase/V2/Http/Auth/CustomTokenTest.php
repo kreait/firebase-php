@@ -42,7 +42,7 @@ class CustomTokenTest extends FirebaseTestCase
     {
         return [
             'without_claims' => ['secret', 'uid', []],
-            'with_claims' => ['secret', 'uid', ['foo' => 'bar']]
+            'with_claims' => ['secret', 'uid', ['foo' => 'bar']],
         ];
     }
 }

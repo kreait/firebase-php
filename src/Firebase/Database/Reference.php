@@ -39,7 +39,7 @@ class Reference
      * @param ApiClient $apiClient
      * @param Validator|null $validator
      *
-     * @throws InvalidArgumentException if the reference URI is invalid.
+     * @throws InvalidArgumentException if the reference URI is invalid
      */
     public function __construct(UriInterface $uri, ApiClient $apiClient, Validator $validator = null)
     {
@@ -73,7 +73,7 @@ class Reference
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Reference#parent
      *
-     * @throws OutOfRangeException if requested for the root Reference.
+     * @throws OutOfRangeException if requested for the root Reference
      *
      * @return Reference
      */
@@ -247,7 +247,7 @@ class Reference
     }
 
     /**
-     * Convenience method for {@see getSnapshot()}->getValue()
+     * Convenience method for {@see getSnapshot()}->getValue().
      *
      * @throws ApiException if the API reported an error
      *

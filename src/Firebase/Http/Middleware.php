@@ -7,7 +7,7 @@ use Psr\Http\Message\RequestInterface;
 class Middleware
 {
     /**
-     * Ensures that the ".json" suffix is added to URIs and that the content type is set correctly
+     * Ensures that the ".json" suffix is added to URIs and that the content type is set correctly.
      *
      * @return \Closure
      */

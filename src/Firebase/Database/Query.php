@@ -96,7 +96,7 @@ class Query
     }
 
     /**
-     * Convenience method for {@see getSnapshot()}->getValue()
+     * Convenience method for {@see getSnapshot()}->getValue().
      *
      * @throws QueryException if an error occurred
      *

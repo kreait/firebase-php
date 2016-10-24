@@ -76,7 +76,7 @@ class ServiceAccount
      */
     public static function fromValue($value): ServiceAccount
     {
-        if ($value instanceof ServiceAccount) {
+        if ($value instanceof self) {
             return $value;
         }
 

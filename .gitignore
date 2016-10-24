@@ -3,6 +3,7 @@
 /docs/_build
 /docs/*.pyc
 
+/.php_cs.cache
 /composer.lock
 /phpunit.xml
 /google-service-account.json

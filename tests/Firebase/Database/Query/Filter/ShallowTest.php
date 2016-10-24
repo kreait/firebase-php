@@ -10,7 +10,7 @@ class ShallowTest extends FirebaseTestCase
 {
     public function testModifyUri()
     {
-        $filter = new Shallow;
+        $filter = new Shallow();
 
         $this->assertContains('shallow=true', (string) $filter->modifyUri(new Uri('http://domain.tld')));
     }

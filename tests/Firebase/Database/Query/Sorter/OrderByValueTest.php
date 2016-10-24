@@ -67,8 +67,8 @@ class OrderByValueTest extends FirebaseTestCase
                     'second' => 4,
                     'third' => 1,
                     'fourth' => 2,
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
@@ -91,8 +91,8 @@ class OrderByValueTest extends FirebaseTestCase
                     'second' => 4,
                     'third' => 1,
                     'fourth' => 2,
-                ]
-            ]
+                ],
+            ],
         ];
     }
 }
