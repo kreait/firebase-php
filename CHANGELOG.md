@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 1.2.1 - 2016-10-26
 
 * Simplify query construction and ensure that the correct variable types are used (previously, a numeric value
   would be wrapped into a string)
