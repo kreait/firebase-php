@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* Simplify query construction and ensure that the correct variable types are used (previously, a numeric value
+  would be wrapped into a string)
+
 ## 1.2 - 2016-10-21
 
 * Authorization and permission errors are now thrown as `\Kreait\Firebase\Exception\PermissionDeniedException`
