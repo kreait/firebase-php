@@ -68,7 +68,7 @@ class Query
      */
     public function orderByChildKey($childKey)
     {
-        $this->orderBy = sprintf('"%s"', $childKey);
+        $this->orderBy = $childKey;
 
         return $this;
     }
@@ -78,7 +78,7 @@ class Query
      */
     public function orderByKey()
     {
-        $this->orderBy = '"$key"';
+        $this->orderBy = '$key';
 
         return $this;
     }
@@ -90,7 +90,7 @@ class Query
      */
     public function orderByPriority()
     {
-        $this->orderBy = '"$priority"';
+        $this->orderBy = '$priority';
 
         return $this;
     }
@@ -193,34 +193,25 @@ class Query
         $result = [];
 
         // An orderBy must be set for the other parameters to work
-        $result['orderBy'] = $this->orderBy ?: '"$key"';
+        $result['orderBy'] = json_encode($this->orderBy ?: '$key');
 
         if ($this->limitTo) {
-            $result[$this->limitTo[0]] = $this->limitTo[1];
+            $result[$this->limitTo[0]] = json_encode($this->limitTo[1]);
         }
 
         if ($this->startAt !== null) {
-            $result['startAt'] = $this->wrapValue($this->startAt);
+            $result['startAt'] = json_encode($this->startAt);
         }
 
         if ($this->endAt !== null) {
-            $result['endAt'] = $this->wrapValue($this->endAt);
+            $result['endAt'] = json_encode($this->endAt);
         }
 
         if ($this->equalTo !== null) {
-            $result['equalTo'] = $this->wrapValue($this->equalTo);
+            $result['equalTo'] = json_encode($this->equalTo);
         }
 
         return $result;
-    }
-
-    private function wrapValue($value)
-    {
-        if (is_bool($value)) {
-            return $value ? 'true' : 'false';
-        }
-
-        return is_string($value) ? sprintf('"%s"', $value) : $value;
     }
 
     public function __toString()
