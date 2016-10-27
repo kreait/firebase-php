@@ -7,6 +7,9 @@ Firebase PHP SDK Documentation
 This SDK makes it easy to interact with `Google Firebase <https://firebase.google.com>`_
 applications.
 
+.. note::
+    This is a 3rd party SDK and not maintained or supported by Firebase or Google.
+
 .. code-block:: php
 
     $firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json');
