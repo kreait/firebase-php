@@ -44,7 +44,7 @@ class ApiClient
         try {
             $response = $this->httpClient->request('GET', $uri);
         } catch (\Throwable $e) {
-            return $this->handleThrowable($e);
+            $this->handleThrowable($e);
         }
 
         return JSON::decode((string) $response->getBody(), true);
@@ -55,7 +55,7 @@ class ApiClient
         try {
             $response = $this->httpClient->request('PUT', $uri, ['body' => JSON::encode($value)]);
         } catch (\Throwable $e) {
-            return $this->handleThrowable($e);
+            $this->handleThrowable($e);
         }
 
         return JSON::decode((string) $response->getBody(), true);
@@ -66,7 +66,7 @@ class ApiClient
         try {
             $response = $this->httpClient->request('POST', $uri, ['body' => JSON::encode($value)]);
         } catch (\Throwable $e) {
-            return $this->handleThrowable($e);
+            $this->handleThrowable($e);
         }
 
         $responseData = JSON::decode((string) $response->getBody(), true);
