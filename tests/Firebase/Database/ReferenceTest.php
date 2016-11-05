@@ -69,6 +69,30 @@ class ReferenceTest extends FirebaseTestCase
         $this->assertSame('parent/key/child', $child->getUri()->getPath());
     }
 
+    public function testGetChildKeys()
+    {
+        $this->apiClient
+            ->expects($this->any())
+            ->method('get')
+            ->with($this->anything())
+            ->willReturn(['a' => true, 'b' => true, 'c' => true]);
+
+        $this->assertSame(['a', 'b', 'c'], $this->reference->getChildKeys());
+    }
+
+    public function testGetChildKeysWhenNoChildrenAreSet()
+    {
+        $this->apiClient
+            ->expects($this->any())
+            ->method('get')
+            ->with($this->anything())
+            ->willReturn('scalar value');
+
+        $this->expectException(OutOfRangeException::class);
+
+        $this->reference->getChildKeys();
+    }
+
     public function testModifiersReturnQueries()
     {
         $this->assertInstanceOf(Query::class, $this->reference->equalTo('x'));

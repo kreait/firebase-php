@@ -242,6 +242,25 @@ class Reference
     }
 
     /**
+     * Returns the keys of a reference's children.
+     *
+     * @throws OutOfRangeException if the reference has no children with keys
+     * @throws ApiException if the API reported an error
+     *
+     * @return string[]
+     */
+    public function getChildKeys(): array
+    {
+        $snapshot = $this->shallow()->getSnapshot();
+
+        if (is_array($value = $snapshot->getValue())) {
+            return array_keys($value);
+        }
+
+        throw new OutOfRangeException(sprintf('%s has no children with keys', $this));
+    }
+
+    /**
      * Convenience method for {@see getSnapshot()}->getValue().
      *
      * @throws ApiException if the API reported an error

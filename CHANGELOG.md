@@ -5,10 +5,13 @@
 * A `PermissionDenied` exception is thrown when a request violates the 
   [Firebase Realtime Database rules](https://firebase.google.com/docs/database/security/securing-data)
 * An `IndexNotDefined` exception is thrown when a Query is performed on an unindexed subtree
-* Removed the query option to sort results in descending order.
+* Removes the query option to sort results in descending order.
   * Nice in theory, conflicted in practice: when combined with `limitToFirst()` or `limitToLast()`,
     results were lost because Firebase sorts in ascending order and limits the results before
     we can process them further.
+* Adds a new Method `Reference::getChildKeys()` to retrieve the key names of a reference's children
+  * This is a convenience method around a shallow query, see 
+    [shallow queries in the Firebase docs](https://firebase.google.com/docs/database/rest/retrieve-data#shallow)
 
 ## 2.0.0-beta2 - 2016-10-11
 
