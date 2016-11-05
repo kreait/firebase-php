@@ -328,7 +328,7 @@ class Reference
      *
      * @return Reference A new reference for the added child
      */
-    public function push($value): Reference
+    public function push($value = null): Reference
     {
         $newKey = $this->apiClient->push($this->uri, $value);
 
