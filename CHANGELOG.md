@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 2.0.0-beta3 - 2016-11-05
 
 * A `PermissionDenied` exception is thrown when a request violates the 
   [Firebase Realtime Database rules](https://firebase.google.com/docs/database/security/securing-data)
