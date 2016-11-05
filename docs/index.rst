@@ -8,7 +8,7 @@ This SDK makes it easy to interact with `Google Firebase <https://firebase.googl
 applications.
 
 .. note::
-    This is a 3rd party SDK and not maintained or supported by Firebase or Google.
+    This is a 3rd party SDK and not maintained, endorsed or supported by Firebase or Google.
 
 .. note::
     This documentation is incomplete, but the SDK is fully functional. As soon as the

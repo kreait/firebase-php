@@ -70,34 +70,162 @@ like References. That means you can execute any method on a Query that you can e
     You can combine every filter query with every order query, but not multiple queries of each type.
     Shallow queries are a special case: they can not be combined with any other query method.
 
-.. note::
-    Your Realtime Database must be indexed to be querieable, except for node keys, which are always indexed.
-    You can learn how to index your data in the official documentation:
-    `Index your data <https://firebase.google.com/docs/database/security/indexing-data>`_.
+Shallow queries
+===============
 
-    An upcoming release of the PHP SDK will be able to index your data on demand, as soon as you perform a query.
+This is an advanced feature, designed to help you work with large datasets without needing to download
+everything. Set this to true to limit the depth of the data returned at a location. If the data at
+the location is a JSON primitive (string, number or boolean), its value will simply be returned.
+
+If the data snapshot at the location is a JSON object, the values for each key will be
+truncated to true.
+
+Detailed information can be found on
+`the official Firebase documentation page for shallow queries <https://firebase.google.com/docs/database/rest/retrieve-data#shallow>`_
+
+.. code-block:: php
+
+    $db->getReference('currencies')
+        // order the reference's children by their key in ascending order
+        ->shallow()
+        ->getSnapshot();
+
+A convenience method is available to retrieve the key names of a reference's children:
+
+.. code-block:: php
+
+    $db->getReference('currencies')->getChildKeys(); // returns an array of key names
+
 
 Ordering data
 =============
 
-By child
---------
+The official Firebase documentation explains
+`How data is ordered <https://firebase.google.com/docs/database/rest/retrieve-data#section-rest-ordered-data>`_.
 
-By child value
---------------
+Data is always ordered in ascending order.
+
+You can only order by one property at a time - if you try to order by multiple properties,
+e.g. by child and by value, an exception will be thrown.
 
 By key
 ------
+
+.. code-block:: php
+
+    $db->getReference('currencies')
+        // order the reference's children by their key in ascending order
+        ->orderByKey()
+        ->getSnapshot();
+
+
+By value
+--------
+.. note::
+    In order to order by value, you must define an index, otherwise the Firebase API will
+    refuse the query.
+
+    .. code-block:: json
+
+        {
+            "currencies": {
+                ".indexOn": ".value"
+            }
+        }
+
+.. code-block:: php
+
+    $db->getReference('currencies')
+        // order the reference's children by their value in ascending order
+        ->orderByValue()
+        ->getSnapshot();
+
+
+By child
+--------
+.. note::
+    In order to order by a child value, you must define an index, otherwise the Firebase API will
+    refuse the query.
+
+    .. code-block:: json
+
+        {
+            "people": {
+                ".indexOn": "height"
+            }
+        }
+
+.. code-block:: php
+
+    $db->getReference('people')
+        // order the reference's children by the values in the field 'height' in ascending order
+        ->orderByChild('height')
+        ->getSnapshot();
+
 
 Filtering data
 ==============
 
-By a specified child key
-------------------------
+To be able to filter results, you must also define an order.
 
-By key
-------
+limitToFirst
+------------
 
-By value
---------
+.. code-block:: php
 
+    $db->getReference('people')
+        // order the reference's children by the values in the field 'height'
+        ->orderByChild('height')
+        // limits the result to the first 10 children (in this case: the 10 shortest persons)
+        // values for 'height')
+        ->limitToFirst(10)
+        ->getSnapshot();
+
+
+limitToLast
+-----------
+
+.. code-block:: php
+
+    $db->getReference('people')
+        // order the reference's children by the values in the field 'height'
+        ->orderByChild('height')
+        // limits the result to the last 10 children (in this case: the 10 tallest persons)
+        ->limitToLast(10)
+        ->getSnapshot();
+
+startAt
+-------
+
+.. code-block:: php
+
+    $db->getReference('people')
+        // order the reference's children by the values in the field 'height'
+        ->orderByChild('height')
+        // returns all persons taller than or exactly 1.68 (meters)
+        ->startAt(1.68)
+        ->getSnapshot();
+
+endAt
+-----
+
+.. code-block:: php
+
+    $db->getReference('people')
+        // order the reference's children by the values in the field 'height'
+        ->orderByChild('height')
+        // returns all persons shorter than or exactly 1.98 (meters)
+        ->endAt(1.98)
+        ->getSnapshot();
+
+equalTo
+-------
+
+.. code-block:: php
+
+    $db->getReference('people')
+        // order the reference's children by the values in the field 'height'
+        ->orderByChild('height')
+        // returns all persons being exactly 1.98 (meters) tall
+        ->equalTo(1.98)
+        ->getSnapshot();
