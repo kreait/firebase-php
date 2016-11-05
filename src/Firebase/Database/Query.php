@@ -84,12 +84,12 @@ class Query
             throw QueryException::fromApiException($e, $this);
         }
 
-        foreach ($this->filters as $filter) {
-            $value = $filter->modifyValue($value);
-        }
-
         if ($this->sorter) {
             $value = $this->sorter->modifyValue($value);
+        }
+
+        foreach ($this->filters as $filter) {
+            $value = $filter->modifyValue($value);
         }
 
         return new Snapshot($this->reference, $value);
