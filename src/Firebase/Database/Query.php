@@ -191,37 +191,33 @@ class Query
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#orderByChild
      *
      * @param string $childKey
-     * @param int|null $sort SORT_ASC or SORT_DESC; if null, the order remains unchanged
      *
      * @throws QueryException if the query is already ordered
      *
      * @return Query
      */
-    public function orderByChild(string $childKey, int $sort = SORT_ASC): Query
+    public function orderByChild(string $childKey): Query
     {
-        return $this->withSorter(new Sorter\OrderByChild($childKey, $sort));
+        return $this->withSorter(new Sorter\OrderByChild($childKey));
     }
 
     /**
      * Generates a new Query object ordered by key.
      *
-     * Sorts the results of a query by their ascending key value. Use {@see reverse()} to sort the
-     * results by their descending key value.
+     * Sorts the results of a query by their ascending key value.
      *
      * Queries can only order by one key at a time. Calling orderBy*() multiple times on
      * the same query is an error.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#orderByKey
      *
-     * @param int|null $sort SORT_ASC or SORT_DESC; if null, the order remains unchanged
-     *
      * @throws QueryException if the query is already ordered
      *
      * @return Query
      */
-    public function orderByKey(int $sort = SORT_ASC): Query
+    public function orderByKey(): Query
     {
-        return $this->withSorter(new Sorter\OrderByKey($sort));
+        return $this->withSorter(new Sorter\OrderByKey());
     }
 
     /**
@@ -235,15 +231,13 @@ class Query
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#orderByValue
      *
-     * @param int|null $sort SORT_ASC or SORT_DESC; if null, the order remains unchanged
-     *
      * @throws QueryException if the query is already ordered
      *
      * @return Query
      */
-    public function orderByValue(int $sort = SORT_ASC): Query
+    public function orderByValue(): Query
     {
-        return $this->withSorter(new Sorter\OrderByValue($sort));
+        return $this->withSorter(new Sorter\OrderByValue());
     }
 
     /**

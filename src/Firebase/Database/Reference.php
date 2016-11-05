@@ -127,13 +127,12 @@ class Reference
      * @see Query::orderByChild()
      *
      * @param string $path
-     * @param int|null $sort SORT_ASC or SORT_DESC; if null, the order is determined by the Firebase API
      *
      * @return Query
      */
-    public function orderByChild(string $path, int $sort = SORT_ASC): Query
+    public function orderByChild(string $path): Query
     {
-        return $this->query()->orderByChild($path, $sort);
+        return $this->query()->orderByChild($path);
     }
 
     /**
@@ -141,13 +140,11 @@ class Reference
      *
      * @see Query::orderByKey()
      *
-     * @param int|null $sort SORT_ASC or SORT_DESC; if null, the order is determined by the Firebase API
-     *
      * @return Query
      */
-    public function orderByKey(int $sort = SORT_ASC): Query
+    public function orderByKey(): Query
     {
-        return $this->query()->orderByKey($sort);
+        return $this->query()->orderByKey();
     }
 
     /**
@@ -155,13 +152,11 @@ class Reference
      *
      * @see Query::orderByValue()
      *
-     * @param int|null $sort SORT_ASC or SORT_DESC; if null, the order is determined by the Firebase API
-     *
      * @return Query
      */
-    public function orderByValue(int $sort = SORT_ASC): Query
+    public function orderByValue(): Query
     {
-        return $this->query()->orderByValue($sort);
+        return $this->query()->orderByValue();
     }
 
     /**

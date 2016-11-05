@@ -11,12 +11,10 @@ final class OrderByChild implements Sorter
     use ModifierTrait;
 
     private $childKey;
-    private $sort;
 
-    public function __construct(string $childKey, int $sort = SORT_ASC)
+    public function __construct(string $childKey)
     {
         $this->childKey = $childKey;
-        $this->sort = $sort;
     }
 
     public function modifyUri(UriInterface $uri): UriInterface
@@ -32,15 +30,9 @@ final class OrderByChild implements Sorter
 
         $childKey = $this->childKey;
 
-        if ($this->sort === SORT_ASC) {
-            uasort($value, function ($a, $b) use ($childKey) {
-                return ($a[$childKey] ?? null) <=> $b[$childKey] ?? null;
-            });
-        } elseif ($this->sort === SORT_DESC) {
-            uasort($value, function ($a, $b) use ($childKey) {
-                return ($b[$childKey] ?? null) <=> $a[$childKey] ?? null;
-            });
-        }
+        uasort($value, function ($a, $b) use ($childKey) {
+            return ($a[$childKey] ?? null) <=> $b[$childKey] ?? null;
+        });
 
         return $value;
     }

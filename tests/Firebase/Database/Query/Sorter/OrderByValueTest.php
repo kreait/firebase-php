@@ -11,44 +11,30 @@ class OrderByValueTest extends FirebaseTestCase
     /**
      * @var OrderByValue
      */
-    protected $ascending;
-
-    /**
-     * @var OrderByValue
-     */
-    protected $descending;
+    protected $sorter;
 
     protected function setUp()
     {
-        $this->ascending = new OrderByValue();
-        $this->descending = new OrderByValue(SORT_DESC);
+        $this->sorter = new OrderByValue();
     }
 
     public function testModifyUri()
     {
         $this->assertContains(
             'orderBy='.rawurlencode('"$value"'),
-            (string) $this->ascending->modifyUri(new Uri('http://domain.tld'))
+            (string) $this->sorter->modifyUri(new Uri('http://domain.tld'))
         );
     }
 
     /**
-     * @dataProvider sortAscendingValueProvider
+     * @dataProvider valueProvider
      */
-    public function testSortAscending($expected, $value)
+    public function testModifyValue($expected, $value)
     {
-        $this->assertSame($expected, $this->ascending->modifyValue($value));
+        $this->assertSame($expected, $this->sorter->modifyValue($value));
     }
 
-    /**
-     * @dataProvider sortDescendingValueProvider
-     */
-    public function testSortDescending($expected, $value)
-    {
-        $this->assertSame($expected, $this->descending->modifyValue($value));
-    }
-
-    public function sortAscendingValueProvider()
+    public function valueProvider()
     {
         return [
             'scalar' => [
@@ -61,30 +47,6 @@ class OrderByValueTest extends FirebaseTestCase
                     'fourth' => 2,
                     'first' => 3,
                     'second' => 4,
-                ],
-                'given' => [
-                    'first' => 3,
-                    'second' => 4,
-                    'third' => 1,
-                    'fourth' => 2,
-                ],
-            ],
-        ];
-    }
-
-    public function sortDescendingValueProvider()
-    {
-        return [
-            'scalar' => [
-                'expected' => 'scalar',
-                'given' => 'scalar',
-            ],
-            'array' => [
-                'expected' => [
-                    'second' => 4,
-                    'first' => 3,
-                    'fourth' => 2,
-                    'third' => 1,
                 ],
                 'given' => [
                     'first' => 3,

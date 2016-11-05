@@ -10,13 +10,6 @@ final class OrderByKey implements Sorter
 {
     use ModifierTrait;
 
-    private $sort;
-
-    public function __construct(int $sort = SORT_ASC)
-    {
-        $this->sort = $sort;
-    }
-
     public function modifyUri(UriInterface $uri): UriInterface
     {
         return $this->appendQueryParam($uri, 'orderBy', '"$key"');
@@ -28,11 +21,7 @@ final class OrderByKey implements Sorter
             return $value;
         }
 
-        if ($this->sort === SORT_ASC) {
-            ksort($value);
-        } elseif ($this->sort === SORT_DESC) {
-            krsort($value);
-        }
+        ksort($value);
 
         return $value;
     }
