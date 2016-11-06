@@ -7,29 +7,26 @@ Firebase PHP SDK Documentation
 This SDK makes it easy to interact with `Google Firebase <https://firebase.google.com>`_
 applications.
 
+The source code can be found at https://github.com/kreait/firebase-php/
+
 .. code-block:: php
 
-    $firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json');
-
+    $firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json')
     $database = $firebase->getDatabase();
 
-    $root = $database->getReference('/');
+    $newPost = $database
+        ->getReference('blog/posts')
+        ->push([
+            'title' => 'Post title',
+            'body' => 'This should probably be longer.'
+        ]);
 
-    $completeSnapshot = $root->getSnapshot();
+    $newPost->getKey(); // => -KVr5eu8gcTv7_AHb-3-
+    $newPost->getUri(); // => https://my-project.firebaseio.com/blog/posts/-KVr5eu8gcTv7_AHb-3-
 
-    $root->getChild('users')->push([
-        'username' => uniqid('user', true),
-        'email' => uniqid('email', true).'@domain.tld'
-    ]);
-
-    $users = $database->getReference('users');
-
-    $sortedUsers = $users
-        ->orderByChild('username', SORT_DESC)
-        ->limitToFirst(10)
-        ->getValue(); // shortcut for ->getSnapshot()->getValue()
-
-    $users->remove();
+    $newPost->getChild('title')->set('Changed post title');
+    $newPost->getValue(); // Fetches the data from the realtime database
+    $newPost->remove();
 
 
 **********
@@ -37,7 +34,7 @@ User Guide
 **********
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 3
 
     overview
     authentication
