@@ -331,8 +331,9 @@ class Reference
     public function push($value = null): Reference
     {
         $newKey = $this->apiClient->push($this->uri, $value);
+        $newPath = sprintf('%s/%s', $this->uri->getPath(), $newKey);
 
-        return new self($this->uri->withPath($newKey), $this->apiClient, $this->validator);
+        return new self($this->uri->withPath($newPath), $this->apiClient, $this->validator);
     }
 
     /**
