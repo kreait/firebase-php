@@ -63,9 +63,19 @@ class Reference
      */
     public function getKey()
     {
-        $key = basename(trim($this->uri->getPath(), '/'));
+        $key = basename($this->getPath());
 
         return $key !== '' ? $key : null;
+    }
+
+    /**
+     * Returns the full path to a reference.
+     *
+     * @return string
+     */
+    public function getPath(): string
+    {
+        return trim($this->uri->getPath(), '/');
     }
 
     /**
@@ -79,7 +89,7 @@ class Reference
      */
     public function getParent(): Reference
     {
-        $parentPath = dirname(trim($this->uri->getPath(), '/'));
+        $parentPath = dirname($this->getPath());
 
         if ($parentPath === '.') {
             throw new OutOfRangeException('Cannot get parent of root reference');

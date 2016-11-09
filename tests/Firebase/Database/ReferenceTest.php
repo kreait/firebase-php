@@ -43,6 +43,11 @@ class ReferenceTest extends FirebaseTestCase
         $this->assertSame('key', $this->reference->getKey());
     }
 
+    public function testGetPath()
+    {
+        $this->assertSame('parent/key', $this->reference->getPath());
+    }
+
     public function testGetParent()
     {
         $this->assertSame('parent', $this->reference->getParent()->getUri()->getPath());

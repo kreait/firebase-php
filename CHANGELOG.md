@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## Unreleased
+
+* Rename "Firebase SDK" to "Firebase Admin SDK for PHP" to emphasize the similarity to the [newly
+  introduced official Admin SDKs](https://firebase.googleblog.com/2016/11/bringing-firebase-to-your-server.html).
+* Added method `Reference::getPath()` to retrieve the full relative path to a node.
+* Updated docs to make clearer that authenticating with a Database Secret is not recommended since
+  the official deprecation by Firebase (see 
+  [the "Database Secrets" section in the "Service Accounts" tab of a project](https://console.firebase.google.com/project/kreait-firebase-php/settings/serviceaccounts/adminsdk)
+  )
+
 ## 2.0.0 - 2016-11-06
 
 * First stable release
