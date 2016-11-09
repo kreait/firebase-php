@@ -9,6 +9,12 @@ from PHP applications.
 
 The source code can be found at https://github.com/kreait/firebase-php/
 
+.. note::
+    If you are interested in using a client for end-user access (for example, in a Node.js desktop
+    or IoT application), as opposed to admin access from a privileged environment (like a server),
+    you should instead follow the instructions for setting up a
+    `Firebase client SDK <https://firebase.google.com/docs/>`_.
+
 .. code-block:: php
 
     $firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json')
