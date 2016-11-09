@@ -18,7 +18,7 @@ Requirements
 Installation
 ************
 
-The recommended way to install the Firebase SDK is with
+The recommended way to install the Firebase Admin SDK is with
 `Composer <http://getcomposer.org>`_. Composer is a dependency management tool
 for PHP that allows you to declare the dependencies your project needs and
 installs them into your project.
@@ -30,14 +30,14 @@ installs them into your project.
     php composer-setup.php
     php -r "unlink('composer-setup.php');"
 
-You can add the Firebase SDK as a dependency using the composer.phar CLI:
+You can add the Firebase Admin SDK as a dependency using the composer.phar CLI:
 
 .. code-block:: bash
 
     php composer.phar require kreait/firebase-php ^2.0
 
 
-Alternatively, you can specify the Firebase SDK as a dependency in your
+Alternatively, you can specify the Firebase Admin SDK as a dependency in your
 project's existing composer.json file:
 
 .. code-block:: js

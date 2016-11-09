@@ -1,11 +1,11 @@
-.. title:: Firebase PHP SDK
+.. title:: Firebase Admin SDK for PHP
 
-##############################
-Firebase PHP SDK Documentation
-##############################
+##########################
+Firebase Admin SDK for PHP
+##########################
 
-This SDK makes it easy to interact with `Google Firebase <https://firebase.google.com>`_
-applications.
+This Admin SDK makes it easy to interact with `Google Firebase <https://firebase.google.com>`_
+from PHP applications.
 
 The source code can be found at https://github.com/kreait/firebase-php/
 

@@ -6,12 +6,12 @@ extensions = []
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
-project = u'Firebase PHP SDK'
+project = u'Firebase Admin SDK for PHP'
 author = u'Jérôme Gamez'
 copyright = u'2016, Jérôme Gamez'
 version = u'2.x'
-html_title = u'Firebase PHP SDK Documentation'
-html_short_title = u'Firebase PHP SDK'
+html_title = u'Firebase Admin SDK for PHP Documentation'
+html_short_title = u'Firebase Admin SDK for PHP'
 
 exclude_patterns = ['_build']
 html_static_path = ['_static']

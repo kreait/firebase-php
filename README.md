@@ -1,4 +1,4 @@
-# Firebase PHP SDK
+# Firebase Admin SDK for PHP
 
 [![Latest Stable Version](https://poser.pugx.org/kreait/firebase-php/v/stable)](https://packagist.org/packages/kreait/firebase-php)
 [![Total Downloads](https://poser.pugx.org/kreait/firebase-php/downloads)](https://packagist.org/packages/kreait/firebase-php)
