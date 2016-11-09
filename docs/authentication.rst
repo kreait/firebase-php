@@ -85,12 +85,27 @@ If you want to be more explicit, you can also override the authentication just o
 
 .. code-block:: php
 
+    // Using a service account (notice the V3 namespace part)
     $firebase = Firebase::fromServiceAccount(...);
-    $database = $firebase->getDatabase();
 
-    $authenticated = $database->asUserWithClaims('a-user-id', [
+    $auth = new \Firebase\V3\Auth\CustomToken('a-user-id', [
         'premium-user' => true
     ]);
+
+    $database = $firebase
+        ->getDatabase()
+        ->withCustomAuth($auth);
+
+    // Using a database secret (notice the V2 namespace part)
+    $firebase = Firebase::fromDatabaseUriAndSecret($uri, $secret);
+
+    $auth = new \Firebase\V2\Auth\CustomToken('a-user-id', [
+        'premium-user' => true
+    ]);
+
+    $database = $firebase
+        ->getDatabase()
+        ->withCustomAuth($auth);
 
 .. note::
     Under the hood, the SDK creates a
