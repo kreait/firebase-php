@@ -81,7 +81,11 @@ class ServiceAccount
         }
 
         if (is_string($value)) {
-            return self::fromJsonFile($value);
+            try {
+                return self::fromJson($value);
+            } catch (InvalidArgumentException $e) {
+                return self::fromJsonFile($value);
+            }
         }
 
         if (is_array($value)) {

@@ -13,7 +13,7 @@ final class Firebase
     /**
      * Creates a new Firebase V3 instance.
      *
-     * @param string|ServiceAccount $serviceAccount Path to service account JSON config or a ServiceAccount instance
+     * @param mixed $serviceAccount Service Account (ServiceAccount instance, JSON, array, path to JSON file)
      * @param string|UriInterface|null $databaseUri Database URI
      *
      * @throws \Firebase\Exception\InvalidArgumentException

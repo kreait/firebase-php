@@ -36,6 +36,14 @@ class ServiceAccountTest extends FirebaseTestCase
         $this->assertSame($data['private_key'], $this->serviceAccount->getPrivateKey());
     }
 
+    public function testCreateFromJsonText()
+    {
+        $this->assertInstanceOf(
+            ServiceAccount::class,
+            ServiceAccount::fromValue(file_get_contents($this->validJsonFile))
+        );
+    }
+
     public function testCreateFromJsonFile()
     {
         $this->assertInstanceOf(ServiceAccount::class, ServiceAccount::fromValue($this->validJsonFile));

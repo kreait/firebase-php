@@ -9,6 +9,8 @@
   the official deprecation by Firebase (see 
   [the "Database Secrets" section in the "Service Accounts" tab of a project](https://console.firebase.google.com/project/kreait-firebase-php/settings/serviceaccounts/adminsdk)
   )
+* It is now possible to pass a JSON string as the Service Account parameter on `Firebase::fromServiceAccount()`.
+  Until now, a string would have been treated as the path to a JSON file. 
 
 ## 2.0.0 - 2016-11-06
 

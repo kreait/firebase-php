@@ -40,7 +40,7 @@ class Firebase
     }
 
     /**
-     * @param mixed $serviceAccount
+     * @param mixed $serviceAccount Service Account (ServiceAccount instance, JSON, array, path to JSON file)
      * @param string|UriInterface $databaseUri
      *
      * @throws InvalidArgumentException
