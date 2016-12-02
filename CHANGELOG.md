@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 2.0.1 - 2016-12-02
 
 * Rename "Firebase SDK" to "Firebase Admin SDK for PHP" to emphasize the similarity to the [newly
   introduced official Admin SDKs](https://firebase.googleblog.com/2016/11/bringing-firebase-to-your-server.html).
