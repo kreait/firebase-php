@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 2.0.2 - 2016-12-26
 
 * Added a `SERVER_TIMESTAMP` constant to the `Firebase\Database` class to ease the population of fields
   with [Firebase's timestamp server value](https://firebase.google.com/docs/reference/rest/database/#section-server-values)
