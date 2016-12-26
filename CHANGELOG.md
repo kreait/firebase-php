@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## Unreleased
+
+* Added a `SERVER_TIMESTAMP` constant to the `Firebase\Database` class to ease the population of fields
+  with [Firebase's timestamp server value](https://firebase.google.com/docs/reference/rest/database/#section-server-values)
+  
+  ```php
+  use Firebase\Database;
+
+  $ref = $db->getReference('my-ref')
+            ->set('created_at', Database::SERVER_TIMESTAMP); 
+  ```
+
 ## 2.0.1 - 2016-12-02
 
 * Rename "Firebase SDK" to "Firebase Admin SDK for PHP" to emphasize the similarity to the [newly

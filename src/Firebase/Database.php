@@ -17,6 +17,8 @@ use Psr\Http\Message\UriInterface;
  */
 class Database
 {
+    const SERVER_TIMESTAMP = ['.sv' => 'timestamp'];
+
     /**
      * @var ApiClient
      */
