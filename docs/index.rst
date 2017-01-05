@@ -45,4 +45,5 @@ User Guide
     overview
     authentication
     realtime-database
+    troubleshooting
 
