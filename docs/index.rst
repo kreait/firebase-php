@@ -17,7 +17,7 @@ The source code can be found at https://github.com/kreait/firebase-php/
 
 .. code-block:: php
 
-    $firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json')
+    $firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json');
     $database = $firebase->getDatabase();
 
     $newPost = $database

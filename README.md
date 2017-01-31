@@ -32,7 +32,7 @@ You can find the documentation at http://firebase-php.readthedocs.io/
 ## Usage example
 
 ```php
-$firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json')
+$firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json');
 $database = $firebase->getDatabase();
 
 $newPost = $database
