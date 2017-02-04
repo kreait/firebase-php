@@ -13,10 +13,6 @@ matrix:
     - php: 7.0
     - php: 7.1
 
-cache:
-  directories:
-    - $HOME/.composer/cache
-
 script:
   - vendor/bin/phpunit --coverage-clover build/coverage.clover
 
