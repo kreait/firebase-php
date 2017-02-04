@@ -4,7 +4,6 @@ sudo: false
 
 before_install:
   - composer config --global github-oauth.github.com $github_oauth_token
-  - travis_retry composer self-update
 
 install: travis_retry composer install
 
