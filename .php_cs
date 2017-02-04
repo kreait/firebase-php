@@ -1,24 +1,17 @@
 <?php
 
-$header = '';
+$finder = PhpCsFixer\Finder::create()
+    ->exclude(['build', 'vendor'])
+    ->in(__DIR__);
 
-Symfony\CS\Fixer\Contrib\HeaderCommentFixer::setHeader($header);
-
-return Symfony\CS\Config::create()
+return PhpCsFixer\Config::create()
     ->setUsingCache(true)
-    ->level(Symfony\CS\FixerInterface::SYMFONY_LEVEL)
-    ->fixers([
-        '-psr0',
-        //'header_comment',
-        '-phpdoc_params',
-        '-blankline_after_open_tag',
-        'multiline_spaces_before_semicolon',
-        'ordered_use',
-        'short_array_syntax',
+    ->setRules([
+        '@Symfony' => true,
+        'header_comment' => ['header' => ''],
+        'phpdoc_align' => false,
+        'phpdoc_order' => true,
+        'ordered_imports' => true,
+        'array_syntax' => ['syntax' => 'short'],
     ])
-    ->finder(
-        Symfony\CS\Finder::create()
-            ->exclude('vendor')
-            ->exclude('build')
-            ->in(__DIR__)
-    );
+    ->setFinder($finder);
