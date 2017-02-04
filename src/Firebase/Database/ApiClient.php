@@ -10,6 +10,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
 use Psr\Http\Message\ResponseInterface;
+use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 
 class ApiClient
 {
@@ -40,33 +41,33 @@ class ApiClient
 
     public function get($uri)
     {
-        $response = $this->request('GET', $uri);
+        $response = $this->request(RequestMethod::METHOD_GET, $uri);
 
         return JSON::decode((string) $response->getBody(), true);
     }
 
     public function set($uri, $value)
     {
-        $response = $this->request('PUT', $uri, ['body' => JSON::encode($value)]);
+        $response = $this->request(RequestMethod::METHOD_PUT, $uri, ['body' => JSON::encode($value)]);
 
         return JSON::decode((string) $response->getBody(), true);
     }
 
     public function push($uri, $value): string
     {
-        $response = $this->request('POST', $uri, ['body' => JSON::encode($value)]);
+        $response = $this->request(RequestMethod::METHOD_POST, $uri, ['body' => JSON::encode($value)]);
 
         return JSON::decode((string) $response->getBody(), true)['name'];
     }
 
     public function remove($uri)
     {
-        $this->request('DELETE', $uri);
+        $this->request(RequestMethod::METHOD_DELETE, $uri);
     }
 
     public function update($uri, array $values)
     {
-        $this->request('PATCH', $uri, ['body' => JSON::encode($values)]);
+        $this->request(RequestMethod::METHOD_PATCH, $uri, ['body' => JSON::encode($values)]);
     }
 
     private function request(string $method, $uri, array $options = []): ResponseInterface

@@ -4,6 +4,7 @@ namespace Firebase\Exception;
 
 use Firebase\Util\JSON;
 use GuzzleHttp\Exception\RequestException;
+use Fig\Http\Message\StatusCodeInterface as StatusCode;
 
 class ApiException extends \RuntimeException implements FirebaseException
 {
@@ -20,7 +21,7 @@ class ApiException extends \RuntimeException implements FirebaseException
             $message = JSON::decode((string) $response->getBody(), true)['error'] ?? $message;
         }
 
-        if (in_array($code, [401, 403], true)) {
+        if (in_array($code, [StatusCode::STATUS_UNAUTHORIZED, StatusCode::STATUS_FORBIDDEN], true)) {
             return new PermissionDenied($message, $code, $e);
         }
 
