@@ -9,7 +9,6 @@ use Firebase\Util\JSON;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 
 class ApiClient
@@ -73,12 +72,9 @@ class ApiClient
     private function request(string $method, $uri, array $options = []): ResponseInterface
     {
         try {
-            $request = new Request($method, $uri);
-            $response = $this->httpClient->send($request, $options);
+            return $this->httpClient->request($method, $uri, $options);
         } catch (\Throwable $e) {
             throw ApiException::wrapThrowable($e);
         }
-
-        return $response;
     }
 }
