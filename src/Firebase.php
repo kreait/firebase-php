@@ -1,6 +1,5 @@
 <?php
 
-use Firebase\ServiceAccount;
 use Firebase\V2;
 use Firebase\V3;
 use Psr\Http\Message\UriInterface;
