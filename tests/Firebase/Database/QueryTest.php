@@ -101,10 +101,12 @@ class QueryTest extends FirebaseTestCase
 
     public function testWrapsApiExceptions()
     {
+        $exception = $this->createMock(ApiException::class);
+
         $this->apiClient
             ->expects($this->any())
             ->method('get')->with($this->anything())
-            ->willThrowException(new ApiException());
+            ->willThrowException($exception);
 
         $this->expectException(QueryException::class);
 
@@ -113,14 +115,12 @@ class QueryTest extends FirebaseTestCase
 
     public function testIndexNotDefined()
     {
+        $exception = new ApiException('foo index not defined bar');
+
         $this->apiClient
             ->expects($this->any())
             ->method('get')->with($this->anything())
-            ->willThrowException(
-                new ApiException(
-                    'Index not defined, add ".indexOn": "keyName", for path "/path/to/child", to the rules'
-                )
-            );
+            ->willThrowException($exception);
 
         $this->expectException(IndexNotDefined::class);
 
