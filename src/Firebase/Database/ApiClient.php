@@ -2,6 +2,7 @@
 
 namespace Firebase\Database;
 
+use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 use Firebase\Exception\ApiException;
 use Firebase\Http\Auth;
 use Firebase\Http\Middleware;
@@ -10,7 +11,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
 use Psr\Http\Message\ResponseInterface;
-use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 
 class ApiClient
 {

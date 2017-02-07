@@ -2,9 +2,9 @@
 
 namespace Firebase\Exception;
 
+use Fig\Http\Message\StatusCodeInterface as StatusCode;
 use Firebase\Util\JSON;
 use GuzzleHttp\Exception\RequestException;
-use Fig\Http\Message\StatusCodeInterface as StatusCode;
 
 class ApiException extends \RuntimeException implements FirebaseException
 {
