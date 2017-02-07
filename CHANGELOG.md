@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 2.1.0 - 2017-02-07
 
 * Added the means to work with custom tokens and ID tokens by using
   [kreait/firebase-tokens](https://packagist.org/packages/kreait/firebase-tokens). See
