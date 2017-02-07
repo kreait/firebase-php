@@ -2,6 +2,7 @@
 
 namespace Firebase\V3;
 
+use Firebase\Auth\Token\Handler;
 use Firebase\Database;
 use Firebase\Database\ApiClient;
 use Firebase\Exception\InvalidArgumentException;
@@ -75,6 +76,24 @@ class Firebase
     public function asUserWithClaims(string $uid, array $claims = []): Firebase
     {
         return $this->withCustomAuth(new CustomToken($uid, $claims));
+    }
+
+    /**
+     * Returns a Token Handler to be used for creating Custom Tokens and
+     * verifying ID tokens.
+     *
+     * @see https://firebase.google.com/docs/auth/admin/create-custom-tokens
+     * @see https://firebase.google.com/docs/auth/admin/verify-id-tokens
+     *
+     * @return Handler
+     */
+    public function getTokenHandler(): Handler
+    {
+        return new Handler(
+            $this->serviceAccount->getProjectId(),
+            $this->serviceAccount->getClientEmail(),
+            $this->serviceAccount->getPrivateKey()
+        );
     }
 
     private function withCustomAuth(Auth $override): Firebase

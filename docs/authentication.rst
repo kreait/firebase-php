@@ -65,9 +65,9 @@ tab in your project's settings page.
     when using it. If you want to access the Storage or other parts of your Firebase project, you will
     have to use Service account authentication.
 
-***********************************************
-Authentication overrides (a.k.a. Custom Tokens)
-***********************************************
+*******************
+Impersonating users
+*******************
 
 You can impersonate users of your Firebase application through the the ``asUserWithClaims()`` method, which requires
 a user id as the first parameter, and an optional array with claims as the second.
@@ -80,36 +80,35 @@ a user id as the first parameter, and an optional array with claims as the secon
         'premium-user' => true
     ]);
 
-If you want to be more explicit, you can also override the authentication just on a database connection:
+*******************
+Working with Tokens
+*******************
+
+If you need to create `Custom Tokens <https://firebase.google.com/docs/auth/server/create-custom-tokens>`_
+or verify `ID Tokens <https://firebase.google.com/docs/auth/admin/verify-id-tokens>`_, a Service Account
+based Firebase instance provides the ``getTokenHandler()`` method:
 
 .. code-block:: php
 
-    // Using a service account (notice the V3 namespace part)
     $firebase = Firebase::fromServiceAccount(...);
 
-    $auth = new \Firebase\V3\Auth\CustomToken('a-user-id', [
-        'premium-user' => true
-    ]);
+    $tokenHandler = $firebase->getTokenHandler();
 
-    $database = $firebase
-        ->getDatabase()
-        ->withCustomAuth($auth);
+    $uid = 'a-uid';
+    $claims = ['foo' => 'bar']; // optional
 
-    // Using a database secret (notice the V2 namespace part)
-    $firebase = Firebase::fromDatabaseUriAndSecret($uri, $secret);
+    // Returns a Lcobucci\JWT\Token instance
+    $customToken = $tokenHandler->createCustomToken($uid, $claims);
+    echo $token; // "eyJ0eXAiOiJKV1..."
 
-    $auth = new \Firebase\V2\Auth\CustomToken('a-user-id', [
-        'premium-user' => true
-    ]);
+    $idTokenString = 'eyJhbGciOiJSUzI1...';
+    // Returns a Lcobucci\JWT\Token instance
+    $idToken = $tokenHandler->verifyIdToken($idTokenString);
 
-    $database = $firebase
-        ->getDatabase()
-        ->withCustomAuth($auth);
+    $uid = $idToken->getClaim('sub');
+
+    echo $uid; // 'a-uid'
 
 .. note::
-    Under the hood, the SDK creates a
-    `Custom Token <https://firebase.google.com/docs/auth/server/create-custom-tokens>`_ and uses to apply
-    the `Security rules <https://firebase.google.com/docs/database/security/>`_ to the connection.
-
-    Authentication overrides are performed differently, depending on whether you authenticate with a
-    Google Service Account or a database secret.
+    A standalone version of the Token Handler is available with the
+    `kreait/firebase-tokens <https://packagist.org/packages/kreait/firebase-tokens>`_ library.

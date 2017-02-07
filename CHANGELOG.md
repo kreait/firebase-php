@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## Unreleased
+
+* Added the means to work with custom tokens and ID tokens by using
+  [kreait/firebase-tokens](https://packagist.org/packages/kreait/firebase-tokens). See
+  [Authentication: Working with Tokens](http://firebase-php.readthedocs.io/en/latest/authentication.html#working-with-tokens)
+  for usage instructions.
+* Replaced the implementation of Database Secret based custom tokens (in the `V2` namespace) 
+  with a solution based on [`lcobucci/jwt`](https://github.com/lcobucci/jwt) instead of the 
+  abandoned [firebase/token-generator](https://github.com/firebase/firebase-token-generator-php).
+
 ## 2.0.2 - 2016-12-26
 
 * Added a `SERVER_TIMESTAMP` constant to the `Firebase\Database` class to ease the population of fields

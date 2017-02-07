@@ -2,9 +2,10 @@
 
 namespace Firebase\V2\Http\Auth;
 
-use Firebase\Token\TokenGenerator;
 use Firebase\V2\Http\Auth;
 use GuzzleHttp\Psr7;
+use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Psr\Http\Message\RequestInterface;
 
 final class CustomToken implements Auth
@@ -12,26 +13,36 @@ final class CustomToken implements Auth
     /**
      * @var string
      */
-    private $token;
+    private $secret;
+
+    /**
+     * @var array
+     */
+    private $claims;
 
     public function __construct(string $databaseSecret, string $uid, array $claims = [])
     {
-        $claims = array_filter($claims, function ($value) {
+        $this->secret = $databaseSecret;
+
+        $this->claims = ['uid' => $uid] + array_filter($claims, function ($value) {
             return $value !== null;
         });
-
-        $claims = ['uid' => $uid] + $claims;
-
-        $this->token = (new TokenGenerator($databaseSecret))
-            ->setData($claims)
-            ->create();
     }
 
     public function authenticateRequest(RequestInterface $request): RequestInterface
     {
         $uri = $request->getUri();
 
-        $queryParams = ['auth' => $this->token] + Psr7\parse_query($uri->getQuery());
+        $now = time();
+
+        $token = (new Builder())
+            ->setIssuedAt($now)
+            ->set('d', $this->claims)
+            ->setExpiration($now + (60 * 60))
+            ->sign(new Sha256(), $this->secret)
+            ->getToken();
+
+        $queryParams = ['auth' => (string) $token] + Psr7\parse_query($uri->getQuery());
         $queryString = Psr7\build_query($queryParams);
 
         $newUri = $uri->withQuery($queryString);
