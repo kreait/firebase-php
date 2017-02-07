@@ -2,6 +2,7 @@
 
 namespace Tests\Firebase\V3;
 
+use Firebase\Auth\Token\Handler;
 use Firebase\Database;
 use Firebase\ServiceAccount;
 use Firebase\V3\Firebase;
@@ -60,5 +61,10 @@ class FirebaseTest extends FirebaseTestCase
         $firebase = $this->firebase->asUserWithClaims('uid');
         $this->assertInstanceOf(Firebase::class, $firebase);
         $this->assertNotSame($this->firebase, $firebase);
+    }
+
+    public function testGetTokenHandler()
+    {
+        $this->assertInstanceOf(Handler::class, $this->firebase->getTokenHandler());
     }
 }
