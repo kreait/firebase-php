@@ -85,6 +85,17 @@ class ReferenceTest extends FirebaseTestCase
         $this->assertSame(['a', 'b', 'c'], $this->reference->getChildKeys());
     }
 
+    public function testHasChildKeys()
+    {
+        $this->apiClient
+            ->expects($this->any())
+            ->method('get')
+            ->with($this->anything())
+            ->willReturn(['a' => true]);
+
+        $this->assertSame(true, $this->reference->hasChild('a'));
+    }
+
     public function testGetChildKeysWhenNoChildrenAreSet()
     {
         $this->apiClient
