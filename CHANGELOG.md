@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* Updated [kreait/firebase-tokens](https://github.com/kreait/firebase-tokens-php/releases/tag/1.1.0) to
+  ensure that ID token verification.
+
 ## 2.1.0 - 2017-02-07
 
 * Added the means to work with custom tokens and ID tokens by using
