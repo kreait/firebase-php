@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* Updated [kreait/firebase-tokens](https://github.com/kreait/firebase-tokens-php/releases/tag/1.1.1) 
+  to fix #65 (Invalid token when claims are empty).
+
 ## 2.1.1 - 2017-02-18
 
 * Updated [kreait/firebase-tokens](https://github.com/kreait/firebase-tokens-php/releases/tag/1.1.0) 
