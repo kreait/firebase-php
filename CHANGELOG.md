@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 2.1.3 - 2017-02-23
 
 * Ensure that `guzzlehttp/psr7` 1.4.0 is not used, as it breaks backwards compatibility
   (see [guzzle/psr7#138](https://github.com/guzzle/psr7/issues/138))
