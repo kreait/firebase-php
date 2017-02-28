@@ -5,7 +5,7 @@ namespace Firebase\V2\Http\Auth;
 use Firebase\V2\Http\Auth;
 use GuzzleHttp\Psr7;
 use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Hmac;
 use Psr\Http\Message\RequestInterface;
 
 class AdminToken implements Auth
@@ -30,7 +30,7 @@ class AdminToken implements Auth
             ->setIssuedAt($now)
             ->setExpiration($now + (60 * 60))
             ->set('admin', true)
-            ->sign(new Sha256(), $this->secret)
+            ->sign(new Hmac\Sha256(), $this->secret)
             ->getToken();
 
         $queryParams = ['auth' => (string) $token] + Psr7\parse_query($uri->getQuery());
