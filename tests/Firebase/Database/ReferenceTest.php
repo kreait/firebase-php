@@ -50,7 +50,7 @@ class ReferenceTest extends FirebaseTestCase
 
     public function testGetParent()
     {
-        $this->assertSame('parent', $this->reference->getParent()->getUri()->getPath());
+        $this->assertSame('parent', $this->reference->getParent()->getPath());
     }
 
     public function testGetParentOfRoot()
@@ -71,7 +71,7 @@ class ReferenceTest extends FirebaseTestCase
     {
         $child = $this->reference->getChild('child');
 
-        $this->assertSame('parent/key/child', $child->getUri()->getPath());
+        $this->assertSame('parent/key/child', $child->getPath());
     }
 
     public function testGetChildKeys()
