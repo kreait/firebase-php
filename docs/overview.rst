@@ -52,7 +52,9 @@ After installing, you need to require Composer's autoloader:
 
 .. code-block:: php
 
-    require 'vendor/autoload.php';
+    <?php
+
+    require __DIR__.'/vendor/autoload.php';
 
 You can find out more on how to install Composer, configure autoloading, and
 other best-practices for defining dependencies at

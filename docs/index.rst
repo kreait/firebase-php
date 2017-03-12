@@ -17,6 +17,10 @@ The source code can be found at https://github.com/kreait/firebase-php/
 
 .. code-block:: php
 
+    <?php
+
+    require __DIR__.'/vendor/autoload.php';
+
     $firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json');
     $database = $firebase->getDatabase();
 
