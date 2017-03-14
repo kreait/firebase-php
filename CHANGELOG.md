@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## Unreleased
+
+* Introduce `Firebase\Factory` to create Firebase instances, and deprecate the
+  previous static instantiation methods on the `Firebase` class.
+  It is now possible to omit an explicit JSON credentials file,
+  * if one of the following environment variables is set with the path to the 
+    credentials file:
+    * `FIREBASE_CREDENTIALS`
+    * `GOOGLE_APPLICATION_CREDENTIALS`
+  * or if the file is located at
+    * `~/.config/gcloud/application_default_credentials.json` (Linux, MacOS)
+    * `$APPDATA/gcloud/application_default_credentials.json` (Windows)
+* Updated documentation at http://firebase-php.readthedocs.io
+
 ## 2.1.3 - 2017-02-23
 
 * Ensure that `guzzlehttp/psr7` 1.4.0 is not used, as it breaks backwards compatibility

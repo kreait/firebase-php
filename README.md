@@ -32,7 +32,11 @@ You can find the documentation at http://firebase-php.readthedocs.io/
 ## Usage example
 
 ```php
-$firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json');
+$firebase = (new \Firebase\Factory())
+    ->withCredentials(__DIR__.'/path/to/google-service-account.json')
+    ->withDatabaseUri('https://my-project.firebaseio.com')
+    ->create();
+
 $database = $firebase->getDatabase();
 
 $newPost = $database

@@ -14,40 +14,48 @@ With a Google Service Account
 Follow the steps described in the official Firebase documentation to create a Service Account for your Firebase
 application: `Add Firebase to your app <https://firebase.google.com/docs/server/setup#add_firebase_to_your_app>`_.
 
-You can now create a new Firebase instance with ``Firebase::fromServiceAccount($value)`` which accepts one of the
-following values:
+Download the Service Account JSON Key to one of the following locations:
 
-- the path to a Google Service Account JSON configuration file (recommended)
-- a JSON string
-- an array
-- an instance of ``Firebase\ServiceAccount``
+#. to the path defined by the environment variable ``FIREBASE_CREDENTIALS``
+#. to the path defined by the environment variable ``GOOGLE_APPLICATION_CREDENTIALS``
+#. to Google's "well known path"
+
+   * on Linux/MacOS: ``$HOME/.config/gcloud/application_default_credentials.json``
+   * on Windows: ``$APPDATA/gcloud/application_default_credentials.json``
+
+#. to any other path your project has access to
 
 .. code-block:: php
 
-    $firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json');
+    # If the JSON file is in one of the known paths, the factory will
+    # find it automatically
+    $firebase = (new \Firebase\Factory())->create();
+
+    # If the JSON file is located in a path accessible to your project,
+    # or if you want to create multiple dedicated instances
+    $firebase = (new \Firebase\Factory())
+        ->withCredentials(__DIR__.'/path/to/google-service-account.json')
+        ->create();
 
 If the project ID in the JSON file does not match the URL of your Firebase application, or if you want to
-be explicit, you can specify the Database URI either as a second parameter or an additional method call:
+be explicit, you can configure the Factory like this:
 
 .. code-block:: php
 
-    $firebase = Firebase::fromServiceAccount(
-        __DIR__.'/google-service-account.json',
-        'https://my-project.firebaseio.com'
-    );
-
-    $firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json');
-        ->withDatabaseUri('https://my-project.firebaseio.com');
+    $firebase = (new \Firebase\Factory())
+        ->withCredentials(__DIR__.'/path/to/google-service-account.json')
+        ->withDatabaseUri('https://my-project.firebaseio.com')
+        ->create();
 
 
-**********************
-With a Database secret
-**********************
+***********************************
+With a Database secret (Deprecated)
+***********************************
 
 .. note::
 
     Authenticating with a database secret has been officially deprecated since November 2016 and will
-    be removed from this library as soon as Firebase doesn't accept it anymore.
+    be removed from this library in Release 3.0.
 
 You can create and retrieve Database secrets in the
 `Service Accounts <https://console.firebase.google.com/project/_/settings/serviceaccounts/adminsdk>`_

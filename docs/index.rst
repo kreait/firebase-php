@@ -21,7 +21,11 @@ The source code can be found at https://github.com/kreait/firebase-php/
 
     require __DIR__.'/vendor/autoload.php';
 
-    $firebase = Firebase::fromServiceAccount(__DIR__.'/google-service-account.json');
+    $firebase = (new Firebase\Factory)
+        ->withCredentials(__DIR__.'/google-service-account.json')
+        ->withDatabaseUri('https://my-project.firebaseio.com')
+        ->create();
+
     $database = $firebase->getDatabase();
 
     $newPost = $database
