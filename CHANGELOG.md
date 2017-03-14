@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 2.2.0 - 2017-03-14
 
 * Introduce `Firebase\Factory` to create Firebase instances, and deprecate the
   previous static instantiation methods on the `Firebase` class.
