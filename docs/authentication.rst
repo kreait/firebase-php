@@ -99,7 +99,7 @@ based Firebase instance provides the ``getTokenHandler()`` method:
 
     // Returns a Lcobucci\JWT\Token instance
     $customToken = $tokenHandler->createCustomToken($uid, $claims);
-    echo $token; // "eyJ0eXAiOiJKV1..."
+    echo $customToken; // "eyJ0eXAiOiJKV1..."
 
     $idTokenString = 'eyJhbGciOiJSUzI1...';
     // Returns a Lcobucci\JWT\Token instance
