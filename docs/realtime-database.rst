@@ -7,7 +7,7 @@ method of your Firebase instance:
 
 .. code-block:: php
 
-    $firebase = Firebase::fromServiceAccount(...);
+    $firebase = (new \Firebase\Factory())->create();
     $database = $firebase->getDatabase();
 
 

@@ -82,7 +82,7 @@ a user id as the first parameter, and an optional array with claims as the secon
 
 .. code-block:: php
 
-    $firebase = Firebase::fromServiceAccount(...);
+    $firebase = (new \Firebase\Factory())->create();
 
     $authenticated = $firebase->asUserWithClaims('a-user-id', [
         'premium-user' => true
@@ -98,7 +98,7 @@ based Firebase instance provides the ``getTokenHandler()`` method:
 
 .. code-block:: php
 
-    $firebase = Firebase::fromServiceAccount(...);
+    $firebase = (new \Firebase\Factory())->create();
 
     $tokenHandler = $firebase->getTokenHandler();
 
