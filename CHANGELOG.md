@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* Allow the usage of a custom token handler when creating a new Firebase instance by adding
+  the factory method `withTokenHandler(\Firebase\Auth\Token\Handler $handler)`
+
 ## 2.2.0 - 2017-03-14
 
 * Introduce `Firebase\Factory` to create Firebase instances, and deprecate the

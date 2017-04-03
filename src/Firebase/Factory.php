@@ -2,6 +2,7 @@
 
 namespace Firebase;
 
+use Firebase\Auth\Token\Handler as TokenHandler;
 use Firebase\Exception\InvalidArgumentException;
 use Firebase\Exception\LogicException;
 use Firebase\V3\Firebase;
@@ -22,6 +23,11 @@ final class Factory
      * @var UriInterface
      */
     private $databaseUri;
+
+    /**
+     * @var TokenHandler
+     */
+    private $tokenHandler;
 
     private static $databaseUriPattern = 'https://%s.firebaseio.com';
 
@@ -46,6 +52,14 @@ final class Factory
         return $factory;
     }
 
+    public function withTokenHandler(TokenHandler $handler): self
+    {
+        $factory = clone $this;
+        $factory->tokenHandler = $handler;
+
+        return $factory;
+    }
+
     private function setupDefaults()
     {
         $this->credentialPaths = array_filter([
@@ -58,8 +72,9 @@ final class Factory
     {
         $serviceAccount = $this->getServiceAccount();
         $databaseUri = $this->databaseUri ?? $this->getDatabaseUriFromServiceAccount($serviceAccount);
+        $tokenHandler = $this->tokenHandler ?? $this->getDefaultTokenHandler($serviceAccount);
 
-        return new Firebase($serviceAccount, $databaseUri);
+        return new Firebase($serviceAccount, $databaseUri, $tokenHandler);
     }
 
     private function getDatabaseUriFromServiceAccount(ServiceAccount $serviceAccount): UriInterface
@@ -94,5 +109,14 @@ final class Factory
                 return null;
             }
         }, $this->credentialPaths));
+    }
+
+    private function getDefaultTokenHandler(ServiceAccount $serviceAccount): TokenHandler
+    {
+        return new TokenHandler(
+            $serviceAccount->getProjectId(),
+            $serviceAccount->getClientEmail(),
+            $serviceAccount->getPrivateKey()
+        );
     }
 }

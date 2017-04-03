@@ -22,6 +22,11 @@ class FirebaseTest extends FirebaseTestCase
     private $databaseUri;
 
     /**
+     * @var Handler
+     */
+    private $tokenHandler;
+
+    /**
      * @var Firebase
      */
     private $firebase;
@@ -30,15 +35,22 @@ class FirebaseTest extends FirebaseTestCase
     {
         $this->serviceAccount = $this->createServiceAccountMock();
         $this->databaseUri = new Uri('https://database-uri.tld');
+        $this->tokenHandler = new Handler('projectid', 'clientEmail', 'privateKey');
 
-        $this->firebase = new Firebase($this->serviceAccount, $this->databaseUri);
+        $this->firebase = new Firebase($this->serviceAccount, $this->databaseUri, $this->tokenHandler);
     }
 
     public function testCreateFromServiceAccount()
     {
+        $this->assertInstanceOf(Firebase::class, @Firebase::fromServiceAccount($this->serviceAccount));
+        $this->assertInstanceOf(Firebase::class, @Firebase::fromServiceAccount($this->serviceAccount, $this->databaseUri));
+        $this->assertInstanceOf(Firebase::class, @Firebase::fromServiceAccount($this->serviceAccount, (string) $this->databaseUri));
+    }
+
+    public function testCreateFromServiceAccountTriggersDeprecationError()
+    {
+        $this->expectException(\PHPUnit\Framework\Error\Deprecated::class);
         $this->assertInstanceOf(Firebase::class, Firebase::fromServiceAccount($this->serviceAccount));
-        $this->assertInstanceOf(Firebase::class, Firebase::fromServiceAccount($this->serviceAccount, $this->databaseUri));
-        $this->assertInstanceOf(Firebase::class, Firebase::fromServiceAccount($this->serviceAccount, (string) $this->databaseUri));
     }
 
     public function testWithDatabaseUri()

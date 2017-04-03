@@ -117,6 +117,16 @@ based Firebase instance provides the ``getTokenHandler()`` method:
 
     echo $uid; // 'a-uid'
 
+If you want to use a custom token handler, you can do so by passing it to the factory:
+
+.. code-block:: php
+
+    $handler = new \Firebase\Auth\Token\Handler(...);
+
+    $firebase = (new \Firebase\Factory())
+        ->withTokenHandler($handler);
+        ->create();
+
 .. note::
     A standalone version of the Token Handler is available with the
     `kreait/firebase-tokens <https://packagist.org/packages/kreait/firebase-tokens>`_ library.

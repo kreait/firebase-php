@@ -2,10 +2,14 @@
 
 namespace Tests\Firebase;
 
+use Firebase\Auth\Token\Domain\Generator;
+use Firebase\Auth\Token\Domain\Verifier;
+use Firebase\Auth\Token\Handler;
 use Firebase\Exception\LogicException;
 use Firebase\Factory;
 use Firebase\V3\Firebase;
 use Google\Auth\CredentialsLoader;
+use Lcobucci\JWT\Token;
 use Tests\FirebaseTestCase;
 
 class FactoryTest extends FirebaseTestCase
@@ -64,5 +68,26 @@ class FactoryTest extends FirebaseTestCase
             ->create();
 
         $this->assertInstanceOf(Firebase::class, $factory);
+    }
+
+    public function testItUsesADefaultTokenHandler()
+    {
+        $firebase = (new Factory())
+            ->withCredentials($this->keyFile)
+            ->create();
+
+        $this->assertInstanceOf(Handler::class, $firebase->getTokenHandler());
+    }
+
+    public function testItAcceptsACustomTokenHandler()
+    {
+        $handler = new Handler('projectId', 'clientEmail', 'privateKey');
+
+        $firebase = (new Factory())
+            ->withCredentials($this->keyFile)
+            ->withTokenHandler($handler)
+            ->create();
+
+        $this->assertSame($handler, $firebase->getTokenHandler());
     }
 }
