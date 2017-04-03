@@ -35,7 +35,8 @@
     "config": {
         "platform": {
             "php": "7.0"
-        }
+        },
+        "sort-packages": true
     },
     "extra": {
         "branch-alias": {
