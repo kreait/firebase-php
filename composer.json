@@ -27,10 +27,7 @@
     "autoload": {
         "psr-4": {
             "Firebase\\": "src/Firebase"
-        },
-        "files": [
-            "src/Firebase.php"
-        ]
+        }
     },
     "config": {
         "platform": {

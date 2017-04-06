@@ -40,19 +40,6 @@ class FirebaseTest extends FirebaseTestCase
         $this->firebase = new Firebase($this->serviceAccount, $this->databaseUri, $this->tokenHandler);
     }
 
-    public function testCreateFromServiceAccount()
-    {
-        $this->assertInstanceOf(Firebase::class, @Firebase::fromServiceAccount($this->serviceAccount));
-        $this->assertInstanceOf(Firebase::class, @Firebase::fromServiceAccount($this->serviceAccount, $this->databaseUri));
-        $this->assertInstanceOf(Firebase::class, @Firebase::fromServiceAccount($this->serviceAccount, (string) $this->databaseUri));
-    }
-
-    public function testCreateFromServiceAccountTriggersDeprecationError()
-    {
-        $this->expectException(\PHPUnit\Framework\Error\Deprecated::class);
-        $this->assertInstanceOf(Firebase::class, Firebase::fromServiceAccount($this->serviceAccount));
-    }
-
     public function testWithDatabaseUri()
     {
         $firebase = $this->firebase->withDatabaseUri('https://some-other-uri.tld');

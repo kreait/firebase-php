@@ -4,8 +4,7 @@ Authentication
 
 In order to access a Firebase project using a server SDK, you must authenticate your server with Firebase. This
 can be done either by creating and using a
-`Service Account <https://developers.google.com/identity/protocols/OAuth2ServiceAccount>`_ (strongly
-recommended), or by providing using a database secret (not recommended).
+`Service Account <https://developers.google.com/identity/protocols/OAuth2ServiceAccount>`_.
 
 *****************************
 With a Google Service Account
@@ -46,32 +45,6 @@ be explicit, you can configure the Factory like this:
         ->withCredentials(__DIR__.'/path/to/google-service-account.json')
         ->withDatabaseUri('https://my-project.firebaseio.com')
         ->create();
-
-
-***********************************
-With a Database secret (Deprecated)
-***********************************
-
-.. note::
-
-    Authenticating with a database secret has been officially deprecated since November 2016 and will
-    be removed from this library in Release 3.0.
-
-You can create and retrieve Database secrets in the
-`Service Accounts <https://console.firebase.google.com/project/_/settings/serviceaccounts/adminsdk>`_
-tab in your project's settings page.
-
-.. code-block:: php
-
-    $secret = '...';
-    $databaseUri = 'https://my-project-id.firebaseio.com';
-
-    $firebase = Firebase::fromDatabaseUriAndSecret($databaseUri, $secret);
-
-.. note::
-    This is a legacy authentication method, you will only be able to access the Firebase Realtime Database
-    when using it. If you want to access the Storage or other parts of your Firebase project, you will
-    have to use Service account authentication.
 
 *******************
 Impersonating users

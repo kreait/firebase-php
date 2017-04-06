@@ -44,7 +44,7 @@ project's existing composer.json file:
 
     {
       "require": {
-         "kreait/firebase-php": "^2.2"
+         "kreait/firebase-php": "^3.0"
       }
    }
 
@@ -93,7 +93,7 @@ License
 
 Licensed using the `MIT license <http://opensource.org/licenses/MIT>`_.
 
-    Copyright (c) 2016 Jérôme Gamez <https://github.com/jeromegamez> <jerome@gamez.name>
+    Copyright (c) 2016-2017 Jérôme Gamez <https://github.com/jeromegamez> <jerome@gamez.name>
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal

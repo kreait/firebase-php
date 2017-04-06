@@ -5,8 +5,6 @@ namespace Firebase\V3;
 use Firebase\Auth\Token\Handler as TokenHandler;
 use Firebase\Database;
 use Firebase\Database\ApiClient;
-use Firebase\Exception\InvalidArgumentException;
-use Firebase\Factory;
 use Firebase\Http\Middleware;
 use Firebase\ServiceAccount;
 use Firebase\V3\Auth\CustomToken;
@@ -15,7 +13,6 @@ use Google\Auth\Middleware\AuthTokenMiddleware;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\UriInterface;
 
 class Firebase
@@ -45,41 +42,6 @@ class Firebase
         $this->serviceAccount = $serviceAccount;
         $this->databaseUri = $databaseUri;
         $this->tokenHandler = $tokenHandler;
-    }
-
-    /**
-     * Creates a new Firebase instance from a service account.
-     *
-     * @deprecated 2.2 will be removed in 3.0, use Firebase\Factory instead
-     *
-     * @param mixed $serviceAccount Service Account (ServiceAccount instance, JSON, array, path to JSON file)
-     * @param string|UriInterface $databaseUri
-     *
-     * @throws InvalidArgumentException
-     *
-     * @return Firebase
-     */
-    public static function fromServiceAccount($serviceAccount, $databaseUri = null)
-    {
-        trigger_error(
-            'This method is deprecated and will be removed in release 3.0 of this library.'
-            .' Use Firebase\Factory instead.', E_USER_DEPRECATED
-        );
-
-        $serviceAccount = ServiceAccount::fromValue($serviceAccount);
-
-        $databaseUri = $databaseUri
-            ? Psr7\uri_for($databaseUri)
-            : new Uri(sprintf('https://%s.firebaseio.com', $serviceAccount->getProjectId()));
-
-        $factory = new Factory();
-        $rc = new \ReflectionObject($factory);
-        $rm = $rc->getMethod('getDefaultTokenHandler');
-        $rm->setAccessible(true);
-
-        $tokenHandler = $rm->invoke($factory, $serviceAccount);
-
-        return new self($serviceAccount, $databaseUri, $tokenHandler);
     }
 
     /**
