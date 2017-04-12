@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 2.3.1 - 2017-04-12
 
 * Bugfix: Allow string values in filter queries
 
