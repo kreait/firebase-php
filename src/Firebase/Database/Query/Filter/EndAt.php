@@ -24,6 +24,6 @@ final class EndAt implements Filter
 
     public function modifyUri(UriInterface $uri): UriInterface
     {
-        return $this->appendQueryParam($uri, 'endAt', $this->value);
+        return $this->appendQueryParam($uri, 'endAt', json_encode($this->value));
     }
 }

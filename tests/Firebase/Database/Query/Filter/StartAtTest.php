@@ -16,10 +16,24 @@ class StartAtTest extends FirebaseTestCase
         new StartAt(null);
     }
 
-    public function testModifyUri()
+    /**
+     * @param $given
+     * @param $expected
+     *
+     * @dataProvider valueProvider
+     */
+    public function testModifyUri($given, $expected)
     {
-        $filter = new StartAt('value');
+        $filter = new StartAt($given);
 
-        $this->assertContains('startAt=value', (string) $filter->modifyUri(new Uri('http://domain.tld')));
+        $this->assertContains($expected, (string) $filter->modifyUri(new Uri('http://domain.tld')));
+    }
+
+    public function valueProvider()
+    {
+        return [
+            [1, 'startAt=1'],
+            ['value', 'startAt=%22value%22']
+        ];
     }
 }

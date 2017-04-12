@@ -24,6 +24,6 @@ final class StartAt implements Filter
 
     public function modifyUri(UriInterface $uri): UriInterface
     {
-        return $this->appendQueryParam($uri, 'startAt', $this->value);
+        return $this->appendQueryParam($uri, 'startAt', json_encode($this->value));
     }
 }

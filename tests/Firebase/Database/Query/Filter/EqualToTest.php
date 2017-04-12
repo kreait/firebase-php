@@ -16,10 +16,24 @@ class EqualToTest extends FirebaseTestCase
         new EqualTo(new \stdClass());
     }
 
-    public function testModifyUri()
+    /**
+     * @param $given
+     * @param $expected
+     *
+     * @dataProvider valueProvider
+     */
+    public function testModifyUri($given, $expected)
     {
-        $filter = new EqualTo('value');
+        $filter = new EqualTo($given);
 
-        $this->assertContains('equalTo=value', (string) $filter->modifyUri(new Uri('http://domain.tld')));
+        $this->assertContains($expected, (string) $filter->modifyUri(new Uri('http://domain.tld')));
+    }
+
+    public function valueProvider()
+    {
+        return [
+            [1, 'equalTo=1'],
+            ['value', 'equalTo=%22value%22']
+        ];
     }
 }

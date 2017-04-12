@@ -16,10 +16,24 @@ class EndAtTest extends FirebaseTestCase
         new EndAt(null);
     }
 
-    public function testModifyUri()
+    /**
+     * @param $given
+     * @param $expected
+     *
+     * @dataProvider valueProvider
+     */
+    public function testModifyUri($given, $expected)
     {
-        $filter = new EndAt('value');
+        $filter = new EndAt($given);
 
-        $this->assertContains('endAt=value', (string) $filter->modifyUri(new Uri('http://domain.tld')));
+        $this->assertContains($expected, (string) $filter->modifyUri(new Uri('http://domain.tld')));
+    }
+
+    public function valueProvider()
+    {
+        return [
+            [1, 'endAt=1'],
+            ['value', 'endAt=%22value%22']
+        ];
     }
 }

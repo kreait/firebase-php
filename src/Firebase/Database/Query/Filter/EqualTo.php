@@ -24,6 +24,6 @@ final class EqualTo implements Filter
 
     public function modifyUri(UriInterface $uri): UriInterface
     {
-        return $this->appendQueryParam($uri, 'equalTo', $this->value);
+        return $this->appendQueryParam($uri, 'equalTo', json_encode($this->value));
     }
 }

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Bugfix: Allow string values in filter queries
+
 ## 2.3.0 - 2017-04-06
 
 * Allow the usage of a custom token handler when creating a new Firebase instance by adding
