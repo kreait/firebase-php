@@ -2,7 +2,7 @@
 
 ## 2.3.1 - 2017-04-12
 
-* Bugfix: Allow string values in filter queries
+* Fixes the problem that it wasn't possible to use startAt/endAt/equalTo with string values.
 
 ## 2.3.0 - 2017-04-06
 
