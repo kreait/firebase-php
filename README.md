@@ -1,12 +1,15 @@
 # Firebase PHP Client
 
-[![Latest Stable Version](https://poser.pugx.org/kreait/firebase-php/version)](https://packagist.org/packages/kreait/firebase-php)
-[![Build Status](https://travis-ci.org/kreait/firebase-php.svg?branch=1.x)](https://travis-ci.org/kreait/firebase-php)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/quality-score.png?b=1.x)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=1.x)
-[![Documentation Status](https://readthedocs.org/projects/firebase-php/badge/?version=latest)](http://firebase-php.readthedocs.io/en/latest/?badge=latest)
-[![Code Coverage](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/coverage.png?b=1.x)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=1.x)
+[![Latest Stable Version](https://poser.pugx.org/kreait/firebase-php/v/stable)](https://packagist.org/packages/kreait/firebase-php)
 
 A PHP client for the [Google Firebase](https://firebase.google.com) Realtime Database
+
+## Security fixes only
+
+The 1.x branch of this library is supported for critical security issues only.
+Releases are only made on an as-needed basis.
+
+Please use the [latest stable version](https://github.com/kreait/firebase-php/releases/latest).
 
 ---
 
