@@ -2,8 +2,14 @@
 Troubleshooting
 ###############
 
+*********************************************
+Call to undefined function ``openssl_sign()``
+*********************************************
+
+You need to install the OpenSSL PHP Extension: http://php.net/openssl
+
 ************************************************
-cURL error 51: SSL certificate validation failed
+cURL error XX: SSL certificate validation failed
 ************************************************
 
 If you receive the above error, make sure that you have a current
