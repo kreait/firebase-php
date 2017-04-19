@@ -21,7 +21,7 @@ class JSON
      *
      * @return string
      */
-    public static function encode($value, $options = 0, $depth = 512)
+    public static function encode($value, $options = 0, $depth = 512): string
     {
         $json = \json_encode($value, $options, $depth);
         if (JSON_ERROR_NONE !== json_last_error()) {

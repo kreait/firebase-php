@@ -9,9 +9,9 @@ class Middleware
     /**
      * Ensures that the ".json" suffix is added to URIs and that the content type is set correctly.
      *
-     * @return \Closure
+     * @return callable
      */
-    public static function ensureJson()
+    public static function ensureJson(): callable
     {
         return function (callable $handler) {
             return function (RequestInterface $request, array $options = []) use ($handler) {
@@ -35,9 +35,9 @@ class Middleware
      *
      * @param \Kreait\Firebase\Http\Auth $override
      *
-     * @return \Closure
+     * @return callable
      */
-    public static function overrideAuth(Auth $override)
+    public static function overrideAuth(Auth $override): callable
     {
         return function (callable $handler) use ($override) {
             return function (RequestInterface $request, array $options = []) use ($handler, $override) {

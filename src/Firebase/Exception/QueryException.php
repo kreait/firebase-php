@@ -20,7 +20,7 @@ class QueryException extends \RuntimeException implements FirebaseException
         return $this->query;
     }
 
-    public static function fromApiException(ApiException $e, Query $query)
+    public static function fromApiException(ApiException $e, Query $query): self
     {
         $message = $e->getMessage();
 

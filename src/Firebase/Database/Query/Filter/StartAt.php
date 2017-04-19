@@ -5,6 +5,7 @@ namespace Kreait\Firebase\Database\Query\Filter;
 use Kreait\Firebase\Database\Query\Filter;
 use Kreait\Firebase\Database\Query\ModifierTrait;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\UriInterface;
 
 final class StartAt implements Filter
@@ -24,6 +25,6 @@ final class StartAt implements Filter
 
     public function modifyUri(UriInterface $uri): UriInterface
     {
-        return $this->appendQueryParam($uri, 'startAt', json_encode($this->value));
+        return $this->appendQueryParam($uri, 'startAt', JSON::encode($this->value));
     }
 }

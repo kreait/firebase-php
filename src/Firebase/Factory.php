@@ -68,13 +68,15 @@ final class Factory
         ]);
     }
 
-    public function create()
+    public function create(): Firebase
     {
         $serviceAccount = $this->getServiceAccount();
-        $databaseUri = $this->databaseUri ?? $this->getDatabaseUriFromServiceAccount($serviceAccount);
-        $tokenHandler = $this->tokenHandler ?? $this->getDefaultTokenHandler($serviceAccount);
 
-        return new Firebase($serviceAccount, $databaseUri, $tokenHandler);
+        return new Firebase(
+            $serviceAccount,
+            $this->databaseUri ?? $this->getDatabaseUriFromServiceAccount($serviceAccount),
+            $this->tokenHandler ?? $this->getDefaultTokenHandler($serviceAccount)
+        );
     }
 
     private function getDatabaseUriFromServiceAccount(ServiceAccount $serviceAccount): UriInterface

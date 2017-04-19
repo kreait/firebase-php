@@ -34,12 +34,12 @@ class Validator
 
     private function validateDepth(string $path)
     {
-        $keys = explode('/', $path);
+        $depth = substr_count($path, '/') + 1;
 
-        if ($count = count($keys) > self::MAX_DEPTH) {
+        if ($depth > self::MAX_DEPTH) {
             throw new InvalidArgumentException(sprintf(
                 'A reference location must not more than %d levels deep, "%s" has %d.',
-                self::MAX_DEPTH, $path, $count
+                self::MAX_DEPTH, $path, $depth
             ));
         }
     }
