@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## Unreleased
+
+* Moved all classes inside the `Kreait` namespace to avoid possible conflicts with official Firebase PHP libraries 
+  using the `Firebase` namespace.
+* Removed database secret authentication, as it has been deprecated by Firebase.
+
+Please visit the [Migration section in the docs](https://firebase-php.readthedocs.io/en/latest/migration.html)
+to see which changes in your code are required when upgrading from 2.x to 3.0.
+
 ## 2.3.1 - 2017-04-12
 
 * Fixes the problem that it wasn't possible to use startAt/endAt/equalTo with string values.
