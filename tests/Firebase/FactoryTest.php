@@ -4,9 +4,9 @@ namespace Kreait\Tests\Firebase;
 
 use Firebase\Auth\Token\Handler;
 use Google\Auth\CredentialsLoader;
+use Kreait\Firebase;
 use Kreait\Firebase\Exception\LogicException;
 use Kreait\Firebase\Factory;
-use Kreait\Firebase\V3\Firebase;
 use Kreait\Tests\FirebaseTestCase;
 
 class FactoryTest extends FirebaseTestCase

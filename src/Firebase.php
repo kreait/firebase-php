@@ -1,6 +1,6 @@
 <?php
 
-namespace Kreait\Firebase\V3;
+namespace Kreait;
 
 use Firebase\Auth\Token\Handler as TokenHandler;
 use Google\Auth\Credentials\ServiceAccountCredentials;
@@ -10,9 +10,10 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7;
 use Kreait\Firebase\Database;
 use Kreait\Firebase\Database\ApiClient;
+use Kreait\Firebase\Http\Auth;
+use Kreait\Firebase\Http\Auth\CustomToken;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\ServiceAccount;
-use Kreait\Firebase\V3\Auth\CustomToken;
 use Psr\Http\Message\UriInterface;
 
 class Firebase
@@ -130,12 +131,7 @@ class Firebase
         return new ApiClient($http);
     }
 
-    /**
-     * @param ServiceAccount $serviceAccount
-     *
-     * @return AuthTokenMiddleware
-     */
-    private function createGoogleAuthTokenMiddleware(ServiceAccount $serviceAccount)
+    private function createGoogleAuthTokenMiddleware(ServiceAccount $serviceAccount): AuthTokenMiddleware
     {
         $scopes = [
             'https://www.googleapis.com/auth/userinfo.email',

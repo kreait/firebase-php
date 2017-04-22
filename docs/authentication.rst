@@ -11,7 +11,9 @@ With a Google Service Account
 *****************************
 
 Follow the steps described in the official Firebase documentation to create a Service Account for your Firebase
-application: `Add Firebase to your app <https://firebase.google.com/docs/server/setup#add_firebase_to_your_app>`_.
+application (see
+`Add the Firebase Admin SDK to your Server <https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app>`_)
+and make sure the Service Account has the `Project -> Editor` or `Project -> Owner` role.
 
 Download the Service Account JSON Key to one of the following locations:
 
@@ -26,13 +28,15 @@ Download the Service Account JSON Key to one of the following locations:
 
 .. code-block:: php
 
+    use Kreait\Firebase;
+
     # If the JSON file is in one of the known paths, the factory will
     # find it automatically
-    $firebase = (new \Firebase\Factory())->create();
+    $firebase = (new Firebase\Factory())->create();
 
     # If the JSON file is located in a path accessible to your project,
     # or if you want to create multiple dedicated instances
-    $firebase = (new \Firebase\Factory())
+    $firebase = (new Firebase\Factory())
         ->withCredentials(__DIR__.'/path/to/google-service-account.json')
         ->create();
 
@@ -41,7 +45,9 @@ be explicit, you can configure the Factory like this:
 
 .. code-block:: php
 
-    $firebase = (new \Firebase\Factory())
+    use Kreait\Firebase;
+
+    $firebase = (new Firebase\Factory())
         ->withCredentials(__DIR__.'/path/to/google-service-account.json')
         ->withDatabaseUri('https://my-project.firebaseio.com')
         ->create();
@@ -55,7 +61,9 @@ a user id as the first parameter, and an optional array with claims as the secon
 
 .. code-block:: php
 
-    $firebase = (new \Firebase\Factory())->create();
+    use Kreait\Firebase;
+
+    $firebase = (new Firebase\Factory())->create();
 
     $authenticated = $firebase->asUserWithClaims('a-user-id', [
         'premium-user' => true
@@ -71,7 +79,9 @@ based Firebase instance provides the ``getTokenHandler()`` method:
 
 .. code-block:: php
 
-    $firebase = (new \Firebase\Factory())->create();
+    use Kreait\Firebase;
+
+    $firebase = (new Firebase\Factory())->create();
 
     $tokenHandler = $firebase->getTokenHandler();
 
@@ -94,9 +104,11 @@ If you want to use a custom token handler, you can do so by passing it to the fa
 
 .. code-block:: php
 
-    $handler = new \Firebase\Auth\Token\Handler(...);
+    use Kreait\Firebase;
 
-    $firebase = (new \Firebase\Factory())
+    $handler = new Firebase\Auth\Token\Handler(...);
+
+    $firebase = (new Firebase\Factory())
         ->withTokenHandler($handler);
         ->create();
 

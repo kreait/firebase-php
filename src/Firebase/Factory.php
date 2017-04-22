@@ -5,9 +5,9 @@ namespace Kreait\Firebase;
 use Firebase\Auth\Token\Handler as TokenHandler;
 use Google\Auth\CredentialsLoader;
 use GuzzleHttp\Psr7;
+use Kreait\Firebase;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\LogicException;
-use Kreait\Firebase\V3\Firebase;
 use Psr\Http\Message\UriInterface;
 
 final class Factory

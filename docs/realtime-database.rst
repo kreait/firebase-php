@@ -7,7 +7,9 @@ method of your Firebase instance:
 
 .. code-block:: php
 
-    $firebase = (new \Firebase\Factory())->create();
+    use Kreait\Firebase;
+
+    $firebase = (new Firebase\Factory())->create();
     $database = $firebase->getDatabase();
 
 

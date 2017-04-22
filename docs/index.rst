@@ -4,16 +4,9 @@
 Firebase Admin SDK for PHP
 ##########################
 
-This Admin SDK makes it easy to interact with `Google Firebase <https://firebase.google.com>`_
-from PHP applications.
+Interact with `Google Firebase <https://firebase.google.com>`_ from your PHP application.
 
 The source code can be found at https://github.com/kreait/firebase-php/
-
-.. note::
-    If you are interested in using a client for end-user access (for example, in a Node.js desktop
-    or IoT application), as opposed to admin access from a privileged environment (like a server),
-    you should instead follow the instructions for setting up a
-    `Firebase client SDK <https://firebase.google.com/docs/>`_.
 
 .. code-block:: php
 
@@ -21,7 +14,9 @@ The source code can be found at https://github.com/kreait/firebase-php/
 
     require __DIR__.'/vendor/autoload.php';
 
-    $firebase = (new \Firebase\Factory)
+    use Kreait\Firebase;
+
+    $firebase = (new Firebase\Factory)
         ->withCredentials(__DIR__.'/google-service-account.json')
         ->withDatabaseUri('https://my-project.firebaseio.com')
         ->create();
@@ -54,4 +49,5 @@ User Guide
     authentication
     realtime-database
     troubleshooting
+    migration
 

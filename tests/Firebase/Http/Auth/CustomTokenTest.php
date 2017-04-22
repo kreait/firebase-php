@@ -1,9 +1,9 @@
 <?php
 
-namespace Kreait\Tests\Firebase\V3\Http\Auth;
+namespace Kreait\Tests\Firebase\Http\Auth;
 
 use GuzzleHttp\Psr7;
-use Kreait\Firebase\V3\Auth\CustomToken;
+use Kreait\Firebase\Http\Auth\CustomToken;
 use Kreait\Tests\FirebaseTestCase;
 
 class CustomTokenTest extends FirebaseTestCase

@@ -37,6 +37,7 @@ class DatabaseTest extends FirebaseTestCase
 
     public function testWithCustomAuth()
     {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Auth $auth */
         $auth = $this->createMock(Auth::class);
 
         $this->assertInstanceOf(Database::class, $this->database->withCustomAuth($auth));
