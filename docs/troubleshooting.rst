@@ -50,4 +50,10 @@ Create a backup of the file, download the current CA bundle from
 https://curl.haxx.se/ca/cacert.pem and put it where ``default_cert_file``
 points to.
 
-If needed, restart your PHP processes and check if the problem still occurs.
+If the problem still occurs, another possible solution is to configure the ``curl.cainfo``
+setting in your ``php.ini``:
+
+.. code-block:: ini
+
+    [curl]
+    curl.cainfo = /absolute/path/to/cacert.pem
