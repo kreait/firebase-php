@@ -1,6 +1,6 @@
 <?php
 
-namespace Firebase\Database;
+namespace Kreait\Firebase\Database;
 
 use JmesPath;
 

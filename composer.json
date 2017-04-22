@@ -26,7 +26,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Firebase\\": "src/Firebase"
+            "Kreait\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kreait\\Tests\\": "tests"
         }
     },
     "config": {

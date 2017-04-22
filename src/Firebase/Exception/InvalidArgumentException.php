@@ -1,6 +1,6 @@
 <?php
 
-namespace Firebase\Exception;
+namespace Kreait\Firebase\Exception;
 
 class InvalidArgumentException extends \InvalidArgumentException implements FirebaseException
 {

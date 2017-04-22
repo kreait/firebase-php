@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Firebase;
+namespace Kreait\Tests\Firebase;
 
-use Firebase\Database;
-use Firebase\Database\ApiClient;
-use Firebase\Database\Reference;
-use Firebase\Exception\InvalidArgumentException;
-use Firebase\Http\Auth;
 use GuzzleHttp\Psr7\Uri;
-use Tests\FirebaseTestCase;
+use Kreait\Firebase\Database;
+use Kreait\Firebase\Database\ApiClient;
+use Kreait\Firebase\Database\Reference;
+use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Http\Auth;
+use Kreait\Tests\FirebaseTestCase;
 
 class DatabaseTest extends FirebaseTestCase
 {

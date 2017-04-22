@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Firebase\Database\Query\Sorter;
+namespace Kreait\Tests\Firebase\Database\Query\Sorter;
 
-use Firebase\Database\Query\Sorter\OrderByChild;
 use GuzzleHttp\Psr7\Uri;
-use Tests\FirebaseTestCase;
+use Kreait\Firebase\Database\Query\Sorter\OrderByChild;
+use Kreait\Tests\FirebaseTestCase;
 
 class OrderByChildTest extends FirebaseTestCase
 {

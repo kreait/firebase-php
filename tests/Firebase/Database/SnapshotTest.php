@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Firebase\Database;
+namespace Kreait\Tests\Firebase\Database;
 
-use Firebase\Database\Reference;
-use Firebase\Database\Snapshot;
-use Tests\FirebaseTestCase;
+use Kreait\Firebase\Database\Reference;
+use Kreait\Firebase\Database\Snapshot;
+use Kreait\Tests\FirebaseTestCase;
 
 class SnapshotTest extends FirebaseTestCase
 {

@@ -1,18 +1,18 @@
 <?php
 
-namespace Firebase\V3;
+namespace Kreait\Firebase\V3;
 
 use Firebase\Auth\Token\Handler as TokenHandler;
-use Firebase\Database;
-use Firebase\Database\ApiClient;
-use Firebase\Http\Middleware;
-use Firebase\ServiceAccount;
-use Firebase\V3\Auth\CustomToken;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\Middleware\AuthTokenMiddleware;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7;
+use Kreait\Firebase\Database;
+use Kreait\Firebase\Database\ApiClient;
+use Kreait\Firebase\Http\Middleware;
+use Kreait\Firebase\ServiceAccount;
+use Kreait\Firebase\V3\Auth\CustomToken;
 use Psr\Http\Message\UriInterface;
 
 class Firebase

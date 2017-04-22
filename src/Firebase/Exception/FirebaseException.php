@@ -1,6 +1,6 @@
 <?php
 
-namespace Firebase\Exception;
+namespace Kreait\Firebase\Exception;
 
 interface FirebaseException extends \Throwable
 {

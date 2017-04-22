@@ -1,13 +1,13 @@
 <?php
 
-namespace Firebase;
+namespace Kreait\Firebase;
 
-use Firebase\Database\ApiClient;
-use Firebase\Database\Reference;
-use Firebase\Exception\InvalidArgumentException;
-use Firebase\Exception\OutOfRangeException;
-use Firebase\Http\Auth;
 use GuzzleHttp\Psr7;
+use Kreait\Firebase\Database\ApiClient;
+use Kreait\Firebase\Database\Reference;
+use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\OutOfRangeException;
+use Kreait\Firebase\Http\Auth;
 use Psr\Http\Message\UriInterface;
 
 /**

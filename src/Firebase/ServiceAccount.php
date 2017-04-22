@@ -1,9 +1,9 @@
 <?php
 
-namespace Firebase;
+namespace Kreait\Firebase;
 
-use Firebase\Exception\InvalidArgumentException;
-use Firebase\Util\JSON;
+use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Util\JSON;
 
 class ServiceAccount
 {

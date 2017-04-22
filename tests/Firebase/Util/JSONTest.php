@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Firebase\Util;
+namespace Kreait\Tests\Firebase\Util;
 
-use Firebase\Exception\InvalidArgumentException;
-use Firebase\Util\JSON;
-use Tests\FirebaseTestCase;
+use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Util\JSON;
+use Kreait\Tests\FirebaseTestCase;
 
 class JSONTest extends FirebaseTestCase
 {

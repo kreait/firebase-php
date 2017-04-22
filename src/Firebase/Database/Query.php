@@ -1,11 +1,11 @@
 <?php
 
-namespace Firebase\Database;
+namespace Kreait\Firebase\Database;
 
-use Firebase\Database\Query\Filter;
-use Firebase\Database\Query\Sorter;
-use Firebase\Exception\ApiException;
-use Firebase\Exception\QueryException;
+use Kreait\Firebase\Database\Query\Filter;
+use Kreait\Firebase\Database\Query\Sorter;
+use Kreait\Firebase\Exception\ApiException;
+use Kreait\Firebase\Exception\QueryException;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -121,7 +121,7 @@ class Query
      */
     public function endAt($value): Query
     {
-        return $this->withAddedFilter(new Filter\EndAt($value));
+        return $this->withAddedFilter(new \Kreait\Firebase\Database\Query\Filter\EndAt($value));
     }
 
     /**
@@ -135,7 +135,7 @@ class Query
      */
     public function equalTo($value): Query
     {
-        return $this->withAddedFilter(new Filter\EqualTo($value));
+        return $this->withAddedFilter(new \Kreait\Firebase\Database\Query\Filter\EqualTo($value));
     }
 
     /**
@@ -151,7 +151,7 @@ class Query
      */
     public function startAt($value): Query
     {
-        return $this->withAddedFilter(new Filter\StartAt($value));
+        return $this->withAddedFilter(new \Kreait\Firebase\Database\Query\Filter\StartAt($value));
     }
 
     /**
@@ -165,7 +165,7 @@ class Query
      */
     public function limitToFirst(int $limit): Query
     {
-        return $this->withAddedFilter(new Filter\LimitToFirst($limit));
+        return $this->withAddedFilter(new \Kreait\Firebase\Database\Query\Filter\LimitToFirst($limit));
     }
 
     /**
@@ -179,7 +179,7 @@ class Query
      */
     public function limitToLast(int $limit): Query
     {
-        return $this->withAddedFilter(new Filter\LimitToLast($limit));
+        return $this->withAddedFilter(new \Kreait\Firebase\Database\Query\Filter\LimitToLast($limit));
     }
 
     /**
@@ -198,7 +198,7 @@ class Query
      */
     public function orderByChild(string $childKey): Query
     {
-        return $this->withSorter(new Sorter\OrderByChild($childKey));
+        return $this->withSorter(new \Kreait\Firebase\Database\Query\Sorter\OrderByChild($childKey));
     }
 
     /**
@@ -217,7 +217,7 @@ class Query
      */
     public function orderByKey(): Query
     {
-        return $this->withSorter(new Sorter\OrderByKey());
+        return $this->withSorter(new \Kreait\Firebase\Database\Query\Sorter\OrderByKey());
     }
 
     /**
@@ -237,7 +237,7 @@ class Query
      */
     public function orderByValue(): Query
     {
-        return $this->withSorter(new Sorter\OrderByValue());
+        return $this->withSorter(new \Kreait\Firebase\Database\Query\Sorter\OrderByValue());
     }
 
     /**
@@ -254,7 +254,7 @@ class Query
      */
     public function shallow(): Query
     {
-        return $this->withAddedFilter(new Filter\Shallow());
+        return $this->withAddedFilter(new \Kreait\Firebase\Database\Query\Filter\Shallow());
     }
 
     /**

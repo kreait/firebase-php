@@ -1,7 +1,7 @@
 <?php
 
-namespace Firebase\V3;
+namespace Kreait\Firebase\V3;
 
-interface Auth extends \Firebase\Http\Auth
+interface Auth extends \Kreait\Firebase\Http\Auth
 {
 }

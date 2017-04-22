@@ -1,9 +1,9 @@
 <?php
 
-namespace Firebase\Database\Query\Sorter;
+namespace Kreait\Firebase\Database\Query\Sorter;
 
-use Firebase\Database\Query\ModifierTrait;
-use Firebase\Database\Query\Sorter;
+use Kreait\Firebase\Database\Query\ModifierTrait;
+use Kreait\Firebase\Database\Query\Sorter;
 use Psr\Http\Message\UriInterface;
 
 final class OrderByKey implements Sorter

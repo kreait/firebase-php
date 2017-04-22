@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Firebase;
+namespace Kreait\Tests\Firebase;
 
-use Firebase\Exception\InvalidArgumentException;
-use Firebase\ServiceAccount;
-use Tests\FirebaseTestCase;
+use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\ServiceAccount;
+use Kreait\Tests\FirebaseTestCase;
 
 class ServiceAccountTest extends FirebaseTestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Firebase\Http;
+namespace Kreait\Firebase\Http;
 
 use Psr\Http\Message\RequestInterface;
 

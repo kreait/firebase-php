@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Firebase\Database\Reference;
+namespace Kreait\Tests\Firebase\Database\Reference;
 
-use Firebase\Database\Reference\Validator;
-use Firebase\Exception\InvalidArgumentException;
 use GuzzleHttp\Psr7\Uri;
+use Kreait\Firebase\Database\Reference\Validator;
+use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Tests\FirebaseTestCase;
 use Psr\Http\Message\UriInterface;
-use Tests\FirebaseTestCase;
 
 class ValidatorTest extends FirebaseTestCase
 {

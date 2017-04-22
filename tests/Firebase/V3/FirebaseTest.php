@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Firebase\V3;
+namespace Kreait\Tests\Firebase\V3;
 
 use Firebase\Auth\Token\Handler;
-use Firebase\Database;
-use Firebase\ServiceAccount;
-use Firebase\V3\Firebase;
 use GuzzleHttp\Psr7\Uri;
-use Tests\FirebaseTestCase;
+use Kreait\Firebase\Database;
+use Kreait\Firebase\ServiceAccount;
+use Kreait\Firebase\V3\Firebase;
+use Kreait\Tests\FirebaseTestCase;
 
 class FirebaseTest extends FirebaseTestCase
 {

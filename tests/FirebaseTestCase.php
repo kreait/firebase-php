@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests;
+namespace Kreait\Tests;
 
-use Firebase\ServiceAccount;
+use Kreait\Firebase\ServiceAccount;
 use PHPUnit\Framework\TestCase;
 
 abstract class FirebaseTestCase extends TestCase

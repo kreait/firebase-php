@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Firebase\Exception;
+namespace Kreait\Tests\Firebase\Exception;
 
-use Firebase\Exception\ApiException;
-use Firebase\Exception\PermissionDenied;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Response;
+use Kreait\Firebase\Exception\ApiException;
+use Kreait\Firebase\Exception\PermissionDenied;
+use Kreait\Tests\FirebaseTestCase;
 use Psr\Http\Message\RequestInterface;
-use Tests\FirebaseTestCase;
 
 class ApiExceptionTest extends FirebaseTestCase
 {

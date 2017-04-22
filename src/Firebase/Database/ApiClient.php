@@ -1,15 +1,15 @@
 <?php
 
-namespace Firebase\Database;
+namespace Kreait\Firebase\Database;
 
 use Fig\Http\Message\RequestMethodInterface as RequestMethod;
-use Firebase\Exception\ApiException;
-use Firebase\Http\Auth;
-use Firebase\Http\Middleware;
-use Firebase\Util\JSON;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
+use Kreait\Firebase\Exception\ApiException;
+use Kreait\Firebase\Http\Auth;
+use Kreait\Firebase\Http\Middleware;
+use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
 
 class ApiClient

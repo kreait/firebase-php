@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\Firebase\Database;
+namespace Kreait\Tests\Firebase\Database;
 
-use Firebase\Database\ApiClient;
-use Firebase\Exception\ApiException;
-use Firebase\Http\Auth;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Kreait\Firebase\Database\ApiClient;
+use Kreait\Firebase\Exception\ApiException;
+use Kreait\Firebase\Http\Auth;
+use Kreait\Tests\FirebaseTestCase;
 use Psr\Http\Message\ResponseInterface;
-use Tests\FirebaseTestCase;
 
 class ApiClientTest extends FirebaseTestCase
 {

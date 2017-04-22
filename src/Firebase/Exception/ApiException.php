@@ -1,10 +1,10 @@
 <?php
 
-namespace Firebase\Exception;
+namespace Kreait\Firebase\Exception;
 
 use Fig\Http\Message\StatusCodeInterface as StatusCode;
-use Firebase\Util\JSON;
 use GuzzleHttp\Exception\RequestException;
+use Kreait\Firebase\Util\JSON;
 
 class ApiException extends \RuntimeException implements FirebaseException
 {

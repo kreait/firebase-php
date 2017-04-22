@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Firebase\V3\Http\Auth;
+namespace Kreait\Tests\Firebase\V3\Http\Auth;
 
-use Firebase\V3\Auth\CustomToken;
 use GuzzleHttp\Psr7;
-use Tests\FirebaseTestCase;
+use Kreait\Firebase\V3\Auth\CustomToken;
+use Kreait\Tests\FirebaseTestCase;
 
 class CustomTokenTest extends FirebaseTestCase
 {

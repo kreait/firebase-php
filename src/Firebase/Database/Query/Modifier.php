@@ -1,6 +1,6 @@
 <?php
 
-namespace Firebase\Database\Query;
+namespace Kreait\Firebase\Database\Query;
 
 use Psr\Http\Message\UriInterface;
 

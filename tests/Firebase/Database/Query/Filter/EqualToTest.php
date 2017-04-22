@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Firebase\Database\Query\Filter;
+namespace Kreait\Tests\Firebase\Database\Query\Filter;
 
-use Firebase\Database\Query\Filter\EqualTo;
-use Firebase\Exception\InvalidArgumentException;
 use GuzzleHttp\Psr7\Uri;
-use Tests\FirebaseTestCase;
+use Kreait\Firebase\Database\Query\Filter\EqualTo;
+use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Tests\FirebaseTestCase;
 
 class EqualToTest extends FirebaseTestCase
 {
@@ -33,7 +33,7 @@ class EqualToTest extends FirebaseTestCase
     {
         return [
             [1, 'equalTo=1'],
-            ['value', 'equalTo=%22value%22']
+            ['value', 'equalTo=%22value%22'],
         ];
     }
 }

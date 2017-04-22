@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\Firebase\Database;
+namespace Kreait\Tests\Firebase\Database;
 
-use Firebase\Database\ApiClient;
-use Firebase\Database\Query;
-use Firebase\Database\Reference;
-use Firebase\Database\Snapshot;
-use Firebase\Exception\OutOfRangeException;
 use GuzzleHttp\Psr7\Uri;
+use Kreait\Firebase\Database\ApiClient;
+use Kreait\Firebase\Database\Query;
+use Kreait\Firebase\Database\Reference;
+use Kreait\Firebase\Database\Snapshot;
+use Kreait\Firebase\Exception\OutOfRangeException;
+use Kreait\Tests\FirebaseTestCase;
 use Psr\Http\Message\UriInterface;
-use Tests\FirebaseTestCase;
 
 class ReferenceTest extends FirebaseTestCase
 {

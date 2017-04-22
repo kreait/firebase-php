@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Firebase\Http;
+namespace Kreait\Tests\Firebase\Http;
 
-use Firebase\Http\Auth;
-use Firebase\Http\Middleware;
 use GuzzleHttp\Psr7;
+use Kreait\Firebase\Http\Auth;
+use Kreait\Firebase\Http\Middleware;
+use Kreait\Tests\FirebaseTestCase;
 use Psr\Http\Message\RequestInterface;
-use Tests\FirebaseTestCase;
 
 class MiddlewareTest extends FirebaseTestCase
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Firebase\Database\Query\Filter;
+namespace Kreait\Tests\Firebase\Database\Query\Filter;
 
-use Firebase\Database\Query\Filter\Shallow;
 use GuzzleHttp\Psr7\Uri;
-use Tests\FirebaseTestCase;
+use Kreait\Firebase\Database\Query\Filter\Shallow;
+use Kreait\Tests\FirebaseTestCase;
 
 class ShallowTest extends FirebaseTestCase
 {

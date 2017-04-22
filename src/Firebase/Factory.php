@@ -1,13 +1,13 @@
 <?php
 
-namespace Firebase;
+namespace Kreait\Firebase;
 
 use Firebase\Auth\Token\Handler as TokenHandler;
-use Firebase\Exception\InvalidArgumentException;
-use Firebase\Exception\LogicException;
-use Firebase\V3\Firebase;
 use Google\Auth\CredentialsLoader;
 use GuzzleHttp\Psr7;
+use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\LogicException;
+use Kreait\Firebase\V3\Firebase;
 use Psr\Http\Message\UriInterface;
 
 final class Factory

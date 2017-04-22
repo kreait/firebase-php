@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Firebase\Exception;
+namespace Kreait\Tests\Firebase\Exception;
 
-use Firebase\Database\Query;
-use Firebase\Exception\ApiException;
-use Firebase\Exception\QueryException;
-use Tests\FirebaseTestCase;
+use Kreait\Firebase\Database\Query;
+use Kreait\Firebase\Exception\ApiException;
+use Kreait\Firebase\Exception\QueryException;
+use Kreait\Tests\FirebaseTestCase;
 
 class QueryExceptionTest extends FirebaseTestCase
 {

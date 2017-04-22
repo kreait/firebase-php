@@ -1,8 +1,8 @@
 <?php
 
-namespace Firebase\Database\Reference;
+namespace Kreait\Firebase\Database\Reference;
 
-use Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
 class Validator

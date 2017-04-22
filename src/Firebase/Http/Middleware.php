@@ -1,6 +1,6 @@
 <?php
 
-namespace Firebase\Http;
+namespace Kreait\Firebase\Http;
 
 use Psr\Http\Message\RequestInterface;
 
@@ -33,7 +33,7 @@ class Middleware
     /**
      * Adds custom authentication to a request.
      *
-     * @param \Firebase\Http\Auth $override
+     * @param \Kreait\Firebase\Http\Auth $override
      *
      * @return \Closure
      */

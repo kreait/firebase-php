@@ -1,10 +1,10 @@
 <?php
 
-namespace Firebase\V3\Auth;
+namespace Kreait\Firebase\V3\Auth;
 
-use Firebase\Util\JSON;
-use Firebase\V3\Auth;
 use GuzzleHttp\Psr7;
+use Kreait\Firebase\Util\JSON;
+use Kreait\Firebase\V3\Auth;
 use Psr\Http\Message\RequestInterface;
 
 final class CustomToken implements Auth

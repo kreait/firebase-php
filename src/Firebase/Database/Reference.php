@@ -1,11 +1,11 @@
 <?php
 
-namespace Firebase\Database;
+namespace Kreait\Firebase\Database;
 
-use Firebase\Database\Reference\Validator;
-use Firebase\Exception\ApiException;
-use Firebase\Exception\InvalidArgumentException;
-use Firebase\Exception\OutOfRangeException;
+use Kreait\Firebase\Database\Reference\Validator;
+use Kreait\Firebase\Exception\ApiException;
+use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\OutOfRangeException;
 use Psr\Http\Message\UriInterface;
 
 /**

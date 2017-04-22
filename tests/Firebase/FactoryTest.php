@@ -1,16 +1,13 @@
 <?php
 
-namespace Tests\Firebase;
+namespace Kreait\Tests\Firebase;
 
-use Firebase\Auth\Token\Domain\Generator;
-use Firebase\Auth\Token\Domain\Verifier;
 use Firebase\Auth\Token\Handler;
-use Firebase\Exception\LogicException;
-use Firebase\Factory;
-use Firebase\V3\Firebase;
 use Google\Auth\CredentialsLoader;
-use Lcobucci\JWT\Token;
-use Tests\FirebaseTestCase;
+use Kreait\Firebase\Exception\LogicException;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\V3\Firebase;
+use Kreait\Tests\FirebaseTestCase;
 
 class FactoryTest extends FirebaseTestCase
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Firebase\Util;
+namespace Kreait\Firebase\Util;
 
-use Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\InvalidArgumentException;
 
 class JSON
 {

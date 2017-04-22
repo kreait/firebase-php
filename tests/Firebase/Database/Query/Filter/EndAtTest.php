@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Firebase\Database\Query\Filter;
+namespace Kreait\Tests\Firebase\Database\Query\Filter;
 
-use Firebase\Database\Query\Filter\EndAt;
-use Firebase\Exception\InvalidArgumentException;
 use GuzzleHttp\Psr7\Uri;
-use Tests\FirebaseTestCase;
+use Kreait\Firebase\Database\Query\Filter\EndAt;
+use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Tests\FirebaseTestCase;
 
 class EndAtTest extends FirebaseTestCase
 {
@@ -33,7 +33,7 @@ class EndAtTest extends FirebaseTestCase
     {
         return [
             [1, 'endAt=1'],
-            ['value', 'endAt=%22value%22']
+            ['value', 'endAt=%22value%22'],
         ];
     }
 }

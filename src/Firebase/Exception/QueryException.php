@@ -1,8 +1,8 @@
 <?php
 
-namespace Firebase\Exception;
+namespace Kreait\Firebase\Exception;
 
-use Firebase\Database\Query;
+use Kreait\Firebase\Database\Query;
 
 class QueryException extends \RuntimeException implements FirebaseException
 {
