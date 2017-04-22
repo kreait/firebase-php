@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.0.0 - 2017-04-22
 
 * Moved all classes inside the `Kreait` namespace to avoid possible conflicts with official Firebase PHP libraries 
   using the `Firebase` namespace.
