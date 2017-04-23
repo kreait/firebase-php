@@ -6,6 +6,7 @@ use Kreait\Firebase\Database\Reference\Validator;
 use Kreait\Firebase\Exception\ApiException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
+use Kreait\Firebase\SSEClient\Client as SSEClient;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -389,6 +390,21 @@ class Reference
         $this->apiClient->update($this->uri, $values);
 
         return $this;
+    }
+
+
+    /**
+     * Allows streaming changes to a single location in realtime database
+     *
+     * @see https://firebase.google.com/docs/reference/rest/database/#section-streaming
+     *
+     * @return Event[]
+     */
+    public function stream(): array
+    {
+        $sseClient = new SSEClient($this->uri);
+
+        return $sseClient->getEvents();
     }
 
     /**

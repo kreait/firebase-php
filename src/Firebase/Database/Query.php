@@ -7,6 +7,7 @@ use Kreait\Firebase\Database\Query\Sorter;
 use Kreait\Firebase\Exception\ApiException;
 use Kreait\Firebase\Exception\QueryException;
 use Psr\Http\Message\UriInterface;
+use Kreait\Firebase\SSEClient\Client as SSEClient;
 
 /**
  * A Query sorts and filters the data at a database location so only a subset of the child data is included.
@@ -93,6 +94,20 @@ class Query
         }
 
         return new Snapshot($this->reference, $value);
+    }
+
+    /**
+     * Allows streaming changes to a single location in realtime database
+     *
+     * @see https://firebase.google.com/docs/reference/rest/database/#section-streaming
+     *
+     * @return Event[]
+     */
+    public function stream(): array
+    {
+        $sseClient = new SSEClient($this->uri);
+
+        return $sseClient->getEvents();
     }
 
     /**
