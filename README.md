@@ -6,9 +6,9 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
 
-Interact with [Google Firebase](https://firebase.google.com>) from your PHP application.
+Interact with [Google Firebase](https://firebase.google.com) from your PHP application.
 
-You can find the documentation at 
+You can find the documentation at
 [firebase-php.readthedocs.io](https://firebase-php.readthedocs.io/).
 
 For support, please use the [issue tracker](https://github.com/kreait/firebase-php/issues/),
