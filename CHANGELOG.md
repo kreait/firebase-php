@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* When the credentials file has not been found, a `CredentialsNotFound` exception is thrown,
+  including the information which paths have been tried.
+
 ## 3.0.0 - 2017-04-22
 
 * Moved all classes inside the `Kreait` namespace to avoid possible conflicts with official Firebase PHP libraries 

@@ -96,10 +96,7 @@ final class Factory
         }
         // @codeCoverageIgnoreEnd
 
-        throw new LogicException(sprintf(
-            'No service account has been found. Please set the path to a service account credentials file with %s::%s()',
-            static::class, 'withCredentials($path)'
-        ));
+        throw new Firebase\Exception\CredentialsNotFound($this->credentialPaths);
     }
 
     private function getServiceAccountCandidates(): array
