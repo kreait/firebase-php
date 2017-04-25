@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.0.1 - 2017-04-25
 
 * When the credentials file has not been found, a `CredentialsNotFound` exception is thrown,
   including the information which paths have been tried.
