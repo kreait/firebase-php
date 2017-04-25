@@ -40,6 +40,20 @@ class FactoryTest extends FirebaseTestCase
         $this->assertInstanceOf(Firebase::class, (new Factory())->create());
     }
 
+    public function testItFindsACustomCredentialsFile()
+    {
+        $firebase = (new Factory())
+            ->withCredentials($this->fixturesDir.'/ServiceAccount/custom.json')
+            ->create();
+
+        $object = new \ReflectionObject($firebase);
+        $property = $object->getProperty('serviceAccount');
+        $property->setAccessible(true);
+        $serviceAccount = $property->getValue($firebase);
+
+        $this->assertSame('custom', $serviceAccount->getProjectId());
+    }
+
     public function testItThrowsAnExceptionWhenNoCredentialsAreAvailable()
     {
         $this->expectException(LogicException::class);
