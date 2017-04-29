@@ -7,7 +7,7 @@ use Kreait\Firebase\Database\Query\Sorter;
 use Kreait\Firebase\Exception\ApiException;
 use Kreait\Firebase\Exception\QueryException;
 use Psr\Http\Message\UriInterface;
-use Kreait\Firebase\SSEClient\Client as SSEClient;
+use Kreait\Firebase\Database\SseClient;
 
 /**
  * A Query sorts and filters the data at a database location so only a subset of the child data is included.
@@ -105,7 +105,7 @@ class Query
      */
     public function getEvents()
     {
-        $sseClient = new SSEClient($this->apiClient->getHttpClient(), $this->uri);
+        $sseClient = new SseClient($this->apiClient->getHttpClient(), $this->uri);
 
         return $sseClient->getEvents();
     }

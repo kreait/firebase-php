@@ -6,8 +6,8 @@ use Kreait\Firebase\Database\Reference\Validator;
 use Kreait\Firebase\Exception\ApiException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
-use Kreait\Firebase\SSEClient\Client as SSEClient;
 use Psr\Http\Message\UriInterface;
+use Kreait\Firebase\Database\SseClient;
 
 /**
  * A Reference represents a specific location in your database and can be used
@@ -402,7 +402,7 @@ class Reference
      */
     public function getEvents()
     {
-        $sseClient = new SSEClient($this->apiClient->getHttpClient(), $this->uri);
+        $sseClient = new SseClient($this->apiClient->getHttpClient(), $this->uri);
 
         return $sseClient->getEvents();
     }

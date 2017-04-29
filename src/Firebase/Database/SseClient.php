@@ -1,6 +1,6 @@
 <?php
 
-namespace Kreait\Firebase\SSEClient;
+namespace Kreait\Firebase\Database;
 
 use GuzzleHttp\Client;
 use Kreait\Firebase\Exception\ApiException;
@@ -8,7 +8,7 @@ use Kreait\Firebase\Exception\ApiException;
 /**
  * SSE Client to retrieve data from streaming rest API
  */
-class Client
+class SseClient
 {
     const RETRY_DEFAULT_MS = 3000;
     const END_OF_MESSAGE = "/\r\n\r\n|\n\n|\r\r/";
@@ -76,7 +76,7 @@ class Client
                 $remaining = $parts[1];
 
                 $buffer = $remaining;
-                $event = Event::parse($rawMessage);
+                $event = ServerSentEvent::parse($rawMessage);
 
                 if ($event->getId()) {
                     $this->lastId = $event->getId();

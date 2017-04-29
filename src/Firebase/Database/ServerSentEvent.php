@@ -1,13 +1,13 @@
 <?php
 
-namespace Kreait\Firebase\SSEClient;
+namespace Kreait\Firebase\Database;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
 /**
  * Server sent event
  */
-class Event
+class ServerSentEvent
 {
     const END_OF_LINE = "/\r\n|\n|\r/";
 
