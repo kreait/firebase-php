@@ -400,9 +400,9 @@ class Reference
      *
      * @return Event[]
      */
-    public function stream(): array
+    public function getEvents()
     {
-        $sseClient = new SSEClient($this->uri);
+        $sseClient = new SSEClient($this->apiClient->getHttpClient(), $this->uri);
 
         return $sseClient->getEvents();
     }

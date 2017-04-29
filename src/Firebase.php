@@ -173,7 +173,7 @@ class Firebase
         return new AuthTokenMiddleware(new ServiceAccountCredentials($scopes, $credentials));
     }
 
-    private setStream(bool $stream) {
+    private function setStream(bool $stream) {
         $this->stream = $stream;
     }
 }

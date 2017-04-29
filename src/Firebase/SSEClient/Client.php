@@ -40,20 +40,13 @@ class Client
     private $retry = self::RETRY_DEFAULT_MS;
 
     /**
+     * @param Client $client
      * @param string $url
      */
-    public function __construct(string $url)
+    public function __construct(Client $client, string $url)
     {
+        $this->client = $client;
         $this->url = $url;
-
-        $this->client = new Client(
-            [
-                'headers' => [
-                    'Accept' => 'text/event-stream',
-                    'Cache-Control' => 'no-cache',
-                ],
-            ]
-        );
 
         $this->connect();
     }
@@ -63,7 +56,7 @@ class Client
      *
      * @return Event[]
      */
-    public function getEvents(): array
+    public function getEvents()
     {
         $buffer = '';
         $body = $this->response->getBody();
