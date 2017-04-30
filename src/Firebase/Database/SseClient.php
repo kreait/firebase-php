@@ -16,7 +16,7 @@ class SseClient
     /**
      * @var Client
      */
-    private $client;
+    private $apiClient;
 
     /**
      *
@@ -40,12 +40,12 @@ class SseClient
     private $retry = self::RETRY_DEFAULT_MS;
 
     /**
-     * @param Client $client
-     * @param string $url
+     * @param ApiClient $apiClient
+     * @param string    $url
      */
-    public function __construct(Client $client, string $url)
+    public function __construct(ApiClient $apiClient, string $url)
     {
-        $this->client = $client;
+        $this->apiClient = $apiClient;
         $this->url = $url;
 
         $this->connect();
@@ -101,13 +101,9 @@ class SseClient
             $headers['Last-Event-ID'] = $this->lastId;
         }
 
-        try {
-            $this->response = $this->client->request('GET', $this->url, [
-                'stream' => true,
-                'headers' => $headers,
-            ]);
-        } catch (\Throwable $e) {
-            throw ApiException::wrapThrowable($e);
-        }
+        $this->response = $this->apiClient->stream($this->url, [
+            'stream' => true,
+            'headers' => $headers,
+        ]);
     }
 }

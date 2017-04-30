@@ -105,7 +105,7 @@ class Query
      */
     public function getEvents()
     {
-        $sseClient = new SseClient($this->apiClient->getHttpClient(), $this->uri);
+        $sseClient = new SseClient($this->apiClient, $this->uri);
 
         return $sseClient->getEvents();
     }

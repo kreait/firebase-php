@@ -46,6 +46,11 @@ class ApiClient
         return JSON::decode((string) $response->getBody(), true);
     }
 
+    public function stream($uri, $options)
+    {
+        return $this->request(RequestMethod::METHOD_GET, $uri, $options);
+    }
+
     public function set($uri, $value)
     {
         $response = $this->request(RequestMethod::METHOD_PUT, $uri, ['body' => JSON::encode($value)]);
