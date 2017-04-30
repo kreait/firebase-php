@@ -75,11 +75,6 @@ class ApiClient
         $this->request(RequestMethod::METHOD_PATCH, $uri, ['body' => JSON::encode($values)]);
     }
 
-    public function getHttpClient()
-    {
-        return $this->httpClient;
-    }
-
     private function request(string $method, $uri, array $options = []): ResponseInterface
     {
         try {
