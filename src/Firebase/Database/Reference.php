@@ -252,6 +252,22 @@ class Reference
     }
 
     /**
+     * Returns if exist children of a reference.
+     * 
+     * @param string $child
+     *
+     * @throws ApiException if the API reported an error
+     *
+     * @return boolean
+     */
+    public function hasChild($child = ''): boolean
+    {
+        $snapshot = $this->shallow()->getSnapshot();
+
+        return array_key_exists($child, $value = $snapshot->getValue());
+    }
+    
+    /**
      * Returns the keys of a reference's children.
      *
      * @throws OutOfRangeException if the reference has no children with keys
@@ -262,11 +278,9 @@ class Reference
     public function getChildKeys(): array
     {
         $snapshot = $this->shallow()->getSnapshot();
-
         if (is_array($value = $snapshot->getValue())) {
             return array_keys($value);
         }
-
         throw new OutOfRangeException(sprintf('%s has no children with keys', $this));
     }
 
