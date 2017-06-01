@@ -7,7 +7,6 @@ use Google\Auth\CredentialsLoader;
 use GuzzleHttp\Psr7;
 use Kreait\Firebase;
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\Exception\LogicException;
 use Psr\Http\Message\UriInterface;
 
 final class Factory
