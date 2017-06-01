@@ -96,6 +96,6 @@ class Database
             ));
         }
 
-        return new Reference($this->uri->withPath($uri->getPath()), $this->client);
+        return $this->getReference($uri->getPath());
     }
 }
