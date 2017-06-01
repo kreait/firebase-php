@@ -128,7 +128,12 @@ class Reference
     {
         $childPath = sprintf('%s/%s', trim($this->uri->getPath(), '/'), trim($path, '/'));
 
-        return new self($this->uri->withPath($childPath), $this->apiClient, $this->validator);
+        try {
+            return new self($this->uri->withPath($childPath), $this->apiClient, $this->validator);
+        } catch (\InvalidArgumentException $e) {
+            throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+        }
+
     }
 
     /**
@@ -142,6 +147,7 @@ class Reference
      */
     public function orderByChild(string $path): Query
     {
+        /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
         return $this->query()->orderByChild($path);
     }
 
@@ -154,6 +160,7 @@ class Reference
      */
     public function orderByKey(): Query
     {
+        /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
         return $this->query()->orderByKey();
     }
 
@@ -166,6 +173,7 @@ class Reference
      */
     public function orderByValue(): Query
     {
+        /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
         return $this->query()->orderByValue();
     }
 

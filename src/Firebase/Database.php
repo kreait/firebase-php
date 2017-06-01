@@ -61,11 +61,17 @@ class Database
      *
      * @param string $path
      *
+     * @throws InvalidArgumentException
+     *
      * @return Reference
      */
     public function getReference(string $path = ''): Reference
     {
-        return new Reference($this->uri->withPath($path), $this->client);
+        try {
+            return new Reference($this->uri->withPath($path), $this->client);
+        } catch (\InvalidArgumentException $e) {
+            throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
