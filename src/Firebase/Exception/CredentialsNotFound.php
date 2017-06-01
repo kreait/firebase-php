@@ -12,7 +12,7 @@ class CredentialsNotFound extends LogicException
      */
     private $triedPaths;
 
-    public function __construct($triedPaths, $message = '', $code = 0, Throwable $previous = null)
+    public function __construct(array $triedPaths, $message = '', $code = 0, Throwable $previous = null)
     {
         $message = $message ?: sprintf(
             'No service account has been found. Tried [%s]. Please set the path to a valid service account credentials file with %s::%s.',
