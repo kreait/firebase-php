@@ -95,6 +95,7 @@ class Reference
             throw new OutOfRangeException('Cannot get parent of root reference');
         }
 
+        /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
         return new self($this->uri->withPath($parentPath), $this->apiClient, $this->validator);
     }
 
@@ -107,6 +108,7 @@ class Reference
      */
     public function getRoot(): Reference
     {
+        /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
         return new self($this->uri->withPath('/'), $this->apiClient, $this->validator);
     }
 
@@ -133,7 +135,6 @@ class Reference
         } catch (\InvalidArgumentException $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
-
     }
 
     /**
@@ -269,6 +270,7 @@ class Reference
      */
     public function getChildKeys(): array
     {
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         $snapshot = $this->shallow()->getSnapshot();
 
         if (is_array($value = $snapshot->getValue())) {
@@ -351,6 +353,7 @@ class Reference
         $newKey = $this->apiClient->push($this->uri, $value);
         $newPath = sprintf('%s/%s', $this->uri->getPath(), $newKey);
 
+        /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
         return new self($this->uri->withPath($newPath), $this->apiClient, $this->validator);
     }
 

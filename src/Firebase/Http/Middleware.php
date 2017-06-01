@@ -29,7 +29,7 @@ class Middleware
                 } catch (\InvalidArgumentException $e) {
                     return new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
                 }
-                
+
                 return $handler($request, $options);
             };
         };

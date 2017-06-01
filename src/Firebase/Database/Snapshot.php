@@ -3,6 +3,7 @@
 namespace Kreait\Firebase\Database;
 
 use JmesPath;
+use Kreait\Firebase\Exception\InvalidArgumentException;
 
 /**
  * A Snapshot contains data from a database location.
@@ -76,6 +77,8 @@ class Snapshot
      * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#child
      *
      * @param string $path
+     *
+     * @throws InvalidArgumentException if the given child path is invalid
      *
      * @return Snapshot
      */
