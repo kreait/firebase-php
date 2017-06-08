@@ -117,10 +117,20 @@ class ServiceAccount
 
     private static function fromJsonFile(string $filePath): ServiceAccount
     {
+        if (is_link($filePath)) {
+            $filePath = (string) realpath($filePath);
+        }
+
+        if (!is_file($filePath)) {
+            throw new InvalidArgumentException(sprintf('%s is not a file.', $filePath));
+        }
+
         if (!is_readable($filePath)) {
             throw new InvalidArgumentException(sprintf('%s is not readable.', $filePath));
         }
 
-        return self::fromJson(file_get_contents($filePath));
+        $jsonString = file_get_contents($filePath);
+
+        return self::fromJson($jsonString);
     }
 }

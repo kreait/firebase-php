@@ -11,6 +11,7 @@ class ServiceAccountTest extends FirebaseTestCase
     private $validJsonFile;
     private $invalidJsonFile;
     private $malformedJsonFile;
+    private $symlinkedJsonFile;
 
     /**
      * @var ServiceAccount
@@ -22,6 +23,7 @@ class ServiceAccountTest extends FirebaseTestCase
         $this->validJsonFile = $this->fixturesDir.'/ServiceAccount/valid.json';
         $this->malformedJsonFile = $this->fixturesDir.'/ServiceAccount/malformed.json';
         $this->invalidJsonFile = $this->fixturesDir.'/ServiceAccount/invalid.json';
+        $this->symlinkedJsonFile = $this->fixturesDir.'/ServiceAccount/symlinked.json';
 
         $this->serviceAccount = ServiceAccount::fromValue($this->validJsonFile);
     }
@@ -47,6 +49,11 @@ class ServiceAccountTest extends FirebaseTestCase
     public function testCreateFromJsonFile()
     {
         $this->assertInstanceOf(ServiceAccount::class, ServiceAccount::fromValue($this->validJsonFile));
+    }
+
+    public function testCreateFromSymlinkedJsonFile()
+    {
+        $this->assertInstanceOf(ServiceAccount::class, ServiceAccount::fromValue($this->symlinkedJsonFile));
     }
 
     public function testCreateFromMissingFile()
