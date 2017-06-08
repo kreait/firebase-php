@@ -117,6 +117,10 @@ class ServiceAccount
 
     private static function fromJsonFile(string $filePath): ServiceAccount
     {
+        if (!file_exists($filePath)) {
+            throw new InvalidArgumentException(sprintf('%s does not exist.', $filePath));
+        }
+
         if (is_link($filePath)) {
             $filePath = (string) realpath($filePath);
         }
