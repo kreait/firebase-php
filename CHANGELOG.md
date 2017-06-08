@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Unreleased
+
+* Added additional checks to ensure given credentials are valid and readable
+* When using the Factory and passing the path to an invalid credentials file, the
+  factory would continue to try to get the credentials e.g. from one of the
+  environment variables. This has now changed: the factory immediately
+  quits when given invalid credentials. 
+
 ## 3.0.1 - 2017-04-25
 
 * When the credentials file has not been found, a `CredentialsNotFound` exception is thrown,

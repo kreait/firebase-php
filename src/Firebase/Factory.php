@@ -28,6 +28,11 @@ final class Factory
      */
     private $tokenHandler;
 
+    /**
+     * @var ServiceAccount
+     */
+    private $serviceAccount;
+
     private static $databaseUriPattern = 'https://%s.firebaseio.com';
 
     public function __construct()
@@ -35,10 +40,10 @@ final class Factory
         $this->setupDefaults();
     }
 
-    public function withCredentials(string $path): self
+    public function withCredentials(string $credentials): self
     {
         $factory = clone $this;
-        array_unshift($factory->credentialPaths, $path);
+        $factory->serviceAccount = ServiceAccount::fromValue($credentials);
 
         return $factory;
     }
@@ -85,6 +90,10 @@ final class Factory
 
     private function getServiceAccount(): ServiceAccount
     {
+        if ($this->serviceAccount) {
+            return $this->serviceAccount;
+        }
+
         if (count($serviceAccounts = $this->getServiceAccountCandidates())) {
             return reset($serviceAccounts);
         }

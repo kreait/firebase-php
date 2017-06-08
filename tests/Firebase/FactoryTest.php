@@ -61,15 +61,6 @@ class FactoryTest extends FirebaseTestCase
         (new Factory())->create();
     }
 
-    public function testItTreatsInvalidPathsAsNonExistent()
-    {
-        $this->expectException(LogicException::class);
-
-        (new Factory())
-            ->withCredentials('foobar')
-            ->create();
-    }
-
     public function testItAcceptsACustomDatabaseUri()
     {
         putenv(sprintf('%s=%s', Factory::ENV_VAR, $this->keyFile));
