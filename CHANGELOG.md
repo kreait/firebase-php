@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.0.2 - 2017-06-08
 
 * Added additional checks to ensure given credentials are valid and readable
 * When using the Factory and passing the path to an invalid credentials file, the
