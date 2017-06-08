@@ -19,16 +19,14 @@ class Middleware
                 $uri = $request->getUri();
                 $path = $uri->getPath();
 
-                try {
-                    if (substr($path, -5) !== '.json') {
-                        $uri = $uri->withPath($path.'.json');
-                        $request = $request->withUri($uri);
-                    }
-
-                    $request = $request->withHeader('Content-Type', 'application/json');
-                } catch (\InvalidArgumentException $e) {
-                    return new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+                if (substr($path, -5) !== '.json') {
+                    /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
+                    $uri = $uri->withPath($path.'.json');
+                    $request = $request->withUri($uri);
                 }
+
+                /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
+                $request = $request->withHeader('Content-Type', 'application/json');
 
                 return $handler($request, $options);
             };
