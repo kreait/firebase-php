@@ -140,7 +140,7 @@ class Configuration implements ConfigurationInterface
         }
 
         $client = new \Google_Client();
-        $client->setAuthConfigFile($this->authConfigFilePath);
+        $client->setAuthConfig($this->authConfigFilePath);
         $client->addScope([
             'https://www.googleapis.com/auth/userinfo.email',
             'https://www.googleapis.com/auth/firebase.database'
