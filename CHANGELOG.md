@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 1.2.2 - 2017-06-09
 
 * Replace deprecated method call when creating a Google HTTP Client
 
