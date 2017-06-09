@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Replace deprecated method call when creating a Google HTTP Client
+
 ## 1.2.1 - 2016-10-26
 
 * Simplify query construction and ensure that the correct variable types are used (previously, a numeric value
