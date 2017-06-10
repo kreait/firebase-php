@@ -12,6 +12,7 @@ class ServiceAccountTest extends FirebaseTestCase
     private $invalidJsonFile;
     private $malformedJsonFile;
     private $symlinkedJsonFile;
+    private $unreadableJsonFile;
 
     /**
      * @var ServiceAccount
@@ -24,8 +25,16 @@ class ServiceAccountTest extends FirebaseTestCase
         $this->malformedJsonFile = $this->fixturesDir.'/ServiceAccount/malformed.json';
         $this->invalidJsonFile = $this->fixturesDir.'/ServiceAccount/invalid.json';
         $this->symlinkedJsonFile = $this->fixturesDir.'/ServiceAccount/symlinked.json';
+        $this->unreadableJsonFile = $this->fixturesDir.'/ServiceAccount/unreadable.json';
+
+        @chmod($this->unreadableJsonFile, 0000);
 
         $this->serviceAccount = ServiceAccount::fromValue($this->validJsonFile);
+    }
+
+    protected function tearDown()
+    {
+        @chmod($this->unreadableJsonFile, 0644);
     }
 
     public function testGetters()
@@ -72,6 +81,18 @@ class ServiceAccountTest extends FirebaseTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         ServiceAccount::fromValue($this->invalidJsonFile);
+    }
+
+    public function testCreateFromDirectory()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        ServiceAccount::fromValue(__DIR__);
+    }
+
+    public function testCreateFromUnreadableFile()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        ServiceAccount::fromValue($this->unreadableJsonFile);
     }
 
     public function testCreateFromArray()
