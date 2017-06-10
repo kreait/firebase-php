@@ -3,6 +3,7 @@
 namespace Kreait\Firebase;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\Firebase\Util\JSON;
 
 class ServiceAccount
@@ -136,5 +137,17 @@ class ServiceAccount
         $jsonString = file_get_contents($filePath);
 
         return self::fromJson($jsonString);
+    }
+
+    /**
+     * @param Discoverer|null $discoverer
+     *
+     * @return ServiceAccount
+     */
+    public static function discover(Discoverer $discoverer = null): ServiceAccount
+    {
+        $discoverer = $discoverer ?: new Discoverer();
+
+        return $discoverer->discover();
     }
 }

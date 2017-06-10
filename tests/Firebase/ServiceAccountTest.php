@@ -121,4 +121,13 @@ class ServiceAccountTest extends FirebaseTestCase
 
         (new ServiceAccount())->withClientEmail('foo');
     }
+
+    public function testWithCustomDiscoverer()
+    {
+        $discoverer = $this->createMock(ServiceAccount\Discoverer::class);
+        $discoverer->expects($this->once())
+            ->method('discover');
+
+        ServiceAccount::discover($discoverer);
+    }
 }
