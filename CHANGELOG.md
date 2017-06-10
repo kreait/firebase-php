@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Unreleased
+
+* Deprecated `Kreait\Firebase\Factory::withCredentials()` ([Documentation](https://firebase-php.readthedocs.io/en/latest/migration.html#to-3-1))  
+* Extracted Service Account discovery to a distinct component ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#with-autodiscovery))
+  * Added `Kreait\Firebase\ServiceAccount::discover()`
+  * You can now add your own discovery methods ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#use-your-own-autodiscovery))
+* Updated and restructured the documentation 
+
 ## 3.0.2 - 2017-06-08
 
 * Added additional checks to ensure given credentials are valid and readable

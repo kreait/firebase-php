@@ -96,7 +96,7 @@ class ServiceAccount
         throw new InvalidArgumentException('Invalid service account specification.');
     }
 
-    private static function fromArray(array $config): ServiceAccount
+    public static function fromArray(array $config): ServiceAccount
     {
         if (!isset($config['project_id'], $config['client_id'], $config['client_email'], $config['private_key'])) {
             throw new InvalidArgumentException('Missing/empty values in Service Account Config.');
@@ -109,14 +109,14 @@ class ServiceAccount
             ->withPrivateKey($config['private_key']);
     }
 
-    private static function fromJson(string $json): ServiceAccount
+    public static function fromJson(string $json): ServiceAccount
     {
         $config = JSON::decode($json, true);
 
         return self::fromArray($config);
     }
 
-    private static function fromJsonFile(string $filePath): ServiceAccount
+    public static function fromJsonFile(string $filePath): ServiceAccount
     {
         if (!file_exists($filePath)) {
             throw new InvalidArgumentException(sprintf('%s does not exist.', $filePath));

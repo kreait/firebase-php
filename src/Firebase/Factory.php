@@ -3,21 +3,13 @@
 namespace Kreait\Firebase;
 
 use Firebase\Auth\Token\Handler as TokenHandler;
-use Google\Auth\CredentialsLoader;
 use GuzzleHttp\Psr7;
 use Kreait\Firebase;
-use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\ServiceAccount\Discoverer;
 use Psr\Http\Message\UriInterface;
 
 final class Factory
 {
-    const ENV_VAR = 'FIREBASE_CREDENTIALS';
-
-    /**
-     * @var string[]
-     */
-    private $credentialPaths;
-
     /**
      * @var UriInterface
      */
@@ -33,17 +25,45 @@ final class Factory
      */
     private $serviceAccount;
 
+    /**
+     * @var Discoverer
+     */
+    private $serviceAccountDiscoverer;
+
     private static $databaseUriPattern = 'https://%s.firebaseio.com';
 
-    public function __construct()
-    {
-        $this->setupDefaults();
-    }
-
+    /**
+     * @deprecated 3.1 use {@see withServiceAccount()} instead
+     * @codeCoverageIgnore
+     *
+     * @param string $credentials Path to a credentials file
+     *
+     * @throws \Kreait\Firebase\Exception\InvalidArgumentException
+     *
+     * @return self
+     */
     public function withCredentials(string $credentials): self
     {
+        trigger_error(
+            'This method is deprecated and will be removed in release 4.0 of this library.'
+            .' Use Firebase\Factory::withServiceAccount() instead.', E_USER_DEPRECATED
+        );
+
+        return $this->withServiceAccount(ServiceAccount::fromValue($credentials));
+    }
+
+    public function withServiceAccount(ServiceAccount $serviceAccount): self
+    {
         $factory = clone $this;
-        $factory->serviceAccount = ServiceAccount::fromValue($credentials);
+        $factory->serviceAccount = $serviceAccount;
+
+        return $factory;
+    }
+
+    public function withServiceAccountDiscoverer(Discoverer $discoverer): self
+    {
+        $factory = clone $this;
+        $factory->serviceAccountDiscoverer = $discoverer;
 
         return $factory;
     }
@@ -64,58 +84,18 @@ final class Factory
         return $factory;
     }
 
-    private function setupDefaults()
-    {
-        $this->credentialPaths = array_filter([
-            getenv(self::ENV_VAR),
-            getenv(CredentialsLoader::ENV_VAR),
-        ]);
-    }
-
     public function create(): Firebase
     {
-        $serviceAccount = $this->getServiceAccount();
+        $serviceAccount = $this->serviceAccount ?? $this->serviceAccountDiscoverer->discover();
+        $databaseUri = $this->databaseUri ?? $this->getDatabaseUriFromServiceAccount($serviceAccount);
+        $tokenHandler = $this->tokenHandler ?? $this->getDefaultTokenHandler($serviceAccount);
 
-        return new Firebase(
-            $serviceAccount,
-            $this->databaseUri ?? $this->getDatabaseUriFromServiceAccount($serviceAccount),
-            $this->tokenHandler ?? $this->getDefaultTokenHandler($serviceAccount)
-        );
+        return new Firebase($serviceAccount, $databaseUri, $tokenHandler);
     }
 
     private function getDatabaseUriFromServiceAccount(ServiceAccount $serviceAccount): UriInterface
     {
         return Psr7\uri_for(sprintf(self::$databaseUriPattern, $serviceAccount->getProjectId()));
-    }
-
-    private function getServiceAccount(): ServiceAccount
-    {
-        if ($this->serviceAccount) {
-            return $this->serviceAccount;
-        }
-
-        if (count($serviceAccounts = $this->getServiceAccountCandidates())) {
-            return reset($serviceAccounts);
-        }
-
-        // @codeCoverageIgnoreStart
-        if ($credentials = CredentialsLoader::fromWellKnownFile()) {
-            return ServiceAccount::fromValue($credentials);
-        }
-        // @codeCoverageIgnoreEnd
-
-        throw new Firebase\Exception\CredentialsNotFound($this->credentialPaths);
-    }
-
-    private function getServiceAccountCandidates(): array
-    {
-        return array_filter(array_map(function ($path) {
-            try {
-                return ServiceAccount::fromValue($path);
-            } catch (InvalidArgumentException $e) {
-                return null;
-            }
-        }, $this->credentialPaths));
     }
 
     private function getDefaultTokenHandler(ServiceAccount $serviceAccount): TokenHandler

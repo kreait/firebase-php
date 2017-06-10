@@ -5,7 +5,11 @@ namespace Kreait\Firebase\Exception;
 use Kreait\Firebase\Factory;
 use Throwable;
 
-class CredentialsNotFound extends LogicException
+/**
+ * @deprecated 3.1 Catch \Kreait\Firebase\Exception\ServiceAccountDiscoveryFailed instead
+ * @codeCoverageIgnore
+ */
+class CredentialsNotFound extends ServiceAccountDiscoveryFailed
 {
     /**
      * @var string[]
@@ -14,6 +18,14 @@ class CredentialsNotFound extends LogicException
 
     public function __construct(array $triedPaths, $message = '', $code = 0, Throwable $previous = null)
     {
+        trigger_error(
+            sprintf(
+                'This exception is deprecated and will be removed in release 4.0 of this library. Catch %s instead.',
+                ServiceAccountDiscoveryFailed::class
+            ),
+            E_USER_DEPRECATED
+        );
+
         $message = $message ?: sprintf(
             'No service account has been found. Tried [%s]. Please set the path to a valid service account credentials file with %s::%s.',
             implode(', ', $triedPaths), Factory::class, 'withCredentials($path)'

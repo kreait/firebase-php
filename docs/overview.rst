@@ -34,7 +34,7 @@ You can add the Firebase Admin SDK as a dependency using the composer.phar CLI:
 
 .. code-block:: bash
 
-    php composer.phar require kreait/firebase-php
+    php composer.phar require kreait/firebase-php ^3.0
 
 
 Alternatively, you can specify the Firebase Admin SDK as a dependency in your

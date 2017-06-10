@@ -14,10 +14,13 @@ The source code can be found at https://github.com/kreait/firebase-php/
 
     require __DIR__.'/vendor/autoload.php';
 
-    use Kreait\Firebase;
+    use Kreait\Firebase\Factory;
+    use Kreait\Firebase\ServiceAccount;
 
-    $firebase = (new Firebase\Factory)
-        ->withCredentials(__DIR__.'/google-service-account.json')
+    $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
+
+    $firebase = (new Factory)
+        ->withServiceAccount($serviceAccount)
         ->withDatabaseUri('https://my-project.firebaseio.com')
         ->create();
 
@@ -46,8 +49,9 @@ User Guide
     :maxdepth: 3
 
     overview
-    authentication
+    setup
     realtime-database
+    authentication
     troubleshooting
     migration
 

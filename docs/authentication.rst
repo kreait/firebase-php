@@ -2,56 +2,6 @@
 Authentication
 ##############
 
-In order to access a Firebase project using a server SDK, you must authenticate your server with Firebase. This
-can be done either by creating and using a
-`Service Account <https://developers.google.com/identity/protocols/OAuth2ServiceAccount>`_.
-
-*****************************
-With a Google Service Account
-*****************************
-
-Follow the steps described in the official Firebase documentation to create a Service Account for your Firebase
-application (see
-`Add the Firebase Admin SDK to your Server <https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app>`_)
-and make sure the Service Account has the `Project -> Editor` or `Project -> Owner` role.
-
-Download the Service Account JSON Key to one of the following locations:
-
-#. to the path defined by the environment variable ``FIREBASE_CREDENTIALS``
-#. to the path defined by the environment variable ``GOOGLE_APPLICATION_CREDENTIALS``
-#. to Google's "well known path"
-
-   * on Linux/MacOS: ``$HOME/.config/gcloud/application_default_credentials.json``
-   * on Windows: ``$APPDATA/gcloud/application_default_credentials.json``
-
-#. to any other path your project has access to
-
-.. code-block:: php
-
-    use Kreait\Firebase;
-
-    # If the JSON file is in one of the known paths, the factory will
-    # find it automatically
-    $firebase = (new Firebase\Factory())->create();
-
-    # If the JSON file is located in a path accessible to your project,
-    # or if you want to create multiple dedicated instances
-    $firebase = (new Firebase\Factory())
-        ->withCredentials(__DIR__.'/path/to/google-service-account.json')
-        ->create();
-
-If the project ID in the JSON file does not match the URL of your Firebase application, or if you want to
-be explicit, you can configure the Factory like this:
-
-.. code-block:: php
-
-    use Kreait\Firebase;
-
-    $firebase = (new Firebase\Factory())
-        ->withCredentials(__DIR__.'/path/to/google-service-account.json')
-        ->withDatabaseUri('https://my-project.firebaseio.com')
-        ->create();
-
 *******************
 Impersonating users
 *******************

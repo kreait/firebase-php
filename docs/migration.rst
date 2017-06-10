@@ -3,6 +3,29 @@ Migration
 #########
 
 **********
+3.0 to 3.1
+**********
+
+.. rubric:: Kreait\Firebase\Factory::withCredentials() has been deprecated
+
+.. code-block:: php
+
+    # Before
+    use Kreait\Firebase\Factory;
+
+    $firebase = (new Factory)
+        ->withCredentials(__DIR__.'/google-service-account.json');
+
+    # After
+    use Kreait\Firebase\Factory;
+    use Kreait\Firebase\ServiceAccount;
+
+    $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
+    $firebase = (new Firebase\Factory)
+        ->withServiceAccount($serviceAccount);
+
+
+**********
 2.x to 3.x
 **********
 

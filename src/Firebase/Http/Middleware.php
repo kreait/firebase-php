@@ -2,7 +2,6 @@
 
 namespace Kreait\Firebase\Http;
 
-use Kreait\Firebase\Exception\InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 
 class Middleware
