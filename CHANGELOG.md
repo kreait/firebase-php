@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.1.0 - 2017-06-10
 
 * Deprecated `Kreait\Firebase\Factory::withCredentials()` ([Documentation](https://firebase-php.readthedocs.io/en/latest/migration.html#to-3-1))  
 * Extracted Service Account discovery to a distinct component ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#with-autodiscovery))
