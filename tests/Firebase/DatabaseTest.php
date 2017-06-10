@@ -48,6 +48,12 @@ class DatabaseTest extends FirebaseTestCase
         $this->assertInstanceOf(Reference::class, $this->database->getReference('any'));
     }
 
+    public function testGetReferenceWithInvalidPath()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->database->getReference('#');
+    }
+
     public function testGetReferenceFromUrl()
     {
         $this->assertInstanceOf(

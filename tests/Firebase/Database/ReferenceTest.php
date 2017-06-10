@@ -7,6 +7,7 @@ use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Query;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\Snapshot;
+use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
 use Kreait\Tests\FirebaseTestCase;
 use Psr\Http\Message\UriInterface;
@@ -72,6 +73,12 @@ class ReferenceTest extends FirebaseTestCase
         $child = $this->reference->getChild('child');
 
         $this->assertSame('parent/key/child', $child->getPath());
+    }
+
+    public function testGetInvalidChild()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->reference->getChild('#');
     }
 
     public function testGetChildKeys()
