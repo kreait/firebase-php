@@ -7,6 +7,11 @@ use Kreait\Firebase\ServiceAccount;
 
 class FromEnvironmentVariable
 {
+    /**
+     * @var string
+     */
+    private $value;
+
     public function __construct(string $value)
     {
         $this->value = $value;
