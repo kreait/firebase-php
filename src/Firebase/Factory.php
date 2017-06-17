@@ -86,11 +86,16 @@ final class Factory
 
     public function create(): Firebase
     {
-        $serviceAccount = $this->serviceAccount ?? $this->serviceAccountDiscoverer->discover();
+        $serviceAccount = $this->serviceAccount ?? $this->getServiceAccountDiscoverer()->discover();
         $databaseUri = $this->databaseUri ?? $this->getDatabaseUriFromServiceAccount($serviceAccount);
         $tokenHandler = $this->tokenHandler ?? $this->getDefaultTokenHandler($serviceAccount);
 
         return new Firebase($serviceAccount, $databaseUri, $tokenHandler);
+    }
+
+    private function getServiceAccountDiscoverer(): Discoverer
+    {
+        return $this->serviceAccountDiscoverer ?? new Discoverer();
     }
 
     private function getDatabaseUriFromServiceAccount(ServiceAccount $serviceAccount): UriInterface

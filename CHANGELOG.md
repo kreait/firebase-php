@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Fixed the error that Service Account Autodiscovery was not working when no Discoverer was given.
+
 ## 3.1.0 - 2017-06-10
 
 * Deprecated `Kreait\Firebase\Factory::withCredentials()` ([Documentation](https://firebase-php.readthedocs.io/en/latest/migration.html#to-3-1))  
