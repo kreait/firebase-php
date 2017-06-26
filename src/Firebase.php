@@ -119,7 +119,7 @@ class Firebase
         $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware($this->serviceAccount);
 
         $stack = HandlerStack::create();
-        $stack->push(Middleware::ensureJson(), 'ensure_json');
+        $stack->push(Middleware::ensureJsonSuffix(), 'ensure_json_suffix');
         $stack->push($googleAuthTokenMiddleware, 'auth_service_account');
 
         $http = new Client([

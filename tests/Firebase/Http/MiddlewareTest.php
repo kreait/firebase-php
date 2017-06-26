@@ -28,16 +28,15 @@ class MiddlewareTest extends FirebaseTestCase
         };
     }
 
-    public function testEnsureJson()
+    public function testEnsureJsonSuffix()
     {
-        $middleware = Middleware::ensureJson();
+        $middleware = Middleware::ensureJsonSuffix();
         $handlerClosure = $middleware($this->handler);
         /** @var RequestInterface $request */
         $request = $handlerClosure($this->request);
 
         $this->assertInstanceOf(RequestInterface::class, $request);
         $this->assertStringEndsWith('.json', $request->getUri()->getPath());
-        $this->assertTrue($request->hasHeader('Content-Type'));
     }
 
     public function testOverrideAuth()

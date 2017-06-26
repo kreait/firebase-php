@@ -11,7 +11,7 @@ class Middleware
      *
      * @return callable
      */
-    public static function ensureJson(): callable
+    public static function ensureJsonSuffix(): callable
     {
         return function (callable $handler) {
             return function (RequestInterface $request, array $options = []) use ($handler) {
