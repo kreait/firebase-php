@@ -38,7 +38,6 @@ class MiddlewareTest extends FirebaseTestCase
         $this->assertInstanceOf(RequestInterface::class, $request);
         $this->assertStringEndsWith('.json', $request->getUri()->getPath());
         $this->assertTrue($request->hasHeader('Content-Type'));
-        $this->assertEquals('application/json', $request->getHeaderLine('Content-Type'));
     }
 
     public function testOverrideAuth()

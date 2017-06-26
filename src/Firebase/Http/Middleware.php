@@ -24,9 +24,6 @@ class Middleware
                     $request = $request->withUri($uri);
                 }
 
-                /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
-                $request = $request->withHeader('Content-Type', 'application/json');
-
                 return $handler($request, $options);
             };
         };
