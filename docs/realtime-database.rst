@@ -327,8 +327,6 @@ The following to usages are equivalent:
 
 .. code-block:: php
 
-    use Firebase\Database;
-
     $ref = $db->getReference('posts/my-post')
               ->set('created_at', ['.sv' => 'timestamp']);
 
