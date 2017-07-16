@@ -39,6 +39,20 @@ class MiddlewareTest extends FirebaseTestCase
         $this->assertStringEndsWith('.json', $request->getUri()->getPath());
     }
 
+    public function testEnsureApiKey()
+    {
+        $middleware = Middleware::ensureApiKey('foo');
+
+        $handlerClosure = $middleware($this->handler);
+        /** @var RequestInterface $request */
+        $request = $handlerClosure($this->request);
+
+        $this->assertInstanceOf(RequestInterface::class, $request);
+        $queryParams = Psr7\parse_query($request->getUri()->getQuery());
+
+        $this->assertArraySubset(['key' => 'foo'], $queryParams);
+    }
+
     public function testOverrideAuth()
     {
         $authenticatedRequest = new Psr7\Request('GET', 'http://domain.tld?is_authenticated=true'); // Doesn't matter :)
