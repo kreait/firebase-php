@@ -102,7 +102,7 @@ class Firebase
     private function withCustomAuth(Auth $override): Firebase
     {
         $firebase = new self($this->serviceAccount, $this->databaseUri, $this->tokenHandler);
-        $firebase->database = $this->getDatabase()->withCustomAuth($override);
+        $firebase->database = $this->createDatabase()->withCustomAuth($override);
 
         return $firebase;
     }
