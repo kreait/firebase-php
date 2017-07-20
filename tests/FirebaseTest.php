@@ -65,4 +65,11 @@ class FirebaseTest extends FirebaseTestCase
     {
         $this->assertInstanceOf(Handler::class, $this->firebase->getTokenHandler());
     }
+
+    public function testGetUnconfiguredAuth()
+    {
+        $this->expectException(Firebase\Exception\LogicException::class);
+
+        $this->firebase->getAuth();
+    }
 }

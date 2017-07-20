@@ -10,6 +10,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7;
 use Kreait\Firebase\Database;
 use Kreait\Firebase\Database\ApiClient;
+use Kreait\Firebase\Exception\LogicException;
 use Kreait\Firebase\Http\Auth;
 use Kreait\Firebase\Http\Auth\CustomToken;
 use Kreait\Firebase\Http\Middleware;
@@ -38,11 +39,21 @@ class Firebase
      */
     private $tokenHandler;
 
-    public function __construct(ServiceAccount $serviceAccount, UriInterface $databaseUri, TokenHandler $tokenHandler)
-    {
+    /**
+     * @var Firebase\Auth|null
+     */
+    private $auth;
+
+    public function __construct(
+        ServiceAccount $serviceAccount,
+        UriInterface $databaseUri,
+        TokenHandler $tokenHandler,
+        Firebase\Auth $auth = null
+    ) {
         $this->serviceAccount = $serviceAccount;
         $this->databaseUri = $databaseUri;
         $this->tokenHandler = $tokenHandler;
+        $this->auth = $auth;
     }
 
     /**
@@ -72,6 +83,22 @@ class Firebase
     }
 
     /**
+     * Returns an Auth instance.
+     *
+     * @throws \Kreait\Firebase\Exception\LogicException
+     *
+     * @return Firebase\Auth
+     */
+    public function getAuth(): Firebase\Auth
+    {
+        if (!$this->auth) {
+            throw new LogicException('You need to configure Firebase with an API key via the factory to use the Authentication capabilities.');
+        }
+
+        return $this->auth;
+    }
+
+    /**
      * Returns a new instance with the permissions
      * of the user with the given UID and claims.
      *
@@ -86,16 +113,15 @@ class Firebase
     }
 
     /**
-     * Returns a Token Handler to be used for creating Custom Tokens and
-     * verifying ID tokens.
-     *
-     * @see https://firebase.google.com/docs/auth/admin/create-custom-tokens
-     * @see https://firebase.google.com/docs/auth/admin/verify-id-tokens
-     *
-     * @return TokenHandler
+     * @deprecated 3.2 use {@see \Firebase\Auth::createCustomToken()} instead
      */
     public function getTokenHandler(): TokenHandler
     {
+        trigger_error(
+            'The token handler is deprecated and will be removed in release 4.0 of this library.'
+            .' Use Firebase\Auth::createCustomToken() instead.', E_USER_DEPRECATED
+        );
+
         return $this->tokenHandler;
     }
 
