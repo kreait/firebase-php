@@ -21,9 +21,14 @@ class AuthTest extends FirebaseTestCase
     private $apiClient;
 
     /**
-     * @var Auth\CustomTokenGenerator
+     * @var Auth\CustomTokenGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $tokenGenerator;
+
+    /**
+     * @var Auth\IdTokenVerifier|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $idTokenVerifier;
 
     /**
      * @var Auth
@@ -32,10 +37,11 @@ class AuthTest extends FirebaseTestCase
 
     protected function setUp()
     {
-        $this->tokenGenerator = new Auth\CustomTokenGenerator($this->createServiceAccountMock());
+        $this->tokenGenerator = $this->createMock(Auth\CustomTokenGenerator::class);
+        $this->idTokenVerifier = $this->createMock(Auth\IdTokenVerifier::class);
         $this->httpClient = $this->createMock(Client::class);
         $this->apiClient = new Auth\ApiClient($this->httpClient);
-        $this->auth = new Auth($this->apiClient, $this->tokenGenerator);
+        $this->auth = new Auth($this->apiClient, $this->tokenGenerator, $this->idTokenVerifier);
     }
 
     public function testGetApiClient()
@@ -45,7 +51,19 @@ class AuthTest extends FirebaseTestCase
 
     public function testCreateCustomToken()
     {
+        $this->tokenGenerator
+            ->expects($this->once())
+            ->method('create');
         $this->assertInstanceOf(Token::class, $this->auth->createCustomToken('uid'));
+    }
+
+    public function testVerifyIdToken()
+    {
+        $this->idTokenVerifier
+            ->expects($this->once())
+            ->method('verify');
+
+        $this->auth->verifyIdToken('some id token string');
     }
 
     public function testCreateUser()

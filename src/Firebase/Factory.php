@@ -8,6 +8,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7;
 use Kreait\Firebase;
 use Kreait\Firebase\Auth\CustomTokenGenerator;
+use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Psr\Http\Message\UriInterface;
@@ -136,7 +137,8 @@ final class Factory
     {
         trigger_error(
             'The token handler is deprecated and will be removed in release 4.0 of this library.'
-            .' Use Firebase\Auth::createCustomToken() instead.', E_USER_DEPRECATED
+            .' Use Firebase\Auth::createCustomToken() or Firebase\Auth::verifyIdToken() instead.',
+            E_USER_DEPRECATED
         );
 
         $factory = clone $this;
@@ -151,7 +153,8 @@ final class Factory
         $databaseUri = $this->databaseUri ?? $this->getDatabaseUriFromServiceAccount($serviceAccount);
         $tokenHandler = $this->tokenHandler ?? $this->getDefaultTokenHandler($serviceAccount);
         $tokenGenerator = new CustomTokenGenerator($serviceAccount);
-        $auth = $this->apiKey ? $this->createAuth($this->apiKey, $tokenGenerator) : null;
+        $idTokenVerifier = new IdTokenVerifier($serviceAccount);
+        $auth = $this->apiKey ? $this->createAuth($this->apiKey, $tokenGenerator, $idTokenVerifier) : null;
 
         return new Firebase($serviceAccount, $databaseUri, $tokenHandler, $auth);
     }
@@ -175,11 +178,11 @@ final class Factory
         );
     }
 
-    private function createAuth(string $apiKey, CustomTokenGenerator $customTokenGenerator): Auth
+    private function createAuth(string $apiKey, CustomTokenGenerator $customTokenGenerator, IdTokenVerifier $idTokenVerifier): Auth
     {
         $client = $this->createAuthApiClient($apiKey);
 
-        return new Auth($client, $customTokenGenerator);
+        return new Auth($client, $customTokenGenerator, $idTokenVerifier);
     }
 
     private function createAuthApiClient(string $apiKey): Firebase\Auth\ApiClient

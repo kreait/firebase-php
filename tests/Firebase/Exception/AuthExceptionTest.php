@@ -54,7 +54,7 @@ class AuthExceptionTest extends FirebaseTestCase
     {
         foreach (AuthException::$errors as $identifier => $exceptionClass) {
             $error = $this->createFirebaseError(sprintf('foo %s bar', $identifier));
-            
+
             $e = AuthException::fromRequestException($error);
 
             $this->assertInstanceOf($exceptionClass, $e);

@@ -119,7 +119,8 @@ class Firebase
     {
         trigger_error(
             'The token handler is deprecated and will be removed in release 4.0 of this library.'
-            .' Use Firebase\Auth::createCustomToken() instead.', E_USER_DEPRECATED
+            .' Use Firebase\Auth::createCustomToken() or Firebase\Auth::verifyIdToken() instead.',
+            E_USER_DEPRECATED
         );
 
         return $this->tokenHandler;

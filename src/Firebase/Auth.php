@@ -4,6 +4,7 @@ namespace Kreait\Firebase;
 
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\CustomTokenGenerator;
+use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Auth\User;
 use Kreait\Firebase\Util\JSON;
 use Lcobucci\JWT\Token;
@@ -21,10 +22,16 @@ class Auth
      */
     private $customToken;
 
-    public function __construct(ApiClient $client, CustomTokenGenerator $customToken)
+    /**
+     * @var IdTokenVerifier
+     */
+    private $idTokenVerifier;
+
+    public function __construct(ApiClient $client, CustomTokenGenerator $customToken, IdTokenVerifier $idTokenVerifier)
     {
         $this->client = $client;
         $this->customToken = $customToken;
+        $this->idTokenVerifier = $idTokenVerifier;
     }
 
     public function getApiClient(): ApiClient
@@ -80,6 +87,11 @@ class Auth
     public function createCustomToken($uid, array $claims = [], \DateTimeInterface $expiresAt = null): Token
     {
         return $this->customToken->create($uid, $claims, $expiresAt);
+    }
+
+    public function verifyIdToken($idToken): Token
+    {
+        return $this->idTokenVerifier->verify($idToken);
     }
 
     private function convertResponseToUser(ResponseInterface $response): User
