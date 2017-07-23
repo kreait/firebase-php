@@ -44,7 +44,7 @@ class User
     public function getUid(): string
     {
         /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
-        return (string) $this->idToken->getClaim('sub');
+        return (string) $this->idToken->getClaim('user_id');
     }
 
     /**
