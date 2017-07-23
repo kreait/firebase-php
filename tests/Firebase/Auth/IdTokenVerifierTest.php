@@ -59,6 +59,7 @@ class IdTokenVerifierTest extends FirebaseTestCase
             [(new Builder())
                 ->setExpiration(time() + 1800)
                 ->setIssuedAt(time() - 10)
+                ->setAudience('project')
                 ->setIssuer('https://securetoken.google.com/project')
                 ->getToken(),
             ],
@@ -71,6 +72,7 @@ class IdTokenVerifierTest extends FirebaseTestCase
             [(string) (new Builder())
                 ->setExpiration(time() + 1800)
                 ->setIssuedAt(time() - 10)
+                ->setAudience('project')
                 ->setIssuer('https://securetoken.google.com/project')
                 ->getToken(),
             ],
@@ -117,6 +119,23 @@ class IdTokenVerifierTest extends FirebaseTestCase
                     ->setExpiration(time() + 1800)
                     ->setIssuedAt(time() - 10)
                     ->setIssuer('invalid_issuer')
+                    ->getToken(),
+                InvalidIdToken::class,
+            ],
+            'no_aud_claim' => [
+                $builder
+                    ->setExpiration(time() + 1800)
+                    ->setIssuedAt(time() - 10)
+                    ->setIssuer('project')
+                    ->getToken(),
+                InvalidIdToken::class,
+            ],
+            'no_audience' => [
+                $builder
+                    ->setExpiration(time() + 1800)
+                    ->setIssuedAt(time() - 10)
+                    ->setIssuer('project')
+                    ->setAudience('project')
                     ->getToken(),
                 InvalidIdToken::class,
             ],

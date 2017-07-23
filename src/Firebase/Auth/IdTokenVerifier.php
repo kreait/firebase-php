@@ -26,6 +26,7 @@ class IdTokenVerifier
         $this->verifyExpiry($token);
         $this->verifyIssuedAt($token);
         $this->verifyIssuer($token);
+        $this->verifyAudience($token);
 
         return $token;
     }
@@ -49,6 +50,17 @@ class IdTokenVerifier
 
         if ($token->getClaim('iat') > time()) {
             throw new InvalidIdToken('This token has been issued in the future.');
+        }
+    }
+
+    private function verifyAudience(Token $token)
+    {
+        if (!$token->hasClaim('aud')) {
+            throw new InvalidIdToken('The claim "aud" is missing.');
+        }
+
+        if ($token->getClaim('aud') !== $this->serviceAccount->getProjectId()) {
+            throw new InvalidIdToken('This token has an invalid audience.');
         }
     }
 
