@@ -7,6 +7,7 @@ use Kreait\Firebase\Exception\Auth\CredentialsMismatch;
 use Kreait\Firebase\Exception\Auth\EmailExists;
 use Kreait\Firebase\Exception\Auth\InvalidCustomToken;
 use Kreait\Firebase\Exception\Auth\MissingPassword;
+use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\WeakPassword;
 use Kreait\Firebase\Util\JSON;
 
@@ -18,6 +19,7 @@ class AuthException extends \RuntimeException implements FirebaseException
         WeakPassword::IDENTIFIER => WeakPassword::class,
         EmailExists::IDENTIFIER => EmailExists::class,
         MissingPassword::IDENTIFIER => MissingPassword::class,
+        UserDisabled::IDENTIFER => UserDisabled::class,
     ];
 
     /**
