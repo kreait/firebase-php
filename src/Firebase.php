@@ -113,7 +113,7 @@ class Firebase
     }
 
     /**
-     * @deprecated 3.2 use {@see \Firebase\Auth::createCustomToken()} instead
+     * @deprecated 3.2 use {@see \Firebase\Auth::createCustomToken()} or {@see \Firebase\Auth::verifyIdToken()} instead
      */
     public function getTokenHandler(): TokenHandler
     {
