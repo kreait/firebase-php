@@ -7,6 +7,7 @@ use Kreait\Firebase\Exception\Auth\CredentialsMismatch;
 use Kreait\Firebase\Exception\Auth\EmailExists;
 use Kreait\Firebase\Exception\Auth\InvalidCustomToken;
 use Kreait\Firebase\Exception\Auth\MissingPassword;
+use Kreait\Firebase\Exception\Auth\OperationNotAllowed;
 use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\WeakPassword;
 use Kreait\Firebase\Util\JSON;
@@ -14,12 +15,13 @@ use Kreait\Firebase\Util\JSON;
 class AuthException extends \RuntimeException implements FirebaseException
 {
     public static $errors = [
-        InvalidCustomToken::IDENTIFER => InvalidCustomToken::class,
         CredentialsMismatch::IDENTIFER => CredentialsMismatch::class,
-        WeakPassword::IDENTIFIER => WeakPassword::class,
         EmailExists::IDENTIFIER => EmailExists::class,
+        InvalidCustomToken::IDENTIFER => InvalidCustomToken::class,
         MissingPassword::IDENTIFIER => MissingPassword::class,
+        OperationNotAllowed::IDENTIFER => OperationNotAllowed::class,
         UserDisabled::IDENTIFER => UserDisabled::class,
+        WeakPassword::IDENTIFIER => WeakPassword::class,
     ];
 
     /**
@@ -44,7 +46,9 @@ class AuthException extends \RuntimeException implements FirebaseException
         $message = $errors['error']['message'] ?? $message;
 
         $candidates = array_filter(array_map(function ($key, $class) use ($message, $e) {
-            return stripos($message, $key) !== false ? new $class($e->getCode(), $e) : null;
+            return stripos($message, $key) !== false
+                ? new $class($e->getCode(), $e)
+                : null;
         }, array_keys(self::$errors), self::$errors));
 
         $fallback = new static(sprintf('Unknown error: "%s"', $message), $e->getCode(), $e);
