@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.1.2 - 2017-08-11
 
 * Removed the restriction to the google/auth package to versions <1.0
 
