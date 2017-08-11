@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Removed the restriction to the google/auth package to versions <1.0
+
 ## 3.1.1 - 2017-06-17
 
 * Fixed the error that Service Account Autodiscovery was not working when no Discoverer was given.
