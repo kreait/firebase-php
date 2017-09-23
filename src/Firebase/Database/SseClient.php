@@ -99,7 +99,11 @@ class SseClient
      */
     private function connect()
     {
-        $headers = [];
+        $headers = [
+            'Accept' => 'text/event-stream',
+            'Cache-Control' => 'no-cache',
+        ];
+
         if ($this->lastId) {
             $headers['Last-Event-ID'] = $this->lastId;
         }

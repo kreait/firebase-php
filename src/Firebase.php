@@ -34,11 +34,6 @@ class Firebase
     private $database;
 
     /**
-     * @var boolean
-     */
-    private $stream = false;
-
-    /**
      * @var TokenHandler
      */
     private $tokenHandler;
@@ -104,20 +99,6 @@ class Firebase
         return $this->tokenHandler;
     }
 
-    /**
-     * Returns a new instance to allow streaming changes
-     * to a single location in realtime database
-     *
-     * @return Firebase
-     */
-    public function withStreaming(): Firebase
-    {
-        $firebase = new self($this->serviceAccount, $this->databaseUri, $this->tokenHandler);
-        $firebase->setStream(true);
-
-        return $firebase;
-    }
-
     private function withCustomAuth(Auth $override): Firebase
     {
         $firebase = new self($this->serviceAccount, $this->databaseUri, $this->tokenHandler);
@@ -141,18 +122,11 @@ class Firebase
         $stack->push(Middleware::ensureJson(), 'ensure_json');
         $stack->push($googleAuthTokenMiddleware, 'auth_service_account');
 
-        $config = [
+        $http = new Client([
             'base_uri' => $databaseUri,
             'handler' => $stack,
             'auth' => 'google_auth',
-        ];
-        if ($this->stream) {
-            $config['headers'] = [
-                'Accept' => 'text/event-stream',
-                'Cache-Control' => 'no-cache',
-            ];
-        }
-        $http = new Client($config);
+        ]);
 
         return new ApiClient($http);
     }
@@ -171,9 +145,5 @@ class Firebase
         ];
 
         return new AuthTokenMiddleware(new ServiceAccountCredentials($scopes, $credentials));
-    }
-
-    private function setStream(bool $stream) {
-        $this->stream = $stream;
     }
 }
