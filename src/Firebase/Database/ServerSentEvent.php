@@ -48,7 +48,7 @@ class ServerSentEvent
     /**
      * @param string $raw
      *
-     * @return Event
+     * @return ServerSentEvent
      */
     public static function parse($raw)
     {
@@ -65,10 +65,6 @@ class ServerSentEvent
             $name = $matches['name'];
             $value = $matches['value'];
 
-            if ($name === '') {
-                continue;
-            }
-
             switch ($name) {
                 case 'event':
                     $event->eventType = $value;
@@ -82,8 +78,6 @@ class ServerSentEvent
                 case 'retry':
                     $event->retry = (int) $value;
                     break;
-                default:
-                    continue;
             }
         }
 

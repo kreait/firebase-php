@@ -20,7 +20,7 @@ class SseClient
 
     /**
      *
-     * @var GuzzleHttp\Psr7\Response
+     * @var Psr\Http\Message\ResponseInterface
      */
     private $response;
 
@@ -47,18 +47,21 @@ class SseClient
     {
         $this->apiClient = $apiClient;
         $this->url = $url;
-
-        $this->connect();
     }
 
     /**
      * Returns generator that yields new event when it's available on stream.
      *
-     * @return Event[]
+     * @return \Generator|ServerSentEvent[]
      */
     public function getEvents()
     {
         $buffer = '';
+
+        if (!$this->response) {
+            $this->connect();
+        }
+
         $body = $this->response->getBody();
 
         while (true) {

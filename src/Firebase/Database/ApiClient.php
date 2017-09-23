@@ -46,7 +46,7 @@ class ApiClient
         return JSON::decode((string) $response->getBody(), true);
     }
 
-    public function stream($uri, $options)
+    public function stream($uri, $options): ResponseInterface
     {
         return $this->request(RequestMethod::METHOD_GET, $uri, $options);
     }
