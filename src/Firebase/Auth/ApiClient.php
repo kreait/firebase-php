@@ -80,6 +80,26 @@ class ApiClient
         ]));
     }
 
+    /**
+     * Signs in a user with an email and password
+     * @param string $email
+     * @param string $password
+     *
+     * @see https://firebase.google.com/docs/reference/rest/auth/#section-sign-in-email-password
+     *
+     * @return ResponseInterface
+     */
+    public function verifyAssertion(string $idToken, string $requestUri = null, string $postBody = null, bool $returnIdpCredential): ResponseInterface
+    {
+        return $this->request('verifyAssertion', array_filter([
+            'idToken'             => $idToken,
+            'email'               => $email,
+            'password'            => $password,
+            'returnSecureToken'   => true,
+            'returnIdpCredential' => $returnIdpCredential,
+        ]));
+    }
+
     public function deleteUser(User $user): ResponseInterface
     {
         return $this->request('deleteAccount', [
@@ -101,6 +121,18 @@ class ApiClient
         return $this->request('setAccountInfo', [
             'idToken'           => (string) $user->getIdToken(),
             'email'             => $newEmail,
+            'returnSecureToken' => true,
+        ]);
+    }
+
+    public function updateProfile(User $user, string $email = null, string $displayName = null, string $photoUrl = null, array $deleteAttribute = [])
+    {
+        return $this->request('setAccountInfo', [
+            'idToken'           => (string) $user->getIdToken(),
+            'email'             => $email,
+            'displayName'       => $displayName,
+            'photoUrl'          => $photoUrl,
+            'deleteAttribute'   => implode(',', $deleteAttribute),
             'returnSecureToken' => true,
         ]);
     }
