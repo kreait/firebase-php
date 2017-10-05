@@ -55,6 +55,13 @@ class Auth
         return $this->convertResponseToUser($response);
     }
 
+    public function getUserByEmailAndPassword(string $email, string $password): User
+    {
+        $response = $this->client->getUserByEmailAndPassword($email, $password);
+
+        return $this->convertResponseToUser($response);
+    }
+
     public function createAnonymousUser(): User
     {
         return $this->createUserWithEmailAndPassword('', '');

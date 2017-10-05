@@ -19,6 +19,23 @@ to the Firebase factory and getting an ``Auth`` instance:
 
     $auth = $firebase->getAuth();
 
+
+**************************
+Creating an anonymous user
+**************************
+
+.. code-block:: php
+
+    $user = $auth->createAnonymousUser();
+
+***************************************
+Creating a user with email and password
+***************************************
+
+.. code-block:: php
+
+    $user = $auth->createUserWithEmailAndPassword('user@domain.tld', 'a secure password');
+
 *********************
 Getting a user by UID
 *********************
@@ -28,6 +45,14 @@ Getting a user by UID
     $user = $auth->getUser('some-uid');
     # Setting additional claims for the user
     $user = $auth->getUser('some-uid', ['premium-user' => true]);
+
+************************************
+Getting a user by email and password
+************************************
+
+.. code-block:: php
+
+    $user = $auth->getUserByEmailAndPassword('user@domain.tld', 'a password');
 
 **************************
 Changing a user's password
@@ -55,22 +80,6 @@ Deleting a user
 
     $user = $auth->getUser('some-uid');
     $auth->deleteUser($user);
-
-**************************
-Creating an anonymous user
-**************************
-
-.. code-block:: php
-
-    $user = $auth->createAnonymousUser();
-
-***************************************
-Creating a user with email and password
-***************************************
-
-.. code-block:: php
-
-    $user = $auth->createUserWithEmailAndPassword('user@domain.tld', 'a secure password');
 
 *************************************
 Trigger email verification for a user

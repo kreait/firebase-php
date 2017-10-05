@@ -6,7 +6,10 @@ use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Exception\Auth\CredentialsMismatch;
+use Kreait\Firebase\Exception\Auth\EmailNotFound;
 use Kreait\Firebase\Exception\Auth\InvalidCustomToken;
+use Kreait\Firebase\Exception\Auth\InvalidPassword;
+use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\AuthException;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
@@ -56,6 +59,29 @@ class ApiClient
     public function signupNewUser(string $email = null, string $password = null): ResponseInterface
     {
         return $this->request('signupNewUser', array_filter([
+            'email' => $email,
+            'password' => $password,
+            'returnSecureToken' => true,
+        ]));
+    }
+
+    /**
+     * Returns a user for the given email address and password.
+     *
+     * @param string $email
+     * @param string $password
+     *
+     * @see https://firebase.google.com/docs/reference/rest/auth/#section-sign-in-email-password
+     *
+     * @throws EmailNotFound
+     * @throws InvalidPassword
+     * @throws UserDisabled
+     *
+     * @return ResponseInterface
+     */
+    public function getUserByEmailAndPassword(string $email, string $password): ResponseInterface
+    {
+        return $this->request('verifyPassword', array_filter([
             'email' => $email,
             'password' => $password,
             'returnSecureToken' => true,
