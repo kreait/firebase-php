@@ -1,5 +1,7 @@
 <?php
 
+namespace Kreait\Firebase\Auth;
+
 abstract class UserInfo
 {
     /**

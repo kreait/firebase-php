@@ -125,11 +125,11 @@ class ApiClient
         ]);
     }
 
-    public function updateProfile(User $user, string $email = null, string $displayName = null, string $photoUrl = null, array $deleteAttribute = [])
+    public function updateProfile(User $user, string $displayName = null, string $photoUrl = null, array $deleteAttribute = [])
     {
         return $this->request('setAccountInfo', [
             'idToken'           => (string) $user->getIdToken(),
-            'email'             => $email,
+            'email'             => (string) $user->getEmail(),
             'displayName'       => $displayName,
             'photoUrl'          => $photoUrl,
             'deleteAttribute'   => implode(',', $deleteAttribute),

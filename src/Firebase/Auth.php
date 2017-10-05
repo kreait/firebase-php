@@ -105,7 +105,16 @@ class Auth
     {
         $data = JSON::decode((string) $response->getBody(), true);
 
-        return User::create($data['idToken'], $data['refreshToken']);
+        $idToken      = isset($data['idToken']) ? $data['idToken'] : '';
+        $refreshToken = isset($data['refreshToken']) ? $data['refreshToken'] : '';
+        $displayName  = isset($data['displayName']) ? $data['displayName'] : '';
+        $email        = isset($data['email']) ? $data['email'] : '';
+        $phoneNumber  = isset($data['phoneNumber']) ? $data['phoneNumber'] : '';
+        $photoURL     = isset($data['photoURL']) ? $data['photoURL'] : '';
+        $providerId   = isset($data['providerId']) ? $data['providerId'] : '';
+        $uid          = isset($data['localId']) ? $data['localId'] : '';
+
+        return User::create($idToken, $refreshToken, $displayName, $email, $phoneNumber, $photoURL, $providerId, $uid);
     }
 
     public function signInWithEmailAndPassword(string $email, string $password): User
