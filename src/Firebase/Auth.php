@@ -29,8 +29,8 @@ class Auth
 
     public function __construct(ApiClient $client, CustomTokenGenerator $customToken, IdTokenVerifier $idTokenVerifier)
     {
-        $this->client = $client;
-        $this->customToken = $customToken;
+        $this->client          = $client;
+        $this->customToken     = $customToken;
         $this->idTokenVerifier = $idTokenVerifier;
     }
 
@@ -99,5 +99,12 @@ class Auth
         $data = JSON::decode((string) $response->getBody(), true);
 
         return User::create($data['idToken'], $data['refreshToken']);
+    }
+
+    public function signInWithEmailAndPassword(string $email, string $password): User
+    {
+        $response = $this->client->verifyPassword($email, $password);
+
+        return $this->convertResponseToUser($response);
     }
 }
