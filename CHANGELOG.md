@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.2.0 - 2017-10-05
 
 * Added user management features ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html))
 * Deprecated `Kreait\Firebase\Factory::withServiceAccount()`, use `Kreait\Firebase\Factory::withServiceAccountAndApiKey()` instead 
