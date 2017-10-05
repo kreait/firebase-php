@@ -3,16 +3,18 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.0/phpunit.xsd"
     beStrictAboutOutputDuringTests="true"
+    bootstrap="tests/bootstrap.php"
     colors="true">
     <testsuites>
         <testsuite name="Firebase Test Suite">
-            <directory suffix="Test.php">tests</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">src/Firebase</directory>
+            <file>src/Firebase.php</file>
         </whitelist>
     </filter>
 </phpunit>

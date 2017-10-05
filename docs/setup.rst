@@ -104,3 +104,23 @@ be explicit, you can configure the Factory like this:
     $firebase = (new Factory)
         ->withDatabaseUri('https://my-project.firebaseio.com')
         ->create();
+
+
+******************************
+Enable user management fetures
+******************************
+
+To be able to use user management features, you have to provide the Firebase Web API key
+to the factory. You can find the key in the settings area of your Firebase project.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Factory;
+    use Kreait\Firebase\ServiceAccount;
+
+    $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
+    $apiKey = '<Firebase Web API key>';
+
+    $firebase = (new Factory)
+        ->withServiceAccountAndApiKey($serviceAccount, $apiKey)
+        ->create();

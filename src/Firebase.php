@@ -8,10 +8,13 @@ use Google\Auth\Middleware\AuthTokenMiddleware;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7;
+use Kreait\Firebase\Auth\User;
 use Kreait\Firebase\Database;
 use Kreait\Firebase\Database\ApiClient;
+use Kreait\Firebase\Exception\LogicException;
 use Kreait\Firebase\Http\Auth;
 use Kreait\Firebase\Http\Auth\CustomToken;
+use Kreait\Firebase\Http\Auth\UserAuth;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\ServiceAccount;
 use Psr\Http\Message\UriInterface;
@@ -38,11 +41,21 @@ class Firebase
      */
     private $tokenHandler;
 
-    public function __construct(ServiceAccount $serviceAccount, UriInterface $databaseUri, TokenHandler $tokenHandler)
-    {
+    /**
+     * @var Firebase\Auth|null
+     */
+    private $auth;
+
+    public function __construct(
+        ServiceAccount $serviceAccount,
+        UriInterface $databaseUri,
+        TokenHandler $tokenHandler,
+        Firebase\Auth $auth = null
+    ) {
         $this->serviceAccount = $serviceAccount;
         $this->databaseUri = $databaseUri;
         $this->tokenHandler = $tokenHandler;
+        $this->auth = $auth;
     }
 
     /**
@@ -72,37 +85,75 @@ class Firebase
     }
 
     /**
+     * Returns an Auth instance.
+     *
+     * @throws \Kreait\Firebase\Exception\LogicException
+     *
+     * @return Firebase\Auth
+     */
+    public function getAuth(): Firebase\Auth
+    {
+        if (!$this->auth) {
+            throw new LogicException('You need to configure Firebase with an API key via the factory to use the Authentication capabilities.');
+        }
+
+        return $this->auth;
+    }
+
+    /**
      * Returns a new instance with the permissions
      * of the user with the given UID and claims.
      *
-     * @param string $uid
+     * @deprecated 3.2 use {@see \Kreait\Firebase\Auth::getUser()} and {@see \Kreait\Firebase::asUser()} instead
+     *
+     * @param string|User $user
      * @param array $claims
      *
      * @return Firebase
      */
-    public function asUserWithClaims(string $uid, array $claims = []): Firebase
+    public function asUserWithClaims($user, array $claims = []): Firebase
     {
-        return $this->withCustomAuth(new CustomToken($uid, $claims));
+        if ($user instanceof User) {
+            $uid = $user->getUid();
+        } else {
+            $uid = (string) $user;
+        }
+
+        return $this->auth
+            ? $this->withCustomAuth(new UserAuth($this->auth->getUser($uid, $claims)))
+            : $this->withCustomAuth(new CustomToken($uid, $claims));
     }
 
     /**
-     * Returns a Token Handler to be used for creating Custom Tokens and
-     * verifying ID tokens.
+     * Returns a new instance with the permissions of the given user.
      *
-     * @see https://firebase.google.com/docs/auth/admin/create-custom-tokens
-     * @see https://firebase.google.com/docs/auth/admin/verify-id-tokens
+     * @param User $user
      *
-     * @return TokenHandler
+     * @return Firebase
+     */
+    public function asUser(User $user): Firebase
+    {
+        return $this->withCustomAuth(new UserAuth($user));
+    }
+
+    /**
+     * @deprecated 3.2 use {@see \Kreait\Firebase\Auth::createCustomToken()} or {@see \Kreait\Firebase\Auth::verifyIdToken()} instead
      */
     public function getTokenHandler(): TokenHandler
     {
+        trigger_error(
+            'The token handler is deprecated and will be removed in release 4.0 of this library.'
+            .' Use Firebase\Auth::createCustomToken() or Firebase\Auth::verifyIdToken() instead.',
+            E_USER_DEPRECATED
+        );
+
         return $this->tokenHandler;
     }
 
     private function withCustomAuth(Auth $override): Firebase
     {
         $firebase = new self($this->serviceAccount, $this->databaseUri, $this->tokenHandler);
-        $firebase->database = $this->getDatabase()->withCustomAuth($override);
+        $firebase->database = $this->createDatabase()->withCustomAuth($override);
 
         return $firebase;
     }

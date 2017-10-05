@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Unreleased
+
+* Added user management features ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html))
+* Deprecated `Kreait\Firebase\Factory::withServiceAccount()`, use `Kreait\Firebase\Factory::withServiceAccountAndApiKey()` instead 
+* Deprecated `Kreait\Firebase::asUserWithClaims()`, use `Kreait\Firebase\Auth::getUser()` and `Kreait\Firebase::asUser()` instead
+* Deprecated `Kreait\Firebase::getTokenHandler()`, use `Kreait\Firebase\Auth::createCustomToken()` and `Kreait\Firebase\Auth::verifyIdToken()` instead.
+* Added migration instructions for deprecated methods, see [Documentation](https://firebase-php.readthedocs.io/en/latest/migration.html#to-3-2)
+  
 ## 3.1.2 - 2017-08-11
 
 * Removed the restriction to the google/auth package to versions <1.0

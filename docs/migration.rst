@@ -3,6 +3,65 @@ Migration
 #########
 
 **********
+3.1 to 3.2
+**********
+
+.. rubric:: Kreait\Firebase::asUserWithClaims() has been deprecated
+
+Use ``Kreait\Firebase\Auth::getUser()`` and ``Kreait\Firebase::asUser()`` instead.
+
+.. code-block:: php
+
+    # Before
+    $authenticated = $firebase->asUserWithClaims('a-uid', ['claim' => 'value']);
+
+    # After
+    $user = $firebase->getAuth()->getUser('a-uid', ['claim' => 'value]);
+    $authenticated = $firebase->asUser($user);
+
+.. rubric:: Kreait\Firebase\Factory::withServiceAccount() has been deprecated
+
+Use ``Kreait\Firebase\Factory::withServiceAccountAndApiKey()`` instead.
+
+.. code-block:: php
+
+    # Before
+    use Kreait\Firebase\Factory;
+    use Kreait\Firebase\ServiceAccount;
+
+    $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
+    $firebase = (new Firebase\Factory)
+        ->withServiceAccount($serviceAccount);
+
+    # After
+    use Kreait\Firebase\Factory;
+    use Kreait\Firebase\ServiceAccount;
+
+    $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
+    $apiKey = '<Firebase Web API key>';
+
+    $firebase = (new Factory)
+        ->withServiceAccountAndApiKey($serviceAccount, $apiKey)
+        ->withDatabaseUri('https://my-project.firebaseio.com')
+        ->create();
+
+.. rubric:: Kreait\Firebase::getTokenHandler() has been deprecated
+
+Use ``Kreait\Firebase\Auth::createCustomToken()`` and ``Kreait\Firebase\Auth::verifyIdToken()`` instead.
+
+.. code-block:: php
+
+    # Before
+    $tokenHandler = $firebase->getTokenHandler();
+    $tokenHandler->createCustomToken(...);
+    $tokenHandler->verifyIdToken(...);
+
+    # After
+    $auth = $firebase->getAuth();
+    $auth->createCustomToken(...);
+    $auth->verifyIdToken(...);
+
+**********
 3.0 to 3.1
 **********
 

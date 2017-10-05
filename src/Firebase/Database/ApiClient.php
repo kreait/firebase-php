@@ -30,6 +30,7 @@ class ApiClient
 
         /** @var HandlerStack $stack */
         $stack = clone $config['handler'];
+        $stack->remove('auth_override');
         $stack->push(Middleware::overrideAuth($auth), 'auth_override');
 
         $config['handler'] = $stack;
