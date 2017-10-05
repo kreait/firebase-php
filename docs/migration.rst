@@ -16,7 +16,7 @@ Use ``Kreait\Firebase\Auth::getUser()`` and ``Kreait\Firebase::asUser()`` instea
     $authenticated = $firebase->asUserWithClaims('a-uid', ['claim' => 'value']);
 
     # After
-    $user = $firebase->getAuth()->getUser('a-uid', ['claim' => 'value]);
+    $user = $firebase->getAuth()->getUser('a-uid', ['claim' => 'value']);
     $authenticated = $firebase->asUser($user);
 
 .. rubric:: Kreait\Firebase\Factory::withServiceAccount() has been deprecated
@@ -25,18 +25,15 @@ Use ``Kreait\Firebase\Factory::withServiceAccountAndApiKey()`` instead.
 
 .. code-block:: php
 
-    # Before
     use Kreait\Firebase\Factory;
     use Kreait\Firebase\ServiceAccount;
 
+    # Before
     $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
     $firebase = (new Firebase\Factory)
         ->withServiceAccount($serviceAccount);
 
     # After
-    use Kreait\Firebase\Factory;
-    use Kreait\Firebase\ServiceAccount;
-
     $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
     $apiKey = '<Firebase Web API key>';
 
@@ -53,11 +50,13 @@ Use ``Kreait\Firebase\Auth::createCustomToken()`` and ``Kreait\Firebase\Auth::ve
 
     # Before
     $tokenHandler = $firebase->getTokenHandler();
+
     $tokenHandler->createCustomToken(...);
     $tokenHandler->verifyIdToken(...);
 
     # After
     $auth = $firebase->getAuth();
+
     $auth->createCustomToken(...);
     $auth->verifyIdToken(...);
 
@@ -85,7 +84,7 @@ Use ``Kreait\Firebase\Auth::createCustomToken()`` and ``Kreait\Firebase\Auth::ve
 
 
 **********
-2.x to 3.x
+2.x to 3.0
 **********
 
 .. rubric:: Database secret authentication
