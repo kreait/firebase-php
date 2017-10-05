@@ -19,7 +19,6 @@ to the Firebase factory and getting an ``Auth`` instance:
 
     $auth = $firebase->getAuth();
 
-
 **************************
 Creating an anonymous user
 **************************
@@ -27,6 +26,7 @@ Creating an anonymous user
 .. code-block:: php
 
     $user = $auth->createAnonymousUser();
+    $anonymousConnection = $firebase->asUser($user);
 
 ***************************************
 Creating a user with email and password
@@ -35,6 +35,7 @@ Creating a user with email and password
 .. code-block:: php
 
     $user = $auth->createUserWithEmailAndPassword('user@domain.tld', 'a secure password');
+    $userConnection = $firebase->asUser($user);
 
 *********************
 Getting a user by UID
@@ -46,6 +47,8 @@ Getting a user by UID
     # Setting additional claims for the user
     $user = $auth->getUser('some-uid', ['premium-user' => true]);
 
+    $userConnection = $firebase->asUser($user);
+
 ************************************
 Getting a user by email and password
 ************************************
@@ -53,6 +56,7 @@ Getting a user by email and password
 .. code-block:: php
 
     $user = $auth->getUserByEmailAndPassword('user@domain.tld', 'a password');
+    $userConnection = $firebase->asUser($user);
 
 **************************
 Changing a user's password
