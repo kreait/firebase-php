@@ -19,7 +19,7 @@ class Middleware
                 $uri = $request->getUri();
                 $path = $uri->getPath();
 
-                if (substr($path, -5) !== '.json') {
+                if ('.json' !== substr($path, -5)) {
                     /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
                     $uri = $uri->withPath($path.'.json');
                     $request = $request->withUri($uri);

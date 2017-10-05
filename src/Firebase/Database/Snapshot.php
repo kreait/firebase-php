@@ -103,7 +103,7 @@ class Snapshot
      */
     public function exists(): bool
     {
-        return $this->value !== null;
+        return null !== $this->value;
     }
 
     /**
@@ -120,7 +120,7 @@ class Snapshot
         $path = trim($path, '/');
         $expression = str_replace('/', '.', $path);
 
-        return JmesPath\search($expression, $this->value) !== null;
+        return null !== JmesPath\search($expression, $this->value);
     }
 
     /**
