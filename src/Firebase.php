@@ -104,6 +104,8 @@ class Firebase
      * Returns a new instance with the permissions
      * of the user with the given UID and claims.
      *
+     * @deprecated 3.2 use {@see \Kreait\Firebase\Auth::getUser()} and {@see \Kreait\Firebase::asUser()} instead
+     *
      * @param string|User $user
      * @param array $claims
      *
@@ -135,7 +137,7 @@ class Firebase
     }
 
     /**
-     * @deprecated 3.2 use {@see \Firebase\Auth::createCustomToken()} or {@see \Firebase\Auth::verifyIdToken()} instead
+     * @deprecated 3.2 use {@see \Kreait\Firebase\Auth::createCustomToken()} or {@see \Kreait\Firebase\Auth::verifyIdToken()} instead
      */
     public function getTokenHandler(): TokenHandler
     {
