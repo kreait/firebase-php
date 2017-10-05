@@ -2,10 +2,11 @@
 
 namespace Kreait\Firebase\Auth;
 
+use Kreait\Firebase\Auth\UserInfo;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Token;
 
-class User
+class User extends UserInfo
 {
     /**
      * @var Token
@@ -17,13 +18,19 @@ class User
      */
     private $refreshToken;
 
-    public static function create($idToken = null, string $refreshToken = null): self
+    public static function create($idToken = null, string $refreshToken = null, string $displayName = null, string $email = null, string $phoneNumber = null, string $photoURL = null, string $providerId = null, string $uid = null): self
     {
         $idToken = $idToken instanceof Token ?: (new Parser())->parse($idToken);
 
         $user = new static();
         $user->setIdToken($idToken);
         $user->setRefreshToken($refreshToken);
+        $user->setDisplayName($displayName);
+        $user->setEmail($email);
+        $user->setPhoneNumber($phoneNumber);
+        $user->setPhotoURL($photoURL);
+        $user->setProviderId($providerId);
+        $user->setUid($uid);
 
         return $user;
     }

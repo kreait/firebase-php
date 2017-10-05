@@ -29,8 +29,8 @@ class Auth
 
     public function __construct(ApiClient $client, CustomTokenGenerator $customToken, IdTokenVerifier $idTokenVerifier)
     {
-        $this->client = $client;
-        $this->customToken = $customToken;
+        $this->client          = $client;
+        $this->customToken     = $customToken;
         $this->idTokenVerifier = $idTokenVerifier;
     }
 
@@ -74,6 +74,13 @@ class Auth
         return $this->convertResponseToUser($response);
     }
 
+    public function updateProfile(User $user, string $displayName = null, string $photoUrl = null, array $deleteAttribute = []): User
+    {
+        $response = $this->client->changeUserEmail($user, $displayName, $photoUrl, $deleteAttribute);
+
+        return $this->convertResponseToUser($response);
+    }
+
     public function deleteUser(User $user): void
     {
         $this->client->deleteUser($user);
@@ -98,6 +105,22 @@ class Auth
     {
         $data = JSON::decode((string) $response->getBody(), true);
 
-        return User::create($data['idToken'], $data['refreshToken']);
+        $idToken      = isset($data['idToken']) ? $data['idToken'] : '';
+        $refreshToken = isset($data['refreshToken']) ? $data['refreshToken'] : '';
+        $displayName  = isset($data['displayName']) ? $data['displayName'] : '';
+        $email        = isset($data['email']) ? $data['email'] : '';
+        $phoneNumber  = isset($data['phoneNumber']) ? $data['phoneNumber'] : '';
+        $photoURL     = isset($data['photoURL']) ? $data['photoURL'] : '';
+        $providerId   = isset($data['providerId']) ? $data['providerId'] : '';
+        $uid          = isset($data['localId']) ? $data['localId'] : '';
+
+        return User::create($idToken, $refreshToken, $displayName, $email, $phoneNumber, $photoURL, $providerId, $uid);
+    }
+
+    public function signInWithEmailAndPassword(string $email, string $password): User
+    {
+        $response = $this->client->verifyPassword($email, $password);
+
+        return $this->convertResponseToUser($response);
     }
 }
