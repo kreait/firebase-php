@@ -3,36 +3,27 @@
 namespace Kreait\Firebase\Http\Auth;
 
 use GuzzleHttp\Psr7;
+use Kreait\Firebase\Auth\User;
 use Kreait\Firebase\Http\Auth;
-use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
 
-final class CustomToken implements Auth
+final class UserAuth implements Auth
 {
     /**
      * @var string
      */
     private $token;
 
-    /**
-     * @deprecated 3.2
-     */
-    public function __construct(string $uid, array $claims = [])
+    public function __construct(User $user)
     {
-        $claims = array_filter($claims, function ($value) {
-            return null !== $value;
-        });
-
-        $claims = ['uid' => $uid] + $claims;
-
-        $this->token = JSON::encode($claims);
+        $this->token = $user->getIdToken();
     }
 
     public function authenticateRequest(RequestInterface $request): RequestInterface
     {
         $uri = $request->getUri();
 
-        $queryParams = ['auth_variable_override' => $this->token] + Psr7\parse_query($uri->getQuery());
+        $queryParams = ['auth' => $this->token] + Psr7\parse_query($uri->getQuery());
         $queryString = Psr7\build_query($queryParams);
 
         $newUri = $uri->withQuery($queryString);

@@ -39,10 +39,10 @@ class Auth
         return $this->client;
     }
 
-    public function getUser($uid): User
+    public function getUser($uid, array $claims = []): User
     {
         $response = $this->client->exchangeCustomTokenForIdAndRefreshToken(
-            $this->createCustomToken($uid)
+            $this->createCustomToken($uid, $claims)
         );
 
         return $this->convertResponseToUser($response);

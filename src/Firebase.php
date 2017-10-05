@@ -8,11 +8,13 @@ use Google\Auth\Middleware\AuthTokenMiddleware;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7;
+use Kreait\Firebase\Auth\User;
 use Kreait\Firebase\Database;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Exception\LogicException;
 use Kreait\Firebase\Http\Auth;
 use Kreait\Firebase\Http\Auth\CustomToken;
+use Kreait\Firebase\Http\Auth\UserAuth;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\ServiceAccount;
 use Psr\Http\Message\UriInterface;
@@ -102,14 +104,34 @@ class Firebase
      * Returns a new instance with the permissions
      * of the user with the given UID and claims.
      *
-     * @param string $uid
+     * @param string|User $user
      * @param array $claims
      *
      * @return Firebase
      */
-    public function asUserWithClaims(string $uid, array $claims = []): Firebase
+    public function asUserWithClaims($user, array $claims = []): Firebase
     {
-        return $this->withCustomAuth(new CustomToken($uid, $claims));
+        if ($user instanceof User) {
+            $uid = $user->getUid();
+        } else {
+            $uid = (string) $user;
+        }
+
+        return $this->auth
+            ? $this->withCustomAuth(new UserAuth($this->auth->getUser($uid, $claims)))
+            : $this->withCustomAuth(new CustomToken($uid, $claims));
+    }
+
+    /**
+     * Returns a new instance with the permissions of the given user.
+     *
+     * @param User $user
+     *
+     * @return Firebase
+     */
+    public function asUser(User $user): Firebase
+    {
+        return $this->withCustomAuth(new UserAuth($user));
     }
 
     /**
