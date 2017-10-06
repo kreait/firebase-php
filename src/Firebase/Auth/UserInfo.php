@@ -2,113 +2,47 @@
 
 namespace Kreait\Firebase\Auth;
 
-abstract class UserInfo
+interface UserInfo
 {
-    /**
-     * @var Display Name
-     */
-    protected $displayName;
+    public function setDisplayName(string $displayName);
 
-    /**
-     * @var Email
-     */
-    protected $email;
+    public function setEmail(string $email);
 
-    /**
-     * @var Phone Number
-     */
-    protected $phoneNumber;
+    public function setPhoneNumber(string $phoneNumber);
 
-    /**
-     * @var Photo URL
-     */
-    protected $photoURL;
+    public function setPhotoURL(string $photoURL);
 
-    /**
-     * @var Provider Id
-     */
-    protected $providerId;
+    public function setProviderId(string $providerId);
 
-    /**
-     * @var User ID
-     */
-    protected $uid;
-
-    public function setDisplayName(string $displayName)
-    {
-        $this->displayName = $displayName;
-    }
-
-    public function setEmail(string $email)
-    {
-        $this->email = $email;
-    }
-
-    public function setPhoneNumber(string $phoneNumber)
-    {
-        $this->phoneNumber = $phoneNumber;
-    }
-
-    public function setPhotoURL(string $photoURL)
-    {
-        $this->photoURL = $photoURL;
-    }
-
-    public function setProviderId(string $providerId)
-    {
-        $this->providerId = $providerId;
-    }
-
-    public function setUid(string $uid)
-    {
-        $this->uid = $uid;
-    }
+    public function setUid(string $uid);
 
     /**
      * @return string
      */
-    public function getDisplayName()
-    {
-        return $this->displayName;
-    }
+    public function getDisplayName();
 
     /**
      * @return string
      */
-    public function getEmail()
-    {
-        return $this->email;
-    }
+    public function getEmail();
 
     /**
      * @return string
      */
-    public function getPhoneNumber()
-    {
-        return $this->getPhoneNumber;
-    }
+    public function getPhoneNumber();
 
     /**
      * @return string
      */
-    public function getPhotoURL()
-    {
-        return $this->photoURL;
-    }
+    public function getPhotoURL();
 
     /**
      * @return string
      */
-    public function getProviderId()
-    {
-        return $this->providerId;
-    }
+    public function getProviderId();
 
     /**
      * @return string
      */
-    public function getUid()
-    {
-        return $this->uid;
-    }
+    public function getUid();
 }

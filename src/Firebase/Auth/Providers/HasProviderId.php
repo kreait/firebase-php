@@ -1,8 +1,8 @@
 <?php
 
-namespace Kreait\Firebase\Auth;
+namespace Kreait\Firebase\Auth\Providers;
 
-abstract class AuthProvider
+trait HasProviderId
 {
     /**
      * @var Provider Id
