@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.2.1 - 2017-10-12
 
 * Reverted `Kreait\Firebase\Factory` deprecations introduced in 3.2.0  
 
