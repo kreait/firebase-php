@@ -95,7 +95,7 @@ class Database
             throw new InvalidArgumentException($e->getMessage(), $e->getCode());
         }
 
-        if ($givenHost = $uri->getHost() !== $dbHost = $this->uri->getHost()) {
+        if (($givenHost = $uri->getHost()) !== ($dbHost = $this->uri->getHost())) {
             throw new InvalidArgumentException(sprintf(
                 'The given URI\'s host "%s" is not covered by the database for the host "%s".',
                 $givenHost, $dbHost
