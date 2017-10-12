@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Reverted `Kreait\Firebase\Factory` deprecations introduced in 3.2.0  
+
 ## 3.2.0 - 2017-10-05
 
 * Added user management features ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html))

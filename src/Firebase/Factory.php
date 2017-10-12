@@ -61,40 +61,16 @@ final class Factory
         return $this->withServiceAccount(ServiceAccount::fromValue($credentials));
     }
 
-    /**
-     * @deprecated 3.2 use {@see withServiceAccountAndApiKey()} instead
-     *
-     * @param string $apiKey
-     *
-     * @return Factory
-     */
     public function withApiKey(string $apiKey): self
     {
-        trigger_error(
-            'This method is deprecated and will be removed in release 4.0 of this library.'
-            .' Use Firebase\Factory::withServiceAccountAndApiKey() instead.', E_USER_DEPRECATED
-        );
-
         $factory = clone $this;
         $factory->apiKey = $apiKey;
 
         return $factory;
     }
 
-    /**
-     * @deprecated 3.2 use {@see withServiceAccountAndApiKey()} instead
-     *
-     * @param ServiceAccount $serviceAccount
-     *
-     * @return self
-     */
     public function withServiceAccount(ServiceAccount $serviceAccount): self
     {
-        trigger_error(
-            'This method is deprecated and will be removed in release 4.0 of this library.'
-            .' Use Firebase\Factory::withServiceAccountAndApiKey() instead.', E_USER_DEPRECATED
-        );
-
         $factory = clone $this;
         $factory->serviceAccount = $serviceAccount;
 
@@ -127,7 +103,7 @@ final class Factory
     }
 
     /**
-     * @deprecated 3.2
+     * @deprecated 3.2 Use `Kreait\Firebase\Auth::createCustomToken()` and `Kreait\Firebase\Auth::verifyIdToken()` instead.
      *
      * @param TokenHandler $handler
      *

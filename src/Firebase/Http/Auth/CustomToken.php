@@ -14,9 +14,6 @@ final class CustomToken implements Auth
      */
     private $token;
 
-    /**
-     * @deprecated 3.2
-     */
     public function __construct(string $uid, array $claims = [])
     {
         $claims = array_filter($claims, function ($value) {
