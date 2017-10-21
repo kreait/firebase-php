@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.3.1 - 2017-10-21
 
 * Restored PHP 7.0 compatibility
 
