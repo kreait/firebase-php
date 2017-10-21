@@ -5,26 +5,60 @@ namespace Kreait\Firebase\Exception;
 use Fig\Http\Message\StatusCodeInterface as StatusCode;
 use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Util\JSON;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class ApiException extends \RuntimeException implements FirebaseException
 {
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var ResponseInterface|null
+     */
+    private $response;
+
     public static function wrapThrowable(\Throwable $e): ApiException
     {
         if ($e instanceof self) {
             return $e;
         }
 
+        if (!($e instanceof RequestException)) {
+            return new self($e->getMessage(), $e->getCode(), $e);
+        }
+
+        $request = $e->getRequest();
+        $response = $e->getResponse();
         $message = $e->getMessage();
         $code = $e->getCode();
 
-        if ($e instanceof RequestException && $response = $e->getResponse()) {
+        if (in_array($code, [StatusCode::STATUS_UNAUTHORIZED, StatusCode::STATUS_FORBIDDEN], true)) {
+            $class = PermissionDenied::class;
+        } else {
+            $class = static::class;
+        }
+
+        if ($response) {
             $message = JSON::decode((string) $response->getBody(), true)['error'] ?? $message;
         }
 
-        if (in_array($code, [StatusCode::STATUS_UNAUTHORIZED, StatusCode::STATUS_FORBIDDEN], true)) {
-            return new PermissionDenied($message, $code, $e);
-        }
+        $instance = new $class($message, $code, $e);
+        $instance->request = $request;
+        $instance->response = $response;
 
-        return new self($e->getMessage(), $e->getCode(), $e);
+        return $instance;
+    }
+
+    public function getRequest(): RequestInterface
+    {
+        return $this->request;
+    }
+
+    public function getResponse(): ?ResponseInterface
+    {
+        return $this->response;
     }
 }

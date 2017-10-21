@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* Enabled API exceptions to be debuggable by including the sent request and received response. 
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/realtime-database.html#debugging-api-exceptions))
+  
 ## 3.2.1 - 2017-10-12
 
 * Reverted `Kreait\Firebase\Factory` deprecations introduced in 3.2.0  

@@ -22,11 +22,17 @@ class ApiExceptionTest extends FirebaseTestCase
 
     public function testWrapClientException()
     {
-        $source = new ClientException('Foo', $this->createMock(RequestInterface::class));
+        $source = new ClientException(
+            'Foo',
+            $request = $this->createMock(RequestInterface::class),
+            $response = new Response(500, [], '{"error": "Foo"}')
+        );
         $result = ApiException::wrapThrowable($source);
 
         $this->assertInstanceOf(ApiException::class, $result);
         $this->assertSame($source, $result->getPrevious());
+        $this->assertSame($request, $result->getRequest());
+        $this->assertSame($response, $result->getResponse());
     }
 
     public function testWrapClientExceptionBeingPermissionDenied()

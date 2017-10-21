@@ -352,6 +352,32 @@ You can also delete by specifying null as the value for another write operation 
 
 You can use this technique with `update()` to delete multiple children in a single API call.
 
+************************
+Debugging API exceptions
+************************
+
+When a request to Firebase fails, the SDK will throw a ``\Kreait\Firebase\Exception\ApiException`` that
+includes the sent request and the received response object:
+
+.. code-block:: php
+
+    try {
+        $db->getReference('forbidden')->getValue();
+    } catch (ApiException $e) {
+        /** @var \Psr\Http\Message\RequestInterface $request */
+        $request = $e->getRequest();
+        /** @var \Psr\Http\Message\ResponseInterface|null $response */
+        $response = $e->getResponse();
+
+        echo $request->getUri().PHP_EOL;
+        echo $request->getBody().PHP_EOL;
+
+        if ($response) {
+            echo $response->getBody();
+        }
+    }
+
+
 .. rubric:: Footnotes
 
 .. [#f1] This example and its description is the same as in the official documentation:
