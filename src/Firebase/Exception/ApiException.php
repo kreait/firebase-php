@@ -57,7 +57,10 @@ class ApiException extends \RuntimeException implements FirebaseException
         return $this->request;
     }
 
-    public function getResponse(): ?ResponseInterface
+    /**
+     * @return ResponseInterface|null
+     */
+    public function getResponse()
     {
         return $this->response;
     }

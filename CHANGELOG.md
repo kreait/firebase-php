@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Restored PHP 7.0 compatibility
+
 ## 3.3.0 - 2017-10-21
 
 * Enabled API exceptions to be debuggable by including the sent request and received response. 
