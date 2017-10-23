@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.3.2 - 2017-10-23
 
 - Only classes implementing an interface should be final.
 
