@@ -13,7 +13,7 @@ use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Psr\Http\Message\UriInterface;
 
-final class Factory
+class Factory
 {
     /**
      * @var UriInterface
