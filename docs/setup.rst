@@ -106,9 +106,9 @@ be explicit, you can configure the Factory like this:
         ->create();
 
 
-******************************
-Enable user management fetures
-******************************
+*******************************
+Enable user management features
+*******************************
 
 To be able to use user management features, you have to provide the Firebase Web API key
 to the factory. You can find the key in the settings area of your Firebase project.
