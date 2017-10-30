@@ -7,7 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
 use Kreait\Firebase\Exception\ApiException;
-use Kreait\Firebase\Http\Auth;
+use Kreait\Firebase\Http\AuthInterface;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
@@ -24,7 +24,7 @@ class ApiClient
         $this->httpClient = $httpClient;
     }
 
-    public function withCustomAuth(Auth $auth): ApiClient
+    public function withCustomAuth(AuthInterface $auth): ApiClient
     {
         $config = $this->httpClient->getConfig();
 

@@ -7,7 +7,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Exception\ApiException;
-use Kreait\Firebase\Http\Auth;
+use Kreait\Firebase\Http\AuthInterface;
 use Kreait\Tests\FirebaseTestCase;
 use Psr\Http\Message\ResponseInterface;
 
@@ -37,7 +37,7 @@ class ApiClientTest extends FirebaseTestCase
 
     public function testWithCustomAuth()
     {
-        $auth = $this->createMock(Auth::class);
+        $auth = $this->createMock(AuthInterface::class);
 
         $this->http
             ->expects($this->any())

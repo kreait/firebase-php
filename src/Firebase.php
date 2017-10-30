@@ -12,7 +12,7 @@ use Kreait\Firebase\Auth\User;
 use Kreait\Firebase\Database;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Exception\LogicException;
-use Kreait\Firebase\Http\Auth;
+use Kreait\Firebase\Http\AuthInterface;
 use Kreait\Firebase\Http\Auth\CustomToken;
 use Kreait\Firebase\Http\Auth\UserAuth;
 use Kreait\Firebase\Http\Middleware;
@@ -150,7 +150,7 @@ class Firebase
         return $this->tokenHandler;
     }
 
-    private function withCustomAuth(Auth $override): Firebase
+    private function withCustomAuth(AuthInterface $override): Firebase
     {
         $firebase = new self($this->serviceAccount, $this->databaseUri, $this->tokenHandler);
         $firebase->database = $this->createDatabase()->withCustomAuth($override);
