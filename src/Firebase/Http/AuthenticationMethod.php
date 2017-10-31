@@ -7,7 +7,7 @@ use Psr\Http\Message\RequestInterface;
 /**
  * @see https://firebase.google.com/docs/auth/server/
  */
-interface AuthInterface
+interface AuthenticationMethod
 {
     /**
      * Returns an authenticated request from the given request.

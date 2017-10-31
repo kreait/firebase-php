@@ -3,7 +3,7 @@
 namespace Kreait\Tests\Firebase\Http;
 
 use GuzzleHttp\Psr7;
-use Kreait\Firebase\Http\AuthInterface;
+use Kreait\Firebase\Http\AuthenticationMethod;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Tests\FirebaseTestCase;
 use Psr\Http\Message\RequestInterface;
@@ -57,7 +57,7 @@ class MiddlewareTest extends FirebaseTestCase
     {
         $authenticatedRequest = new Psr7\Request('GET', 'http://domain.tld?is_authenticated=true'); // Doesn't matter :)
 
-        $auth = $this->createMock(AuthInterface::class);
+        $auth = $this->createMock(AuthenticationMethod::class);
         $auth->expects($this->any())
             ->method('authenticateRequest')
             ->with($this->request)

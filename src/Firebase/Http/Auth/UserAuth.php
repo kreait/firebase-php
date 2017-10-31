@@ -4,11 +4,11 @@ namespace Kreait\Firebase\Http\Auth;
 
 use GuzzleHttp\Psr7;
 use Kreait\Firebase\Auth\User;
-use Kreait\Firebase\Http\AuthInterface;
+use Kreait\Firebase\Http\AuthenticationMethod;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\RequestInterface;
 
-final class UserAuth implements AuthInterface
+final class UserAuth implements AuthenticationMethod
 {
     /**
      * @var Token

@@ -33,11 +33,11 @@ class Middleware
     /**
      * Adds custom authentication to a request.
      *
-     * @param \Kreait\Firebase\Http\AuthInterface $override
+     * @param \Kreait\Firebase\Http\AuthenticationMethod $override
      *
      * @return callable
      */
-    public static function overrideAuth(AuthInterface $override): callable
+    public static function overrideAuth(AuthenticationMethod $override): callable
     {
         return function (callable $handler) use ($override) {
             return function (RequestInterface $request, array $options = []) use ($handler, $override) {
