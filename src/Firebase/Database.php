@@ -7,7 +7,7 @@ use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
-use Kreait\Firebase\Http\Auth;
+use Kreait\Firebase\Http\AuthenticationMethod;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -45,11 +45,11 @@ class Database
     /**
      * Returns a new Database instance with the given authentication override.
      *
-     * @param Auth $auth
+     * @param AuthenticationMethod $auth
      *
      * @return Database
      */
-    public function withCustomAuth(Auth $auth): Database
+    public function withCustomAuth(AuthenticationMethod $auth): Database
     {
         return new self($this->uri, $this->client->withCustomAuth($auth));
     }

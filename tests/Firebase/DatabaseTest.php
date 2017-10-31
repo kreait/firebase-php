@@ -7,7 +7,7 @@ use Kreait\Firebase\Database;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\Http\Auth;
+use Kreait\Firebase\Http\AuthenticationMethod;
 use Kreait\Tests\FirebaseTestCase;
 
 class DatabaseTest extends FirebaseTestCase
@@ -37,8 +37,8 @@ class DatabaseTest extends FirebaseTestCase
 
     public function testWithCustomAuth()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Auth $auth */
-        $auth = $this->createMock(Auth::class);
+        /** @var \PHPUnit_Framework_MockObject_MockObject|AuthenticationMethod $auth */
+        $auth = $this->createMock(AuthenticationMethod::class);
 
         $this->assertInstanceOf(Database::class, $this->database->withCustomAuth($auth));
     }

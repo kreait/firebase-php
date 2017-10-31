@@ -3,11 +3,11 @@
 namespace Kreait\Firebase\Http\Auth;
 
 use GuzzleHttp\Psr7;
-use Kreait\Firebase\Http\Auth;
+use Kreait\Firebase\Http\AuthenticationMethod;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
 
-final class CustomToken implements Auth
+final class CustomToken implements AuthenticationMethod
 {
     /**
      * @var string
