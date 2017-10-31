@@ -6,11 +6,7 @@ php:
 
 sudo: false
 
-before_install:
-  - composer config --global github-oauth.github.com $github_oauth_token
-
 install: travis_retry composer install
-
 
 script:
   - vendor/bin/phpunit --coverage-clover build/coverage.clover
