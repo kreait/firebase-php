@@ -10,12 +10,8 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7;
 use Kreait\Firebase\Auth\User;
 use Kreait\Firebase\Database;
-use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Exception\LogicException;
-use Kreait\Firebase\Http\Auth;
-use Kreait\Firebase\Http\Auth\CustomToken;
-use Kreait\Firebase\Http\Auth\UserAuth;
-use Kreait\Firebase\Http\Middleware;
+use Kreait\Firebase\Http;
 use Kreait\Firebase\ServiceAccount;
 use Psr\Http\Message\UriInterface;
 
@@ -120,8 +116,8 @@ class Firebase
         }
 
         return $this->auth
-            ? $this->withCustomAuth(new UserAuth($this->auth->getUser($uid, $claims)))
-            : $this->withCustomAuth(new CustomToken($uid, $claims));
+            ? $this->withCustomAuth(new Http\Auth\UserAuth($this->auth->getUser($uid, $claims)))
+            : $this->withCustomAuth(new Http\Auth\CustomToken($uid, $claims));
     }
 
     /**
@@ -133,7 +129,7 @@ class Firebase
      */
     public function asUser(User $user): Firebase
     {
-        return $this->withCustomAuth(new UserAuth($user));
+        return $this->withCustomAuth(new Http\Auth\UserAuth($user));
     }
 
     /**
@@ -150,7 +146,7 @@ class Firebase
         return $this->tokenHandler;
     }
 
-    private function withCustomAuth(Auth $override): Firebase
+    private function withCustomAuth(Http\Auth $override): Firebase
     {
         $firebase = new self($this->serviceAccount, $this->databaseUri, $this->tokenHandler);
         $firebase->database = $this->createDatabase()->withCustomAuth($override);
@@ -165,12 +161,12 @@ class Firebase
         return new Database($this->databaseUri, $client);
     }
 
-    private function createDatabaseClient(UriInterface $databaseUri): ApiClient
+    private function createDatabaseClient(UriInterface $databaseUri): Database\ApiClient
     {
         $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware($this->serviceAccount);
 
         $stack = HandlerStack::create();
-        $stack->push(Middleware::ensureJsonSuffix(), 'ensure_json_suffix');
+        $stack->push(Http\Middleware::ensureJsonSuffix(), 'ensure_json_suffix');
         $stack->push($googleAuthTokenMiddleware, 'auth_service_account');
 
         $http = new Client([
@@ -179,7 +175,7 @@ class Firebase
             'auth' => 'google_auth',
         ]);
 
-        return new ApiClient($http);
+        return new Database\ApiClient($http);
     }
 
     private function createGoogleAuthTokenMiddleware(ServiceAccount $serviceAccount): AuthTokenMiddleware

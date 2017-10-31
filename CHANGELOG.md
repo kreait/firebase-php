@@ -1,8 +1,13 @@
 # CHANGELOG
 
+## Unreleased
+
+* Fixed Travis CI builds for pull requests
+* Fixed class/namespace collisions in certain PHP versions.
+
 ## 3.3.2 - 2017-10-23
 
-- Only classes implementing an interface should be final.
+* Only classes implementing an interface should be final.
 
 ## 3.3.1 - 2017-10-21
 
