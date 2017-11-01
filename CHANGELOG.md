@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.3.3 - 2017-11-01
 
 * Fixed Travis CI builds for pull requests
 * Fixed class/namespace collisions in certain PHP versions.
