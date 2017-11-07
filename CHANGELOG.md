@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.4.0 - 2017-11-07
 
 * Added `Kreait\Firebase\Auth\User::getEmail()`
 * Added `Kreait\Firebase\Auth\User::hasVerifiedEmail()`
