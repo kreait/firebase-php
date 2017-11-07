@@ -28,28 +28,42 @@ class User
         return $user;
     }
 
-    public function setIdToken(Token $token)
+    /**
+     * @internal
+     *
+     * @param Token $token
+     */
+    public function setIdToken(Token $token): void
     {
         $this->idToken = $token;
     }
 
-    public function setRefreshToken(string $refreshToken)
+    /**
+     * @internal
+     *
+     * @param string $refreshToken
+     */
+    public function setRefreshToken(string $refreshToken): void
     {
         $this->refreshToken = $refreshToken;
     }
 
-    /**
-     * @return string
-     */
     public function getUid(): string
     {
         /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
         return (string) $this->idToken->getClaim('user_id');
     }
 
-    public function getEmail(): string
+    /**
+     * @return string|null
+     */
+    public function getEmail()
     {
-        return (string) $this->idToken->getClaim('email');
+        try {
+            return (string) $this->idToken->getClaim('email');
+        } catch (\OutOfBoundsException $e) {
+            return null;
+        }
     }
 
     public function hasVerifiedEmail(): bool

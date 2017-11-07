@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Avoid OutOfBoundsException when a user's email is not set
+
 ## 3.4.0 - 2017-11-07
 
 * Added `Kreait\Firebase\Auth\User::getEmail()`
