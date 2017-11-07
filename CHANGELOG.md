@@ -3,6 +3,8 @@
 ## Unreleased
 
 * Added `Kreait\Firebase\Auth\User::getEmail()`
+* Added `Kreait\Firebase\Auth::sendPasswordResetEmail($userOrEmail)`
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#send-a-password-reset-email))
 
 ## 3.3.3 - 2017-11-01
 

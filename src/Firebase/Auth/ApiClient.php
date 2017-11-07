@@ -121,6 +121,14 @@ class ApiClient
         ]);
     }
 
+    public function sendPasswordResetEmail(string $email): ResponseInterface
+    {
+        return $this->request('getOobConfirmationCode', [
+            'email' => $email,
+            'requestType' => 'PASSWORD_RESET',
+        ]);
+    }
+
     private function request(string $uri, array $data): ResponseInterface
     {
         try {

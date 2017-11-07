@@ -94,3 +94,16 @@ Trigger email verification for a user
     $user = $auth->getUser('some-uid');
     $auth->sendEmailVerification($user);
 
+***************************
+Send a password reset email
+***************************
+
+.. code-block:: php
+
+    // Using an email address only
+    $email = 'user@domain.tld';
+    $auth->sendPasswordResetEmail($email);
+
+    // Using an already fetched user
+    $user = $auth->getUser('some-uid');
+    $auth->sendPasswordResetEmail($user);

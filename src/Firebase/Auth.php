@@ -91,6 +91,15 @@ class Auth
         $this->client->sendEmailVerification($user);
     }
 
+    public function sendPasswordResetEmail($userOrEmail): void
+    {
+        $email = $userOrEmail instanceof User
+            ? $userOrEmail->getUid()
+            : (string) $userOrEmail;
+
+        $this->client->sendPasswordResetEmail($email);
+    }
+
     public function createCustomToken($uid, array $claims = [], \DateTimeInterface $expiresAt = null): Token
     {
         return $this->customToken->create($uid, $claims, $expiresAt);
