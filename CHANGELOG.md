@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Added `Kreait\Firebase\Auth\User::getEmail()`
+
 ## 3.3.3 - 2017-11-01
 
 * Fixed Travis CI builds for pull requests

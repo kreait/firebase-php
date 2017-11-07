@@ -47,6 +47,11 @@ class User
         return (string) $this->idToken->getClaim('user_id');
     }
 
+    public function getEmail(): string
+    {
+        return (string) $this->idToken->getClaim('email');
+    }
+
     /**
      * @return Token
      */
