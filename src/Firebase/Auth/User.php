@@ -52,6 +52,11 @@ class User
         return (string) $this->idToken->getClaim('email');
     }
 
+    public function hasVerifiedEmail(): bool
+    {
+        return (bool) $this->idToken->getClaim('email_verified', false);
+    }
+
     /**
      * @return Token
      */
