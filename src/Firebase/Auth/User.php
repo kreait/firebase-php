@@ -33,7 +33,7 @@ class User
      *
      * @param Token $token
      */
-    public function setIdToken(Token $token): void
+    public function setIdToken(Token $token)
     {
         $this->idToken = $token;
     }
@@ -43,7 +43,7 @@ class User
      *
      * @param string $refreshToken
      */
-    public function setRefreshToken(string $refreshToken): void
+    public function setRefreshToken(string $refreshToken)
     {
         $this->refreshToken = $refreshToken;
     }

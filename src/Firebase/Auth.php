@@ -81,17 +81,17 @@ class Auth
         return $this->convertResponseToUser($response);
     }
 
-    public function deleteUser(User $user): void
+    public function deleteUser(User $user)
     {
         $this->client->deleteUser($user);
     }
 
-    public function sendEmailVerification(User $user): void
+    public function sendEmailVerification(User $user)
     {
         $this->client->sendEmailVerification($user);
     }
 
-    public function sendPasswordResetEmail($userOrEmail): void
+    public function sendPasswordResetEmail($userOrEmail)
     {
         $email = $userOrEmail instanceof User
             ? $userOrEmail->getUid()

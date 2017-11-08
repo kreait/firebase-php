@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Restore PHP 7.0 compatibility
+
 ## 3.4.1 - 2017-11-08
 
 * Avoid OutOfBoundsException when a user's email is not set
