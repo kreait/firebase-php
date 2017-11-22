@@ -52,4 +52,11 @@ class ValidatorTest extends FirebaseTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->validator->validateUri($uri);
     }
+
+    public function testRulesUrl()
+    {
+        $uri = $this->uri->withPath('.settings/rules');
+
+        $this->assertNull($this->validator->validateUri($uri));
+    }
 }
