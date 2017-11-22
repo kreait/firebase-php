@@ -20,15 +20,25 @@ class Validator
      */
     public function validateUri(UriInterface $uri)
     {
+        // Firebase has valid REST URL endpoints that contain invalid
+        // characters. For example, the PUT .settings/rules endpoint
+        // writes rules to the database. This array allows us to filter
+        // validation on those technically valid URLs.
+        $validUrls = [
+            '.settings/rules',
+        ];
+
         $path = trim($uri->getPath(), '/');
 
-        $this->validateDepth($path);
+        if (!in_array($path, $validUrls)) {
+            $this->validateDepth($path);
 
-        $keys = explode('/', $path);
+            $keys = explode('/', $path);
 
-        foreach ($keys as $key) {
-            $this->validateKeySize($key);
-            $this->validateChars($key);
+            foreach ($keys as $key) {
+                $this->validateKeySize($key);
+                $this->validateChars($key);
+            }
         }
     }
 
