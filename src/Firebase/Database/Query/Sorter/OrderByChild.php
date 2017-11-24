@@ -27,13 +27,46 @@ final class OrderByChild implements Sorter
         if (!\is_array($value)) {
             return $value;
         }
-
+        
         $childKey = $this->childKey;
-
+        
         uasort($value, function ($a, $b) use ($childKey) {
-            return ($a[$childKey] ?? null) <=> $b[$childKey] ?? null;
+            return ($this->accessToArrayPath($a, $childKey) ?? null) <=> $this->accessToArrayPath($b, $childKey) ?? null;
         });
-
+        
         return $value;
+    }
+
+    /**
+     * Function taken from Mohamed Meabed repo:
+     * https://github.com/tajawal/lodash-php/blob/master/src/collections/get.php
+     * 
+     * Get item of an array by index , aceepting nested index
+     *
+     ** __::get(['foo' => ['bar' => 'ter']], 'foo/bar');
+     ** // → 'ter'
+     *
+     * @param array  $collection array of values
+     * @param string $key        key or index
+     * @param null   $default    default value to return if index not exist
+     *
+     * @return array|mixed|null
+     *
+     */
+    function accessToArrayPath($collection = [], $key = '', $default = null)
+    {
+        if (is_null($key)) {
+            return $collection;
+        }
+
+        foreach (explode('/', $key) as $segment) {
+            if (!isset($collection[$segment])) {
+                return $default instanceof \Closure ? $default() : $default;
+            }
+
+            $collection = $collection[$segment];
+        }
+
+        return $collection;
     }
 }
