@@ -76,4 +76,22 @@ class DatabaseTest extends FirebaseTestCase
 
         $this->database->getReferenceFromUrl('http://non-matching.tld');
     }
+
+    public function testGetRules()
+    {
+        $this->apiClient->expects($this->once())
+            ->method('get')
+            ->with($this->uri->withPath('.settings/rules'));
+
+        $this->assertEquals($this->database->getRules(), []);
+    }
+
+    public function testSetRules()
+    {
+        $this->apiClient->expects($this->once())
+            ->method('set')
+            ->with($this->uri->withPath('.settings/rules'));
+
+        $this->assertEquals($this->database->setRules([]), $this->database);
+    }
 }

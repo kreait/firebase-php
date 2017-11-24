@@ -378,6 +378,34 @@ includes the sent request and the received response object:
     }
 
 
+*****
+Rules
+*****
+
+Manage Firebase Realtime Database Rules through the following examples. 
+
+Detailed information can be found on
+`the official Firebase documentation page for Rules management via REST <https://firebase.google.com/docs/database/rest/app-management>`_
+
+Update Rules
+=============
+
+.. code-block:: php
+
+        $database->setRules([
+            'rules' => [
+                '.read' => true,
+                '.write' => false
+            ]
+        ]);
+
+Retrieve Rules
+=============
+
+.. code-block:: php
+
+        $database->getRules();
+
 .. rubric:: Footnotes
 
 .. [#f1] This example and its description is the same as in the official documentation:

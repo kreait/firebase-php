@@ -103,4 +103,40 @@ class Database
 
         return $this->getReference($uri->getPath());
     }
+
+    /**
+     * Retrieve Firebase Database Rules.
+     *
+     * @see https://firebase.google.com/docs/database/rest/app-management#retrieving-firebase-realtime-database-rules
+     *
+     * @return array
+     */
+    public function getRules(): array
+    {
+        $rules = $this->client->get($this->uri->withPath('.settings/rules'));
+
+        return $rules ? $rules : [];
+    }
+
+    /**
+     * Update Firebase Database Rules.
+     *
+     * @see https://firebase.google.com/docs/database/rest/app-management#updating-firebase-realtime-database-rules
+     *
+     * @param array $rules
+     *
+     * @throws InvalidArgumentException If rules are invalid
+     *
+     * @return Database
+     */
+    public function setRules(array $rules): Database
+    {
+        try {
+            $this->client->set($this->uri->withPath('.settings/rules'), $rules);
+        } catch (InvalidArgumentException $e) {
+            throw new InvalidArgumentException($e->getMessage(), $e->getCode());
+        }
+
+        return $this;
+    }
 }
