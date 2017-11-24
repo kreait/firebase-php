@@ -378,33 +378,18 @@ includes the sent request and the received response object:
     }
 
 
-*****
-Rules
-*****
+******************
+Security and Rules
+******************
 
-Manage Firebase Realtime Database Rules through the following examples. 
-
-Detailed information can be found on
-`the official Firebase documentation page for Rules management via REST <https://firebase.google.com/docs/database/rest/app-management>`_
-
-Update Rules
-=============
+Learn more about the usage of Firebase Realtime Database Rules in the
+`official documentation <https://firebase.google.com/docs/database/security/>`_.
 
 .. code-block:: php
 
-        $database->setRules([
-            'rules' => [
-                '.read' => true,
-                '.write' => false
-            ]
-        ]);
+        $rules = $db->getRules();
+        $db->setRules($rules);
 
-Retrieve Rules
-=============
-
-.. code-block:: php
-
-        $database->getRules();
 
 .. rubric:: Footnotes
 

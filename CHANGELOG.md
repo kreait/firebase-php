@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* Add support for getting and updating Realtime Database Rules 
+  ([#136](https://github.com/kreait/firebase-php/pull/136))
+
 ## 3.4.2 - 2017-11-08
 
 * Restore PHP 7.0 compatibility
