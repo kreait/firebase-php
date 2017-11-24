@@ -392,7 +392,7 @@ Update Rules
 
 .. code-block:: php
 
-        $this->firebase->getDatabase()->setRules([
+        $database->setRules([
             'rules' => [
                 '.read' => true,
                 '.write' => false
@@ -404,7 +404,7 @@ Retrieve Rules
 
 .. code-block:: php
 
-        $this->firebase->getDatabase()->getRules();
+        $database->getRules();
 
 .. rubric:: Footnotes
 
