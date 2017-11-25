@@ -18,7 +18,7 @@ class ServiceAccount
         return $this->projectId;
     }
 
-    public function withProjectId(string $value): ServiceAccount
+    public function withProjectId(string $value): self
     {
         $serviceAccount = clone $this;
         $serviceAccount->projectId = $value;
@@ -31,7 +31,7 @@ class ServiceAccount
         return $this->clientId;
     }
 
-    public function withClientId(string $value): ServiceAccount
+    public function withClientId(string $value): self
     {
         $serviceAccount = clone $this;
         $serviceAccount->clientId = $value;
@@ -44,7 +44,7 @@ class ServiceAccount
         return $this->clientEmail;
     }
 
-    public function withClientEmail(string $value): ServiceAccount
+    public function withClientEmail(string $value): self
     {
         if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
             throw new InvalidArgumentException(sprintf('"%s" is not a valid email.', $value));
@@ -60,7 +60,7 @@ class ServiceAccount
         return $this->privateKey;
     }
 
-    public function withPrivateKey(string $value): ServiceAccount
+    public function withPrivateKey(string $value): self
     {
         $serviceAccount = clone $this;
         $serviceAccount->privateKey = $value;
@@ -75,7 +75,7 @@ class ServiceAccount
      *
      * @return ServiceAccount
      */
-    public static function fromValue($value): ServiceAccount
+    public static function fromValue($value): self
     {
         if ($value instanceof self) {
             return $value;
@@ -96,7 +96,7 @@ class ServiceAccount
         throw new InvalidArgumentException('Invalid service account specification.');
     }
 
-    public static function fromArray(array $config): ServiceAccount
+    public static function fromArray(array $config): self
     {
         if (!isset($config['project_id'], $config['client_id'], $config['client_email'], $config['private_key'])) {
             throw new InvalidArgumentException('Missing/empty values in Service Account Config.');
@@ -109,14 +109,14 @@ class ServiceAccount
             ->withPrivateKey($config['private_key']);
     }
 
-    public static function fromJson(string $json): ServiceAccount
+    public static function fromJson(string $json): self
     {
         $config = JSON::decode($json, true);
 
         return self::fromArray($config);
     }
 
-    public static function fromJsonFile(string $filePath): ServiceAccount
+    public static function fromJsonFile(string $filePath): self
     {
         if (!file_exists($filePath)) {
             throw new InvalidArgumentException(sprintf('%s does not exist.', $filePath));
@@ -144,7 +144,7 @@ class ServiceAccount
      *
      * @return ServiceAccount
      */
-    public static function discover(Discoverer $discoverer = null): ServiceAccount
+    public static function discover(Discoverer $discoverer = null): self
     {
         $discoverer = $discoverer ?: new Discoverer();
 

@@ -48,7 +48,7 @@ class Database
      *
      * @return Database
      */
-    public function withCustomAuth(Http\Auth $auth): Database
+    public function withCustomAuth(Http\Auth $auth): self
     {
         return new self($this->uri, $this->client->withCustomAuth($auth));
     }
@@ -115,7 +115,7 @@ class Database
     {
         $rules = $this->client->get($this->uri->withPath('.settings/rules'));
 
-        return $rules ? $rules : [];
+        return $rules ?: [];
     }
 
     /**
@@ -129,7 +129,7 @@ class Database
      *
      * @return Database
      */
-    public function setRules(array $rules): Database
+    public function setRules(array $rules): self
     {
         try {
             $this->client->set($this->uri->withPath('.settings/rules'), $rules);

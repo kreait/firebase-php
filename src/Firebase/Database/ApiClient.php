@@ -24,7 +24,7 @@ class ApiClient
         $this->httpClient = $httpClient;
     }
 
-    public function withCustomAuth(Auth $auth): ApiClient
+    public function withCustomAuth(Auth $auth): self
     {
         $config = $this->httpClient->getConfig();
 

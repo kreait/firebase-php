@@ -119,7 +119,7 @@ class Query
      *
      * @return Query
      */
-    public function endAt($value): Query
+    public function endAt($value): self
     {
         return $this->withAddedFilter(new Filter\EndAt($value));
     }
@@ -133,7 +133,7 @@ class Query
      *
      * @return Query
      */
-    public function equalTo($value): Query
+    public function equalTo($value): self
     {
         return $this->withAddedFilter(new Filter\EqualTo($value));
     }
@@ -149,7 +149,7 @@ class Query
      *
      * @return Query
      */
-    public function startAt($value): Query
+    public function startAt($value): self
     {
         return $this->withAddedFilter(new Filter\StartAt($value));
     }
@@ -163,7 +163,7 @@ class Query
      *
      * @return Query
      */
-    public function limitToFirst(int $limit): Query
+    public function limitToFirst(int $limit): self
     {
         return $this->withAddedFilter(new Filter\LimitToFirst($limit));
     }
@@ -177,7 +177,7 @@ class Query
      *
      * @return Query
      */
-    public function limitToLast(int $limit): Query
+    public function limitToLast(int $limit): self
     {
         return $this->withAddedFilter(new Filter\LimitToLast($limit));
     }
@@ -196,7 +196,7 @@ class Query
      *
      * @return Query
      */
-    public function orderByChild(string $childKey): Query
+    public function orderByChild(string $childKey): self
     {
         return $this->withSorter(new Sorter\OrderByChild($childKey));
     }
@@ -215,7 +215,7 @@ class Query
      *
      * @return Query
      */
-    public function orderByKey(): Query
+    public function orderByKey(): self
     {
         return $this->withSorter(new Sorter\OrderByKey());
     }
@@ -235,7 +235,7 @@ class Query
      *
      * @return Query
      */
-    public function orderByValue(): Query
+    public function orderByValue(): self
     {
         return $this->withSorter(new Sorter\OrderByValue());
     }
@@ -252,7 +252,7 @@ class Query
      *
      * @return Query
      */
-    public function shallow(): Query
+    public function shallow(): self
     {
         return $this->withAddedFilter(new Filter\Shallow());
     }

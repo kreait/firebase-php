@@ -87,7 +87,7 @@ class Reference
      *
      * @return Reference
      */
-    public function getParent(): Reference
+    public function getParent(): self
     {
         $parentPath = dirname($this->getPath());
 
@@ -106,7 +106,7 @@ class Reference
      *
      * @return Reference
      */
-    public function getRoot(): Reference
+    public function getRoot(): self
     {
         /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
         return new self($this->uri->withPath('/'), $this->apiClient, $this->validator);
@@ -126,7 +126,7 @@ class Reference
      *
      * @return Reference
      */
-    public function getChild(string $path): Reference
+    public function getChild(string $path): self
     {
         $childPath = sprintf('%s/%s', trim($this->uri->getPath(), '/'), trim($path, '/'));
 
@@ -306,7 +306,7 @@ class Reference
      *
      * @return Reference
      */
-    public function set($value): Reference
+    public function set($value): self
     {
         $this->apiClient->set($this->uri, $value);
 
@@ -348,7 +348,7 @@ class Reference
      *
      * @return Reference A new reference for the added child
      */
-    public function push($value = null): Reference
+    public function push($value = null): self
     {
         $newKey = $this->apiClient->push($this->uri, $value);
         $newPath = sprintf('%s/%s', $this->uri->getPath(), $newKey);
@@ -368,7 +368,7 @@ class Reference
      *
      * @return Reference A new instance for the now empty Reference
      */
-    public function remove(): Reference
+    public function remove(): self
     {
         $this->apiClient->remove($this->uri);
 
@@ -395,7 +395,7 @@ class Reference
      *
      * @return Reference
      */
-    public function update(array $values): Reference
+    public function update(array $values): self
     {
         $this->apiClient->update($this->uri, $values);
 

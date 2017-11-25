@@ -61,7 +61,7 @@ class Firebase
      *
      * @return Firebase
      */
-    public function withDatabaseUri($databaseUri): Firebase
+    public function withDatabaseUri($databaseUri): self
     {
         return new self($this->serviceAccount, Psr7\uri_for($databaseUri), $this->tokenHandler);
     }
@@ -107,7 +107,7 @@ class Firebase
      *
      * @return Firebase
      */
-    public function asUserWithClaims($user, array $claims = []): Firebase
+    public function asUserWithClaims($user, array $claims = []): self
     {
         if ($user instanceof User) {
             $uid = $user->getUid();
@@ -127,7 +127,7 @@ class Firebase
      *
      * @return Firebase
      */
-    public function asUser(User $user): Firebase
+    public function asUser(User $user): self
     {
         return $this->withCustomAuth(new Http\Auth\UserAuth($user));
     }
@@ -146,7 +146,7 @@ class Firebase
         return $this->tokenHandler;
     }
 
-    private function withCustomAuth(Http\Auth $override): Firebase
+    private function withCustomAuth(Http\Auth $override): self
     {
         $firebase = new self($this->serviceAccount, $this->databaseUri, $this->tokenHandler);
         $firebase->database = $this->createDatabase()->withCustomAuth($override);

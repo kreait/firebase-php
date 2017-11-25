@@ -20,7 +20,7 @@ class ApiException extends \RuntimeException implements FirebaseException
      */
     private $response;
 
-    public static function wrapThrowable(\Throwable $e): ApiException
+    public static function wrapThrowable(\Throwable $e): self
     {
         if ($e instanceof self) {
             return $e;
