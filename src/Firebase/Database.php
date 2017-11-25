@@ -5,7 +5,10 @@ namespace Kreait\Firebase;
 use GuzzleHttp\Psr7;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Reference;
+use Kreait\Firebase\Database\RuleSet;
+use Kreait\Firebase\Exception\ApiException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\InvalidDatabaseRuleSet;
 use Kreait\Firebase\Exception\OutOfRangeException;
 use Psr\Http\Message\UriInterface;
 
@@ -109,13 +112,13 @@ class Database
      *
      * @see https://firebase.google.com/docs/database/rest/app-management#retrieving-firebase-realtime-database-rules
      *
-     * @return array
+     * @return RuleSet
      */
-    public function getRules(): array
+    public function getRules(): RuleSet
     {
         $rules = $this->client->get($this->uri->withPath('.settings/rules'));
 
-        return $rules ?: [];
+        return RuleSet::fromArray($rules);
     }
 
     /**
@@ -123,20 +126,10 @@ class Database
      *
      * @see https://firebase.google.com/docs/database/rest/app-management#updating-firebase-realtime-database-rules
      *
-     * @param array $rules
-     *
-     * @throws InvalidArgumentException If rules are invalid
-     *
-     * @return Database
+     * @param RuleSet $ruleSet
      */
-    public function setRules(array $rules): self
+    public function updateRules(RuleSet $ruleSet)
     {
-        try {
-            $this->client->set($this->uri->withPath('.settings/rules'), $rules);
-        } catch (InvalidArgumentException $e) {
-            throw new InvalidArgumentException($e->getMessage(), $e->getCode());
-        }
-
-        return $this;
+        $this->client->set($this->uri->withPath('.settings/rules'), $ruleSet);
     }
 }

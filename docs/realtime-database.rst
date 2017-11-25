@@ -378,17 +378,45 @@ includes the sent request and the received response object:
     }
 
 
-******************
-Security and Rules
-******************
+**************
+Database rules
+**************
 
 Learn more about the usage of Firebase Realtime Database Rules in the
 `official documentation <https://firebase.google.com/docs/database/security/>`_.
 
 .. code-block:: php
 
-        $rules = $db->getRules();
-        $db->setRules($rules);
+        use Kreait\Firebase\Database\RuleSet;
+
+        // The default rules allow full read and write access to authenticated users of your app
+        $ruleSet = RuleSet::default();
+
+        // This level of access means anyone can read or write to your database. You should
+        // configure more secure rules before launching your app.
+        $ruleSet = RuleSet::public();
+
+        // Private rules disable read and write access to your database by users.
+        // With these rules, you can only access the database through the
+        // Firebase console and the Admin SDKs.
+        $ruleSet = RuleSet::private();
+
+        // You can of course define custom rules
+        $ruleSet = RuleSet::fromArray(['rules' => [
+            '.read' => true,
+            '.write' => false,
+            'users' => [
+                '$uid' => [
+                    '.read' => '$uid === auth.uid',
+                    '.write' => '$uid === auth.uid',
+                ]
+            ]
+        ]]);
+
+        $db->updateRules($ruleSet);
+
+        $freshRuleSet = $db->getRules(); // Returns a new RuleSet instance
+        $actualRules = $ruleSet->getRules(); // returns an array
 
 
 .. rubric:: Footnotes

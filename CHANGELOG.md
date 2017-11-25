@@ -3,7 +3,8 @@
 ## Unreleased
 
 * Add support for getting and updating Realtime Database Rules 
-  ([#136](https://github.com/kreait/firebase-php/pull/136))
+  ([#136](https://github.com/kreait/firebase-php/pull/136)) 
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/realtime-database.html#database-rules))
 
 ## 3.4.2 - 2017-11-08
 

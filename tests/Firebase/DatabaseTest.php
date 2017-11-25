@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Reference;
+use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Http\Auth;
 use Kreait\Tests\FirebaseTestCase;
@@ -81,17 +82,22 @@ class DatabaseTest extends FirebaseTestCase
     {
         $this->apiClient->expects($this->once())
             ->method('get')
-            ->with($this->uri->withPath('.settings/rules'));
+            ->with($this->uri->withPath('.settings/rules'))
+            ->willReturn($expected = RuleSet::default()->getRules());
 
-        $this->assertEquals($this->database->getRules(), []);
+        $ruleSet = $this->database->getRules();
+
+        $this->assertEquals($expected, $ruleSet->getRules());
     }
 
     public function testSetRules()
     {
+        $ruleSet = RuleSet::default();
+
         $this->apiClient->expects($this->once())
             ->method('set')
-            ->with($this->uri->withPath('.settings/rules'));
+            ->with($this->uri->withPath('.settings/rules'), $ruleSet);
 
-        $this->assertEquals($this->database->setRules([]), $this->database);
+        $this->database->updateRules($ruleSet);
     }
 }
