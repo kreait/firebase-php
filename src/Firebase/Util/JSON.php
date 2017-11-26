@@ -58,4 +58,21 @@ class JSON
 
         return $data;
     }
+
+    /**
+     * Returns true if the given value is a valid JSON string.
+     *
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    public static function isValid($value): bool
+    {
+        try {
+            self::decode($value);
+            return true;
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
 }

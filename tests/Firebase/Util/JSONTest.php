@@ -31,4 +31,10 @@ class JSONTest extends FirebaseTestCase
 
         JSON::decode('{');
     }
+
+    public function testIsValid()
+    {
+        $this->assertTrue(JSON::isValid(json_encode([])));
+        $this->assertFalse(JSON::isValid('<html></html>'));
+    }
 }
