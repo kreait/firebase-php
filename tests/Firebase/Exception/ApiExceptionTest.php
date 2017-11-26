@@ -62,4 +62,13 @@ class ApiExceptionTest extends FirebaseTestCase
         $this->assertInstanceOf(ApiException::class, $result);
         $this->assertSame($source, $result->getPrevious());
     }
+
+    public function testWrapServerExceptionWithNonJsonResponse()
+    {
+        $response = new Response(500, [], '<html><body>Some server exception</body></html>');
+        $source = new ClientException('Foo', $this->createMock(RequestInterface::class), $response);
+        $result = ApiException::wrapThrowable($source);
+
+        $this->assertSame('Foo', $result->getMessage());
+    }
 }

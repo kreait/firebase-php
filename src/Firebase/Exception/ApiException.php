@@ -4,6 +4,7 @@ namespace Kreait\Firebase\Exception;
 
 use Fig\Http\Message\StatusCodeInterface as StatusCode;
 use GuzzleHttp\Exception\RequestException;
+use InvalidArgumentException;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -41,8 +42,9 @@ class ApiException extends \RuntimeException implements FirebaseException
             $class = static::class;
         }
 
-        if ($response) {
-            $message = JSON::decode((string) $response->getBody(), true)['error'] ?? $message;
+        if ($response && JSON::isValid($responseBody = (string) $response->getBody())) {
+            $json = JSON::decode($responseBody, true);
+            $message = $json['error'] ?? $message;
         }
 
         $instance = new $class($message, $code, $e);

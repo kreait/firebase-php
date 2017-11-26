@@ -38,7 +38,7 @@ class AuthExceptionTest extends FirebaseTestCase
             new Response(400, [], '{')
         );
 
-        $this->assertRegExp('/json/i', AuthException::fromRequestException($re)->getMessage());
+        $this->assertSame('foo', AuthException::fromRequestException($re)->getMessage());
     }
 
     public function testUnknownError()
