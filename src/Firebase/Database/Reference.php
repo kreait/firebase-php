@@ -89,7 +89,7 @@ class Reference
      */
     public function getParent(): self
     {
-        $parentPath = dirname($this->getPath());
+        $parentPath = \dirname($this->getPath());
 
         if ('.' === $parentPath) {
             throw new OutOfRangeException('Cannot get parent of root reference');
@@ -273,7 +273,7 @@ class Reference
         /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         $snapshot = $this->shallow()->getSnapshot();
 
-        if (is_array($value = $snapshot->getValue())) {
+        if (\is_array($value = $snapshot->getValue())) {
             return array_keys($value);
         }
 

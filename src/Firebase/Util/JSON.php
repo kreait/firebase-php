@@ -70,6 +70,7 @@ class JSON
     {
         try {
             self::decode($value);
+
             return true;
         } catch (\Throwable $e) {
             return false;

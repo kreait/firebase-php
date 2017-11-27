@@ -81,7 +81,7 @@ class ServiceAccount
             return $value;
         }
 
-        if (is_string($value)) {
+        if (\is_string($value)) {
             try {
                 return self::fromJson($value);
             } catch (InvalidArgumentException $e) {
@@ -89,7 +89,7 @@ class ServiceAccount
             }
         }
 
-        if (is_array($value)) {
+        if (\is_array($value)) {
             return self::fromArray($value);
         }
 

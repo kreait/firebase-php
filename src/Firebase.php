@@ -115,9 +115,10 @@ class Firebase
             $uid = (string) $user;
         }
 
-        return $this->auth
-            ? $this->withCustomAuth(new Http\Auth\UserAuth($this->auth->getUser($uid, $claims)))
-            : $this->withCustomAuth(new Http\Auth\CustomToken($uid, $claims));
+        return $this->withCustomAuth($this->auth
+            ? new Http\Auth\UserAuth($this->auth->getUser($uid, $claims))
+            : new Http\Auth\CustomToken($uid, $claims)
+        );
     }
 
     /**

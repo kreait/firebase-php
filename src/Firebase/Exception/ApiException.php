@@ -4,7 +4,6 @@ namespace Kreait\Firebase\Exception;
 
 use Fig\Http\Message\StatusCodeInterface as StatusCode;
 use GuzzleHttp\Exception\RequestException;
-use InvalidArgumentException;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -36,7 +35,7 @@ class ApiException extends \RuntimeException implements FirebaseException
         $message = $e->getMessage();
         $code = $e->getCode();
 
-        if (in_array($code, [StatusCode::STATUS_UNAUTHORIZED, StatusCode::STATUS_FORBIDDEN], true)) {
+        if (\in_array($code, [StatusCode::STATUS_UNAUTHORIZED, StatusCode::STATUS_FORBIDDEN], true)) {
             $class = PermissionDenied::class;
         } else {
             $class = static::class;

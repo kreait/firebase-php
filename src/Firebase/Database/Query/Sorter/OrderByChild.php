@@ -24,7 +24,7 @@ final class OrderByChild implements Sorter
 
     public function modifyValue($value)
     {
-        if (!is_array($value)) {
+        if (!\is_array($value)) {
             return $value;
         }
 

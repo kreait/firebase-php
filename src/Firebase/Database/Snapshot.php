@@ -137,7 +137,7 @@ class Snapshot
      */
     public function hasChildren(): bool
     {
-        return is_array($this->value) && count($this->value);
+        return \is_array($this->value) && \count($this->value);
     }
 
     /**
@@ -149,7 +149,7 @@ class Snapshot
      */
     public function numChildren(): int
     {
-        return is_array($this->value) ? count($this->value) : 0;
+        return \is_array($this->value) ? \count($this->value) : 0;
     }
 
     /**

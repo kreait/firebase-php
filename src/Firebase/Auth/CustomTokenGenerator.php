@@ -45,7 +45,7 @@ class CustomTokenGenerator
      */
     public function create($uid, array $claims = [], \DateTimeInterface $expiresAt = null): Token
     {
-        if (count($claims)) {
+        if (\count($claims)) {
             $this->builder->set('claims', $claims);
         }
 

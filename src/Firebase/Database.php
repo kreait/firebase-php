@@ -6,9 +6,7 @@ use GuzzleHttp\Psr7;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\RuleSet;
-use Kreait\Firebase\Exception\ApiException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\Exception\InvalidDatabaseRuleSet;
 use Kreait\Firebase\Exception\OutOfRangeException;
 use Psr\Http\Message\UriInterface;
 
@@ -116,6 +114,7 @@ class Database
      */
     public function getRules(): RuleSet
     {
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         $rules = $this->client->get($this->uri->withPath('.settings/rules'));
 
         return RuleSet::fromArray($rules);
@@ -130,6 +129,7 @@ class Database
      */
     public function updateRules(RuleSet $ruleSet)
     {
+        /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
         $this->client->set($this->uri->withPath('.settings/rules'), $ruleSet);
     }
 }
