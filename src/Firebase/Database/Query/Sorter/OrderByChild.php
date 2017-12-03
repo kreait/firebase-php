@@ -31,7 +31,7 @@ final class OrderByChild implements Sorter
         $childKey = $this->childKey;
         
         uasort($value, function ($a, $b) use ($childKey) {
-            return ($this->get($a, $childKey) ?? null) <=> $this->get($b, $childKey) ?? null;
+            return ($this->accessToArrayPath($a, $childKey) ?? null) <=> $this->accessToArrayPath($b, $childKey) ?? null;
         });
         
         return $value;
@@ -53,30 +53,18 @@ final class OrderByChild implements Sorter
      * @return array|mixed|null
      *
      */
-    function get($collection = [], $key = '', $default = null)
+    function accessToArrayPath($collection = [], $key = '', $default = null)
     {
         if (is_null($key)) {
             return $collection;
         }
 
-        if (!is_object($collection) && isset($collection[$key])) {
-            return $collection[$key];
-        }
-
         foreach (explode('/', $key) as $segment) {
-            if (is_object($collection)) {
-                if (!isset($collection->{$segment})) {
-                    return $default instanceof \Closure ? $default() : $default;
-                } else {
-                    $collection = $collection->{$segment};
-                }
-            } else {
-                if (!isset($collection[$segment])) {
-                    return $default instanceof \Closure ? $default() : $default;
-                } else {
-                    $collection = $collection[$segment];
-                }
+            if (!isset($collection[$segment])) {
+                return $default instanceof \Closure ? $default() : $default;
             }
+
+            $collection = $collection[$segment];
         }
 
         return $collection;
