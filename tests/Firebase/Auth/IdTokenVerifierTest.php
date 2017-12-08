@@ -53,6 +53,20 @@ class IdTokenVerifierTest extends FirebaseTestCase
         $this->verifier->verify($token);
     }
 
+    /**
+     * @param Token $token
+     * @param string $exception
+     * @dataProvider invalidTokenProvider
+     */
+    public function testTheExceptionHasTheToken(Token $token, $exception)
+    {
+        try {
+            $this->verifier->verify($token);
+        } catch (InvalidIdToken $e) {
+            $this->assertSame($token, $e->getToken());
+        }
+    }
+
     public function validTokenProvider()
     {
         return [

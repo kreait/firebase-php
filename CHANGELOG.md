@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* When an ID Token verification has failed, the resulting exception now includes the token.
+  ([#139](https://github.com/kreait/firebase-php/issues/139), [#140](https://github.com/kreait/firebase-php/issues/140))
+
 ## 3.5.0 - 2017-11-27
 
 * Add support for getting and updating Realtime Database Rules 
