@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.6.0 - 2017-12-08
 
 * When an ID Token verification has failed, the resulting exception now includes the token.
   ([#139](https://github.com/kreait/firebase-php/issues/139), [#140](https://github.com/kreait/firebase-php/issues/140))
