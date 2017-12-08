@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Enable ordering by nested childs ([#135](https://github.com/kreait/firebase-php/pull/135))
+
 ## 3.6.0 - 2017-12-08
 
 * When an ID Token verification has failed, the resulting exception now includes the token.
