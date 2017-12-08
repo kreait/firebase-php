@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.7.0 - 2017-12-08
 
 * Enable ordering by nested childs ([#135](https://github.com/kreait/firebase-php/pull/135))
 
