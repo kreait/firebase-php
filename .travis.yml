@@ -10,6 +10,7 @@ install: travis_retry composer install
 
 script:
   - vendor/bin/phpunit --coverage-clover build/coverage.clover
+  - vendor/bin/phpstan analyse src -c phpstan.neon --level=6 --no-progress -vvv
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar

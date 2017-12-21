@@ -17,3 +17,6 @@ indent_style = tab
 
 [.travis.yml]
 indent_size = 2
+
+[*.neon]
+indent_style = tab

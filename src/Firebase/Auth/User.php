@@ -19,7 +19,9 @@ class User
 
     public static function create($idToken = null, string $refreshToken = null): self
     {
-        $idToken = $idToken instanceof Token ?: (new Parser())->parse($idToken);
+        if (!($idToken instanceof Token)) {
+            $idToken = (new Parser())->parse($idToken);
+        }
 
         $user = new static();
         $user->setIdToken($idToken);

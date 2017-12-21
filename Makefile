@@ -3,6 +3,7 @@
 
 tests: ## Executes the test suite
 	vendor/bin/phpunit
+	vendor/bin/phpstan analyse src -c phpstan.neon --level=6 --no-progress -vvv
 
 coverage: ## Executes the test suite and generates code coverage reports
 	@vendor/bin/phpunit --coverage-html=build/coverage

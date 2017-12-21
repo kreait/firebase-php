@@ -37,7 +37,7 @@ class CredentialsNotFound extends ServiceAccountDiscoveryFailed
     }
 
     /**
-     * @return \string[]
+     * @return string[]
      */
     public function getTriedPaths(): array
     {

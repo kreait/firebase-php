@@ -102,7 +102,7 @@ class Firebase
      *
      * @deprecated 3.2 use {@see \Kreait\Firebase\Auth::getUser()} and {@see \Kreait\Firebase::asUser()} instead
      *
-     * @param string|User $user
+     * @param User|mixed $user
      * @param array $claims
      *
      * @return Firebase
