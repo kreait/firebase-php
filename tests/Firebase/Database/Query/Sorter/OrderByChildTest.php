@@ -55,11 +55,11 @@ class OrderByChildTest extends FirebaseTestCase
                 'expected' => [
                     'third' => ['child' => ['grandchild' => 1]],
                     'fourth' => ['child' => ['grandchild' => 2]],
-                    'first'  => ['child' => ['grandchild' => 3]],
+                    'first' => ['child' => ['grandchild' => 3]],
                     'second' => ['child' => ['grandchild' => 4]],
                 ],
                 'given' => [
-                    'first'  => ['child' => ['grandchild' => 3]],
+                    'first' => ['child' => ['grandchild' => 3]],
                     'second' => ['child' => ['grandchild' => 4]],
                     'third' => ['child' => ['grandchild' => 1]],
                     'fourth' => ['child' => ['grandchild' => 2]],
@@ -70,17 +70,16 @@ class OrderByChildTest extends FirebaseTestCase
                 'expected' => [
                     'third' => ['child' => ['grandchild' => ['great_grandchild' => 1]]],
                     'fourth' => ['child' => ['grandchild' => ['great_grandchild' => 2]]],
-                    'first'  => ['child' => ['grandchild' => ['great_grandchild' => 3]]],
+                    'first' => ['child' => ['grandchild' => ['great_grandchild' => 3]]],
                     'second' => ['child' => ['grandchild' => ['great_grandchild' => 4]]],
                 ],
                 'given' => [
-                    'first'  => ['child' => ['grandchild' => ['great_grandchild' => 3]]],
+                    'first' => ['child' => ['grandchild' => ['great_grandchild' => 3]]],
                     'second' => ['child' => ['grandchild' => ['great_grandchild' => 4]]],
                     'third' => ['child' => ['grandchild' => ['great_grandchild' => 1]]],
                     'fourth' => ['child' => ['grandchild' => ['great_grandchild' => 2]]],
                 ],
             ],
-
         ];
     }
 }
