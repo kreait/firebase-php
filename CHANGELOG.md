@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.7.1 - 2018-01-07
 
 * Fixes bug that not more than one custom token could be created at a time.
 
