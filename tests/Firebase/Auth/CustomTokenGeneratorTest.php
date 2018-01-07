@@ -40,4 +40,12 @@ class CustomTokenGeneratorTest extends FirebaseTestCase
 
         $this->assertSame($expiresAt->getTimestamp(), $token->getClaim('exp'));
     }
+
+    public function testGenerateMultipleTokens()
+    {
+        $this->generator->create('first');
+        $this->generator->create('second');
+
+        $this->assertTrue($noExceptionWasThrown = true);
+    }
 }

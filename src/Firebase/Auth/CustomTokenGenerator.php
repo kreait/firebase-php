@@ -54,11 +54,15 @@ class CustomTokenGenerator
         $now = time();
         $expiration = $expiresAt ? $expiresAt->getTimestamp() : $now + (60 * 60);
 
-        return $this->builder
+        $token = $this->builder
             ->setIssuedAt($now)
             ->setExpiration($expiration)
             ->sign($this->signer, $this->serviceAccount->getPrivateKey())
             ->getToken();
+
+        $this->builder->unsign();
+
+        return $token;
     }
 
     private function createBuilder(): Builder
