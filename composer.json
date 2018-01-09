@@ -41,10 +41,5 @@
             "php": "7.0"
         },
         "sort-packages": true
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.x-dev"
-        }
     }
 }
