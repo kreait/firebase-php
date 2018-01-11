@@ -99,6 +99,7 @@ class ApiClient
     {
         return $this->request('setAccountInfo', [
             'idToken' => (string) $user->getIdToken(),
+            'localId' => $user->getUid(),
             'password' => $newPassword,
             'returnSecureToken' => true,
         ]);
@@ -108,6 +109,7 @@ class ApiClient
     {
         return $this->request('setAccountInfo', [
             'idToken' => (string) $user->getIdToken(),
+            'localId' => $user->getUid(),
             'email' => $newEmail,
             'returnSecureToken' => true,
         ]);
