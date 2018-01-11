@@ -9,6 +9,8 @@ use Lcobucci\JWT\Token;
 
 class IdTokenVerifier
 {
+    const ISSUER_FORMAT = 'https://securetoken.google.com/%s';
+
     /**
      * @var ServiceAccount
      */
@@ -70,7 +72,7 @@ class IdTokenVerifier
             throw new InvalidIdToken($token, 'The claim "iss" is missing.');
         }
 
-        if ($token->getClaim('iss') !== sprintf('https://securetoken.google.com/%s', $this->serviceAccount->getProjectId())) {
+        if ($token->getClaim('iss') !== sprintf(self::ISSUER_FORMAT, $this->serviceAccount->getProjectId())) {
             throw new InvalidIdToken($token, 'This token has an invalid issuer.');
         }
     }

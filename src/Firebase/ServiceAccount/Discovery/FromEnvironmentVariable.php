@@ -17,6 +17,11 @@ class FromEnvironmentVariable
         $this->value = $value;
     }
 
+    /**
+     * @throws ServiceAccountDiscoveryFailed
+     *
+     * @return ServiceAccount
+     */
     public function __invoke(): ServiceAccount
     {
         $msg = sprintf('%s: The environment variable "%s"', static::class, $this->value);

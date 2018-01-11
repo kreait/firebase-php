@@ -8,6 +8,11 @@ use Kreait\Firebase\ServiceAccount;
 
 class FromGoogleWellKnownFile
 {
+    /**
+     * @throws ServiceAccountDiscoveryFailed
+     *
+     * @return ServiceAccount
+     */
     public function __invoke(): ServiceAccount
     {
         $msg = sprintf('%s: The well known file', static::class);
@@ -18,6 +23,7 @@ class FromGoogleWellKnownFile
 
         // @codeCoverageIgnoreStart
         // We can't really test this because of too many unknowns in the Google library
+        /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
         return ServiceAccount::fromValue($credentials);
         // @codeCoverageIgnoreEnd
     }

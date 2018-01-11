@@ -6,16 +6,14 @@
     bootstrap="tests/bootstrap.php"
     colors="true">
     <testsuites>
-        <testsuite name="Firebase Test Suite">
-            <directory>tests</directory>
+        <testsuite name="unit">
+            <directory>tests/Firebase/Unit</directory>
+        </testsuite>
+
+        <testsuite name="integration">
+            <directory>tests/Firebase/Integration</directory>
         </testsuite>
     </testsuites>
-    
-    <groups>
-        <exclude>
-            <group>Integration</group>
-        </exclude>
-    </groups>
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

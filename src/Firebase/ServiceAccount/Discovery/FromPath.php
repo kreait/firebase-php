@@ -17,6 +17,11 @@ class FromPath
         $this->path = $path;
     }
 
+    /**
+     * @throws ServiceAccountDiscoveryFailed
+     *
+     * @return ServiceAccount
+     */
     public function __invoke(): ServiceAccount
     {
         try {

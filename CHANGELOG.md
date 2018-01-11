@@ -6,6 +6,7 @@
 - Auth: Fixed changing emails and password
 - Auth: Removed need for the project's web API key and deprecated related methods
 - Added integration tests for database operations
+- Restructured tests for clean separation of unit/integration tests
 - Enhanced Travis CI build performance
 - Ensured support for PHP 7.2
 
