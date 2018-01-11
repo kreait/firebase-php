@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fixed creation of new users (anonymous, email/password)
 - Added integration tests for database operations
 - Enhanced Travis CI build performance
 - Ensured support for PHP 7.2

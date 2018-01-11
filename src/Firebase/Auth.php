@@ -50,9 +50,11 @@ class Auth
 
     public function createUserWithEmailAndPassword(string $email, string $password): User
     {
-        $response = $this->client->signupNewUser($email, $password);
+        $this->client->signupNewUser($email, $password);
 
-        return $this->convertResponseToUser($response);
+        // The response for a created user only includes the local id,
+        // so we have to refetch them.
+        return $this->getUserByEmailAndPassword($email, $password);
     }
 
     public function getUserByEmailAndPassword(string $email, string $password): User
@@ -64,7 +66,13 @@ class Auth
 
     public function createAnonymousUser(): User
     {
-        return $this->createUserWithEmailAndPassword('', '');
+        $response = $this->client->signupNewUser();
+
+        // The response for a created user only includes the local id,
+        // so we have to refetch them.
+        $uid = JSON::decode((string) $response->getBody(), true)['localId'];
+
+        return $this->getUser($uid);
     }
 
     public function changeUserPassword(User $user, string $newPassword): User
