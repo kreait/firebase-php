@@ -5,25 +5,22 @@ declare(strict_types=1);
 namespace Kreait\Tests\Integration\Database;
 
 use Kreait\Firebase\Database\Reference;
+use Kreait\Tests\DatabaseTestCase;
 use Kreait\Tests\IntegrationTestCase;
 
 /**
  * @group Integration
  */
-class ReferenceTest extends IntegrationTestCase
+class ReferenceTest extends DatabaseTestCase
 {
     /**
      * @var Reference
      */
-    private static $ref;
+    private $ref;
 
-    public static function setUpBeforeClass()
+    public function setUp()
     {
-        parent::setUpBeforeClass();
-
-        self::$ref = self::$firebase->getDatabase()->getReference(self::$prefix)->getChild('Database');
-
-        self::$ref->remove();
+        $this->ref = self::$db->getReference(self::$refPrefix);
     }
 
     /**
@@ -34,7 +31,7 @@ class ReferenceTest extends IntegrationTestCase
      */
     public function testSetAndGet($key, $value)
     {
-        $ref = self::$ref->getChild(__FUNCTION__.'/'.$key);
+        $ref = $this->ref->getChild(__FUNCTION__.'/'.$key);
         $ref->set($value);
 
         $this->assertSame($value, $ref->getValue());
@@ -42,21 +39,21 @@ class ReferenceTest extends IntegrationTestCase
 
     public function testUpdate()
     {
-        $ref = self::$ref->getChild(__FUNCTION__);
+        $ref = $this->ref->getChild(__FUNCTION__);
         $ref->set([
             'first' => 'value',
-            'second' => 'value'
+            'second' => 'value',
         ]);
 
         $ref->update([
             'first' => 'updated',
-            'third' => 'new'
+            'third' => 'new',
         ]);
 
         $expected = [
             'first' => 'updated',
             'second' => 'value',
-            'third' => 'new'
+            'third' => 'new',
         ];
 
         $this->assertEquals($expected, $ref->getValue());
@@ -64,7 +61,7 @@ class ReferenceTest extends IntegrationTestCase
 
     public function testPush()
     {
-        $ref = self::$ref->getChild(__FUNCTION__);
+        $ref = $this->ref->getChild(__FUNCTION__);
         $value = 'a value';
 
         $newRef = $ref->push($value);
@@ -75,11 +72,11 @@ class ReferenceTest extends IntegrationTestCase
 
     public function testRemove()
     {
-        $ref = self::$ref->getChild(__FUNCTION__);
+        $ref = $this->ref->getChild(__FUNCTION__);
 
         $ref->set([
             'first' => 'value',
-            'second' => 'value'
+            'second' => 'value',
         ]);
 
         $ref->getChild('first')->remove();

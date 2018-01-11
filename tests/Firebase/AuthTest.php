@@ -65,10 +65,4 @@ class AuthTest extends FirebaseTestCase
 
         $this->auth->verifyIdToken('some id token string');
     }
-
-    public function testCreateUser()
-    {
-        $this->markTestSkipped('We have to test this with integration tests.');
-        $this->assertInstanceOf(Auth\User::class, $this->auth->getUser('uid'));
-    }
 }
