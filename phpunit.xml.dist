@@ -10,6 +10,12 @@
             <directory>tests</directory>
         </testsuite>
     </testsuites>
+    
+    <groups>
+        <exclude>
+            <group>Integration</group>
+        </exclude>
+    </groups>
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

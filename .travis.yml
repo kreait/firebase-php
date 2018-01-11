@@ -1,20 +1,63 @@
 language: php
 
-php:
-  - 7.0
-  - 7.1
+env:
+  global:
+    - UNIT_TESTS=1
+    - STATIC_ANALYSIS=0
+    - INTEGRATION_TESTS=0
+    - CODE_COVERAGE=0
+    - DEFAULT_COMPOSER_FLAGS='--profile --ansi --prefer-dist --no-interaction --optimize-autoloader --no-suggest --no-progress'
+    - PHPUNIT_FLAGS=''
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 7.0
+    - php: 7.1
+    - php: 7.2
+    - php: 7.2
+      env: STATIC_ANALYSIS=1
+    - php: 7.2
+      env: PHPUNIT_FLAGS='--group Integration'
+    - php: 7.2
+      env: CODE_COVERAGE=1
+  allow_failures:
+    - php: 7.2
+      env: CODE_COVERAGE=1
 
 sudo: false
 
-install: travis_retry composer install
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_8bfcfbcad9c4_key -iv $encrypted_8bfcfbcad9c4_iv -in test_credentials.json.enc -out tests/test_credentials.json -d
+
+install:
+  - composer $COMPOSER_FLAGS $DEFAULT_COMPOSER_FLAGS update
 
 script:
-  - vendor/bin/phpunit --coverage-clover build/coverage.clover
-  - vendor/bin/phpstan analyse src -c phpstan.neon --level=6 --no-progress -vvv
+  - |
+    if [ UNIT_TESTS == 1 ]; then
+      vendor/bin/phpunit $PHPUNIT_FLAGS
+    fi
+  - |
+    if [ STATIC_ANALYSIS == 1 ]; then
+      vendor/bin/phpstan analyse src -c phpstan.neon --level=6 --no-progress -vvv
+    fi
+  - |
+    if [ CODE_COVERAGE == 1 ]; then
+      vendor/bin/phpunit --coverage-clover build/coverage.clover
+    fi
 
 after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover
+  - |
+    if [ $CODE_COVERAGE == 1 ]; then
+      wget https://scrutinizer-ci.com/ocular.phar
+      php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover
+    fi
 
 notifications:
   email:

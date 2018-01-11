@@ -5,6 +5,7 @@
 /.gitignore export-ignore
 /.php_cs export-ignore
 /.travis.yml export-ignore
+/.test_credentials.json.enc
 /docs export-ignore
 /Makefile export-ignore
 /phpstan.neon export-ignore

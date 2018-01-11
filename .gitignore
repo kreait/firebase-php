@@ -2,6 +2,7 @@
 /vendor
 /docs/_build
 /docs/*.pyc
+/tests/test_credentials.json
 
 /.php_cs.cache
 /composer.lock
