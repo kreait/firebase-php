@@ -4,7 +4,6 @@ namespace Kreait\Tests\Firebase;
 
 use Firebase\Auth\Token\Handler;
 use Kreait\Firebase;
-use Kreait\Firebase\Auth;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\Tests\FirebaseTestCase;
@@ -28,55 +27,45 @@ class FactoryTest extends FirebaseTestCase
 
     public function testItAcceptsACustomDatabaseUri()
     {
-        $firebase = $this->factory
-            ->withDatabaseUri('http://domain.tld')
-            ->create();
+        $uri = 'http://domain.tld';
 
-        $this->assertInstanceOf(Firebase::class, $firebase);
+        $factory = $this->factory->withDatabaseUri($uri);
+
+        $this->assertSame($uri, (string) $factory->getDatabaseUri());
     }
 
     public function testItUsesADefaultTokenHandler()
     {
-        $this->assertInstanceOf(Handler::class, $this->factory->create()->getTokenHandler());
+        $this->assertInstanceOf(Handler::class, $this->factory->getTokenHandler());
     }
 
     public function testItAcceptsACustomTokenHandler()
     {
         $handler = new Handler('projectId', 'clientEmail', 'privateKey');
 
-        $firebase = $this->factory
-            ->withTokenHandler($handler)
-            ->create();
+        $factory = $this->factory->withTokenHandler($handler);
 
-        $this->assertSame($handler, $firebase->getTokenHandler());
+        $this->assertSame($handler, $factory->getTokenHandler());
     }
 
     public function testItAcceptsCredentials()
     {
         $firebase = $this->factory
-            ->withCredentials($this->fixturesDir.'/ServiceAccount/valid.json')
-            ->create();
+            ->withCredentials($this->fixturesDir.'/ServiceAccount/valid.json');
 
-        $this->assertInstanceOf(Firebase::class, $firebase);
+        $this->assertTrue($noExceptionHasBeenThrown = true);
     }
 
     public function testItAcceptsAServiceAccount()
     {
-        $firebase = $this->factory
-            ->withServiceAccount($this->createServiceAccountMock())
-            ->create();
+        $factory = $this->factory->withServiceAccount($serviceAccount = $this->createServiceAccountMock());
 
-        $this->assertInstanceOf(Firebase::class, $firebase);
+        $this->assertSame($serviceAccount, $factory->getServiceAccount());
     }
 
     public function testItAcceptsAnApiKey()
     {
-        $firebase = $this->factory
-            ->withApiKey('foo')
-            ->create();
-
-        $this->assertInstanceOf(Firebase::class, $firebase);
-        $this->assertInstanceOf(Auth::class, $firebase->getAuth());
+        $this->assertSame($this->factory, $this->factory->withApiKey('foo'));
     }
 
     public function testItAcceptsAServiceAccountAndApiKey()

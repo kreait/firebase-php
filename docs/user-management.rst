@@ -11,10 +11,9 @@ to the Firebase factory and getting an ``Auth`` instance:
     use Kreait\Firebase\ServiceAccount;
 
     $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
-    $apiKey = '<Firebase Web API key>';
 
     $firebase = (new Factory)
-        ->withServiceAccountAndApiKey($serviceAccount, $apiKey)
+        ->withServiceAccount($serviceAccount)
         ->create();
 
     $auth = $firebase->getAuth();

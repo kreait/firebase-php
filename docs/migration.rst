@@ -6,19 +6,6 @@ Migration
 3.1 to 3.2
 **********
 
-.. rubric:: Kreait\Firebase::asUserWithClaims() has been deprecated
-
-Use ``Kreait\Firebase\Auth::getUser()`` and ``Kreait\Firebase::asUser()`` instead.
-
-.. code-block:: php
-
-    # Before
-    $authenticated = $firebase->asUserWithClaims('a-uid', ['claim' => 'value']);
-
-    # After
-    $user = $firebase->getAuth()->getUser('a-uid', ['claim' => 'value']);
-    $authenticated = $firebase->asUser($user);
-
 .. rubric:: Kreait\Firebase::getTokenHandler() has been deprecated
 
 Use ``Kreait\Firebase\Auth::createCustomToken()`` and ``Kreait\Firebase\Auth::verifyIdToken()`` instead.

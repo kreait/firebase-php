@@ -4,6 +4,7 @@
 
 - Auth: Fixed creation of new users (anonymous, email/password)
 - Auth: Fixed changing emails and password
+- Auth: Removed need for the project's web API key and deprecated related methods
 - Added integration tests for database operations
 - Enhanced Travis CI build performance
 - Ensured support for PHP 7.2

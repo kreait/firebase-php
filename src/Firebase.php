@@ -3,14 +3,10 @@
 namespace Kreait;
 
 use Firebase\Auth\Token\Handler as TokenHandler;
-use Google\Auth\Credentials\ServiceAccountCredentials;
-use Google\Auth\Middleware\AuthTokenMiddleware;
-use GuzzleHttp\Client;
-use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7;
 use Kreait\Firebase\Auth\User;
 use Kreait\Firebase\Database;
-use Kreait\Firebase\Exception\LogicException;
+use Kreait\Firebase\Factory;
 use Kreait\Firebase\Http;
 use Kreait\Firebase\ServiceAccount;
 use Psr\Http\Message\UriInterface;
@@ -18,17 +14,12 @@ use Psr\Http\Message\UriInterface;
 class Firebase
 {
     /**
-     * @var ServiceAccount
-     */
-    private $serviceAccount;
-
-    /**
      * @var UriInterface
      */
     private $databaseUri;
 
     /**
-     * @var Database
+     * @var Database|null
      */
     private $database;
 
@@ -42,16 +33,28 @@ class Firebase
      */
     private $auth;
 
+    /**
+     * @var Factory
+     */
+    private $factory;
+
     public function __construct(
         ServiceAccount $serviceAccount,
         UriInterface $databaseUri,
-        TokenHandler $tokenHandler,
-        Firebase\Auth $auth = null
+        TokenHandler $tokenHandler = null,
+        Firebase\Auth $auth = null,
+        Factory $factory = null
     ) {
-        $this->serviceAccount = $serviceAccount;
         $this->databaseUri = $databaseUri;
         $this->tokenHandler = $tokenHandler;
         $this->auth = $auth;
+
+        $factory = ($factory ?: new Factory())
+            ->withServiceAccount($serviceAccount)
+            ->withDatabaseUri($databaseUri)
+            ->withTokenHandler($tokenHandler);
+
+        $this->factory = $factory;
     }
 
     /**
@@ -63,7 +66,12 @@ class Firebase
      */
     public function withDatabaseUri($databaseUri): self
     {
-        return new self($this->serviceAccount, Psr7\uri_for($databaseUri), $this->tokenHandler);
+        $new = clone $this;
+
+        $new->databaseUri = Psr7\uri_for($databaseUri);
+        $new->database = null;
+
+        return $new;
     }
 
     /**
@@ -74,7 +82,7 @@ class Firebase
     public function getDatabase(): Database
     {
         if (!$this->database) {
-            $this->database = $this->createDatabase();
+            $this->database = $this->factory->createDatabase();
         }
 
         return $this->database;
@@ -83,14 +91,12 @@ class Firebase
     /**
      * Returns an Auth instance.
      *
-     * @throws \Kreait\Firebase\Exception\LogicException
-     *
      * @return Firebase\Auth
      */
     public function getAuth(): Firebase\Auth
     {
         if (!$this->auth) {
-            throw new LogicException('You need to configure Firebase with an API key via the factory to use the Authentication capabilities.');
+            $this->auth = $this->factory->createAuth();
         }
 
         return $this->auth;
@@ -99,8 +105,6 @@ class Firebase
     /**
      * Returns a new instance with the permissions
      * of the user with the given UID and claims.
-     *
-     * @deprecated 3.2 use {@see \Kreait\Firebase\Auth::getUser()} and {@see \Kreait\Firebase::asUser()} instead
      *
      * @param User|mixed $user
      * @param array $claims
@@ -115,22 +119,19 @@ class Firebase
             $uid = (string) $user;
         }
 
-        return $this->withCustomAuth($this->auth
-            ? new Http\Auth\UserAuth($this->auth->getUser($uid, $claims))
-            : new Http\Auth\CustomToken($uid, $claims)
-        );
+        return $this->withCustomAuth(new Http\Auth\CustomToken($uid, $claims));
     }
 
     /**
      * Returns a new instance with the permissions of the given user.
      *
-     * @param User $user
+     * @param User|mixed $user
      *
      * @return Firebase
      */
-    public function asUser(User $user): self
+    public function asUser($user): self
     {
-        return $this->withCustomAuth(new Http\Auth\UserAuth($user));
+        return $this->asUserWithClaims($user);
     }
 
     /**
@@ -144,54 +145,18 @@ class Firebase
             E_USER_DEPRECATED
         );
 
+        if (!$this->tokenHandler) {
+            $this->tokenHandler = $this->factory->getTokenHandler();
+        }
+
         return $this->tokenHandler;
     }
 
     private function withCustomAuth(Http\Auth $override): self
     {
-        $firebase = new self($this->serviceAccount, $this->databaseUri, $this->tokenHandler);
-        $firebase->database = $this->createDatabase()->withCustomAuth($override);
+        $new = clone $this;
+        $new->database = $this->getDatabase()->withCustomAuth($override);
 
-        return $firebase;
-    }
-
-    private function createDatabase(): Database
-    {
-        $client = $this->createDatabaseClient($this->databaseUri);
-
-        return new Database($this->databaseUri, $client);
-    }
-
-    private function createDatabaseClient(UriInterface $databaseUri): Database\ApiClient
-    {
-        $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware($this->serviceAccount);
-
-        $stack = HandlerStack::create();
-        $stack->push(Http\Middleware::ensureJsonSuffix(), 'ensure_json_suffix');
-        $stack->push($googleAuthTokenMiddleware, 'auth_service_account');
-
-        $http = new Client([
-            'base_uri' => $databaseUri,
-            'handler' => $stack,
-            'auth' => 'google_auth',
-        ]);
-
-        return new Database\ApiClient($http);
-    }
-
-    private function createGoogleAuthTokenMiddleware(ServiceAccount $serviceAccount): AuthTokenMiddleware
-    {
-        $scopes = [
-            'https://www.googleapis.com/auth/userinfo.email',
-            'https://www.googleapis.com/auth/firebase.database',
-        ];
-
-        $credentials = [
-            'client_email' => $serviceAccount->getClientEmail(),
-            'client_id' => $serviceAccount->getClientId(),
-            'private_key' => $serviceAccount->getPrivateKey(),
-        ];
-
-        return new AuthTokenMiddleware(new ServiceAccountCredentials($scopes, $credentials));
+        return $new;
     }
 }

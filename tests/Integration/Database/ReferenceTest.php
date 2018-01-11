@@ -6,7 +6,6 @@ namespace Kreait\Tests\Integration\Database;
 
 use Kreait\Firebase\Database\Reference;
 use Kreait\Tests\DatabaseTestCase;
-use Kreait\Tests\IntegrationTestCase;
 
 /**
  * @group Integration

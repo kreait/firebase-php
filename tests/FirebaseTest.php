@@ -5,6 +5,7 @@ namespace Kreait\Tests;
 use Firebase\Auth\Token\Handler;
 use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase;
+use Kreait\Firebase\Auth;
 use Kreait\Firebase\Database;
 use Kreait\Firebase\ServiceAccount;
 
@@ -21,11 +22,6 @@ class FirebaseTest extends FirebaseTestCase
     private $databaseUri;
 
     /**
-     * @var Handler
-     */
-    private $tokenHandler;
-
-    /**
      * @var Firebase
      */
     private $firebase;
@@ -34,9 +30,8 @@ class FirebaseTest extends FirebaseTestCase
     {
         $this->serviceAccount = $this->createServiceAccountMock();
         $this->databaseUri = new Uri('https://database-uri.tld');
-        $this->tokenHandler = new Handler('projectid', 'clientEmail', 'privateKey');
 
-        $this->firebase = new Firebase($this->serviceAccount, $this->databaseUri, $this->tokenHandler);
+        $this->firebase = new Firebase($this->serviceAccount, $this->databaseUri);
     }
 
     public function testWithDatabaseUri()
@@ -54,22 +49,31 @@ class FirebaseTest extends FirebaseTestCase
         $this->assertInstanceOf(Database::class, $db);
     }
 
-    public function testAsUserWithClaims()
+    public function testAsUserWithClaimsWithUid()
     {
         $firebase = $this->firebase->asUserWithClaims('uid');
         $this->assertInstanceOf(Firebase::class, $firebase);
         $this->assertNotSame($this->firebase, $firebase);
     }
 
-    public function testGetTokenHandler()
+    public function testAsUserWithClaimsWithUser()
     {
-        $this->assertInstanceOf(Handler::class, $this->firebase->getTokenHandler());
+        $user = $this->prophesize(Auth\User::class);
+        $user->getUid()->willReturn('uid');
+
+        $firebase = $this->firebase->asUser($user->reveal());
+        $this->assertInstanceOf(Firebase::class, $firebase);
+        $this->assertNotSame($this->firebase, $firebase);
     }
 
-    public function testGetUnconfiguredAuth()
+    public function testGetTokenHandler()
     {
-        $this->expectException(Firebase\Exception\LogicException::class);
+        $firebase = new Firebase($this->serviceAccount, $this->databaseUri);
+        $this->assertInstanceOf(Handler::class, $firebase->getTokenHandler());
+    }
 
-        $this->firebase->getAuth();
+    public function testGetAuth()
+    {
+        $this->assertInstanceOf(Auth::class, $this->firebase->getAuth());
     }
 }

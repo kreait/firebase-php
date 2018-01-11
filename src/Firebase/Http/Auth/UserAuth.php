@@ -15,6 +15,11 @@ final class UserAuth implements Auth
      */
     private $token;
 
+    /**
+     * @deprecated 3.8
+     *
+     * @param User $user
+     */
     public function __construct(User $user)
     {
         $this->token = $user->getIdToken();
