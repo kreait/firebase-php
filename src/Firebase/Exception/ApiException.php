@@ -22,29 +22,16 @@ class ApiException extends \RuntimeException implements FirebaseException
 
     public static function wrapThrowable(\Throwable $e): self
     {
-        if ($e instanceof self) {
-            return $e;
-        }
-
         if (!($e instanceof RequestException)) {
             return new self($e->getMessage(), $e->getCode(), $e);
         }
 
         $request = $e->getRequest();
         $response = $e->getResponse();
-        $message = $e->getMessage();
+        $message = self::getPreciseMessage($response) ?: $e->getMessage();
         $code = $e->getCode();
 
-        if (\in_array($code, [StatusCode::STATUS_UNAUTHORIZED, StatusCode::STATUS_FORBIDDEN], true)) {
-            $class = PermissionDenied::class;
-        } else {
-            $class = static::class;
-        }
-
-        if ($response && JSON::isValid($responseBody = (string) $response->getBody())) {
-            $json = JSON::decode($responseBody, true);
-            $message = $json['error'] ?? $message;
-        }
+        $class = self::getTargetClassFromStatusCode($code);
 
         $instance = new $class($message, $code, $e);
         $instance->request = $request;
@@ -64,5 +51,22 @@ class ApiException extends \RuntimeException implements FirebaseException
     public function getResponse()
     {
         return $this->response;
+    }
+
+    private static function getTargetClassFromStatusCode($code): string
+    {
+        if (\in_array($code, [StatusCode::STATUS_UNAUTHORIZED, StatusCode::STATUS_FORBIDDEN], true)) {
+            return PermissionDenied::class;
+        }
+
+        return static::class;
+    }
+
+    private static function getPreciseMessage(ResponseInterface $response = null)
+    {
+        if ($response && JSON::isValid($responseBody = (string) $response->getBody())) {
+            $json = JSON::decode($responseBody, true);
+            return $json['error'] ?? null;
+        }
     }
 }

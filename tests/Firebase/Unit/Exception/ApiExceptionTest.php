@@ -12,14 +12,6 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiExceptionTest extends UnitTestCase
 {
-    public function testWrapApiException()
-    {
-        $source = new ApiException('Foo');
-        $result = ApiException::wrapThrowable($source);
-
-        $this->assertSame($source, $result);
-    }
-
     public function testWrapClientException()
     {
         $source = new ClientException(
