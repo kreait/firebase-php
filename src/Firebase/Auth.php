@@ -48,6 +48,27 @@ class Auth
         return $this->convertResponseToUser($response);
     }
 
+    public function listUsers(int $maxResults = 1000, int $batchSize = 1000): \Generator
+    {
+        $pageToken = null;
+        $count = 0;
+
+        do {
+            $response = $this->client->downloadAccount($batchSize, $pageToken);
+            $result = JSON::decode((string) $response->getBody(), true);
+
+            foreach ((array) ($result['users'] ?? []) as $userData) {
+                yield $userData;
+
+                if (++$count === $maxResults) {
+                    return;
+                }
+            }
+
+            $pageToken = $result['nextPageToken'] ?? null;
+        } while ($pageToken);
+    }
+
     public function createUserWithEmailAndPassword(string $email, string $password): User
     {
         $this->client->signupNewUser($email, $password);
@@ -102,7 +123,7 @@ class Auth
     public function sendPasswordResetEmail($userOrEmail)
     {
         $email = $userOrEmail instanceof User
-            ? $userOrEmail->getUid()
+            ? $userOrEmail->getEmail()
             : (string) $userOrEmail;
 
         $this->client->sendPasswordResetEmail($email);

@@ -110,4 +110,31 @@ class AuthTest extends IntegrationTestCase
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
+
+    public function testListUsers()
+    {
+        // We already should have a list of users, but let's add another one,
+        // just to be sure
+        $createdUsers = [
+            $this->auth->createAnonymousUser(),
+            $this->auth->createAnonymousUser(),
+        ];
+
+        $users = $this->auth->listUsers($maxResults = 2, $batchSize = 1);
+
+        $count = 0;
+        foreach ($users as $userData) {
+            $this->assertInternalType('array', $userData);
+            $this->assertArrayHasKey('localId', $userData);
+            ++$count;
+        }
+
+        $this->assertSame($maxResults, $count);
+
+        foreach ($createdUsers as $createdUser) {
+            $this->auth->deleteUser($createdUser);
+        }
+
+        $this->assertTrue($noExceptionHasBeenThrown = true);
+    }
 }

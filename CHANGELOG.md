@@ -2,13 +2,15 @@
 
 ## Unreleased
 
-- Auth: Fixed creation of new users (anonymous, email/password)
-- Auth: Fixed changing emails and password
-- Auth: Removed need for the project's web API key and deprecated related methods
-- Added integration tests for database operations
-- Restructured tests for clean separation of unit/integration tests
-- Enhanced Travis CI build performance
-- Ensured support for PHP 7.2
+* Added `Kreait\Firebase\Auth::listUsers(int $maxResults = 1000, int $batchSize = 1000): \Generator`
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#list-users))
+* Auth: Fixed creation of new users (anonymous, email/password)
+* Auth: Fixed changing emails and password
+* Auth: Removed need for the project's web API key and deprecated related methods
+* Added integration tests for database operations
+* Restructured tests for clean separation of unit/integration tests
+* Enhanced Travis CI build performance
+* Ensured support for PHP 7.2
 
 ## 3.7.1 - 2018-01-07
 

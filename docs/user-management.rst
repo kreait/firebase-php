@@ -106,3 +106,22 @@ Send a password reset email
     // Using an already fetched user
     $user = $auth->getUser('some-uid');
     $auth->sendPasswordResetEmail($user);
+
+**********
+List users
+**********
+
+To enhance performance and prevent memory issues when retrieving a huge amount of users,
+this methods returns a `Generator <http://php.net/manual/en/language.generators.overview.php>`_.
+
+.. code-block:: php
+
+    $users = $auth->listUsers($defaultMaxResults = 1000, $defaultBatchSize = 1000);
+
+    foreach ($users as $user) {
+        print_r($user);
+    }
+    // or
+    array_map(function (array $userData) {
+        print_r($userData);
+    }, iterator_to_array($users));

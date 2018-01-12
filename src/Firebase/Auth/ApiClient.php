@@ -88,6 +88,14 @@ class ApiClient
         ]));
     }
 
+    public function downloadAccount(int $batchSize = 1000, string $nextPageToken = null): ResponseInterface
+    {
+        return $this->request('downloadAccount', array_filter([
+            'maxResults' => $batchSize,
+            'nextPageToken' => $nextPageToken,
+        ]));
+    }
+
     public function deleteUser(User $user): ResponseInterface
     {
         return $this->request('deleteAccount', [
