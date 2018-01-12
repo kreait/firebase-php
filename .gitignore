@@ -5,6 +5,7 @@
 /tests/Firebase/Integration/test_credentials.json
 
 /.php_cs.cache
+/cc-test-reporter
 /composer.lock
 /phpunit.xml
 /google-service-account.json

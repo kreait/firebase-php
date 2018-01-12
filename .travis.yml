@@ -54,9 +54,9 @@ script:
       chmod +x ./cc-test-reporter
       ./cc-test-reporter before-build
 
-      vendor/bin/phpunit --coverage-clover build/coverage.clover
+      vendor/bin/phpunit --coverage-clover clover.xml
 
-      ./cc-test-reporter after-build --exit-code $?
+      ./cc-test-reporter after-build -t clover --exit-code $?
     fi
 
 notifications:
