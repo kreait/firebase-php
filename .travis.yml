@@ -8,6 +8,7 @@ env:
     - CODE_COVERAGE=0
     - DEFAULT_COMPOSER_FLAGS='--profile --ansi --prefer-dist --no-interaction --optimize-autoloader --no-suggest --no-progress'
     - PHPUNIT_FLAGS='--testsuite unit'
+    - CC_TEST_REPORTER_ID=6e569def80067b8098353f7391c0c478f024666d7227ce7b89b2a7112805d2bd
 
 matrix:
   fast_finish: true
@@ -49,9 +50,13 @@ script:
     fi
 
     if [ CODE_COVERAGE == 1 ]; then
+      curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      chmod +x ./cc-test-reporter
+      ./cc-test-reporter before-build
+
       vendor/bin/phpunit --coverage-clover build/coverage.clover
-      wget https://scrutinizer-ci.com/ocular.phar
-      php ocular.phar code-coverage:upload --format=php-clover build/coverage.clover
+
+      ./cc-test-reporter after-build --exit-code $?
     fi
 
 notifications:
