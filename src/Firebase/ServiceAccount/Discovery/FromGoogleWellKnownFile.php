@@ -2,7 +2,7 @@
 
 namespace Kreait\Firebase\ServiceAccount\Discovery;
 
-use Google\Auth\CredentialsLoader;
+use Google\Auth\Credentials\ServiceAccountCredentials;
 use Kreait\Firebase\Exception\ServiceAccountDiscoveryFailed;
 use Kreait\Firebase\ServiceAccount;
 
@@ -17,7 +17,7 @@ class FromGoogleWellKnownFile
     {
         $msg = sprintf('%s: The well known file', static::class);
 
-        if (!($credentials = @CredentialsLoader::fromWellKnownFile())) {
+        if (!($credentials = @ServiceAccountCredentials::fromWellKnownFile())) {
             throw new ServiceAccountDiscoveryFailed($msg.' is not readable or invalid');
         }
 
