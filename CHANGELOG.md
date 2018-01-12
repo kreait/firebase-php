@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.8.0 - 2018-01-12
 
 * Added `Kreait\Firebase\Auth::listUsers(int $maxResults = 1000, int $batchSize = 1000): \Generator`
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#list-users))
