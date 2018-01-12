@@ -79,11 +79,10 @@ class Factory
      * @deprecated 3.8 The api key is not required anymore, use {@see withServiceAccount()} instead
      *
      * @param ServiceAccount $serviceAccount
-     * @param string $apiKey
      *
      * @return Factory
      */
-    public function withServiceAccountAndApiKey(ServiceAccount $serviceAccount, string $apiKey): self
+    public function withServiceAccountAndApiKey(ServiceAccount $serviceAccount): self
     {
         trigger_error(
             'The api key is not required anymore.'
