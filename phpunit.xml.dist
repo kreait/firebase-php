@@ -7,11 +7,11 @@
     colors="true">
     <testsuites>
         <testsuite name="unit">
-            <directory>tests/Firebase/Unit</directory>
+            <directory>tests/Unit</directory>
         </testsuite>
 
         <testsuite name="integration">
-            <directory>tests/Firebase/Integration</directory>
+            <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
 

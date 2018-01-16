@@ -2,7 +2,7 @@
 /vendor
 /docs/_build
 /docs/*.pyc
-/tests/Firebase/Integration/test_credentials.json
+/tests/_fixtures/test_credentials.json
 
 /.php_cs.cache
 /cc-test-reporter
