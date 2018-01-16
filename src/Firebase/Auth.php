@@ -112,7 +112,7 @@ class Auth
 
     public function deleteUser($userOrUserId)
     {
-        $uid =  $userOrUserId instanceof User ? $userOrUserId->getUid() : (string) $userOrUserId;
+        $uid = $userOrUserId instanceof User ? $userOrUserId->getUid() : (string) $userOrUserId;
 
         $this->client->deleteUser($uid);
     }

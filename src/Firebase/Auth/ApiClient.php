@@ -99,7 +99,7 @@ class ApiClient
     public function deleteUser(string $uid): ResponseInterface
     {
         return $this->request('deleteAccount', [
-            'localId' => $uid
+            'localId' => $uid,
         ]);
     }
 

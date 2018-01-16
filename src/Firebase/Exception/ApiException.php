@@ -66,6 +66,7 @@ class ApiException extends \RuntimeException implements FirebaseException
     {
         if ($response && JSON::isValid($responseBody = (string) $response->getBody())) {
             $json = JSON::decode($responseBody, true);
+
             return $json['error'] ?? null;
         }
     }
