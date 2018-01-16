@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Bugfix: Ensure that ID tokens are verified fully and completely (discovered by [@hernandev](https://github.com/hernandev), thanks!)
+
 ## 3.8.0 - 2018-01-12
 
 * Added `Kreait\Firebase\Auth::listUsers(int $maxResults = 1000, int $batchSize = 1000): \Generator`

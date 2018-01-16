@@ -3,6 +3,7 @@
 namespace Kreait\Firebase;
 
 use Firebase\Auth\Token\Handler as TokenHandler;
+use Firebase\Auth\Token\Verifier as BaseVerifier;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\Middleware\AuthTokenMiddleware;
 use GuzzleHttp\Client;
@@ -159,7 +160,7 @@ class Factory
 
     public function getIdTokenVerifier(): IdTokenVerifier
     {
-        return new IdTokenVerifier($this->getServiceAccount());
+        return new IdTokenVerifier(new BaseVerifier($this->getServiceAccount()->getProjectId()));
     }
 
     public function getTokenHandler(): TokenHandler
