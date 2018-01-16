@@ -96,10 +96,10 @@ class ApiClient
         ]));
     }
 
-    public function deleteUser(User $user): ResponseInterface
+    public function deleteUser(string $uid): ResponseInterface
     {
         return $this->request('deleteAccount', [
-            'idToken' => (string) $user->getIdToken(),
+            'localId' => $uid
         ]);
     }
 
@@ -119,6 +119,15 @@ class ApiClient
             'idToken' => (string) $user->getIdToken(),
             'localId' => $user->getUid(),
             'email' => $newEmail,
+            'returnSecureToken' => true,
+        ]);
+    }
+
+    public function getAccountInfo(User $user): ResponseInterface
+    {
+        return $this->request('getAccountInfo', [
+            'idToken' => (string) $user->getIdToken(),
+            'localId' => $user->getUid(),
             'returnSecureToken' => true,
         ]);
     }

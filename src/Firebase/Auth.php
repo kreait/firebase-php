@@ -110,9 +110,11 @@ class Auth
         return $this->convertResponseToUser($response);
     }
 
-    public function deleteUser(User $user)
+    public function deleteUser($userOrUserId)
     {
-        $this->client->deleteUser($user);
+        $uid =  $userOrUserId instanceof User ? $userOrUserId->getUid() : (string) $userOrUserId;
+
+        $this->client->deleteUser($uid);
     }
 
     public function sendEmailVerification(User $user)
