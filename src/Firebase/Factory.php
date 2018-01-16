@@ -220,8 +220,8 @@ class Factory
     public static function createGoogleAuthTokenMiddleware(ServiceAccount $serviceAccount): AuthTokenMiddleware
     {
         $scopes = [
+            'https://www.googleapis.com/auth/cloud-platform',
             'https://www.googleapis.com/auth/firebase',
-            'https://www.googleapis.com/auth/identitytoolkit',
             'https://www.googleapis.com/auth/userinfo.email',
         ];
 
