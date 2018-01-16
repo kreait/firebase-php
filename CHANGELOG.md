@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.8.1 - 2018-01-16
 
 * Bugfix: Ensure that ID tokens are verified fully and completely (discovered by [@hernandev](https://github.com/hernandev), thanks!)
 
