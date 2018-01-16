@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Bugfix: `Kreait\Firebase\Exception\InvalidIdToken` was not able to hold every invalid ID token ([#152](https://github.com/kreait/firebase-php/pull/152))
+
 ## 3.8.1 - 2018-01-16
 
 * Bugfix: Ensure that ID tokens are verified fully and completely (discovered by [@hernandev](https://github.com/hernandev), thanks!)
