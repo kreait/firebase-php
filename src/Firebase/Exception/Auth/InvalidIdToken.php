@@ -9,18 +9,18 @@ use Throwable;
 class InvalidIdToken extends AuthException
 {
     /**
-     * @var Token
+     * @var Token|mixed
      */
     private $token;
 
-    public function __construct(Token $token, string $message, int $code = 0, Throwable $previous = null)
+    public function __construct($token, string $message, int $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
 
         $this->token = $token;
     }
 
-    public function getToken(): Token
+    public function getToken()
     {
         return $this->token;
     }

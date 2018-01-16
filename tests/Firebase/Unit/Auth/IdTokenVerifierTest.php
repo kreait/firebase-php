@@ -43,6 +43,24 @@ class IdTokenVerifierTest extends UnitTestCase
         $this->verifier->verify($token);
     }
 
+    /**
+     * @param $invalidValue
+     * @dataProvider invalidTokens
+     */
+    public function testAnInvalidTokenExceptionContainsTheGivenToken($invalidValue)
+    {
+        $this->base
+            ->expects($this->once())
+            ->method('verifyIdToken')
+            ->willThrowException(new \Exception('any'));
+
+        try {
+            $this->verifier->verify($invalidValue);
+        } catch (InvalidIdToken $e) {
+            $this->assertSame($invalidValue, $e->getToken());
+        }
+    }
+
     public function testItReturnsTheTokenOnSuccess()
     {
         $token = $this->createMock(Token::class);
@@ -68,5 +86,14 @@ class IdTokenVerifierTest extends UnitTestCase
             ->willReturn($token);
 
         $this->assertSame($token, $this->verifier->verify($tokenString));
+    }
+
+    public function invalidTokens()
+    {
+        return [
+            'int' => [1],
+            'bool' => [true],
+            'null' => [null]
+        ];
     }
 }
