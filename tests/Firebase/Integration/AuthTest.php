@@ -38,7 +38,6 @@ class AuthTest extends IntegrationTestCase
 
         $this->assertSame($email, $user->getEmail());
         $this->assertFalse($user->hasVerifiedEmail());
-        $this->auth->verifyIdToken((string) $user->getIdToken()); // should not throw an exception
         $this->assertNotEmpty($user->getRefreshToken());
 
         $this->auth->deleteUser($user);
@@ -134,6 +133,32 @@ class AuthTest extends IntegrationTestCase
         foreach ($createdUsers as $createdUser) {
             $this->auth->deleteUser($createdUser);
         }
+
+        $this->assertTrue($noExceptionHasBeenThrown = true);
+    }
+
+    public function testVerifyIdToken()
+    {
+        $user = $this->auth->createAnonymousUser();
+
+        $idToken = $user->getIdToken();
+
+        $this->auth->verifyIdToken($idToken);
+
+        $this->auth->deleteUser($user);
+
+        $this->assertTrue($noExceptionHasBeenThrown = true);
+    }
+
+    public function testVerifyIdTokenString()
+    {
+        $user = $this->auth->createAnonymousUser();
+
+        $idToken = $user->getIdToken();
+
+        $this->auth->verifyIdToken((string) $idToken);
+
+        $this->auth->deleteUser($user);
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }

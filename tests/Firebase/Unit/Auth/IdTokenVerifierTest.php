@@ -7,6 +7,7 @@ use Firebase\Auth\Token\Exception\InvalidToken as BaseVerifierException;
 use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Exception\Auth\InvalidIdToken;
 use Kreait\Tests\Firebase\Unit\UnitTestCase;
+use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Token;
 
 class IdTokenVerifierTest extends UnitTestCase
@@ -53,5 +54,19 @@ class IdTokenVerifierTest extends UnitTestCase
             ->willReturn($token);
 
         $this->assertSame($token, $this->verifier->verify($token));
+    }
+
+    public function testItCanHandleATokenAsString()
+    {
+        $token = (new Builder())->getToken();
+        $tokenString = (string) $token;
+
+        $this->base
+            ->expects($this->once())
+            ->method('verifyIdToken')
+            ->with($tokenString)
+            ->willReturn($token);
+
+        $this->assertSame($token, $this->verifier->verify($tokenString));
     }
 }
