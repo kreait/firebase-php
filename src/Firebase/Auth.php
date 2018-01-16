@@ -7,6 +7,7 @@ use Kreait\Firebase\Auth\CustomTokenGenerator;
 use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Auth\User;
 use Kreait\Firebase\Util\JSON;
+use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
 
@@ -138,6 +139,10 @@ class Auth
 
     public function verifyIdToken($idToken): Token
     {
+        if (is_string($idToken)) {
+            $idToken = (new Parser())->parse($idToken);
+        }
+
         return $this->idTokenVerifier->verify($idToken);
     }
 
