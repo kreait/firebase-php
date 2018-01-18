@@ -177,16 +177,13 @@ class Auth
         $verifiedToken = $this->idTokenVerifier->verify($idToken);
 
         if ($checkIfRevoked) {
-            $response = $this->client->getAccountInfo($verifiedToken->getClaim('sub'));
-            $data = JSON::decode($response->getBody()->getContents(), true);
+            $userInfo = $this->getUserInfo($verifiedToken->getClaim('sub'));
 
-            if ($data['users'][0]['validSince'] ?? null) {
-                $validSince = (int) $data['users'][0]['validSince'];
-                $tokenAuthenticatedAt = (int) $verifiedToken->getClaim('auth_time');
+            $validSince = (int) ($userInfo['validSince'] ?? 0);
+            $tokenAuthenticatedAt = (int) $verifiedToken->getClaim('auth_time');
 
-                if ($tokenAuthenticatedAt < $validSince) {
-                    throw new RevokedIdToken($verifiedToken);
-                }
+            if ($tokenAuthenticatedAt < $validSince) {
+                throw new RevokedIdToken($verifiedToken);
             }
         }
 
