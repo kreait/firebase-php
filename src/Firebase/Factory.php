@@ -51,7 +51,7 @@ class Factory
     public function withCredentials(string $credentials): self
     {
         trigger_error(
-            'This method is deprecated and will be removed in release 4.0 of this library.'
+            'This method is deprecated and will be removed in the next major release.'
             .' Use Firebase\Factory::withServiceAccount() instead.', E_USER_DEPRECATED
         );
 
@@ -65,6 +65,11 @@ class Factory
      */
     public function withApiKey(): self
     {
+        trigger_error(
+            'This method is deprecated and will be removed in the next major release.',
+            E_USER_DEPRECATED
+        );
+
         return $this;
     }
 
@@ -87,7 +92,7 @@ class Factory
     {
         trigger_error(
             'The api key is not required anymore.'
-            .' This method is deprecated and will be removed in release 4.0 of this library.'
+            .' This method is deprecated and will be removed in the next major release.'
             .' Use Kreait\Firebase\Factory::withServiceAccount() instead.', E_USER_DEPRECATED
         );
 
@@ -119,6 +124,11 @@ class Factory
      */
     public function withTokenHandler(TokenHandler $handler = null): self
     {
+        trigger_error(
+            'This method is deprecated and will be removed in the next major release.',
+            E_USER_DEPRECATED
+        );
+
         $factory = clone $this;
         $factory->tokenHandler = $handler;
 
