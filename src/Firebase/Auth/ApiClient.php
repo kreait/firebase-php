@@ -123,12 +123,10 @@ class ApiClient
         ]);
     }
 
-    public function getAccountInfo(User $user): ResponseInterface
+    public function getAccountInfo(string $uid): ResponseInterface
     {
         return $this->request('getAccountInfo', [
-            'idToken' => (string) $user->getIdToken(),
-            'localId' => $user->getUid(),
-            'returnSecureToken' => true,
+            'localId' => [$uid],
         ]);
     }
 
@@ -145,6 +143,14 @@ class ApiClient
         return $this->request('getOobConfirmationCode', [
             'email' => $email,
             'requestType' => 'PASSWORD_RESET',
+        ]);
+    }
+
+    public function revokeRefreshTokens(string $uid): ResponseInterface
+    {
+        return $this->request('setAccountInfo', [
+            'localId' => $uid,
+            'validSince' => time(),
         ]);
     }
 

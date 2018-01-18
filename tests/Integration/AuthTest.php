@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Auth;
+use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 class AuthTest extends IntegrationTestCase
@@ -149,6 +150,25 @@ class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user);
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
+    }
+
+    public function testRevokeRefreshTokens()
+    {
+        $user = $this->auth->createAnonymousUser();
+
+        $idToken = $user->getIdToken();
+
+        $this->auth->verifyIdToken($idToken, $checkIfRevoked = false); // Should not throw an exception
+
+        sleep(2);
+
+        $this->auth->revokeRefreshTokens($user->getUid());
+
+        $this->expectException(RevokedIdToken::class);
+
+        $this->auth->verifyIdToken($idToken, $checkIfRevoked = true);
+
+        $this->auth->deleteUser($user);
     }
 
     public function testVerifyIdTokenString()
