@@ -18,95 +18,6 @@ to the Firebase factory and getting an ``Auth`` instance:
 
     $auth = $firebase->getAuth();
 
-**************************
-Creating an anonymous user
-**************************
-
-.. code-block:: php
-
-    $user = $auth->createAnonymousUser();
-    $anonymousConnection = $firebase->asUser($user);
-
-***************************************
-Creating a user with email and password
-***************************************
-
-.. code-block:: php
-
-    $user = $auth->createUserWithEmailAndPassword('user@domain.tld', 'a secure password');
-    $userConnection = $firebase->asUser($user);
-
-*********************
-Getting a user by UID
-*********************
-
-.. code-block:: php
-
-    $user = $auth->getUser('some-uid');
-    # Setting additional claims for the user
-    $user = $auth->getUser('some-uid', ['premium-user' => true]);
-
-    $userConnection = $firebase->asUser($user);
-
-************************************
-Getting a user by email and password
-************************************
-
-.. code-block:: php
-
-    $user = $auth->getUserByEmailAndPassword('user@domain.tld', 'a password');
-    $userConnection = $firebase->asUser($user);
-
-**************************
-Changing a user's password
-**************************
-
-.. code-block:: php
-
-    $user = $auth->getUser('some-uid');
-    $updatedUser = $auth->changeUserPassword($user, 'new password');
-
-***********************
-Changing a user's email
-***********************
-
-.. code-block:: php
-
-    $user = $auth->getUser('some-uid');
-    $updatedUser = $auth->changeUserEmail($user, 'user@domain.tld');
-
-***************
-Deleting a user
-***************
-
-.. code-block:: php
-
-    $user = $auth->getUser('some-uid');
-    $auth->deleteUser($user);
-
-*************************************
-Trigger email verification for a user
-*************************************
-
-.. code-block:: php
-
-    $user = $auth->getUser('some-uid');
-    $auth->sendEmailVerification($user);
-
-***************************
-Send a password reset email
-***************************
-
-.. code-block:: php
-
-    // Using an email address only
-    $email = 'user@domain.tld';
-    $auth->sendPasswordResetEmail($email);
-
-    // Using an already fetched user
-    $user = $auth->getUser('some-uid');
-    $auth->sendPasswordResetEmail($user);
-
 **********
 List users
 **********
@@ -125,3 +36,124 @@ this methods returns a `Generator <http://php.net/manual/en/language.generators.
     array_map(function (array $userData) {
         print_r($userData);
     }, iterator_to_array($users));
+
+
+*************************************
+Get information about a specific user
+*************************************
+
+.. code-block:: php
+
+    $userInfo = $auth->getUserInfo('some-uid');
+
+
+************************
+Create an anonymous user
+************************
+
+.. code-block:: php
+
+    $auth->createAnonymousUser();
+
+*************************************
+Create a user with email and password
+*************************************
+
+.. code-block:: php
+
+    $auth->createUserWithEmailAndPassword('user@domain.tld', 'a secure password');
+
+************************
+Change a user's password
+************************
+
+.. code-block:: php
+
+    $uid = 'some-uid';
+
+    $updatedUser = $auth->changeUserPassword($uid, 'new password');
+
+*********************
+Change a user's email
+*********************
+
+.. code-block:: php
+
+    $uid = 'some-uid';
+
+    $updatedUser = $auth->changeUserEmail($uid, 'user@domain.tld');
+
+**************
+Disable a user
+**************
+
+.. code-block:: php
+
+    $uid = 'some-uid';
+
+    $updatedUser = $auth->disableUser($uid);
+
+
+*************
+Enable a user
+*************
+
+.. code-block:: php
+
+    $uid = 'some-uid';
+
+    $updatedUser = $auth->enableUser($uid);
+
+
+*************
+Delete a user
+*************
+
+.. code-block:: php
+
+    $uid = 'some-uid';
+
+    $auth->deleteUser($uid);
+
+***************************
+Send a password reset email
+***************************
+
+.. code-block:: php
+
+    $email = 'user@domain.tld';
+
+    $auth->sendPasswordResetEmail($email);
+
+*******************************
+Invalidate user sessions [#f1]_
+*******************************
+
+This will revoke all sessions for a specified user and disable any new ID tokens for existing sessions from getting
+minted. **Existing ID tokens may remain active until their natural expiration (one hour).** To verify that
+ID tokens are revoked, use ``Auth::verifyIdToken()`` with the second parameter set to ``true``.
+
+If the check fails, a ``RevokedIdToken`` exception will be thrown.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Exception\Auth\RevokedIdToken;
+
+    $idTokenString = '...';
+
+    $verifiedIdToken = $firebase->getAuth()->verifyIdToken($idTokenString);
+
+    $uid = $verifiedIdToken->getClaim('sub');
+
+    $firebase->getAuth()->revokeRefreshTokens($uid);
+
+    try {
+        $verifiedIdToken = $firebase->getAuth()->verifyIdToken($idTokenString, true);
+    } catch (RevokedIdToken $e) {
+        echo $e->getMessage();
+    }
+
+
+.. rubric:: References
+
+.. [#f1] `Google: Revoke refresh tokens <https://firebase.google.com/docs/reference/admin/node/admin.auth.Auth#revokeRefreshTokens>`_

@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## Unreleased
+
+* Added `Kreait\Firebase\Auth::getUserInfo(string $uid): array`
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#get-information-about-a-specific-user))
+* Added `Kreait\Firebase\Auth::disableUser(string $uid)`
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#disable-a-user))
+* Added `Kreait\Firebase\Auth::enableUser(string $uid)`
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#enable-a-user))
+* Added `Kreait\Firebase\Auth::revokeRefreshTokens(string $uid)`
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#invalidate-user-sessions))
+* Added check for revoked ID tokens to `Kreait\Firebase\Auth::verifyIdToken()`
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/authentication.html#verify-a-firebase-id-token))
+* Deprecated the usage of the `Kreait\Firebase\Auth\User` object
+* Deprecated `Kreait\Firebase\Auth::sendEmailVerification(Kreait\Firebase\Auth\User\User $user)`
+* Full rewrite of the [Authentication documentation](https://firebase-php.readthedocs.io/en/latest/authentication.html)
+
 ## 3.8.2 - 2018-01-16
 
 * Bugfix: `Kreait\Firebase\Exception\InvalidIdToken` was not able to hold every invalid ID token ([#152](https://github.com/kreait/firebase-php/pull/152))
