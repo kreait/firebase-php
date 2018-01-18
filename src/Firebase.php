@@ -123,7 +123,7 @@ class Firebase
     }
 
     /**
-     * Returns a new instance with the permissions of the given user.
+     * Returns a new instance with the permissions of the user with the given UID.
      *
      * @param User|mixed $user
      *

@@ -103,23 +103,19 @@ class ApiClient
         ]);
     }
 
-    public function changeUserPassword(User $user, string $newPassword): ResponseInterface
+    public function changeUserPassword(string $uid, string $newPassword): ResponseInterface
     {
         return $this->request('setAccountInfo', [
-            'idToken' => (string) $user->getIdToken(),
-            'localId' => $user->getUid(),
+            'localId' => [$uid],
             'password' => $newPassword,
-            'returnSecureToken' => true,
         ]);
     }
 
-    public function changeUserEmail(User $user, string $newEmail): ResponseInterface
+    public function changeUserEmail(string $uid, string $newEmail): ResponseInterface
     {
         return $this->request('setAccountInfo', [
-            'idToken' => (string) $user->getIdToken(),
-            'localId' => $user->getUid(),
+            'localId' => [$uid],
             'email' => $newEmail,
-            'returnSecureToken' => true,
         ]);
     }
 
@@ -130,11 +126,11 @@ class ApiClient
         ]);
     }
 
-    public function sendEmailVerification(User $user): ResponseInterface
+    public function sendEmailVerification(string $idToken): ResponseInterface
     {
         return $this->request('getOobConfirmationCode', [
             'requestType' => 'VERIFY_EMAIL',
-            'idToken' => (string) $user->getIdToken(),
+            'idToken' => $idToken,
         ]);
     }
 

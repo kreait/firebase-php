@@ -97,39 +97,33 @@ class Auth
         return $this->getUser($uid);
     }
 
-    public function changeUserPassword(User $user, string $newPassword): User
+    public function changeUserPassword($userOrUid, string $newPassword): User
     {
-        $response = $this->client->changeUserPassword($user, $newPassword);
+        $this->client->changeUserPassword($uid = $this->uid($userOrUid), $newPassword);
 
-        return $this->convertResponseToUser($response);
+        return $this->getUser($uid);
     }
 
-    public function changeUserEmail(User $user, string $newEmail): User
+    public function changeUserEmail($userOrUid, string $newEmail): User
     {
-        $response = $this->client->changeUserEmail($user, $newEmail);
+        $this->client->changeUserEmail($uid = $this->uid($userOrUid), $newEmail);
 
-        return $this->convertResponseToUser($response);
+        return $this->getUser($uid);
     }
 
-    public function deleteUser($userOrUserId)
+    public function deleteUser($userOrUid)
     {
-        $uid = $userOrUserId instanceof User ? $userOrUserId->getUid() : (string) $userOrUserId;
-
-        $this->client->deleteUser($uid);
+        $this->client->deleteUser($this->uid($userOrUid));
     }
 
     public function sendEmailVerification(User $user)
     {
-        $this->client->sendEmailVerification($user);
+        $this->client->sendEmailVerification((string) $user->getIdToken());
     }
 
     public function sendPasswordResetEmail($userOrEmail)
     {
-        $email = $userOrEmail instanceof User
-            ? $userOrEmail->getEmail()
-            : (string) $userOrEmail;
-
-        $this->client->sendPasswordResetEmail($email);
+        $this->client->sendPasswordResetEmail($this->email($userOrEmail));
     }
 
     public function createCustomToken($uid, array $claims = [], \DateTimeInterface $expiresAt = null): Token
@@ -202,5 +196,14 @@ class Auth
         }
 
         return (string) $userOrUid;
+    }
+
+    private function email($userOrEmail): string
+    {
+        if ($userOrEmail instanceof User) {
+            return $userOrEmail->getEmail();
+        }
+
+        return (string) $userOrEmail;
     }
 }
