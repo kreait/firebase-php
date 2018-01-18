@@ -139,9 +139,14 @@ class Auth
         return $this->getUser($uid);
     }
 
+    /**
+     * @deprecated 3.9
+     *
+     * @param User $user
+     */
     public function sendEmailVerification(User $user)
     {
-        $this->client->sendEmailVerification((string) $user->getIdToken());
+        $this->client->sendEmailVerification($user);
     }
 
     public function sendPasswordResetEmail($userOrEmail)
@@ -215,6 +220,14 @@ class Auth
     private function uid($userOrUid): string
     {
         if ($userOrUid instanceof User) {
+            trigger_error(
+                sprintf(
+                    'The usage of %s as a parameter for %s is deprecated. Use a UID string directly.',
+                    User::class, self::class
+                ),
+                E_USER_DEPRECATED
+            );
+
             return $userOrUid->getUid();
         }
 
@@ -224,6 +237,14 @@ class Auth
     private function email($userOrEmail): string
     {
         if ($userOrEmail instanceof User) {
+            trigger_error(
+                sprintf(
+                    'The usage of %s as a parameter for %s is deprecated. Use an email string directly.',
+                    User::class, self::class
+                ),
+                E_USER_DEPRECATED
+            );
+
             return $userOrEmail->getEmail();
         }
 
