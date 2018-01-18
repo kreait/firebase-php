@@ -20,7 +20,7 @@ class AuthTest extends IntegrationTestCase
         $this->auth = self::$firebase->getAuth();
     }
 
-    public function testAnonymousUser()
+    public function testCreateAnonymousUser()
     {
         $user = $this->auth->createAnonymousUser();
 
@@ -29,7 +29,7 @@ class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user);
     }
 
-    public function testUserWithEmailAndPassword()
+    public function testCreateUserWithEmailAndPassword()
     {
         /** @noinspection NonSecureUniqidUsageInspection */
         $email = uniqid('').'@domain.tld';
@@ -182,5 +182,31 @@ class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user);
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
+    }
+
+    public function testDisableAndEnableUser()
+    {
+        $user = $this->auth->createAnonymousUser();
+
+        $this->auth->disableUser($user);
+
+        $this->assertTrue($this->auth->getUserInfo($user->getUid())['disabled']);
+
+        $this->auth->enableUser($user);
+
+        $this->assertFalse($this->auth->getUserInfo($user->getUid())['disabled']);
+
+        $this->auth->deleteUser($user);
+    }
+
+    public function testGetUserInf()
+    {
+        $user = $this->auth->createAnonymousUser();
+
+        $userInfo = $this->auth->getUserInfo($user->getUid());
+
+        $this->assertArrayHasKey('localId', $userInfo);
+
+        $this->auth->deleteUser($user);
     }
 }

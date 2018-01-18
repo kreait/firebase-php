@@ -96,6 +96,22 @@ class ApiClient
         ]));
     }
 
+    public function enableUser($uid): ResponseInterface
+    {
+        return $this->request('setAccountInfo', [
+            'localId' => $uid,
+            'disableUser' => false,
+        ]);
+    }
+
+    public function disableUser($uid): ResponseInterface
+    {
+        return $this->request('setAccountInfo', [
+            'localId' => $uid,
+            'disableUser' => true,
+        ]);
+    }
+
     public function deleteUser(string $uid): ResponseInterface
     {
         return $this->request('deleteAccount', [
@@ -126,11 +142,23 @@ class ApiClient
         ]);
     }
 
-    public function sendEmailVerification(string $idToken): ResponseInterface
+    /**
+     * @deprecated 3.9
+     *
+     * @param User $user
+     *
+     * @return ResponseInterface
+     */
+    public function sendEmailVerification(User $user): ResponseInterface
     {
+        trigger_error(
+            'The sending of Email verifications is deprecated and will be removed in the next major release.',
+            E_USER_DEPRECATED
+        );
+
         return $this->request('getOobConfirmationCode', [
             'requestType' => 'VERIFY_EMAIL',
-            'idToken' => $idToken,
+            'idToken' => (string) $user->getIdToken(),
         ]);
     }
 

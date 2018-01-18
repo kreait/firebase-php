@@ -49,6 +49,15 @@ class Auth
         return $this->convertResponseToUser($response);
     }
 
+    public function getUserInfo($userOrUid): array
+    {
+        $response = $this->client->getAccountInfo($this->uid($userOrUid));
+
+        $data = JSON::decode($response->getBody()->getContents(), true);
+
+        return array_shift($data['users']);
+    }
+
     public function listUsers(int $maxResults = 1000, int $batchSize = 1000): \Generator
     {
         $pageToken = null;
@@ -111,9 +120,23 @@ class Auth
         return $this->getUser($uid);
     }
 
-    public function deleteUser($userOrUid)
+    public function enableUser($userOrUid): User
     {
-        $this->client->deleteUser($this->uid($userOrUid));
+        $this->client->enableUser($uid = $this->uid($userOrUid));
+
+        return $this->getUser($uid);
+    }
+
+    public function disableUser($userOrUid)
+    {
+        $this->client->disableUser($uid = $this->uid($userOrUid));
+    }
+
+    public function deleteUser($userOrUid): User
+    {
+        $this->client->deleteUser($uid = $this->uid($userOrUid));
+
+        return $this->getUser($uid);
     }
 
     public function sendEmailVerification(User $user)
