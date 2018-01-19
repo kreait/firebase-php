@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Reverted deprecations of `Kreait\Firebase\Factory::withTokenHandler` and `\Kreait\Firebase\Auth\ApiClient::sendEmailVerification`
+
 ## 3.9.0 - 2018-01-19
 
 * Added `Kreait\Firebase\Auth::getUserInfo(string $uid): array`

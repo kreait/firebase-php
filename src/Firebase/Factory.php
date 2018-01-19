@@ -124,11 +124,6 @@ class Factory
      */
     public function withTokenHandler(TokenHandler $handler = null): self
     {
-        trigger_error(
-            'This method is deprecated and will be removed in the next major release.',
-            E_USER_DEPRECATED
-        );
-
         $factory = clone $this;
         $factory->tokenHandler = $handler;
 

@@ -151,11 +151,6 @@ class ApiClient
      */
     public function sendEmailVerification(User $user): ResponseInterface
     {
-        trigger_error(
-            'The sending of Email verifications is deprecated and will be removed in the next major release.',
-            E_USER_DEPRECATED
-        );
-
         return $this->request('getOobConfirmationCode', [
             'requestType' => 'VERIFY_EMAIL',
             'idToken' => (string) $user->getIdToken(),
