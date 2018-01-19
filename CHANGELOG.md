@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.9.1 - 2018-01-19
 
 * Reverted deprecations of `Kreait\Firebase\Factory::withTokenHandler` and `\Kreait\Firebase\Auth\ApiClient::sendEmailVerification`
 
