@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.9.0 - 2018-01-19
 
 * Added `Kreait\Firebase\Auth::getUserInfo(string $uid): array`
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#get-information-about-a-specific-user))
