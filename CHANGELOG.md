@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bugfixes
+* A Database API Exception did not always include a request ([#155](https://github.com/kreait/firebase-php/issues/155))
+
+### Other
+* Added more integration tests
+
 ## 3.9.1 - 2018-01-19
 
 * Reverted deprecations of `Kreait\Firebase\Factory::withTokenHandler()` and `\Kreait\Firebase\Auth\ApiClient::sendEmailVerification()`
