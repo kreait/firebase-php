@@ -11,6 +11,7 @@ use Kreait\Firebase\Exception\ApiException;
 use Kreait\Firebase\Exception\IndexNotDefined;
 use Kreait\Firebase\Exception\QueryException;
 use Kreait\Firebase\Tests\UnitTestCase;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 
 class QueryTest extends UnitTestCase
@@ -115,7 +116,9 @@ class QueryTest extends UnitTestCase
 
     public function testIndexNotDefined()
     {
-        $exception = new ApiException('foo index not defined bar');
+        $request = $this->createMock(RequestInterface::class);
+
+        $exception = new ApiException($request, 'foo index not defined bar');
 
         $this->apiClient
             ->expects($this->any())

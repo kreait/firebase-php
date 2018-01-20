@@ -5,7 +5,9 @@ namespace Kreait\Firebase\Database;
 use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
 use Kreait\Firebase\Exception\ApiException;
 use Kreait\Firebase\Http\Auth;
 use Kreait\Firebase\Http\Middleware;
@@ -73,10 +75,14 @@ class ApiClient
 
     private function request(string $method, $uri, array $options = []): ResponseInterface
     {
+        $request = new Request($method, $uri);
+
         try {
-            return $this->httpClient->request($method, $uri, $options);
+            return $this->httpClient->send($request, $options);
+        } catch (RequestException $e) {
+            throw ApiException::wrapRequestException($e);
         } catch (\Throwable $e) {
-            throw ApiException::wrapThrowable($e);
+            throw new ApiException($request, $e->getMessage(), $e->getCode(), $e);
         }
     }
 }

@@ -6,6 +6,7 @@ use Kreait\Firebase\Database\Query;
 use Kreait\Firebase\Exception\ApiException;
 use Kreait\Firebase\Exception\QueryException;
 use Kreait\Firebase\Tests\UnitTestCase;
+use Psr\Http\Message\RequestInterface;
 
 class QueryExceptionTest extends UnitTestCase
 {
@@ -32,7 +33,8 @@ class QueryExceptionTest extends UnitTestCase
 
     public function testItExplainsAMissingOrderBy()
     {
-        $apiException = new ApiException('Foo bar orderby must be defined bar foo');
+        $request = $this->createMock(RequestInterface::class);
+        $apiException = new ApiException($request, 'Foo bar orderby must be defined bar foo');
 
         $e = QueryException::fromApiException($apiException, $this->query);
 
@@ -41,7 +43,8 @@ class QueryExceptionTest extends UnitTestCase
 
     public function testItExplainsWrongOrderingParameters()
     {
-        $apiException = new ApiException('Foo bar key index passed non bar foo');
+        $request = $this->createMock(RequestInterface::class);
+        $apiException = new ApiException($request, 'Foo bar key index passed non bar foo');
 
         $e = QueryException::fromApiException($apiException, $this->query);
 

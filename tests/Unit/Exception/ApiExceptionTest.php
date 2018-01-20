@@ -19,7 +19,7 @@ class ApiExceptionTest extends UnitTestCase
             $request = $this->createMock(RequestInterface::class),
             $response = new Response(500, [], '{"error": "Foo"}')
         );
-        $result = ApiException::wrapThrowable($source);
+        $result = ApiException::wrapRequestException($source);
 
         $this->assertInstanceOf(ApiException::class, $result);
         $this->assertSame($source, $result->getPrevious());
@@ -31,7 +31,7 @@ class ApiExceptionTest extends UnitTestCase
     {
         $response = new Response(401, [], json_encode(['error' => 'Permission denied']));
         $source = new ClientException('Foo', $this->createMock(RequestInterface::class), $response);
-        $result = ApiException::wrapThrowable($source);
+        $result = ApiException::wrapRequestException($source);
 
         $this->assertInstanceOf(PermissionDenied::class, $result);
         $this->assertSame($source, $result->getPrevious());
@@ -40,16 +40,7 @@ class ApiExceptionTest extends UnitTestCase
     public function testWrapRequestException()
     {
         $source = new RequestException('Foo', $this->createMock(RequestInterface::class));
-        $result = ApiException::wrapThrowable($source);
-
-        $this->assertInstanceOf(ApiException::class, $result);
-        $this->assertSame($source, $result->getPrevious());
-    }
-
-    public function testWrapAnyException()
-    {
-        $source = new \Exception('Foo');
-        $result = ApiException::wrapThrowable($source);
+        $result = ApiException::wrapRequestException($source);
 
         $this->assertInstanceOf(ApiException::class, $result);
         $this->assertSame($source, $result->getPrevious());
@@ -59,7 +50,7 @@ class ApiExceptionTest extends UnitTestCase
     {
         $response = new Response(500, [], '<html><body>Some server exception</body></html>');
         $source = new ClientException('Foo', $this->createMock(RequestInterface::class), $response);
-        $result = ApiException::wrapThrowable($source);
+        $result = ApiException::wrapRequestException($source);
 
         $this->assertSame('Foo', $result->getMessage());
     }

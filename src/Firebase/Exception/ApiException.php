@@ -7,6 +7,7 @@ use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 class ApiException extends \RuntimeException implements FirebaseException
 {
@@ -20,21 +21,23 @@ class ApiException extends \RuntimeException implements FirebaseException
      */
     private $response;
 
-    public static function wrapThrowable(\Throwable $e): self
+    public function __construct(RequestInterface $request, string $message = '', int $code = 0, Throwable $previous = null)
     {
-        if (!($e instanceof RequestException)) {
-            return new self($e->getMessage(), $e->getCode(), $e);
-        }
+        parent::__construct($message, $code, $previous);
 
+        $this->request = $request;
+    }
+
+    public static function wrapRequestException(RequestException $e): self
+    {
         $request = $e->getRequest();
         $response = $e->getResponse();
-        $message = self::getPreciseMessage($response) ?: $e->getMessage();
+        $message = self::getPreciseMessage($response, $default = $e->getMessage());
         $code = $e->getCode();
 
         $class = self::getTargetClassFromStatusCode($code);
 
-        $instance = new $class($message, $code, $e);
-        $instance->request = $request;
+        $instance = new $class($request, $message, $code, $e);
         $instance->response = $response;
 
         return $instance;
@@ -62,12 +65,14 @@ class ApiException extends \RuntimeException implements FirebaseException
         return static::class;
     }
 
-    private static function getPreciseMessage(ResponseInterface $response = null)
+    private static function getPreciseMessage(ResponseInterface $response = null, string $default = ''): string
     {
-        if ($response && JSON::isValid($responseBody = (string) $response->getBody())) {
-            $json = JSON::decode($responseBody, true);
+        $message = $default;
 
-            return $json['error'] ?? null;
+        if ($response && JSON::isValid($responseBody = (string) $response->getBody())) {
+            $message = JSON::decode($responseBody, true)['error'] ?? null;
         }
+
+        return $message;
     }
 }

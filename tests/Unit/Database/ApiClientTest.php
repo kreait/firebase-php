@@ -3,7 +3,9 @@
 namespace Kreait\Firebase\Tests\Unit\Database;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Exception\ApiException;
@@ -81,6 +83,19 @@ class ApiClientTest extends UnitTestCase
         $client = $this->createApiClient();
 
         $this->assertNull($client->remove($this->targetUrl)); // => no return value, no exception
+    }
+
+    public function testCatchRequestException()
+    {
+        $request = new Request('GET', 'foo');
+
+        $this->http->expects($this->any())
+            ->method($this->anything())
+            ->willThrowException(new RequestException('foo', $request));
+
+        $this->expectException(ApiException::class);
+
+        $this->client->get($this->targetUrl);
     }
 
     public function testCatchAnyException()
