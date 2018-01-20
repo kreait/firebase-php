@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.9.2 - 2018-01-20
 
 ### Bugfixes
 * A Database API Exception did not always include a request ([#155](https://github.com/kreait/firebase-php/issues/155))
