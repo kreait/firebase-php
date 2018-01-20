@@ -106,6 +106,7 @@ class AuthTest extends IntegrationTestCase
         $user = $this->auth->createUserWithEmailAndPassword($email, $password);
 
         $this->auth->sendPasswordResetEmail($user);
+        $this->auth->sendPasswordResetEmail($user->getEmail());
 
         $this->auth->deleteUser($user);
 
