@@ -17,6 +17,10 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     {
         $credentialsPath = self::$fixturesDir.'/test_credentials.json';
 
+        if (!file_exists($credentialsPath)) {
+            self::markTestSkipped();
+        }
+
         try {
             $serviceAccount = Firebase\ServiceAccount::fromJsonFile($credentialsPath);
         } catch (\Throwable $e) {
