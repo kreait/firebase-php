@@ -132,11 +132,9 @@ class Auth
         $this->client->disableUser($uid = $this->uid($userOrUid));
     }
 
-    public function deleteUser($userOrUid): User
+    public function deleteUser($userOrUid)
     {
         $this->client->deleteUser($uid = $this->uid($userOrUid));
-
-        return $this->getUser($uid);
     }
 
     /**
