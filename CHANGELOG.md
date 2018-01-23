@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 3.9.3 - 2018-01-23
 
 ### Bugfixes
 * When deleting a user account, an empty account was created with the same UID ([#156](https://github.com/kreait/firebase-php/pull/156))
