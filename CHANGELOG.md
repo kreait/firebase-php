@@ -3,8 +3,8 @@
 ## Unreleased
 
 ### Bugfixes
-
 * When deleting a user account, an empty account was created with the same UID ([#156](https://github.com/kreait/firebase-php/pull/156))
+* Travis CI builds now also work for pull requests
 
 ## 3.9.2 - 2018-01-20
 
