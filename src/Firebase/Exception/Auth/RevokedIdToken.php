@@ -4,12 +4,31 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Exception\Auth;
 
+use Kreait\Firebase\Exception\AuthException;
+use Kreait\Firebase\Exception\FirebaseException;
 use Lcobucci\JWT\Token;
+use Throwable;
 
-class RevokedIdToken extends InvalidIdToken
+class RevokedIdToken extends AuthException
 {
-    public function __construct(Token $token)
+    /**
+     * @var Token
+     */
+    private $token;
+
+    public function __construct(Token $token, string $message = '', int $code = 0, Throwable $previous = null)
     {
-        parent::__construct($token, 'The Firebase ID token has been revoked.');
+        $message = $message ?: 'The Firebase ID token has been revoked.';
+
+        parent::__construct($message, $code, $previous);
+
+        $this->token = $token;
+    }
+
+    public function getToken(): Token
+    {
+        // @codeCoverageIgnoreStart
+        return $this->token;
+        // @codeCoverageIgnoreEnd
     }
 }

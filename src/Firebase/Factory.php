@@ -2,15 +2,14 @@
 
 namespace Kreait\Firebase;
 
-use Firebase\Auth\Token\Verifier as BaseVerifier;
+use Firebase\Auth\Token\Generator;
+use Firebase\Auth\Token\Verifier;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\Middleware\AuthTokenMiddleware;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7;
 use Kreait\Firebase;
-use Kreait\Firebase\Auth\CustomTokenGenerator;
-use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Psr\Http\Message\UriInterface;
@@ -109,25 +108,19 @@ class Factory
         return Psr7\uri_for(sprintf(self::$databaseUriPattern, $serviceAccount->getProjectId()));
     }
 
-    private function getCustomTokenGenerator(): CustomTokenGenerator
-    {
-        return new CustomTokenGenerator($this->getServiceAccount());
-    }
-
-    private function getIdTokenVerifier(): IdTokenVerifier
-    {
-        return new IdTokenVerifier(new BaseVerifier($this->getServiceAccount()->getProjectId()));
-    }
-
     private function createAuth(): Auth
     {
-        $http = $this->createApiClient($this->getServiceAccount(), [
+        $serviceAccount = $this->getServiceAccount();
+
+        $http = $this->createApiClient($serviceAccount, [
             'base_uri' => 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/',
         ]);
 
-        $apiClient = new Auth\ApiClient($http);
-
-        return new Auth($apiClient, $this->getCustomTokenGenerator(), $this->getIdTokenVerifier());
+        return new Auth(
+            new Auth\ApiClient($http),
+            new Generator($serviceAccount->getClientEmail(), $serviceAccount->getPrivateKey()),
+            new Verifier($serviceAccount->getProjectId())
+        );
     }
 
     private function createDatabase(): Database

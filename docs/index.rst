@@ -54,5 +54,3 @@ User Guide
     authentication
     user-management
     troubleshooting
-    migration
-
