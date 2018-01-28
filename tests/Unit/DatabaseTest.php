@@ -8,7 +8,6 @@ use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\Http\Auth;
 use Kreait\Firebase\Tests\UnitTestCase;
 
 class DatabaseTest extends UnitTestCase
@@ -34,14 +33,6 @@ class DatabaseTest extends UnitTestCase
         $this->apiClient = $this->createMock(ApiClient::class);
 
         $this->database = new Database($this->uri, $this->apiClient);
-    }
-
-    public function testWithCustomAuth()
-    {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Auth $auth */
-        $auth = $this->createMock(Auth::class);
-
-        $this->assertInstanceOf(Database::class, $this->database->withCustomAuth($auth));
     }
 
     public function testGetReference()

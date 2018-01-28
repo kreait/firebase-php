@@ -4,12 +4,10 @@ namespace Kreait\Firebase\Tests\Unit\Database;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Exception\ApiException;
-use Kreait\Firebase\Http\Auth;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Http\Message\ResponseInterface;
 
@@ -35,19 +33,6 @@ class ApiClientTest extends UnitTestCase
         $this->http = $this->createMock(ClientInterface::class);
         $this->client = new ApiClient($this->http);
         $this->targetUrl = 'http://domain.tld/some/path';
-    }
-
-    public function testWithCustomAuth()
-    {
-        $auth = $this->createMock(Auth::class);
-
-        $this->http
-            ->expects($this->any())
-            ->method('getConfig')
-            ->willReturn(['handler' => $this->createMock(HandlerStack::class)]);
-
-        $this->assertInstanceOf(ApiClient::class, $this->client->withCustomAuth($auth));
-        $this->assertNotSame($this->client, $this->client->withCustomAuth($auth));
     }
 
     public function testGet()

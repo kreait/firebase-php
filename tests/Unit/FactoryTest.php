@@ -2,14 +2,24 @@
 
 namespace Kreait\Firebase\Tests\Unit;
 
-use Firebase\Auth\Token\Handler;
 use Kreait\Firebase;
 use Kreait\Firebase\Factory;
+use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\Firebase\Tests\UnitTestCase;
 
 class FactoryTest extends UnitTestCase
 {
+    /**
+     * @var ServiceAccount
+     */
+    private $serviceAccount;
+
+    /**
+     * @var Discoverer
+     */
+    private $discoverer;
+
     /**
      * @var Factory
      */
@@ -17,63 +27,34 @@ class FactoryTest extends UnitTestCase
 
     protected function setUp()
     {
-        $discoverer = $this->createMock(Discoverer::class);
-        $discoverer->expects($this->any())
-            ->method('discover')
-            ->willReturn($this->createServiceAccountMock());
+        $this->serviceAccount = ServiceAccount::fromJsonFile(self::$fixturesDir.'/ServiceAccount/valid.json');
 
-        $this->factory = (new Factory())->withServiceAccountDiscoverer($discoverer);
+        $this->discoverer = $this->createMock(Discoverer::class);
+        $this->discoverer->expects($this->any())
+            ->method('discover')
+            ->willReturn($this->serviceAccount);
+
+        $this->factory = (new Factory())->withServiceAccountDiscoverer($this->discoverer);
     }
 
     public function testItAcceptsACustomDatabaseUri()
     {
-        $uri = 'http://domain.tld';
+        $factory = $this->factory->withDatabaseUri('http://domain.tld');
 
-        $factory = $this->factory->withDatabaseUri($uri);
-
-        $this->assertSame($uri, (string) $factory->getDatabaseUri());
-    }
-
-    public function testItUsesADefaultTokenHandler()
-    {
-        $this->assertInstanceOf(Handler::class, $this->factory->getTokenHandler());
-    }
-
-    public function testItAcceptsACustomTokenHandler()
-    {
-        $handler = new Handler('projectId', 'clientEmail', 'privateKey');
-
-        $factory = $this->factory->withTokenHandler($handler);
-
-        $this->assertSame($handler, $factory->getTokenHandler());
-    }
-
-    public function testItAcceptsCredentials()
-    {
-        $firebase = $this->factory
-            ->withCredentials(self::$fixturesDir.'/ServiceAccount/valid.json');
-
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->assertInstanceOf(Firebase::class, $factory->create());
     }
 
     public function testItAcceptsAServiceAccount()
     {
-        $factory = $this->factory->withServiceAccount($serviceAccount = $this->createServiceAccountMock());
+        $factory = $this->factory->withServiceAccount($this->serviceAccount);
 
-        $this->assertSame($serviceAccount, $factory->getServiceAccount());
+        $this->assertInstanceOf(Firebase::class, $factory->create());
     }
 
-    public function testItAcceptsAnApiKey()
+    public function testItAcceptsAnAuthOverride()
     {
-        $this->assertSame($this->factory, $this->factory->withApiKey('foo'));
-    }
+        $factory = $this->factory->asUser('some-uid', ['some' => 'claim']);
 
-    public function testItAcceptsAServiceAccountAndApiKey()
-    {
-        $firebase = $this->factory
-            ->withServiceAccountAndApiKey($this->createServiceAccountMock(), 'some key')
-            ->create();
-
-        $this->assertInstanceOf(Firebase::class, $firebase);
+        $this->assertInstanceOf(Firebase::class, $factory->create());
     }
 }
