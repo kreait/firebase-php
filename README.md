@@ -15,7 +15,7 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 Full documentation at [firebase-php.readthedocs.io](https://firebase-php.readthedocs.io/).
 
 ```bash
-composer require kreait/firebase-php ^3.0
+composer require kreait/firebase-php ^4.0
 ```
 
 ```php
