@@ -2,9 +2,9 @@
 
 namespace Kreait\Firebase;
 
+use Firebase\Auth\Token\Domain\Generator as TokenGenerator;
+use Firebase\Auth\Token\Domain\Verifier as IdTokenVerifier;
 use Kreait\Firebase\Auth\ApiClient;
-use Kreait\Firebase\Auth\CustomTokenGenerator;
-use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Auth\User;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Util\JSON;
@@ -19,19 +19,19 @@ class Auth
     private $client;
 
     /**
-     * @var CustomTokenGenerator
+     * @var TokenGenerator
      */
-    private $customToken;
+    private $tokenGenerator;
 
     /**
      * @var IdTokenVerifier
      */
     private $idTokenVerifier;
 
-    public function __construct(ApiClient $client, CustomTokenGenerator $customToken, IdTokenVerifier $idTokenVerifier)
+    public function __construct(ApiClient $client, TokenGenerator $customToken, IdTokenVerifier $idTokenVerifier)
     {
         $this->client = $client;
-        $this->customToken = $customToken;
+        $this->tokenGenerator = $customToken;
         $this->idTokenVerifier = $idTokenVerifier;
     }
 
@@ -152,9 +152,9 @@ class Auth
         $this->client->sendPasswordResetEmail($this->email($userOrEmail));
     }
 
-    public function createCustomToken($uid, array $claims = [], \DateTimeInterface $expiresAt = null): Token
+    public function createCustomToken($uid, array $claims = []): Token
     {
-        return $this->customToken->create($uid, $claims, $expiresAt);
+        return $this->tokenGenerator->createCustomToken($uid, $claims);
     }
 
     /**
@@ -172,7 +172,7 @@ class Auth
      */
     public function verifyIdToken($idToken, bool $checkIfRevoked = false): Token
     {
-        $verifiedToken = $this->idTokenVerifier->verify($idToken);
+        $verifiedToken = $this->idTokenVerifier->verifyIdToken($idToken);
 
         if ($checkIfRevoked) {
             $userInfo = $this->getUserInfo($verifiedToken->getClaim('sub'));

@@ -145,13 +145,13 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
 
 .. code-block:: php
 
-    use Kreait\Firebase\Exception\Auth\InvalidIdToken;
+    use Firebase\Auth\Token\Exception\InvalidToken;
 
     $idTokenString = '...';
 
     try {
         $verifiedIdToken = $firebase->getAuth()->verifyIdToken($idTokenString);
-    } catch (InvalidIdToken $e) {
+    } catch (InvalidToken $e) {
         echo $e->getMessage();
     }
 

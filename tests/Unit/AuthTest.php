@@ -2,6 +2,8 @@
 
 namespace Kreait\Firebase\Tests\Unit;
 
+use Firebase\Auth\Token\Domain\Generator;
+use Firebase\Auth\Token\Domain\Verifier;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Kreait\Firebase\Auth;
@@ -21,12 +23,12 @@ class AuthTest extends UnitTestCase
     private $apiClient;
 
     /**
-     * @var Auth\CustomTokenGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Generator
      */
     private $tokenGenerator;
 
     /**
-     * @var Auth\IdTokenVerifier|\PHPUnit_Framework_MockObject_MockObject
+     * @var Verifier
      */
     private $idTokenVerifier;
 
@@ -37,8 +39,8 @@ class AuthTest extends UnitTestCase
 
     protected function setUp()
     {
-        $this->tokenGenerator = $this->createMock(Auth\CustomTokenGenerator::class);
-        $this->idTokenVerifier = $this->createMock(Auth\IdTokenVerifier::class);
+        $this->tokenGenerator = $this->createMock(Generator::class);
+        $this->idTokenVerifier = $this->createMock(Verifier::class);
         $this->httpClient = $this->createMock(Client::class);
         $this->apiClient = new Auth\ApiClient($this->httpClient);
         $this->auth = new Auth($this->apiClient, $this->tokenGenerator, $this->idTokenVerifier);
@@ -51,17 +53,21 @@ class AuthTest extends UnitTestCase
 
     public function testCreateCustomToken()
     {
+        $token = $this->createMock(Token::class);
+
         $this->tokenGenerator
             ->expects($this->once())
-            ->method('create');
-        $this->assertInstanceOf(Token::class, $this->auth->createCustomToken('uid'));
+            ->method('createCustomToken')
+            ->willReturn($token);
+
+        $this->assertSame($token, $this->auth->createCustomToken('uid'));
     }
 
     public function testVerifyIdToken()
     {
         $this->idTokenVerifier
             ->expects($this->once())
-            ->method('verify');
+            ->method('verifyIdToken');
 
         $this->auth->verifyIdToken('some id token string');
     }

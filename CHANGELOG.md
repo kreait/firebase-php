@@ -11,13 +11,24 @@ All deprecated methods and classes have been removed.
 #### Authentication overrides
 
 Since 4.0, defining authentication overrides is only possible when creating a new `Firebase` instance via
-the factory (see [Authenticate with limited privileges](https://firebase-php.readthedocs.io/en/stable/authentication.html#authenticate-with-limited-privileges)).
+the factory (see [Authenticate with limited privileges](https://firebase-php.readthedocs.io/en/latest/authentication.html#authenticate-with-limited-privileges)).
 Thus, the following methods have been removed:
 
   * `Kreait\Firebase::asUser()`
   * `Kreait\Firebase::asUserWithClaims()`
   * `Kreait\Firebase\Database::withCustomAuth()`
   * `Kreait\Firebase\Database\ApiClient::withCustomAuth()`
+
+#### Token generation and verification
+
+The SDK now makes full use of the [kreait/firebase-tokens](https://github.com/kreait/firebase-tokens-php) library and
+throws its exceptions when an ID token is considered invalid.
+
+Also, the option to specify a custom expiration time when creating custom tokens has been removed. 
+Following the official Firebase SDKs, the lifetime of a custom token is one hour.
+
+Added documentation: 
+([Troubleshooting: ID Tokens are issued in the future](https://firebase-php.readthedocs.io/en/latest/troubleshooting.html#id-tokens-are-issued-in-the-future)) 
 
 ## 3.9.3 - 2018-01-23
 
