@@ -9,7 +9,7 @@ master_doc = 'index'
 project = u'Firebase Admin SDK for PHP'
 author = u'Jérôme Gamez'
 copyright = u'2016-2018, Jérôme Gamez'
-version = u'3.x'
+version = u'4.x'
 html_title = u'Firebase Admin SDK for PHP Documentation'
 html_short_title = u'Firebase Admin SDK for PHP'
 

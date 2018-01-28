@@ -2,7 +2,6 @@
 
 namespace Kreait\Firebase;
 
-use Firebase\Auth\Token\Handler as TokenHandler;
 use Firebase\Auth\Token\Verifier as BaseVerifier;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\Middleware\AuthTokenMiddleware;
@@ -12,6 +11,7 @@ use GuzzleHttp\Psr7;
 use Kreait\Firebase;
 use Kreait\Firebase\Auth\CustomTokenGenerator;
 use Kreait\Firebase\Auth\IdTokenVerifier;
+use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Psr\Http\Message\UriInterface;
 
@@ -23,11 +23,6 @@ class Factory
     private $databaseUri;
 
     /**
-     * @var TokenHandler
-     */
-    private $tokenHandler;
-
-    /**
      * @var ServiceAccount
      */
     private $serviceAccount;
@@ -37,41 +32,17 @@ class Factory
      */
     private $serviceAccountDiscoverer;
 
+    /**
+     * @var string|null
+     */
+    private $uid;
+
+    /**
+     * @var array
+     */
+    private $claims = [];
+
     private static $databaseUriPattern = 'https://%s.firebaseio.com';
-
-    /**
-     * @deprecated 3.1 use {@see withServiceAccount()} instead
-     *
-     * @param string $credentials Path to a credentials file
-     *
-     * @throws \Kreait\Firebase\Exception\InvalidArgumentException
-     *
-     * @return self
-     */
-    public function withCredentials(string $credentials): self
-    {
-        trigger_error(
-            'This method is deprecated and will be removed in the next major release.'
-            .' Use Firebase\Factory::withServiceAccount() instead.', E_USER_DEPRECATED
-        );
-
-        return $this->withServiceAccount(ServiceAccount::fromValue($credentials));
-    }
-
-    /**
-     * @deprecated 3.8
-     *
-     * @return self
-     */
-    public function withApiKey(): self
-    {
-        trigger_error(
-            'This method is deprecated and will be removed in the next major release.',
-            E_USER_DEPRECATED
-        );
-
-        return $this;
-    }
 
     public function withServiceAccount(ServiceAccount $serviceAccount): self
     {
@@ -79,24 +50,6 @@ class Factory
         $factory->serviceAccount = $serviceAccount;
 
         return $factory;
-    }
-
-    /**
-     * @deprecated 3.8 The api key is not required anymore, use {@see withServiceAccount()} instead
-     *
-     * @param ServiceAccount $serviceAccount
-     *
-     * @return Factory
-     */
-    public function withServiceAccountAndApiKey(ServiceAccount $serviceAccount): self
-    {
-        trigger_error(
-            'The api key is not required anymore.'
-            .' This method is deprecated and will be removed in the next major release.'
-            .' Use Kreait\Firebase\Factory::withServiceAccount() instead.', E_USER_DEPRECATED
-        );
-
-        return $this->withServiceAccount($serviceAccount);
     }
 
     public function withServiceAccountDiscoverer(Discoverer $discoverer): self
@@ -115,27 +68,21 @@ class Factory
         return $factory;
     }
 
-    /**
-     * @deprecated 3.2 Use `Kreait\Firebase\Auth::createCustomToken()` and `Kreait\Firebase\Auth::verifyIdToken()` instead.
-     *
-     * @param TokenHandler $handler
-     *
-     * @return Factory
-     */
-    public function withTokenHandler(TokenHandler $handler = null): self
+    public function asUser(string $uid, array $claims = []): self
     {
         $factory = clone $this;
-        $factory->tokenHandler = $handler;
+        $factory->uid = $uid;
+        $factory->claims = $claims;
 
         return $factory;
     }
 
     public function create(): Firebase
     {
-        $serviceAccount = $this->getServiceAccount();
-        $databaseUri = $this->databaseUri ?? $this->getDatabaseUriFromServiceAccount($serviceAccount);
+        $database = $this->createDatabase();
+        $auth = $this->createAuth();
 
-        return new Firebase($serviceAccount, $databaseUri);
+        return new Firebase($database, $auth);
     }
 
     private function getServiceAccountDiscoverer(): Discoverer
@@ -143,12 +90,16 @@ class Factory
         return $this->serviceAccountDiscoverer ?? new Discoverer();
     }
 
-    public function getServiceAccount(): ServiceAccount
+    private function getServiceAccount(): ServiceAccount
     {
-        return $this->serviceAccount ?: $this->getServiceAccountDiscoverer()->discover();
+        if (!$this->serviceAccount) {
+            $this->serviceAccount = $this->getServiceAccountDiscoverer()->discover();
+        }
+
+        return $this->serviceAccount;
     }
 
-    public function getDatabaseUri(): UriInterface
+    private function getDatabaseUri(): UriInterface
     {
         return $this->databaseUri ?: $this->getDatabaseUriFromServiceAccount($this->getServiceAccount());
     }
@@ -158,35 +109,17 @@ class Factory
         return Psr7\uri_for(sprintf(self::$databaseUriPattern, $serviceAccount->getProjectId()));
     }
 
-    public function getCustomTokenGenerator(): CustomTokenGenerator
+    private function getCustomTokenGenerator(): CustomTokenGenerator
     {
         return new CustomTokenGenerator($this->getServiceAccount());
     }
 
-    public function getIdTokenVerifier(): IdTokenVerifier
+    private function getIdTokenVerifier(): IdTokenVerifier
     {
         return new IdTokenVerifier(new BaseVerifier($this->getServiceAccount()->getProjectId()));
     }
 
-    public function getTokenHandler(): TokenHandler
-    {
-        if (!$this->tokenHandler) {
-            $this->tokenHandler = $this->createDefaultTokenHandler($this->getServiceAccount());
-        }
-
-        return $this->tokenHandler;
-    }
-
-    private function createDefaultTokenHandler(ServiceAccount $serviceAccount): TokenHandler
-    {
-        return new TokenHandler(
-            $serviceAccount->getProjectId(),
-            $serviceAccount->getClientEmail(),
-            $serviceAccount->getPrivateKey()
-        );
-    }
-
-    public function createAuth(): Auth
+    private function createAuth(): Auth
     {
         $http = $this->createApiClient($this->getServiceAccount(), [
             'base_uri' => 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/',
@@ -197,20 +130,33 @@ class Factory
         return new Auth($apiClient, $this->getCustomTokenGenerator(), $this->getIdTokenVerifier());
     }
 
-    public function createDatabase(): Database
+    private function createDatabase(): Database
     {
         $http = $this->createApiClient($this->getServiceAccount());
-        $http->getConfig('handler')
-            ->push(Firebase\Http\Middleware::ensureJsonSuffix(), 'json_suffix');
 
-        $apiClient = new Database\ApiClient($http);
+        $middlewares = [
+            'json_suffix' => Firebase\Http\Middleware::ensureJsonSuffix(),
+        ];
 
-        return new Database($this->getDatabaseUri(), $apiClient);
+        if ($this->uid) {
+            $authOverride = new Http\Auth\CustomToken($this->uid, $this->claims);
+
+            $middlewares['auth_override'] = Middleware::overrideAuth($authOverride);
+        }
+
+        /** @var HandlerStack $handler */
+        $handler = $http->getConfig('handler');
+
+        foreach ($middlewares as $name => $middleware) {
+            $handler->push($middleware, $name);
+        }
+
+        return new Database($this->getDatabaseUri(), new Database\ApiClient($http));
     }
 
     private function createApiClient(ServiceAccount $serviceAccount, array $config = []): Client
     {
-        $googleAuthTokenMiddleware = self::createGoogleAuthTokenMiddleware($serviceAccount);
+        $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware($serviceAccount);
 
         $stack = HandlerStack::create();
         $stack->push($googleAuthTokenMiddleware, 'auth_service_account');
@@ -223,7 +169,7 @@ class Factory
         return new Client($config);
     }
 
-    public static function createGoogleAuthTokenMiddleware(ServiceAccount $serviceAccount): AuthTokenMiddleware
+    private function createGoogleAuthTokenMiddleware(ServiceAccount $serviceAccount): AuthTokenMiddleware
     {
         $scopes = [
             'https://www.googleapis.com/auth/cloud-platform',

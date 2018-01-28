@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## Unreleased
+
+Major release with breaking changes.
+
+#### Deprecations
+
+All deprecated methods and classes have been removed.
+
+#### Authentication overrides
+
+Since 4.0, defining authentication overrides is only possible when creating a new `Firebase` instance via
+the factory (see [Authenticate with limited privileges](https://firebase-php.readthedocs.io/en/stable/authentication.html#authenticate-with-limited-privileges)).
+Thus, the following methods have been removed:
+
+  * `Kreait\Firebase::asUser()`
+  * `Kreait\Firebase::asUserWithClaims()`
+  * `Kreait\Firebase\Database::withCustomAuth()`
+  * `Kreait\Firebase\Database\ApiClient::withCustomAuth()`
+
 ## 3.9.3 - 2018-01-23
 
 ### Bugfixes
