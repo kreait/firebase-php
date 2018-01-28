@@ -43,18 +43,6 @@ class Database
     }
 
     /**
-     * Returns a new Database instance with the given authentication override.
-     *
-     * @param Http\Auth $auth
-     *
-     * @return Database
-     */
-    public function withCustomAuth(Http\Auth $auth): self
-    {
-        return new self($this->uri, $this->client->withCustomAuth($auth));
-    }
-
-    /**
      * Returns a Reference to the root or the specified path.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Database#ref
