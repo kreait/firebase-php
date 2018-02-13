@@ -26,7 +26,7 @@ class AuthTest extends IntegrationTestCase
 
         $this->assertNull($user->getEmail());
 
-        $this->auth->deleteUser($user);
+        $this->auth->deleteUser($user->getUid());
     }
 
     public function testCreateUserWithEmailAndPassword()
@@ -42,7 +42,7 @@ class AuthTest extends IntegrationTestCase
         $this->assertFalse($user->hasVerifiedEmail());
         $this->assertNotEmpty($user->getRefreshToken());
 
-        $this->auth->deleteUser($user);
+        $this->auth->deleteUser($user->getUid());
     }
 
     public function testChangeUserPassword()
@@ -52,11 +52,11 @@ class AuthTest extends IntegrationTestCase
 
         $user = $this->auth->createUserWithEmailAndPassword($email, 'old password');
 
-        $this->auth->changeUserPassword($user, 'new password');
+        $this->auth->changeUserPassword($user->getUid(), 'new password');
 
         $refetchedUser = $this->auth->getUserByEmailAndPassword($email, 'new password');
 
-        $this->auth->deleteUser($refetchedUser);
+        $this->auth->deleteUser($refetchedUser->getUid());
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
@@ -71,11 +71,11 @@ class AuthTest extends IntegrationTestCase
 
         $user = $this->auth->createUserWithEmailAndPassword($email, $password);
 
-        $this->auth->changeUserEmail($user, $newEmail);
+        $this->auth->changeUserEmail($user->getUid(), $newEmail);
 
         $refetchedUser = $this->auth->getUserByEmailAndPassword($newEmail, $password);
 
-        $this->auth->deleteUser($refetchedUser);
+        $this->auth->deleteUser($refetchedUser->getUid());
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
@@ -89,9 +89,9 @@ class AuthTest extends IntegrationTestCase
 
         $user = $this->auth->createUserWithEmailAndPassword($email, $password);
 
-        $this->auth->sendEmailVerification($user);
+        $this->auth->sendEmailVerification($user->getUid());
 
-        $this->auth->deleteUser($user);
+        $this->auth->deleteUser($user->getUid());
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
@@ -108,7 +108,7 @@ class AuthTest extends IntegrationTestCase
         $this->auth->sendPasswordResetEmail($user);
         $this->auth->sendPasswordResetEmail($user->getEmail());
 
-        $this->auth->deleteUser($user);
+        $this->auth->deleteUser($user->getUid());
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
@@ -134,7 +134,7 @@ class AuthTest extends IntegrationTestCase
         $this->assertSame($maxResults, $count);
 
         foreach ($createdUsers as $createdUser) {
-            $this->auth->deleteUser($createdUser);
+            $this->auth->deleteUser($createdUser->getUid());
         }
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
@@ -148,7 +148,7 @@ class AuthTest extends IntegrationTestCase
 
         $this->auth->verifyIdToken($idToken);
 
-        $this->auth->deleteUser($user);
+        $this->auth->deleteUser($user->getUid());
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
@@ -167,7 +167,7 @@ class AuthTest extends IntegrationTestCase
 
         $this->auth->verifyIdToken($idToken, $checkIfRevoked = true);
 
-        $this->auth->deleteUser($user);
+        $this->auth->deleteUser($user->getUid());
     }
 
     public function testVerifyIdTokenString()
@@ -178,7 +178,7 @@ class AuthTest extends IntegrationTestCase
 
         $this->auth->verifyIdToken((string) $idToken);
 
-        $this->auth->deleteUser($user);
+        $this->auth->deleteUser($user->getUid());
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
@@ -187,15 +187,15 @@ class AuthTest extends IntegrationTestCase
     {
         $user = $this->auth->createAnonymousUser();
 
-        $this->auth->disableUser($user);
+        $this->auth->disableUser($user->getUid());
 
         $this->assertTrue($this->auth->getUserInfo($user->getUid())['disabled']);
 
-        $this->auth->enableUser($user);
+        $this->auth->enableUser($user->getUid());
 
         $this->assertFalse($this->auth->getUserInfo($user->getUid())['disabled']);
 
-        $this->auth->deleteUser($user);
+        $this->auth->deleteUser($user->getUid());
     }
 
     public function testGetUserInfo()
@@ -206,7 +206,7 @@ class AuthTest extends IntegrationTestCase
 
         $this->assertArrayHasKey('localId', $userInfo);
 
-        $this->auth->deleteUser($user);
+        $this->auth->deleteUser($user->getUid());
     }
 
     public function testGetUserRecord()
@@ -217,6 +217,6 @@ class AuthTest extends IntegrationTestCase
 
         $this->assertSame($user->getUid(), $userRecord->uid);
 
-        $this->auth->deleteUser($user);
+        $this->auth->deleteUser($user->getUid());
     }
 }
