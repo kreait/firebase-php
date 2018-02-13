@@ -143,17 +143,15 @@ class ApiClient
     }
 
     /**
-     * @deprecated 3.9
-     *
-     * @param User $user
+     * @param string $idToken
      *
      * @return ResponseInterface
      */
-    public function sendEmailVerification(User $user): ResponseInterface
+    public function sendEmailVerification(string $idToken): ResponseInterface
     {
         return $this->request('getOobConfirmationCode', [
             'requestType' => 'VERIFY_EMAIL',
-            'idToken' => (string) $user->getIdToken(),
+            'idToken' => $idToken,
         ]);
     }
 

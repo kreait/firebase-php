@@ -60,9 +60,9 @@ class Auth
         return UserRecord::fromResponseData($data);
     }
 
-    public function getUserInfo($userOrUid): array
+    public function getUserInfo(string $uid): array
     {
-        $response = $this->client->getAccountInfo($this->uid($userOrUid));
+        $response = $this->client->getAccountInfo($uid);
 
         $data = JSON::decode($response->getBody()->getContents(), true);
 
@@ -117,45 +117,49 @@ class Auth
         return $this->getUser($uid);
     }
 
-    public function changeUserPassword($userOrUid, string $newPassword): User
+    public function changeUserPassword(string $uid, string $newPassword): User
     {
-        $this->client->changeUserPassword($uid = $this->uid($userOrUid), $newPassword);
+        $this->client->changeUserPassword($uid, $newPassword);
 
         return $this->getUser($uid);
     }
 
-    public function changeUserEmail($userOrUid, string $newEmail): User
+    public function changeUserEmail(string $uid, string $newEmail): User
     {
-        $this->client->changeUserEmail($uid = $this->uid($userOrUid), $newEmail);
+        $this->client->changeUserEmail($uid, $newEmail);
 
         return $this->getUser($uid);
     }
 
-    public function enableUser($userOrUid): User
+    public function enableUser(string $uid): User
     {
-        $this->client->enableUser($uid = $this->uid($userOrUid));
+        $this->client->enableUser($uid);
 
         return $this->getUser($uid);
     }
 
-    public function disableUser($userOrUid)
+    public function disableUser(string $uid)
     {
-        $this->client->disableUser($uid = $this->uid($userOrUid));
+        $this->client->disableUser($uid);
     }
 
-    public function deleteUser($userOrUid)
+    public function deleteUser(string $uid)
     {
-        $this->client->deleteUser($uid = $this->uid($userOrUid));
+        $this->client->deleteUser($uid);
     }
 
     /**
-     * @deprecated 3.9
-     *
-     * @param User $user
+     * @param string $uid
      */
-    public function sendEmailVerification(User $user)
+    public function sendEmailVerification(string $uid)
     {
-        $this->client->sendEmailVerification($user);
+        $response = $this->client->exchangeCustomTokenForIdAndRefreshToken(
+            $this->createCustomToken($uid)
+        );
+
+        $idToken = JSON::decode((string) $response->getBody(), true)['idToken'];
+
+        $this->client->sendEmailVerification($idToken);
     }
 
     public function sendPasswordResetEmail($userOrEmail)
@@ -203,15 +207,11 @@ class Auth
      * before revocation will also be revoked on the Auth backend. Any request with an
      * ID token generated before revocation will be rejected with a token expired error.
      *
-     * @param User|string $userOrUid the user whose tokens are to be revoked
-     *
-     * @return string the user id of the corresponding user
+     * @param string $uid the user whose tokens are to be revoked
      */
-    public function revokeRefreshTokens($userOrUid): string
+    public function revokeRefreshTokens(string $uid): void
     {
-        $this->client->revokeRefreshTokens($uid = $this->uid($userOrUid));
-
-        return $uid;
+        $this->client->revokeRefreshTokens($uid);
     }
 
     private function convertResponseToUser(ResponseInterface $response): User
@@ -219,23 +219,6 @@ class Auth
         $data = JSON::decode((string) $response->getBody(), true);
 
         return User::create($data['idToken'], $data['refreshToken']);
-    }
-
-    private function uid($userOrUid): string
-    {
-        if ($userOrUid instanceof User) {
-            trigger_error(
-                sprintf(
-                    'The usage of %s as a parameter for %s is deprecated. Use a UID string directly.',
-                    User::class, self::class
-                ),
-                E_USER_DEPRECATED
-            );
-
-            return $userOrUid->getUid();
-        }
-
-        return (string) $userOrUid;
     }
 
     private function email($userOrEmail): string
