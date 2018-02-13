@@ -6,6 +6,7 @@ use Firebase\Auth\Token\Domain\Generator as TokenGenerator;
 use Firebase\Auth\Token\Domain\Verifier as IdTokenVerifier;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\User;
+use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Util\JSON;
 use Lcobucci\JWT\Token;
@@ -47,6 +48,15 @@ class Auth
         );
 
         return $this->convertResponseToUser($response);
+    }
+
+    public function getUserRecord($uid): UserRecord
+    {
+        $response = $this->client->getAccountInfo($uid);
+
+        $data = JSON::decode($response->getBody()->getContents(), true)['users'][0];
+
+        return UserRecord::fromResponseData($data);
     }
 
     public function getUserInfo($userOrUid): array
