@@ -161,8 +161,6 @@ class AuthTest extends IntegrationTestCase
 
         $this->auth->verifyIdToken($idToken, $checkIfRevoked = false); // Should not throw an exception
 
-        sleep(2);
-
         $this->auth->revokeRefreshTokens($user->getUid());
 
         $this->expectException(RevokedIdToken::class);

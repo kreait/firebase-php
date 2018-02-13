@@ -9,6 +9,7 @@ use Kreait\Firebase\Auth\User;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Util\JSON;
+use Kreait\Firebase\Util\Util;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
 
@@ -185,12 +186,10 @@ class Auth
         $verifiedToken = $this->idTokenVerifier->verifyIdToken($idToken);
 
         if ($checkIfRevoked) {
-            $userInfo = $this->getUserInfo($verifiedToken->getClaim('sub'));
+            $tokenAuthenticatedAt = Util::parseTimestamp($verifiedToken->getClaim('auth_time'));
+            $validSince = $this->getUserRecord($verifiedToken->getClaim('sub'))->tokensValidAfterTime;
 
-            $validSince = (int) ($userInfo['validSince'] ?? 0);
-            $tokenAuthenticatedAt = (int) $verifiedToken->getClaim('auth_time');
-
-            if ($tokenAuthenticatedAt < $validSince) {
+            if ($validSince && ($tokenAuthenticatedAt < $validSince)) {
                 throw new RevokedIdToken($verifiedToken);
             }
         }
