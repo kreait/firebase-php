@@ -5,13 +5,11 @@ namespace Kreait\Firebase;
 use Firebase\Auth\Token\Domain\Generator as TokenGenerator;
 use Firebase\Auth\Token\Domain\Verifier as IdTokenVerifier;
 use Kreait\Firebase\Auth\ApiClient;
-use Kreait\Firebase\Auth\User;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Util\Util;
 use Lcobucci\JWT\Token;
-use Psr\Http\Message\ResponseInterface;
 
 class Auth
 {
@@ -42,20 +40,11 @@ class Auth
         return $this->client;
     }
 
-    public function getUser($uid, array $claims = []): User
-    {
-        $response = $this->client->exchangeCustomTokenForIdAndRefreshToken(
-            $this->createCustomToken($uid, $claims)
-        );
-
-        return $this->convertResponseToUser($response);
-    }
-
-    public function getUserRecord($uid): UserRecord
+    public function getUser($uid): UserRecord
     {
         $response = $this->client->getAccountInfo($uid);
 
-        $data = JSON::decode($response->getBody()->getContents(), true)['users'][0];
+        $data = JSON::decode((string) $response->getBody(), true)['users'][0];
 
         return UserRecord::fromResponseData($data);
     }
@@ -64,11 +53,17 @@ class Auth
     {
         $response = $this->client->getAccountInfo($uid);
 
-        $data = JSON::decode($response->getBody()->getContents(), true);
+        $data = JSON::decode((string) $response->getBody(), true);
 
         return array_shift($data['users']);
     }
 
+    /**
+     * @param int $maxResults
+     * @param int $batchSize
+     *
+     * @return \Generator|UserRecord[]
+     */
     public function listUsers(int $maxResults = 1000, int $batchSize = 1000): \Generator
     {
         $pageToken = null;
@@ -78,8 +73,8 @@ class Auth
             $response = $this->client->downloadAccount($batchSize, $pageToken);
             $result = JSON::decode((string) $response->getBody(), true);
 
-            foreach ((array) ($result['users'] ?? []) as $userData) {
-                yield $userData;
+            foreach ((array) $result['users'] as $userData) {
+                yield UserRecord::fromResponseData($userData);
 
                 if (++$count === $maxResults) {
                     return;
@@ -90,23 +85,25 @@ class Auth
         } while ($pageToken);
     }
 
-    public function createUserWithEmailAndPassword(string $email, string $password): User
+    public function createUserWithEmailAndPassword(string $email, string $password): UserRecord
     {
-        $this->client->signupNewUser($email, $password);
+        $response = $this->client->signupNewUser($email, $password);
 
-        // The response for a created user only includes the local id,
-        // so we have to refetch them.
-        return $this->getUserByEmailAndPassword($email, $password);
+        $uid = JSON::decode((string) $response->getBody(), true)['localId'];
+
+        return $this->getUser($uid);
     }
 
-    public function getUserByEmailAndPassword(string $email, string $password): User
+    public function getUserByEmailAndPassword(string $email, string $password): UserRecord
     {
         $response = $this->client->getUserByEmailAndPassword($email, $password);
 
-        return $this->convertResponseToUser($response);
+        $uid = JSON::decode((string) $response->getBody(), true)['localId'];
+
+        return $this->getUser($uid);
     }
 
-    public function createAnonymousUser(): User
+    public function createAnonymousUser(): UserRecord
     {
         $response = $this->client->signupNewUser();
 
@@ -117,30 +114,32 @@ class Auth
         return $this->getUser($uid);
     }
 
-    public function changeUserPassword(string $uid, string $newPassword): User
+    public function changeUserPassword(string $uid, string $newPassword): UserRecord
     {
         $this->client->changeUserPassword($uid, $newPassword);
 
         return $this->getUser($uid);
     }
 
-    public function changeUserEmail(string $uid, string $newEmail): User
+    public function changeUserEmail(string $uid, string $newEmail): UserRecord
     {
         $this->client->changeUserEmail($uid, $newEmail);
 
         return $this->getUser($uid);
     }
 
-    public function enableUser(string $uid): User
+    public function enableUser(string $uid): UserRecord
     {
         $this->client->enableUser($uid);
 
         return $this->getUser($uid);
     }
 
-    public function disableUser(string $uid)
+    public function disableUser(string $uid): UserRecord
     {
         $this->client->disableUser($uid);
+
+        return $this->getUser($uid);
     }
 
     public function deleteUser(string $uid)
@@ -151,7 +150,7 @@ class Auth
     /**
      * @param string $uid
      */
-    public function sendEmailVerification(string $uid)
+    public function sendEmailVerification(string $uid): void
     {
         $response = $this->client->exchangeCustomTokenForIdAndRefreshToken(
             $this->createCustomToken($uid)
@@ -162,9 +161,9 @@ class Auth
         $this->client->sendEmailVerification($idToken);
     }
 
-    public function sendPasswordResetEmail($userOrEmail)
+    public function sendPasswordResetEmail(string $email)
     {
-        $this->client->sendPasswordResetEmail($this->email($userOrEmail));
+        $this->client->sendPasswordResetEmail($email);
     }
 
     public function createCustomToken($uid, array $claims = []): Token
@@ -191,7 +190,7 @@ class Auth
 
         if ($checkIfRevoked) {
             $tokenAuthenticatedAt = Util::parseTimestamp($verifiedToken->getClaim('auth_time'));
-            $validSince = $this->getUserRecord($verifiedToken->getClaim('sub'))->tokensValidAfterTime;
+            $validSince = $this->getUser($verifiedToken->getClaim('sub'))->tokensValidAfterTime;
 
             if ($validSince && ($tokenAuthenticatedAt < $validSince)) {
                 throw new RevokedIdToken($verifiedToken);
@@ -212,29 +211,5 @@ class Auth
     public function revokeRefreshTokens(string $uid): void
     {
         $this->client->revokeRefreshTokens($uid);
-    }
-
-    private function convertResponseToUser(ResponseInterface $response): User
-    {
-        $data = JSON::decode((string) $response->getBody(), true);
-
-        return User::create($data['idToken'], $data['refreshToken']);
-    }
-
-    private function email($userOrEmail): string
-    {
-        if ($userOrEmail instanceof User) {
-            trigger_error(
-                sprintf(
-                    'The usage of %s as a parameter for %s is deprecated. Use an email string directly.',
-                    User::class, self::class
-                ),
-                E_USER_DEPRECATED
-            );
-
-            return $userOrEmail->getEmail();
-        }
-
-        return (string) $userOrEmail;
     }
 }

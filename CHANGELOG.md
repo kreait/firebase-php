@@ -4,6 +4,11 @@
 
 Major release with breaking changes.
 
+#### Changes
+
+* `Kreait\Firebase\Auth\User` has been replaced with `Kreait\Firebase\Auth\UserRecord`
+* All methods that required an instance of `User` now accept UIDs only.
+
 #### Deprecations
 
 All deprecated methods and classes have been removed.

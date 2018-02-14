@@ -7,6 +7,7 @@ namespace Kreait\Firebase\Tests\Integration;
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use Kreait\Firebase\Util\JSON;
 
 class AuthTest extends IntegrationTestCase
 {
@@ -24,9 +25,9 @@ class AuthTest extends IntegrationTestCase
     {
         $user = $this->auth->createAnonymousUser();
 
-        $this->assertNull($user->getEmail());
+        $this->assertNull($user->email);
 
-        $this->auth->deleteUser($user->getUid());
+        $this->auth->deleteUser($user->uid);
     }
 
     public function testCreateUserWithEmailAndPassword()
@@ -35,14 +36,12 @@ class AuthTest extends IntegrationTestCase
         $email = uniqid('').'@domain.tld';
         $password = 'foobar';
 
-        $this->auth->createUserWithEmailAndPassword($email, $password);
-        $user = $this->auth->getUserByEmailAndPassword($email, $password);
+        $check = $this->auth->createUserWithEmailAndPassword($email, $password);
 
-        $this->assertSame($email, $user->getEmail());
-        $this->assertFalse($user->hasVerifiedEmail());
-        $this->assertNotEmpty($user->getRefreshToken());
+        $this->assertSame($email, $check->email);
+        $this->assertFalse($check->emailVerified);
 
-        $this->auth->deleteUser($user->getUid());
+        $this->auth->deleteUser($check->uid);
     }
 
     public function testChangeUserPassword()
@@ -52,11 +51,11 @@ class AuthTest extends IntegrationTestCase
 
         $user = $this->auth->createUserWithEmailAndPassword($email, 'old password');
 
-        $this->auth->changeUserPassword($user->getUid(), 'new password');
+        $this->auth->changeUserPassword($user->uid, 'new password');
 
         $refetchedUser = $this->auth->getUserByEmailAndPassword($email, 'new password');
 
-        $this->auth->deleteUser($refetchedUser->getUid());
+        $this->auth->deleteUser($refetchedUser->uid);
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
@@ -71,13 +70,13 @@ class AuthTest extends IntegrationTestCase
 
         $user = $this->auth->createUserWithEmailAndPassword($email, $password);
 
-        $this->auth->changeUserEmail($user->getUid(), $newEmail);
+        $check = $this->auth->changeUserEmail($user->uid, $newEmail);
+        $this->assertSame($newEmail, $check->email);
 
         $refetchedUser = $this->auth->getUserByEmailAndPassword($newEmail, $password);
+        $this->assertSame($newEmail, $refetchedUser->email);
 
-        $this->auth->deleteUser($refetchedUser->getUid());
-
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->auth->deleteUser($user->uid);
     }
 
     public function testSendEmailVerification()
@@ -89,9 +88,9 @@ class AuthTest extends IntegrationTestCase
 
         $user = $this->auth->createUserWithEmailAndPassword($email, $password);
 
-        $this->auth->sendEmailVerification($user->getUid());
+        $this->auth->sendEmailVerification($user->uid);
 
-        $this->auth->deleteUser($user->getUid());
+        $this->auth->deleteUser($user->uid);
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
@@ -105,10 +104,9 @@ class AuthTest extends IntegrationTestCase
 
         $user = $this->auth->createUserWithEmailAndPassword($email, $password);
 
-        $this->auth->sendPasswordResetEmail($user);
-        $this->auth->sendPasswordResetEmail($user->getEmail());
+        $this->auth->sendPasswordResetEmail($user->email);
 
-        $this->auth->deleteUser($user->getUid());
+        $this->auth->deleteUser($user->uid);
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
@@ -122,19 +120,18 @@ class AuthTest extends IntegrationTestCase
             $this->auth->createAnonymousUser(),
         ];
 
-        $users = $this->auth->listUsers($maxResults = 2, $batchSize = 1);
+        $userRecords = $this->auth->listUsers($maxResults = 2, $batchSize = 1);
 
         $count = 0;
-        foreach ($users as $userData) {
-            $this->assertInternalType('array', $userData);
-            $this->assertArrayHasKey('localId', $userData);
+        foreach ($userRecords as $userData) {
+            $this->assertInstanceOf(Auth\UserRecord::class, $userData);
             ++$count;
         }
 
         $this->assertSame($maxResults, $count);
 
         foreach ($createdUsers as $createdUser) {
-            $this->auth->deleteUser($createdUser->getUid());
+            $this->auth->deleteUser($createdUser->uid);
         }
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
@@ -144,11 +141,14 @@ class AuthTest extends IntegrationTestCase
     {
         $user = $this->auth->createAnonymousUser();
 
-        $idToken = $user->getIdToken();
+        $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
+            $this->auth->createCustomToken($user->uid)
+        );
+        $idToken = JSON::decode($idTokenResponse->getBody()->getContents(), true)['idToken'];
 
         $this->auth->verifyIdToken($idToken);
 
-        $this->auth->deleteUser($user->getUid());
+        $this->auth->deleteUser($user->uid);
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
@@ -157,28 +157,34 @@ class AuthTest extends IntegrationTestCase
     {
         $user = $this->auth->createAnonymousUser();
 
-        $idToken = $user->getIdToken();
+        $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
+            $this->auth->createCustomToken($user->uid)
+        );
+        $idToken = JSON::decode($idTokenResponse->getBody()->getContents(), true)['idToken'];
 
         $this->auth->verifyIdToken($idToken, $checkIfRevoked = false); // Should not throw an exception
 
-        $this->auth->revokeRefreshTokens($user->getUid());
+        $this->auth->revokeRefreshTokens($user->uid);
 
         $this->expectException(RevokedIdToken::class);
 
         $this->auth->verifyIdToken($idToken, $checkIfRevoked = true);
 
-        $this->auth->deleteUser($user->getUid());
+        $this->auth->deleteUser($user->uid);
     }
 
     public function testVerifyIdTokenString()
     {
         $user = $this->auth->createAnonymousUser();
 
-        $idToken = $user->getIdToken();
+        $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
+            $this->auth->createCustomToken($user->uid)
+        );
+        $idToken = JSON::decode($idTokenResponse->getBody()->getContents(), true)['idToken'];
 
         $this->auth->verifyIdToken((string) $idToken);
 
-        $this->auth->deleteUser($user->getUid());
+        $this->auth->deleteUser($user->uid);
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
@@ -187,36 +193,34 @@ class AuthTest extends IntegrationTestCase
     {
         $user = $this->auth->createAnonymousUser();
 
-        $this->auth->disableUser($user->getUid());
+        $check = $this->auth->disableUser($user->uid);
+        $this->assertTrue($check->disabled);
 
-        $this->assertTrue($this->auth->getUserInfo($user->getUid())['disabled']);
+        $check = $this->auth->enableUser($user->uid);
+        $this->assertFalse($check->disabled);
 
-        $this->auth->enableUser($user->getUid());
-
-        $this->assertFalse($this->auth->getUserInfo($user->getUid())['disabled']);
-
-        $this->auth->deleteUser($user->getUid());
+        $this->auth->deleteUser($user->uid);
     }
 
     public function testGetUserInfo()
     {
         $user = $this->auth->createAnonymousUser();
 
-        $userInfo = $this->auth->getUserInfo($user->getUid());
+        $userInfo = $this->auth->getUserInfo($user->uid);
 
         $this->assertArrayHasKey('localId', $userInfo);
 
-        $this->auth->deleteUser($user->getUid());
+        $this->auth->deleteUser($user->uid);
     }
 
     public function testGetUserRecord()
     {
         $user = $this->auth->createAnonymousUser();
 
-        $userRecord = $this->auth->getUserRecord($user->getUid());
+        $check = $this->auth->getUser($user->uid);
 
-        $this->assertSame($user->getUid(), $userRecord->uid);
+        $this->assertSame($user->uid, $check->uid);
 
-        $this->auth->deleteUser($user->getUid());
+        $this->auth->deleteUser($user->uid);
     }
 }
