@@ -200,17 +200,6 @@ class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testGetUserInfo()
-    {
-        $user = $this->auth->createAnonymousUser();
-
-        $userInfo = $this->auth->getUserInfo($user->uid);
-
-        $this->assertArrayHasKey('localId', $userInfo);
-
-        $this->auth->deleteUser($user->uid);
-    }
-
     public function testGetUserRecord()
     {
         $user = $this->auth->createAnonymousUser();

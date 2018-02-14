@@ -49,15 +49,6 @@ class Auth
         return UserRecord::fromResponseData($data);
     }
 
-    public function getUserInfo(string $uid): array
-    {
-        $response = $this->client->getAccountInfo($uid);
-
-        $data = JSON::decode((string) $response->getBody(), true);
-
-        return array_shift($data['users']);
-    }
-
     /**
      * @param int $maxResults
      * @param int $batchSize

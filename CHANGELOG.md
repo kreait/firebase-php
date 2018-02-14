@@ -9,8 +9,11 @@ Major release with breaking changes.
 * All deprecated methods and classes have been removed.
 * `Kreait\Firebase\Auth\User` has been replaced with `Kreait\Firebase\Auth\UserRecord`
 * All methods that required an instance of `User` now accept UIDs only.
-* `Kreait\Firebase\Auth::getUserByEmail(string $email)` has been added
-* `Kreait\Firebase\Auth::getUserByEmailAndPassword()` has been removed
+* Added methods
+  * `Kreait\Firebase\Auth::getUserByEmail(string $email)`
+* Removed methods
+  * `Kreait\Firebase\Auth::getUserByEmailAndPassword()`
+  * `Kreait\Firebase\Auth::getUserInfo()`
 
 #### Authentication overrides
 
