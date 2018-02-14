@@ -20,6 +20,42 @@ rate limiting.
 
     $auth = $firebase->getAuth();
 
+************
+User Records
+************
+
+``UserRecord`` s returned by methods from the ``Kreait\Firebase\Auth`` class have the
+following signature:
+
+.. code-block:: json
+
+    {
+        "uid": "jEazVdPDhqec0tnEOG7vM5wbDyU2",
+        "email": "user@domain.tld",
+        "emailVerified": true,
+        "displayName": null,
+        "photoURL": null,
+        "phoneNumber": null,
+        "disabled": false,
+        "metadata": {
+            "createdAt": "2018-02-14T15:41:32+00:00",
+            "lastLoginAt": "2018-02-14T15:41:32+00:00"
+        },
+        "providerData": [
+            {
+                "uid": "user@domain.tld",
+                "displayName": null,
+                "email": "user@domain.tld",
+                "photoUrl": null,
+                "providerId": "password",
+                "phoneNumber": null
+            }
+        ],
+        "passwordHash": "UkVEQUNURUQ=",
+        "customClaims": null,
+        "tokensValidAfterTime": "2018-02-14T15:41:32+00:00"
+    }
+
 **********
 List users
 **********
@@ -32,11 +68,12 @@ this methods returns a `Generator <http://php.net/manual/en/language.generators.
     $users = $auth->listUsers($defaultMaxResults = 1000, $defaultBatchSize = 1000);
 
     foreach ($users as $user) {
-        print_r($user);
+        /** @var \Kreait\Firebase\Auth\UserRecord $user */
+        // ...
     }
     // or
-    array_map(function (array $userData) {
-        print_r($userData);
+    array_map(function (\Kreait\Firebase\Auth\UserRecord $user) {
+        // ...
     }, iterator_to_array($users));
 
 
@@ -46,7 +83,7 @@ Get information about a specific user
 
 .. code-block:: php
 
-    $userInfo = $auth->getUserInfo('some-uid');
+    $user = $auth->getUser('some-uid');
 
 
 ************************
@@ -55,7 +92,7 @@ Create an anonymous user
 
 .. code-block:: php
 
-    $auth->createAnonymousUser();
+    $user = $auth->createAnonymousUser();
 
 *************************************
 Create a user with email and password
@@ -63,7 +100,7 @@ Create a user with email and password
 
 .. code-block:: php
 
-    $auth->createUserWithEmailAndPassword('user@domain.tld', 'a secure password');
+    $user = $auth->createUserWithEmailAndPassword('user@domain.tld', 'a secure password');
 
 ************************
 Change a user's password

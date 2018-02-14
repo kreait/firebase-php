@@ -44,7 +44,7 @@ project's existing composer.json file:
 
     {
       "require": {
-         "kreait/firebase-php": "^3.0"
+         "kreait/firebase-php": "^4.0"
       }
    }
 
@@ -67,25 +67,6 @@ Issues/Support
 - `Github issue tracker <https://github.com/kreait/firebase-php/issues/>`_
 - Join the Firebase Community Slack at https://firebase-community.appspot.com, join the #php channel and look
   for @jeromegamez.
-
-*******
-Roadmap
-*******
-
-The following planned features are not in a particular order:
-
-- Integration of `Firebase Storage <https://firebase.google.com/docs/storage/>`_
-- Automatic updates of `Firebase Rules <https://firebase.google.com/docs/database/security/>`_
-
-  - Background:
-    `Data must be indexed to be queriable or sortable <https://firebase.google.com/docs/database/security/indexing-data>`_.
-    If you try to query a yet unindexed dataset, the Firebase REST API will return an error. With this feature, the
-    SDK could execute an error, and if an error occurs, update the Firebase Rules as needed and retry.
-
-- Support for listening to the
-  `Firebase event stream <https://firebase.google.com/docs/reference/rest/database/#section-streaming>`_
-- PHP Object Serialization and Deserialization
-- Use parallel requests where possible to speed up operations
 
 *******
 License
@@ -147,14 +128,3 @@ to ensure a uniform coding style. Apply coding standard fixed using the Makefile
     make cs
 
 from the root of the project.
-
-
-
-****************
-Acknowledgements
-****************
-
-* The structure and wording of this documentation is loosely based on the
-  official Firebase documentation at `<https://firebase.google.com/docs/>`_.
-* The index and overview page are adapted from
-  `Guzzle's documentation <http://guzzle.readthedocs.io/en/latest/>`_.

@@ -2,8 +2,6 @@
 
 ## Unreleased
 
-Major release with breaking changes.
-
 #### Changes
 
 * All deprecated methods and classes have been removed.
