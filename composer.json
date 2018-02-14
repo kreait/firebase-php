@@ -14,7 +14,6 @@
         "php": "^7.0",
         "ext-mbstring": "*",
         "ext-openssl": "*",
-        "fig/http-message-util": "^1.1",
         "google/auth": "^0.11.0|^1.0",
         "guzzlehttp/guzzle": "^6.2.1",
         "kreait/firebase-tokens": "^1.1.1",

@@ -2,7 +2,6 @@
 
 namespace Kreait\Firebase\Auth;
 
-use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Exception\Auth\CredentialsMismatch;
@@ -174,7 +173,7 @@ class ApiClient
     private function request(string $uri, array $data): ResponseInterface
     {
         try {
-            return $this->client->request(RequestMethod::METHOD_POST, $uri, ['json' => $data]);
+            return $this->client->request('POST', $uri, ['json' => $data]);
         } catch (RequestException $e) {
             throw AuthException::fromRequestException($e);
         }
