@@ -2,7 +2,6 @@
 
 namespace Kreait\Firebase\Database;
 
-use Fig\Http\Message\RequestMethodInterface as RequestMethod;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
@@ -24,33 +23,33 @@ class ApiClient
 
     public function get($uri)
     {
-        $response = $this->request(RequestMethod::METHOD_GET, $uri);
+        $response = $this->request('GET', $uri);
 
         return JSON::decode((string) $response->getBody(), true);
     }
 
     public function set($uri, $value)
     {
-        $response = $this->request(RequestMethod::METHOD_PUT, $uri, ['json' => $value]);
+        $response = $this->request('PUT', $uri, ['json' => $value]);
 
         return JSON::decode((string) $response->getBody(), true);
     }
 
     public function push($uri, $value): string
     {
-        $response = $this->request(RequestMethod::METHOD_POST, $uri, ['json' => $value]);
+        $response = $this->request('POST', $uri, ['json' => $value]);
 
         return JSON::decode((string) $response->getBody(), true)['name'];
     }
 
     public function remove($uri)
     {
-        $this->request(RequestMethod::METHOD_DELETE, $uri);
+        $this->request('DELETE', $uri);
     }
 
     public function update($uri, array $values)
     {
-        $this->request(RequestMethod::METHOD_PATCH, $uri, ['json' => $values]);
+        $this->request('PATCH', $uri, ['json' => $values]);
     }
 
     private function request(string $method, $uri, array $options = []): ResponseInterface
