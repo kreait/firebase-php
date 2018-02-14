@@ -3,12 +3,11 @@
 namespace Kreait\Firebase\Auth;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Exception\Auth\CredentialsMismatch;
 use Kreait\Firebase\Exception\Auth\EmailNotFound;
 use Kreait\Firebase\Exception\Auth\InvalidCustomToken;
-use Kreait\Firebase\Exception\Auth\InvalidPassword;
-use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\AuthException;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
@@ -168,6 +167,10 @@ class ApiClient
             return $this->client->request('POST', $uri, ['json' => $data]);
         } catch (RequestException $e) {
             throw AuthException::fromRequestException($e);
+        } catch (GuzzleException $e) {
+            throw new AuthException($e->getMessage(), $e->getCode(), $e);
+        } catch (\Throwable $e) {
+            throw new AuthException($e->getMessage(), $e->getCode(), $e);
         }
     }
 }
