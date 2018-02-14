@@ -53,9 +53,7 @@ class AuthTest extends IntegrationTestCase
 
         $this->auth->changeUserPassword($user->uid, 'new password');
 
-        $refetchedUser = $this->auth->getUserByEmailAndPassword($email, 'new password');
-
-        $this->auth->deleteUser($refetchedUser->uid);
+        $this->auth->deleteUser($user->uid);
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
@@ -73,7 +71,7 @@ class AuthTest extends IntegrationTestCase
         $check = $this->auth->changeUserEmail($user->uid, $newEmail);
         $this->assertSame($newEmail, $check->email);
 
-        $refetchedUser = $this->auth->getUserByEmailAndPassword($newEmail, $password);
+        $refetchedUser = $this->auth->getUserByEmail($newEmail);
         $this->assertSame($newEmail, $refetchedUser->email);
 
         $this->auth->deleteUser($user->uid);

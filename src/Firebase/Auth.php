@@ -94,13 +94,13 @@ class Auth
         return $this->getUser($uid);
     }
 
-    public function getUserByEmailAndPassword(string $email, string $password): UserRecord
+    public function getUserByEmail(string $email): UserRecord
     {
-        $response = $this->client->getUserByEmailAndPassword($email, $password);
+        $response = $this->client->getUserByEmail($email);
 
-        $uid = JSON::decode((string) $response->getBody(), true)['localId'];
+        $data = JSON::decode((string) $response->getBody(), true)['users'][0];
 
-        return $this->getUser($uid);
+        return UserRecord::fromResponseData($data);
     }
 
     public function createAnonymousUser(): UserRecord
