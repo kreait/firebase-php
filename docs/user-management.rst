@@ -2,8 +2,10 @@
 User management
 ###############
 
-You can enable user management features by providing your project's web API key
-to the Firebase factory and getting an ``Auth`` instance:
+The Firebase Admin SDK for PHP provides an API for managing your Firebase users with elevated privileges.
+The admin user management API gives you the ability to programmatically retrieve, create, update, and
+delete users without requiring a user's existing credentials and without worrying about client-side
+rate limiting.
 
 .. code-block:: php
 

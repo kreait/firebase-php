@@ -64,25 +64,19 @@ class ApiClient
     }
 
     /**
-     * Returns a user for the given email address and password.
+     * Returns a user for the given email address.
      *
      * @param string $email
-     * @param string $password
-     *
-     * @see https://firebase.google.com/docs/reference/rest/auth/#section-sign-in-email-password
      *
      * @throws EmailNotFound
-     * @throws InvalidPassword
-     * @throws UserDisabled
      *
      * @return ResponseInterface
      */
-    public function getUserByEmailAndPassword(string $email, string $password): ResponseInterface
+    public function getUserByEmail(string $email): ResponseInterface
     {
-        return $this->request('verifyPassword', array_filter([
-            'email' => $email,
-            'password' => $password,
-        ]));
+        return $this->request('getAccountInfo', [
+            'email' => [$email],
+        ]);
     }
 
     public function downloadAccount(int $batchSize = 1000, string $nextPageToken = null): ResponseInterface
