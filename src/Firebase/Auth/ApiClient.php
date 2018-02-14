@@ -60,7 +60,6 @@ class ApiClient
         return $this->request('signupNewUser', array_filter([
             'email' => $email,
             'password' => $password,
-            'returnSecureToken' => true,
         ]));
     }
 
@@ -83,7 +82,6 @@ class ApiClient
         return $this->request('verifyPassword', array_filter([
             'email' => $email,
             'password' => $password,
-            'returnSecureToken' => true,
         ]));
     }
 
