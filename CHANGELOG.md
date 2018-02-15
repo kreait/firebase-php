@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bugfix
+
+* Fix Undefined index "users" while retrieving list of users ([#168](https://github.com/kreait/firebase-php/pull/168))
+
 ## 4.0.0 - 2018-02-14
 
 #### Changes

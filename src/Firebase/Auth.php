@@ -64,7 +64,7 @@ class Auth
             $response = $this->client->downloadAccount($batchSize, $pageToken);
             $result = JSON::decode((string) $response->getBody(), true);
 
-            foreach ((array) $result['users'] as $userData) {
+            foreach ((array) ($result['users'] ?? []) as $userData) {
                 yield UserRecord::fromResponseData($userData);
 
                 if (++$count === $maxResults) {
