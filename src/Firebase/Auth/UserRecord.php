@@ -6,7 +6,7 @@ namespace Kreait\Firebase\Auth;
 
 use DateTimeImmutable;
 use Kreait\Firebase\Exception\AuthException;
-use Kreait\Firebase\Util\Util;
+use Kreait\Firebase\Util\DT;
 
 class UserRecord implements \JsonSerializable
 {
@@ -93,7 +93,7 @@ class UserRecord implements \JsonSerializable
         $record->passwordHash = $data['passwordHash'] ?? null;
 
         if ($data['validSince'] ?? null) {
-            $record->tokensValidAfterTime = Util::parseTimestamp($data['validSince']);
+            $record->tokensValidAfterTime = DT::toUTCDateTimeImmutable($data['validSince']);
         }
 
         return $record;

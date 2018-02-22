@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Guess incoming timestamps more reliably and ensure UTC Timezones on all returned DateTime properties 
+
 ## 4.0.1 - 2018-02-15
 
 ### Bugfix

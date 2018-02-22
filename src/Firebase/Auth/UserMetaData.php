@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Auth;
 
 use DateTimeImmutable;
-use Kreait\Firebase\Util\Util;
+use Kreait\Firebase\Util\DT;
 
 class UserMetaData implements \JsonSerializable
 {
@@ -22,10 +22,10 @@ class UserMetaData implements \JsonSerializable
     public static function fromResponseData(array $data): self
     {
         $metadata = new self();
-        $metadata->createdAt = Util::parseTimestamp($data['createdAt']);
+        $metadata->createdAt = DT::toUTCDateTimeImmutable($data['createdAt']);
 
         if ($data['lastLoginAt'] ?? null) {
-            $metadata->lastLoginAt = Util::parseTimestamp($data['lastLoginAt']);
+            $metadata->lastLoginAt = DT::toUTCDateTimeImmutable($data['lastLoginAt']);
         }
 
         return $metadata;

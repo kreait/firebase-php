@@ -7,8 +7,8 @@ use Firebase\Auth\Token\Domain\Verifier as IdTokenVerifier;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
+use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
-use Kreait\Firebase\Util\Util;
 use Lcobucci\JWT\Token;
 
 class Auth
@@ -180,7 +180,7 @@ class Auth
         $verifiedToken = $this->idTokenVerifier->verifyIdToken($idToken);
 
         if ($checkIfRevoked) {
-            $tokenAuthenticatedAt = Util::parseTimestamp($verifiedToken->getClaim('auth_time'));
+            $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->getClaim('auth_time'));
             $validSince = $this->getUser($verifiedToken->getClaim('sub'))->tokensValidAfterTime;
 
             if ($validSince && ($tokenAuthenticatedAt < $validSince)) {

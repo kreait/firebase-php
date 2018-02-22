@@ -161,6 +161,7 @@ class AuthTest extends IntegrationTestCase
         $idToken = JSON::decode($idTokenResponse->getBody()->getContents(), true)['idToken'];
 
         $this->auth->verifyIdToken($idToken, $checkIfRevoked = false); // Should not throw an exception
+        sleep(1);
 
         $this->auth->revokeRefreshTokens($user->uid);
 
