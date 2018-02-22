@@ -167,8 +167,6 @@ class ApiClient
             return $this->client->request('POST', $uri, ['json' => $data]);
         } catch (RequestException $e) {
             throw AuthException::fromRequestException($e);
-        } catch (GuzzleException $e) {
-            throw new AuthException($e->getMessage(), $e->getCode(), $e);
         } catch (\Throwable $e) {
             throw new AuthException($e->getMessage(), $e->getCode(), $e);
         }

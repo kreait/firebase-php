@@ -29,7 +29,7 @@ class ApiClientTest extends UnitTestCase
         $this->client = new ApiClient($this->http);
     }
 
-    public function testExceptionsAreConverted()
+    public function testCatchRequestException()
     {
         $request = $this->prophesize(RequestInterface::class);
 
@@ -37,6 +37,17 @@ class ApiClientTest extends UnitTestCase
             ->expects($this->once())
             ->method('request')
             ->willThrowException(new RequestException('Foo', $request->reveal()));
+
+        $this->expectException(AuthException::class);
+        $this->client->signupNewUser();
+    }
+
+    public function testCatchThrowable()
+    {
+        $this->http
+            ->expects($this->once())
+            ->method('request')
+            ->willThrowException(new \Exception());
 
         $this->expectException(AuthException::class);
         $this->client->signupNewUser();

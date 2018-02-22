@@ -76,10 +76,6 @@ class UserRecord implements \JsonSerializable
 
     public static function fromResponseData(array $data)
     {
-        if (!array_key_exists('localId', $data)) {
-            throw new AuthException('Invalid user record data.');
-        }
-
         $record = new self();
         $record->uid = $data['localId'];
         $record->email = $data['email'] ?? null;
@@ -119,9 +115,6 @@ class UserRecord implements \JsonSerializable
     public function jsonSerialize()
     {
         $data = $this->toArray();
-        $data['providerData'] = array_map(function (UserInfo $userInfo) {
-            return $userInfo->jsonSerialize();
-        }, $data['providerData']);
         $data['metadata'] = $this->metadata->jsonSerialize();
 
         if ($data['tokensValidAfterTime']) {

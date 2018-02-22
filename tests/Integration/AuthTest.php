@@ -160,14 +160,16 @@ class AuthTest extends IntegrationTestCase
         );
         $idToken = JSON::decode($idTokenResponse->getBody()->getContents(), true)['idToken'];
 
-        $this->auth->verifyIdToken($idToken, $checkIfRevoked = false); // Should not throw an exception
+        $this->auth->verifyIdToken($idToken, $checkIfRevoked = false);
         sleep(1);
 
         $this->auth->revokeRefreshTokens($user->uid);
 
-        $this->expectException(RevokedIdToken::class);
-
-        $this->auth->verifyIdToken($idToken, $checkIfRevoked = true);
+        try {
+            $this->auth->verifyIdToken($idToken, $checkIfRevoked = true);
+        } catch (\Throwable $e) {
+            $this->assertInstanceOf(RevokedIdToken::class, $e);
+        }
 
         $this->auth->deleteUser($user->uid);
     }
@@ -208,6 +210,11 @@ class AuthTest extends IntegrationTestCase
         $check = $this->auth->getUser($user->uid);
 
         $this->assertSame($user->uid, $check->uid);
+        $this->assertJson(@\json_encode($check->jsonSerialize()));
+        $this->assertJson(@\json_encode($check->metadata->jsonSerialize()));
+        foreach ($check->providerData as $userInfo) {
+            $this->assertJson(@\json_encode($userInfo->jsonSerialize()));
+        }
 
         $this->auth->deleteUser($user->uid);
     }
