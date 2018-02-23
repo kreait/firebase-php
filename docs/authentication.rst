@@ -155,6 +155,9 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
         echo $e->getMessage();
     }
 
+    $uid = $verifiedToken->getClaim('sub');
+    $user = $firebase->getAuth()->getUser($uid);
+
 .. rubric:: References
 
 .. [#f1] `Google: Introduction to the Admin Database API <https://firebase.google.com/docs/database/admin/start>`_
