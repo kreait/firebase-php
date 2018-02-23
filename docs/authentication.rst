@@ -155,7 +155,7 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
         echo $e->getMessage();
     }
 
-    $uid = $verifiedToken->getClaim('sub');
+    $uid = $verifiedIdToken->getClaim('sub');
     $user = $firebase->getAuth()->getUser($uid);
 
 .. rubric:: References
