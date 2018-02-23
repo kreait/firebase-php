@@ -40,7 +40,7 @@ class Auth
         return $this->client;
     }
 
-    public function getUser($uid): UserRecord
+    public function getUser(string $uid): UserRecord
     {
         $response = $this->client->getAccountInfo($uid);
 
