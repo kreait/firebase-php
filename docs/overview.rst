@@ -25,16 +25,7 @@ installs them into your project.
 
 .. code-block:: bash
 
-    # Install Composer
-    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    php composer-setup.php
-    php -r "unlink('composer-setup.php');"
-
-You can add the Firebase Admin SDK as a dependency using the composer.phar CLI:
-
-.. code-block:: bash
-
-    php composer.phar require kreait/firebase-php ^4.0
+    composer require kreait/firebase-php ^4.0
 
 
 Alternatively, you can specify the Firebase Admin SDK as a dependency in your
