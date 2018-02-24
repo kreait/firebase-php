@@ -10,13 +10,31 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 [![Maintainability](https://api.codeclimate.com/v1/badges/577e2f8f5df7f4133675/maintainability)](https://codeclimate.com/github/kreait/firebase-php/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/577e2f8f5df7f4133675/test_coverage)](https://codeclimate.com/github/kreait/firebase-php/test_coverage)
 
-## Quickstart
+If you are interested in using the PHP Admin SDK as a client for end-user access (for example, in a web application), as opposed to admin access from a privileged environment (like a server), you should instead follow the [instructions for setting up the client JavaScript SDK](https://firebase.google.com/docs/web/setup).
 
-Full documentation at [firebase-php.readthedocs.io](https://firebase-php.readthedocs.io/).
+## Documentation
 
-```bash
-composer require kreait/firebase-php ^4.0
-```
+You can find the full documentation at
+[firebase-php.readthedocs.io](https://firebase-php.readthedocs.io/).
+
+## Feature matrix
+
+| Feature | PHP | Node.js | Java | Python | Go |
+| --- | :---: | :---: | :---: | :---: | :---: |
+| [Custom Token Minting](https://firebase.google.com/docs/auth/admin/create-custom-tokens) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [ID Token Verification](https://firebase.google.com/docs/auth/admin/verify-id-tokens)	| ✅ | ✅ | ✅ | ✅ | ✅ |
+| [Realtime Database API](https://firebase.google.com/docs/database/admin/start) | ✅* | ✅ | ✅ | ✅* | ✅ |
+| [User Management API](https://firebase.google.com/docs/auth/admin/manage-users) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [Cloud Messaging API](https://firebase.google.com/docs/cloud-messaging/admin/) |  | ✅ | ✅ | ✅ | ✅ |				
+| [Cloud Storage API](https://firebase.google.com/docs/storage/admin/start) | | ✅ | ✅ | ✅ | ✅ |
+| [Cloud Firestore API](https://firebase.google.com/docs/firestore/) | | ✅ | ✅ | ✅ | ✅ |
+
+> Note: The Realtime Database API in PHP/Python Admin SDK currently does not support realtime event listeners. 
+This means there is no provision for adding event listeners to a database reference in order to automatically 
+receive realtime update notifications. Instead, in PHP/Python updates should be proactively fetched by explicitly 
+invoking read operations.
+
+### Usage example
 
 ```php
 <?php
@@ -54,6 +72,8 @@ $newPost->getChild('title')->set('Changed post title');
 $newPost->getValue(); // Fetches the data from the realtime database
 $newPost->remove();
 ```
+
+## Support
 
 For errors and missing features, please use the [issue tracker](https://github.com/kreait/firebase-php/issues/).
 
