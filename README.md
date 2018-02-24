@@ -26,7 +26,7 @@ You can find the full documentation at
 | [Realtime Database API](https://firebase.google.com/docs/database/admin/start) | ✅* | ✅ | ✅ | ✅* | ✅ |
 | [User Management API](https://firebase.google.com/docs/auth/admin/manage-users) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [Cloud Messaging API](https://firebase.google.com/docs/cloud-messaging/admin/) |  | ✅ | ✅ | ✅ | ✅ |				
-| [Cloud Storage API](https://firebase.google.com/docs/storage/admin/start) | | ✅ | ✅ | ✅ | ✅ |
+| [Cloud Storage API](https://firebase.google.com/docs/storage/admin/start) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [Cloud Firestore API](https://firebase.google.com/docs/firestore/) | | ✅ | ✅ | ✅ | ✅ |
 
 > Note: The Realtime Database API in PHP/Python Admin SDK currently does not support realtime event listeners. 

@@ -3,7 +3,6 @@
 namespace Kreait\Firebase\Auth;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Exception\Auth\CredentialsMismatch;
 use Kreait\Firebase\Exception\Auth\EmailNotFound;

@@ -44,6 +44,16 @@ class FactoryTest extends UnitTestCase
         $this->assertInstanceOf(Firebase::class, $factory->create());
     }
 
+    public function testItAcceptsACustomDefaultStorageBucket()
+    {
+        $factory = $this->factory->withDefaultStorageBucket('foo');
+
+        $firebase = $factory->create();
+
+        $this->assertInstanceOf(Firebase::class, $firebase);
+        $this->assertSame('foo', $firebase->getStorage()->getBucket()->name());
+    }
+
     public function testItAcceptsAServiceAccount()
     {
         $factory = $this->factory->withServiceAccount($this->serviceAccount);

@@ -36,4 +36,5 @@ User Guide
     realtime-database
     authentication
     user-management
+    storage
     troubleshooting

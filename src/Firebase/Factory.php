@@ -6,6 +6,7 @@ use Firebase\Auth\Token\Generator;
 use Firebase\Auth\Token\Verifier;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\Middleware\AuthTokenMiddleware;
+use Google\Cloud\Core\ServiceBuilder;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7;
@@ -20,6 +21,11 @@ class Factory
      * @var UriInterface
      */
     private $databaseUri;
+
+    /**
+     * @var string
+     */
+    private $defaultStorageBucket;
 
     /**
      * @var ServiceAccount
@@ -41,7 +47,14 @@ class Factory
      */
     private $claims = [];
 
+    /**
+     * @var ServiceBuilder|null
+     */
+    private $googleCloudServiceBuilder;
+
     private static $databaseUriPattern = 'https://%s.firebaseio.com';
+
+    private static $storageBucketNamePattern = '%s.appspot.com';
 
     public function withServiceAccount(ServiceAccount $serviceAccount): self
     {
@@ -67,6 +80,14 @@ class Factory
         return $factory;
     }
 
+    public function withDefaultStorageBucket($name): self
+    {
+        $factory = clone $this;
+        $factory->defaultStorageBucket = $name;
+
+        return $factory;
+    }
+
     public function asUser(string $uid, array $claims = []): self
     {
         $factory = clone $this;
@@ -80,8 +101,9 @@ class Factory
     {
         $database = $this->createDatabase();
         $auth = $this->createAuth();
+        $storage = $this->createStorage();
 
-        return new Firebase($database, $auth);
+        return new Firebase($database, $auth, $storage);
     }
 
     private function getServiceAccountDiscoverer(): Discoverer
@@ -103,9 +125,19 @@ class Factory
         return $this->databaseUri ?: $this->getDatabaseUriFromServiceAccount($this->getServiceAccount());
     }
 
+    private function getStorageBucketName(): string
+    {
+        return $this->defaultStorageBucket ?: $this->getStorageBucketNameFromServiceAccount($this->getServiceAccount());
+    }
+
     private function getDatabaseUriFromServiceAccount(ServiceAccount $serviceAccount): UriInterface
     {
         return Psr7\uri_for(sprintf(self::$databaseUriPattern, $serviceAccount->getProjectId()));
+    }
+
+    private function getStorageBucketNameFromServiceAccount(ServiceAccount $serviceAccount): string
+    {
+        return sprintf(self::$storageBucketNamePattern, $serviceAccount->getProjectId());
     }
 
     private function createAuth(): Auth
@@ -177,5 +209,36 @@ class Factory
         ];
 
         return new AuthTokenMiddleware(new ServiceAccountCredentials($scopes, $credentials));
+    }
+
+    private function createStorage(): Storage
+    {
+        $builder = $this->getGoogleCloudServiceBuilder();
+
+        $storageClient = $builder->storage([
+            'projectId' => $this->getServiceAccount()->getProjectId(),
+        ]);
+
+        return new Storage($storageClient, $this->getStorageBucketName());
+    }
+
+    private function getGoogleCloudServiceBuilder(): ServiceBuilder
+    {
+        if (!$this->googleCloudServiceBuilder) {
+            $serviceAccount = $this->getServiceAccount();
+
+            $credentials = [
+                'client_email' => $serviceAccount->getClientEmail(),
+                'client_id' => $serviceAccount->getClientId(),
+                'private_key' => $serviceAccount->getPrivateKey(),
+                'type' => 'service_account',
+            ];
+
+            $this->googleCloudServiceBuilder = new ServiceBuilder([
+                'keyFile' => $credentials,
+            ]);
+        }
+
+        return $this->googleCloudServiceBuilder;
     }
 }

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased
+
+### New features
+
+- Added support for the Firebase Cloud Storage
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/storage.html))
+
 ## 4.0.2 - 2018-02-22
 
 * Guess incoming timestamps more reliably and ensure UTC Timezones on all returned DateTime properties 

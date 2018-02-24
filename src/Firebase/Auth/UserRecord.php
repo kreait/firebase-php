@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Auth;
 
 use DateTimeImmutable;
-use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Util\DT;
 
 class UserRecord implements \JsonSerializable
