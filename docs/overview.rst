@@ -54,6 +54,7 @@ other best-practices for defining dependencies at
 *************
 Usage example
 *************
+In addition to this example, many usage examples exist in the documentation and in the - `test directory <https://github.com/kreait/firebase-php/tree/master/tests>`_ of the project.  
 
 .. code-block:: php
 
