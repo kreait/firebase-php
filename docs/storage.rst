@@ -2,7 +2,7 @@
 Storage
 #######
 
-Cloud Storage for Firebase stores your data in `Google Cloud Storage <https://cloud.google.com/storage>`,
+Cloud Storage for Firebase stores your data in `Google Cloud Storage <https://cloud.google.com/storage>`_,
 an exabyte scale object storage solution with high availability and global redundancy.
 
 Before you start, please read about Firebase Cloud Storage in the official documentation:
