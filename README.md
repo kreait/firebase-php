@@ -27,7 +27,7 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 
 // This assumes that you have placed the Firebase credentials in the same directory
-// as ths PHP file.
+// as this PHP file.
 $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
 
 $firebase = (new Factory)
