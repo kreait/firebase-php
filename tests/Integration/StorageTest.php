@@ -9,7 +9,6 @@ use Google\Cloud\Storage\StorageClient;
 use Kreait\Firebase\Storage;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use League\Flysystem\FilesystemInterface;
-use PHPUnit\Framework\TestCase;
 
 class StorageTest extends IntegrationTestCase
 {
