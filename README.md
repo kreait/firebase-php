@@ -36,6 +36,9 @@ invoking read operations.
 
 ### Usage example
 
+You can find more usage examples in the
+[tests directory](https://github.com/kreait/firebase-php/tree/master/tests).
+
 ```php
 <?php
 
