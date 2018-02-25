@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bugfixes
+
+- Due to improper caching in the Firebase Factory, configuring a new Firebase instance with another 
+  service account would have used a wrongly configured storage.
+
 ## 4.1.0 - 2018-02-24
 
 ### New features

@@ -47,11 +47,6 @@ class Factory
      */
     private $claims = [];
 
-    /**
-     * @var ServiceBuilder|null
-     */
-    private $googleCloudServiceBuilder;
-
     private static $databaseUriPattern = 'https://%s.firebaseio.com';
 
     private static $storageBucketNamePattern = '%s.appspot.com';
@@ -224,21 +219,17 @@ class Factory
 
     private function getGoogleCloudServiceBuilder(): ServiceBuilder
     {
-        if (!$this->googleCloudServiceBuilder) {
-            $serviceAccount = $this->getServiceAccount();
+        $serviceAccount = $this->getServiceAccount();
 
-            $credentials = [
-                'client_email' => $serviceAccount->getClientEmail(),
-                'client_id' => $serviceAccount->getClientId(),
-                'private_key' => $serviceAccount->getPrivateKey(),
-                'type' => 'service_account',
-            ];
+        $credentials = [
+            'client_email' => $serviceAccount->getClientEmail(),
+            'client_id' => $serviceAccount->getClientId(),
+            'private_key' => $serviceAccount->getPrivateKey(),
+            'type' => 'service_account',
+        ];
 
-            $this->googleCloudServiceBuilder = new ServiceBuilder([
-                'keyFile' => $credentials,
-            ]);
-        }
-
-        return $this->googleCloudServiceBuilder;
+        return new ServiceBuilder([
+            'keyFile' => $credentials,
+        ]);
     }
 }
