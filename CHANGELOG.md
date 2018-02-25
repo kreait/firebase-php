@@ -2,7 +2,10 @@
 
 ## Unreleased
 
+### Bugfixes
+
 * `Kreait\Firebase\Storage::getFilesystem()` was using/overwriting the configured buckets
+* Added simple integration test to ensure that file operations work as excpected
 
 ## 4.1.1 - 2018-02-25
 
