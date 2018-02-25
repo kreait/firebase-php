@@ -60,9 +60,9 @@ class Storage
 
         if (!array_key_exists($name = $bucket->name(), $this->filesystems)) {
             $adapter = new GoogleStorageAdapter($this->storageClient, $bucket);
-            $this->buckets[$name] = new Filesystem($adapter);
+            $this->filesystems[$name] = new Filesystem($adapter);
         }
 
-        return $this->buckets[$name];
+        return $this->filesystems[$name];
     }
 }
