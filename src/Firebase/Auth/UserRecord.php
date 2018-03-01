@@ -33,7 +33,7 @@ class UserRecord implements \JsonSerializable
     /**
      * @var string|null
      */
-    public $photoURL;
+    public $photoUrl;
 
     /**
      * @var string|null
@@ -85,7 +85,7 @@ class UserRecord implements \JsonSerializable
         $record->email = $data['email'] ?? null;
         $record->emailVerified = $data['emailVerified'] ?? null;
         $record->displayName = $data['displayName'] ?? null;
-        $record->photoURL = $data['photoURL'] ?? null;
+        $record->photoUrl = $data['photoUrl'] ?? null;
         $record->phoneNumber = $data['phoneNumber'] ?? null;
         $record->disabled = $data['disabled'] ?? false;
         $record->metadata = self::userMetaDataFromResponseData($data);
