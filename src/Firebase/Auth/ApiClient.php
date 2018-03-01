@@ -160,6 +160,49 @@ class ApiClient
         ]);
     }
 
+    /**
+     * @param string $email
+     * @param string $password
+     *
+     * @see https://firebase.google.com/docs/reference/rest/auth/#section-sign-in-email-password
+     *
+     * @return ResponseInterface
+     */
+    public function signinWithEmailAndPassword(string $email, string $password): ResponseInterface
+    {
+        return $this->request('verifyPassword', [
+            'email' => $email,
+            'password' => $password,
+        ]);
+    }
+
+    /**
+     * @param string $uid
+     * @param string $displayName
+     * @param string $photoUrl
+     *
+     * @see https://firebase.google.com/docs/reference/rest/auth/#section-update-profile
+     *
+     * @return ResponseInterface
+     */
+    public function updateUserProfile(string $uid, string $displayName = '', string $photoUrl = ''): ResponseInterface
+    {
+        $deleteAttribute = [];
+        if ($displayName === '') {
+            $deleteAttribute[] = 'DISPLAY_NAME';
+        }
+        if ($photoUrl === '') {
+            $deleteAttribute[] = 'PHOTO_Url';
+        }
+
+        return $this->request('setAccountInfo', [
+            'localId' => [$uid],
+            'displayName' => $displayName,
+            'photoUrl' => $photoUrl,
+            'deleteAttribute' => $deleteAttribute,
+        ]);
+    }
+
     private function request(string $uri, array $data): ResponseInterface
     {
         try {
