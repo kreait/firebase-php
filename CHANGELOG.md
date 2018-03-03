@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## Unreleased
+
+### New features
+
+* Added support for creating users with properties 
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#create-a-user))
+  * `Kreait\Firebase\Auth::createUser()`
+
+### Deprecations
+
+* `Kreait\Firebase\Auth::createAnonymousUser()`
+* `Kreait\Firebase\Auth::createUserWithEmailAndPassword()`
+* `Kreait\Firebase\Auth\ApiClient::signupNewUser()`
+
 ## 4.1.2 - 2018-02-25
 
 ### Bugfixes
