@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
+use Kreait\Firebase\Exception\UserNotFound;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Kreait\Firebase\Util\JSON;
 
@@ -203,7 +204,7 @@ class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testGetUserRecord()
+    public function testGetUser()
     {
         $user = $this->auth->createUser([]);
 
@@ -217,6 +218,26 @@ class AuthTest extends IntegrationTestCase
         }
 
         $this->auth->deleteUser($user->uid);
+    }
+
+    public function testGetNonExistingUser()
+    {
+        $user = $this->auth->createUser([]);
+        $this->auth->deleteUser($user->uid);
+
+        $this->expectException(UserNotFound::class);
+        $this->auth->getUser($user->uid);
+    }
+
+    public function testGetUserByNonExistingEmail()
+    {
+        $user = $this->auth->createUser([
+            'email' => $email = bin2hex(random_bytes(5)).'@domain.tld',
+        ]);
+        $this->auth->deleteUser($user->uid);
+
+        $this->expectException(UserNotFound::class);
+        $this->auth->getUserByEmail($email);
     }
 
     public function testCreateUser()
