@@ -8,9 +8,12 @@ use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\UserNotFound;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
+use Kreait\Firebase\Value\Email;
+use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Token;
 
 class Auth
@@ -42,13 +45,19 @@ class Auth
         return $this->client;
     }
 
-    public function getUser(string $uid): UserRecord
+    public function getUser($uid): UserRecord
     {
-        $response = $this->client->getAccountInfo($uid);
+        $uid = $uid instanceof Uid ? $uid : new Uid($uid);
 
-        $data = JSON::decode((string) $response->getBody(), true)['users'][0];
+        $response = $this->client->getAccountInfo((string) $uid);
 
-        return UserRecord::fromResponseData($data);
+        $data = JSON::decode((string) $response->getBody(), true);
+
+        if (!array_key_exists('users', $data) || !\count($data['users'])) {
+            throw new UserNotFound('No user with uid "'.$uid.'" found.');
+        }
+
+        return UserRecord::fromResponseData($data['users'][0]);
     }
 
     /**
@@ -111,13 +120,20 @@ class Auth
         );
     }
 
-    public function getUserByEmail(string $email): UserRecord
+    public function getUserByEmail($email): UserRecord
     {
-        $response = $this->client->getUserByEmail($email);
+        $email = $email instanceof Email ? $email : new Email($email);
 
-        $data = JSON::decode((string) $response->getBody(), true)['users'][0];
+        $response = $this->client->getUserByEmail((string) $email);
 
-        return UserRecord::fromResponseData($data);
+        $data = JSON::decode((string) $response->getBody(), true);
+
+        if (!array_key_exists('users', $data) || !\count($data['users'])) {
+            throw new UserNotFound('No user with email "'.$email.'" found.');
+        }
+
+        return UserRecord::fromResponseData($data['users'][0]);
+    }
     }
 
     /**

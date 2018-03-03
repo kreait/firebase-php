@@ -8,6 +8,13 @@
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#create-a-user))
   * `Kreait\Firebase\Auth::createUser()`
 
+### Bugfixes
+
+* `Kreait\Firebase\Auth::getUser()` and `Kreait\Firebase\Auth::getUser()` were throwing a TypeError
+  when trying to create a user record from an empty data set (the Firebase API returns an empty 
+  response when no user is found). Now, a `Kreait\Firebase\Exception\UserNotFound` exception
+  is thrown instead.
+
 ### Deprecations
 
 * `Kreait\Firebase\Auth::createAnonymousUser()`
