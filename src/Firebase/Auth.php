@@ -7,6 +7,8 @@ use Firebase\Auth\Token\Domain\Verifier as IdTokenVerifier;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
+use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
 use Lcobucci\JWT\Token;
@@ -76,13 +78,37 @@ class Auth
         } while ($pageToken);
     }
 
-    public function createUserWithEmailAndPassword(string $email, string $password): UserRecord
+    /**
+     * Creates a new user with the provided properties.
+     *
+     * @param array|CreateUser $properties
+     *
+     * @throws InvalidArgumentException if invalid properties have been provided
+     *
+     * @return UserRecord
+     */
+    public function createUser($properties): UserRecord
     {
-        $response = $this->client->signupNewUser($email, $password);
+        $request = $properties instanceof CreateUser ? $properties : CreateUser::withProperties($properties);
+
+        $response = $this->client->createUser($request);
 
         $uid = JSON::decode((string) $response->getBody(), true)['localId'];
 
         return $this->getUser($uid);
+    }
+
+    /**
+     * @deprecated 4.2.0
+     * @see Auth::createUser()
+     */
+    public function createUserWithEmailAndPassword(string $email, string $password): UserRecord
+    {
+        return $this->createUser(
+            CreateUser::new()
+                ->withUnverifiedEmail($email)
+                ->withClearTextPassword($password)
+        );
     }
 
     public function getUserByEmail(string $email): UserRecord
@@ -94,15 +120,13 @@ class Auth
         return UserRecord::fromResponseData($data);
     }
 
+    /**
+     * @deprecated 4.2.0
+     * @see Auth::createUser()
+     */
     public function createAnonymousUser(): UserRecord
     {
-        $response = $this->client->signupNewUser();
-
-        // The response for a created user only includes the local id,
-        // so we have to refetch them.
-        $uid = JSON::decode((string) $response->getBody(), true)['localId'];
-
-        return $this->getUser($uid);
+        return $this->createUser(CreateUser::new());
     }
 
     public function changeUserPassword(string $uid, string $newPassword): UserRecord

@@ -114,8 +114,8 @@ class AuthTest extends IntegrationTestCase
         // We already should have a list of users, but let's add another one,
         // just to be sure
         $createdUsers = [
-            $this->auth->createAnonymousUser(),
-            $this->auth->createAnonymousUser(),
+            $this->auth->createUser([]),
+            $this->auth->createUser([]),
         ];
 
         $userRecords = $this->auth->listUsers($maxResults = 2, $batchSize = 1);
@@ -137,7 +137,7 @@ class AuthTest extends IntegrationTestCase
 
     public function testVerifyIdToken()
     {
-        $user = $this->auth->createAnonymousUser();
+        $user = $this->auth->createUser([]);
 
         $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
             $this->auth->createCustomToken($user->uid)
@@ -153,7 +153,7 @@ class AuthTest extends IntegrationTestCase
 
     public function testRevokeRefreshTokens()
     {
-        $user = $this->auth->createAnonymousUser();
+        $user = $this->auth->createUser([]);
 
         $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
             $this->auth->createCustomToken($user->uid)
@@ -176,7 +176,7 @@ class AuthTest extends IntegrationTestCase
 
     public function testVerifyIdTokenString()
     {
-        $user = $this->auth->createAnonymousUser();
+        $user = $this->auth->createUser([]);
 
         $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
             $this->auth->createCustomToken($user->uid)
@@ -192,7 +192,7 @@ class AuthTest extends IntegrationTestCase
 
     public function testDisableAndEnableUser()
     {
-        $user = $this->auth->createAnonymousUser();
+        $user = $this->auth->createUser([]);
 
         $check = $this->auth->disableUser($user->uid);
         $this->assertTrue($check->disabled);
@@ -205,7 +205,7 @@ class AuthTest extends IntegrationTestCase
 
     public function testGetUserRecord()
     {
-        $user = $this->auth->createAnonymousUser();
+        $user = $this->auth->createUser([]);
 
         $check = $this->auth->getUser($user->uid);
 
@@ -217,5 +217,21 @@ class AuthTest extends IntegrationTestCase
         }
 
         $this->auth->deleteUser($user->uid);
+    }
+
+    public function testCreateUser()
+    {
+        $uid = bin2hex(random_bytes(5));
+        $userRecord = $this->auth->createUser([
+            'uid' => $uid,
+            'displayName' => $displayName = 'A display name',
+            'verifiedEmail' => $email = $uid.'@domain.tld',
+        ]);
+
+        $this->assertSame($uid, $userRecord->uid);
+        $this->assertSame($displayName, $userRecord->displayName);
+        $this->assertTrue($userRecord->emailVerified);
+
+        $this->auth->deleteUser($uid);
     }
 }

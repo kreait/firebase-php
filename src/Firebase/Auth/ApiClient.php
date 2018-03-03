@@ -8,6 +8,7 @@ use Kreait\Firebase\Exception\Auth\CredentialsMismatch;
 use Kreait\Firebase\Exception\Auth\EmailNotFound;
 use Kreait\Firebase\Exception\Auth\InvalidCustomToken;
 use Kreait\Firebase\Exception\AuthException;
+use Kreait\Firebase\Request\CreateUser;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
 
@@ -43,22 +44,24 @@ class ApiClient
         ]);
     }
 
+    public function createUser(CreateUser $request): ResponseInterface
+    {
+        return $this->request('signupNewUser', $request);
+    }
+
     /**
-     * Creates a new user with the given email address and password.
+     * @deprecated 4.2.0
+     * @see ApiClient::createUser()
      *
-     * @param string $email
-     * @param string $password
-     *
-     * @see https://firebase.google.com/docs/reference/rest/auth/#section-create-email-password
-     *
-     * @return ResponseInterface
+     * @codeCoverageIgnore
      */
     public function signupNewUser(string $email = null, string $password = null): ResponseInterface
     {
-        return $this->request('signupNewUser', array_filter([
-            'email' => $email,
-            'password' => $password,
-        ]));
+        return $this->createUser(
+            CreateUser::new()
+                ->withUnverifiedEmail($email)
+                ->withClearTextPassword($password)
+        );
     }
 
     /**
@@ -160,7 +163,7 @@ class ApiClient
         ]);
     }
 
-    private function request(string $uri, array $data): ResponseInterface
+    private function request(string $uri, $data): ResponseInterface
     {
         try {
             return $this->client->request('POST', $uri, ['json' => $data]);
