@@ -30,86 +30,85 @@ class CreateUserTest extends TestCase
 
     public function propertiesProvider(): array
     {
+        $given = ['uid' => 'some-uid'];
+        $expected = ['localId' => 'some-uid'];
+
         return [
-            'rewrite_uid' => [
-                ['uid' => 'uid'],
-                ['localId' => 'uid'],
-            ],
-            'email_is_unverified_by_default' => [
-                ['email' => 'user@domain.tld'],
-                ['email' => 'user@domain.tld', 'emailVerified' => false],
+            'email' => [
+                $given + ['email' => 'user@domain.tld'],
+                $expected + ['email' => 'user@domain.tld'],
             ],
             'unverified_email_through_flag' => [
-                ['email' => 'user@domain.tld', 'emailVerified' => false],
-                ['email' => 'user@domain.tld', 'emailVerified' => false],
+                $given + ['email' => 'user@domain.tld', 'emailVerified' => false],
+                $expected + ['email' => 'user@domain.tld', 'emailVerified' => false],
             ],
             'unverified_email' => [
-                ['unverifiedEmail' => 'user@domain.tld'],
-                ['email' => 'user@domain.tld', 'emailVerified' => false],
+                $given + ['unverifiedEmail' => 'user@domain.tld'],
+                $expected + ['email' => 'user@domain.tld', 'emailVerified' => false],
             ],
             'verified_email_through_flag' => [
-                ['email' => 'user@domain.tld', 'emailVerified' => true],
-                ['email' => 'user@domain.tld', 'emailVerified' => true],
+                $given + ['email' => 'user@domain.tld', 'emailVerified' => true],
+                $expected + ['email' => 'user@domain.tld', 'emailVerified' => true],
             ],
             'verified_email' => [
-                ['verifiedEmail' => 'user@domain.tld'],
-                ['email' => 'user@domain.tld', 'emailVerified' => true],
+                $given + ['verifiedEmail' => 'user@domain.tld'],
+                $expected + ['email' => 'user@domain.tld', 'emailVerified' => true],
             ],
             'no_email_but_verification_flag' => [
-                ['emailVerified' => true],
-                [],
+                $given + ['emailVerified' => true],
+                $expected,
             ],
             'disabled_user_1' => [
-                ['disabled' => true],
-                ['disableUser' => true],
+                $given + ['disabled' => true],
+                $expected + ['disableUser' => true],
             ],
             'disabled_user_2' => [
-                ['isDisabled' => true],
-                ['disableUser' => true],
+                $given + ['isDisabled' => true],
+                $expected + ['disableUser' => true],
             ],
             'explicitely_enabled_user_1' => [
-                ['enabled' => true],
-                [],
+                $given + ['enabled' => true],
+                $expected + ['disableUser' => false],
             ],
             'explicitely_enabled_user_2' => [
-                ['isEnabled' => true],
-                [],
+                $given + ['isEnabled' => true],
+                $expected + ['disableUser' => false],
             ],
             'displayName' => [
-                ['displayName' => 'Äöüß Èâç!'],
-                ['displayName' => 'Äöüß Èâç!'],
+                $given + ['displayName' => 'Äöüß Èâç!'],
+                $expected + ['displayName' => 'Äöüß Èâç!'],
             ],
             'phone' => [
-                ['phone' => '+123456789'],
-                ['phoneNumber' => '+123456789'],
+                $given + ['phone' => '+123456789'],
+                $expected + ['phoneNumber' => '+123456789'],
             ],
             'phoneNumber' => [
-                ['phoneNumber' => '+123456789'],
-                ['phoneNumber' => '+123456789'],
+                $given + ['phoneNumber' => '+123456789'],
+                $expected + ['phoneNumber' => '+123456789'],
             ],
             'phoneNumberObject' => [
-                ['phoneNumber' => new PhoneNumber('+123456789')],
-                ['phoneNumber' => '+123456789'],
+                $given + ['phoneNumber' => new PhoneNumber('+123456789')],
+                $expected + ['phoneNumber' => '+123456789'],
             ],
             'photo' => [
-                ['photo' => 'https://domain.tld/photo.jpg'],
-                ['photoUrl' => 'https://domain.tld/photo.jpg'],
+                $given + ['photo' => 'https://domain.tld/photo.jpg'],
+                $expected + ['photoUrl' => 'https://domain.tld/photo.jpg'],
             ],
             'photoUrl' => [
-                ['photoUrl' => 'https://domain.tld/photo.jpg'],
-                ['photoUrl' => 'https://domain.tld/photo.jpg'],
+                $given + ['photoUrl' => 'https://domain.tld/photo.jpg'],
+                $expected + ['photoUrl' => 'https://domain.tld/photo.jpg'],
             ],
             'password' => [
-                ['password' => 'secret'],
-                ['password' => 'secret'],
+                $given + ['password' => 'secret'],
+                $expected + ['password' => 'secret'],
             ],
             'clearTextPassword' => [
-                ['clearTextPassword' => 'secret'],
-                ['password' => 'secret'],
+                $given + ['clearTextPassword' => 'secret'],
+                $expected + ['password' => 'secret'],
             ],
             'clearTextPasswordObject' => [
-                ['clearTextPassword' => new ClearTextPassword('secret')],
-                ['password' => 'secret'],
+                $given + ['clearTextPassword' => new ClearTextPassword('secret')],
+                $expected + ['password' => 'secret'],
             ],
         ];
     }
