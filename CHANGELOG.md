@@ -7,6 +7,7 @@
 * Added support for creating users with properties 
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#create-a-user))
   * `Kreait\Firebase\Auth::createUser()`
+* Added `Kreait\Firebase\Auth::getUserByPhoneNumber()`
 
 ### Bugfixes
 

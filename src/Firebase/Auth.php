@@ -13,6 +13,7 @@ use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\Email;
+use Kreait\Firebase\Value\PhoneNumber;
 use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Token;
 
@@ -134,6 +135,20 @@ class Auth
 
         return UserRecord::fromResponseData($data['users'][0]);
     }
+
+    public function getUserByPhoneNumber($phoneNumber): UserRecord
+    {
+        $phoneNumber = $phoneNumber instanceof PhoneNumber ? $phoneNumber : new PhoneNumber($phoneNumber);
+
+        $response = $this->client->getUserByPhoneNumber((string) $phoneNumber);
+
+        $data = JSON::decode((string) $response->getBody(), true);
+
+        if (!array_key_exists('users', $data) || !\count($data['users'])) {
+            throw new UserNotFound('No user with phone number "'.$phoneNumber.'" found.');
+        }
+
+        return UserRecord::fromResponseData($data['users'][0]);
     }
 
     /**
