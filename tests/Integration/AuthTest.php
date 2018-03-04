@@ -240,6 +240,35 @@ class AuthTest extends IntegrationTestCase
         $this->auth->getUserByEmail($email);
     }
 
+    public function testGetUserByPhoneNumber()
+    {
+        $phoneNumber = '+1234567'.random_int(1000, 9999);
+
+        $user = $this->auth->createUser([
+            'phoneNumber' => $phoneNumber
+        ]);
+
+        $check = $this->auth->getUserByPhoneNumber($phoneNumber);
+
+        $this->assertSame($user->uid, $check->uid);
+
+        $this->auth->deleteUser($user->uid);
+    }
+
+    public function testGetUserByNonExistingPhoneNumber()
+    {
+        $phoneNumber = '+1234567'.random_int(1000, 9999);
+
+        $user = $this->auth->createUser([
+            'phoneNumber' => $phoneNumber
+        ]);
+        $this->auth->deleteUser($user->uid);
+
+
+        $this->expectException(UserNotFound::class);
+        $this->auth->getUserByPhoneNumber($phoneNumber);
+    }
+
     public function testCreateUser()
     {
         $uid = bin2hex(random_bytes(5));

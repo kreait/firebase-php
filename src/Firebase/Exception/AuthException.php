@@ -10,6 +10,7 @@ use Kreait\Firebase\Exception\Auth\InvalidCustomToken;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\MissingPassword;
 use Kreait\Firebase\Exception\Auth\OperationNotAllowed;
+use Kreait\Firebase\Exception\Auth\PhoneNumberExists;
 use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\WeakPassword;
 use Kreait\Firebase\Util\JSON;
@@ -26,6 +27,7 @@ class AuthException extends \RuntimeException implements FirebaseException
         OperationNotAllowed::IDENTIFER => OperationNotAllowed::class,
         UserDisabled::IDENTIFER => UserDisabled::class,
         WeakPassword::IDENTIFIER => WeakPassword::class,
+        PhoneNumberExists::IDENTIFIER => PhoneNumberExists::class,
     ];
 
     /**

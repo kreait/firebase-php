@@ -80,6 +80,20 @@ class ApiClient
         ]);
     }
 
+    /**
+     * Returns a user for the given phone number.
+     *
+     * @param string $phoneNumber
+     *
+     * @return ResponseInterface
+     */
+    public function getUserByPhoneNumber(string $phoneNumber): ResponseInterface
+    {
+        return $this->request('getAccountInfo', [
+            'phoneNumber' => [$phoneNumber],
+        ]);
+    }
+
     public function downloadAccount(int $batchSize = 1000, string $nextPageToken = null): ResponseInterface
     {
         return $this->request('downloadAccount', array_filter([
