@@ -34,7 +34,7 @@ following signature:
         "email": "user@domain.tld",
         "emailVerified": true,
         "displayName": null,
-        "photoURL": null,
+        "photoUrl": null,
         "phoneNumber": null,
         "disabled": false,
         "metadata": {
