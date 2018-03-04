@@ -156,6 +156,25 @@ Property          Type    Description
 .. note::
     If you provide none of the properties, an anonymous user will be created.
 
+*************
+Update a user
+*************
+
+Updating a user works exactly as creating a new user, except that the ``uid`` property is required:
+
+.. code-block:: php
+
+    $properties = [
+        'uid' => 'some-uid',
+        // other properties
+    ];
+
+    $updatedUser = $auth->updateUser($properties);
+
+    $request = \Kreait\Auth\Request\UpdateUser::new('some-uid')
+        // with other properties
+    ;
+    $updatedUser = $auth->updateUser($request);
 
 ************************
 Change a user's password

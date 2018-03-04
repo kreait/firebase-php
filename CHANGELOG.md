@@ -4,10 +4,11 @@
 
 ### New features
 
-* Added support for creating users with properties 
+* Added support to create and update users with properties 
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#create-a-user))
-  * `Kreait\Firebase\Auth::createUser()`
-* Added `Kreait\Firebase\Auth::getUserByPhoneNumber()`
+  * `Kreait\Firebase\Auth::createUser($properties)`
+  * `Kreait\Firebase\Auth::updateUser($properties, $uid = null)`
+* Added `Kreait\Firebase\Auth::getUserByPhoneNumber($phoneNumber)`
 
 ### Bugfixes
 
@@ -20,7 +21,15 @@
 
 * `Kreait\Firebase\Auth::createAnonymousUser()`
 * `Kreait\Firebase\Auth::createUserWithEmailAndPassword()`
+* `Kreait\Firebase\Auth::changeUserPassword()`
+* `Kreait\Firebase\Auth::changeUserEmail()`
+* `Kreait\Firebase\Auth::enableUser()`
+* `Kreait\Firebase\Auth::disableUser()`
 * `Kreait\Firebase\Auth\ApiClient::signupNewUser()`
+* `Kreait\Firebase\Auth\ApiClient::enableUser()`
+* `Kreait\Firebase\Auth\ApiClient::disableUser()`
+* `Kreait\Firebase\Auth\ApiClient::changeUserPassword()`
+* `Kreait\Firebase\Auth\ApiClient::changeUserEmail()`
 
 ## 4.1.2 - 2018-02-25
 

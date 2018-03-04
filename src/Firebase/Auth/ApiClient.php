@@ -9,6 +9,7 @@ use Kreait\Firebase\Exception\Auth\EmailNotFound;
 use Kreait\Firebase\Exception\Auth\InvalidCustomToken;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Request\CreateUser;
+use Kreait\Firebase\Request\UpdateUser;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
 
@@ -47,6 +48,11 @@ class ApiClient
     public function createUser(CreateUser $request): ResponseInterface
     {
         return $this->request('signupNewUser', $request);
+    }
+
+    public function updateUser(UpdateUser $request): ResponseInterface
+    {
+        return $this->request('setAccountInfo', $request);
     }
 
     /**
@@ -102,20 +108,26 @@ class ApiClient
         ]));
     }
 
+    /**
+     * @deprecated 4.2.0
+     * @see ApiClient::updateUser()
+     */
     public function enableUser($uid): ResponseInterface
     {
-        return $this->request('setAccountInfo', [
-            'localId' => $uid,
-            'disableUser' => false,
-        ]);
+        return $this->updateUser(
+            UpdateUser::new($uid)->markAsEnabled()
+        );
     }
 
+    /**
+     * @deprecated 4.2.0
+     * @see ApiClient::updateUser()
+     */
     public function disableUser($uid): ResponseInterface
     {
-        return $this->request('setAccountInfo', [
-            'localId' => $uid,
-            'disableUser' => true,
-        ]);
+        return $this->updateUser(
+            UpdateUser::new($uid)->markAsDisabled()
+        );
     }
 
     public function deleteUser(string $uid): ResponseInterface
@@ -125,20 +137,26 @@ class ApiClient
         ]);
     }
 
+    /**
+     * @deprecated 4.2.0
+     * @see ApiClient::updateUser()
+     */
     public function changeUserPassword(string $uid, string $newPassword): ResponseInterface
     {
-        return $this->request('setAccountInfo', [
-            'localId' => [$uid],
-            'password' => $newPassword,
-        ]);
+        return $this->updateUser(
+            UpdateUser::new($uid)->withClearTextPassword($newPassword)
+        );
     }
 
+    /**
+     * @deprecated 4.2.0
+     * @see ApiClient::updateUser()
+     */
     public function changeUserEmail(string $uid, string $newEmail): ResponseInterface
     {
-        return $this->request('setAccountInfo', [
-            'localId' => [$uid],
-            'email' => $newEmail,
-        ]);
+        return $this->updateUser(
+            UpdateUser::new($uid)->withEmail($newEmail)
+        );
     }
 
     public function getAccountInfo(string $uid): ResponseInterface

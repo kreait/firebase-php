@@ -245,7 +245,7 @@ class AuthTest extends IntegrationTestCase
         $phoneNumber = '+1234567'.random_int(1000, 9999);
 
         $user = $this->auth->createUser([
-            'phoneNumber' => $phoneNumber
+            'phoneNumber' => $phoneNumber,
         ]);
 
         $check = $this->auth->getUserByPhoneNumber($phoneNumber);
@@ -260,10 +260,9 @@ class AuthTest extends IntegrationTestCase
         $phoneNumber = '+1234567'.random_int(1000, 9999);
 
         $user = $this->auth->createUser([
-            'phoneNumber' => $phoneNumber
+            'phoneNumber' => $phoneNumber,
         ]);
         $this->auth->deleteUser($user->uid);
-
 
         $this->expectException(UserNotFound::class);
         $this->auth->getUserByPhoneNumber($phoneNumber);
@@ -283,5 +282,15 @@ class AuthTest extends IntegrationTestCase
         $this->assertTrue($userRecord->emailVerified);
 
         $this->auth->deleteUser($uid);
+    }
+
+    public function testUpdateUserWithUidAsAdditionalArgument()
+    {
+        $user = $this->auth->createUser([]);
+        $this->auth->updateUser([], $user->uid);
+
+        $this->assertTrue($noExceptionHasBeenThrown = true);
+
+        $this->auth->deleteUser($user->uid);
     }
 }

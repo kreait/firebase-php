@@ -10,6 +10,7 @@ use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\UserNotFound;
 use Kreait\Firebase\Request\CreateUser;
+use Kreait\Firebase\Request\UpdateUser;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\Email;
@@ -109,6 +110,35 @@ class Auth
     }
 
     /**
+     * Updates the given user with the given properties.
+     *
+     * @param array|UpdateUser $properties
+     * @param mixed|Uid $uid
+     *
+     * @throws InvalidArgumentException if invalid properties have been provided
+     *
+     * @return UserRecord
+     */
+    public function updateUser($properties, $uid = null): UserRecord
+    {
+        $request = $properties instanceof UpdateUser ? $properties : UpdateUser::withProperties($properties);
+
+        if ($uid) {
+            $request = $request->withUid($uid instanceof Uid ? $uid : new Uid((string)  $uid));
+        }
+
+        if (!$request->hasUid()) {
+            throw new InvalidArgumentException('A uid is required to update an existing user.');
+        }
+
+        $response = $this->client->updateUser($request);
+
+        $uid = JSON::decode((string) $response->getBody(), true)['localId'];
+
+        return $this->getUser($uid);
+    }
+
+    /**
      * @deprecated 4.2.0
      * @see Auth::createUser()
      */
@@ -160,29 +190,49 @@ class Auth
         return $this->createUser(CreateUser::new());
     }
 
+    /**
+     * @deprecated 4.2.0
+     * @see Auth::updateUser()
+     */
     public function changeUserPassword(string $uid, string $newPassword): UserRecord
     {
+        /** @noinspection PhpDeprecationInspection */
         $this->client->changeUserPassword($uid, $newPassword);
 
         return $this->getUser($uid);
     }
 
+    /**
+     * @deprecated 4.2.0
+     * @see Auth::updateUser()
+     */
     public function changeUserEmail(string $uid, string $newEmail): UserRecord
     {
+        /** @noinspection PhpDeprecationInspection */
         $this->client->changeUserEmail($uid, $newEmail);
 
         return $this->getUser($uid);
     }
 
+    /**
+     * @deprecated 4.2.0
+     * @see Auth::updateUser()
+     */
     public function enableUser(string $uid): UserRecord
     {
+        /** @noinspection PhpDeprecationInspection */
         $this->client->enableUser($uid);
 
         return $this->getUser($uid);
     }
 
+    /**
+     * @deprecated 4.2.0
+     * @see Auth::updateUser()
+     */
     public function disableUser(string $uid): UserRecord
     {
+        /** @noinspection PhpDeprecationInspection */
         $this->client->disableUser($uid);
 
         return $this->getUser($uid);
