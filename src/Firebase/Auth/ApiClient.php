@@ -110,6 +110,8 @@ class ApiClient
     /**
      * @deprecated 4.2.0
      * @see ApiClient::updateUser()
+     *
+     * @codeCoverageIgnore
      */
     public function enableUser($uid): ResponseInterface
     {
@@ -123,6 +125,8 @@ class ApiClient
     /**
      * @deprecated 4.2.0
      * @see ApiClient::updateUser()
+     *
+     * @codeCoverageIgnore
      */
     public function disableUser($uid): ResponseInterface
     {
@@ -143,6 +147,8 @@ class ApiClient
     /**
      * @deprecated 4.2.0
      * @see ApiClient::updateUser()
+     *
+     * @codeCoverageIgnore
      */
     public function changeUserPassword(string $uid, string $newPassword): ResponseInterface
     {
@@ -156,6 +162,8 @@ class ApiClient
     /**
      * @deprecated 4.2.0
      * @see ApiClient::updateUser()
+     *
+     * @codeCoverageIgnore
      */
     public function changeUserEmail(string $uid, string $newEmail): ResponseInterface
     {

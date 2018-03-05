@@ -134,10 +134,6 @@ class Auth
         return $this->getUser($uid);
     }
 
-    /**
-     * @deprecated 4.2.0
-     * @see Auth::createUser()
-     */
     public function createUserWithEmailAndPassword(string $email, string $password): UserRecord
     {
         return $this->createUser(
@@ -177,61 +173,29 @@ class Auth
         return UserRecord::fromResponseData($data['users'][0]);
     }
 
-    /**
-     * @deprecated 4.2.0
-     * @see Auth::createUser()
-     */
     public function createAnonymousUser(): UserRecord
     {
         return $this->createUser(Request\CreateUser::new());
     }
 
-    /**
-     * @deprecated 4.2.0
-     * @see Auth::updateUser()
-     */
     public function changeUserPassword(string $uid, string $newPassword): UserRecord
     {
-        /* @noinspection PhpDeprecationInspection */
-        $this->client->changeUserPassword($uid, $newPassword);
-
-        return $this->getUser($uid);
+        return $this->updateUser($uid, Request\UpdateUser::new()->withClearTextPassword($newPassword));
     }
 
-    /**
-     * @deprecated 4.2.0
-     * @see Auth::updateUser()
-     */
     public function changeUserEmail(string $uid, string $newEmail): UserRecord
     {
-        /* @noinspection PhpDeprecationInspection */
-        $this->client->changeUserEmail($uid, $newEmail);
-
-        return $this->getUser($uid);
+        return $this->updateUser($uid, Request\UpdateUser::new()->withEmail($newEmail));
     }
 
-    /**
-     * @deprecated 4.2.0
-     * @see Auth::updateUser()
-     */
     public function enableUser(string $uid): UserRecord
     {
-        /* @noinspection PhpDeprecationInspection */
-        $this->client->enableUser($uid);
-
-        return $this->getUser($uid);
+        return $this->updateUser($uid, Request\UpdateUser::new()->markAsEnabled());
     }
 
-    /**
-     * @deprecated 4.2.0
-     * @see Auth::updateUser()
-     */
     public function disableUser(string $uid): UserRecord
     {
-        /* @noinspection PhpDeprecationInspection */
-        $this->client->disableUser($uid);
-
-        return $this->getUser($uid);
+        return $this->updateUser($uid, Request\UpdateUser::new()->markAsDisabled());
     }
 
     public function deleteUser(string $uid)

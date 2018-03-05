@@ -175,6 +175,58 @@ Updating a user works exactly as creating a new user, except that the ``uid`` pr
 
     $updatedUser = $auth->updateUser($request);
 
+************************
+Change a user's password
+************************
+
+.. code-block:: php
+
+    $uid = 'some-uid';
+
+    $updatedUser = $auth->changeUserPassword($uid, 'new password');
+
+*********************
+Change a user's email
+*********************
+
+.. code-block:: php
+
+    $uid = 'some-uid';
+
+    $updatedUser = $auth->changeUserEmail($uid, 'user@domain.tld');
+
+**************
+Disable a user
+**************
+
+.. code-block:: php
+
+    $uid = 'some-uid';
+
+    $updatedUser = $auth->disableUser($uid);
+
+
+*************
+Enable a user
+*************
+
+.. code-block:: php
+
+    $uid = 'some-uid';
+
+    $updatedUser = $auth->enableUser($uid);
+
+
+*************
+Delete a user
+*************
+
+.. code-block:: php
+
+    $uid = 'some-uid';
+
+    $auth->deleteUser($uid);
+
 ***************************
 Send a password reset email
 ***************************

@@ -19,12 +19,6 @@
 
 ### Deprecations
 
-* `Kreait\Firebase\Auth::createAnonymousUser()`
-* `Kreait\Firebase\Auth::createUserWithEmailAndPassword()`
-* `Kreait\Firebase\Auth::changeUserPassword()`
-* `Kreait\Firebase\Auth::changeUserEmail()`
-* `Kreait\Firebase\Auth::enableUser()`
-* `Kreait\Firebase\Auth::disableUser()`
 * `Kreait\Firebase\Auth\ApiClient::signupNewUser()`
 * `Kreait\Firebase\Auth\ApiClient::enableUser()`
 * `Kreait\Firebase\Auth\ApiClient::disableUser()`
