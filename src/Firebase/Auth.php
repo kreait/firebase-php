@@ -9,7 +9,6 @@ use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\UserNotFound;
-use Kreait\Firebase\Request;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\Email;
@@ -113,26 +112,20 @@ class Auth
     /**
      * Updates the given user with the given properties.
      *
-     * @param array|Request\UpdateUser $properties
      * @param mixed|Uid $uid
+     * @param array|Request\UpdateUser $properties
      *
      * @throws InvalidArgumentException if invalid properties have been provided
      *
      * @return UserRecord
      */
-    public function updateUser($properties, $uid = null): UserRecord
+    public function updateUser($uid, $properties): UserRecord
     {
         $request = $properties instanceof Request\UpdateUser
             ? $properties
             : Request\UpdateUser::withProperties($properties);
 
-        if ($uid) {
-            $request = $request->withUid($uid instanceof Uid ? $uid : new Uid((string)  $uid));
-        }
-
-        if (!$request->hasUid()) {
-            throw new InvalidArgumentException('A uid is required to update an existing user.');
-        }
+        $request = $request->withUid($uid instanceof Uid ? $uid : new Uid((string) $uid));
 
         $response = $this->client->updateUser($request);
 
@@ -199,7 +192,7 @@ class Auth
      */
     public function changeUserPassword(string $uid, string $newPassword): UserRecord
     {
-        /** @noinspection PhpDeprecationInspection */
+        /* @noinspection PhpDeprecationInspection */
         $this->client->changeUserPassword($uid, $newPassword);
 
         return $this->getUser($uid);
@@ -211,7 +204,7 @@ class Auth
      */
     public function changeUserEmail(string $uid, string $newEmail): UserRecord
     {
-        /** @noinspection PhpDeprecationInspection */
+        /* @noinspection PhpDeprecationInspection */
         $this->client->changeUserEmail($uid, $newEmail);
 
         return $this->getUser($uid);
@@ -223,7 +216,7 @@ class Auth
      */
     public function enableUser(string $uid): UserRecord
     {
-        /** @noinspection PhpDeprecationInspection */
+        /* @noinspection PhpDeprecationInspection */
         $this->client->enableUser($uid);
 
         return $this->getUser($uid);
@@ -235,7 +228,7 @@ class Auth
      */
     public function disableUser(string $uid): UserRecord
     {
-        /** @noinspection PhpDeprecationInspection */
+        /* @noinspection PhpDeprecationInspection */
         $this->client->disableUser($uid);
 
         return $this->getUser($uid);

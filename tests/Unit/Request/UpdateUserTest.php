@@ -20,13 +20,6 @@ class UpdateUserTest extends TestCase
         $this->assertEquals($expected, json_decode(json_encode($request), true));
     }
 
-    public function testWithUid()
-    {
-        $request = UpdateUser::new('some-uid');
-
-        $this->assertTrue($request->hasUid());
-    }
-
     public function testWithMissingUid()
     {
         $this->expectException(InvalidArgumentException::class);

@@ -114,7 +114,9 @@ class ApiClient
     public function enableUser($uid): ResponseInterface
     {
         return $this->updateUser(
-            Request\UpdateUser::new($uid)->markAsEnabled()
+            Request\UpdateUser::new()
+                ->withUid($uid)
+                ->markAsEnabled()
         );
     }
 
@@ -125,7 +127,9 @@ class ApiClient
     public function disableUser($uid): ResponseInterface
     {
         return $this->updateUser(
-            Request\UpdateUser::new($uid)->markAsDisabled()
+            Request\UpdateUser::new()
+                ->withUid($uid)
+                ->markAsDisabled()
         );
     }
 
@@ -143,7 +147,9 @@ class ApiClient
     public function changeUserPassword(string $uid, string $newPassword): ResponseInterface
     {
         return $this->updateUser(
-            Request\UpdateUser::new($uid)->withClearTextPassword($newPassword)
+            Request\UpdateUser::new()
+                ->withUid($uid)
+                ->withClearTextPassword($newPassword)
         );
     }
 
@@ -154,7 +160,9 @@ class ApiClient
     public function changeUserEmail(string $uid, string $newEmail): ResponseInterface
     {
         return $this->updateUser(
-            Request\UpdateUser::new($uid)->withEmail($newEmail)
+            Request\UpdateUser::new()
+                ->withUid($uid)
+                ->withEmail($newEmail)
         );
     }
 

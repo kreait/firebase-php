@@ -4,20 +4,12 @@ namespace Kreait\Firebase\Tests\Unit;
 
 use Firebase\Auth\Token\Domain\Generator;
 use Firebase\Auth\Token\Domain\Verifier;
-use GuzzleHttp\ClientInterface;
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Auth\ApiClient;
-use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
-use Lcobucci\JWT\Token;
 
 class AuthTest extends UnitTestCase
 {
-    /**
-     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $httpClient;
-
     /**
      * @var ApiClient
      */
@@ -67,11 +59,5 @@ class AuthTest extends UnitTestCase
             ->method('verifyIdToken');
 
         $this->auth->verifyIdToken('some id token string');
-    }
-
-    public function testUpdateUserWithoutUid()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->auth->updateUser([]);
     }
 }

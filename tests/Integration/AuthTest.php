@@ -287,7 +287,7 @@ class AuthTest extends IntegrationTestCase
     public function testUpdateUserWithUidAsAdditionalArgument()
     {
         $user = $this->auth->createUser([]);
-        $this->auth->updateUser([], $user->uid);
+        $this->auth->updateUser($user->uid, []);
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
 

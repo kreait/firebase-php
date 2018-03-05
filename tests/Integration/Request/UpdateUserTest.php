@@ -28,7 +28,7 @@ class UpdateUserTest extends IntegrationTestCase
         $user = $this->auth->createUser(CreateUser::new()->withPhotoUrl($photoUrl));
         $this->assertSame($user->photoUrl, $photoUrl);
 
-        $updatedUser = $this->auth->updateUser(UpdateUser::new($user->uid)->withRemovedPhotoUrl());
+        $updatedUser = $this->auth->updateUser($user->uid, UpdateUser::new()->withRemovedPhotoUrl());
 
         $this->assertNull($updatedUser->photoUrl);
 
@@ -42,7 +42,7 @@ class UpdateUserTest extends IntegrationTestCase
         $user = $this->auth->createUser(CreateUser::new()->withDisplayName($displayName));
         $this->assertSame($user->displayName, $displayName);
 
-        $updatedUser = $this->auth->updateUser(UpdateUser::new($user->uid)->withRemovedDisplayName());
+        $updatedUser = $this->auth->updateUser($user->uid, UpdateUser::new()->withRemovedDisplayName());
 
         $this->assertNull($updatedUser->displayName);
 

@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Request;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Request;
-use Kreait\Firebase\Value\Email;
 
 final class UpdateUser implements Request
 {
@@ -24,9 +23,9 @@ final class UpdateUser implements Request
     {
     }
 
-    public static function new($uid): self
+    public static function new(): self
     {
-        return (new self())->withUid($uid);
+        return new self();
     }
 
     /**

@@ -7,7 +7,7 @@
 * Added support to create and update users with properties 
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#create-a-user))
   * `Kreait\Firebase\Auth::createUser($properties)`
-  * `Kreait\Firebase\Auth::updateUser($properties, $uid = null)`
+  * `Kreait\Firebase\Auth::updateUser($uid, $properties)`
 * Added `Kreait\Firebase\Auth::getUserByPhoneNumber($phoneNumber)`
 
 ### Bugfixes
