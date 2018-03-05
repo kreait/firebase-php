@@ -8,8 +8,7 @@ use Kreait\Firebase\Exception\Auth\CredentialsMismatch;
 use Kreait\Firebase\Exception\Auth\EmailNotFound;
 use Kreait\Firebase\Exception\Auth\InvalidCustomToken;
 use Kreait\Firebase\Exception\AuthException;
-use Kreait\Firebase\Request\CreateUser;
-use Kreait\Firebase\Request\UpdateUser;
+use Kreait\Firebase\Request;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
 
@@ -45,12 +44,12 @@ class ApiClient
         ]);
     }
 
-    public function createUser(CreateUser $request): ResponseInterface
+    public function createUser(Request\CreateUser $request): ResponseInterface
     {
         return $this->request('signupNewUser', $request);
     }
 
-    public function updateUser(UpdateUser $request): ResponseInterface
+    public function updateUser(Request\UpdateUser $request): ResponseInterface
     {
         return $this->request('setAccountInfo', $request);
     }
@@ -64,7 +63,7 @@ class ApiClient
     public function signupNewUser(string $email = null, string $password = null): ResponseInterface
     {
         return $this->createUser(
-            CreateUser::new()
+            Request\CreateUser::new()
                 ->withUnverifiedEmail($email)
                 ->withClearTextPassword($password)
         );
@@ -115,7 +114,7 @@ class ApiClient
     public function enableUser($uid): ResponseInterface
     {
         return $this->updateUser(
-            UpdateUser::new($uid)->markAsEnabled()
+            Request\UpdateUser::new($uid)->markAsEnabled()
         );
     }
 
@@ -126,7 +125,7 @@ class ApiClient
     public function disableUser($uid): ResponseInterface
     {
         return $this->updateUser(
-            UpdateUser::new($uid)->markAsDisabled()
+            Request\UpdateUser::new($uid)->markAsDisabled()
         );
     }
 
@@ -144,7 +143,7 @@ class ApiClient
     public function changeUserPassword(string $uid, string $newPassword): ResponseInterface
     {
         return $this->updateUser(
-            UpdateUser::new($uid)->withClearTextPassword($newPassword)
+            Request\UpdateUser::new($uid)->withClearTextPassword($newPassword)
         );
     }
 
@@ -155,7 +154,7 @@ class ApiClient
     public function changeUserEmail(string $uid, string $newEmail): ResponseInterface
     {
         return $this->updateUser(
-            UpdateUser::new($uid)->withEmail($newEmail)
+            Request\UpdateUser::new($uid)->withEmail($newEmail)
         );
     }
 

@@ -9,8 +9,7 @@ use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\UserNotFound;
-use Kreait\Firebase\Request\CreateUser;
-use Kreait\Firebase\Request\UpdateUser;
+use Kreait\Firebase\Request;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\Email;
@@ -92,7 +91,7 @@ class Auth
     /**
      * Creates a new user with the provided properties.
      *
-     * @param array|CreateUser $properties
+     * @param array|Request\CreateUser $properties
      *
      * @throws InvalidArgumentException if invalid properties have been provided
      *
@@ -100,7 +99,9 @@ class Auth
      */
     public function createUser($properties): UserRecord
     {
-        $request = $properties instanceof CreateUser ? $properties : CreateUser::withProperties($properties);
+        $request = $properties instanceof Request\CreateUser
+            ? $properties
+            : Request\CreateUser::withProperties($properties);
 
         $response = $this->client->createUser($request);
 
@@ -112,7 +113,7 @@ class Auth
     /**
      * Updates the given user with the given properties.
      *
-     * @param array|UpdateUser $properties
+     * @param array|Request\UpdateUser $properties
      * @param mixed|Uid $uid
      *
      * @throws InvalidArgumentException if invalid properties have been provided
@@ -121,7 +122,9 @@ class Auth
      */
     public function updateUser($properties, $uid = null): UserRecord
     {
-        $request = $properties instanceof UpdateUser ? $properties : UpdateUser::withProperties($properties);
+        $request = $properties instanceof Request\UpdateUser
+            ? $properties
+            : Request\UpdateUser::withProperties($properties);
 
         if ($uid) {
             $request = $request->withUid($uid instanceof Uid ? $uid : new Uid((string)  $uid));
@@ -145,7 +148,7 @@ class Auth
     public function createUserWithEmailAndPassword(string $email, string $password): UserRecord
     {
         return $this->createUser(
-            CreateUser::new()
+            Request\CreateUser::new()
                 ->withUnverifiedEmail($email)
                 ->withClearTextPassword($password)
         );
@@ -187,7 +190,7 @@ class Auth
      */
     public function createAnonymousUser(): UserRecord
     {
-        return $this->createUser(CreateUser::new());
+        return $this->createUser(Request\CreateUser::new());
     }
 
     /**
