@@ -58,13 +58,21 @@ class CreateUserTest extends TestCase
                 $given + ['emailVerified' => true],
                 $expected,
             ],
-            'disabled_user_1' => [
+            'disabled_1' => [
                 $given + ['disabled' => true],
                 $expected + ['disableUser' => true],
             ],
-            'disabled_user_2' => [
+            'disabled_2' => [
                 $given + ['isDisabled' => true],
                 $expected + ['disableUser' => true],
+            ],
+            'disableUser' => [
+                $given + ['disableUser' => true],
+                $expected + ['disableUser' => true],
+            ],
+            'enableUser' => [
+                $given + ['disableUser' => false],
+                $expected + ['disableUser' => false],
             ],
             'explicitely_enabled_user_1' => [
                 $given + ['enabled' => true],

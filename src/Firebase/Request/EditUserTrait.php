@@ -101,7 +101,7 @@ trait EditUserTrait
                 case 'photourl':
                     $request = $request->withPhotoUrl($value);
                     break;
-                case 'disableUser':
+                case 'disableuser':
                     if ($value) {
                         $request = $request->markAsDisabled();
                     } else {
