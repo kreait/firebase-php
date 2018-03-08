@@ -9,11 +9,11 @@ use Google\Auth\Middleware\AuthTokenMiddleware;
 use Google\Cloud\Core\ServiceBuilder;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7;
 use Kreait\Firebase;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Psr\Http\Message\UriInterface;
+use function GuzzleHttp\Psr7\uri_for;
 
 class Factory
 {
@@ -70,7 +70,7 @@ class Factory
     public function withDatabaseUri($uri): self
     {
         $factory = clone $this;
-        $factory->databaseUri = Psr7\uri_for($uri);
+        $factory->databaseUri = uri_for($uri);
 
         return $factory;
     }
@@ -127,7 +127,7 @@ class Factory
 
     private function getDatabaseUriFromServiceAccount(ServiceAccount $serviceAccount): UriInterface
     {
-        return Psr7\uri_for(sprintf(self::$databaseUriPattern, $serviceAccount->getProjectId()));
+        return uri_for(sprintf(self::$databaseUriPattern, $serviceAccount->getProjectId()));
     }
 
     private function getStorageBucketNameFromServiceAccount(ServiceAccount $serviceAccount): string
