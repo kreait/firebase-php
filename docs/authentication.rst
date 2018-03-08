@@ -120,6 +120,13 @@ the auth / request.auth objects in your Security Rules:
 
     $customToken = $firebase->getAuth()->createCustomToken($uid, $additionalClaims);
 
+    $customTokenString = (string) $customToken;
+
+.. note::
+    This library uses `lcobucci/jwt <https://github.com/lcobucci/jwt>`_ to work with JSON Web Tokens (JWT).
+    You can find the usage instructions at
+    `https://github.com/lcobucci/jwt/blob/3.2/README.md <https://github.com/lcobucci/jwt/blob/3.2/README.md>`_.
+
 
 *********************************
 Verify a Firebase ID Token [#f3]_
@@ -157,6 +164,12 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
 
     $uid = $verifiedIdToken->getClaim('sub');
     $user = $firebase->getAuth()->getUser($uid);
+
+.. note::
+    This library uses `lcobucci/jwt <https://github.com/lcobucci/jwt>`_ to work with JSON Web Tokens (JWT).
+    You can find the usage instructions at
+    `https://github.com/lcobucci/jwt/blob/3.2/README.md <https://github.com/lcobucci/jwt/blob/3.2/README.md>`_.
+
 
 .. rubric:: References
 
