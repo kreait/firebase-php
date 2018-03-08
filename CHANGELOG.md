@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.2.0 - 2018-03-08
 
 ### New features
 
