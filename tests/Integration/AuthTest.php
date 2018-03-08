@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Auth;
+use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\UserNotFound;
+use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Kreait\Firebase\Util\JSON;
 
@@ -211,10 +213,10 @@ class AuthTest extends IntegrationTestCase
         $check = $this->auth->getUser($user->uid);
 
         $this->assertSame($user->uid, $check->uid);
-        $this->assertJson(@\json_encode($check->jsonSerialize()));
-        $this->assertJson(@\json_encode($check->metadata->jsonSerialize()));
+        $this->assertJson(@\json_encode($check));
+        $this->assertJson(@\json_encode($check->metadata));
         foreach ($check->providerData as $userInfo) {
-            $this->assertJson(@\json_encode($userInfo->jsonSerialize()));
+            $this->assertJson(@\json_encode($userInfo));
         }
 
         $this->auth->deleteUser($user->uid);
@@ -292,5 +294,36 @@ class AuthTest extends IntegrationTestCase
         $this->assertTrue($noExceptionHasBeenThrown = true);
 
         $this->auth->deleteUser($user->uid);
+    }
+
+    public function testVerifyCorrectPassword()
+    {
+        $user = $this->auth->createUser(CreateUser::new()
+            ->withEmail($email = 'user@domain.tld')
+            ->withClearTextPassword($password = 'secret')
+        );
+
+        $check = $this->auth->verifyPassword($email, $password);
+
+        $this->assertSame($user->uid, $check->uid);
+
+        $this->auth->deleteUser($user->uid);
+    }
+
+    public function testVerifyIncorrectPassword()
+    {
+        $user = $this->auth->createUser(CreateUser::new()
+            ->withEmail($email = 'user@domain.tld')
+            ->withClearTextPassword('correct')
+        );
+
+        try {
+            $this->auth->verifyPassword($email, 'incorrect');
+            $this->fail(InvalidPassword::class.' should have been thrown');
+        } catch (\Throwable $e) {
+            $this->assertInstanceOf(InvalidPassword::class, $e);
+        } finally {
+            $this->auth->deleteUser($user->uid);
+        }
     }
 }

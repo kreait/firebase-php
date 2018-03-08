@@ -9,6 +9,8 @@
   * `Kreait\Firebase\Auth::createUser($properties)`
   * `Kreait\Firebase\Auth::updateUser($uid, $properties)`
 * Added `Kreait\Firebase\Auth::getUserByPhoneNumber($phoneNumber)`
+* Added method to verify the password of an account provided by the email/password provider 
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#verify-a-password))
 
 ### Bugfixes
 
