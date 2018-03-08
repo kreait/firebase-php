@@ -22,7 +22,9 @@ Interact with `Google Firebase <https://firebase.google.com>`_ from your PHP app
     privileged environment (like a server), you should instead follow the
     `instructions for setting up the client JavaScript SDK <https://firebase.google.com/docs/web/setup>`_.
 
-The source code can be found at https://github.com/kreait/firebase-php/
+The source code can be found at https://github.com/kreait/firebase-php/ .
+
+A ready-to-go repository with usage examples can be found at https://github.com/jeromegamez/firebase-php-examples .
 
 **********
 User Guide

@@ -17,6 +17,9 @@ If you are interested in using the PHP Admin SDK as a client for end-user access
 You can find the full documentation at
 [firebase-php.readthedocs.io](https://firebase-php.readthedocs.io/).
 
+A ready-to-go repository with usage examples can be found at 
+https://github.com/jeromegamez/firebase-php-examples
+
 ## Feature matrix
 
 | Feature | PHP | Node.js | Java | Python | Go |
