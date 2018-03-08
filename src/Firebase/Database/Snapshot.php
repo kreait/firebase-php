@@ -2,7 +2,7 @@
 
 namespace Kreait\Firebase\Database;
 
-use JmesPath;
+use function JmesPath\search;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
 /**
@@ -87,7 +87,7 @@ class Snapshot
         $path = trim($path, '/');
         $expression = str_replace('/', '.', $path);
 
-        $childValue = JmesPath\search($expression, $this->value);
+        $childValue = search($expression, $this->value);
 
         return new self($this->reference->getChild($path), $childValue);
     }
@@ -120,7 +120,7 @@ class Snapshot
         $path = trim($path, '/');
         $expression = str_replace('/', '.', $path);
 
-        return null !== JmesPath\search($expression, $this->value);
+        return null !== search($expression, $this->value);
     }
 
     /**
