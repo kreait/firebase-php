@@ -7,8 +7,8 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 [![Build Status](https://travis-ci.org/kreait/firebase-php.svg?branch=master)](https://travis-ci.org/kreait/firebase-php)
 [![GitHub license](https://img.shields.io/github/license/kreait/firebase-php.svg)](https://github.com/kreait/firebase-php/blob/master/LICENSE)
 [![Total Downloads](https://img.shields.io/packagist/dt/kreait/firebase-php.svg)]()
-[![Maintainability](https://api.codeclimate.com/v1/badges/577e2f8f5df7f4133675/maintainability)](https://codeclimate.com/github/kreait/firebase-php/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/577e2f8f5df7f4133675/test_coverage)](https://codeclimate.com/github/kreait/firebase-php/test_coverage)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
 
 If you are interested in using the PHP Admin SDK as a client for end-user access (for example, in a web application), as opposed to admin access from a privileged environment (like a server), you should instead follow the [instructions for setting up the client JavaScript SDK](https://firebase.google.com/docs/web/setup).
 

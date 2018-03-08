@@ -33,33 +33,11 @@ cache:
     - vendor
     - $HOME/.composer/cache
 
-before_install:
-  - if [ "$TRAVIS_SECURE_ENV_VARS" == "true" ]; then
-      openssl aes-256-cbc -K $encrypted_8bfcfbcad9c4_key -iv $encrypted_8bfcfbcad9c4_iv -in test_credentials.json.enc -out tests/_fixtures/test_credentials.json -d;
-    fi
+before_install: .travis/before_install.sh
 
-install:
-  - composer $COMPOSER_FLAGS $DEFAULT_COMPOSER_FLAGS update
+install: .travis/install.sh
 
-script:
-  - |
-    if [ UNIT_TESTS == 1 ]; then
-      vendor/bin/phpunit $PHPUNIT_FLAGS
-    fi
-
-    if [ STATIC_ANALYSIS == 1 ]; then
-      vendor/bin/phpstan analyse src -c phpstan.neon --level=6 --no-progress -vvv
-    fi
-
-    if [ CODE_COVERAGE == 1 ]; then
-      curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-      chmod +x ./cc-test-reporter
-      ./cc-test-reporter before-build
-
-      vendor/bin/phpunit --coverage-clover clover.xml
-
-      ./cc-test-reporter after-build -t clover --exit-code $?
-    fi
+script: .travis/build.sh
 
 notifications:
   email:
