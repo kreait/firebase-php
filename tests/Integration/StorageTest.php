@@ -41,19 +41,19 @@ class StorageTest extends IntegrationTestCase
 
     public function testGetFilesystem()
     {
-        $this->assertInstanceOf(FilesystemInterface::class, $first = $this->storage->getFileystem());
-        $this->assertSame($first, $this->storage->getFileystem());
+        $this->assertInstanceOf(FilesystemInterface::class, $first = $this->storage->getFilesystem());
+        $this->assertSame($first, $this->storage->getFilesystem());
     }
 
     public function testGetCustomFilesystem()
     {
-        $this->assertInstanceOf(FilesystemInterface::class, $first = $this->storage->getFileystem('custom'));
-        $this->assertSame($first, $this->storage->getFileystem('custom'));
+        $this->assertInstanceOf(FilesystemInterface::class, $first = $this->storage->getFilesystem('custom'));
+        $this->assertSame($first, $this->storage->getFilesystem('custom'));
     }
 
     public function testWriteFileOnFilesystem()
     {
-        $fs = $this->storage->getFileystem();
+        $fs = $this->storage->getFilesystem();
         $path = 'tests/'.uniqid(__METHOD__, true);
         $contents = random_bytes(1);
 

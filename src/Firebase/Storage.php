@@ -54,7 +54,7 @@ class Storage
         return $this->buckets[$name];
     }
 
-    public function getFileystem(string $bucketName = null): FilesystemInterface
+    public function getFilesystem(string $bucketName = null): FilesystemInterface
     {
         $bucket = $this->getBucket($bucketName);
 

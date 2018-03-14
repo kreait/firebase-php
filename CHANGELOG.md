@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bugfix
+
+- Renamed method with typo `Storage::getFileystem()` to the correct `Storage::getFilesystem()` 
+  ([#182](https://github.com/kreait/firebase-php/issues/182))
+
 ## 4.2.0 - 2018-03-08
 
 ### New features
