@@ -56,7 +56,7 @@ class CreateUserTest extends TestCase
             ],
             'no_email_but_verification_flag' => [
                 $given + ['emailVerified' => true],
-                $expected,
+                $expected + ['emailVerified' => true],
             ],
             'disabled_1' => [
                 $given + ['disabled' => true],

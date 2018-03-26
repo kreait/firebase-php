@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bugfix
+
+- Fixed setting email verification flags ([#183](https://github.com/kreait/firebase-php/issues/183)) 
+
 ## 4.2.1 - 2018-03-14
 
 ### Bugfix
