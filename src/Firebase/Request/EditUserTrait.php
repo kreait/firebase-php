@@ -86,7 +86,7 @@ trait EditUserTrait
                 case 'emailverified':
                     if ($value) {
                         $request = $request->markEmailAsVerified();
-                    } else {
+                    } elseif (false === $value) {
                         $request = $request->markEmailAsUnverified();
                     }
                     break;
@@ -253,10 +253,6 @@ trait EditUserTrait
         ], function ($value) {
             return null !== $value;
         });
-
-        if (array_key_exists('emailVerified', $data) && !array_key_exists('email', $data)) {
-            unset($data['emailVerified']);
-        }
 
         return $data;
     }

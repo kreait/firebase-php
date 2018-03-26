@@ -85,6 +85,18 @@ class UpdateUserTest extends TestCase
                 $given + ['deleteAttributes' => ['displayname']],
                 $expected + ['deleteAttribute' => [UpdateUser::DISPLAY_NAME]],
             ],
+            [
+                $given + ['emailVerified' => true],
+                $expected + ['emailVerified' => true],
+            ],
+            [
+                $given + ['emailVerified' => false],
+                $expected + ['emailVerified' => false],
+            ],
+            [
+                $given + ['emailVerified' => null],
+                $expected,
+            ],
         ];
     }
 }
