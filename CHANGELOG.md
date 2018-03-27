@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+- Handle non-existing users consistently ([#186](https://github.com/kreait/firebase-php/issues/186))
+
 ## 4.2.2 - 2018-03-27
 
 ### Bugfix

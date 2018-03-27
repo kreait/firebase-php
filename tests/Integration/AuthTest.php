@@ -7,7 +7,7 @@ namespace Kreait\Firebase\Tests\Integration;
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
-use Kreait\Firebase\Exception\UserNotFound;
+use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Kreait\Firebase\Util\JSON;
@@ -325,5 +325,15 @@ class AuthTest extends IntegrationTestCase
         } finally {
             $this->auth->deleteUser($user->uid);
         }
+    }
+
+    public function testDeleteNonExistingUser()
+    {
+        $user = $this->auth->createUser([]);
+
+        $this->auth->deleteUser($user->uid);
+
+        $this->expectException(UserNotFound::class);
+        $this->auth->deleteUser($user->uid);
     }
 }

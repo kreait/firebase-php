@@ -8,8 +8,8 @@ use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
+use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\Exception\UserNotFound;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\ClearTextPassword;
@@ -56,7 +56,7 @@ class Auth
         $data = JSON::decode((string) $response->getBody(), true);
 
         if (!array_key_exists('users', $data) || !\count($data['users'])) {
-            throw new UserNotFound('No user with uid "'.$uid.'" found.');
+            throw UserNotFound::withCustomMessage('No user with uid "'.$uid.'" found.');
         }
 
         return UserRecord::fromResponseData($data['users'][0]);
@@ -154,7 +154,7 @@ class Auth
         $data = JSON::decode((string) $response->getBody(), true);
 
         if (!array_key_exists('users', $data) || !\count($data['users'])) {
-            throw new UserNotFound('No user with email "'.$email.'" found.');
+            throw UserNotFound::withCustomMessage('No user with email "'.$email.'" found.');
         }
 
         return UserRecord::fromResponseData($data['users'][0]);
@@ -169,7 +169,7 @@ class Auth
         $data = JSON::decode((string) $response->getBody(), true);
 
         if (!array_key_exists('users', $data) || !\count($data['users'])) {
-            throw new UserNotFound('No user with phone number "'.$phoneNumber.'" found.');
+            throw UserNotFound::withCustomMessage('No user with phone number "'.$phoneNumber.'" found.');
         }
 
         return UserRecord::fromResponseData($data['users'][0]);
@@ -202,7 +202,11 @@ class Auth
 
     public function deleteUser(string $uid)
     {
-        $this->client->deleteUser($uid);
+        try {
+            $this->client->deleteUser($uid);
+        } catch (UserNotFound $e) {
+            throw UserNotFound::withCustomMessage('No user with uid "'.$uid.'" found.');
+        }
     }
 
     /**
