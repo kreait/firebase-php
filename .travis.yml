@@ -2,29 +2,29 @@ language: php
 
 env:
   global:
-    - UNIT_TESTS=1
+    - UNIT_TESTS=0
     - STATIC_ANALYSIS=0
     - INTEGRATION_TESTS=0
     - CODE_COVERAGE=0
-    - DEFAULT_COMPOSER_FLAGS='--profile --ansi --prefer-dist --no-interaction --optimize-autoloader --no-suggest --no-progress'
-    - PHPUNIT_FLAGS='--testsuite unit'
-    - CC_TEST_REPORTER_ID=6e569def80067b8098353f7391c0c478f024666d7227ce7b89b2a7112805d2bd
 
 matrix:
   fast_finish: true
   include:
     - php: 7.0
+      env: UNIT_TESTS=1
     - php: 7.1
+      env: UNIT_TESTS=1 COMPOSER_FLAGS=--ignore-platform-reqs
     - php: 7.2
+      env: UNIT_TESTS=1 COMPOSER_FLAGS=--ignore-platform-reqs
     - php: 7.2
-      env: STATIC_ANALYSIS=1
+      env: STATIC_ANALYSIS=1 COMPOSER_FLAGS=--ignore-platform-reqs
     - php: 7.2
-      env: PHPUNIT_FLAGS='--testsuite integration'
+      env: INTEGRATION_TESTS=1 COMPOSER_FLAGS=--ignore-platform-reqs
     - php: 7.2
-      env: CODE_COVERAGE=1
+      env: CODE_COVERAGE=1 COMPOSER_FLAGS=--ignore-platform-reqs
   allow_failures:
     - php: 7.2
-      env: CODE_COVERAGE=1
+      env: CODE_COVERAGE=1 COMPOSER_FLAGS=--ignore-platform-reqs
 
 sudo: false
 
