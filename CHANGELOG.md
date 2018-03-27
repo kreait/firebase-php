@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.2.2 - 2018-03-27
 
 ### Bugfix
 
