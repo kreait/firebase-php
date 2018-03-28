@@ -39,4 +39,5 @@ User Guide
     authentication
     user-management
     storage
+    remote-config
     troubleshooting

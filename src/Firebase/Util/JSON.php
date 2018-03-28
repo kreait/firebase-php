@@ -76,4 +76,9 @@ class JSON
             return false;
         }
     }
+
+    public static function prettyPrint($value): string
+    {
+        return self::encode($value, JSON_PRETTY_PRINT);
+    }
 }

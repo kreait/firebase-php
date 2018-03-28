@@ -28,6 +28,7 @@ https://github.com/jeromegamez/firebase-php-examples
 | [ID Token Verification](https://firebase.google.com/docs/auth/admin/verify-id-tokens)	| ✅ | ✅ | ✅ | ✅ | ✅ |
 | [Realtime Database API](https://firebase.google.com/docs/database/admin/start) | ✅* | ✅ | ✅ | ✅* | ✅ |
 | [User Management API](https://firebase.google.com/docs/auth/admin/manage-users) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [Remote Config](https://firebase.google.com/docs/remote-config/) | ✅ | | | | |
 | [Cloud Messaging API](https://firebase.google.com/docs/cloud-messaging/admin/) |  | ✅ | ✅ | ✅ | ✅ |				
 | [Cloud Storage API](https://firebase.google.com/docs/storage/admin/start) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [Cloud Firestore API](https://firebase.google.com/docs/firestore/) | | ✅ | ✅ | ✅ | ✅ |
