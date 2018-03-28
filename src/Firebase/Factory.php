@@ -97,8 +97,9 @@ class Factory
         $database = $this->createDatabase();
         $auth = $this->createAuth();
         $storage = $this->createStorage();
+        $remoteConfig = $this->createRemoteConfig();
 
-        return new Firebase($database, $auth, $storage);
+        return new Firebase($database, $auth, $storage, $remoteConfig);
     }
 
     private function getServiceAccountDiscoverer(): Discoverer
@@ -174,6 +175,15 @@ class Factory
         return new Database($this->getDatabaseUri(), new Database\ApiClient($http));
     }
 
+    private function createRemoteConfig()
+    {
+        $http = $this->createApiClient($this->getServiceAccount(), [
+            'base_uri' => 'https://firebaseremoteconfig.googleapis.com/v1/projects/'.$this->getServiceAccount()->getProjectId().'/remoteConfig',
+        ]);
+
+        return new RemoteConfig(new RemoteConfig\ApiClient($http));
+    }
+
     private function createApiClient(ServiceAccount $serviceAccount, array $config = []): Client
     {
         $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware($serviceAccount);
@@ -194,6 +204,7 @@ class Factory
         $scopes = [
             'https://www.googleapis.com/auth/cloud-platform',
             'https://www.googleapis.com/auth/firebase',
+            'https://www.googleapis.com/auth/firebase.remoteconfig',
             'https://www.googleapis.com/auth/userinfo.email',
         ];
 
