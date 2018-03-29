@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+### New features
+
+* Added support for the Firebase Remote Config ([Documentation](https://firebase-php.readthedocs.io/en/latest/remote-config.html))
+
 ## 4.2.3 - 2018-03-27
 
 - Handle non-existing users consistently ([#186](https://github.com/kreait/firebase-php/issues/186))

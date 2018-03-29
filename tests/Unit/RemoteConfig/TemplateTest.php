@@ -7,7 +7,6 @@ namespace Kreait\Firebase\Tests\Unit\RemoteConfig;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\RemoteConfig\ConditionalValue;
 use Kreait\Firebase\RemoteConfig\Parameter;
-use Kreait\Firebase\RemoteConfig\TagColor;
 use Kreait\Firebase\RemoteConfig\Template;
 use Kreait\Firebase\Tests\UnitTestCase;
 
