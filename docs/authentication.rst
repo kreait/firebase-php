@@ -89,8 +89,8 @@ with the identifier you used to represent your service in your Security Rules.
 
     $firebase = (new Factory)
         ->withServiceAccount($serviceAccount)
-        ->asUser('my-service-worker')
-        ->create();
+        ->create()
+        ->asUser('my-service-worker');
 
 
 ***************************
