@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Auth;
 
 use DateTimeImmutable;
 use Kreait\Firebase\Util\DT;
+use Kreait\Firebase\Util\JSON;
 
 class UserRecord implements \JsonSerializable
 {
@@ -62,7 +63,7 @@ class UserRecord implements \JsonSerializable
     /**
      * @var array
      */
-    public $customClaims;
+    public $customAttributes;
 
     /**
      * @var DateTimeImmutable|null
@@ -89,6 +90,10 @@ class UserRecord implements \JsonSerializable
 
         if ($data['validSince'] ?? null) {
             $record->tokensValidAfterTime = DT::toUTCDateTimeImmutable($data['validSince']);
+        }
+
+        if ($customAttributes = $data['customAttributes'] ?? '{}') {
+            $record->customAttributes = JSON::decode($customAttributes, true);
         }
 
         return $record;

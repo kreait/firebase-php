@@ -8,6 +8,7 @@ use Kreait\Firebase\Auth;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Request\UpdateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use Kreait\Firebase\Util\JSON;
 
 class UpdateUserTest extends IntegrationTestCase
 {
@@ -104,5 +105,33 @@ class UpdateUserTest extends IntegrationTestCase
         $this->assertFalse($updatedUser->emailVerified);
 
         $this->auth->deleteUser($updatedUser->uid);
+    }
+
+    public function testUpdateUserWithCustomAttributes()
+    {
+        $request = CreateUser::new()
+            ->withUid($uid = bin2hex(random_bytes(5)));
+
+        $this->auth->createUser($request);
+
+        $request = UpdateUser::new()
+            ->withCustomAttributes($claims = [
+                'admin' => true,
+                'groupId' => '1234',
+            ]);
+
+        $user = $this->auth->updateUser($uid, $request);
+        $this->assertEquals($claims, $user->customAttributes);
+
+        // Make sure the custom claims are available in the user's ID token
+        $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
+            $this->auth->createCustomToken($user->uid)
+        );
+        $idToken = $this->auth->verifyIdToken(JSON::decode($idTokenResponse->getBody()->getContents(), true)['idToken']);
+
+        $this->assertTrue($idToken->getClaim('admin'));
+        $this->assertSame('1234', $idToken->getClaim('groupId'));
+
+        $this->auth->deleteUser($uid);
     }
 }

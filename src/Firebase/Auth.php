@@ -228,6 +228,11 @@ class Auth
         $this->client->sendPasswordResetEmail($email);
     }
 
+    public function setCustomUserAttributes(string $uid, array $attributes): UserRecord
+    {
+        return $this->updateUser($uid, Request\UpdateUser::new()->withCustomAttributes($attributes));
+    }
+
     public function createCustomToken($uid, array $claims = []): Token
     {
         return $this->tokenGenerator->createCustomToken($uid, $claims);

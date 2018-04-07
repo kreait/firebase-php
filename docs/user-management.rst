@@ -175,6 +175,16 @@ Updating a user works exactly as creating a new user, except that the ``uid`` pr
 
     $updatedUser = $auth->updateUser($request);
 
+In addition to the properties of a create request, the following properties can be provided:
+
+====================== ======= ===========
+Property               Type    Description
+====================== ======= ===========
+``deletePhotoUrl``     boolean Whether or not to delete the user's photo.
+``deleteDisplayName``  boolean Whether or not to delete the user's display name.
+``customAttributes``   array   A list of custom attributes which will be available in a User's ID token.
+====================== ======= ===========
+
 ************************
 Change a user's password
 ************************
@@ -216,6 +226,23 @@ Enable a user
 
     $updatedUser = $auth->enableUser($uid);
 
+*********************
+Set custom attributes
+*********************
+
+.. code-block:: php
+
+    $uid = 'some-uid';
+    $customAttributes = [
+        'admin' => true,
+        'groupId' => '1234'
+    ];
+
+    $updatedUser = $auth->setCustomUserAttributes($uid, $customAttributes);
+
+.. note::
+    Learn more about custom attributes/claims in the official documentation:
+    `Control Access with Custom Claims and Security Rules <https://firebase.google.com/docs/auth/admin/custom-claims>`_
 
 *************
 Delete a user

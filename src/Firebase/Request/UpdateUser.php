@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Request;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Request;
+use Kreait\Firebase\Util\JSON;
 
 final class UpdateUser implements Request
 {
@@ -18,6 +19,11 @@ final class UpdateUser implements Request
      * @var array
      */
     private $attributesToDelete = [];
+
+    /**
+     * @var array|null
+     */
+    private $customAttributes;
 
     private function __construct()
     {
@@ -62,6 +68,10 @@ final class UpdateUser implements Request
                         }
                     }
                     break;
+                case 'customattributes':
+                case 'customclaims':
+                    $request = $request->withCustomAttributes($value);
+                    break;
             }
         }
 
@@ -86,6 +96,14 @@ final class UpdateUser implements Request
         return $request;
     }
 
+    public function withCustomAttributes(array $customAttributes): self
+    {
+        $request = clone $this;
+        $request->customAttributes = $customAttributes;
+
+        return $request;
+    }
+
     public function jsonSerialize()
     {
         if (!$this->hasUid()) {
@@ -93,6 +111,10 @@ final class UpdateUser implements Request
         }
 
         $data = $this->prepareJsonSerialize();
+
+        if ($this->customAttributes) {
+            $data['customAttributes'] = JSON::encode($this->customAttributes);
+        }
 
         if (\count($this->attributesToDelete)) {
             $data['deleteAttribute'] = array_unique($this->attributesToDelete);

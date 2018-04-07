@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### New Features
+
+* Added support for setting custom attributes/claims on users
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#set-custom-attributes),
+  [Official Firebase documentation](https://firebase.google.com/docs/auth/admin/custom-claims))
+  * `Kreait\Firebase\Auth::setCustomUserAttributes($uid, array $attributes)`
+
 ### Bugfixes
 
 * Removed PHP 7.0 incompatible `void` return types

@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Tests\Unit\Request;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Request\UpdateUser;
+use Kreait\Firebase\Util\JSON;
 use PHPUnit\Framework\TestCase;
 
 class UpdateUserTest extends TestCase
@@ -96,6 +97,14 @@ class UpdateUserTest extends TestCase
             [
                 $given + ['emailVerified' => null],
                 $expected,
+            ],
+            [
+                $given + ['customClaims' => $claims = ['admin' => true, 'groupId' => '1234']],
+                $expected + ['customAttributes' => JSON::encode($claims)],
+            ],
+            [
+                $given + ['customAttributes' => $claims = ['admin' => true, 'groupId' => '1234']],
+                $expected + ['customAttributes' => JSON::encode($claims)],
             ],
         ];
     }

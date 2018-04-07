@@ -336,4 +336,15 @@ class AuthTest extends IntegrationTestCase
         $this->expectException(UserNotFound::class);
         $this->auth->deleteUser($user->uid);
     }
+
+    public function testSetCustomUserAttributes()
+    {
+        $user = $this->auth->createUser([]);
+
+        $updatedUser = $this->auth->setCustomUserAttributes($user->uid, $claims = ['admin' => true, 'groupId' => '1234']);
+
+        $this->assertEquals($claims, $updatedUser->customAttributes);
+
+        $this->auth->deleteUser($user->uid);
+    }
 }
