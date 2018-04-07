@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased
+
+### Changes
+
+* Empty properties in a ProviderData object are now filtered out 
+  (e.g. the "phone" provider never includes a photo or an email)
+
 ## 4.4.0 - 2018-04-07
 
 ### New Features

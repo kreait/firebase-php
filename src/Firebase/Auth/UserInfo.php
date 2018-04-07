@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
-class UserInfo
+class UserInfo implements \JsonSerializable
 {
     public $uid;
     public $displayName;
@@ -24,5 +24,15 @@ class UserInfo
         $info->phoneNumber = $data['phoneNumber'] ?? null;
 
         return $info;
+    }
+
+    public function toArray(): array
+    {
+        return array_filter(get_object_vars($this));
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 }
