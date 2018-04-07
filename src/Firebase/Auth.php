@@ -212,7 +212,7 @@ class Auth
     /**
      * @param string $uid
      */
-    public function sendEmailVerification(string $uid): void
+    public function sendEmailVerification(string $uid)
     {
         $response = $this->client->exchangeCustomTokenForIdAndRefreshToken(
             $this->createCustomToken($uid)
@@ -298,7 +298,7 @@ class Auth
      *
      * @param string $uid the user whose tokens are to be revoked
      */
-    public function revokeRefreshTokens(string $uid): void
+    public function revokeRefreshTokens(string $uid)
     {
         $this->client->revokeRefreshTokens($uid);
     }

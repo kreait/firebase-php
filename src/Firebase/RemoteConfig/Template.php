@@ -82,7 +82,7 @@ class Template implements \JsonSerializable
         return $template;
     }
 
-    private function assertThatAllConditionalValuesAreValid(Parameter $parameter): void
+    private function assertThatAllConditionalValuesAreValid(Parameter $parameter)
     {
         $allValid = array_reduce($parameter->conditionalValues(), function (bool $result, ConditionalValue $conditionalValue) {
             return $result ?: $this->conditionExists($conditionalValue->conditionName());

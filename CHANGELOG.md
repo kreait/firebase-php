@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bugfixes
+
+* Removed PHP 7.0 incompatible `void` return types
+
 ## 4.3.0 - 2018-03-29
 
 ### New features
