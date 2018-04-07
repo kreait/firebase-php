@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.4.0 - 2018-04-07
 
 ### New Features
 
