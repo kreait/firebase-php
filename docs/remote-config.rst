@@ -44,7 +44,7 @@ Get the Remote Config
 
 .. code-block:: php
 
-    $template = $remoteConfig->getTemplate();
+    $template = $remoteConfig->get();
     echo json_encode($template, JSON_PRETTY_PRINT);
 
 **************************
@@ -114,4 +114,4 @@ Publish the Remote Config
 
 .. code-block:: php
 
-    $remoteConfig->publishTemplate($template);
+    $remoteConfig->publish($template);
