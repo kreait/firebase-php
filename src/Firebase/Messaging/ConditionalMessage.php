@@ -25,37 +25,43 @@ class ConditionalMessage implements Message
         return new self($condition);
     }
 
+    /**
+     * @param array $data
+     *
+     * @throws InvalidArgumentException
+     *
+     * @return ConditionalMessage
+     */
     public static function fromArray(array $data): self
     {
         if (!array_key_exists('condition', $data)) {
             throw new InvalidArgumentException('Missing field "condition"');
         }
 
-        try {
-            $message = new self($data['condition']);
+        $message = new self($data['condition']);
 
-            if ($data['data'] ?? null) {
-                $message = $message->withData($data['data']);
-            }
+        if ($data['data'] ?? null) {
+            $message = $message->withData($data['data']);
+        }
 
-            if ($data['notification']) {
-                $message = $message->withNotification(Notification::fromArray($data['notification']));
-            }
-        } catch (\Throwable $e) {
-            throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+        if ($data['notification'] ?? null) {
+            $message = $message->withNotification(Notification::fromArray($data['notification']));
         }
 
         return $message;
     }
 
+    public function condition(): string
+    {
+        return $this->condition;
+    }
+
     public function jsonSerialize()
     {
-        return [
-            'message' => array_filter([
-                'condition' => $this->condition,
-                'data' => $this->data,
-                'notification' => $this->notification,
-            ]),
-        ];
+        return array_filter([
+            'condition' => $this->condition,
+            'data' => $this->data,
+            'notification' => $this->notification,
+        ]);
     }
 }

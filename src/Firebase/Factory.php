@@ -198,24 +198,6 @@ class Factory
         return new Messaging(new Messaging\ApiClient($http), new MessageFactory());
     }
 
-    public function createCustomApiClient(array $additionalScopes = [], array $clientConfig = []): Client
-    {
-        $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware(
-            $serviceAccount = $this->getServiceAccount(),
-            $additionalScopes
-        );
-
-        $stack = HandlerStack::create();
-        $stack->push($googleAuthTokenMiddleware, 'auth_service_account');
-
-        $config = array_merge($clientConfig, [
-            'handler' => $stack,
-            'auth' => 'google_auth',
-        ]);
-
-        return new Client($config);
-    }
-
     private function createApiClient(ServiceAccount $serviceAccount, array $config = []): Client
     {
         $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware($serviceAccount);

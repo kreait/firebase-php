@@ -4,7 +4,7 @@ namespace Kreait\Firebase\Messaging;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
-use Kreait\Firebase\Util\JSON;
+use Kreait\Firebase\Exception\MessagingException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
@@ -24,17 +24,23 @@ class ApiClient
     {
         // echo JSON::prettyPrint($message); exit;
         return $this->request('POST', 'messages:send', [
-            'json' => $message,
+            'json' => ['message' => $message->jsonSerialize()],
         ]);
     }
 
-    private function request($method, $endpoint, array $options = [])
+    private function request($method, $endpoint, array $options = []): ResponseInterface
     {
         /** @var UriInterface $uri */
         $uri = $this->client->getConfig('base_uri');
         $path = rtrim($uri->getPath(), '/').'/'.ltrim($endpoint, '/');
         $uri = $uri->withPath($path);
 
-        return $this->client->request($method, $uri, $options);
+        try {
+            return $this->client->request($method, $uri, $options);
+        } catch (RequestException $e) {
+            throw new MessagingException($e->getMessage(), $e->getCode(), $e);
+        } catch (\Throwable $e) {
+            throw new MessagingException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 }

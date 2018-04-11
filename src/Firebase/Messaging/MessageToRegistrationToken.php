@@ -6,23 +6,23 @@ namespace Kreait\Firebase\Messaging;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
-class MessageToTopic implements Message
+class MessageToRegistrationToken implements Message
 {
     use MessageTrait;
 
     /**
      * @var string
      */
-    private $topic;
+    private $token;
 
-    private function __construct(string $topic)
+    private function __construct(string $token)
     {
-        $this->topic = $topic;
+        $this->token = $token;
     }
 
-    public static function create(string $topic): self
+    public static function create(string $token): self
     {
-        return new self($topic);
+        return new self($token);
     }
 
     /**
@@ -30,15 +30,15 @@ class MessageToTopic implements Message
      *
      * @throws InvalidArgumentException
      *
-     * @return MessageToTopic
+     * @return MessageToRegistrationToken
      */
     public static function fromArray(array $data): self
     {
-        if (!array_key_exists('topic', $data)) {
-            throw new InvalidArgumentException('Missing field "topic"');
+        if (!array_key_exists('token', $data)) {
+            throw new InvalidArgumentException('Missing field "token"');
         }
 
-        $message = self::create($data['topic']);
+        $message = self::create($data['token']);
 
         if ($data['data'] ?? null) {
             $message = $message->withData($data['data']);
@@ -51,15 +51,15 @@ class MessageToTopic implements Message
         return $message;
     }
 
-    public function topic(): string
+    public function token(): string
     {
-        return $this->topic;
+        return $this->token;
     }
 
     public function jsonSerialize()
     {
         return array_filter([
-            'topic' => $this->topic,
+            'token' => $this->token,
             'data' => $this->data,
             'notification' => $this->notification,
         ]);

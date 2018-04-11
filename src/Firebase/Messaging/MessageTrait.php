@@ -17,6 +17,22 @@ trait MessageTrait
     protected $notification;
 
     /**
+     * @return array|null
+     */
+    public function data()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @return Notification|null
+     */
+    public function notification()
+    {
+        return $this->notification;
+    }
+
+    /**
      * @param array $data
      *
      * @return static

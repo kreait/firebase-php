@@ -10,16 +10,12 @@ class MessageFactory
 {
     public function fromArray(array $data): Message
     {
-        if (\array_key_exists('message', $data) && \count($data) === 1) {
-            $data = $data['message'];
-        }
-
         if (array_key_exists('topic', $data)) {
             return MessageToTopic::fromArray($data);
         }
 
         if (array_key_exists('token', $data)) {
-            return MessageToToken::fromArray($data);
+            return MessageToRegistrationToken::fromArray($data);
         }
 
         if (array_key_exists('condition', $data)) {
