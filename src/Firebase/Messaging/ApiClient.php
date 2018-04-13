@@ -38,7 +38,7 @@ class ApiClient
         try {
             return $this->client->request($method, $uri, $options);
         } catch (RequestException $e) {
-            throw new MessagingException($e->getMessage(), $e->getCode(), $e);
+            throw MessagingException::fromRequestException($e);
         } catch (\Throwable $e) {
             throw new MessagingException($e->getMessage(), $e->getCode(), $e);
         }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration\Messaging;
 
+use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\MessageToRegistrationToken;
 use Kreait\Firebase\Tests\Integration\MessagingTestCase;
@@ -23,7 +24,7 @@ class MessageToRegistrationTokenTest extends MessagingTestCase
 
     public function testSendMessageToUnknownRegistrationToken()
     {
-        $this->expectException(MessagingException::class);
+        $this->expectException(InvalidArgument::class);
 
         $this->messaging->send(MessageToRegistrationToken::create('unknown-token'));
     }
