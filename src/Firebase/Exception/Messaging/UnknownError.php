@@ -8,5 +8,4 @@ use Kreait\Firebase\Exception\MessagingException;
 
 class UnknownError extends MessagingException
 {
-
 }

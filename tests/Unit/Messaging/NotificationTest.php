@@ -41,7 +41,7 @@ class NotificationTest extends UnitTestCase
     {
         $notification = Notification::fromArray($array = [
             'title' => $title = 'My Title',
-            'body' => $body = 'My Body'
+            'body' => $body = 'My Body',
         ]);
 
         $this->assertSame($title, $notification->title());

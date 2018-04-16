@@ -13,7 +13,6 @@ use Kreait\Firebase\Exception\RemoteConfig\PermissionDenied;
 use Kreait\Firebase\Exception\RemoteConfigException;
 use Kreait\Firebase\RemoteConfig\ApiClient;
 use Kreait\Firebase\Tests\UnitTestCase;
-use Psr\Http\Message\RequestInterface;
 
 class ApiClientTest extends UnitTestCase
 {
