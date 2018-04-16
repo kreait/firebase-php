@@ -11,6 +11,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use Kreait\Firebase;
 use Kreait\Firebase\Http\Middleware;
+use Kreait\Firebase\Messaging\MessageFactory;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Psr\Http\Message\UriInterface;
 use function GuzzleHttp\Psr7\uri_for;
@@ -98,8 +99,9 @@ class Factory
         $auth = $this->createAuth();
         $storage = $this->createStorage();
         $remoteConfig = $this->createRemoteConfig();
+        $messaging = $this->createMessaging();
 
-        return new Firebase($database, $auth, $storage, $remoteConfig);
+        return new Firebase($database, $auth, $storage, $remoteConfig, $messaging);
     }
 
     private function getServiceAccountDiscoverer(): Discoverer
@@ -175,13 +177,25 @@ class Factory
         return new Database($this->getDatabaseUri(), new Database\ApiClient($http));
     }
 
-    private function createRemoteConfig()
+    private function createRemoteConfig(): RemoteConfig
     {
         $http = $this->createApiClient($this->getServiceAccount(), [
             'base_uri' => 'https://firebaseremoteconfig.googleapis.com/v1/projects/'.$this->getServiceAccount()->getProjectId().'/remoteConfig',
         ]);
 
         return new RemoteConfig(new RemoteConfig\ApiClient($http));
+    }
+
+    private function createMessaging(): Messaging
+    {
+        $serviceAccount = $this->getServiceAccount();
+        $projectId = $serviceAccount->getProjectId();
+
+        $http = $this->createApiClient($this->getServiceAccount(), [
+            'base_uri' => 'https://fcm.googleapis.com/v1/projects/'.$projectId,
+        ]);
+
+        return new Messaging(new Messaging\ApiClient($http), new MessageFactory());
     }
 
     private function createApiClient(ServiceAccount $serviceAccount, array $config = []): Client
@@ -199,14 +213,15 @@ class Factory
         return new Client($config);
     }
 
-    private function createGoogleAuthTokenMiddleware(ServiceAccount $serviceAccount): AuthTokenMiddleware
+    private function createGoogleAuthTokenMiddleware(ServiceAccount $serviceAccount, array $additionalScopes = []): AuthTokenMiddleware
     {
         $scopes = [
             'https://www.googleapis.com/auth/cloud-platform',
             'https://www.googleapis.com/auth/firebase',
+            'https://www.googleapis.com/auth/firebase.messaging',
             'https://www.googleapis.com/auth/firebase.remoteconfig',
             'https://www.googleapis.com/auth/userinfo.email',
-        ];
+        ] + $additionalScopes;
 
         $credentials = [
             'client_email' => $serviceAccount->getClientEmail(),

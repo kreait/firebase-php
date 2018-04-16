@@ -4,6 +4,7 @@ namespace Kreait;
 
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Database;
+use Kreait\Firebase\Messaging;
 use Kreait\Firebase\RemoteConfig;
 use Kreait\Firebase\Storage;
 
@@ -29,12 +30,18 @@ class Firebase
      */
     private $remoteConfig;
 
-    public function __construct(Database $database, Auth $auth, Storage $storage, RemoteConfig $remoteConfig)
+    /**
+     * @var Messaging
+     */
+    private $messaging;
+
+    public function __construct(Database $database, Auth $auth, Storage $storage, RemoteConfig $remoteConfig, Messaging $messaging)
     {
         $this->database = $database;
         $this->auth = $auth;
         $this->storage = $storage;
         $this->remoteConfig = $remoteConfig;
+        $this->messaging = $messaging;
     }
 
     public function getDatabase(): Database
@@ -55,5 +62,10 @@ class Firebase
     public function getRemoteConfig(): RemoteConfig
     {
         return $this->remoteConfig;
+    }
+
+    public function getMessaging(): Messaging
+    {
+        return $this->messaging;
     }
 }

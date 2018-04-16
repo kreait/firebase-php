@@ -40,4 +40,5 @@ User Guide
     user-management
     storage
     remote-config
+    cloud-messaging
     troubleshooting

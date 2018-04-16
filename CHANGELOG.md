@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### New Features
+
+* Added support for Firebase Cloud Messaging ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html))
+
 ### Changes
 
 * Empty properties in a ProviderData object are now filtered out 

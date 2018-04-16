@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests;
 
 use Kreait\Firebase;
+use Kreait\Firebase\ServiceAccount;
 
 abstract class IntegrationTestCase extends FirebaseTestCase
 {
@@ -12,6 +13,11 @@ abstract class IntegrationTestCase extends FirebaseTestCase
      * @var Firebase
      */
     protected static $firebase;
+
+    /**
+     * @var ServiceAccount
+     */
+    protected static $serviceAccount;
 
     public static function setUpBeforeClass()
     {
@@ -22,7 +28,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         }
 
         try {
-            $serviceAccount = Firebase\ServiceAccount::fromJsonFile($credentialsPath);
+            self::$serviceAccount = ServiceAccount::fromJsonFile($credentialsPath);
         } catch (\Throwable $e) {
             self::markTestSkipped('The integration tests require a credentials file at "'.$credentialsPath.'"."');
 
@@ -30,7 +36,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         }
 
         self::$firebase = (new Firebase\Factory())
-            ->withServiceAccount($serviceAccount)
+            ->withServiceAccount(self::$serviceAccount)
             ->create();
     }
 }
