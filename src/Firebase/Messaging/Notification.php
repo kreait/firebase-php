@@ -18,10 +18,15 @@ class Notification implements \JsonSerializable
      */
     private $body;
 
-    public function __construct(string $title = null, string $body = null)
+    private function __construct(string $title = null, string $body = null)
     {
         $this->title = $title;
         $this->body = $body;
+    }
+
+    public static function create(string $title = null, string $body = null): self
+    {
+        return new self($title, $body);
     }
 
     public static function fromArray(array $data): self
@@ -36,11 +41,45 @@ class Notification implements \JsonSerializable
         }
     }
 
+    public function withTitle(string $title): self
+    {
+        $notification = clone $this;
+        $notification->title = $title;
+
+        return $notification;
+    }
+
+    public function withBody(string $body): self
+    {
+        $notification = clone $this;
+        $notification->body = $body;
+
+        return $notification;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function title()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function body()
+    {
+        return $this->body;
+    }
+
     public function jsonSerialize()
     {
         return array_filter([
             'title' => $this->title,
             'body' => $this->body,
-        ]);
+        ], function ($value) {
+            return null !== $value;
+        });
     }
 }

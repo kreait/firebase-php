@@ -10,6 +10,45 @@ use Kreait\Firebase\Tests\UnitTestCase;
 
 class NotificationTest extends UnitTestCase
 {
+    public function testCreateEmptyNotification()
+    {
+        $notification = Notification::create();
+
+        $this->assertNull($notification->title());
+        $this->assertNull($notification->body());
+        $this->assertEmpty($notification->jsonSerialize());
+    }
+
+    public function testCreateWithEmptyStrings()
+    {
+        $notification = Notification::create('', '');
+        $this->assertSame('', $notification->title());
+        $this->assertSame('', $notification->body());
+        $this->assertEquals(['title' => '', 'body' => ''], $notification->jsonSerialize());
+    }
+
+    public function testCreateWithValidFields()
+    {
+        $notification = Notification::create()
+            ->withTitle($title = 'My Title')
+            ->withBody($body = 'My Body');
+
+        $this->assertSame($title, $notification->title());
+        $this->assertSame($body, $notification->body());
+    }
+
+    public function testCreateFromValidArray()
+    {
+        $notification = Notification::fromArray($array = [
+            'title' => $title = 'My Title',
+            'body' => $body = 'My Body'
+        ]);
+
+        $this->assertSame($title, $notification->title());
+        $this->assertSame($body, $notification->body());
+        $this->assertEquals($array, $notification->jsonSerialize());
+    }
+
     /**
      * @param array $data
      * @dataProvider invalidDataProvider
