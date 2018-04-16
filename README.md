@@ -17,8 +17,9 @@ If you are interested in using the PHP Admin SDK as a client for end-user access
 You can find the full documentation at
 [firebase-php.readthedocs.io](https://firebase-php.readthedocs.io/).
 
-A ready-to-go repository with usage examples can be found at 
-https://github.com/jeromegamez/firebase-php-examples
+An example project can be found at https://github.com/jeromegamez/firebase-php-examples .
+
+
 
 ## Feature matrix
 
@@ -29,56 +30,12 @@ https://github.com/jeromegamez/firebase-php-examples
 | [Realtime Database API](https://firebase.google.com/docs/database/admin/start) | ✅* | ✅ | ✅ | ✅* | ✅ |
 | [User Management API](https://firebase.google.com/docs/auth/admin/manage-users) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [Remote Config](https://firebase.google.com/docs/remote-config/) | ✅ | | | | |
-| [Cloud Messaging API](https://firebase.google.com/docs/cloud-messaging/admin/) |  | ✅ | ✅ | ✅ | ✅ |				
+| [Cloud Messaging API](https://firebase.google.com/docs/cloud-messaging/admin/) | ✅* | ✅ | ✅ | ✅ | ✅ |				
 | [Cloud Storage API](https://firebase.google.com/docs/storage/admin/start) | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [Cloud Firestore API](https://firebase.google.com/docs/firestore/) | | ✅ | ✅ | ✅ | ✅ |
 
-> Note: The Realtime Database API in PHP/Python Admin SDK currently does not support realtime event listeners. 
-This means there is no provision for adding event listeners to a database reference in order to automatically 
-receive realtime update notifications. Instead, in PHP/Python updates should be proactively fetched by explicitly 
-invoking read operations.
-
-### Usage example
-
-You can find more usage examples in the
-[tests directory](https://github.com/kreait/firebase-php/tree/master/tests).
-
-```php
-<?php
-
-require __DIR__.'/vendor/autoload.php';
-
-use Kreait\Firebase\Factory;
-use Kreait\Firebase\ServiceAccount;
-
-// This assumes that you have placed the Firebase credentials in the same directory
-// as this PHP file.
-$serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
-
-$firebase = (new Factory)
-    ->withServiceAccount($serviceAccount)
-    // The following line is optional if the project id in your credentials file
-    // is identical to the subdomain of your Firebase project. If you need it,
-    // make sure to replace the URL with the URL of your project.
-    ->withDatabaseUri('https://my-project.firebaseio.com')
-    ->create();
-
-$database = $firebase->getDatabase();
-
-$newPost = $database
-    ->getReference('blog/posts')
-    ->push([
-        'title' => 'Post title',
-        'body' => 'This should probably be longer.'
-    ]);
-
-$newPost->getKey(); // => -KVr5eu8gcTv7_AHb-3-
-$newPost->getUri(); // => https://my-project.firebaseio.com/blog/posts/-KVr5eu8gcTv7_AHb-3-
-
-$newPost->getChild('title')->set('Changed post title');
-$newPost->getValue(); // Fetches the data from the realtime database
-$newPost->remove();
-```
+> * The Realtime Database API currently does not support realtime event listeners.
+> * The Cloud Messaging API currently does not support sending messages tailored to different target platforms (Android, iOS and Web).
 
 ## Support
 

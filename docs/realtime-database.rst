@@ -2,6 +2,9 @@
 Realtime Database
 #################
 
+.. note::
+    The Realtime Database API currently does not support realtime event listeners.
+
 You can work with your Firebase application's Realtime Database by invoking the ``getDatabase()``
 method of your Firebase instance:
 
