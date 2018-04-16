@@ -38,7 +38,7 @@ be parsed to one of the supported message types.
 The Supported message types are:
 
 - A message to a given topic ``Kreait\Firebase\Messaging\MessageToTopic``
-- A conditional message to a topic ``Kreait\Firebase\Messaging\ConditionalMessage``
+- A conditional message ``Kreait\Firebase\Messaging\ConditionalMessage``
 - A message to a specific device ``Kreait\Firebase\Messaging\MessageToRegistrationToken``
 
 A message can contain:
