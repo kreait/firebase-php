@@ -12,12 +12,6 @@ Before you start, please read about Firebase Remote Config in the official docum
 
 - `Firebase Remote Config <https://firebase.google.com/docs/remote-config/>`_
 
-.. note::
-    The implementation in this library is in its very early stages and has been created at the
-    announcement day of the Remote Config REST API (see the
-    `Announcement post in the Firebase Blog <https://firebase.googleblog.com/2018/03/announcing-remote-config-rest-api.html>`_). It
-    currently only supports getting and setting the raw configuration, and will be extended over time.
-
 ****************
 Before you begin
 ****************
