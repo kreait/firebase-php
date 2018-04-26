@@ -62,6 +62,9 @@ class MessageToRegistrationToken implements Message
             'token' => $this->token,
             'data' => $this->data,
             'notification' => $this->notification,
+            'android' => $this->androidConfig,
+            'apns' => $this->apnsConfig,
+            'webpush' => $this->webPushConfig
         ]);
     }
 }

@@ -62,6 +62,9 @@ class ConditionalMessage implements Message
             'condition' => $this->condition,
             'data' => $this->data,
             'notification' => $this->notification,
+            'android' => $this->androidConfig,
+            'apns' => $this->apnsConfig,
+            'webpush' => $this->webPushConfig
         ]);
     }
 }
