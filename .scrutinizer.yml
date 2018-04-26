@@ -1,6 +1,0 @@
-checks:
-    php: true
-filter:
-    excluded_paths:
-        - tests/*
-        - docs/*
