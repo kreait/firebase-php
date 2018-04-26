@@ -8,11 +8,7 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 
 class WebPushConfig implements Config
 {
-    /**
-     * @var array
-     */
-    private $data;
-
+    use ConfigTrait;
 
     private function __construct(array $data)
     {
@@ -27,22 +23,6 @@ class WebPushConfig implements Config
         } catch (\Throwable $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
-    }
-
-    public function setData(array $data): self
-    {
-        $config = clone $config;
-        $config->data = $data;
-
-        return $config;
-    }
-
-    /**
-     * @return array
-     */
-    public function data(): array
-    {
-        return $this->data;
     }
 
     public function jsonSerialize()
