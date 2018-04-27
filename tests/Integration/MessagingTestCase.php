@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Messaging;
+use Kreait\Firebase\Messaging\MessageFactory;
 use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use Kreait\Firebase\Util\JSON;
 
 abstract class MessagingTestCase extends IntegrationTestCase
 {
@@ -16,27 +18,63 @@ abstract class MessagingTestCase extends IntegrationTestCase
     public $messaging;
 
     /**
-     * @var Notification
+     * @var MessageFactory
      */
-    public $notification;
+    public $messageFactory;
 
     /**
      * @var array
      */
-    public $data;
+    public $fullMessageData;
 
     protected function setUp()
     {
         $this->messaging = self::$firebase->getMessaging();
+        $this->messageFactory = new MessageFactory();
 
-        $this->notification = Notification::fromArray([
-            'title' => 'Notification title',
-            'body' => 'Notification body',
-        ]);
-
-        $this->data = [
-            'key_1' => 'Value 1',
-            'key_2' => 'Value 2',
+        $this->fullMessageData = [
+            'notification' => [
+                'title' => 'Notification title',
+                'body' => 'Notification body',
+            ],
+            'data' => [
+                'key_1' => 'Value 1',
+                'key_2' => 'Value 2',
+            ],
+            'android' => [
+                // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#android_specific_fields
+                'ttl' => '3600s',
+                'priority' => 'normal',
+                'notification' => [
+                    'title' => '$GOOG up 1.43% on the day',
+                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                    'icon' => 'stock_ticker_update',
+                    'color' => '#f45342',
+                ],
+            ],
+            'apns' => [
+                // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#apns_specific_fields
+                'headers' => [
+                    'apns-priority' => '10',
+                ],
+                'payload' => [
+                    'aps' => [
+                        'alert' => [
+                            'title' => '$GOOG up 1.43% on the day',
+                            'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                        ],
+                        'badge' => 42,
+                    ],
+                ],
+            ],
+            'webpush' => [
+                // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#webpush_specific_fields
+                'notification' => [
+                    'title' => '$GOOG up 1.43% on the day',
+                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                    'icon' => 'https://my-server/icon.png',
+                ],
+            ]
         ];
     }
 
@@ -51,9 +89,8 @@ abstract class MessagingTestCase extends IntegrationTestCase
 
     abstract public function testSendEmptyMessage();
 
-    abstract public function testSendMessageWithData();
-
-    abstract public function testSendMessageWithNotification();
-
-    abstract public function testSendMessageWithNotificationAndData();
+    public function testSendFullMessage()
+    {
+        $this->assertSuccessfulMessage($this->messageFactory->fromArray($this->fullMessageData));
+    }
 }

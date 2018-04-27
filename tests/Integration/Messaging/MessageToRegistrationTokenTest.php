@@ -19,50 +19,18 @@ class MessageToRegistrationTokenTest extends MessagingTestCase
     {
         parent::setUp();
         $this->token = 'registration-token';
-    }
-
-    public function testSendMessageToUnknownRegistrationToken()
-    {
-        $this->expectException(InvalidArgument::class);
-
-        $this->messaging->send(MessageToRegistrationToken::create('unknown-token'));
+        $this->fullMessageData['token'] = $this->token;
     }
 
     public function testSendEmptyMessage()
     {
-        $this->markTestSkipped('No valid registration token available');
-
+        $this->markTestSkipped('No valid registration token available yet');
         $this->assertSuccessfulMessage(MessageToRegistrationToken::create($this->token));
     }
 
-    public function testSendMessageWithData()
+    public function testSendFullMessage()
     {
-        $this->markTestSkipped('No valid registration token available');
-
-        $this->assertSuccessfulMessage(
-            MessageToRegistrationToken::create($this->token)
-                ->withData($this->data)
-        );
-    }
-
-    public function testSendMessageWithNotification()
-    {
-        $this->markTestSkipped('No valid registration token available');
-
-        $this->assertSuccessfulMessage(
-            MessageToRegistrationToken::create($this->token)
-                ->withNotification($this->notification)
-        );
-    }
-
-    public function testSendMessageWithNotificationAndData()
-    {
-        $this->markTestSkipped('No valid registration token available');
-
-        $this->assertSuccessfulMessage(
-            MessageToRegistrationToken::create($this->token)
-                ->withNotification($this->notification)
-                ->withData($this->data)
-        );
+        $this->markTestSkipped('No valid registration token available yet');
+        parent::testSendFullMessage();
     }
 }

@@ -14,36 +14,13 @@ class MessageToTopicTest extends MessagingTestCase
     protected function setUp()
     {
         parent::setUp();
+
         $this->topic = 'integration-test-topic';
+        $this->fullMessageData['topic'] = $this->topic;
     }
 
     public function testSendEmptyMessage()
     {
         $this->assertSuccessfulMessage(MessageToTopic::create($this->topic));
-    }
-
-    public function testSendMessageWithData()
-    {
-        $this->assertSuccessfulMessage(
-            MessageToTopic::create($this->topic)
-                ->withData($this->data)
-        );
-    }
-
-    public function testSendMessageWithNotification()
-    {
-        $this->assertSuccessfulMessage(
-            MessageToTopic::create($this->topic)
-                ->withNotification($this->notification)
-        );
-    }
-
-    public function testSendMessageWithNotificationAndData()
-    {
-        $this->assertSuccessfulMessage(
-            MessageToTopic::create($this->topic)
-                ->withNotification($this->notification)
-                ->withData($this->data)
-        );
     }
 }

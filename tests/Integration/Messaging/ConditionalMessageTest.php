@@ -15,36 +15,12 @@ class ConditionalMessageTest extends MessagingTestCase
     {
         parent::setUp();
 
-        $this->condition = "'foo' in topics || 'cats' in topics";
+        $this->condition = "'dogs' in topics || 'cats' in topics";
+        $this->fullMessageData['condition'] = $this->condition;
     }
 
     public function testSendEmptyMessage()
     {
         $this->assertSuccessfulMessage(ConditionalMessage::create($this->condition));
-    }
-
-    public function testSendMessageWithData()
-    {
-        $this->assertSuccessfulMessage(
-            ConditionalMessage::create($this->condition)
-                ->withData($this->data)
-        );
-    }
-
-    public function testSendMessageWithNotification()
-    {
-        $this->assertSuccessfulMessage(
-            ConditionalMessage::create($this->condition)
-                ->withNotification($this->notification)
-        );
-    }
-
-    public function testSendMessageWithNotificationAndData()
-    {
-        $this->assertSuccessfulMessage(
-            ConditionalMessage::create($this->condition)
-                ->withNotification($this->notification)
-                ->withData($this->data)
-        );
     }
 }
