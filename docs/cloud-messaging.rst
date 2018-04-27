@@ -8,9 +8,6 @@ You can use the Firebase Admin SDK for PHP to send Firebase Cloud Messaging mess
     Sending messages to Device Groups is only possible with legacy protocols which are not supported
     by this SDK.
 
-.. note::
-    The Cloud Messaging API currently does not support sending messages tailored to different target platforms (Android, iOS and Web).
-
 Before you start, please read about Firebase Remote Config in the official documentation:
 
 - `Introduction to Firebase Cloud Messaging <https://firebase.google.com/docs/cloud-messaging/>`_
@@ -45,59 +42,7 @@ A message can contain:
 
 - A notification ``Kreait\Firebase\Messaging\Notification``
 - Arbitrary data as an array of key-value pairs where all keys and values are strings
-
-**********************
-Creating Notifications
-**********************
-
-A notification is an instance of ``Kreait\Firebase\Messaging\Notification`` and can be
-created in one of the following ways. The title and the body of a notification
-are both optional.
-
-.. code-block:: php
-
-    use Kreait\Firebase\Messaging\Notification;
-
-    $title = 'My Notification Title';
-    $body = 'My Notification Body';
-
-    $notification = Notification::fromArray([
-        'title' => $title,
-        'body' => $body
-    ]);
-
-    $notification = Notification::create($title, $body);
-
-    $notification = Notification::create()
-        ->withTitle($title)
-        ->withBody($body);
-
-Once you have created a message with one of the methods described below,
-you can attach the notification to it:
-
-.. code-block:: php
-
-    $message = $message->withNotification($notification);
-
-***************************
-Attaching data to a message
-***************************
-
-The data attached to a message must be an array of key-value pairs
-where all keys and values are strings.
-
-Once you have created a message with one of the methods described below,
-you can attach data to it:
-
-.. code-block:: php
-
-    $data = [
-        'first_key' => 'First Value',
-        'second_key' => 'Second Value',
-    ];
-
-    $message = $message->withData($data);
-
+- Target platform specific configuration
 
 ***********************
 Send messages to topics
@@ -196,4 +141,190 @@ Each of the Firebase client SDKs are able to generate these registration tokens:
     $messaging->send($message);
 
 
+*********************
+Adding a notification
+*********************
 
+A notification is an instance of ``Kreait\Firebase\Messaging\Notification`` and can be
+created in one of the following ways. The title and the body of a notification
+are both optional.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Messaging\Notification;
+
+    $title = 'My Notification Title';
+    $body = 'My Notification Body';
+
+    $notification = Notification::fromArray([
+        'title' => $title,
+        'body' => $body
+    ]);
+
+    $notification = Notification::create($title, $body);
+
+    $notification = Notification::create()
+        ->withTitle($title)
+        ->withBody($body);
+
+Once you have created a message with one of the methods described below,
+you can attach the notification to it:
+
+.. code-block:: php
+
+    $message = $message->withNotification($notification);
+
+***********
+Adding data
+***********
+
+The data attached to a message must be an array of key-value pairs
+where all keys and values are strings.
+
+Once you have created a message with one of the methods described below,
+you can attach data to it:
+
+.. code-block:: php
+
+    $data = [
+        'first_key' => 'First Value',
+        'second_key' => 'Second Value',
+    ];
+
+    $message = $message->withData($data);
+
+*********************************************
+Adding target platform specific configuration
+*********************************************
+
+You can target platforms specific configuration to your messages.
+
+Android
+-------
+
+You can find the full Android configuration reference in the official documentation:
+`REST Resource: projects.messages.AndroidConfig <https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidconfig>`_
+
+.. code-block:: php
+
+    use Kreait\Firebase\Messaging\AndroidConfig;
+
+    // Example from https://firebase.google.com/docs/cloud-messaging/admin/send-messages#android_specific_fields
+    $config = AndroidConfig::fromArray([
+        'ttl' => '3600s',
+        'priority' => 'normal',
+        'notification' => [
+            'title' => '$GOOG up 1.43% on the day',
+            'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+            'icon' => 'stock_ticker_update',
+            'color' => '#f45342',
+        ],
+    ]);
+
+    $message = $message->withAndroidConfig($config);
+
+APNs
+----
+
+You can find the full APNs configuration reference in the official documentation:
+`REST Resource: projects.messages.ApnsConfig <https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#apnsconfig>`_
+
+.. code-block:: php
+
+    use Kreait\Firebase\Messaging\ApnsConfig;
+
+    // Example from https://firebase.google.com/docs/cloud-messaging/admin/send-messages#apns_specific_fields
+    $config = ApnsConfig::fromArray([
+        'headers' => [
+            'apns-priority' => '10',
+        ],
+        'payload' => [
+            'aps' => [
+                'alert' => [
+                    'title' => '$GOOG up 1.43% on the day',
+                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                ],
+                'badge' => 42,
+            ],
+        ],
+    ]);
+
+    $message = $message->withApnsConfig($config);
+
+
+WebPush
+-------
+
+You can find the full WebPush configuration reference in the official documentation:
+`REST Resource: projects.messages.Webpush <https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig>`_
+
+.. code-block:: php
+
+    use Kreait\Firebase\Messaging\WebPushConfig;
+
+    // Example from https://firebase.google.com/docs/cloud-messaging/admin/send-messages#webpush_specific_fields
+    $config = ApnsConfig::fromArray([
+        'notification' => [
+            'title' => '$GOOG up 1.43% on the day',
+            'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+            'icon' => 'https://my-server/icon.png',
+        ],
+    ]);
+
+    $message = $message->withWebPushConfig($config);
+
+**************************************
+Sending a fully configured raw message
+**************************************
+
+.. note::
+    The message will be parsed and validated by the SDK.
+
+.. code-block:: php
+
+    $firebase
+        ->getMessaging()
+        ->send([
+            'topic' => 'my-topic',
+            // 'condition' => "'TopicA' in topics && ('TopicB' in topics || 'TopicC' in topics)",
+            // 'token' => '...',
+            'notification' => [
+                'title' => 'Notification title',
+                'body' => 'Notification body',
+            ],
+            'data' => [
+                'key_1' => 'Value 1',
+                'key_2' => 'Value 2',
+            ],
+            'android' => [
+                'ttl' => '3600s',
+                'priority' => 'normal',
+                'notification' => [
+                    'title' => '$GOOG up 1.43% on the day',
+                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                    'icon' => 'stock_ticker_update',
+                    'color' => '#f45342',
+                ],
+            ],
+            'apns' => [
+                'headers' => [
+                    'apns-priority' => '10',
+                ],
+                'payload' => [
+                    'aps' => [
+                        'alert' => [
+                            'title' => '$GOOG up 1.43% on the day',
+                            'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                        ],
+                        'badge' => 42,
+                    ],
+                ],
+            ],
+            'webpush' => [
+                'notification' => [
+                    'title' => '$GOOG up 1.43% on the day',
+                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                    'icon' => 'https://my-server/icon.png',
+                ],
+            ],
+        ])
