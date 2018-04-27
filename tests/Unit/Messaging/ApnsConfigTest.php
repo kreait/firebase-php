@@ -24,7 +24,7 @@ class ApnsConfigTest extends UnitTestCase
         return [
             'full_config' => [[
                 // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#apns_specific_fields
-                'header' => [
+                'headers' => [
                     'apns-priority' => '10',
                 ],
                 'payload' => [

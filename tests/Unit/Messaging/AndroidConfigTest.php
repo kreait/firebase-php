@@ -24,7 +24,7 @@ class AndroidConfigTest extends UnitTestCase
         return [
             'full_config' => [[
                 // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#android_specific_fields
-                'ttl' => 3600 * 1000, // 1 hour in milliseconds,
+                'ttl' => '3600s',
                 'priority' => 'normal',
                 'notification' => [
                     'title' => '$GOOG up 1.43% on the day',
