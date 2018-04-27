@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration\Messaging;
 
-use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\MessageToRegistrationToken;
 use Kreait\Firebase\Tests\Integration\MessagingTestCase;
 

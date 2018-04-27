@@ -8,7 +8,6 @@ use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\MessageFactory;
 use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Tests\IntegrationTestCase;
-use Kreait\Firebase\Util\JSON;
 
 abstract class MessagingTestCase extends IntegrationTestCase
 {
@@ -74,7 +73,7 @@ abstract class MessagingTestCase extends IntegrationTestCase
                     'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
                     'icon' => 'https://my-server/icon.png',
                 ],
-            ]
+            ],
         ];
     }
 
