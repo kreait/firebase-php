@@ -62,6 +62,9 @@ class MessageToTopic implements Message
             'topic' => $this->topic,
             'data' => $this->data,
             'notification' => $this->notification,
+            'android' => $this->androidConfig,
+            'apns' => $this->apnsConfig,
+            'webpush' => $this->webPushConfig
         ]);
     }
 }
