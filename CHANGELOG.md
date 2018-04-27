@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+### New features
+
+* Added support for FCM message configurations (Android, APNS, WebPush) (initiated by [@Casperhr](https://github.com/Casperhr), thanks!)
+
 ## 4.5.0 - 2018-04-16
 
 ### New Features
