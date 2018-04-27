@@ -48,6 +48,18 @@ class ConditionalMessage implements Message
             $message = $message->withNotification(Notification::fromArray($data['notification']));
         }
 
+        if ($data['android'] ?? null) {
+            $message = $message->withAndroidConfig(AndroidConfig::fromArray($data['android']));
+        }
+
+        if ($data['apns'] ?? null) {
+            $message = $message->withApnsConfig(ApnsConfig::fromArray($data['apns']));
+        }
+
+        if ($data['webpush'] ?? null) {
+            $message = $message->withWebPushConfig(WebPushConfig::fromArray($data['webpush']));
+        }
+
         return $message;
     }
 
@@ -64,7 +76,7 @@ class ConditionalMessage implements Message
             'notification' => $this->notification,
             'android' => $this->androidConfig,
             'apns' => $this->apnsConfig,
-            'webpush' => $this->webPushConfig
+            'webpush' => $this->webPushConfig,
         ]);
     }
 }
