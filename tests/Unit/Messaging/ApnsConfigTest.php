@@ -4,21 +4,39 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
-use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Messaging\ApnsConfig;
-use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Tests\UnitTestCase;
 
 class ApnsConfigTest extends UnitTestCase
 {
-    public function testCreateFromValidArray()
+    /**
+     * @dataProvider validDataProvider
+     */
+    public function testCreateFromArray(array $data)
     {
-        $apnsConfig = ApnsConfig::fromArray($array = [
-            'key1' => $title = 'My key1',
-            'key2' => $body = 'My key2',
-        ]);
+        $config = ApnsConfig::fromArray($data);
 
-        $this->assertEquals($array, $apnsConfig->jsonSerialize());
+        $this->assertEquals($data, $config->jsonSerialize());
+    }
+
+    public function validDataProvider()
+    {
+        return [
+            'full_config' => [[
+                // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#apns_specific_fields
+                'header' => [
+                    'apns-priority' => '10',
+                ],
+                'payload' => [
+                    'aps' => [
+                        'alert' => [
+                            'title' => '$GOOG up 1.43% on the day',
+                            'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                        ],
+                        'badge' => 42,
+                    ],
+                ],
+            ]],
+        ];
     }
 }
