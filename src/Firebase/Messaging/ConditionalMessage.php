@@ -11,17 +11,19 @@ class ConditionalMessage implements Message
     use MessageTrait;
 
     /**
-     * @var string
+     * @var Condition
      */
     private $condition;
 
-    private function __construct(string $condition)
+    private function __construct(Condition $condition)
     {
         $this->condition = $condition;
     }
 
-    public static function create(string $condition): self
+    public static function create($condition): self
     {
+        $condition = $condition instanceof Condition ? $condition : Condition::fromValue($condition);
+
         return new self($condition);
     }
 
@@ -38,7 +40,7 @@ class ConditionalMessage implements Message
             throw new InvalidArgumentException('Missing field "condition"');
         }
 
-        $message = new self($data['condition']);
+        $message = self::create($data['condition']);
 
         if ($data['data'] ?? null) {
             $message = $message->withData($data['data']);
@@ -65,7 +67,8 @@ class ConditionalMessage implements Message
 
     public function condition(): string
     {
-        return $this->condition;
+        // TODO Change this to return a Condition instance in 5.0
+        return (string) $this->condition;
     }
 
     public function jsonSerialize()
