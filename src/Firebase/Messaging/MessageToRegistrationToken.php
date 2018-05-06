@@ -11,17 +11,19 @@ class MessageToRegistrationToken implements Message
     use MessageTrait;
 
     /**
-     * @var string
+     * @var RegistrationToken
      */
     private $token;
 
-    private function __construct(string $token)
+    private function __construct(RegistrationToken $token)
     {
         $this->token = $token;
     }
 
-    public static function create(string $token): self
+    public static function create($token): self
     {
+        $token = $token instanceof RegistrationToken ? $token : RegistrationToken::fromValue($token);
+
         return new self($token);
     }
 
@@ -65,7 +67,8 @@ class MessageToRegistrationToken implements Message
 
     public function token(): string
     {
-        return $this->token;
+        // TODO Change this to return a RegistrationToken instance in 5.0
+        return (string) $this->token;
     }
 
     public function jsonSerialize()
