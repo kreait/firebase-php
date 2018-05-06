@@ -11,17 +11,19 @@ class MessageToTopic implements Message
     use MessageTrait;
 
     /**
-     * @var string
+     * @var Topic
      */
     private $topic;
 
-    private function __construct(string $topic)
+    private function __construct(Topic $topic)
     {
         $this->topic = $topic;
     }
 
-    public static function create(string $topic): self
+    public static function create($topic): self
     {
+        $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
+
         return new self($topic);
     }
 
@@ -65,7 +67,8 @@ class MessageToTopic implements Message
 
     public function topic(): string
     {
-        return $this->topic;
+        // TODO Change this to return a Topic instance in 5.0
+        return (string) $this->topic;
     }
 
     public function jsonSerialize()
