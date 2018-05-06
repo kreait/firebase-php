@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Tests;
 
 use Kreait\Firebase;
 use Kreait\Firebase\ServiceAccount;
+use Kreait\Firebase\Util\JSON;
 
 abstract class IntegrationTestCase extends FirebaseTestCase
 {
@@ -19,8 +20,17 @@ abstract class IntegrationTestCase extends FirebaseTestCase
      */
     protected static $serviceAccount;
 
+    /**
+     * @var string[]
+     */
+    protected static $registrationTokens = [];
+
     public static function setUpBeforeClass()
     {
+        if (file_exists($testDevices = self::$fixturesDir.'/test_devices.json')) {
+            self::$registrationTokens = JSON::decode(file_get_contents($testDevices), true);
+        }
+
         $credentialsPath = self::$fixturesDir.'/test_credentials.json';
 
         if (!file_exists($credentialsPath)) {

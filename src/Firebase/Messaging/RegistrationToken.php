@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging;
 
-use Kreait\Firebase\Exception\Messaging\InvalidArgument;
-
 class RegistrationToken implements \JsonSerializable
 {
     /**

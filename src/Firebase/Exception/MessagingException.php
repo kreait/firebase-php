@@ -7,6 +7,7 @@ namespace Kreait\Firebase\Exception;
 use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Exception\Messaging\AuthenticationError;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
+use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Exception\Messaging\ServerError;
 use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
 use Kreait\Firebase\Exception\Messaging\UnknownError;
@@ -28,6 +29,8 @@ class MessagingException extends \RuntimeException implements FirebaseException
             case 401:
             case 403:
                 return new AuthenticationError('Authentication error: '.$message, $code, $e);
+            case 404:
+                return new NotFound('Not found: '.$message, $code, $e);
             case 500:
                 return new ServerError('Server Error: '.$message, $code, $e);
             case 503:

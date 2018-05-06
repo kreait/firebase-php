@@ -2,7 +2,7 @@
 /vendor
 /docs/_build
 /docs/*.pyc
-/tests/_fixtures/test_credentials.json
+/tests/_fixtures/test_*
 
 /.php_cs.cache
 /cc-test-reporter
