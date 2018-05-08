@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.7.0 - 2018-05-08
 
 * Added support to unlink identity providers from a user
   * `Kreait\Firebase\Auth::unlinkProvider($uid, $provider)` (`$provider` can be a string or an array of strings)
