@@ -134,4 +134,25 @@ class UpdateUserTest extends IntegrationTestCase
 
         $this->auth->deleteUser($uid);
     }
+
+    public function testRemovePhoneNumber()
+    {
+        $user = $this->auth->createUser(
+            CreateUser::new()
+                ->withUid($uid = bin2hex(random_bytes(5)))
+                ->withVerifiedEmail($email = $uid.'@example.org')
+                ->withPhoneNumber($phoneNumber = '+1234567'.random_int(1000, 9999))
+        );
+
+        $this->assertSame($phoneNumber, $user->phoneNumber);
+
+        $updatedUser = $this->auth->updateUser(
+            $user->uid,
+            UpdateUser::new()->withRemovedPhoneNumber()
+        );
+
+        $this->assertNull($updatedUser->phoneNumber);
+
+        $this->auth->deleteUser($user->uid);
+    }
 }

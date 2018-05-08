@@ -15,6 +15,7 @@ use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\ClearTextPassword;
 use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\PhoneNumber;
+use Kreait\Firebase\Value\Provider;
 use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Token;
 
@@ -306,5 +307,19 @@ class Auth
     public function revokeRefreshTokens(string $uid)
     {
         $this->client->revokeRefreshTokens($uid);
+    }
+
+    public function unlinkProvider($uid, $provider): UserRecord
+    {
+        $uid = $uid instanceof Uid ? $uid : new Uid($uid);
+        $provider = array_map(function ($provider) {
+            return $provider instanceof Provider ? $provider : new Provider($provider);
+        }, (array) $provider);
+
+        $response = $this->client->unlinkProvider($uid, $provider);
+
+        $uid = JSON::decode((string) $response->getBody(), true)['localId'];
+
+        return $this->getUser($uid);
     }
 }

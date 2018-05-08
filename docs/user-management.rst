@@ -177,13 +177,15 @@ Updating a user works exactly as creating a new user, except that the ``uid`` pr
 
 In addition to the properties of a create request, the following properties can be provided:
 
-====================== ======= ===========
-Property               Type    Description
-====================== ======= ===========
-``deletePhotoUrl``     boolean Whether or not to delete the user's photo.
-``deleteDisplayName``  boolean Whether or not to delete the user's display name.
-``customAttributes``   array   A list of custom attributes which will be available in a User's ID token.
-====================== ======= ===========
+====================== ============ ===========
+Property               Type         Description
+====================== ============ ===========
+``deletePhotoUrl``     boolean      Whether or not to delete the user's photo.
+``deleteDisplayName``  boolean      Whether or not to delete the user's display name.
+``deletePhoneNumber``  boolean      Whether or not to delete the user's phone number.
+``deleteProvider``     string|array One or more identity providers to delete.
+``customAttributes``   array        A list of custom attributes which will be available in a User's ID token.
+====================== ============ ===========
 
 ************************
 Change a user's password

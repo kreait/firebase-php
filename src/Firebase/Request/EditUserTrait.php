@@ -170,11 +170,14 @@ trait EditUserTrait
 
     public function withPhoneNumber($phoneNumber): self
     {
+        if ($phoneNumber) {
+            $phoneNumber = $phoneNumber instanceof PhoneNumber
+                ? $phoneNumber
+                : new PhoneNumber($phoneNumber)
+            ;
+        }
         $request = clone $this;
-        $request->phoneNumber = $phoneNumber instanceof PhoneNumber
-            ? $phoneNumber
-            : new PhoneNumber($phoneNumber)
-        ;
+        $request->phoneNumber = $phoneNumber;
 
         return $request;
     }

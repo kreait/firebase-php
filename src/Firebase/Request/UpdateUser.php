@@ -7,6 +7,7 @@ namespace Kreait\Firebase\Request;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Request;
 use Kreait\Firebase\Util\JSON;
+use Kreait\Firebase\Value\Provider;
 
 final class UpdateUser implements Request
 {
@@ -19,6 +20,11 @@ final class UpdateUser implements Request
      * @var array
      */
     private $attributesToDelete = [];
+
+    /**
+     * @var Provider[]
+     */
+    private $providersToDelete = [];
 
     /**
      * @var array|null
@@ -72,8 +78,46 @@ final class UpdateUser implements Request
                 case 'customclaims':
                     $request = $request->withCustomAttributes($value);
                     break;
+                case 'phonenumber':
+                case 'phone':
+                    if (!$value) {
+                        $request = $request->withRemovedPhoneNumber();
+                    }
+                    break;
+                case 'deletephone':
+                case 'deletephonenumber':
+                case 'removephone':
+                case 'removephonenumber':
+                    $request = $request->withRemovedPhoneNumber();
+                    break;
+                case 'deleteprovider':
+                case 'deleteproviders':
+                case 'removeprovider':
+                case 'removeproviders':
+                    $request = array_reduce((array) $value, function (self $request, $provider) {
+                        return $request->withRemovedProvider($provider);
+                    }, $request);
+                    break;
             }
         }
+
+        return $request;
+    }
+
+    public function withRemovedPhoneNumber(): self
+    {
+        $request = clone $this;
+        $request->phoneNumber = null;
+
+        return $request->withRemovedProvider('phone');
+    }
+
+    public function withRemovedProvider($provider): self
+    {
+        $provider = $provider instanceof Provider ? $provider : new Provider($provider);
+
+        $request = clone $this;
+        $request->providersToDelete[] = $provider;
 
         return $request;
     }
@@ -118,6 +162,10 @@ final class UpdateUser implements Request
 
         if (\count($this->attributesToDelete)) {
             $data['deleteAttribute'] = array_unique($this->attributesToDelete);
+        }
+
+        if (\count($this->providersToDelete)) {
+            $data['deleteProvider'] = $this->providersToDelete;
         }
 
         return $data;

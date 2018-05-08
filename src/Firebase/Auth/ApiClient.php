@@ -218,6 +218,14 @@ class ApiClient
         ]);
     }
 
+    public function unlinkProvider(string $uid, array $providers): ResponseInterface
+    {
+        return $this->request('setAccountInfo', [
+            'localId' => $uid,
+            'deleteProvider' => $providers,
+        ]);
+    }
+
     private function request(string $uri, $data): ResponseInterface
     {
         try {

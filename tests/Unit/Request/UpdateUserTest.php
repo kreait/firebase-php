@@ -79,6 +79,46 @@ class UpdateUserTest extends TestCase
                 $expected + ['deleteAttribute' => [UpdateUser::DISPLAY_NAME]],
             ],
             [
+                $given + ['deletephone' => true],
+                $expected + ['deleteProvider' => ['phone']],
+            ],
+            [
+                $given + ['deletephonenumber' => true],
+                $expected + ['deleteProvider' => ['phone']],
+            ],
+            [
+                $given + ['removephone' => true],
+                $expected + ['deleteProvider' => ['phone']],
+            ],
+            [
+                $given + ['removephonenumber' => true],
+                $expected + ['deleteProvider' => ['phone']],
+            ],
+            [
+                $given + ['phone' => null],
+                $expected + ['deleteProvider' => ['phone']],
+            ],
+            [
+                $given + ['phonenumber' => null],
+                $expected + ['deleteProvider' => ['phone']],
+            ],
+            [
+                $given + ['deleteprovider' => 'phone'],
+                $expected + ['deleteProvider' => ['phone']],
+            ],
+            [
+                $given + ['deleteproviders' => ['phone', 'password']],
+                $expected + ['deleteProvider' => ['phone', 'password']],
+            ],
+            [
+                $given + ['removeprovider' => 'phone'],
+                $expected + ['deleteProvider' => ['phone']],
+            ],
+            [
+                $given + ['removeproviders' => ['phone', 'password']],
+                $expected + ['deleteProvider' => ['phone', 'password']],
+            ],
+            [
                 $given + ['deleteAttribute' => 'displayname'],
                 $expected + ['deleteAttribute' => [UpdateUser::DISPLAY_NAME]],
             ],

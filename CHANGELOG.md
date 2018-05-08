@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## Unreleased
+
+* Added support to unlink identity providers from a user
+  * `Kreait\Firebase\Auth::unlinkProvider($uid, $provider)` (`$provider` can be a string or an array of strings)
+* Added support to remove the phone number from a user ([#195](https://github.com/kreait/firebase-php/issues/195))
+  * When you update a user ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#update-a-user)), you can now 
+    * set `phoneNumber` to `null`
+    * set `deletePhoneNumber` to `true`
+    * set `deleteProvider` to `['phone']`
+
 ## 4.6.0 - 2018-04-27
 
 ### New features

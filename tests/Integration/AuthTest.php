@@ -347,4 +347,19 @@ class AuthTest extends IntegrationTestCase
 
         $this->auth->deleteUser($user->uid);
     }
+
+    public function testUnlinkProvider()
+    {
+        $user = $this->auth->createUser([
+            'uid' => $uid = bin2hex(random_bytes(5)),
+            'verifiedEmail' => $email = $uid.'@domain.tld',
+            'phone' => $phoneNumber = '+1234567'.random_int(1000, 9999),
+        ]);
+
+        $updatedUser = $this->auth->unlinkProvider($user->uid, 'phone');
+
+        $this->assertNull($updatedUser->phoneNumber);
+
+        $this->auth->deleteUser($user->uid);
+    }
 }
