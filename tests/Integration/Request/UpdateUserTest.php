@@ -155,4 +155,22 @@ class UpdateUserTest extends IntegrationTestCase
 
         $this->auth->deleteUser($user->uid);
     }
+
+    /**
+     * @see https://github.com/kreait/firebase-php/issues/196
+     */
+    public function testReEnable()
+    {
+        $user = $this->auth->createUser([
+            'disabled' => true,
+        ]);
+
+        $check = $this->auth->updateUser($user->uid, [
+            'disabled' => false,
+        ]);
+
+        $this->assertFalse($check->disabled);
+
+        $this->auth->deleteUser($user->uid);
+    }
 }

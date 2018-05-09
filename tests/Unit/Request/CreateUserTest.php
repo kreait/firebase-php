@@ -66,11 +66,15 @@ class CreateUserTest extends TestCase
                 $given + ['isDisabled' => true],
                 $expected + ['disableUser' => true],
             ],
-            'disableUser' => [
+            'disabled_3' => [
+                $given + ['isDisabled' => null],
+                $expected,
+            ],
+            'disableUser_1' => [
                 $given + ['disableUser' => true],
                 $expected + ['disableUser' => true],
             ],
-            'enableUser' => [
+            'disableUser_2' => [
                 $given + ['disableUser' => false],
                 $expected + ['disableUser' => false],
             ],
@@ -80,6 +84,10 @@ class CreateUserTest extends TestCase
             ],
             'explicitely_enabled_user_2' => [
                 $given + ['isEnabled' => true],
+                $expected + ['disableUser' => false],
+            ],
+            'enableUser' => [
+                $given + ['enableUser' => true],
                 $expected + ['disableUser' => false],
             ],
             'displayName' => [

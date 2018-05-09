@@ -1,6 +1,14 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bugfixes
+
+* Fixed marking disabled users as enabled when using arrays ([#196](https://github.com/kreait/firebase-php/issues/196))
+
 ## 4.7.0 - 2018-05-08
+
+### New features
 
 * Added support to unlink identity providers from a user
   * `Kreait\Firebase\Auth::unlinkProvider($uid, $provider)` (`$provider` can be a string or an array of strings)
