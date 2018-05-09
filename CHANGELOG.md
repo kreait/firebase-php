@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.7.1 - 2018-05-09
 
 ### Bugfixes
 
