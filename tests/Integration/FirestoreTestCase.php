@@ -12,7 +12,7 @@ abstract class FirestoreTestCase extends IntegrationTestCase
     /**
      * @var string
      */
-    protected static $refPrefix;
+    protected static $testCollection;
 
     /**
      * @var Firestore
@@ -24,8 +24,13 @@ abstract class FirestoreTestCase extends IntegrationTestCase
         parent::setUpBeforeClass();
 
         self::$db = self::$firebase->getFirestore();
-        self::$refPrefix = 'tests';
+        self::$testCollection = 'tests';
 
-        self::$db->getReference(self::$refPrefix)->remove();
+        try {
+            self::$db->getCollection(self::$testCollection)->remove();
+        }
+        catch (\Exception $e) {
+            // assuming it just doesn't exist yet, continue with tests
+        }
     }
 }

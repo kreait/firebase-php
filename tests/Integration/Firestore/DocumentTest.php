@@ -7,30 +7,35 @@ namespace Kreait\Firebase\Tests\Integration\Firestore;
 use Kreait\Firebase\Firestore\Reference;
 use Kreait\Firebase\Tests\Integration\FirestoreTestCase;
 
-class ReferenceTest extends FirestoreTestCase
+class DocumentTest extends FirestoreTestCase
 {
     /**
-     * @var Reference
+     * @var Collection
      */
-    private $ref;
+    private $collection;
 
     public function setUp()
     {
-        $this->ref = self::$db->getReference(self::$refPrefix);
+        $this->collection = self::$db->getCollection(self::$testCollection);
     }
 
     /**
      * @param $key
      * @param $value
      *
-     * @dataProvider validValues
+     * @dataDisabledProvider validValues
      */
-    public function testSetAndGet($key, $value)
+    public function testSetAndGet()
     {
-        $ref = $this->ref->getChild(__FUNCTION__.'/'.$key);
-        $ref->set($value);
+        $doc = $this->collection->getDocument(__FUNCTION__);
 
-        $this->assertSame($value, $ref->getValue());
+        $doc->set($this->validValues());
+
+        $snap = $doc->getSnapshot();
+
+        foreach ($this->validValues() as $key => $value) {
+            $this->assertSame($value, $snap[$key]);
+        }
     }
 
     public function testUpdate()
@@ -83,11 +88,11 @@ class ReferenceTest extends FirestoreTestCase
     public function validValues()
     {
         return [
-            'string' => ['string', 'value'],
-            'int' => ['int', 1],
-            'bool_true' => ['true', true],
-            'bool_false' => ['false', false],
-            'array' => ['array', ['first' => 'value', 'second' => 'value']],
+            'string' => 'value',
+            'int' => 1,
+            'bool_true' => true,
+            'bool_false' => false,
+            // 'array' => ['first' => 'value', 'second' => 'value'],
         ];
     }
 }

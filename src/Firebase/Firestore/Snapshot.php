@@ -1,164 +1,347 @@
 <?php
+/**
+ * Copyright 2017 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 namespace Kreait\Firebase\Firestore;
 
-use Kreait\Firebase\Exception\InvalidArgumentException;
-use function JmesPath\search;
+use Google\Cloud\Core\Timestamp;
 
 /**
- * A Snapshot contains data from a database location.
+ * Represents the data of a document at the time of retrieval.
+ * A snapshot is immutable and may point to a non-existing document.
  *
- * It is an immutable copy of the data at a database location. It cannot be modified and will never
- * change (to modify data, you always call the {@see Reference::set()}).
+ * Fields may be read in array-style syntax. Note that writing using array-style
+ * syntax is NOT supported and will result in a `\BadMethodCallException`.
  *
- * You can extract the contents of the snapshot as a JavaScript object by calling
- * the {@see getValue()} method.
+ * Example:
+ * ```
+ * use Google\Cloud\Firestore\FirestoreClient;
  *
- * Alternatively, you can traverse into the snapshot by calling {@see getChild()}
- * to return child snapshots (which you could then call {@see getValue()} on).
+ * $firestore = new FirestoreClient();
+ * $document = $firestore->document('users/john');
+ * $snapshot = $document->snapshot();
+ * ```
  *
- * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot
+ * ```
+ * // Fields are exposed via array-style accessors:
+ * $bitcoinWalletValue = $snapshot['wallet']['cryptoCurrency']['bitcoin'];
+ * ```
  */
-class Snapshot
+class Snapshot implements \ArrayAccess
 {
     /**
-     * @var Reference
+     * @var DocumentReference
      */
     private $reference;
 
     /**
-     * @var mixed
+     * @var ValueMapper
      */
-    private $value;
+    private $valueMapper;
 
-    public function __construct(Reference $reference, $value)
-    {
+    /**
+     * @var array
+     */
+    private $info;
+
+    /**
+     * @var array
+     */
+    private $data;
+
+    /**
+     * @var bool
+     */
+    private $exists;
+
+    /**
+     * @param DocumentReference $reference The document which created the snapshot.
+     * @param ValueMapper $valueMapper A Firestore Value Mapper.
+     * @param array $info Document information, such as create and update timestamps.
+     * @param array $data Document field data.
+     * @param bool $exists Whether the document exists in the Firestore database.
+     */
+    public function __construct(
+        Document $reference,
+        array $info,
+        array $data,
+        $exists
+    ) {
         $this->reference = $reference;
-        $this->value = $value;
+        $this->info = $info;
+        $this->data = $data;
+        $this->exists = $exists;
     }
 
     /**
-     * Returns the key (last part of the path) of the location of this Snapshot.
+     * Get the reference of the document which created the snapshot.
      *
-     * The last token in a database location is considered its key. For example, "ada" is the key for
-     * the /users/ada/ node. Accessing the key on any Snapshot will return the key for the
-     * location that generated it. However, accessing the key on the root URL of a database
-     * will return null.
+     * Example:
+     * ```
+     * $reference = $snapshot->reference();
+     * ```
      *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#key
-     *
-     * @return string|null
+     * @return DocumentReference
      */
-    public function getKey()
-    {
-        return $this->reference->getKey();
-    }
-
-    /**
-     * Returns the Reference for the location that generated this Snapshot.
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#ref
-     *
-     * @return Reference
-     */
-    public function getReference(): Reference
+    public function reference()
     {
         return $this->reference;
     }
 
     /**
-     * Returns another Snapshot for the location at the specified relative path.
+     * Get the document name.
      *
-     * Passing a relative path to the child() method of a Snapshot returns another Snapshot for the location
-     * at the specified relative path. The relative path can either be a simple child name (e.g. "ada") or a
-     * deeper, slash-separated path (e.g. "ada/name/first"). If the child location has no data, an empty
-     * Snapshot (that is, a Snapshot whose value is null) is returned.
+     * Names are absolute. The result of this call would be of the form
+     * `projects/<project-id>/databases/<database-id>/documents/<relative-path>`.
      *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#child
+     * Other methods are available to retrieve different parts of a collection name:
+     * * {@see Google\Cloud\Firestore\DocumentSnapshot::id()} Returns the last element.
+     * * {@see Google\Cloud\Firestore\DocumentSnapshot::path()} Returns the path, relative to the database.
      *
-     * @param string $path
+     * Example:
+     * ```
+     * $name = $snapshot->name();
+     * ```
      *
-     * @throws InvalidArgumentException if the given child path is invalid
-     *
-     * @return Snapshot
+     * @return string
      */
-    public function getChild(string $path): self
+    public function name()
     {
-        $path = trim($path, '/');
-        $expression = str_replace('/', '.', $path);
-
-        $childValue = search($expression, $this->value);
-
-        return new self($this->reference->getChild($path), $childValue);
+        return $this->reference->name();
     }
 
     /**
-     * Returns true if this Snapshot contains any data.
+     * Get the document path.
      *
-     * It is a convenience method for `$snapshot->getValue() !== null`.
+     * Paths identify the location of a document, relative to the database name.
      *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#exists
+     * To retrieve the document ID (the last element of the path), use
+     * {@see Google\Cloud\Firestore\DocumentSnapshot::id()}.
+     *
+     * Example:
+     * ```
+     * $path = $snapshot->path();
+     * ```
+     *
+     * @return string
+     */
+    public function path()
+    {
+        return $this->reference->path();
+    }
+
+    /**
+     * Get the document identifier (i.e. the last path element).
+     *
+     * IDs are the path element which identifies a resource. To retrieve the
+     * full path to a resource (the resource name), use
+     * {@see Google\Cloud\Firestore\DocumentSnapshot::name()}.
+     *
+     * Example:
+     * ```
+     * $id = $snapshot->id();
+     * ```
+     *
+     * @return string
+     */
+    public function id()
+    {
+        return $this->reference->id();
+    }
+
+    /**
+     * Get the Document Update Timestamp.
+     *
+     * Example:
+     * ```
+     * $updateTime = $snapshot->updateTime();
+     * ```
+     *
+     * @return Timestamp|null
+     */
+    public function updateTime()
+    {
+        return isset($this->info['updateTime'])
+            ? $this->info['updateTime']
+            : null;
+    }
+
+    /**
+     * Get the Document Read Timestamp.
+     *
+     * Example:
+     * ```
+     * $readTime = $snapshot->readTime();
+     * ```
+     *
+     * @return Timestamp|null
+     */
+    public function readTime()
+    {
+        return isset($this->info['readTime'])
+            ? $this->info['readTime']
+            : null;
+    }
+
+    /**
+     * Get the Document Create Timestamp.
+     *
+     * Example:
+     * ```
+     * $createTime = $snapshot->createTime();
+     * ```
+     *
+     * @return Timestamp|null
+     */
+    public function createTime()
+    {
+        return isset($this->info['createTime'])
+            ? $this->info['createTime']
+            : null;
+    }
+
+    /**
+     * Returns document data as an array, or null if the document does not exist.
+     *
+     * Example:
+     * ```
+     * $data = $snapshot->data();
+     * ```
+     *
+     * @return array|null
+     */
+    public function data()
+    {
+        return $this->exists
+            ? $this->data
+            : null;
+    }
+
+    /**
+     * Returns true if the document exists in the database.
+     *
+     * Example:
+     * ```
+     * if ($snapshot->exists()) {
+     *     echo "The document exists!";
+     * }
+     * ```
      *
      * @return bool
      */
-    public function exists(): bool
+    public function exists()
     {
-        return null !== $this->value;
+        return $this->exists;
     }
 
     /**
-     * Returns true if the specified child path has (non-null) data.
+     * Get a field by field path.
      *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#hasChild
+     * A field path is a string containing the path to a specific field, at the
+     * top level or nested, delimited by `.`. For instance, the value `hello` in
+     * the structured field `{ "foo" : { "bar" : "hello" }}` would be accessible
+     * using a field path of `foo.bar`.
      *
-     * @param string $path
+     * Example:
+     * ```
+     * $value = $snapshot->get('wallet.cryptoCurrency.bitcoin');
+     * ```
      *
-     * @return bool
-     */
-    public function hasChild(string $path): bool
-    {
-        $path = trim($path, '/');
-        $expression = str_replace('/', '.', $path);
-
-        return null !== search($expression, $this->value);
-    }
-
-    /**
-     * Returns true if the Snapshot has any child properties.
+     * ```
+     * // Field names containing dots or symbols can be targeted using a FieldPath instance:
+     * use Google\Cloud\Firestore\FieldPath;
      *
-     * You can use {@see hasChildren()} to determine if a Snappshot has any children. If it does,
-     * you can enumerate them using foreach(). If it does not, then either this snapshot
-     * contains a primitive value (which can be retrieved with {@see getValue()}) or
-     * it is empty (in which case {@see getValue()} will return null).
+     * $value = $snapshot->get(new FieldPath(['wallet', 'cryptoCurrency', 'my.coin']));
+     * ```
      *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#hasChildren
-     *
-     * @return bool
-     */
-    public function hasChildren(): bool
-    {
-        return \is_array($this->value) && \count($this->value);
-    }
-
-    /**
-     * Returns the number of child properties of this Snapshot.
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#numChildren
-     *
-     * @return int
-     */
-    public function numChildren(): int
-    {
-        return \is_array($this->value) ? \count($this->value) : 0;
-    }
-
-    /**
-     * Returns the data contained in this Snapshot.
-     *
+     * @param string|FieldPath $fieldPath The field path to return.
      * @return mixed
+     * @throws \InvalidArgumentException if the field path does not exist.
      */
-    public function getValue()
+    public function get($fieldPath)
     {
-        return $this->value;
+        $res = null;
+
+        if (is_string($fieldPath)) {
+            $parts = explode('.', $fieldPath);
+        } elseif ($fieldPath instanceof FieldPath) {
+            $parts = $fieldPath->path();
+        } else {
+            throw new \InvalidArgumentException('Given path was not a string or instance of FieldPath.');
+        }
+
+        $len = count($parts);
+
+        $fields = $this->data;
+        foreach ($parts as $idx => $part) {
+            if ($idx === $len-1 && isset($fields[$part])) {
+                $res = $fields[$part];
+                break;
+            } else {
+                if (!isset($fields[$part])) {
+                    throw new \InvalidArgumentException('field path does not exist.');
+                }
+
+                $fields = $fields[$part];
+            }
+        }
+
+        return $res;
+    }
+
+    /**
+     * @access private
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new \BadMethodCallException('DocumentSnapshots are read-only.');
+    }
+
+    /**
+     * @access private
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->data[$offset]);
+    }
+
+    /**
+     * @access private
+     */
+    public function offsetUnset($offset)
+    {
+        throw new \BadMethodCallException('DocumentSnapshots are read-only.');
+    }
+
+    /**
+     * @access private
+     */
+    public function offsetGet($offset)
+    {
+        if (!$this->offsetExists($offset)) {
+            trigger_error(sprintf(
+                'Undefined index: %s. Document field does not exist.',
+                $offset
+            ), E_USER_NOTICE);
+
+            // @codeCoverageIgnoreStart
+            return null;
+            // @codeCoverageIgnoreEnd
+        }
+
+        return $this->data[$offset];
     }
 }

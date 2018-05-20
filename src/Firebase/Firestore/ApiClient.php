@@ -30,7 +30,7 @@ class ApiClient
 
     public function set($uri, $value)
     {
-        $response = $this->request('PUT', $uri, ['json' => $value]);
+        $response = $this->request('PATCH', $uri, ['json' => $value]);
 
         return JSON::decode((string) $response->getBody(), true);
     }
