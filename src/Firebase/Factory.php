@@ -96,12 +96,13 @@ class Factory
     public function create(): Firebase
     {
         $database = $this->createDatabase();
+        $firestore = $this->createFirestore();
         $auth = $this->createAuth();
         $storage = $this->createStorage();
         $remoteConfig = $this->createRemoteConfig();
         $messaging = $this->createMessaging();
 
-        return new Firebase($database, $auth, $storage, $remoteConfig, $messaging);
+        return new Firebase($database, $firestore, $auth, $storage, $remoteConfig, $messaging);
     }
 
     private function getServiceAccountDiscoverer(): Discoverer
@@ -175,6 +176,30 @@ class Factory
         }
 
         return new Database($this->getDatabaseUri(), new Database\ApiClient($http));
+    }
+
+    private function createFirestore(): Firestore
+    {
+        $http = $this->createApiClient($this->getServiceAccount());
+
+        $middlewares = [
+            'json_suffix' => Firebase\Http\Middleware::ensureJsonSuffix(),
+        ];
+
+        if ($this->uid) {
+            $authOverride = new Http\Auth\CustomToken($this->uid, $this->claims);
+
+            $middlewares['auth_override'] = Middleware::overrideAuth($authOverride);
+        }
+
+        /** @var HandlerStack $handler */
+        $handler = $http->getConfig('handler');
+
+        foreach ($middlewares as $name => $middleware) {
+            $handler->push($middleware, $name);
+        }
+
+        return new Firestore($this->getDatabaseUri(), new Firestore\ApiClient($http));
     }
 
     private function createRemoteConfig(): RemoteConfig
