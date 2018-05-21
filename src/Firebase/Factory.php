@@ -24,6 +24,11 @@ class Factory
     private $databaseUri;
 
     /**
+     * @var UriInterface
+     */
+    private $firestoreUri;
+
+    /**
      * @var string
      */
     private $defaultStorageBucket;
@@ -49,6 +54,7 @@ class Factory
     private $claims = [];
 
     private static $databaseUriPattern = 'https://%s.firebaseio.com';
+    private static $firestoreUriPattern = 'https://firestore.googleapis.com/v1beta1/projects/%s/databases/(default)/documents/';
 
     private static $storageBucketNamePattern = '%s.appspot.com';
 
@@ -96,12 +102,13 @@ class Factory
     public function create(): Firebase
     {
         $database = $this->createDatabase();
+        $firestore = $this->createFirestore();
         $auth = $this->createAuth();
         $storage = $this->createStorage();
         $remoteConfig = $this->createRemoteConfig();
         $messaging = $this->createMessaging();
 
-        return new Firebase($database, $auth, $storage, $remoteConfig, $messaging);
+        return new Firebase($database, $firestore, $auth, $storage, $remoteConfig, $messaging);
     }
 
     private function getServiceAccountDiscoverer(): Discoverer
@@ -123,6 +130,11 @@ class Factory
         return $this->databaseUri ?: $this->getDatabaseUriFromServiceAccount($this->getServiceAccount());
     }
 
+    private function getFirestoreUri(): UriInterface
+    {
+        return $this->firestoreUri ?: $this->getFirestoreUriFromServiceAccount($this->getServiceAccount());
+    }
+
     private function getStorageBucketName(): string
     {
         return $this->defaultStorageBucket ?: $this->getStorageBucketNameFromServiceAccount($this->getServiceAccount());
@@ -131,6 +143,11 @@ class Factory
     private function getDatabaseUriFromServiceAccount(ServiceAccount $serviceAccount): UriInterface
     {
         return uri_for(sprintf(self::$databaseUriPattern, $serviceAccount->getProjectId()));
+    }
+
+    private function getFirestoreUriFromServiceAccount(ServiceAccount $serviceAccount): UriInterface
+    {
+        return uri_for(sprintf(self::$firestoreUriPattern, $serviceAccount->getProjectId()));
     }
 
     private function getStorageBucketNameFromServiceAccount(ServiceAccount $serviceAccount): string
@@ -175,6 +192,20 @@ class Factory
         }
 
         return new Database($this->getDatabaseUri(), new Database\ApiClient($http));
+    }
+
+    private function createFirestore(): Firestore
+    {
+        $http = $this->createApiClient($this->getServiceAccount());
+
+        if ($this->uid) {
+            $authOverride = new Http\Auth\CustomToken($this->uid, $this->claims);
+
+            $handler = $http->getConfig('handler');
+            $handler->push(Middleware::overrideAuth($authOverride), 'auth_override');
+        }
+
+        return new Firestore($this->getFirestoreUri(), new Firestore\ApiClient($http));
     }
 
     private function createRemoteConfig(): RemoteConfig

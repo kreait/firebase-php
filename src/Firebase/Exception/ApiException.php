@@ -73,6 +73,10 @@ class ApiException extends \RuntimeException implements FirebaseException
             $message = JSON::decode($responseBody, true)['error'] ?? null;
         }
 
+        if (is_array($message)) {
+            $message = $message['message'];
+        }
+
         return $message;
     }
 }
