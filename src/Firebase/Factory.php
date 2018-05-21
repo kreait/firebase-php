@@ -198,21 +198,11 @@ class Factory
     {
         $http = $this->createApiClient($this->getServiceAccount());
 
-        $middlewares = [
-            'json_suffix' => Firebase\Http\Middleware::ensureJsonSuffix(),
-        ];
-
         if ($this->uid) {
             $authOverride = new Http\Auth\CustomToken($this->uid, $this->claims);
 
-            $middlewares['auth_override'] = Middleware::overrideAuth($authOverride);
-        }
-
-        /** @var HandlerStack $handler */
-        $handler = $http->getConfig('handler');
-
-        foreach ($middlewares as $name => $middleware) {
-            $handler->push($middleware, $name);
+            $handler = $http->getConfig('handler');
+            $handler->push(Middleware::overrideAuth($authOverride), 'auth_override');
         }
 
         return new Firestore($this->getFirestoreUri(), new Firestore\ApiClient($http));
