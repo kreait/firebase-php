@@ -2,8 +2,16 @@
 
 ## Unreleased
 
+### New features
+
+* Added support for FCM Topic management ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#topic-management))
+  * `Kreait\Firebase\Messaging::subscribeToTopic($topic, $registrationTokens)`
+  * `Kreait\Firebase\Messaging::unsubscribeFromTopic($topic, $registrationTokens)`
+
+### Changes
+
 * Made `Kreait\Firebase\Factory` extensible so that it can be extended by libraries that want to build on it.
-  - [morrislaptop/firestore-php](https://github.com/morrislaptop/firestore-php) is a new project that aims to
+  * [morrislaptop/firestore-php](https://github.com/morrislaptop/firestore-php) is a new project that aims to
     provide support for the Firestore without the need to install the `grpc` PHP extension.
 
 ## 4.7.1 - 2018-05-09

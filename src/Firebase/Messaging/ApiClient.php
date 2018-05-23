@@ -4,6 +4,7 @@ namespace Kreait\Firebase\Messaging;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
 use Kreait\Firebase\Exception\MessagingException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Integration\Messaging;
 
 use Kreait\Firebase\Messaging\MessageToRegistrationToken;
-use Kreait\Firebase\Tests\Integration\MessagingTestCase;
+use Kreait\Firebase\Tests\Integration\MessageTestCase;
 
-class MessageToRegistrationTokenTest extends MessagingTestCase
+class MessageToRegistrationTokenTest extends MessageTestCase
 {
     /**
      * @var string

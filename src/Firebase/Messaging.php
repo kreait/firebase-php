@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Kreait\Firebase;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\MessageFactory;
+use Kreait\Firebase\Messaging\RegistrationToken;
+use Kreait\Firebase\Messaging\Topic;
+use Kreait\Firebase\Messaging\TopicManagementApiClient;
 use Kreait\Firebase\Util\JSON;
 
 class Messaging
@@ -15,17 +19,26 @@ class Messaging
     /**
      * @var ApiClient
      */
-    private $client;
+    private $messagingApi;
 
     /**
      * @var MessageFactory
      */
     private $factory;
 
-    public function __construct(ApiClient $client, MessageFactory $messageFactory)
-    {
-        $this->client = $client;
+    /**
+     * @var TopicManagementApiClient
+     */
+    private $topicManagementApi;
+
+    public function __construct(
+        ApiClient $messagingApiClient,
+        MessageFactory $messageFactory,
+        TopicManagementApiClient $topicManagementApiClient
+    ) {
+        $this->messagingApi = $messagingApiClient;
         $this->factory = $messageFactory;
+        $this->topicManagementApi = $topicManagementApiClient;
     }
 
     /**
@@ -44,8 +57,59 @@ class Messaging
                 'Unsupported message type. Use an array or a class implementing %s'.Message::class
             );
         }
-        $response = $this->client->sendMessage($message);
+        $response = $this->messagingApi->sendMessage($message);
 
         return JSON::decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * @param string|Topic $topic
+     * @param RegistrationToken|RegistrationToken[]|string|string[] $registrationTokenOrTokens
+     *
+     * @return array
+     */
+    public function subscribeToTopic($topic, $registrationTokenOrTokens): array
+    {
+        $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
+        $tokens = $this->ensureArrayOfRegistrationTokens($registrationTokenOrTokens);
+
+        $response = $this->topicManagementApi->subscribeToTopic($topic, $tokens);
+
+        return JSON::decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * @param string|Topic $topic
+     * @param RegistrationToken|RegistrationToken[]|string|string[] $registrationTokenOrTokens
+     *
+     * @return array
+     */
+    public function unsubscribeFromTopic($topic, $registrationTokenOrTokens): array
+    {
+        $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
+        $tokens = $this->ensureArrayOfRegistrationTokens($registrationTokenOrTokens);
+
+        $response = $this->topicManagementApi->unsubscribeFromTopic($topic, $tokens);
+
+        return JSON::decode((string) $response->getBody(), true);
+    }
+
+    private function ensureArrayOfRegistrationTokens($tokenOrTokens): array
+    {
+        if ($tokenOrTokens instanceof RegistrationToken) {
+            return [$tokenOrTokens];
+        }
+
+        if (\is_string($tokenOrTokens)) {
+            return [RegistrationToken::fromValue($tokenOrTokens)];
+        }
+
+        if (\is_array($tokenOrTokens) && \count($tokenOrTokens)) {
+            return array_map(function ($token) {
+                return $token instanceof RegistrationToken ? $token : RegistrationToken::fromValue($token);
+            }, $tokenOrTokens);
+        }
+
+        throw new InvalidArgument('Invalid registration tokens.');
     }
 }

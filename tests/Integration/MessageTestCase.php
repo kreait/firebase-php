@@ -9,7 +9,7 @@ use Kreait\Firebase\Messaging\MessageFactory;
 use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
-abstract class MessagingTestCase extends IntegrationTestCase
+abstract class MessageTestCase extends IntegrationTestCase
 {
     /**
      * @var Messaging
@@ -31,7 +31,29 @@ abstract class MessagingTestCase extends IntegrationTestCase
         $this->messaging = self::$firebase->getMessaging();
         $this->messageFactory = new MessageFactory();
 
-        $this->fullMessageData = [
+        $this->fullMessageData = self::createFullMessageData();
+    }
+
+    protected function assertSuccessfulMessage($message)
+    {
+        $result = $this->messaging->send($message);
+
+        $this->assertTrue($noExceptionHasBeenThrown = true);
+
+        return $result;
+    }
+
+    abstract public function testSendEmptyMessage();
+
+    public function testSendFullMessage()
+    {
+        $message = $this->messageFactory->fromArray($this->fullMessageData);
+        $this->assertSuccessfulMessage($message);
+    }
+
+    public static function createFullMessageData(): array
+    {
+        return [
             'notification' => [
                 'title' => 'Notification title',
                 'body' => 'Notification body',
@@ -75,21 +97,5 @@ abstract class MessagingTestCase extends IntegrationTestCase
                 ],
             ],
         ];
-    }
-
-    protected function assertSuccessfulMessage($message)
-    {
-        $result = $this->messaging->send($message);
-
-        $this->assertTrue($noExceptionHasBeenThrown = true);
-
-        return $result;
-    }
-
-    abstract public function testSendEmptyMessage();
-
-    public function testSendFullMessage()
-    {
-        $this->assertSuccessfulMessage($this->messageFactory->fromArray($this->fullMessageData));
     }
 }

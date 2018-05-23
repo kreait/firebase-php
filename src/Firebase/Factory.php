@@ -191,11 +191,22 @@ class Factory
         $serviceAccount = $this->getServiceAccount();
         $projectId = $serviceAccount->getProjectId();
 
-        $http = $this->createApiClient($this->getServiceAccount(), [
-            'base_uri' => 'https://fcm.googleapis.com/v1/projects/'.$projectId,
-        ]);
+        $messagingApiClient = new Messaging\ApiClient(
+            $this->createApiClient($this->getServiceAccount(), [
+                'base_uri' => 'https://fcm.googleapis.com/v1/projects/'.$projectId,
+            ])
+        );
 
-        return new Messaging(new Messaging\ApiClient($http), new MessageFactory());
+        $topicManagementApiClient = new Messaging\TopicManagementApiClient(
+            $this->createApiClient($this->getServiceAccount(), [
+                'base_uri' => 'https://iid.googleapis.com',
+                'headers' => [
+                    'access_token_auth' => 'true',
+                ],
+            ])
+        );
+
+        return new Messaging($messagingApiClient, new MessageFactory(), $topicManagementApiClient);
     }
 
     protected function createApiClient(ServiceAccount $serviceAccount, array $config = []): Client
