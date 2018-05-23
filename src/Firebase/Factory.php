@@ -21,36 +21,36 @@ class Factory
     /**
      * @var UriInterface
      */
-    private $databaseUri;
+    protected $databaseUri;
 
     /**
      * @var string
      */
-    private $defaultStorageBucket;
+    protected $defaultStorageBucket;
 
     /**
      * @var ServiceAccount
      */
-    private $serviceAccount;
+    protected $serviceAccount;
 
     /**
      * @var Discoverer
      */
-    private $serviceAccountDiscoverer;
+    protected $serviceAccountDiscoverer;
 
     /**
      * @var string|null
      */
-    private $uid;
+    protected $uid;
 
     /**
      * @var array
      */
-    private $claims = [];
+    protected $claims = [];
 
-    private static $databaseUriPattern = 'https://%s.firebaseio.com';
+    protected static $databaseUriPattern = 'https://%s.firebaseio.com';
 
-    private static $storageBucketNamePattern = '%s.appspot.com';
+    protected static $storageBucketNamePattern = '%s.appspot.com';
 
     public function withServiceAccount(ServiceAccount $serviceAccount): self
     {
@@ -104,12 +104,12 @@ class Factory
         return new Firebase($database, $auth, $storage, $remoteConfig, $messaging);
     }
 
-    private function getServiceAccountDiscoverer(): Discoverer
+    protected function getServiceAccountDiscoverer(): Discoverer
     {
         return $this->serviceAccountDiscoverer ?? new Discoverer();
     }
 
-    private function getServiceAccount(): ServiceAccount
+    protected function getServiceAccount(): ServiceAccount
     {
         if (!$this->serviceAccount) {
             $this->serviceAccount = $this->getServiceAccountDiscoverer()->discover();
@@ -118,27 +118,27 @@ class Factory
         return $this->serviceAccount;
     }
 
-    private function getDatabaseUri(): UriInterface
+    protected function getDatabaseUri(): UriInterface
     {
         return $this->databaseUri ?: $this->getDatabaseUriFromServiceAccount($this->getServiceAccount());
     }
 
-    private function getStorageBucketName(): string
+    protected function getStorageBucketName(): string
     {
         return $this->defaultStorageBucket ?: $this->getStorageBucketNameFromServiceAccount($this->getServiceAccount());
     }
 
-    private function getDatabaseUriFromServiceAccount(ServiceAccount $serviceAccount): UriInterface
+    protected function getDatabaseUriFromServiceAccount(ServiceAccount $serviceAccount): UriInterface
     {
         return uri_for(sprintf(self::$databaseUriPattern, $serviceAccount->getProjectId()));
     }
 
-    private function getStorageBucketNameFromServiceAccount(ServiceAccount $serviceAccount): string
+    protected function getStorageBucketNameFromServiceAccount(ServiceAccount $serviceAccount): string
     {
         return sprintf(self::$storageBucketNamePattern, $serviceAccount->getProjectId());
     }
 
-    private function createAuth(): Auth
+    protected function createAuth(): Auth
     {
         $serviceAccount = $this->getServiceAccount();
 
@@ -153,7 +153,7 @@ class Factory
         );
     }
 
-    private function createDatabase(): Database
+    protected function createDatabase(): Database
     {
         $http = $this->createApiClient($this->getServiceAccount());
 
@@ -177,7 +177,7 @@ class Factory
         return new Database($this->getDatabaseUri(), new Database\ApiClient($http));
     }
 
-    private function createRemoteConfig(): RemoteConfig
+    protected function createRemoteConfig(): RemoteConfig
     {
         $http = $this->createApiClient($this->getServiceAccount(), [
             'base_uri' => 'https://firebaseremoteconfig.googleapis.com/v1/projects/'.$this->getServiceAccount()->getProjectId().'/remoteConfig',
@@ -186,7 +186,7 @@ class Factory
         return new RemoteConfig(new RemoteConfig\ApiClient($http));
     }
 
-    private function createMessaging(): Messaging
+    protected function createMessaging(): Messaging
     {
         $serviceAccount = $this->getServiceAccount();
         $projectId = $serviceAccount->getProjectId();
@@ -198,7 +198,7 @@ class Factory
         return new Messaging(new Messaging\ApiClient($http), new MessageFactory());
     }
 
-    private function createApiClient(ServiceAccount $serviceAccount, array $config = []): Client
+    protected function createApiClient(ServiceAccount $serviceAccount, array $config = []): Client
     {
         $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware($serviceAccount);
 
@@ -213,7 +213,7 @@ class Factory
         return new Client($config);
     }
 
-    private function createGoogleAuthTokenMiddleware(ServiceAccount $serviceAccount, array $additionalScopes = []): AuthTokenMiddleware
+    protected function createGoogleAuthTokenMiddleware(ServiceAccount $serviceAccount, array $additionalScopes = []): AuthTokenMiddleware
     {
         $scopes = [
             'https://www.googleapis.com/auth/cloud-platform',
@@ -232,7 +232,7 @@ class Factory
         return new AuthTokenMiddleware(new ServiceAccountCredentials($scopes, $credentials));
     }
 
-    private function createStorage(): Storage
+    protected function createStorage(): Storage
     {
         $builder = $this->getGoogleCloudServiceBuilder();
 
@@ -243,7 +243,7 @@ class Factory
         return new Storage($storageClient, $this->getStorageBucketName());
     }
 
-    private function getGoogleCloudServiceBuilder(): ServiceBuilder
+    protected function getGoogleCloudServiceBuilder(): ServiceBuilder
     {
         $serviceAccount = $this->getServiceAccount();
 
