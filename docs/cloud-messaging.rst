@@ -328,3 +328,49 @@ Sending a fully configured raw message
                 ],
             ],
         ])
+
+****************
+Topic management
+****************
+
+Subscribe to a topic
+--------------------
+
+You can subscribe one or multiple devices to a topic by passing registration tokens to the
+``subscribeToTopic()`` method.
+
+.. code-block:: php
+
+    $topic = 'my-topic';
+    $registrationTokens = [
+        // ...
+    };
+
+    $firebase
+        ->getMessaging()
+        ->subscribeToTopic($topic, $registrationTokens);
+
+.. note::
+    You can subscribe up to 1,000 devices in a single request. If you provide an array with over 1,000
+    registration tokens, the operation will fail with an error.
+
+Unsubscribe from a topic
+------------------------
+
+You can unsubscribe one or multiple devices from a topic by passing registration tokens to the
+``unsubscribeFromTopic()`` method.
+
+.. code-block:: php
+
+    $topic = 'my-topic';
+    $registrationTokens = [
+        // ...
+    };
+
+    $firebase
+        ->getMessaging()
+        ->unsubscribeFromTopic($topic, $registrationTokens);
+
+.. note::
+    You can unsubscribe up to 1,000 devices in a single request. If you provide an array with over 1,000
+    registration tokens, the operation will fail with an error.
