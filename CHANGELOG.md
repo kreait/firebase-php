@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+* Made `Kreait\Firebase\Factory` extensible so that it can be extended by libraries that want to build on it.
+  - [morrislaptop/firestore-php](https://github.com/morrislaptop/firestore-php) is a new project that aims to
+    provide support for the Firestore without the need to install the `grpc` PHP extension.
+
 ## 4.7.1 - 2018-05-09
 
 ### Bugfixes

@@ -32,9 +32,14 @@ An example project can be found at https://github.com/jeromegamez/firebase-php-e
 | [Remote Config](https://firebase.google.com/docs/remote-config/) | ✅ | | | | |
 | [Cloud Messaging API](https://firebase.google.com/docs/cloud-messaging/admin/) | ✅ | ✅ | ✅ | ✅ | ✅ |				
 | [Cloud Storage API](https://firebase.google.com/docs/storage/admin/start) | ✅ | ✅ | ✅ | ✅ | ✅ |
-| [Cloud Firestore API](https://firebase.google.com/docs/firestore/) | | ✅ | ✅ | ✅ | ✅ |
+| [Cloud Firestore API](https://firebase.google.com/docs/firestore/) | # | ✅ | ✅ | ✅ | ✅ |
 
-> * The Realtime Database API currently does not support realtime event listeners.
+> \* The Realtime Database API currently does not support realtime event listeners.
+
+> \# An integration with [google/cloud-firestore](https://github.com/GoogleCloudPlatform/google-cloud-php-firestore) 
+  is currently not available to avoid the need to install the `grpc` PHP extension when using this SDK.
+> [morrislaptop/firestore-php](https://github.com/morrislaptop/firestore-php) is a new project that aims to 
+  provide support for the Firestore without the need to install the `grpc` PHP extension.
 
 ## Support
 
