@@ -4,9 +4,11 @@ namespace Kreait\Firebase\Tests\Unit;
 
 use Firebase\Auth\Token\Domain\Generator;
 use Firebase\Auth\Token\Domain\Verifier;
+use Firebase\Auth\Token\Exception\IssuedInTheFuture;
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Tests\UnitTestCase;
+use Lcobucci\JWT\Token;
 
 class AuthTest extends UnitTestCase
 {
@@ -59,5 +61,37 @@ class AuthTest extends UnitTestCase
             ->method('verifyIdToken');
 
         $this->auth->verifyIdToken('some id token string');
+    }
+
+    public function testDisallowFutureTokens()
+    {
+        $tokenProphecy = $this->prophesize(Token::class);
+        $tokenProphecy->getClaim('iat')->willReturn(date('U'));
+
+        $token = $tokenProphecy->reveal();
+
+        $this->idTokenVerifier
+            ->expects($this->once())
+            ->method('verifyIdToken')
+            ->willThrowException(new IssuedInTheFuture($token));
+
+        $this->expectException(IssuedInTheFuture::class);
+        $this->auth->verifyIdToken('foo');
+    }
+
+    public function testAllowFutureTokens()
+    {
+        $tokenProphecy = $this->prophesize(Token::class);
+        $tokenProphecy->getClaim('iat')->willReturn(date('U'));
+
+        $token = $tokenProphecy->reveal();
+
+        $this->idTokenVerifier
+            ->expects($this->once())
+            ->method('verifyIdToken')
+            ->willReturn($token);
+
+        $verifiedToken = $this->auth->verifyIdToken('foo', false, true);
+        $this->assertSame($token, $verifiedToken);
     }
 }

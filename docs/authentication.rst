@@ -165,6 +165,21 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
     $uid = $verifiedIdToken->getClaim('sub');
     $user = $firebase->getAuth()->getUser($uid);
 
+``Auth::verifyIdToken()`` accepts up to three parameters:
+
+===================== ============ ===========
+Parameter             Type         Description
+===================== ============ ===========
+``idToken``           string|Token **(required)** The ID token to verify
+``checkIfRevoked``    boolean      (optional, default: ``false`` ) check if the ID token is revoked
+``allowFutureTokens`` boolean      (optional, default: ``false`` ) allow tokens that have been issued in the future
+===================== ============ ===========
+
+.. warning::
+    Enabling the ``$allowFutureTokens`` flag is not recommended. An ``IssuedInTheFuture`` exception
+    is an indication the system time is not correct, and you should aim to fix the issue instead of
+    reducing the token's security.
+
 .. note::
     This library uses `lcobucci/jwt <https://github.com/lcobucci/jwt>`_ to work with JSON Web Tokens (JWT).
     You can find the usage instructions at

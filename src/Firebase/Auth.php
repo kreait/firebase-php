@@ -4,6 +4,8 @@ namespace Kreait\Firebase;
 
 use Firebase\Auth\Token\Domain\Generator as TokenGenerator;
 use Firebase\Auth\Token\Domain\Verifier as IdTokenVerifier;
+use Firebase\Auth\Token\Exception\InvalidToken;
+use Firebase\Auth\Token\Exception\IssuedInTheFuture;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
@@ -247,14 +249,23 @@ class Auth
      *
      * @param Token|string $idToken the JWT to verify
      * @param bool $checkIfRevoked whether to check if the ID token is revoked
+     * @param bool $allowFutureTokens whether to allow tokens that have been issued for the future
      *
+     * @throws InvalidToken
+     * @throws IssuedInTheFuture
      * @throws RevokedIdToken
      *
      * @return Token the verified token
      */
-    public function verifyIdToken($idToken, bool $checkIfRevoked = false): Token
+    public function verifyIdToken($idToken, bool $checkIfRevoked = false, bool $allowFutureTokens = false): Token
     {
-        $verifiedToken = $this->idTokenVerifier->verifyIdToken($idToken);
+        try {
+            $verifiedToken = $this->idTokenVerifier->verifyIdToken($idToken);
+        } catch (IssuedInTheFuture $e) {
+            if (!$allowFutureTokens) {
+                throw $e;
+            }
+        }
 
         if ($checkIfRevoked) {
             $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->getClaim('auth_time'));
