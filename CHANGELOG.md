@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.9.0 - 2018-06-09
 
 * Added a flag to `Kreait\Firebase\Auth::verifyIdToken()` to ignore `IssuedInTheFuture` exceptions
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/authentication.html#verify-a-firebase-id-token))
