@@ -6,10 +6,8 @@ namespace Kreait\Firebase\Messaging;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
-class MessageToTopic implements Message
+class MessageToTopic extends Message
 {
-    use MessageTrait;
-
     /**
      * @var Topic
      */

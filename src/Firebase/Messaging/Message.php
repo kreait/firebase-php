@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging;
 
-interface Message extends \JsonSerializable
+abstract class Message implements \JsonSerializable
 {
+    use MessageTrait;
 }

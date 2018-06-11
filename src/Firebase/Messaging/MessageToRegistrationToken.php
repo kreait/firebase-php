@@ -6,10 +6,8 @@ namespace Kreait\Firebase\Messaging;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
-class MessageToRegistrationToken implements Message
+class MessageToRegistrationToken extends Message
 {
-    use MessageTrait;
-
     /**
      * @var RegistrationToken
      */
