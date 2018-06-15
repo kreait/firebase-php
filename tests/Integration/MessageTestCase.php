@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\MessageFactory;
-use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 abstract class MessageTestCase extends IntegrationTestCase

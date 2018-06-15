@@ -3,7 +3,6 @@
 namespace Kreait\Firebase\Tests\Unit\ServiceAccount\Discovery;
 
 use Kreait\Firebase\Exception\ServiceAccountDiscoveryFailed;
-use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\ServiceAccount\Discovery\FromPath;
 use Kreait\Firebase\Tests\UnitTestCase;
 

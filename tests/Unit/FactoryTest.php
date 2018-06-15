@@ -2,13 +2,11 @@
 
 namespace Kreait\Firebase\Tests\Unit;
 
-use Firebase\Auth\Token\Exception\InvalidToken;
 use Kreait\Firebase;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\Firebase\Tests\UnitTestCase;
-use Lcobucci\JWT\Token;
 
 class FactoryTest extends UnitTestCase
 {
