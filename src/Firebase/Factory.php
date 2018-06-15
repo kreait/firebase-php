@@ -2,7 +2,9 @@
 
 namespace Kreait\Firebase;
 
+use Firebase\Auth\Token\Cache\InMemoryCache;
 use Firebase\Auth\Token\Generator;
+use Firebase\Auth\Token\HttpKeyStore;
 use Firebase\Auth\Token\Verifier;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\Middleware\AuthTokenMiddleware;
@@ -10,6 +12,7 @@ use Google\Cloud\Core\ServiceBuilder;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use Kreait\Firebase;
+use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\Messaging\MessageFactory;
 use Kreait\Firebase\ServiceAccount\Discoverer;
@@ -48,6 +51,11 @@ class Factory
      */
     protected $claims = [];
 
+    /**
+     * @var \Psr\SimpleCache\CacheInterface
+     */
+    protected $verifierCache;
+
     protected static $databaseUriPattern = 'https://%s.firebaseio.com';
 
     protected static $storageBucketNamePattern = '%s.appspot.com';
@@ -80,6 +88,18 @@ class Factory
     {
         $factory = clone $this;
         $factory->defaultStorageBucket = $name;
+
+        return $factory;
+    }
+
+    public function withVerifierCache($cache): self
+    {
+        if (!is_a($cache, $expected = 'Psr\SimpleCache\CacheInterface')) {
+            throw new InvalidArgumentException('The verififier cache must be an instance of '.$expected);
+        }
+
+        $factory = clone $this;
+        $factory->verifierCache = $cache;
 
         return $factory;
     }
@@ -146,10 +166,12 @@ class Factory
             'base_uri' => 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/',
         ]);
 
+        $keyStore = new HttpKeyStore(new Client(), $this->verifierCache ?: new InMemoryCache());
+
         return new Auth(
             new Auth\ApiClient($http),
             new Generator($serviceAccount->getClientEmail(), $serviceAccount->getPrivateKey()),
-            new Verifier($serviceAccount->getProjectId())
+            new Verifier($serviceAccount->getProjectId(), $keyStore)
         );
     }
 

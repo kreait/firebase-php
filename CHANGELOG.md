@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Unreleased
+
+### New features
+
+* Allow the caching of Google's public keys used for ID Token verification 
+  ([#210](https://github.com/kreait/firebase-php/issues/210)) 
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/authentication.html#caching-google-s-public-keys))
+
 ## 4.9.0 - 2018-06-09
 
 * Added a flag to `Kreait\Firebase\Auth::verifyIdToken()` to ignore `IssuedInTheFuture` exceptions

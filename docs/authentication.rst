@@ -185,6 +185,32 @@ Parameter             Type         Description
     You can find the usage instructions at
     `https://github.com/lcobucci/jwt/blob/3.2/README.md <https://github.com/lcobucci/jwt/blob/3.2/README.md>`_.
 
+Caching Google's public keys
+----------------------------
+
+In order to verify ID tokens, the verifier makes a call to fetch Firebase's currently available public keys.
+The keys are cached in memory by default.
+
+If you want to cache the public keys more effectively, you can provide any
+`implementation of psr/simple-cache <https://packagist.org/providers/psr/simple-cache-implementation>`_ to the
+Firebase factory when creating your Firebase instance.
+
+Here is an example using the `Symfony Cache Component <https://symfony.com/doc/current/components/cache.html>`_:
+
+.. code-block:: php
+
+        use Kreait\Firebase\Factory;
+        use Kreait\Firebase\ServiceAccount;
+        use Symfony\Component\Cache\Simple\FilesystemCache;
+
+        $cache = new FilesystemCache();
+
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
+
+        $firebase = (new Factory)
+            ->withServiceAccount($serviceAccount)
+            ->withVerifierCache($cache)
+            ->create();
 
 .. rubric:: References
 

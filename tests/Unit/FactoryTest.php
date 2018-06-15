@@ -2,11 +2,13 @@
 
 namespace Kreait\Firebase\Tests\Unit;
 
+use Firebase\Auth\Token\Exception\InvalidToken;
 use Kreait\Firebase;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\Firebase\Tests\UnitTestCase;
+use Lcobucci\JWT\Token;
 
 class FactoryTest extends UnitTestCase
 {
@@ -66,5 +68,22 @@ class FactoryTest extends UnitTestCase
         $factory = $this->factory->asUser('some-uid', ['some' => 'claim']);
 
         $this->assertInstanceOf(Firebase::class, $factory->create());
+    }
+
+    public function testItAcceptsAVerifierCache()
+    {
+        $cache = $this->createMock('\Psr\SimpleCache\CacheInterface');
+
+        $factory = $this->factory->withVerifierCache($cache);
+
+        $this->assertInstanceOf(Firebase::class, $factory->create());
+    }
+
+    public function testItRejectsAnInvalidVerifierCache()
+    {
+        $cache = $this->createMock(\stdClass::class);
+
+        $this->expectException(Firebase\Exception\InvalidArgumentException::class);
+        $this->factory->withVerifierCache($cache);
     }
 }
