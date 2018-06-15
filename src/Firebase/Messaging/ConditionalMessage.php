@@ -6,10 +6,8 @@ namespace Kreait\Firebase\Messaging;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
-class ConditionalMessage implements Message
+class ConditionalMessage extends Message
 {
-    use MessageTrait;
-
     /**
      * @var Condition
      */
