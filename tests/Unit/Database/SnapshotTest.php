@@ -101,4 +101,19 @@ class SnapshotTest extends UnitTestCase
         $this->assertSame(0, $this->snapshotWithScalarValue->numChildren());
         $this->assertSame(0, $this->snapshotWithEmptyValue->numChildren());
     }
+
+
+    public function testGetChildWithKeyStartingWithANumber()
+    {
+        $snapshot = new Snapshot($this->reference, ['123' => 'value']);
+
+        $this->assertTrue($snapshot->hasChild('123'));
+    }
+
+    public function testGetChildWithKeyStartingWithAHyphen()
+    {
+        $snapshot = new Snapshot($this->reference, ['-abc' => 'value']);
+
+        $this->assertTrue($snapshot->hasChild('-abc'));
+    }
 }
