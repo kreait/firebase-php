@@ -265,6 +265,8 @@ class Auth
             if (!$allowFutureTokens) {
                 throw $e;
             }
+
+            $verifiedToken = $e->getToken();
         }
 
         if ($checkIfRevoked) {
