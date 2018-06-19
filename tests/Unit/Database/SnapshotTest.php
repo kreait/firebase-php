@@ -101,4 +101,18 @@ class SnapshotTest extends UnitTestCase
         $this->assertSame(0, $this->snapshotWithScalarValue->numChildren());
         $this->assertSame(0, $this->snapshotWithEmptyValue->numChildren());
     }
+
+    /**
+     * @see https://github.com/kreait/firebase-php/issues/212
+     */
+    public function testGetChildWithKeyStartingWithANonAlphabeticalCharacter()
+    {
+        $snapshot = new Snapshot($this->reference, [
+            '123' => 'value',
+            '-abc' => 'value',
+        ]);
+
+        $this->assertTrue($snapshot->hasChild('123'));
+        $this->assertTrue($snapshot->hasChild('-abc'));
+    }
 }
