@@ -92,6 +92,13 @@ class Factory
         return $factory;
     }
 
+    /**
+     * @param \Psr\SimpleCache\CacheInterface $cache
+     *
+     * @throws \Kreait\Firebase\Exception\InvalidArgumentException
+     *
+     * @return self
+     */
     public function withVerifierCache($cache): self
     {
         if (!is_a($cache, $expected = 'Psr\SimpleCache\CacheInterface')) {
