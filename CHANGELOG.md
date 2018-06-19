@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bugfixes
+
+* Add support for non-alphabetical chars in keys in Database snapshots ([#212](https://github.com/kreait/firebase-php/issues/212))
+
 ## 4.10.0 - 2018-06-15
 
 ### New features
