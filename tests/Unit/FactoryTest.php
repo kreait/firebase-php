@@ -77,6 +77,23 @@ class FactoryTest extends UnitTestCase
         $this->assertInstanceOf(Firebase::class, $factory->create());
     }
 
+    public function testItAcceptsACustomHttpClientConfig()
+    {
+        $factory = $this->factory->withHttpClientConfig(['key' => 'value']);
+
+        $this->assertInstanceOf(Firebase::class, $factory->create());
+    }
+
+    public function testItAcceptsAdditionalHttpClientMiddlewares()
+    {
+        $factory = $this->factory->withHttpClientMiddlewares([
+            function () {},
+            'name' => function () {},
+        ]);
+
+        $this->assertInstanceOf(Firebase::class, $factory->create());
+    }
+
     public function testItRejectsAnInvalidVerifierCache()
     {
         $cache = $this->createMock(\stdClass::class);

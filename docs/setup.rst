@@ -104,3 +104,31 @@ be explicit, you can configure the Factory like this:
     $firebase = (new Factory)
         ->withDatabaseUri('https://my-project.firebaseio.com')
         ->create();
+
+***********************************
+HTTP Client Options and middlewares
+***********************************
+
+If you want to extend or change the behaviour of the underlying HTTP client, you can pass options to it
+while creating your Firebase instance.
+
+See `Guzzle Request Options <http://docs.guzzlephp.org/en/stable/request-options.html>`_ for the available options
+and `Guzzle Middlewares <http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html#middleware>`_ for
+information on how to use middlewares.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Factory;
+
+    $httpConfig = [
+        // see http://docs.guzzlephp.org/en/stable/request-options.html
+    ];
+
+    $httpMiddlewares = [
+        // see http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html#middleware
+    ];
+
+    $firebase = (new Factory)
+        ->withHttpClientConfig($httpConfig)
+        ->withHttpClientMiddlewares($httpMiddlewares)
+        ->create();

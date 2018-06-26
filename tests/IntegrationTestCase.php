@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests;
 
 use Kreait\Firebase;
+use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Util\JSON;
 
@@ -14,6 +15,11 @@ abstract class IntegrationTestCase extends FirebaseTestCase
      * @var Firebase
      */
     protected static $firebase;
+
+    /**
+     * @var Factory
+     */
+    protected static $factory;
 
     /**
      * @var ServiceAccount
@@ -45,8 +51,8 @@ abstract class IntegrationTestCase extends FirebaseTestCase
             return;
         }
 
-        self::$firebase = (new Firebase\Factory())
-            ->withServiceAccount(self::$serviceAccount)
-            ->create();
+        self::$factory = (new Factory())->withServiceAccount(self::$serviceAccount);
+
+        self::$firebase = self::$factory->create();
     }
 }

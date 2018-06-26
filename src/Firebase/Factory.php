@@ -56,6 +56,16 @@ class Factory
      */
     protected $verifierCache;
 
+    /**
+     * @var array
+     */
+    protected $httpClientConfig = [];
+
+    /**
+     * @var array
+     */
+    protected $httpClientMiddlewares = [];
+
     protected static $databaseUriPattern = 'https://%s.firebaseio.com';
 
     protected static $storageBucketNamePattern = '%s.appspot.com';
@@ -107,6 +117,22 @@ class Factory
 
         $factory = clone $this;
         $factory->verifierCache = $cache;
+
+        return $factory;
+    }
+
+    public function withHttpClientConfig(array $config): self
+    {
+        $factory = clone $this;
+        $factory->httpClientConfig = $config;
+
+        return $factory;
+    }
+
+    public function withHttpClientMiddlewares(array $middlewares): self
+    {
+        $factory = clone $this;
+        $factory->httpClientMiddlewares = $middlewares;
 
         return $factory;
     }
@@ -243,9 +269,12 @@ class Factory
         $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware($serviceAccount);
 
         $stack = HandlerStack::create();
+        foreach ($this->httpClientMiddlewares as $middleware) {
+            $stack->push($middleware);
+        }
         $stack->push($googleAuthTokenMiddleware, 'auth_service_account');
 
-        $config = array_merge($config, [
+        $config = array_merge($this->httpClientConfig, $config, [
             'handler' => $stack,
             'auth' => 'google_auth',
         ]);
