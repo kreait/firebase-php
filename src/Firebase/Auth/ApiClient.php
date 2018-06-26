@@ -228,6 +228,10 @@ class ApiClient
 
     private function request(string $uri, $data): ResponseInterface
     {
+        if ($data instanceof \JsonSerializable && empty($data->jsonSerialize())) {
+            $data = (object) []; // Will be '{}' instead of '[]' when JSON encoded
+        }
+
         try {
             return $this->client->request('POST', $uri, ['json' => $data]);
         } catch (RequestException $e) {

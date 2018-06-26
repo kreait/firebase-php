@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Fixed issue when creating anonymous users: The Firebase REST API now requires empty payloads to be objects, not arrays (`{}` instead of `[]`)
+
 ## 4.10.1 - 2018-06-19
 
 ### Bugfixes
