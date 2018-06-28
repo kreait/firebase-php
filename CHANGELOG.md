@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.12.0 - 2018-06-28
 
 * Add support for validating FCM messages without actually sending them ([#216](https://github.com/kreait/firebase-php/issues/216)) 
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#validating-messages))
