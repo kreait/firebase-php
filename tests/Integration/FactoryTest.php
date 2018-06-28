@@ -17,7 +17,7 @@ class FactoryTest extends IntegrationTestCase
         $firebase = self::$factory->withHttpClientConfig([
             'on_headers' => function (ResponseInterface $response) use (&$invocations) {
                 ++$invocations;
-            }
+            },
         ])->create();
 
         // Any request will do
@@ -33,9 +33,10 @@ class FactoryTest extends IntegrationTestCase
             function (callable $handler) use (&$invocations) {
                 return function (RequestInterface $request, array $options) use ($handler, &$invocations) {
                     ++$invocations;
+
                     return $handler($request, $options);
                 };
-            }
+            },
         ])->create();
 
         // Any request will do

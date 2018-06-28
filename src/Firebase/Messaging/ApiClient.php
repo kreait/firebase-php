@@ -23,9 +23,18 @@ class ApiClient
 
     public function sendMessage(Message $message): ResponseInterface
     {
-        // echo JSON::prettyPrint($message); exit;
         return $this->request('POST', 'messages:send', [
             'json' => ['message' => $message->jsonSerialize()],
+        ]);
+    }
+
+    public function validateMessage(Message $message): ResponseInterface
+    {
+        return $this->request('POST', 'messages:send', [
+            'json' => [
+                'message' => $message->jsonSerialize(),
+                'validate_only' => true,
+            ],
         ]);
     }
 

@@ -6,6 +6,8 @@ namespace Kreait\Firebase;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
+use Kreait\Firebase\Exception\Messaging\InvalidMessage;
+use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\MessageFactory;
@@ -58,6 +60,36 @@ class Messaging
             );
         }
         $response = $this->messagingApi->sendMessage($message);
+
+        return JSON::decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * @param array|Message $message
+     *
+     * @throws InvalidArgumentException
+     * @throws InvalidMessage
+     *
+     * @return array
+     */
+    public function validate($message): array
+    {
+        if (\is_array($message)) {
+            $message = $this->factory->fromArray($message);
+        }
+
+        if (!($message instanceof Message)) {
+            throw new InvalidArgumentException(
+                'Unsupported message type. Use an array or a class implementing %s'.Message::class
+            );
+        }
+
+        try {
+            $response = $this->messagingApi->validateMessage($message);
+        } catch (NotFound $e) {
+            throw (new InvalidMessage($e->getMessage(), $e->getCode()))
+                ->withResponse($e->response());
+        }
 
         return JSON::decode((string) $response->getBody(), true);
     }

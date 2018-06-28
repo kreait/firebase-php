@@ -329,6 +329,25 @@ Sending a fully configured raw message
             ],
         ])
 
+*******************
+Validating messages
+*******************
+
+You can validate a message by sending a validation-only request to the Firebase REST API. If the message is invalid,
+a `Kreait\Firebase\Exception\Messaging\InvalidMessage` exception is thrown, which you can catch to evaluate the raw
+error message(s) that the API returned.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Exception\Messaging\InvalidMessage;
+
+    try {
+        $firebase->getMessaging()->validate($message);
+    } catch (InvalidMessage $e) {
+        print_r($e->errors());
+    }
+
+
 ****************
 Topic management
 ****************
