@@ -49,7 +49,7 @@ class Template implements \JsonSerializable
         $template->etag = $etag;
 
         foreach ((array) ($data['conditions'] ?? []) as $conditionData) {
-            $template->conditions[] = Condition::fromArray($conditionData);
+            $template->conditions[$conditionData['name']] = Condition::fromArray($conditionData);
         }
 
         foreach ((array) ($data['parameters'] ?? []) as $name => $parameterData) {

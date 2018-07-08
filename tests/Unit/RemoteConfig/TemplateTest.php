@@ -19,4 +19,19 @@ class TemplateTest extends UnitTestCase
         $this->expectException(InvalidArgumentException::class);
         Template::new()->withParameter($parameter);
     }
+
+    /**
+     * @see https://github.com/kreait/firebase-php/issues/218
+     */
+    public function testConditionNamesAreImportedCorrectlyWhenUsingFromArray()
+    {
+        $given = ['conditions' => [['name' => 'foo', 'expression' => '"true"']]];
+
+        $template = Template::fromArray($given);
+
+        $parameter = Parameter::named('param')->withConditionalValue(ConditionalValue::basedOn('foo'));
+
+        $template->withParameter($parameter);
+        $this->assertTrue($noExceptionHasBeenThrown = true);
+    }
 }
