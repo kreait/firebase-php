@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased
+
+### Changes
+
+* Remote Config: A more descriptive exception is thrown when adding a parameter to a template that refers 
+  to a condition that doesn't exist.  
+
 ## 4.12.0 - 2018-06-28
 
 * Add support for validating FCM messages without actually sending them ([#216](https://github.com/kreait/firebase-php/issues/216)) 

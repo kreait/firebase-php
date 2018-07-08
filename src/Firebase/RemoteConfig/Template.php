@@ -84,18 +84,13 @@ class Template implements \JsonSerializable
 
     private function assertThatAllConditionalValuesAreValid(Parameter $parameter)
     {
-        $allValid = array_reduce($parameter->conditionalValues(), function (bool $result, ConditionalValue $conditionalValue) {
-            return $result ?: $this->conditionExists($conditionalValue->conditionName());
-        }, false);
+        foreach ($parameter->conditionalValues() as $conditionalValue) {
+            if (!array_key_exists($conditionalValue->conditionName(), $this->conditions)) {
+                $message = 'The conditional value of the parameter named "%s" referes to a condition "%s" which does not exist.';
 
-        if (!$allValid && \count($parameter->conditionalValues())) {
-            throw new InvalidArgumentException('Not all given conditional values refer to an existing condition.');
+                throw new InvalidArgumentException(sprintf($message, $parameter->name(), $conditionalValue->conditionName()));
+            }
         }
-    }
-
-    private function conditionExists(string $conditionName): bool
-    {
-        return array_key_exists($conditionName, $this->conditions);
     }
 
     public function jsonSerialize()
