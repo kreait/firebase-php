@@ -27,9 +27,16 @@ class ConditionalValue implements \JsonSerializable
         return $this->conditionName;
     }
 
-    public static function basedOn(Condition $condition): self
+    /**
+     * @param string|Condition $condition
+     *
+     * @return self
+     */
+    public static function basedOn($condition): self
     {
-        return new self($condition->name(), '');
+        $name = $condition instanceof Condition ? $condition->name() : $condition;
+
+        return new self($name, '');
     }
 
     public function value(): string

@@ -21,4 +21,11 @@ class ConditionalValueTest extends UnitTestCase
         $this->assertSame('foo', $conditionalValue->value());
         $this->assertEquals(['value' => 'foo'], $conditionalValue->jsonSerialize());
     }
+
+    public function testCreateWithString()
+    {
+        $value = ConditionalValue::basedOn('foo');
+
+        $this->assertSame('foo', $value->conditionName());
+    }
 }
