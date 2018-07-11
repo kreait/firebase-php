@@ -9,7 +9,7 @@
 ### Changes
 
 * A more descriptive exception is thrown when adding a parameter to a Remote Config template that refers 
-  to a condition that doesn't exist.  
+  to a condition that doesn't exist.
 
 ## 4.12.0 - 2018-06-28
 
