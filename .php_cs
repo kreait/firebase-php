@@ -1,8 +1,7 @@
 <?php
 
 $finder = PhpCsFixer\Finder::create()
-    ->exclude(['build', 'vendor'])
-    ->in(__DIR__);
+    ->in(['src', 'tests']);
 
 return PhpCsFixer\Config::create()
     ->setUsingCache(true)
