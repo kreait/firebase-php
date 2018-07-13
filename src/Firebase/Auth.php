@@ -214,6 +214,7 @@ class Auth
 
     /**
      * @param string $uid
+     * @param string $continueUrl
      */
     public function sendEmailVerification(string $uid, string $continueUrl = null)
     {

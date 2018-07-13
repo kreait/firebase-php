@@ -191,6 +191,7 @@ class ApiClient
 
     /**
      * @param string $idToken
+     * @param string $continueUrl
      *
      * @return ResponseInterface
      */
