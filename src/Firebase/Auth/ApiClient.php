@@ -194,19 +194,21 @@ class ApiClient
      *
      * @return ResponseInterface
      */
-    public function sendEmailVerification(string $idToken): ResponseInterface
+    public function sendEmailVerification(string $idToken, string $continueUrl = null): ResponseInterface
     {
         return $this->request('getOobConfirmationCode', [
             'requestType' => 'VERIFY_EMAIL',
             'idToken' => $idToken,
+            'continueUrl' => $continueUrl,
         ]);
     }
 
-    public function sendPasswordResetEmail(string $email): ResponseInterface
+    public function sendPasswordResetEmail(string $email, string $continueUrl = null): ResponseInterface
     {
         return $this->request('getOobConfirmationCode', [
             'email' => $email,
             'requestType' => 'PASSWORD_RESET',
+            'continueUrl' => $continueUrl,
         ]);
     }
 
