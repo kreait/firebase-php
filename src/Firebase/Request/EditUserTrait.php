@@ -129,7 +129,12 @@ trait EditUserTrait
         return $request;
     }
 
-    public function withUid($uid): self
+    /**
+     * @param Uid|string $uid
+     *
+     * @return static
+     */
+    public function withUid($uid)
     {
         $request = clone $this;
         $request->uid = $uid instanceof Uid ? $uid : new Uid($uid);
@@ -137,7 +142,11 @@ trait EditUserTrait
         return $request;
     }
 
-    public function withEmail($email): self
+    /**
+     * @param Email|string $email
+     * @return static
+     */
+    public function withEmail($email)
     {
         $request = clone $this;
         $request->email = $email instanceof Email ? $email : new Email($email);
@@ -145,7 +154,11 @@ trait EditUserTrait
         return $request;
     }
 
-    public function withVerifiedEmail($email): self
+    /**
+     * @param Email|string $email
+     * @return static
+     */
+    public function withVerifiedEmail($email)
     {
         $request = clone $this;
         $request->email = $email instanceof Email ? $email : new Email($email);
@@ -154,7 +167,11 @@ trait EditUserTrait
         return $request;
     }
 
-    public function withUnverifiedEmail($email): self
+    /**
+     * @param Email|string $email
+     * @return static
+     */
+    public function withUnverifiedEmail($email)
     {
         $request = clone $this;
         $request->email = $email instanceof Email ? $email : new Email($email);
@@ -163,7 +180,11 @@ trait EditUserTrait
         return $request;
     }
 
-    public function withDisplayName(string $displayName): self
+    /**
+     * @param string $displayName
+     * @return static
+     */
+    public function withDisplayName(string $displayName)
     {
         $request = clone $this;
         $request->displayName = $displayName;
@@ -171,7 +192,11 @@ trait EditUserTrait
         return $request;
     }
 
-    public function withPhoneNumber($phoneNumber): self
+    /**
+     * @param string|PhoneNumber $phoneNumber
+     * @return static
+     */
+    public function withPhoneNumber($phoneNumber)
     {
         if ($phoneNumber) {
             $phoneNumber = $phoneNumber instanceof PhoneNumber
@@ -185,7 +210,11 @@ trait EditUserTrait
         return $request;
     }
 
-    public function withPhotoUrl($url): self
+    /**
+     * @param Url|string $url
+     * @return static
+     */
+    public function withPhotoUrl($url)
     {
         $request = clone $this;
         $request->photoUrl = $url instanceof Url ? $url : Url::fromValue($url);
@@ -193,7 +222,10 @@ trait EditUserTrait
         return $request;
     }
 
-    public function markAsDisabled(): self
+    /**
+     * @return static
+     */
+    public function markAsDisabled()
     {
         $request = clone $this;
         $request->markAsEnabled = null;
@@ -202,7 +234,10 @@ trait EditUserTrait
         return $request;
     }
 
-    public function markAsEnabled(): self
+    /**
+     * @return static
+     */
+    public function markAsEnabled()
     {
         $request = clone $this;
         $request->markAsDisabled = null;
@@ -211,7 +246,10 @@ trait EditUserTrait
         return $request;
     }
 
-    public function markEmailAsVerified(): self
+    /**
+     * @return static
+     */
+    public function markEmailAsVerified()
     {
         $request = clone $this;
         $request->emailIsVerified = true;
@@ -219,7 +257,10 @@ trait EditUserTrait
         return $request;
     }
 
-    public function markEmailAsUnverified(): self
+    /**
+     * @return static
+     */
+    public function markEmailAsUnverified()
     {
         $request = clone $this;
         $request->emailIsVerified = false;
@@ -227,7 +268,11 @@ trait EditUserTrait
         return $request;
     }
 
-    public function withClearTextPassword($clearTextPassword): self
+    /**
+     * @param ClearTextPassword|string $clearTextPassword
+     * @return static
+     */
+    public function withClearTextPassword($clearTextPassword)
     {
         $request = clone $this;
         $request->clearTextPassword = $clearTextPassword instanceof ClearTextPassword
