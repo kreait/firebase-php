@@ -16,9 +16,9 @@ class Discoverer
     /**
      * @param callable[] $methods
      */
-    public function __construct(array $methods = [])
+    public function __construct(array $methods = null)
     {
-        $this->methods = $methods ?: $this->getDefaultMethods();
+        $this->methods = $methods ?? $this->getDefaultMethods();
     }
 
     public function getDefaultMethods(): array

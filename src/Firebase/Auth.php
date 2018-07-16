@@ -72,8 +72,11 @@ class Auth
      *
      * @return \Generator|UserRecord[]
      */
-    public function listUsers(int $maxResults = 1000, int $batchSize = 1000): \Generator
+    public function listUsers(int $maxResults = null, int $batchSize = null): \Generator
     {
+        $maxResults = $maxResults ?? 1000;
+        $batchSize = $batchSize ?? 1000;
+
         $pageToken = null;
         $count = 0;
 
@@ -289,8 +292,10 @@ class Auth
      *
      * @return Token
      */
-    public function createCustomToken($uid, array $claims = []): Token
+    public function createCustomToken($uid, array $claims = null): Token
     {
+        $claims = $claims ?? [];
+
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
 
         return $this->tokenGenerator->createCustomToken($uid, $claims);
@@ -312,8 +317,11 @@ class Auth
      *
      * @return Token the verified token
      */
-    public function verifyIdToken($idToken, bool $checkIfRevoked = false, bool $allowFutureTokens = false): Token
+    public function verifyIdToken($idToken, bool $checkIfRevoked = null, bool $allowFutureTokens = null): Token
     {
+        $checkIfRevoked = $checkIfRevoked ?? false;
+        $allowFutureTokens = $allowFutureTokens ?? false;
+
         try {
             $verifiedToken = $this->idTokenVerifier->verifyIdToken($idToken);
         } catch (IssuedInTheFuture $e) {

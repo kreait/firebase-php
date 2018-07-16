@@ -52,8 +52,10 @@ class ApiClient
         $this->request('PATCH', $uri, ['json' => $values]);
     }
 
-    private function request(string $method, $uri, array $options = []): ResponseInterface
+    private function request(string $method, $uri, array $options = null): ResponseInterface
     {
+        $options = $options ?? [];
+
         $request = new Request($method, $uri);
 
         try {

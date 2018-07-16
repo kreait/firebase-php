@@ -138,11 +138,11 @@ class Factory
         return $factory;
     }
 
-    public function asUser(string $uid, array $claims = []): self
+    public function asUser(string $uid, array $claims = null): self
     {
         $factory = clone $this;
         $factory->uid = $uid;
-        $factory->claims = $claims;
+        $factory->claims = $claims ?? [];
 
         return $factory;
     }
@@ -265,7 +265,7 @@ class Factory
         return new Messaging($messagingApiClient, new MessageFactory(), $topicManagementApiClient);
     }
 
-    protected function createApiClient(ServiceAccount $serviceAccount, array $config = []): Client
+    protected function createApiClient(ServiceAccount $serviceAccount, array $config = null): Client
     {
         $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware($serviceAccount);
 
@@ -275,15 +275,19 @@ class Factory
         }
         $stack->push($googleAuthTokenMiddleware, 'auth_service_account');
 
-        $config = array_merge($this->httpClientConfig, $config, [
-            'handler' => $stack,
-            'auth' => 'google_auth',
-        ]);
+        $config = array_merge(
+            $this->httpClientConfig,
+            $config ?? [],
+            [
+                'handler' => $stack,
+                'auth' => 'google_auth',
+            ]
+        );
 
         return new Client($config);
     }
 
-    protected function createGoogleAuthTokenMiddleware(ServiceAccount $serviceAccount, array $additionalScopes = []): AuthTokenMiddleware
+    protected function createGoogleAuthTokenMiddleware(ServiceAccount $serviceAccount, array $additionalScopes = null): AuthTokenMiddleware
     {
         $scopes = [
             'https://www.googleapis.com/auth/cloud-platform',
@@ -291,7 +295,7 @@ class Factory
             'https://www.googleapis.com/auth/firebase.messaging',
             'https://www.googleapis.com/auth/firebase.remoteconfig',
             'https://www.googleapis.com/auth/userinfo.email',
-        ] + $additionalScopes;
+        ] + ($additionalScopes ?? []);
 
         $credentials = [
             'client_email' => $serviceAccount->getClientEmail(),

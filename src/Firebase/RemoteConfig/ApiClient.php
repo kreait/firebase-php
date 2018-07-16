@@ -36,8 +36,10 @@ class ApiClient
         ]);
     }
 
-    private function request($method, $uri, array $options = [])
+    private function request($method, $uri, array $options = null)
     {
+        $options = $options ?? [];
+
         $options = array_merge($options, [
             'decode_content' => 'gzip', // sets content-type and deflates response body
         ]);

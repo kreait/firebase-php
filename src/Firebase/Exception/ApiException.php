@@ -65,9 +65,9 @@ class ApiException extends \RuntimeException implements FirebaseException
         return static::class;
     }
 
-    private static function getPreciseMessage(ResponseInterface $response = null, string $default = ''): string
+    private static function getPreciseMessage(ResponseInterface $response = null, string $default = null): string
     {
-        $message = $default;
+        $message = $default ?? '';
 
         if ($response && JSON::isValid($responseBody = (string) $response->getBody())) {
             $message = JSON::decode($responseBody, true)['error'] ?? null;

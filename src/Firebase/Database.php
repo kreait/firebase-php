@@ -53,10 +53,10 @@ class Database
      *
      * @return Reference
      */
-    public function getReference(string $path = ''): Reference
+    public function getReference(string $path = null): Reference
     {
         try {
-            return new Reference($this->uri->withPath($path), $this->client);
+            return new Reference($this->uri->withPath($path ?? ''), $this->client);
         } catch (\InvalidArgumentException $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }

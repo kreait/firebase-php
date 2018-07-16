@@ -38,8 +38,10 @@ class ApiClient
         ]);
     }
 
-    private function request($method, $endpoint, array $options = []): ResponseInterface
+    private function request($method, $endpoint, array $options = null): ResponseInterface
     {
+        $options = $options ?? [];
+
         /** @var UriInterface $uri */
         $uri = $this->client->getConfig('base_uri');
         $path = rtrim($uri->getPath(), '/').'/'.ltrim($endpoint, '/');
