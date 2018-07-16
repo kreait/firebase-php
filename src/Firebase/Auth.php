@@ -20,6 +20,7 @@ use Kreait\Firebase\Value\PhoneNumber;
 use Kreait\Firebase\Value\Provider;
 use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Token;
+use Psr\Http\Message\UriInterface;
 
 class Auth
 {
@@ -117,7 +118,7 @@ class Auth
     /**
      * Updates the given user with the given properties.
      *
-     * @param mixed|Uid $uid
+     * @param Uid|string $uid
      * @param array|Request\UpdateUser $properties
      *
      * @throws InvalidArgumentException if invalid properties have been provided
@@ -130,7 +131,7 @@ class Auth
             ? $properties
             : Request\UpdateUser::withProperties($properties);
 
-        $request = $request->withUid($uid instanceof Uid ? $uid : new Uid((string) $uid));
+        $request = $request->withUid($uid);
 
         $response = $this->client->updateUser($request);
 
@@ -139,7 +140,13 @@ class Auth
         return $this->getUser($uid);
     }
 
-    public function createUserWithEmailAndPassword(string $email, string $password): UserRecord
+    /**
+     * @param Email|string $email
+     * @param ClearTextPassword|string $password
+     *
+     * @return UserRecord
+     */
+    public function createUserWithEmailAndPassword($email, $password): UserRecord
     {
         return $this->createUser(
             Request\CreateUser::new()
@@ -183,40 +190,67 @@ class Auth
         return $this->createUser(Request\CreateUser::new());
     }
 
-    public function changeUserPassword(string $uid, string $newPassword): UserRecord
+    /**
+     * @param Uid|string $uid
+     * @param ClearTextPassword|string $newPassword
+     *
+     * @return UserRecord
+     */
+    public function changeUserPassword($uid, $newPassword): UserRecord
     {
         return $this->updateUser($uid, Request\UpdateUser::new()->withClearTextPassword($newPassword));
     }
 
-    public function changeUserEmail(string $uid, string $newEmail): UserRecord
+    /**
+     * @param Uid|string $uid
+     * @param Email|string $newEmail
+     *
+     * @return UserRecord
+     */
+    public function changeUserEmail($uid, $newEmail): UserRecord
     {
         return $this->updateUser($uid, Request\UpdateUser::new()->withEmail($newEmail));
     }
 
-    public function enableUser(string $uid): UserRecord
+    /**
+     * @param Uid|string $uid
+     *
+     * @return UserRecord
+     */
+    public function enableUser($uid): UserRecord
     {
         return $this->updateUser($uid, Request\UpdateUser::new()->markAsEnabled());
     }
 
-    public function disableUser(string $uid): UserRecord
+    /**
+     * @param Uid|string $uid
+     *
+     * @return UserRecord
+     */
+    public function disableUser($uid): UserRecord
     {
         return $this->updateUser($uid, Request\UpdateUser::new()->markAsDisabled());
     }
 
-    public function deleteUser(string $uid)
+    /**
+     * @param Uid|string $uid
+     */
+    public function deleteUser($uid)
     {
+        $uid = $uid instanceof Uid ? $uid : new Uid($uid);
+
         try {
-            $this->client->deleteUser($uid);
+            $this->client->deleteUser((string) $uid);
         } catch (UserNotFound $e) {
             throw UserNotFound::withCustomMessage('No user with uid "'.$uid.'" found.');
         }
     }
 
     /**
-     * @param string $uid
-     * @param string $continueUrl
+     * @param Uid|string $uid
+     * @param UriInterface|string $continueUrl
      */
-    public function sendEmailVerification(string $uid, string $continueUrl = null)
+    public function sendEmailVerification($uid, $continueUrl = null)
     {
         $response = $this->client->exchangeCustomTokenForIdAndRefreshToken(
             $this->createCustomToken($uid)
@@ -224,21 +258,41 @@ class Auth
 
         $idToken = JSON::decode((string) $response->getBody(), true)['idToken'];
 
-        $this->client->sendEmailVerification($idToken, $continueUrl);
+        $this->client->sendEmailVerification($idToken, (string) $continueUrl);
     }
 
-    public function sendPasswordResetEmail(string $email, string $continueUrl = null)
+    /**
+     * @param Email|string $email
+     * @param UriInterface|string|null $continueUrl
+     */
+    public function sendPasswordResetEmail($email, $continueUrl = null)
     {
-        $this->client->sendPasswordResetEmail($email, $continueUrl);
+        $email = $email instanceof Email ? $email : new Email($email);
+
+        $this->client->sendPasswordResetEmail((string) $email, (string) $continueUrl);
     }
 
-    public function setCustomUserAttributes(string $uid, array $attributes): UserRecord
+    /**
+     * @param Uid|string $uid
+     * @param array $attributes
+     *
+     * @return UserRecord
+     */
+    public function setCustomUserAttributes($uid, array $attributes): UserRecord
     {
         return $this->updateUser($uid, Request\UpdateUser::new()->withCustomAttributes($attributes));
     }
 
+    /**
+     * @param Uid|string $uid
+     * @param array $claims
+     *
+     * @return Token
+     */
     public function createCustomToken($uid, array $claims = []): Token
     {
+        $uid = $uid instanceof Uid ? $uid : new Uid($uid);
+
         return $this->tokenGenerator->createCustomToken($uid, $claims);
     }
 
@@ -316,11 +370,13 @@ class Auth
      * before revocation will also be revoked on the Auth backend. Any request with an
      * ID token generated before revocation will be rejected with a token expired error.
      *
-     * @param string $uid the user whose tokens are to be revoked
+     * @param Uid|string $uid the user whose tokens are to be revoked
      */
-    public function revokeRefreshTokens(string $uid)
+    public function revokeRefreshTokens($uid)
     {
-        $this->client->revokeRefreshTokens($uid);
+        $uid = $uid instanceof Uid ? $uid : new Uid($uid);
+
+        $this->client->revokeRefreshTokens((string) $uid);
     }
 
     public function unlinkProvider($uid, $provider): UserRecord

@@ -30,8 +30,15 @@ class RemoteConfig
         return Template::fromResponse($this->client->getTemplate());
     }
 
-    public function publish(Template $template): string
+    /**
+     * @param Template|array $template
+     *
+     * @return string The etag value of the published template that can be compared to in later calls
+     */
+    public function publish($template): string
     {
+        $template = $template instanceof Template ? $template : Template::fromArray($template);
+
         $response = $this->client->publishTemplate($template);
 
         $etag = $response->getHeader('ETag');
