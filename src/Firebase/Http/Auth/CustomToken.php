@@ -18,7 +18,7 @@ final class CustomToken implements Auth
     public function __construct(string $uid, array $claims = null)
     {
         $claims = array_filter($claims ?? [], function ($value) {
-            return null !== $value;
+            return $value !== null;
         });
 
         $claims = ['uid' => $uid] + $claims;

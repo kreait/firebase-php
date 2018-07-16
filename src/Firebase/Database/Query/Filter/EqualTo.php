@@ -16,7 +16,7 @@ final class EqualTo implements Filter
 
     public function __construct($value)
     {
-        if (null !== $value && !is_scalar($value)) {
+        if ($value !== null && !is_scalar($value)) {
             throw new InvalidArgumentException('Only scalar values are allowed for "equalTo" queries.');
         }
 

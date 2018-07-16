@@ -84,9 +84,9 @@ trait EditUserTrait
                     $request = $request->withVerifiedEmail($value);
                     break;
                 case 'emailverified':
-                    if (true === $value) {
+                    if ($value === true) {
                         $request = $request->markEmailAsVerified();
-                    } elseif (false === $value) {
+                    } elseif ($value === false) {
                         $request = $request->markEmailAsUnverified();
                     }
                     break;
@@ -104,18 +104,18 @@ trait EditUserTrait
                 case 'disableuser':
                 case 'disabled':
                 case 'isdisabled':
-                    if (true === $value) {
+                    if ($value === true) {
                         $request = $request->markAsDisabled();
-                    } elseif (false === $value) {
+                    } elseif ($value === false) {
                         $request = $request->markAsEnabled();
                     }
                     break;
                 case 'enableuser':
                 case 'enabled':
                 case 'isenabled':
-                    if (true === $value) {
+                    if ($value === true) {
                         $request = $request->markAsEnabled();
-                    } elseif (false === $value) {
+                    } elseif ($value === false) {
                         $request = $request->markAsDisabled();
                     }
                     break;
@@ -302,7 +302,7 @@ trait EditUserTrait
             'photoUrl' => $this->photoUrl,
             'password' => $this->clearTextPassword,
         ], function ($value) {
-            return null !== $value;
+            return $value !== null;
         });
 
         return $data;

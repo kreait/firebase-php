@@ -65,7 +65,7 @@ class Reference
     {
         $key = basename($this->getPath());
 
-        return '' !== $key ? $key : null;
+        return $key !== '' ? $key : null;
     }
 
     /**
@@ -91,7 +91,7 @@ class Reference
     {
         $parentPath = \dirname($this->getPath());
 
-        if ('.' === $parentPath) {
+        if ($parentPath === '.') {
             throw new OutOfRangeException('Cannot get parent of root reference');
         }
 

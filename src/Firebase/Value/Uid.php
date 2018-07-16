@@ -16,7 +16,7 @@ class Uid implements Value, \JsonSerializable
 
     public function __construct(string $value)
     {
-        if ('' === $value || \strlen($value) > 128) {
+        if ($value === '' || \strlen($value) > 128) {
             throw new InvalidArgumentException('A uid must be a non-empty string with at most 128 characters.');
         }
 

@@ -72,7 +72,7 @@ class Condition implements \JsonSerializable
             'expression' => $this->expression,
             'tagColor' => $this->tagColor ? $this->tagColor->value() : null,
         ], function ($value) {
-            return null !== $value;
+            return $value !== null;
         });
     }
 }

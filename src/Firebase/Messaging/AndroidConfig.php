@@ -26,7 +26,7 @@ class AndroidConfig implements Config
     public function jsonSerialize()
     {
         return array_filter($this->rawConfig, function ($value) {
-            return null !== $value;
+            return $value !== null;
         });
     }
 }

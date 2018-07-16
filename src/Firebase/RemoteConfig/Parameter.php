@@ -30,7 +30,7 @@ class Parameter implements \JsonSerializable
 
     public static function named(string $name, $defaultValue = null): self
     {
-        if (null === $defaultValue) {
+        if ($defaultValue === null) {
             $defaultValue = DefaultValue::none();
         } elseif (\is_string($defaultValue)) {
             $defaultValue = DefaultValue::with($defaultValue);

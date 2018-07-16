@@ -79,7 +79,7 @@ class Notification implements \JsonSerializable
             'title' => $this->title,
             'body' => $this->body,
         ], function ($value) {
-            return null !== $value;
+            return $value !== null;
         });
     }
 }

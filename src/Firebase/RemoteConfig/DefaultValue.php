@@ -35,7 +35,7 @@ class DefaultValue implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $key = true === $this->value ? 'useInAppDefault' : 'value';
+        $key = $this->value === true ? 'useInAppDefault' : 'value';
 
         return [$key => $this->value];
     }
