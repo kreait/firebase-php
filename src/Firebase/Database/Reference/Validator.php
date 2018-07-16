@@ -24,9 +24,7 @@ class Validator
 
         $this->validateDepth($path);
 
-        $keys = explode('/', $path);
-
-        foreach ($keys as $key) {
+        foreach (explode('/', $path) as $key) {
             $this->validateKeySize($key);
             $this->validateChars($key);
         }

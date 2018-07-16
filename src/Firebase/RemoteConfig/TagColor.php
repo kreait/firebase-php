@@ -34,7 +34,7 @@ class TagColor
     {
         $value = strtoupper($value);
 
-        if (!\in_array($value, self::VALID_COLORS)) {
+        if (!\in_array($value, self::VALID_COLORS, true)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Invalid tag color "%s". Supported colors are "%s".',
