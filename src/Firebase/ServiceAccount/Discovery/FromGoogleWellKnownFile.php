@@ -23,7 +23,6 @@ class FromGoogleWellKnownFile
 
         // @codeCoverageIgnoreStart
         // We can't really test this because of too many unknowns in the Google library
-        /* @noinspection ExceptionsAnnotatingAndHandlingInspection */
         return ServiceAccount::fromValue($credentials);
         // @codeCoverageIgnoreEnd
     }

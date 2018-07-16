@@ -25,7 +25,6 @@ class RemoteConfigException extends \RuntimeException implements FirebaseExcepti
 
         /* @noinspection NullPointerExceptionInspection */
         if ($e->getResponse() && JSON::isValid($responseBody = (string) $e->getResponse()->getBody())) {
-            /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
             $errors = JSON::decode($responseBody, true);
             $message = $errors['error']['message'] ?? $message;
         }
