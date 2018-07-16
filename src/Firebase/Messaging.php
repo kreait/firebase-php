@@ -136,7 +136,11 @@ class Messaging
             return [RegistrationToken::fromValue($tokenOrTokens)];
         }
 
-        if (\is_array($tokenOrTokens) && \count($tokenOrTokens)) {
+        if (\is_array($tokenOrTokens)) {
+            if (empty($tokenOrTokens)) {
+                throw new InvalidArgument('Empty array of registration tokens.');
+            }
+
             return array_map(function ($token) {
                 return $token instanceof RegistrationToken ? $token : RegistrationToken::fromValue($token);
             }, $tokenOrTokens);

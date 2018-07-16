@@ -59,7 +59,7 @@ class Auth
 
         $data = JSON::decode((string) $response->getBody(), true);
 
-        if (!array_key_exists('users', $data) || !\count($data['users'])) {
+        if (empty($data['users'][0])) {
             throw UserNotFound::withCustomMessage('No user with uid "'.$uid.'" found.');
         }
 
@@ -163,7 +163,7 @@ class Auth
 
         $data = JSON::decode((string) $response->getBody(), true);
 
-        if (!array_key_exists('users', $data) || !\count($data['users'])) {
+        if (empty($data['users'][0])) {
             throw UserNotFound::withCustomMessage('No user with email "'.$email.'" found.');
         }
 
@@ -178,7 +178,7 @@ class Auth
 
         $data = JSON::decode((string) $response->getBody(), true);
 
-        if (!array_key_exists('users', $data) || !\count($data['users'])) {
+        if (empty($data['users'][0])) {
             throw UserNotFound::withCustomMessage('No user with phone number "'.$phoneNumber.'" found.');
         }
 

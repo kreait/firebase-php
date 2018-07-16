@@ -160,11 +160,11 @@ final class UpdateUser implements Request
             $data['customAttributes'] = JSON::encode($this->customAttributes);
         }
 
-        if (\count($this->attributesToDelete)) {
+        if (!empty($this->attributesToDelete)) {
             $data['deleteAttribute'] = array_unique($this->attributesToDelete);
         }
 
-        if (\count($this->providersToDelete)) {
+        if (!empty($this->providersToDelete)) {
             $data['deleteProvider'] = $this->providersToDelete;
         }
 
