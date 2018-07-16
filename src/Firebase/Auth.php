@@ -214,8 +214,9 @@ class Auth
 
     /**
      * @param string $uid
+     * @param string $continueUrl
      */
-    public function sendEmailVerification(string $uid)
+    public function sendEmailVerification(string $uid, string $continueUrl = null)
     {
         $response = $this->client->exchangeCustomTokenForIdAndRefreshToken(
             $this->createCustomToken($uid)
@@ -223,12 +224,12 @@ class Auth
 
         $idToken = JSON::decode((string) $response->getBody(), true)['idToken'];
 
-        $this->client->sendEmailVerification($idToken);
+        $this->client->sendEmailVerification($idToken, $continueUrl);
     }
 
-    public function sendPasswordResetEmail(string $email)
+    public function sendPasswordResetEmail(string $email, string $continueUrl = null)
     {
-        $this->client->sendPasswordResetEmail($email);
+        $this->client->sendPasswordResetEmail($email, $continueUrl);
     }
 
     public function setCustomUserAttributes(string $uid, array $attributes): UserRecord
