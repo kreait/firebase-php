@@ -274,15 +274,36 @@ Verify a password
     }
 
 
+***********************
+Verify an email address
+***********************
+
+Unless a user verifies the email address assigned to them, their email address will be markes as ``unverified``.
+
+You can send a verification email to a user with the following method:
+
+.. code-block:: php
+
+    $auth->sendEmailVerification($uid);
+
+    // The method has an optional second parameter to specify where the user should be redirected
+    // to after they have have verified their email address
+    $auth->sendPasswordResetEmail($uid, 'https//my-application.com/email-verified');
+
+
 ***************************
 Send a password reset email
 ***************************
 
+You can send an email allowing a user to reset their password with the following method:
+
 .. code-block:: php
 
-    $email = 'user@domain.tld';
+    $auth->sendPasswordResetEmail('user@domain.tld');
 
-    $auth->sendPasswordResetEmail($email);
+    // The method has an optional second parameter to specify where the user should be redirected
+    // to after they have have reset their password
+    $auth->sendPasswordResetEmail('user@domain.tld', 'https//my-application.com/password-reset');
 
 *******************************
 Invalidate user sessions [#f1]_
@@ -311,6 +332,15 @@ If the check fails, a ``RevokedIdToken`` exception will be thrown.
     } catch (RevokedIdToken $e) {
         echo $e->getMessage();
     }
+
+.. note::
+    Because Firebase ID tokens are stateless JWTs, you can determine a token has been revoked only by requesting the
+    token's status from the Firebase Authentication backend. For this reason, performing this check on your server
+    is an expensive operation, requiring an extra network round trip. You can avoid making this network request
+    by setting up Firebase Rules that check for revocation rather than using the Admin SDK to make the check.
+
+    For more information, please visit
+    `Google: Detect ID token revocation in Database Rules <https://firebase.google.com/docs/auth/admin/manage-sessions#detect_id_token_revocation_in_database_rules>`_
 
 
 .. rubric:: References

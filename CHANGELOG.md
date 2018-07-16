@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+### Features
+
+* Added support for setting a continueUrl to email actions ([#220](https://github.com/kreait/firebase-php/pull/220), thanks to [Wade Womersley](https://github.com/wadewomersley))
+
 ## 4.12.1 - 2018-07-08
 
 ### Bugfixes
