@@ -43,6 +43,8 @@ class TopicManagementApiClient
     {
         try {
             return $this->client->request($method, $endpoint, $options);
+            // GuzzleException is a marker interface that we cannot catch (at least not in <7.1)
+            /** @noinspection PhpUnhandledExceptionInspection */
         } catch (RequestException $e) {
             throw MessagingException::fromRequestException($e);
         } catch (\Throwable $e) {

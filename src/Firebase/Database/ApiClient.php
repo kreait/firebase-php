@@ -57,6 +57,8 @@ class ApiClient
         $request = new Request($method, $uri);
 
         try {
+            // GuzzleException is a marker interface that we cannot catch (at least not in <7.1)
+            /** @noinspection PhpUnhandledExceptionInspection */
             return $this->httpClient->send($request, $options);
         } catch (RequestException $e) {
             throw ApiException::wrapRequestException($e);
