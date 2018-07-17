@@ -302,7 +302,11 @@ class Reference
      */
     public function set($value): self
     {
-        $this->apiClient->set($this->uri, $value);
+        if ($value === null) {
+            $this->apiClient->remove($this->uri);
+        } else {
+            $this->apiClient->set($this->uri, $value);
+        }
 
         return $this;
     }
@@ -344,6 +348,8 @@ class Reference
      */
     public function push($value = null): self
     {
+        $value = $value ?? [];
+
         $newKey = $this->apiClient->push($this->uri, $value);
         $newPath = sprintf('%s/%s', $this->uri->getPath(), $newKey);
 

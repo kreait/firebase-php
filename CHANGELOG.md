@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bugfixes
+
+* Fixed generating a random child key with `$reference->push()->getKey()` ([#222](https://github.com/kreait/firebase-php/issues/222))
+* Fixed deleting a reference by setting it to `null` ([#222](https://github.com/kreait/firebase-php/issues/222))
+
 ## 4.13.0 - 2018-07-16
 
 ### Features

@@ -80,6 +80,28 @@ class ReferenceTest extends DatabaseTestCase
         $this->assertEquals(['second' => 'value'], $ref->getValue());
     }
 
+    public function testPushToGetKey()
+    {
+        $ref = $this->ref->getChild(__FUNCTION__);
+        $key = $ref->push()->getKey();
+
+        $this->assertInternalType('string', $key);
+        $this->assertSame(0, $ref->getSnapshot()->numChildren());
+    }
+
+    public function testSetWithNullIsSameAsRemove()
+    {
+        $ref = $this->ref->getChild(__FUNCTION__);
+
+        $key = $ref->push('foo')->getKey();
+
+        $this->assertSame(1, $ref->getSnapshot()->numChildren());
+
+        $ref->getChild($key)->set(null);
+
+        $this->assertSame(0, $ref->getSnapshot()->numChildren());
+    }
+
     public function validValues()
     {
         return [
