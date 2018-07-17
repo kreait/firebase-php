@@ -144,6 +144,7 @@ trait EditUserTrait
 
     /**
      * @param Email|string $email
+     *
      * @return static
      */
     public function withEmail($email)
@@ -156,6 +157,7 @@ trait EditUserTrait
 
     /**
      * @param Email|string $email
+     *
      * @return static
      */
     public function withVerifiedEmail($email)
@@ -169,6 +171,7 @@ trait EditUserTrait
 
     /**
      * @param Email|string $email
+     *
      * @return static
      */
     public function withUnverifiedEmail($email)
@@ -182,6 +185,7 @@ trait EditUserTrait
 
     /**
      * @param string $displayName
+     *
      * @return static
      */
     public function withDisplayName(string $displayName)
@@ -194,6 +198,7 @@ trait EditUserTrait
 
     /**
      * @param string|PhoneNumber $phoneNumber
+     *
      * @return static
      */
     public function withPhoneNumber($phoneNumber)
@@ -212,6 +217,7 @@ trait EditUserTrait
 
     /**
      * @param Url|string $url
+     *
      * @return static
      */
     public function withPhotoUrl($url)
@@ -270,6 +276,7 @@ trait EditUserTrait
 
     /**
      * @param ClearTextPassword|string $clearTextPassword
+     *
      * @return static
      */
     public function withClearTextPassword($clearTextPassword)

@@ -7,10 +7,11 @@ return PhpCsFixer\Config::create()
     ->setUsingCache(true)
     ->setRules([
         '@Symfony' => true,
+        'array_syntax' => ['syntax' => 'short'],
         'header_comment' => ['header' => ''],
+        'ordered_imports' => true,
         'phpdoc_align' => false,
         'phpdoc_order' => true,
-        'ordered_imports' => true,
-        'array_syntax' => ['syntax' => 'short'],
+        'yoda_style' => false,
     ])
     ->setFinder($finder);
