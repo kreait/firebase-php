@@ -169,12 +169,12 @@ Updating a user works exactly as creating a new user, except that the ``uid`` pr
         'displayName' => 'New display name'
     ];
 
-    $updatedUser = $auth->updateUser($uid,$properties);
+    $updatedUser = $auth->updateUser($uid, $properties);
 
     $request = \Kreait\Auth\Request\UpdateUser::new()
         ->withDisplayName('New display name');
 
-    $updatedUser = $auth->updateUser($uid,$request);
+    $updatedUser = $auth->updateUser($uid, $request);
 
 In addition to the properties of a create request, the following properties can be provided:
 
