@@ -8,11 +8,11 @@ Call to undefined function ``openssl_sign()``
 
 You need to install the OpenSSL PHP Extension: http://php.net/openssl
 
-************************************************
-cURL error XX: SSL certificate validation failed
-************************************************
+******************
+cURL error XX: ...
+******************
 
-If you receive the above error, make sure that you have a current
+If you receive a ``cURL error XX: ...``, make sure that you have a current
 CA Root Certificates bundle on your system and that PHP uses it.
 
 To see where PHP looks for the CA bundle, check the output of the
