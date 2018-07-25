@@ -2,6 +2,26 @@
 Troubleshooting
 ###############
 
+********************************
+PHP Parse Error/PHP Syntax Error
+********************************
+
+If you're getting an error in the likes of
+
+.. code-block:: bash
+
+    PHP Parse error: syntax error, unexpected ':', expecting ';' or '{' in ...
+
+the environment you are running the script in does not use PHP 7.x. You can check this
+by adding the line
+
+.. code-block:: php
+
+    echo phpversion(); exit;
+
+somewhere in your script.
+
+
 *********************************************
 Call to undefined function ``openssl_sign()``
 *********************************************
