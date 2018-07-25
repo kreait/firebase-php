@@ -6,7 +6,7 @@
 
 * Project IDs that cannot be used for database URIs directly are sanitized when configuring a Service Account ([#228](https://github.com/kreait/firebase-php/issues/228))
 
-## Non-breaking changes
+### Non-breaking changes
 
 * When publishing an outdated Remote Config, Firebase previously returned an "OPERATION ABORTED" error,
   resulting in a `Kreait\Firebase\Exception\RemoteConfig\OperationAborted` exception. Firebase has
