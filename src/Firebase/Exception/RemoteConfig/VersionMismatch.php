@@ -7,14 +7,14 @@ namespace Kreait\Firebase\Exception\RemoteConfig;
 use Kreait\Firebase\Exception\RemoteConfigException;
 use Throwable;
 
-class OperationAborted extends RemoteConfigException
+class VersionMismatch extends OperationAborted
 {
-    const IDENTIFER = 'ABORTED';
+    const IDENTIFER = 'VERSION_MISMATCH';
 
     public function __construct($message = '', $code = 0, Throwable $previous = null)
     {
         if (!$message) {
-            $message = 'Operation aborted. The reason is most probably that the remote config template has been updated remotely since you last fetched it.';
+            $message = 'Version mismatch';
         }
 
         parent::__construct($message, $code, $previous);

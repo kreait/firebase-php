@@ -11,8 +11,12 @@ class PermissionDenied extends RemoteConfigException
 {
     const IDENTIFER = 'PERMISSION_DENIED';
 
-    public function __construct($code = 0, Throwable $previous = null)
+    public function __construct($message = '', $code = 0, Throwable $previous = null)
     {
-        parent::__construct('Permission denied', $code, $previous);
+        if (!$message) {
+            $message = 'Permission denied';
+        }
+
+        parent::__construct($message, $code, $previous);
     }
 }
