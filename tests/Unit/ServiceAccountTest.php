@@ -136,11 +136,17 @@ class ServiceAccountTest extends UnitTestCase
      *
      * @dataProvider sanitizableProjectIdProvider
      */
-    public function testWithSanitizableProjectId($expected, $given)
+    public function testGetSanitizedProjectId($expected, $given)
     {
-        $serviceAccount = ServiceAccount::fromJsonFile($this->validJsonFile)->withProjectId($given);
+        $serviceAccount = ServiceAccount::fromJsonFile($this->validJsonFile);
 
-        $this->assertSame($expected, $serviceAccount->getProjectId());
+        $previousSanitizedProjectId = $serviceAccount->getSanitizedProjectId();
+
+        $serviceAccount = $serviceAccount->withProjectId($given);
+        $sanitizedProjectId = $serviceAccount->getSanitizedProjectId();
+
+        $this->assertSame($expected, $sanitizedProjectId);
+        $this->assertNotSame($previousSanitizedProjectId, $sanitizedProjectId);
     }
 
     public function sanitizableProjectIdProvider()

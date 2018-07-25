@@ -9,6 +9,7 @@ use Kreait\Firebase\Util\JSON;
 class ServiceAccount
 {
     private $projectId;
+    private $sanitizedProjectId;
     private $clientId;
     private $clientEmail;
     private $privateKey;
@@ -18,12 +19,20 @@ class ServiceAccount
         return $this->projectId;
     }
 
+    public function getSanitizedProjectId(): string
+    {
+        if (!$this->sanitizedProjectId) {
+            $this->sanitizedProjectId = preg_replace('/[^A-Za-z0-9\-]/', '-', $this->projectId);
+        }
+
+        return $this->sanitizedProjectId;
+    }
+
     public function withProjectId(string $value): self
     {
-        $value = preg_replace('/[^A-Za-z0-9\-]/', '-', $value);
-
         $serviceAccount = clone $this;
         $serviceAccount->projectId = $value;
+        $serviceAccount->sanitizedProjectId = null;
 
         return $serviceAccount;
     }

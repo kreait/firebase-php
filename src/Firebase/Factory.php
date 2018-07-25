@@ -184,12 +184,12 @@ class Factory
 
     protected function getDatabaseUriFromServiceAccount(ServiceAccount $serviceAccount): UriInterface
     {
-        return uri_for(sprintf(self::$databaseUriPattern, $serviceAccount->getProjectId()));
+        return uri_for(sprintf(self::$databaseUriPattern, $serviceAccount->getSanitizedProjectId()));
     }
 
     protected function getStorageBucketNameFromServiceAccount(ServiceAccount $serviceAccount): string
     {
-        return sprintf(self::$storageBucketNamePattern, $serviceAccount->getProjectId());
+        return sprintf(self::$storageBucketNamePattern, $serviceAccount->getSanitizedProjectId());
     }
 
     protected function createAuth(): Auth
@@ -205,7 +205,7 @@ class Factory
         return new Auth(
             new Auth\ApiClient($http),
             new Generator($serviceAccount->getClientEmail(), $serviceAccount->getPrivateKey()),
-            new Verifier($serviceAccount->getProjectId(), $keyStore)
+            new Verifier($serviceAccount->getSanitizedProjectId(), $keyStore)
         );
     }
 
@@ -236,7 +236,7 @@ class Factory
     protected function createRemoteConfig(): RemoteConfig
     {
         $http = $this->createApiClient($this->getServiceAccount(), [
-            'base_uri' => 'https://firebaseremoteconfig.googleapis.com/v1/projects/'.$this->getServiceAccount()->getProjectId().'/remoteConfig',
+            'base_uri' => 'https://firebaseremoteconfig.googleapis.com/v1/projects/'.$this->getServiceAccount()->getSanitizedProjectId().'/remoteConfig',
         ]);
 
         return new RemoteConfig(new RemoteConfig\ApiClient($http));
@@ -245,7 +245,7 @@ class Factory
     protected function createMessaging(): Messaging
     {
         $serviceAccount = $this->getServiceAccount();
-        $projectId = $serviceAccount->getProjectId();
+        $projectId = $serviceAccount->getSanitizedProjectId();
 
         $messagingApiClient = new Messaging\ApiClient(
             $this->createApiClient($this->getServiceAccount(), [
@@ -311,7 +311,7 @@ class Factory
         $builder = $this->getGoogleCloudServiceBuilder();
 
         $storageClient = $builder->storage([
-            'projectId' => $this->getServiceAccount()->getProjectId(),
+            'projectId' => $this->getServiceAccount()->getSanitizedProjectId(),
         ]);
 
         return new Storage($storageClient, $this->getStorageBucketName());

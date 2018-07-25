@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bugfixes
+
+* Sanitizing the project ID by default changed the output of the method `\Kreait\Firebase\ServiceAccount::getProjectId()`,
+  so a new method `\Kreait\Firebase\ServiceAccount::getSanitizedProjectId()` is now used instead.
+
 ## 4.13.2 - 2018-07-25
 
 ### Bugfixes
