@@ -20,6 +20,8 @@ class ServiceAccount
 
     public function withProjectId(string $value): self
     {
+        $value = preg_replace('/[^A-Za-z0-9\-]/', '-', $value);
+
         $serviceAccount = clone $this;
         $serviceAccount->projectId = $value;
 

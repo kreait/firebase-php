@@ -130,4 +130,23 @@ class ServiceAccountTest extends UnitTestCase
 
         ServiceAccount::discover($discoverer);
     }
+
+    /**
+     * @see https://github.com/kreait/firebase-php/issues/228
+     *
+     * @dataProvider sanitizableProjectIdProvider
+     */
+    public function testWithSanitizableProjectId($expected, $given)
+    {
+        $serviceAccount = ServiceAccount::fromJsonFile($this->validJsonFile)->withProjectId($given);
+
+        $this->assertSame($expected, $serviceAccount->getProjectId());
+    }
+
+    public function sanitizableProjectIdProvider()
+    {
+        return [
+            ['example-com-api-project-xxxxxx', 'example.com:api-project-xxxxxx']
+        ];
+    }
 }
