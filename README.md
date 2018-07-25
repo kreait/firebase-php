@@ -9,6 +9,7 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 [![Total Downloads](https://img.shields.io/packagist/dt/kreait/firebase-php.svg)](https://packagist.org/packages/kreait/firebase-php/stats)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
+[![Gitter](https://badges.gitter.im/kreait/firebase-php.svg)](https://gitter.im/kreait/firebase-php)
 
 If you are interested in using the PHP Admin SDK as a client for end-user access (for example, in a web application), as opposed to admin access from a privileged environment (like a server), you should instead follow the [instructions for setting up the client JavaScript SDK](https://firebase.google.com/docs/web/setup).
 
@@ -43,6 +44,8 @@ An example project can be found at https://github.com/jeromegamez/firebase-php-e
 
 ## Support
 
-For errors and missing features, please use the [issue tracker](https://github.com/kreait/firebase-php/issues/).
+For bug reports and feature requests, use the [issue tracker](https://github.com/kreait/firebase-php/issues/).
 
-For general support, join the `#php` channel at [https://firebase.community/](https://firebase.community/).
+For help with and discussion about the PHP SDK, join the [Gitter Channel dedicated to this library](https://gitter.im/kreait/firebase-php).
+
+For questions about Firebase in general, use [Stack Overflow](https://stackoverflow.com/questions/tagged/firebase) or join the [Firebase Slack Community](https://firebase.community).

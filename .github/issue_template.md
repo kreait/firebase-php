@@ -1,16 +1,22 @@
-#### 1. Which version of `kreait/firebase-php` are you using?
+Please avoid using the issue tracker for questions or help. Submitting issues to this repository are usually reserved for bugs, feature requests, or changes to the source code. We have a help channel at https://gitter.im/kreait/firebase-php (you can sign in with your GitHub account). If nobody can answer your question, tag @jeromegamez in your question.
 
-*You can use `composer show kreait/firebase-php` to see the installed version in the `versions` line.*
+Also see past issues and https://firebase-php.readthedocs.io/en/latest/troubleshooting.html to check if your problem has already been covered.
 
-#### 2. Which version of PHP are you using?
+Please chose a descriptive title for your issue and delete everything before and including this line before submitting the issue.
 
-*You can use `php -v` on the system the issue occurs on to get the PHP version.* 
+## The problem
 
-#### 3. What's the issue?
+Briefly describe the issue you are experiencing (or the feature you want to see added). 
 
-*Please don't just copy and paste a PHP exception trace.*
+## Environment
 
-#### 4. Code that lead to the issue
+- PHP Version (`php -v`):
+- Firebase PHP SDK version (`composer show | grep kreait`):
 
-*Please use [syntax highlighted code blocks](https://help.github.com/articles/creating-and-highlighting-code-blocks/) with code that can be used to reproduce the issue.*
+## Details
 
+If necessary, describe the problem you have been experiencing in more detail.
+
+## Code to reproduce issue
+
+Please remember that with sample code it's easier to reproduce the bug and it's much faster to fix it.
