@@ -5,6 +5,7 @@ namespace Kreait\Firebase;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\Firebase\Util\JSON;
+use Kreait\GcpMetadata;
 
 class ServiceAccount
 {
@@ -64,6 +65,11 @@ class ServiceAccount
         $serviceAccount->clientEmail = $value;
 
         return $serviceAccount;
+    }
+
+    public function hasPrivateKey(): bool
+    {
+        return (bool) $this->privateKey;
     }
 
     public function getPrivateKey(): string
@@ -136,6 +142,15 @@ class ServiceAccount
         } catch (\Throwable $e) {
             throw new InvalidArgumentException(sprintf('%s can not be read.', $filePath));
         }
+    }
+
+    public static function withProjectIdAndServiceAccountId(string $projectId, string $serviceAccountId): self
+    {
+        $serviceAccount = new self();
+        $serviceAccount->projectId = $projectId;
+        $serviceAccount->clientEmail = $serviceAccountId;
+
+        return $serviceAccount;
     }
 
     /**
