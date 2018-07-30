@@ -25,7 +25,7 @@ class FromPath
     public function __invoke(): ServiceAccount
     {
         try {
-            return ServiceAccount::fromValue($this->path);
+            return ServiceAccount::fromJsonFile($this->path);
         } catch (\Throwable $e) {
             throw new ServiceAccountDiscoveryFailed($e->getMessage());
         }

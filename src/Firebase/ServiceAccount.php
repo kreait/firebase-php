@@ -129,25 +129,13 @@ class ServiceAccount
 
     public static function fromJsonFile(string $filePath): self
     {
-        if (!file_exists($filePath)) {
-            throw new InvalidArgumentException(sprintf('%s does not exist.', $filePath));
+        try {
+            $file = new \SplFileObject($filePath);
+
+            return self::fromJson($file->fread($file->getSize()));
+        } catch (\Throwable $e) {
+            throw new InvalidArgumentException(sprintf('%s can not be read.', $filePath));
         }
-
-        if (is_link($filePath)) {
-            $filePath = (string) realpath($filePath);
-        }
-
-        if (!is_file($filePath)) {
-            throw new InvalidArgumentException(sprintf('%s is not a file.', $filePath));
-        }
-
-        if (!is_readable($filePath)) {
-            throw new InvalidArgumentException(sprintf('%s is not readable.', $filePath));
-        }
-
-        $jsonString = file_get_contents($filePath);
-
-        return self::fromJson($jsonString);
     }
 
     /**
