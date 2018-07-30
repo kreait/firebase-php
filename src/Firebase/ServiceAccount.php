@@ -38,6 +38,11 @@ class ServiceAccount
         return $serviceAccount;
     }
 
+    public function hasClientId(): bool
+    {
+        return (bool) $this->clientId;
+    }
+
     public function getClientId(): string
     {
         return $this->clientId;

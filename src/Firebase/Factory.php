@@ -344,15 +344,21 @@ class Factory
     {
         $serviceAccount = $this->getServiceAccount();
 
-        $credentials = [
-            'client_email' => $serviceAccount->getClientEmail(),
-            'client_id' => $serviceAccount->getClientId(),
-            'private_key' => $serviceAccount->getPrivateKey(),
-            'type' => 'service_account',
+        $config = [
+            'projectId' => $serviceAccount->getProjectId(),
         ];
 
-        return new ServiceBuilder([
-            'keyFile' => $credentials,
-        ]);
+        if ($serviceAccount->hasClientId() && $serviceAccount->hasPrivateKey()) {
+            $config = [
+                'keyFile' => [
+                    'client_email' => $serviceAccount->getClientEmail(),
+                    'client_id' => $serviceAccount->getClientId(),
+                    'private_key' => $serviceAccount->getPrivateKey(),
+                    'type' => 'service_account',
+                ]
+            ];
+        }
+
+        return new ServiceBuilder($config);
     }
 }
