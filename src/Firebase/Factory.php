@@ -310,7 +310,9 @@ class Factory
 
         $scopes = [
             'https://www.googleapis.com/auth/cloud-platform',
+            'https://www.googleapis.com/auth/datastore', // Firestore
             'https://www.googleapis.com/auth/firebase',
+            'https://www.googleapis.com/auth/firebase.database',
             'https://www.googleapis.com/auth/firebase.messaging',
             'https://www.googleapis.com/auth/firebase.remoteconfig',
             'https://www.googleapis.com/auth/userinfo.email',
