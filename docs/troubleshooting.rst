@@ -100,3 +100,24 @@ If you chose to ignore the issue, you can catch the exception and return the ID 
         echo $e->getMessage();
         exit;
     }
+
+**********************
+"403 Forbidden" Errors
+**********************
+
+Under the hood, a Firebase project is actually a Google Cloud project with pre-defined and pre-allocated
+permissions and resources.
+
+When Google adds features to its product line, it is possible that you have to manually configure your
+Firebase/Google Cloud Project to take advantage of those new features.
+
+When a request to the Firebase APIs fails, please make sure that the according Google Cloud API is
+enabled for your project:
+
+- Firebase Services: https://console.cloud.google.com/apis/library/firebase.googleapis.com
+- Cloud Messaging (FCM): https://console.cloud.google.com/apis/library/fcm.googleapis.com
+- Dynamic Links: https://console.cloud.google.com/apis/library/firebasedynamiclinks.googleapis.com
+- Firestore: https://console.cloud.google.com/apis/library/firestore.googleapis.com
+- Realtime Database Rules: https://console.cloud.google.com/apis/library/firebaserules.googleapis.com
+- Remote Config: https://console.cloud.google.com/apis/library/firebaseremoteconfig.googleapis.com
+- Storage: https://console.cloud.google.com/apis/library/storage-component.googleapis.com
