@@ -7,7 +7,6 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\ApiClient;
-use Kreait\Firebase\Messaging\MessageFactory;
 use Kreait\Firebase\Messaging\TopicManagementApiClient;
 use Kreait\Firebase\Tests\UnitTestCase;
 
@@ -28,18 +27,12 @@ class MessagingTest extends UnitTestCase
      */
     private $topicManagementApi;
 
-    /**
-     * @var MessageFactory
-     */
-    private $messageFactory;
-
     protected function setUp()
     {
-        $this->messageFactory = new MessageFactory();
         $this->messagingApi = $this->createMock(ApiClient::class);
         $this->topicManagementApi = $this->createMock(TopicManagementApiClient::class);
 
-        $this->messaging = new Messaging($this->messagingApi, $this->messageFactory, $this->topicManagementApi);
+        $this->messaging = new Messaging($this->messagingApi, $this->topicManagementApi);
     }
 
     public function testSendInvalidObject()

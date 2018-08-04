@@ -6,6 +6,9 @@ namespace Kreait\Firebase\Messaging;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
+/**
+ * @deprecated 4.14 Use CloudMessage instead
+ */
 class MessageToTopic implements Message
 {
     use MessageTrait;
@@ -20,6 +23,14 @@ class MessageToTopic implements Message
         $this->topic = $topic;
     }
 
+    /**
+     * @deprecated 4.14 Use CloudMessage::withTarget('topic', $topic) instead
+     * @see CloudMessage::withTarget()
+     *
+     * @param Topic|string $topic
+     *
+     * @return MessageToTopic
+     */
     public static function create($topic): self
     {
         $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
@@ -28,6 +39,9 @@ class MessageToTopic implements Message
     }
 
     /**
+     * @deprecated 4.14 Use CloudMessage::fromArray() instead
+     * @see CloudMessage::fromArray()
+     *
      * @param array $data
      *
      * @throws InvalidArgumentException
