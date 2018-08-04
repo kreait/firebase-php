@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
-use Kreait\Firebase\Database;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
-use Kreait\Firebase\Tests\IntegrationTestCase;
 use Kreait\Firebase\Util\JSON;
 
 class DatabaseTest extends DatabaseTestCase

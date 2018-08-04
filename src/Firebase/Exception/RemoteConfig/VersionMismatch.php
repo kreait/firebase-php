@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Exception\RemoteConfig;
 
-use Kreait\Firebase\Exception\RemoteConfigException;
 use Throwable;
 
 class VersionMismatch extends OperationAborted

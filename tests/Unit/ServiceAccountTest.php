@@ -152,7 +152,7 @@ class ServiceAccountTest extends UnitTestCase
     public function sanitizableProjectIdProvider()
     {
         return [
-            ['example-com-api-project-xxxxxx', 'example.com:api-project-xxxxxx']
+            ['example-com-api-project-xxxxxx', 'example.com:api-project-xxxxxx'],
         ];
     }
 }
