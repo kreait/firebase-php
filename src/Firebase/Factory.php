@@ -111,7 +111,6 @@ class Factory
      */
     public function withVerifierCache($cache): self
     {
-        /* @noinspection ClassConstantCanBeUsedInspection */
         if (!is_a($cache, $expected = 'Psr\SimpleCache\CacheInterface')) {
             throw new InvalidArgumentException('The verififier cache must be an instance of '.$expected);
         }

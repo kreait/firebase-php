@@ -41,7 +41,6 @@ class AuthException extends \RuntimeException implements FirebaseException
     {
         $message = $e->getMessage();
 
-        /* @noinspection NullPointerExceptionInspection */
         if ($e->getResponse() && JSON::isValid($responseBody = (string) $e->getResponse()->getBody())) {
             $errors = JSON::decode($responseBody, true);
             $message = $errors['error']['message'] ?? $message;

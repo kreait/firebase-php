@@ -45,8 +45,6 @@ class ApiClient
         ]);
 
         try {
-            // GuzzleException is a marker interface that we cannot catch (at least not in <7.1)
-            /** @noinspection PhpUnhandledExceptionInspection */
             return $this->client->request($method, $uri, $options);
         } catch (RequestException $e) {
             throw RemoteConfigException::fromRequestException($e);
