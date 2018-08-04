@@ -62,16 +62,16 @@ You can create a message to a topic in one of the following ways:
 
 .. code-block:: php
 
-    use Kreait\Firebase\Messaging\MessageToTopic;
+    use Kreait\Firebase\Messaging\CloudMessage;
 
     $topic = 'a-topic';
 
-    $message = MessageToTopic::create($topic)
+    $message = CloudMessage::withTarget('topic', $topic)
         ->withNotification($notification) // optional
         ->withData($data) // optional
     ;
 
-    $message = MessageToTopic::fromArray([
+    $message = CloudMessage::fromArray([
         'topic' => $topic,
         'notification' => [/* Notification data as array */], // optional
         'data' => [/* data array */], // optional
@@ -95,16 +95,16 @@ FCM first evaluates any conditions in parentheses, and then evaluates the expres
 
 .. code-block:: php
 
-    use Kreait\Firebase\Messaging\ConditionalMessage;
+    use Kreait\Firebase\Messaging\CloudMessage;
 
     $condition = "'TopicA' in topics && ('TopicB' in topics || 'TopicC' in topics)";
 
-    $message = ConditionalMessage::create($condition)
+    $message = CloudMessage::withTarget('condition', $condition)
         ->withNotification($notification) // optional
         ->withData($data) // optional
     ;
 
-    $message = ConditionalMessage::fromArray([
+    $message = CloudMessage::fromArray([
         'condition' => $condition,
         'notification' => [/* Notification data as array */], // optional
         'data' => [/* data array */], // optional
@@ -123,16 +123,16 @@ Each of the Firebase client SDKs are able to generate these registration tokens:
 
 .. code-block:: php
 
-    use Kreait\Firebase\Messaging\MessageToRegistrationToken;
+    use Kreait\Firebase\Messaging\CloudMessage;
 
     $deviceToken = '...';
 
-    $message = MessageToRegistrationToken::create($deviceToken)
+    $message = CloudMessage::withTarget('token', $deviceToken)
         ->withNotification($notification) // optional
         ->withData($data) // optional
     ;
 
-    $message = MessageToRegistrationToken::fromArray([
+    $message = CloudMessage::fromArray([
         'token' => $deviceToken,
         'notification' => [/* Notification data as array */], // optional
         'data' => [/* data array */], // optional

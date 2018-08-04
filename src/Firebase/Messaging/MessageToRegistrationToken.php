@@ -6,6 +6,9 @@ namespace Kreait\Firebase\Messaging;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
+/**
+ * @deprecated 4.14 Use CloudMessage instead
+ */
 class MessageToRegistrationToken implements Message
 {
     use MessageTrait;
@@ -20,6 +23,14 @@ class MessageToRegistrationToken implements Message
         $this->token = $token;
     }
 
+    /**
+     * @deprecated 4.14 Use CloudMessage::withTarget('token', $token) instead
+     * @see CloudMessage::withTarget()
+     *
+     * @param RegistrationToken|string $token
+     *
+     * @return MessageToRegistrationToken
+     */
     public static function create($token): self
     {
         $token = $token instanceof RegistrationToken ? $token : RegistrationToken::fromValue($token);
@@ -28,6 +39,9 @@ class MessageToRegistrationToken implements Message
     }
 
     /**
+     * @deprecated 4.14 Use CloudMessage::fromArray() instead
+     * @see CloudMessage::fromArray()
+     *
      * @param array $data
      *
      * @throws InvalidArgumentException

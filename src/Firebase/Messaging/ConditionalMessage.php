@@ -6,6 +6,9 @@ namespace Kreait\Firebase\Messaging;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
+/**
+ * @deprecated 4.14 Use CloudMessage instead
+ */
 class ConditionalMessage implements Message
 {
     use MessageTrait;
@@ -20,6 +23,14 @@ class ConditionalMessage implements Message
         $this->condition = $condition;
     }
 
+    /**
+     * @deprecated 4.14 Use CloudMessage::withTarget('condition', $condition) instead
+     * @see CloudMessage::withTarget()
+     *
+     * @param Condition|string $condition
+     *
+     * @return ConditionalMessage
+     */
     public static function create($condition): self
     {
         $condition = $condition instanceof Condition ? $condition : Condition::fromValue($condition);
@@ -28,6 +39,9 @@ class ConditionalMessage implements Message
     }
 
     /**
+     * @deprecated 4.14 Use CloudMessage::fromArray() instead
+     * @see CloudMessage::fromArray()
+     *
      * @param array $data
      *
      * @throws InvalidArgumentException

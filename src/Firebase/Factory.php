@@ -14,7 +14,6 @@ use GuzzleHttp\HandlerStack;
 use Kreait\Firebase;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Http\Middleware;
-use Kreait\Firebase\Messaging\MessageFactory;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Psr\Http\Message\UriInterface;
 use function GuzzleHttp\Psr7\uri_for;
@@ -261,7 +260,7 @@ class Factory
             ])
         );
 
-        return new Messaging($messagingApiClient, new MessageFactory(), $topicManagementApiClient);
+        return new Messaging($messagingApiClient, $topicManagementApiClient);
     }
 
     protected function createApiClient(ServiceAccount $serviceAccount, array $config = null): Client
