@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Messaging;
-use Kreait\Firebase\Messaging\MessageFactory;
+use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 abstract class MessageTestCase extends IntegrationTestCase
@@ -16,11 +16,6 @@ abstract class MessageTestCase extends IntegrationTestCase
     public $messaging;
 
     /**
-     * @var MessageFactory
-     */
-    public $messageFactory;
-
-    /**
      * @var array
      */
     public $fullMessageData;
@@ -28,7 +23,6 @@ abstract class MessageTestCase extends IntegrationTestCase
     protected function setUp()
     {
         $this->messaging = self::$firebase->getMessaging();
-        $this->messageFactory = new MessageFactory();
 
         $this->fullMessageData = self::createFullMessageData();
     }
@@ -46,7 +40,7 @@ abstract class MessageTestCase extends IntegrationTestCase
 
     public function testSendFullMessage()
     {
-        $message = $this->messageFactory->fromArray($this->fullMessageData);
+        $message = CloudMessage::fromArray($this->fullMessageData);
         $this->assertSuccessfulMessage($message);
     }
 

@@ -1,5 +1,27 @@
 # CHANGELOG
 
+## Unreleased
+
+### Features
+
+* `Kreait\Firebase\Messaging\CloudMessage` can handle all currently supported types of messages and supersedes
+  the specialized message types.
+
+### Deprecations
+
+* `Kreait\Firebase\Messaging\MessageToTopic::fromArray()`
+  * Use `Kreait\Firebase\Messaging\CloudMessage::fromArray()`
+* `Kreait\Firebase\Messaging\MessageToTopic::create($topic)`
+  * Use `Kreait\Firebase\Messaging\CloudMessage::withTarget('topic', $topic)`
+* `Kreait\Firebase\Messaging\ConditionalMessage::fromArray()`
+  * Use `Kreait\Firebase\Messaging\CloudMessage::fromArray()`
+* `Kreait\Firebase\Messaging\ConditionalMessage::create($condition)`
+  * Use `Kreait\Firebase\Messaging\CloudMessage::withTarget('condition', $condition)`
+* `Kreait\Firebase\Messaging\MessageToRegistrationToken::fromArray()`
+  * Use `Kreait\Firebase\Messaging\CloudMessage::fromArray()`
+* `Kreait\Firebase\Messaging\MessageToRegistrationToken::create($token)`
+  * Use `Kreait\Firebase\Messaging\CloudMessage::withTarget('token', $token)`
+
 ## 4.13.3 - 2018-07-25
 
 ### Bugfixes

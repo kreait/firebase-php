@@ -9,8 +9,8 @@ use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Messaging\ApiClient;
+use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Message;
-use Kreait\Firebase\Messaging\MessageFactory;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Messaging\Topic;
 use Kreait\Firebase\Messaging\TopicManagementApiClient;
@@ -24,34 +24,25 @@ class Messaging
     private $messagingApi;
 
     /**
-     * @var MessageFactory
-     */
-    private $factory;
-
-    /**
      * @var TopicManagementApiClient
      */
     private $topicManagementApi;
 
-    public function __construct(
-        ApiClient $messagingApiClient,
-        MessageFactory $messageFactory,
-        TopicManagementApiClient $topicManagementApiClient
-    ) {
+    public function __construct(ApiClient $messagingApiClient, TopicManagementApiClient $topicManagementApiClient)
+    {
         $this->messagingApi = $messagingApiClient;
-        $this->factory = $messageFactory;
         $this->topicManagementApi = $topicManagementApiClient;
     }
 
     /**
-     * @param array|Message $message
+     * @param array|CloudMessage|Message $message
      *
      * @return array
      */
     public function send($message): array
     {
         if (\is_array($message)) {
-            $message = $this->factory->fromArray($message);
+            $message = CloudMessage::fromArray($message);
         }
 
         if (!($message instanceof Message)) {
@@ -65,7 +56,7 @@ class Messaging
     }
 
     /**
-     * @param array|Message $message
+     * @param array|CloudMessage|Message $message
      *
      * @throws InvalidArgumentException
      * @throws InvalidMessage
@@ -75,7 +66,7 @@ class Messaging
     public function validate($message): array
     {
         if (\is_array($message)) {
-            $message = $this->factory->fromArray($message);
+            $message = CloudMessage::fromArray($message);
         }
 
         if (!($message instanceof Message)) {
