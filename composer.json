@@ -24,6 +24,7 @@
         "google/auth": "^0.11.0|^1.0",
         "guzzlehttp/guzzle": "^6.2.1",
         "kreait/firebase-tokens": "^1.1.1",
+        "kreait/gcp-metadata": "^1.0.1",
         "lcobucci/jwt": "^3.2",
         "mtdowling/jmespath.php": "^2.3",
         "superbalist/flysystem-google-storage": "^7.0"

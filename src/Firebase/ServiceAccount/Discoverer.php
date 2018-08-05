@@ -27,6 +27,7 @@ class Discoverer
             new Discovery\FromEnvironmentVariable('FIREBASE_CREDENTIALS'),
             new Discovery\FromEnvironmentVariable(CredentialsLoader::ENV_VAR),
             new Discovery\FromGoogleWellKnownFile(),
+            new Discovery\OnGoogleCloudPlatform(),
         ];
     }
 

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+### Features
+
+* The SDK can now be used configuration-free on Google Cloud Engine.
+
 ## 4.14.0 - 2018-08-05
 
 ### Features

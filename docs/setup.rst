@@ -19,6 +19,8 @@ With autodiscovery
 
 By default, the SDK is able to autodiscover the Service Account for your project in the following conditions:
 
+#. Your application runs on Google Cloud Engine.
+
 #. The path to the JSON key file is defined in one of the following environment variables
 
    * ``FIREBASE_CREDENTIALS``

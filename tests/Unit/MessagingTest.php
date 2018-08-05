@@ -2,13 +2,9 @@
 
 namespace Kreait\Firebase\Tests\Unit;
 
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
-use Kreait\Firebase\Exception\Messaging\InvalidMessage;
-use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\TopicManagementApiClient;

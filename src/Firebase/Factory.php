@@ -3,18 +3,22 @@
 namespace Kreait\Firebase;
 
 use Firebase\Auth\Token\Cache\InMemoryCache;
-use Firebase\Auth\Token\Generator;
+use Firebase\Auth\Token\Domain\Generator;
+use Firebase\Auth\Token\Generator as CustomTokenGenerator;
 use Firebase\Auth\Token\HttpKeyStore;
 use Firebase\Auth\Token\Verifier;
+use Google\Auth\Credentials\GCECredentials;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\Middleware\AuthTokenMiddleware;
 use Google\Cloud\Core\ServiceBuilder;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use Kreait\Firebase;
+use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\ServiceAccount\Discoverer;
+use Kreait\GcpMetadata;
 use Psr\Http\Message\UriInterface;
 use function GuzzleHttp\Psr7\uri_for;
 
@@ -192,24 +196,36 @@ class Factory
 
     protected function createAuth(): Auth
     {
-        $serviceAccount = $this->getServiceAccount();
-
-        $http = $this->createApiClient($serviceAccount, [
+        $http = $this->createApiClient([
             'base_uri' => 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/',
         ]);
+        $apiClient = new Auth\ApiClient($http);
 
+        $serviceAccount = $this->getServiceAccount();
+
+        $customTokenGenerator = $this->createCustomTokenGenerator();
         $keyStore = new HttpKeyStore(new Client(), $this->verifierCache ?: new InMemoryCache());
+        $verifier = new Verifier($serviceAccount->getSanitizedProjectId(), $keyStore);
 
-        return new Auth(
-            new Auth\ApiClient($http),
-            new Generator($serviceAccount->getClientEmail(), $serviceAccount->getPrivateKey()),
-            new Verifier($serviceAccount->getSanitizedProjectId(), $keyStore)
-        );
+        return new Auth($apiClient, $customTokenGenerator, $verifier);
+    }
+
+    public function createCustomTokenGenerator(): Generator
+    {
+        $serviceAccount = $this->getServiceAccount();
+
+        if ($serviceAccount->hasPrivateKey()) {
+            return new CustomTokenGenerator($serviceAccount->getClientEmail(), $serviceAccount->getPrivateKey());
+        }
+
+        $http = $this->createApiClient(null, ['https://www.googleapis.com/auth/iam']);
+
+        return new CustomTokenViaGoogleIam($serviceAccount->getClientEmail(), $http);
     }
 
     protected function createDatabase(): Database
     {
-        $http = $this->createApiClient($this->getServiceAccount());
+        $http = $this->createApiClient();
 
         $middlewares = [
             'json_suffix' => Firebase\Http\Middleware::ensureJsonSuffix(),
@@ -233,7 +249,7 @@ class Factory
 
     protected function createRemoteConfig(): RemoteConfig
     {
-        $http = $this->createApiClient($this->getServiceAccount(), [
+        $http = $this->createApiClient([
             'base_uri' => 'https://firebaseremoteconfig.googleapis.com/v1/projects/'.$this->getServiceAccount()->getSanitizedProjectId().'/remoteConfig',
         ]);
 
@@ -246,13 +262,13 @@ class Factory
         $projectId = $serviceAccount->getSanitizedProjectId();
 
         $messagingApiClient = new Messaging\ApiClient(
-            $this->createApiClient($this->getServiceAccount(), [
+            $this->createApiClient([
                 'base_uri' => 'https://fcm.googleapis.com/v1/projects/'.$projectId,
             ])
         );
 
         $topicManagementApiClient = new Messaging\TopicManagementApiClient(
-            $this->createApiClient($this->getServiceAccount(), [
+            $this->createApiClient([
                 'base_uri' => 'https://iid.googleapis.com',
                 'headers' => [
                     'access_token_auth' => 'true',
@@ -263,15 +279,18 @@ class Factory
         return new Messaging($messagingApiClient, $topicManagementApiClient);
     }
 
-    protected function createApiClient(ServiceAccount $serviceAccount, array $config = null): Client
+    public function createApiClient(array $config = null, array $additionalScopes = null): Client
     {
-        $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware($serviceAccount);
+        $config = $config ?? [];
+        $additionalScopes = $additionalScopes ?? [];
+
+        $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware($additionalScopes);
 
         $stack = HandlerStack::create();
         foreach ($this->httpClientMiddlewares as $middleware) {
             $stack->push($middleware);
         }
-        $stack->push($googleAuthTokenMiddleware, 'auth_service_account');
+        $stack->push($googleAuthTokenMiddleware);
 
         $config = array_merge(
             $this->httpClientConfig,
@@ -285,23 +304,30 @@ class Factory
         return new Client($config);
     }
 
-    protected function createGoogleAuthTokenMiddleware(ServiceAccount $serviceAccount, array $additionalScopes = null): AuthTokenMiddleware
+    protected function createGoogleAuthTokenMiddleware(array $additionalScopes = null): AuthTokenMiddleware
     {
+        $serviceAccount = $this->getServiceAccount();
+
         $scopes = [
             'https://www.googleapis.com/auth/cloud-platform',
             'https://www.googleapis.com/auth/firebase',
+            'https://www.googleapis.com/auth/firebase.database',
             'https://www.googleapis.com/auth/firebase.messaging',
             'https://www.googleapis.com/auth/firebase.remoteconfig',
             'https://www.googleapis.com/auth/userinfo.email',
         ] + ($additionalScopes ?? []);
 
-        $credentials = [
-            'client_email' => $serviceAccount->getClientEmail(),
-            'client_id' => $serviceAccount->getClientId(),
-            'private_key' => $serviceAccount->getPrivateKey(),
-        ];
+        if ((new GcpMetadata())->isAvailable()) {
+            $credentials = new GCECredentials();
+        } else {
+            $credentials = new ServiceAccountCredentials($scopes, [
+                'client_email' => $serviceAccount->getClientEmail(),
+                'client_id' => $serviceAccount->getClientId(),
+                'private_key' => $serviceAccount->getPrivateKey(),
+            ]);
+        }
 
-        return new AuthTokenMiddleware(new ServiceAccountCredentials($scopes, $credentials));
+        return new AuthTokenMiddleware($credentials);
     }
 
     protected function createStorage(): Storage
@@ -319,15 +345,21 @@ class Factory
     {
         $serviceAccount = $this->getServiceAccount();
 
-        $credentials = [
-            'client_email' => $serviceAccount->getClientEmail(),
-            'client_id' => $serviceAccount->getClientId(),
-            'private_key' => $serviceAccount->getPrivateKey(),
-            'type' => 'service_account',
+        $config = [
+            'projectId' => $serviceAccount->getProjectId(),
         ];
 
-        return new ServiceBuilder([
-            'keyFile' => $credentials,
-        ]);
+        if ($serviceAccount->hasClientId() && $serviceAccount->hasPrivateKey()) {
+            $config = [
+                'keyFile' => [
+                    'client_email' => $serviceAccount->getClientEmail(),
+                    'client_id' => $serviceAccount->getClientId(),
+                    'private_key' => $serviceAccount->getPrivateKey(),
+                    'type' => 'service_account',
+                ],
+            ];
+        }
+
+        return new ServiceBuilder($config);
     }
 }
