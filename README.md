@@ -11,16 +11,12 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 [![Code Coverage](https://scrutinizer-ci.com/g/kreait/firebase-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/kreait/firebase-php/?branch=master)
 [![Gitter](https://badges.gitter.im/kreait/firebase-php.svg)](https://gitter.im/kreait/firebase-php)
 
-If you are interested in using the PHP Admin SDK as a client for end-user access (for example, in a web application), as opposed to admin access from a privileged environment (like a server), you should instead follow the [instructions for setting up the client JavaScript SDK](https://firebase.google.com/docs/web/setup).
-
 ## Documentation
 
 You can find the full documentation at
 [firebase-php.readthedocs.io](https://firebase-php.readthedocs.io/).
 
 An example project can be found at https://github.com/jeromegamez/firebase-php-examples .
-
-
 
 ## Feature matrix
 
