@@ -51,7 +51,7 @@ class CustomTokenViaGoogleIam implements Generator
 
         $token = $builder->getToken();
 
-        $url = 'https://iam.googleapis.com/v1/'.'projects/-/serviceAccounts/'.$this->clientEmail.':signBlob';
+        $url = 'https://iam.googleapis.com/v1/projects/-/serviceAccounts/'.$this->clientEmail.':signBlob';
 
         try {
             $response = $this->client->request('POST', $url, [
