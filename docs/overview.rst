@@ -25,7 +25,7 @@ installs them into your project.
 
 .. code-block:: bash
 
-    composer require kreait/firebase-php ^4.0
+    composer require kreait/firebase-php ^4.15.1
 
 
 Alternatively, you can specify the Firebase Admin SDK as a dependency in your
