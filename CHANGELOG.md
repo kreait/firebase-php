@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bugfixes
+
+* When on GCP/GCE, the environment was overriding an explicitely injected service account for API request authentication.   
+
 ## 4.15.0 - 2018-08-05
 
 ### Features

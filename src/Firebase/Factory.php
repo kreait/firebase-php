@@ -9,6 +9,7 @@ use Firebase\Auth\Token\HttpKeyStore;
 use Firebase\Auth\Token\Verifier;
 use Google\Auth\Credentials\GCECredentials;
 use Google\Auth\Credentials\ServiceAccountCredentials;
+use Google\Auth\CredentialsLoader;
 use Google\Auth\Middleware\AuthTokenMiddleware;
 use Google\Cloud\Core\ServiceBuilder;
 use GuzzleHttp\Client;
@@ -317,14 +318,16 @@ class Factory
             'https://www.googleapis.com/auth/userinfo.email',
         ] + ($additionalScopes ?? []);
 
-        if ((new GcpMetadata())->isAvailable()) {
-            $credentials = new GCECredentials();
-        } else {
+        if ($serviceAccount->hasClientId() && $serviceAccount->hasPrivateKey()) {
             $credentials = new ServiceAccountCredentials($scopes, [
                 'client_email' => $serviceAccount->getClientEmail(),
                 'client_id' => $serviceAccount->getClientId(),
                 'private_key' => $serviceAccount->getPrivateKey(),
             ]);
+        } elseif ((new GcpMetadata())->isAvailable()) {
+            $credentials = new GCECredentials();
+        } else {
+            throw new Firebase\Exception\RuntimeException('Unable to determine credentials.');
         }
 
         return new AuthTokenMiddleware($credentials);
