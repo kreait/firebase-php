@@ -6,5 +6,4 @@ namespace Kreait\Firebase\Exception;
 
 class RuntimeException extends \RuntimeException implements FirebaseException
 {
-
 }

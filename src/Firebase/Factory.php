@@ -9,7 +9,6 @@ use Firebase\Auth\Token\HttpKeyStore;
 use Firebase\Auth\Token\Verifier;
 use Google\Auth\Credentials\GCECredentials;
 use Google\Auth\Credentials\ServiceAccountCredentials;
-use Google\Auth\CredentialsLoader;
 use Google\Auth\Middleware\AuthTokenMiddleware;
 use Google\Cloud\Core\ServiceBuilder;
 use GuzzleHttp\Client;
@@ -17,6 +16,7 @@ use GuzzleHttp\HandlerStack;
 use Kreait\Firebase;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\GcpMetadata;
@@ -327,7 +327,7 @@ class Factory
         } elseif ((new GcpMetadata())->isAvailable()) {
             $credentials = new GCECredentials();
         } else {
-            throw new Firebase\Exception\RuntimeException('Unable to determine credentials.');
+            throw new RuntimeException('Unable to determine credentials.');
         }
 
         return new AuthTokenMiddleware($credentials);
