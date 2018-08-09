@@ -175,4 +175,14 @@ class CloudMessage implements Message
             'webpush' => $this->webPushConfig,
         ]);
     }
+
+    public function data()
+    {
+        return $this->data->data();
+    }
+
+    public function notification()
+    {
+        return $this->notification;
+    }
 }
