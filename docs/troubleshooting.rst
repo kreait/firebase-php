@@ -21,6 +21,11 @@ by adding the line
 
 somewhere in your script.
 
+****************************************
+Class 'Kreait\\Firebase\\ ...' not found
+****************************************
+
+You are not using the latest release of the SDK, please update your composer dependencies.
 
 *********************************************
 Call to undefined function ``openssl_sign()``
