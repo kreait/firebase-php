@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase;
 
+use Kreait\Firebase\Exception\RemoteConfig\ValidationFailed;
+use Kreait\Firebase\Exception\RemoteConfigException;
 use Kreait\Firebase\RemoteConfig\ApiClient;
 use Kreait\Firebase\RemoteConfig\Template;
 
@@ -31,7 +33,23 @@ class RemoteConfig
     }
 
     /**
+     * Validates the given template without publishing it.
+     *
      * @param Template|array $template
+     *
+     * @throws ValidationFailed if the validation failed
+     */
+    public function validate($template)
+    {
+        $template = $template instanceof Template ? $template : Template::fromArray($template);
+
+        $this->client->validateTemplate($template);
+    }
+
+    /**
+     * @param Template|array $template
+     *
+     * @throws RemoteConfigException
      *
      * @return string The etag value of the published template that can be compared to in later calls
      */

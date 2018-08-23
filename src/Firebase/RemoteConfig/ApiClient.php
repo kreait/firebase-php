@@ -25,6 +25,20 @@ class ApiClient
         return $this->request('GET', 'remoteConfig');
     }
 
+    public function validateTemplate(Template $template): ResponseInterface
+    {
+        return $this->request('PUT', 'remoteConfig', [
+            'headers' => [
+                'Content-Type' => 'application/json; UTF-8',
+                'If-Match' => $template->getEtag(),
+            ],
+            'query' => [
+                'validate_only' => 'true',
+            ],
+            'body' => JSON::encode($template),
+        ]);
+    }
+
     public function publishTemplate(Template $template): ResponseInterface
     {
         return $this->request('PUT', 'remoteConfig', [

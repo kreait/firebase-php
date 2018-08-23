@@ -102,10 +102,37 @@ Conditional values
 .. note::
     When you use a conditional value, make sure to add the corresponding condition to the template first.
 
+**********
+Validation
+**********
+
+Usually, the SDK will protect you from creating an invalid Remote Config template in the first
+place. If you want to be sure, you can validate the template with a call to the Firebase API:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Exception\RemoteConfig\ValidationFailed;
+
+    try {
+        $remoteConfig->validate($template);
+    } catch (ValidationFailed $e) {
+        echo $e->getMessage();
+    }
+
+.. note::
+    The ``ValidationFailed`` exception extends ``Kreait\Firebase\Exception\RemoteConfigException``,
+    so you can safely use the more generic exception type as well.
+
 *************************
 Publish the Remote Config
 *************************
 
 .. code-block:: php
 
-    $remoteConfig->publish($template);
+    use Kreait\Firebase\Exception\RemoteConfigException
+
+    try {
+        $remoteConfig->publish($template);
+    } catch (RemoteConfigException $e) {
+        echo $e->getMessage();
+    }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Exception\RemoteConfig\OperationAborted;
+use Kreait\Firebase\Exception\RemoteConfig\ValidationFailed;
 use Kreait\Firebase\RemoteConfig;
 use Kreait\Firebase\RemoteConfig\Condition;
 use Kreait\Firebase\RemoteConfig\ConditionalValue;
@@ -116,5 +117,48 @@ CONFIG;
         $this->remoteConfig->publish($template);
 
         $this->assertTrue($noExceptionHasBeenThrown = true);
+    }
+
+    public function testValidateTemplate()
+    {
+        $current = $this->remoteConfig->get();
+
+        $template = $this->templateWithTooManyParameters();
+
+        try {
+            $this->remoteConfig->validate($template);
+            $this->fail('A '.ValidationFailed::class.' should have been thrown');
+        } catch (\Throwable $e) {
+            $this->assertInstanceOf(ValidationFailed::class, $e);
+        }
+
+        $this->assertSame($current->getEtag(), $this->remoteConfig->get()->getEtag());
+    }
+
+    public function testPublishInvalidTemplate()
+    {
+        $current = $this->remoteConfig->get();
+
+        $template = $this->templateWithTooManyParameters();
+
+        try {
+            $this->remoteConfig->validate($template);
+            $this->fail('A '.ValidationFailed::class.' should have been thrown');
+        } catch (\Throwable $e) {
+            $this->assertInstanceOf(ValidationFailed::class, $e);
+        }
+
+        $this->assertSame($current->getEtag(), $this->remoteConfig->get()->getEtag());
+    }
+
+    public function templateWithTooManyParameters()
+    {
+        $template = Template::new();
+
+        for ($i = 0; $i < 2001; ++$i) {
+            $template = $template->withParameter(Parameter::named('i_'.$i));
+        }
+
+        return $template;
     }
 }

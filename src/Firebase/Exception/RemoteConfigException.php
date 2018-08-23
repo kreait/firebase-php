@@ -5,6 +5,7 @@ namespace Kreait\Firebase\Exception;
 use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Exception\RemoteConfig\OperationAborted;
 use Kreait\Firebase\Exception\RemoteConfig\PermissionDenied;
+use Kreait\Firebase\Exception\RemoteConfig\ValidationFailed;
 use Kreait\Firebase\Exception\RemoteConfig\VersionMismatch;
 use Kreait\Firebase\Util\JSON;
 
@@ -14,6 +15,7 @@ class RemoteConfigException extends \RuntimeException implements FirebaseExcepti
         PermissionDenied::IDENTIFER => PermissionDenied::class,
         OperationAborted::IDENTIFER => OperationAborted::class,
         VersionMismatch::IDENTIFER => VersionMismatch::class,
+        ValidationFailed::IDENTIFER => ValidationFailed::class,
     ];
 
     /**

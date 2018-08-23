@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+### Features
+
+* Added support for Remote Config Template validation ([Documentation](https://firebase-php.readthedocs.io/en/latest/remote-config.html#validation)) 
+
 ## 4.15.1 - 2018-08-07
 
 ### Bugfixes
