@@ -4,6 +4,8 @@ namespace Kreait\Firebase\RemoteConfig;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Uri;
+use function GuzzleHttp\Psr7\uri_for;
 use Kreait\Firebase\Exception\RemoteConfigException;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
@@ -47,6 +49,33 @@ class ApiClient
                 'If-Match' => $template->getEtag(),
             ],
             'body' => JSON::encode($template),
+        ]);
+    }
+
+    public function listVersions(FindVersions $query, string $nextPageToken = null): ResponseInterface
+    {
+        $uri = rtrim((string) $this->client->getConfig('base_uri'), '/').':listVersions';
+
+        $since = $query->since() ? $query->since()->format('Y-m-d\TH:i:s.v\Z') : null;
+        $until = $query->until() ? $query->until()->format('Y-m-d\TH:i:s.v\Z') : null;
+        $upToVersion = $query->upToVersion() ? (string) $query->upToVersion() : null;
+
+        return $this->request('GET', $uri, array_filter([
+            'startTime' => $since,
+            'endTime' => $until,
+            'endVersionNumber' => $upToVersion,
+            'nextPageToken' => $nextPageToken,
+        ]));
+    }
+
+    public function rollbackToVersion(VersionNumber $versionNumber): ResponseInterface
+    {
+        $uri = rtrim((string) $this->client->getConfig('base_uri'), '/').':rollback';
+
+        return $this->request('POST', $uri, [
+            'json' => [
+                'version_number' => (string) $versionNumber,
+            ]
         ]);
     }
 

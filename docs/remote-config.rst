@@ -136,3 +136,60 @@ Publish the Remote Config
     } catch (RemoteConfigException $e) {
         echo $e->getMessage();
     }
+
+**************
+Change history
+**************
+
+Since August 23, 2018, Firebase provides a change history for your published Remote configs.
+
+Versions
+--------
+
+The following properties are available from a ``Kreait\Firebase\RemoteConfig\Version`` object:
+
+.. code-block:: php
+
+    $version->versionNumber();
+    $version->user(); // The user/service account the performed the change
+    $version->description();
+    $version->updatedAt();
+    $version->updateOrigin();
+    $version->updateType();
+    $version->rollBackSource();
+
+
+List versions
+-------------
+
+To enhance performance and prevent memory issues when retrieving a huge amount of users,
+this methods returns a `Generator <http://php.net/manual/en/language.generators.overview.php>`_.
+
+.. code-block:: php
+
+    $users = ;
+
+    foreach ($auth->listVersions() as $version) {
+        /** @var \Kreait\Firebase\RemoteConfig\Version $user */
+        // ...
+    }
+    // or
+    array_map(function (\Kreait\Firebase\RemoteConfig\Version $user) {
+        // ...
+    }, iterator_to_array($auth->listVersions()));
+
+
+Get a specific version
+----------------------
+
+.. code-block:: php
+
+    $version = $remoteConfig->getVersion($versionNumber);
+
+
+Rollback to a version
+---------------------
+
+.. code-block:: php
+
+    $template = $remoteConfig->rollbackToVersion($versionNumber);

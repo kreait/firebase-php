@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace Kreait\Firebase;
 
 use Kreait\Firebase\Exception\RemoteConfig\ValidationFailed;
+use Kreait\Firebase\Exception\RemoteConfig\VersionNotFound;
 use Kreait\Firebase\Exception\RemoteConfigException;
 use Kreait\Firebase\RemoteConfig\ApiClient;
+use Kreait\Firebase\RemoteConfig\FindVersions;
 use Kreait\Firebase\RemoteConfig\Template;
+use Kreait\Firebase\RemoteConfig\Version;
+use Kreait\Firebase\RemoteConfig\VersionNumber;
+use Kreait\Firebase\Util\JSON;
 
 /**
  * The Firebase Remote Config.
@@ -38,6 +43,8 @@ class RemoteConfig
      * @param Template|array $template
      *
      * @throws ValidationFailed if the validation failed
+     *
+     * @return void
      */
     public function validate($template)
     {
@@ -62,5 +69,77 @@ class RemoteConfig
         $etag = $response->getHeader('ETag');
 
         return array_shift($etag);
+    }
+
+    /**
+     * Returns a version with the given number
+     *
+     * @param VersionNumber|mixed $versionNumber
+     *
+     * @throws VersionNotFound
+     *
+     * @return Version
+     */
+    public function getVersion($versionNumber): Version
+    {
+        $versionNumber = $versionNumber instanceof VersionNumber
+            ? $versionNumber
+            : VersionNumber::fromValue($versionNumber);
+
+        foreach ($this->listVersions() as $version) {
+            if ($version->versionNumber()->equalsTo($versionNumber)) {
+                return $version;
+            }
+        }
+
+        throw VersionNotFound::withVersionNumber($versionNumber);
+    }
+
+    /**
+     * Returns a version with the given number
+     *
+     * @param VersionNumber|mixed $versionNumber
+     *
+     * @throws VersionNotFound
+     *
+     * @return Template
+     */
+    public function rollbackToVersion($versionNumber): Template
+    {
+        $versionNumber = $versionNumber instanceof VersionNumber
+            ? $versionNumber
+            : VersionNumber::fromValue($versionNumber);
+
+        $response = $this->client->rollbackToVersion($versionNumber);
+
+        return Template::fromResponse($response);
+    }
+
+    /**
+     * @param FindVersions|array $query
+     *
+     * @return \Generator|Version[]
+     */
+    public function listVersions($query = null): \Generator
+    {
+        $query = $query instanceof FindVersions ? $query : FindVersions::fromArray((array) $query);
+        $pageToken = null;
+        $count = 0;
+
+        do {
+            $response = $this->client->listVersions($query, $pageToken);
+            $result = JSON::decode((string) $response->getBody(), true);
+
+            foreach ((array) ($result['versions'] ?? []) as $versionData) {
+                ++$count;
+                yield Version::fromArray($versionData);
+
+                if ($count === (int) $query->limit()) {
+                    return;
+                }
+            }
+
+            $pageToken = $result['nextPageToken'] ?? null;
+        } while ($pageToken);
     }
 }

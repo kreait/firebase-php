@@ -12,6 +12,7 @@ use Kreait\Firebase\RemoteConfig\ConditionalValue;
 use Kreait\Firebase\RemoteConfig\Parameter;
 use Kreait\Firebase\RemoteConfig\TagColor;
 use Kreait\Firebase\RemoteConfig\Template;
+use Kreait\Firebase\RemoteConfig\Version;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 class RemoteConfigTest extends IntegrationTestCase
@@ -151,7 +152,51 @@ CONFIG;
         $this->assertSame($current->getEtag(), $this->remoteConfig->get()->getEtag());
     }
 
-    public function templateWithTooManyParameters()
+    public function testListVersions()
+    {
+        $counter = 0;
+
+        foreach ($this->remoteConfig->listVersions() as $version) {
+            $this->assertInstanceOf(RemoteConfig\Version::class, $version);
+            $counter++;
+        }
+
+        $this->assertGreaterThan(0, $counter);
+    }
+
+    public function testGetVersion()
+    {
+        $randomPosition = random_int(1, 10);
+        $counter = 0;
+        $targetVersion = null;
+
+        foreach ($this->remoteConfig->listVersions() as $version) {
+            $counter++;
+
+            if ($counter === $randomPosition) {
+                $targetVersion = $version;
+                break;
+            }
+        }
+
+        $this->assertSame($randomPosition, $counter);
+        $version = $this->remoteConfig->getVersion($targetVersion->versionNumber());
+
+        $this->assertTrue($targetVersion->versionNumber()->equalsTo($version->versionNumber()));
+    }
+
+    public function testFindVersionsWithLimit()
+    {
+        $counter = 0;
+
+        foreach ($this->remoteConfig->listVersions(['limit' => 1]) as $version) {
+            $counter++;
+        }
+
+        $this->assertSame(1, $counter);
+    }
+
+    private function templateWithTooManyParameters()
     {
         $template = Template::new();
 
