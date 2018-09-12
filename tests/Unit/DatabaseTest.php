@@ -80,15 +80,4 @@ class DatabaseTest extends UnitTestCase
 
         $this->assertEquals($expected, $ruleSet->getRules());
     }
-
-    public function testSetRules()
-    {
-        $ruleSet = RuleSet::default();
-
-        $this->apiClient->expects($this->once())
-            ->method('set')
-            ->with($this->uri->withPath('.settings/rules'), $ruleSet);
-
-        $this->database->updateRules($ruleSet);
-    }
 }
