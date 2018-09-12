@@ -4,7 +4,8 @@
 
 ### Changes
 
-* When loading a non-existing/invalid service account file, error details are now included. 
+* When loading a non-existing/invalid service account file, error details are now included.
+* Database rules are now updated with prettified JSON to improve editing them in the web console.
 
 ## 4.16.0 - 2018-08-24
 

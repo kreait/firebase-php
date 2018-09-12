@@ -116,6 +116,6 @@ class Database
      */
     public function updateRules(RuleSet $ruleSet)
     {
-        $this->client->set($this->uri->withPath('.settings/rules'), $ruleSet);
+        $this->client->updateRules($this->uri->withPath('.settings/rules'), $ruleSet);
     }
 }

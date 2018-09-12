@@ -35,6 +35,15 @@ class ApiClient
         return JSON::decode((string) $response->getBody(), true);
     }
 
+    public function updateRules($uri, RuleSet $ruleSet)
+    {
+        $response = $this->request('PUT', $uri, [
+            'body' => json_encode($ruleSet, JSON_PRETTY_PRINT)
+        ]);
+
+        return JSON::decode((string) $response->getBody(), true);
+    }
+
     public function push($uri, $value): string
     {
         $response = $this->request('POST', $uri, ['json' => $value]);
