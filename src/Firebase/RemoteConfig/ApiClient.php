@@ -4,8 +4,6 @@ namespace Kreait\Firebase\RemoteConfig;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7\Uri;
-use function GuzzleHttp\Psr7\uri_for;
 use Kreait\Firebase\Exception\RemoteConfigException;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
@@ -75,7 +73,7 @@ class ApiClient
         return $this->request('POST', $uri, [
             'json' => [
                 'version_number' => (string) $versionNumber,
-            ]
+            ],
         ]);
     }
 

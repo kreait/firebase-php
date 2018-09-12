@@ -43,8 +43,6 @@ class RemoteConfig
      * @param Template|array $template
      *
      * @throws ValidationFailed if the validation failed
-     *
-     * @return void
      */
     public function validate($template)
     {
@@ -72,7 +70,7 @@ class RemoteConfig
     }
 
     /**
-     * Returns a version with the given number
+     * Returns a version with the given number.
      *
      * @param VersionNumber|mixed $versionNumber
      *
@@ -96,7 +94,7 @@ class RemoteConfig
     }
 
     /**
-     * Returns a version with the given number
+     * Returns a version with the given number.
      *
      * @param VersionNumber|mixed $versionNumber
      *

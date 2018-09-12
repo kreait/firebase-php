@@ -12,7 +12,6 @@ use Kreait\Firebase\RemoteConfig\ConditionalValue;
 use Kreait\Firebase\RemoteConfig\Parameter;
 use Kreait\Firebase\RemoteConfig\TagColor;
 use Kreait\Firebase\RemoteConfig\Template;
-use Kreait\Firebase\RemoteConfig\Version;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 class RemoteConfigTest extends IntegrationTestCase
@@ -158,7 +157,7 @@ CONFIG;
 
         foreach ($this->remoteConfig->listVersions() as $version) {
             $this->assertInstanceOf(RemoteConfig\Version::class, $version);
-            $counter++;
+            ++$counter;
         }
 
         $this->assertGreaterThan(0, $counter);
@@ -171,7 +170,7 @@ CONFIG;
         $targetVersion = null;
 
         foreach ($this->remoteConfig->listVersions() as $version) {
-            $counter++;
+            ++$counter;
 
             if ($counter === $randomPosition) {
                 $targetVersion = $version;
@@ -190,7 +189,7 @@ CONFIG;
         $counter = 0;
 
         foreach ($this->remoteConfig->listVersions(['limit' => 1]) as $version) {
-            $counter++;
+            ++$counter;
         }
 
         $this->assertSame(1, $counter);
