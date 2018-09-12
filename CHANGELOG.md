@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### Unreleased
+## 4.17.0 - 2018-09-12
 
 ### Changes
 
