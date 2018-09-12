@@ -144,7 +144,7 @@ class ServiceAccount
 
             return self::fromJson($file->fread($file->getSize()));
         } catch (\Throwable $e) {
-            throw new InvalidArgumentException(sprintf('%s can not be read.', $filePath));
+            throw new InvalidArgumentException(sprintf('%s can not be read: '.$e->getMessage(), $filePath));
         }
     }
 

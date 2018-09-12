@@ -1,5 +1,11 @@
 # CHANGELOG
 
+### Unreleased
+
+### Changes
+
+* When loading a non-existing/invalid service account file, error details are now included. 
+
 ## 4.16.0 - 2018-08-24
 
 ### Features
