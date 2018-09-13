@@ -231,6 +231,14 @@ class ApiClient
         ]);
     }
 
+    public function createSessionCookie(string $idToken, int $lifetimeInSeconds): ResponseInterface
+    {
+        return $this->request('createSessionCookie', [
+            'idToken' => $idToken,
+            'validDuration' => $lifetimeInSeconds,
+        ]);
+    }
+
     private function request(string $uri, $data): ResponseInterface
     {
         if ($data instanceof \JsonSerializable && empty($data->jsonSerialize())) {

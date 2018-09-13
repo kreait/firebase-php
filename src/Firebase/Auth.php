@@ -14,12 +14,14 @@ use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Util\DT;
+use Kreait\Firebase\Util\Duration;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\ClearTextPassword;
 use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\PhoneNumber;
 use Kreait\Firebase\Value\Provider;
 use Kreait\Firebase\Value\Uid;
+use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\UriInterface;
 
@@ -401,5 +403,19 @@ class Auth
         $uid = JSON::decode((string) $response->getBody(), true)['localId'];
 
         return $this->getUser($uid);
+    }
+
+    public function createSessionCookie($idToken, $lifetime = null)
+    {
+        $idToken = $idToken instanceof Token ? $idToken : (new Parser())->parse($idToken);
+        $lifetime = $lifetime instanceof Duration ? $lifetime : Duration::fromValue($lifetime ?: '5 minutes');
+
+        if (!$lifetime->isWithin(Duration::fromValue('5 minutes'), Duration::fromValue('2 weeks'))) {
+            throw new InvalidArgumentException('A session cookie\'s lifetime must be between 5 minutes and 2 weeks.');
+        }
+
+        $response = $this->client->createSessionCookie((string) $idToken, $lifetime->inSeconds());
+
+        return JSON::decode((string) $response->getBody(), true)['sessionCookie'];
     }
 }
