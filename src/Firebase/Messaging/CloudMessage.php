@@ -11,32 +11,32 @@ class CloudMessage implements Message
     /**
      * @var MessageTarget
      */
-    private $target;
+    protected $target;
 
     /**
      * @var MessageData|null
      */
-    private $data;
+    protected $data;
 
     /**
      * @var Notification|null
      */
-    private $notification;
+    protected $notification;
 
     /**
      * @var AndroidConfig|null
      */
-    private $androidConfig;
+    protected $androidConfig;
 
     /**
      * @var ApnsConfig|null
      */
-    private $apnsConfig;
+    protected $apnsConfig;
 
     /**
      * @var WebPushConfig|null
      */
-    private $webPushConfig;
+    protected $webPushConfig;
 
     private function __construct()
     {
