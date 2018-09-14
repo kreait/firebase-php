@@ -35,4 +35,9 @@ final class MessageData implements \JsonSerializable
     {
         return $this->data;
     }
+
+    public function data()
+    {
+        return $this->data;
+    }
 }
