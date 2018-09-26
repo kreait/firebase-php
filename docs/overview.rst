@@ -51,6 +51,8 @@ You can find out more on how to install Composer, configure autoloading, and
 other best-practices for defining dependencies at
 `getcomposer.org <http://getcomposer.org>`_.
 
+Please continue to the :ref:`Setup section <setup>` to learn more about connecting your application to Firebase.
+
 *************
 Usage example
 *************
