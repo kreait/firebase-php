@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+### Enhancements
+
+* Service Account related errors are now more fine grained.
+
 ## 4.17.0 - 2018-09-12
 
 ### Changes

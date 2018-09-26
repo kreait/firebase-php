@@ -119,8 +119,20 @@ class ServiceAccount
 
     public static function fromArray(array $config): self
     {
-        if (!isset($config['project_id'], $config['client_id'], $config['client_email'], $config['private_key'])) {
-            throw new InvalidArgumentException('Missing/empty values in Service Account Config.');
+        $requiredFields = ['project_id', 'client_id', 'client_email', 'private_key'];
+        $missingFields = [];
+
+        foreach ($requiredFields as $field) {
+            if (!isset($config[$field])) {
+                $missingFields[] = $field;
+            }
+        }
+
+        if (!empty($missingFields)) {
+            throw new InvalidArgumentException(
+                'The following fields are missing/empty in the Service Account specification: '
+                .implode(', ', $missingFields)
+            );
         }
 
         return (new self())
@@ -141,10 +153,15 @@ class ServiceAccount
     {
         try {
             $file = new \SplFileObject($filePath);
-
-            return self::fromJson($file->fread($file->getSize()));
+            $json = $file->fread($file->getSize());
         } catch (\Throwable $e) {
-            throw new InvalidArgumentException(sprintf('%s can not be read: '.$e->getMessage(), $filePath));
+            throw new InvalidArgumentException(sprintf('%s can not be read: %s', $filePath, $e->getMessage()));
+        }
+
+        try {
+            return self::fromJson($json);
+        } catch (\Throwable $e) {
+            throw new InvalidArgumentException(sprintf('%s could not be parsed to a Service Account: %s', $filePath, $e->getMessage()));
         }
     }
 
