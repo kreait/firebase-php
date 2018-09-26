@@ -103,9 +103,10 @@ of this project's `GitHub repository <https://github.com/kreait/firebase-php/>`_
 Issues/Support
 **************
 
-- `Github issue tracker <https://github.com/kreait/firebase-php/issues/>`_
-- Join the Firebase Community Slack at https://firebase-community.appspot.com, join the #php channel and look
-  for @jeromegamez.
+- For bugs, feature requests and past issues: `Github issue tracker <https://github.com/kreait/firebase-php/issues/>`_
+- For help with and discussion about the PHP SDK: `Gitter Channel dedicated to this library <https://gitter.im/kreait/firebase-php>`_
+- For questions about Firebase in general: `Stack Overflow <https://stackoverflow.com/questions/tagged/firebase>`_ and the `Firebase Slack Community <https://firebase.community>`_.
+
 
 *******
 License
