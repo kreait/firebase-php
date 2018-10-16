@@ -22,19 +22,27 @@
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "giggsey/libphonenumber-for-php": "^8.9",
-        "google/auth": "^0.11.0|^1.0",
-        "guzzlehttp/guzzle": "^6.2.1",
+        "google/auth": "^1.4",
+        "google/cloud-storage": "^1.9",
+        "guzzlehttp/guzzle": "^6.3.3",
+        "kevinrob/guzzle-cache-middleware": "^3.2",
         "kreait/firebase-tokens": "^1.7.2",
         "kreait/gcp-metadata": "^1.0.1",
         "lcobucci/jwt": "^3.2",
-        "mtdowling/jmespath.php": "^2.3",
-        "superbalist/flysystem-google-storage": "^7.0"
+        "league/flysystem": "^1.0",
+        "mtdowling/jmespath.php": "^2.4",
+        "psr/http-message": "^1.0",
+        "superbalist/flysystem-google-storage": "^7.1"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.0",
         "phpstan/phpstan-phpunit": "^0.9.2",
-        "phpunit/phpunit": "^6.0|^7.0",
+        "phpunit/phpunit": "^6.0",
         "symfony/var-dumper": "^3.3"
+    },
+    "suggest": {
+        "psr/cache": "Allows caching requests to the Firebase authentication APIs",
+        "psr/simple-cache": "Allows caching requests to the Firebase authentication APIs"
     },
     "autoload": {
         "psr-4": {
