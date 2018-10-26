@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use Firebase\Auth\Token\Exception\InvalidSignature;
+use Firebase\Auth\Token\HttpKeyStore;
+use GuzzleHttp\Client;
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
@@ -11,6 +14,7 @@ use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Kreait\Firebase\Util\JSON;
+use Lcobucci\JWT\Builder;
 
 class AuthTest extends IntegrationTestCase
 {
@@ -361,5 +365,23 @@ class AuthTest extends IntegrationTestCase
         $this->assertNull($updatedUser->phoneNumber);
 
         $this->auth->deleteUser($user->uid);
+    }
+
+    public function testDisallowFutureTokensWithAnInvalidSignature()
+    {
+        $client = new Client();
+        $keys = JSON::decode((string) $client->get(HttpKeyStore::KEYS_URL)->getBody(), true);
+        $keyIds = array_keys($keys);
+        $keyId = reset($keyIds);
+
+        $token = (new Builder())
+            ->setIssuedAt(strtotime('+1 hour'))
+            ->setExpiration(strtotime('+2 hours'))
+            ->setHeader('kid', $keyId)
+            ->sign(new \Lcobucci\JWT\Signer\Hmac\Sha256(), 'i am evil')
+            ->getToken();
+
+        $this->expectException(InvalidSignature::class);
+        $this->auth->verifyIdToken($token, false, true);
     }
 }

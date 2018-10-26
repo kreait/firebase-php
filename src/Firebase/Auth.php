@@ -4,6 +4,7 @@ namespace Kreait\Firebase;
 
 use Firebase\Auth\Token\Domain\Generator as TokenGenerator;
 use Firebase\Auth\Token\Domain\Verifier as IdTokenVerifier;
+use Firebase\Auth\Token\Exception\InvalidSignature;
 use Firebase\Auth\Token\Exception\InvalidToken;
 use Firebase\Auth\Token\Exception\IssuedInTheFuture;
 use Kreait\Firebase\Auth\ApiClient;
@@ -314,6 +315,7 @@ class Auth
      * @throws InvalidToken
      * @throws IssuedInTheFuture
      * @throws RevokedIdToken
+     * @throws InvalidSignature
      *
      * @return Token the verified token
      */

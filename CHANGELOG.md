@@ -2,8 +2,15 @@
 
 ## Unreleased
 
+### Bugfixes
+
+* The signature of an ID Token is now verified even if a prior error occured (thanks [@kanoblake](https://github.com/kanoblake) for reporting the issue and providing a test case) 
+
 ### Enhancements
 
+* ID Tokens must have a valid "auth_time" claim.
+* Tokens with an invalid signature now throw a `Firebase\Auth\Token\Exception\InvalidSignature` exception. It extends the previously thrown `Firebase\Auth\Token\Exception\InvalidToken`,
+so existing behaviour doesn't change.
 * Service Account related errors are now more fine grained.
 
 ## 4.17.0 - 2018-09-12
