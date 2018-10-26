@@ -3,16 +3,20 @@
 namespace Kreait\Firebase;
 
 use Firebase\Auth\Token\Domain\Generator as TokenGenerator;
-use Firebase\Auth\Token\Domain\Verifier as IdTokenVerifier;
+use Firebase\Auth\Token\Domain\Verifier as LegacyIdTokenVerifier;
 use Firebase\Auth\Token\Exception\InvalidSignature;
 use Firebase\Auth\Token\Exception\InvalidToken;
 use Firebase\Auth\Token\Exception\IssuedInTheFuture;
 use Kreait\Firebase\Auth\ApiClient;
+use Kreait\Firebase\Auth\IdTokenVerifier as NewIdTokenVerifier;
+use Kreait\Firebase\Auth\SessionTokenVerifier;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
+use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\RevokedToken;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\Duration;
 use Kreait\Firebase\Util\JSON;
@@ -38,15 +42,34 @@ class Auth
     private $tokenGenerator;
 
     /**
-     * @var IdTokenVerifier
+     * @var NewIdTokenVerifier|LegacyIdTokenVerifier
      */
     private $idTokenVerifier;
 
-    public function __construct(ApiClient $client, TokenGenerator $customToken, IdTokenVerifier $idTokenVerifier)
+    /**
+     * @var SessionTokenVerifier
+     */
+    private $sessionTokenVerifier;
+
+    /**
+     * @param ApiClient $client
+     * @param TokenGenerator $customToken
+     * @param NewIdTokenVerifier|LegacyIdTokenVerifier $idTokenVerifier
+     * @param SessionTokenVerifier $sessionTokenVerifier
+     */
+    public function __construct(ApiClient $client, TokenGenerator $customToken, $idTokenVerifier, SessionTokenVerifier $sessionTokenVerifier)
     {
         $this->client = $client;
         $this->tokenGenerator = $customToken;
+
+        if ($idTokenVerifier instanceof LegacyIdTokenVerifier) {
+            trigger_error(sprintf('%s is deprecated, please use %s instead', LegacyIdTokenVerifier::class, NewIdTokenVerifier::class), E_USER_DEPRECATED);
+        } elseif (!($idTokenVerifier instanceof NewIdTokenVerifier)) {
+            throw new InvalidArgumentException(sprintf('An ID token verifier must be an instance of %s', NewIdTokenVerifier::class));
+        }
+
         $this->idTokenVerifier = $idTokenVerifier;
+        $this->sessionTokenVerifier = $sessionTokenVerifier;
     }
 
     public function getApiClient(): ApiClient
@@ -314,6 +337,7 @@ class Auth
      * @param bool $checkIfRevoked whether to check if the ID token is revoked
      * @param bool $allowFutureTokens whether to allow tokens that have been issued for the future
      *
+     * @throws InvalidArgumentException
      * @throws InvalidToken
      * @throws IssuedInTheFuture
      * @throws RevokedIdToken
@@ -323,29 +347,45 @@ class Auth
      */
     public function verifyIdToken($idToken, bool $checkIfRevoked = null, bool $allowFutureTokens = null): Token
     {
+        try {
+            $idToken = $idToken instanceof Token ? $idToken : (new Parser())->parse($idToken);
+        } catch (\Throwable $e) {
+            throw new InvalidArgumentException('The given value could not be parsed as a token: '.$e->getMessage());
+        }
+
         $checkIfRevoked = $checkIfRevoked ?? false;
         $allowFutureTokens = $allowFutureTokens ?? false;
 
-        try {
-            $verifiedToken = $this->idTokenVerifier->verifyIdToken($idToken);
-        } catch (IssuedInTheFuture $e) {
-            if (!$allowFutureTokens) {
-                throw $e;
-            }
+        if ($this->idTokenVerifier instanceof NewIdTokenVerifier) {
+            try {
+                $this->idTokenVerifier->verify($idToken);
+            } catch (Exception\InvalidToken $e) {
+                $issuedAt = $idToken->getClaim('iat', false);
+                $isIssuedInTheFuture = $issuedAt > time();
 
-            $verifiedToken = $e->getToken();
+                if ($isIssuedInTheFuture && !$allowFutureTokens) {
+                    throw new IssuedInTheFuture($idToken);
+                }
+
+                if (!$isIssuedInTheFuture) {
+                    throw new InvalidToken($idToken);
+                }
+            }
+        } else {
+            try {
+                $this->idTokenVerifier->verify($idToken);
+            } catch (IssuedInTheFuture $e) {
+                if (!$allowFutureTokens) {
+                    throw $e;
+                }
+            }
         }
 
-        if ($checkIfRevoked) {
-            $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->getClaim('auth_time'));
-            $validSince = $this->getUser($verifiedToken->getClaim('sub'))->tokensValidAfterTime;
-
-            if ($validSince && ($tokenAuthenticatedAt < $validSince)) {
-                throw new RevokedIdToken($verifiedToken);
-            }
+        if ($checkIfRevoked && $this->tokenHasBeenRevoked($idToken)) {
+            throw new RevokedIdToken($idToken);
         }
 
-        return $verifiedToken;
+        return $idToken;
     }
 
     /**
@@ -391,6 +431,17 @@ class Auth
         $this->client->revokeRefreshTokens((string) $uid);
     }
 
+    public function tokenHasBeenRevoked($token): bool
+    {
+        $token = $token instanceof Token ? $token : (new Parser())->parse($token);
+        $uid = new Uid($token->getClaim('sub'));
+
+        $validSince = $this->getUser($uid)->tokensValidAfterTime;
+        $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($token->getClaim('auth_time'));
+
+        return $tokenAuthenticatedAt < $validSince;
+    }
+
     public function unlinkProvider($uid, $provider): UserRecord
     {
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
@@ -405,17 +456,72 @@ class Auth
         return $this->getUser($uid);
     }
 
-    public function createSessionCookie($idToken, $lifetime = null)
+    /**
+     * Creates a session token for the user identified by the given ID Token and returns it.
+     *
+     * @see https://firebase.google.com/docs/auth/admin/manage-cookies#create_session_cookie
+     *
+     * @param Token|string $idToken
+     * @param Duration|null $lifetime
+     *
+     * @throws InvalidArgumentException
+     * @throws AuthException when the session token can not be created
+     *
+     * @return Token
+     */
+    public function createSessionToken($idToken, $lifetime = null): Token
     {
         $idToken = $idToken instanceof Token ? $idToken : (new Parser())->parse($idToken);
         $lifetime = $lifetime instanceof Duration ? $lifetime : Duration::fromValue($lifetime ?: '5 minutes');
 
         if (!$lifetime->isWithin(Duration::fromValue('5 minutes'), Duration::fromValue('2 weeks'))) {
-            throw new InvalidArgumentException('A session cookie\'s lifetime must be between 5 minutes and 2 weeks.');
+            throw new InvalidArgumentException("A session cookie's lifetime must be between 5 minutes and 2 weeks.");
         }
 
         $response = $this->client->createSessionCookie((string) $idToken, $lifetime->inSeconds());
 
-        return JSON::decode((string) $response->getBody(), true)['sessionCookie'];
+        try {
+            $data = JSON::decode((string) $response->getBody(), true);
+        } catch (\InvalidArgumentException $e) {
+            throw new AuthException("Unable to parse the response from the Firebase API as JSON: {$e->getMessage()}", $e->getCode(), $e);
+        }
+
+        if (!($tokenString = $data['sessionCookie'] ?? null)) {
+            throw new AuthException("The Firebase API response does not include a 'sessionCookie' field, got: ".JSON::prettyPrint($data));
+        }
+
+        try {
+            return (new Parser())->parse($tokenString);
+        } catch (\Throwable $e) {
+            throw new AuthException("Unable to parse {$tokenString} into a JWT token: ".$e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Verifies a JWT session token.
+     *
+     * @param Token|string $token
+     * @param bool $checkIfRevoked If set to true, verifies if the session corresponding to the ID token was revoked.
+     * @param Duration|mixed $leeway
+     *
+     * @throws InvalidArgumentException
+     * @throws Exception\InvalidToken
+     * @throws RevokedToken
+     *
+     * @return void
+     */
+    public function verifySessionToken($token, bool $checkIfRevoked = false, $leeway = null)
+    {
+        try {
+            $token = $token instanceof Token ? $token : (new Parser())->parse($token);
+        } catch (\Throwable $e) {
+            throw new InvalidArgumentException('The given value could not be parsed as a token: '.$e->getMessage());
+        }
+
+        $this->sessionTokenVerifier->verify($token, $leeway);
+
+        if ($checkIfRevoked && $this->tokenHasBeenRevoked($token)) {
+            throw RevokedToken::because('The session has been revoked');
+        }
     }
 }

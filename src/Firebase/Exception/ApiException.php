@@ -2,7 +2,6 @@
 
 namespace Kreait\Firebase\Exception;
 
-use Fig\Http\Message\StatusCodeInterface as StatusCode;
 use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
@@ -58,7 +57,7 @@ class ApiException extends \RuntimeException implements FirebaseException
 
     private static function getTargetClassFromStatusCode($code): string
     {
-        if (\in_array($code, [StatusCode::STATUS_UNAUTHORIZED, StatusCode::STATUS_FORBIDDEN], true)) {
+        if (\in_array($code, [401, 403], true)) {
             return PermissionDenied::class;
         }
 

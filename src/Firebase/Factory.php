@@ -6,7 +6,8 @@ use Firebase\Auth\Token\Cache\InMemoryCache;
 use Firebase\Auth\Token\Domain\Generator;
 use Firebase\Auth\Token\Generator as CustomTokenGenerator;
 use Firebase\Auth\Token\HttpKeyStore;
-use Firebase\Auth\Token\Verifier;
+use Firebase\Auth\Token\Verifier as LegacyIdTokenVerifier;
+use Kreait\Firebase\Auth\IdTokenVerifier;
 use Google\Auth\Credentials\GCECredentials;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\Middleware\AuthTokenMiddleware;
@@ -15,6 +16,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use Kreait\Firebase;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
+use Kreait\Firebase\Auth\SessionTokenVerifier;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\Http\Middleware;
@@ -202,13 +204,13 @@ class Factory
         ]);
         $apiClient = new Auth\ApiClient($http);
 
-        $serviceAccount = $this->getServiceAccount();
+        $projectId = $this->getServiceAccount()->getSanitizedProjectId();
 
         $customTokenGenerator = $this->createCustomTokenGenerator();
-        $keyStore = new HttpKeyStore(new Client(), $this->verifierCache ?: new InMemoryCache());
-        $verifier = new Verifier($serviceAccount->getSanitizedProjectId(), $keyStore);
+        $verifier = new IdTokenVerifier($projectId);
+        $sessionTokenVerifier = new SessionTokenVerifier($projectId);
 
-        return new Auth($apiClient, $customTokenGenerator, $verifier);
+        return new Auth($apiClient, $customTokenGenerator, $verifier, $sessionTokenVerifier);
     }
 
     public function createCustomTokenGenerator(): Generator
@@ -259,12 +261,9 @@ class Factory
 
     protected function createMessaging(): Messaging
     {
-        $serviceAccount = $this->getServiceAccount();
-        $projectId = $serviceAccount->getSanitizedProjectId();
-
         $messagingApiClient = new Messaging\ApiClient(
             $this->createApiClient([
-                'base_uri' => 'https://fcm.googleapis.com/v1/projects/'.$projectId,
+                'base_uri' => 'https://fcm.googleapis.com/v1/projects/'.$this->getServiceAccount()->getSanitizedProjectId(),
             ])
         );
 
@@ -335,9 +334,7 @@ class Factory
 
     protected function createStorage(): Storage
     {
-        $builder = $this->getGoogleCloudServiceBuilder();
-
-        $storageClient = $builder->storage([
+        $storageClient = $this->getGoogleCloudServiceBuilder()->storage([
             'projectId' => $this->getServiceAccount()->getSanitizedProjectId(),
         ]);
 

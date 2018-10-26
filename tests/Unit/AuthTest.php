@@ -7,6 +7,7 @@ use Firebase\Auth\Token\Domain\Verifier;
 use Firebase\Auth\Token\Exception\IssuedInTheFuture;
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Auth\ApiClient;
+use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Lcobucci\JWT\Token;
 
@@ -54,12 +55,9 @@ class AuthTest extends UnitTestCase
         $this->auth->createCustomToken('uid');
     }
 
-    public function testVerifyIdToken()
+    public function testVerifyIdTokenWithInvalidToken()
     {
-        $this->idTokenVerifier
-            ->expects($this->once())
-            ->method('verifyIdToken');
-
+        $this->expectException(InvalidArgumentException::class);
         $this->auth->verifyIdToken('some id token string');
     }
 
@@ -76,7 +74,7 @@ class AuthTest extends UnitTestCase
             ->willThrowException(new IssuedInTheFuture($token));
 
         $this->expectException(IssuedInTheFuture::class);
-        $this->auth->verifyIdToken('foo');
+        $this->auth->verifyIdToken($token);
     }
 
     public function testAllowFutureTokens()
@@ -91,7 +89,7 @@ class AuthTest extends UnitTestCase
             ->method('verifyIdToken')
             ->willReturn($token);
 
-        $verifiedToken = $this->auth->verifyIdToken('foo', false, true);
+        $verifiedToken = $this->auth->verifyIdToken($token, false, true);
         $this->assertSame($token, $verifiedToken);
     }
 }

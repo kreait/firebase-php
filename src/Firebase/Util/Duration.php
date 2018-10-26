@@ -53,6 +53,11 @@ final class Duration
         return $then->getTimestamp() - $now->getTimestamp();
     }
 
+    public function asInterval(): DateInterval
+    {
+        return $this->interval;
+    }
+
     public function compareTo(Duration $other): int
     {
         return $this->inSeconds() <=> $other->inSeconds();
