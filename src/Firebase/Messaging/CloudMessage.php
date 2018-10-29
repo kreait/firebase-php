@@ -46,16 +46,13 @@ class CloudMessage implements Message
      * @param string $type One of "condition", "token", "topic"
      * @param string $value
      *
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException if the target type or value is invalid
      *
      * @return CloudMessage
      */
     public static function withTarget(string $type, string $value): self
     {
-        $new = new self();
-        $new->target = MessageTarget::with($type, $value);
-
-        return $new;
+        return (new self())->withChangedTarget($type, $value);
     }
 
     public static function fromArray(array $data): self
@@ -70,8 +67,7 @@ class CloudMessage implements Message
             throw new InvalidArgumentException('Missing target field');
         }
 
-        $new = new self();
-        $new->target = MessageTarget::with($targetType, (string) $targetValue);
+        $new = (new self())->withChangedTarget($targetType, (string) $targetValue);
 
         if ($data['data'] ?? null) {
             $new = $new->withData($data['data']);
@@ -92,6 +88,22 @@ class CloudMessage implements Message
         if ($data['webpush'] ?? null) {
             $new = $new->withWebPushConfig(WebPushConfig::fromArray($data['webpush']));
         }
+
+        return $new;
+    }
+
+    /**
+     * @param string $type One of "condition", "token", "topic"
+     * @param string $value
+     *
+     * @throws InvalidArgumentException if the target type or value is invalid
+     *
+     * @return CloudMessage
+     */
+    public function withChangedTarget(string $type, string $value): self
+    {
+        $new = clone $this;
+        $new->target = MessageTarget::with($type, $value);
 
         return $new;
     }

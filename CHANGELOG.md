@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* `Kreait\Firebase\Messaging\CloudMessage`: You can now create a new message with a different target from an existing message by using the
+  `withChangedTarget()` method ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#changing-the-message-target)).
+
 ## 4.17.1 - 2018-10-27
 
 ### Bugfixes

@@ -193,6 +193,28 @@ you can attach data to it:
 
     $message = $message->withData($data);
 
+***************************
+Changing the message target
+***************************
+
+You can change the target of an already created message with the ``withChangedTarget()`` method.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Messaging\CloudMessage;
+
+    $deviceToken = '...';
+    $anotherDeviceToken = '...';
+
+    $message = CloudMessage::withTarget('token', $deviceToken)
+        ->withNotification(['title' => 'My title', 'body' => 'My Body')
+    ;
+
+    $messaging->send($message);
+
+    $sameMessageToDifferentTarget = $message->withChangedTarget('token', $anotherDeviceToken);
+
+
 *********************************************
 Adding target platform specific configuration
 *********************************************

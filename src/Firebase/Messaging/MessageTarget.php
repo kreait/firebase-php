@@ -30,6 +30,16 @@ final class MessageTarget
     {
     }
 
+    /**
+     * Create a new message target with the given type and value.
+     *
+     * @param string $type
+     * @param string $value
+     *
+     * @throws InvalidArgumentException
+     *
+     * @return MessageTarget
+     */
     public static function with(string $type, string $value): self
     {
         $targetType = strtolower($type);
