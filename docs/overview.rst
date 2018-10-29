@@ -25,7 +25,7 @@ installs them into your project.
 
 .. code-block:: bash
 
-    composer require kreait/firebase-php ^4.17.1
+    composer require kreait/firebase-php ^4.18
 
 
 Alternatively, you can specify the Firebase Admin SDK as a dependency in your
@@ -35,7 +35,7 @@ project's existing composer.json file:
 
     {
       "require": {
-         "kreait/firebase-php": "^4.17.1"
+         "kreait/firebase-php": "^4.18"
       }
    }
 
