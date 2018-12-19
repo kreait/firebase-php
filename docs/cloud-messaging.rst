@@ -291,6 +291,9 @@ You can find the full WebPush configuration reference in the official documentat
             'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
             'icon' => 'https://my-server/icon.png',
         ],
+        'fcm_options' => [
+            'link' => 'https://my-server/some-page',
+        ],
     ]);
 
     $message = $message->withWebPushConfig($config);
@@ -347,6 +350,9 @@ Sending a fully configured raw message
                     'title' => '$GOOG up 1.43% on the day',
                     'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
                     'icon' => 'https://my-server/icon.png',
+                ],
+                'fcm_options' => [
+                    'link' => 'https://my-server/some-page',
                 ],
             ],
         ])
