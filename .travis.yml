@@ -12,19 +12,18 @@ matrix:
   include:
     - php: 7.0
       env: UNIT_TESTS=1
+    - php: 7.0
+      env: INTEGRATION_TESTS=1
     - php: 7.1
-      env: UNIT_TESTS=1 COMPOSER_FLAGS=--ignore-platform-reqs
+      env: UNIT_TESTS=1
     - php: 7.2
-      env: UNIT_TESTS=1 COMPOSER_FLAGS=--ignore-platform-reqs
+      env: UNIT_TESTS=1
     - php: 7.2
-      env: STATIC_ANALYSIS=1 COMPOSER_FLAGS=--ignore-platform-reqs
+      env: STATIC_ANALYSIS=1
     - php: 7.2
-      env: INTEGRATION_TESTS=1 COMPOSER_FLAGS=--ignore-platform-reqs
-    - php: 7.2
-      env: CODE_COVERAGE=1 COMPOSER_FLAGS=--ignore-platform-reqs
-  allow_failures:
-    - php: 7.2
-      env: CODE_COVERAGE=1 COMPOSER_FLAGS=--ignore-platform-reqs
+      env: CODE_COVERAGE=1
+    - php: 7.3
+      env: UNIT_TESTS=1 COMPOSER_FLAGS=--ignore-platform-reqs # php-cs-fixer does not yet support PHP 7.3
 
 sudo: false
 

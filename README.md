@@ -5,6 +5,7 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 [![Current version](https://img.shields.io/packagist/v/kreait/firebase-php.svg)](https://packagist.org/packages/kreait/firebase-php)
 [![Supported PHP version](https://img.shields.io/packagist/php-v/kreait/firebase-php.svg)]()
 [![Total Downloads](https://img.shields.io/packagist/dt/kreait/firebase-php.svg)](https://packagist.org/packages/kreait/firebase-php/stats)
+[![Build Status](https://travis-ci.org/kreait/firebase-php.svg?branch=master)](https://travis-ci.org/kreait/firebase-php)
 [![Gitter](https://badges.gitter.im/kreait/firebase-php.svg)](https://gitter.im/kreait/firebase-php)
 
 ## Documentation

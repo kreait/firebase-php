@@ -15,9 +15,9 @@ Interact with `Google Firebase <https://firebase.google.com>`_ from your PHP app
 .. image:: https://img.shields.io/packagist/dt/kreait/firebase-php.svg
    :target: https://packagist.org/packages/kreait/firebase-php
    :alt: Total downloads
-.. image:: https://img.shields.io/packagist/dd/kreait/firebase-php.svg
-   :target: https://packagist.org/packages/kreait/firebase-php
-   :alt: Daily downloads
+.. image:: https://badges.gitter.im/kreait/firebase-php.svg
+   :target: https://gitter.im/kreait/firebase-php
+   :alt: Community chat
 
 .. note::
     If you are interested in using the PHP Admin SDK as a client for end-user access
