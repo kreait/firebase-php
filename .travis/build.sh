@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -ex
 
 if [ "${UNIT_TESTS}" = "1" ]; then
   echo "Running unit tests"

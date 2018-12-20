@@ -15,7 +15,7 @@ class CloudMessageTest extends TestCase
     public function testInvalidTargetCausesError()
     {
         $this->expectException(InvalidArgumentException::class);
-        CloudMessage::withTarget(MessageTarget::TOKEN, 'bar');
+        CloudMessage::withTarget('invalid_target', 'foo');
     }
 
     public function testWithChangedTarget()

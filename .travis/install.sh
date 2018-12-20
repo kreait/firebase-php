@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-set -ev
+set -ex
 
 composer update $COMPOSER_FLAGS --profile --ansi --prefer-dist --no-interaction --optimize-autoloader --no-suggest --no-progress

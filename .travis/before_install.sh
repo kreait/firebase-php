@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -ev
+set -evx
 
 if [ "$TRAVIS_SECURE_ENV_VARS" == "true" ]; then
   echo "Decrypting test credentials"

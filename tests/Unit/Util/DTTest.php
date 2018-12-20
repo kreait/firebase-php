@@ -47,9 +47,9 @@ class DTTest extends TestCase
     public function validFixedValues()
     {
         return [
-            'seconds' => ['1234567890.00000', 1234567890],
-            'milliseconds_1' => ['1234567890.00000', 1234567890000],
-            'milliseconds_2' => ['1234567890.12300', 1234567890123],
+            'seconds' => ['1234567890.000000', 1234567890],
+            'milliseconds_1' => ['1234567890.000000', 1234567890000],
+            'milliseconds_2' => ['1234567890.123000', 1234567890123],
             'date_string' => ['345254400.000000', '10.12.1980'],
             'timezoned_1' => ['345328496.789012', '10.12.1980 12:34:56.789012 -08:00'],
             'timezoned_2' => ['345328496.789012', new DateTime('10.12.1980 12:34:56.789012', new DateTimeZone('America/Los_Angeles'))],
