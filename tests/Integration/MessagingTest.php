@@ -49,12 +49,20 @@ class MessagingTest extends IntegrationTestCase
 
     public function testSubscribeToTopic()
     {
+        if (empty(self::$registrationTokens)) {
+            $this->markTestSkipped();
+        }
+
         $this->messaging->subscribeToTopic('foo', self::$registrationTokens);
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
 
     public function testUnsubscribeFromTopic()
     {
+        if (empty(self::$registrationTokens)) {
+            $this->markTestSkipped();
+        }
+
         $this->messaging->unsubscribeFromTopic('foo', self::$registrationTokens);
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
