@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.18.1 - 2019-01-14
 
 * Instances of `Kreait\Firebase\Exception\MessagingException` now have better messages 
   ([#274](https://github.com/kreait/firebase-php/issues/274)).
