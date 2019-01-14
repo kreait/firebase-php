@@ -13,6 +13,7 @@ use Google\Auth\Middleware\AuthTokenMiddleware;
 use Google\Cloud\Core\ServiceBuilder;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
+use function GuzzleHttp\Psr7\uri_for;
 use Kreait\Firebase;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
 use Kreait\Firebase\Exception\InvalidArgumentException;
@@ -21,7 +22,6 @@ use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\GcpMetadata;
 use Psr\Http\Message\UriInterface;
-use function GuzzleHttp\Psr7\uri_for;
 
 class Factory
 {

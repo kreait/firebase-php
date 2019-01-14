@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Value;
 
+use function GuzzleHttp\Psr7\uri_for;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value;
 use Psr\Http\Message\UriInterface;
-use function GuzzleHttp\Psr7\uri_for;
 
 class Url implements Value, \JsonSerializable
 {

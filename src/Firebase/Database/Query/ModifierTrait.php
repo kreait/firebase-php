@@ -2,9 +2,9 @@
 
 namespace Kreait\Firebase\Database\Query;
 
-use Psr\Http\Message\UriInterface;
 use function GuzzleHttp\Psr7\build_query;
 use function GuzzleHttp\Psr7\parse_query;
+use Psr\Http\Message\UriInterface;
 
 trait ModifierTrait
 {

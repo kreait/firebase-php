@@ -58,7 +58,7 @@ class Notification implements \JsonSerializable
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function title()
     {
@@ -66,7 +66,7 @@ class Notification implements \JsonSerializable
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function body()
     {

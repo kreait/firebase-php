@@ -2,13 +2,13 @@
 
 namespace Kreait\Firebase;
 
+use function GuzzleHttp\Psr7\uri_for;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
 use Psr\Http\Message\UriInterface;
-use function GuzzleHttp\Psr7\uri_for;
 
 /**
  * The Firebase Realtime Database.
