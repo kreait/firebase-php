@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* Instances of `Kreait\Firebase\Exception\MessagingException` now have better messages 
+  ([#274](https://github.com/kreait/firebase-php/issues/274)).
+
 ## 4.18.0 - 2018-10-29
 
 * `Kreait\Firebase\Messaging\CloudMessage`: You can now create a new message with a different target from an existing message by using the
