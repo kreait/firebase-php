@@ -1,11 +1,22 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bugfixes
+
+* When creating `Kreait\Firebase\Exception\MessagingException` from a `GuzzleHttp\Exception\RequestException`, 
+  the HTTP response returned was lost.
+
 ## 4.18.1 - 2019-01-14
+
+### Enhancements
 
 * Instances of `Kreait\Firebase\Exception\MessagingException` now have better messages 
   ([#274](https://github.com/kreait/firebase-php/issues/274)).
 
 ## 4.18.0 - 2018-10-29
+
+### Enhancements
 
 * `Kreait\Firebase\Messaging\CloudMessage`: You can now create a new message with a different target from an existing message by using the
   `withChangedTarget()` method ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#changing-the-message-target)).

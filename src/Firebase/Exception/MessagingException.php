@@ -74,6 +74,7 @@ class MessagingException extends \RuntimeException implements FirebaseException
     public function withErrors(array $errors = [])
     {
         $e = new static($this->getMessage(), $this->getCode());
+        $e->response = $this->response;
         $e->errors = $errors;
 
         return $e;
@@ -90,6 +91,7 @@ class MessagingException extends \RuntimeException implements FirebaseException
     public function withResponse(ResponseInterface $response = null)
     {
         $e = new static($this->getMessage(), $this->getCode());
+        $e->errors = $this->errors;
         $e->response = $response;
 
         return $e;
