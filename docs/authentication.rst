@@ -167,18 +167,19 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
 
 ``Auth::verifyIdToken()`` accepts up to three parameters:
 
-===================== ============ ===========
-Parameter             Type         Description
-===================== ============ ===========
-``idToken``           string|Token **(required)** The ID token to verify
-``checkIfRevoked``    boolean      (optional, default: ``false`` ) check if the ID token is revoked
-``allowFutureTokens`` boolean      (optional, default: ``false`` ) allow tokens that have been issued in the future
-===================== ============ ===========
+============================ ============ ===========
+Parameter                    Type         Description
+============================ ============ ===========
+``idToken``                  string|Token **(required)** The ID token to verify
+``checkIfRevoked``           boolean      (optional, default: ``false`` ) check if the ID token is revoked
+``allowTimeInconsistencies`` boolean      (optional, default: ``false`` ) allow a token even if it's timestamps are invalid
+============================ ============ ===========
 
 .. warning::
-    Enabling the ``$allowFutureTokens`` flag is not recommended. An ``IssuedInTheFuture`` exception
-    is an indication the system time is not correct, and you should aim to fix the issue instead of
-    reducing the token's security.
+    Allowing time inconsistencies might impose a security risk. Do this only when you are not able
+    to fix your environment's time to be consistent with Google's servers. This parameter is here
+    for backwards compatibility reasons, and will be removed in the next major version. You
+    should not rely on it.
 
 .. note::
     This library uses `lcobucci/jwt <https://github.com/lcobucci/jwt>`_ to work with JSON Web Tokens (JWT).

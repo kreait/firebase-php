@@ -20,6 +20,7 @@ use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\PhoneNumber;
 use Kreait\Firebase\Value\Provider;
 use Kreait\Firebase\Value\Uid;
+use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\UriInterface;
 
@@ -308,9 +309,14 @@ class Auth
      * ID token was revoked. If the corresponding user's session was invalidated, a RevokedToken
      * exception is thrown. If not specified the check is not applied.
      *
+     * NOTE: Allowing time inconsistencies might impose a security risk. Do this only when you are not able
+     * to fix your environment's time to be consistent with Google's servers. This parameter is here
+     * for backwards compatibility reasons, and will be removed in the next major version. You
+     * shouldn't rely on it.
+     *
      * @param Token|string $idToken the JWT to verify
      * @param bool $checkIfRevoked whether to check if the ID token is revoked
-     * @param bool $allowFutureTokens whether to allow tokens that have been issued for the future
+     * @param bool $allowTimeInconsistencies whether to allow tokens that have mismatching timestamps
      *
      * @throws InvalidToken
      * @throws IssuedInTheFuture
@@ -319,19 +325,35 @@ class Auth
      *
      * @return Token the verified token
      */
-    public function verifyIdToken($idToken, bool $checkIfRevoked = null, bool $allowFutureTokens = null): Token
+    public function verifyIdToken($idToken, bool $checkIfRevoked = null, bool $allowTimeInconsistencies = null): Token
     {
         $checkIfRevoked = $checkIfRevoked ?? false;
-        $allowFutureTokens = $allowFutureTokens ?? false;
+        $allowTimeInconsistencies = $allowTimeInconsistencies ?? false;
 
         try {
             $verifiedToken = $this->idTokenVerifier->verifyIdToken($idToken);
         } catch (IssuedInTheFuture $e) {
-            if (!$allowFutureTokens) {
+            if (!$allowTimeInconsistencies) {
                 throw $e;
             }
 
             $verifiedToken = $e->getToken();
+        } catch (InvalidToken $e) {
+            $verifiedToken = $idToken instanceof Token ? $idToken : (new Parser())->parse($idToken);
+
+            if (stripos($e->getMessage(), 'authentication time') !== false) {
+                $authTime = $verifiedToken->getClaim('auth_time', false);
+
+                if ($authTime && !$allowTimeInconsistencies && $authTime > time()) {
+                    throw $e;
+                }
+            } else {
+                throw $e;
+            }
+        }
+
+        if ($checkIfRevoked && $allowTimeInconsistencies) {
+            throw new InvalidToken($verifiedToken, 'Allowing mismatching timestamps cannot be combined with token revokation checks.');
         }
 
         if ($checkIfRevoked) {

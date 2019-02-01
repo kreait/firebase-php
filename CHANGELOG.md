@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* When verifying ID tokens, allowed time inconsistencies now include the `auth_time` clime, in addition to the `iat` claim. ([#278](https://github.com/kreait/firebase-php/issues/278))
+
 ## 4.18.2 - 2019-01-14
 
 ### Bugfixes

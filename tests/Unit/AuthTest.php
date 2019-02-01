@@ -4,11 +4,13 @@ namespace Kreait\Firebase\Tests\Unit;
 
 use Firebase\Auth\Token\Domain\Generator;
 use Firebase\Auth\Token\Domain\Verifier;
+use Firebase\Auth\Token\Exception\InvalidToken;
 use Firebase\Auth\Token\Exception\IssuedInTheFuture;
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Lcobucci\JWT\Token;
+use Prophecy\Argument;
 
 class AuthTest extends UnitTestCase
 {
@@ -93,5 +95,34 @@ class AuthTest extends UnitTestCase
 
         $verifiedToken = $this->auth->verifyIdToken('foo', false, true);
         $this->assertSame($token, $verifiedToken);
+    }
+
+    public function testAllowAuthTimeToBeInTheFuture()
+    {
+        $tokenProphecy = $this->prophesize(Token::class);
+        $tokenProphecy->getClaim('auth_time', Argument::any())->willReturn(date('U'));
+
+        $token = $tokenProphecy->reveal();
+
+        $this->idTokenVerifier
+            ->expects($this->once())
+            ->method('verifyIdToken')
+            ->willThrowException(new InvalidToken($token, 'authentication time'));
+
+        $verifiedToken = $this->auth->verifyIdToken($token, false, false);
+        $this->assertSame($token, $verifiedToken);
+    }
+
+    public function testDoNotAllowTimeInconsistenciesAndCheckRevokationStatusAtTheSameTime()
+    {
+        $token = $this->prophesize(Token::class);
+
+        $this->idTokenVerifier
+            ->expects($this->once())
+            ->method('verifyIdToken')
+            ->willReturn($token->reveal());
+
+        $this->expectException(InvalidToken::class);
+        $this->auth->verifyIdToken($token->reveal(), true, true);
     }
 }
