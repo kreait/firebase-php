@@ -207,7 +207,7 @@ You can change the target of an already created message with the ``withChangedTa
     $anotherDeviceToken = '...';
 
     $message = CloudMessage::withTarget('token', $deviceToken)
-        ->withNotification(['title' => 'My title', 'body' => 'My Body')
+        ->withNotification(['title' => 'My title', 'body' => 'My Body'])
     ;
 
     $messaging->send($message);
