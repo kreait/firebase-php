@@ -84,6 +84,7 @@ Get information about a specific user
 .. code-block:: php
 
     $user = $auth->getUser('some-uid');
+    $user = $auth->getUserByEmail('user@domain.tld');
 
 *************
 Create a user
