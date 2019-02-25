@@ -35,8 +35,9 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 
 > \# An integration with [google/cloud-firestore](https://github.com/GoogleCloudPlatform/google-cloud-php-firestore) 
   is currently not available to avoid the need to install the `grpc` PHP extension when using this SDK.
-> [morrislaptop/firestore-php](https://github.com/morrislaptop/firestore-php) is a new project that aims to 
-  provide support for the Firestore without the need to install the `grpc` PHP extension.
+> The following projects provide support for Firestore without the need to install the `grpc` PHP extension:
+> - [ahsankhatri/firestore-php](https://github.com/ahsankhatri/firestore-php)
+> - [morrislaptop/firestore-php](https://github.com/morrislaptop/firestore-php)
 
 ## License
 
