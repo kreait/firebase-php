@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.19.1 - 2019-03-10
 
 * Improved the error message when encountering an invalid Service Account specification to help developers use
   the correct one (provided by [@puf](https://github.com/puf) in [this StackOverflow answer](https://stackoverflow.com/a/55081397/284325))
