@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* Improved the error message when encountering an invalid Service Account specification to help developers use
+  the correct one (provided by [@puf](https://github.com/puf) in [this StackOverflow answer](https://stackoverflow.com/a/55081397/284325))
+
 ## 4.19.0 - 2019-02-09
 
 * When verifying ID tokens, allowed time inconsistencies now include the `auth_time` clime, in addition to the `iat` claim. ([#278](https://github.com/kreait/firebase-php/issues/278))

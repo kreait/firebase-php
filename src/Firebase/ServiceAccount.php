@@ -130,8 +130,11 @@ class ServiceAccount
 
         if (!empty($missingFields)) {
             throw new InvalidArgumentException(
-                'The following fields are missing/empty in the Service Account specification: '
-                .implode(', ', $missingFields)
+                'The following fields are missing/empty in the Service Account specification: "'
+                .implode('", "', $missingFields)
+                .'". Please make sure you download the Service Account JSON file from the Service Accounts tab '
+                .'in the Firebase Console, as shown in the documentation on '
+                .'https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app'
             );
         }
 
