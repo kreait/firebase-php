@@ -153,35 +153,21 @@ CONFIG;
 
     public function testListVersions()
     {
-        $counter = 0;
-
         foreach ($this->remoteConfig->listVersions() as $version) {
             $this->assertInstanceOf(RemoteConfig\Version::class, $version);
-            ++$counter;
+            break;
         }
-
-        $this->assertGreaterThan(0, $counter);
     }
 
     public function testGetVersion()
     {
-        $randomPosition = random_int(1, 10);
-        $counter = 0;
-        $targetVersion = null;
-
-        foreach ($this->remoteConfig->listVersions() as $version) {
-            ++$counter;
-
-            if ($counter === $randomPosition) {
-                $targetVersion = $version;
-                break;
-            }
+        foreach ($this->remoteConfig->listVersions() as $first) {
+            break;
         }
 
-        $this->assertSame($randomPosition, $counter);
-        $version = $this->remoteConfig->getVersion($targetVersion->versionNumber());
+        $same = $this->remoteConfig->getVersion($first->versionNumber());
 
-        $this->assertTrue($targetVersion->versionNumber()->equalsTo($version->versionNumber()));
+        $this->assertTrue($first->versionNumber()->equalsTo($same->versionNumber()));
     }
 
     public function testFindVersionsWithLimit()
