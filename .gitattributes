@@ -1,5 +1,8 @@
 *.php diff=php
 
+/docs export-ignore
+/tests export-ignore
+
 /.editorconfig export-ignore
 /.gitattributes export-ignore
 /.github export-ignore
@@ -7,11 +10,10 @@
 /.php_cs export-ignore
 /.travis export-ignore
 /.travis.yml export-ignore
-/.test_credentials.json.enc export-ignore
-/.test_devices.json.enc export-ignore
-/docs export-ignore
 /CODE_OF_CONDUCT.md export-ignore
 /Makefile export-ignore
 /phpstan.neon export-ignore
 /phpunit.xml.dist export-ignore
-/tests export-ignore
+/sonar-project.properties export-ignore
+/test_credentials.json.enc export-ignore
+/test_devices.json.enc export-ignore
