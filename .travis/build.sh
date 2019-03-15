@@ -17,7 +17,7 @@ fi
 
 if [ "${ALL_TESTS}" = "1" ]; then
   echo "Running Sonar Scanner"
-  vendor/bin/phpunit --coverage-clover coverage.clover --log-junit phpunit.xml
+  vendor/bin/phpunit --coverage-clover=coverage-report.clover --log-junit=test-report.xml
   sonar-scanner
 else
   echo "Not running code coverage"
