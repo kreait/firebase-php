@@ -9,8 +9,10 @@ skipCreatedBefore: false
 
 # Issues and pull requests with these labels will be ignored. Set to `[]` to disable
 exemptLabels:
+    - feature
     - pinned
     - security
+    - wip
 
 # Label to add before locking, such as `outdated`. Set to `false` to disable
 lockLabel: false
