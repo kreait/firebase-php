@@ -44,6 +44,16 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 > - [ahsankhatri/firestore-php](https://github.com/ahsankhatri/firestore-php)
 > - [morrislaptop/firestore-php](https://github.com/morrislaptop/firestore-php)
 
+## Versions
+
+| Version | Status      | PHP Version | Support |
+|---------|-------------|-------------|---------|
+| 1.x     | EOL         | >= 5.5      | EOL     |
+| 2.x     | EOL         | >= 7.0      | EOL     |
+| 3.x     | EOL         | >= 7.0      | EOL     |
+| 4.x     | Latest      | >= 7.0      | active  |
+| 5.x     | Development | >= 7.2      | active  |
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
