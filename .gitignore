@@ -5,6 +5,7 @@
 /tests/_fixtures/test_*
 /secrets.tar
 
+/.php_cs
 /.php_cs.cache
 /cc-test-reporter
 /composer.lock
