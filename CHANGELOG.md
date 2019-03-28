@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.20.0 - 2019-03-28
 
 * Sent emails can now be localized by providing a `$locale` parameter to the following methods:
   * `Kreait\Firebase\Auth::sendEmailVerification($uid, $continueUrl = null, $locale = null)`
