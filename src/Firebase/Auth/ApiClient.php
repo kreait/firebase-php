@@ -191,28 +191,30 @@ class ApiClient
         ]);
     }
 
-    /**
-     * @param string $idToken
-     * @param string $continueUrl
-     *
-     * @return ResponseInterface
-     */
-    public function sendEmailVerification(string $idToken, string $continueUrl = null): ResponseInterface
+    public function sendEmailVerification(string $idToken, string $continueUrl = null, string $locale = null): ResponseInterface
     {
-        return $this->request('getOobConfirmationCode', array_filter([
+        $headers = $locale ? ['X-Firebase-Locale' => $locale] : null;
+
+        $data = array_filter([
             'requestType' => 'VERIFY_EMAIL',
             'idToken' => $idToken,
             'continueUrl' => $continueUrl,
-        ]));
+        ]);
+
+        return $this->request('getOobConfirmationCode', $data, $headers);
     }
 
-    public function sendPasswordResetEmail(string $email, string $continueUrl = null): ResponseInterface
+    public function sendPasswordResetEmail(string $email, string $continueUrl = null, string $locale = null): ResponseInterface
     {
-        return $this->request('getOobConfirmationCode', array_filter([
+        $headers = $locale ? ['X-Firebase-Locale' => $locale] : null;
+
+        $data = array_filter([
             'email' => $email,
             'requestType' => 'PASSWORD_RESET',
             'continueUrl' => $continueUrl,
-        ]));
+        ]);
+
+        return $this->request('getOobConfirmationCode', $data, $headers);
     }
 
     public function revokeRefreshTokens(string $uid): ResponseInterface
@@ -231,14 +233,19 @@ class ApiClient
         ]);
     }
 
-    private function request(string $uri, $data): ResponseInterface
+    private function request(string $uri, $data, array $headers = null): ResponseInterface
     {
         if ($data instanceof \JsonSerializable && empty($data->jsonSerialize())) {
             $data = (object) []; // Will be '{}' instead of '[]' when JSON encoded
         }
 
+        $options = array_filter([
+            'json' => $data,
+            'headers' => $headers,
+        ]);
+
         try {
-            return $this->client->request('POST', $uri, ['json' => $data]);
+            return $this->client->request('POST', $uri, $options);
         } catch (RequestException $e) {
             throw AuthException::fromRequestException($e);
         } catch (\Throwable $e) {

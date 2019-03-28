@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+* Sent emails can now be localized by providing a `$locale` parameter to the following methods:
+  * `Kreait\Firebase\Auth::sendEmailVerification($uid, $continueUrl = null, $locale = null)`
+  * `Kreait\Firebase\Auth::sendPasswordResetEmail($email, $continueUrl = null, $locale = null)`
+
 ## 4.19.1 - 2019-03-10
 
 * Improved the error message when encountering an invalid Service Account specification to help developers use

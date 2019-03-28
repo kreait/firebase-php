@@ -255,7 +255,7 @@ class Auth
      * @param Uid|string $uid
      * @param UriInterface|string $continueUrl
      */
-    public function sendEmailVerification($uid, $continueUrl = null)
+    public function sendEmailVerification($uid, $continueUrl = null, string $locale = null)
     {
         $response = $this->client->exchangeCustomTokenForIdAndRefreshToken(
             $this->createCustomToken($uid)
@@ -263,18 +263,18 @@ class Auth
 
         $idToken = JSON::decode((string) $response->getBody(), true)['idToken'];
 
-        $this->client->sendEmailVerification($idToken, (string) $continueUrl);
+        $this->client->sendEmailVerification($idToken, (string) $continueUrl, $locale);
     }
 
     /**
      * @param Email|string $email
      * @param UriInterface|string|null $continueUrl
      */
-    public function sendPasswordResetEmail($email, $continueUrl = null)
+    public function sendPasswordResetEmail($email, $continueUrl = null, string $locale = null)
     {
         $email = $email instanceof Email ? $email : new Email($email);
 
-        $this->client->sendPasswordResetEmail((string) $email, (string) $continueUrl);
+        $this->client->sendPasswordResetEmail((string) $email, (string) $continueUrl, $locale);
     }
 
     /**
