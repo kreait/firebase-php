@@ -303,7 +303,8 @@ class AuthTest extends IntegrationTestCase
     public function testVerifyCorrectPassword()
     {
         $user = $this->auth->createUser(CreateUser::new()
-            ->withEmail($email = 'user@domain.tld')
+            ->withUid($uid = bin2hex(random_bytes(5)))
+            ->withEmail($email = $uid.'@domain.tld')
             ->withClearTextPassword($password = 'secret')
         );
 
@@ -317,7 +318,8 @@ class AuthTest extends IntegrationTestCase
     public function testVerifyIncorrectPassword()
     {
         $user = $this->auth->createUser(CreateUser::new()
-            ->withEmail($email = 'user@domain.tld')
+            ->withUid($uid = bin2hex(random_bytes(5)))
+            ->withEmail($email = $uid.'@domain.tld')
             ->withClearTextPassword('correct')
         );
 
