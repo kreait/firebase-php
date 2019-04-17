@@ -3,6 +3,7 @@
 /docs/_build
 /docs/*.pyc
 /tests/_fixtures/test_*
+/secrets.tar
 
 /.php_cs.cache
 /cc-test-reporter
