@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.20.1 - 2019-04-25
 
 * Fixed `TypeError`s when processing certain API exceptions ([#295](https://github.com/kreait/firebase-php/issues/295))
 
