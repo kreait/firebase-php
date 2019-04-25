@@ -15,13 +15,32 @@ class ApiExceptionTest extends UnitTestCase
     public function testWrapClientException()
     {
         $source = new ClientException(
-            'Foo',
+            'Unused',
             $request = $this->createMock(RequestInterface::class),
             $response = new Response(500, [], '{"error": "Foo"}')
         );
         $result = ApiException::wrapRequestException($source);
 
-        $this->assertInstanceOf(ApiException::class, $result);
+        $this->assertSame('Foo', $result->getMessage());
+        $this->assertSame($source, $result->getPrevious());
+        $this->assertSame($request, $result->getRequest());
+        $this->assertSame($response, $result->getResponse());
+    }
+
+    /**
+     * @see https://github.com/kreait/firebase-php/issues/295
+     */
+    public function testWrapClientExceptionWithExtendedResponse()
+    {
+        // see https://firebase.google.com/docs/reference/rest/auth/#section-error-response
+        $source = new ClientException(
+            'Unused',
+            $request = $this->createMock(RequestInterface::class),
+            $response = new Response(500, [], '{"error": {"message": "Foo"}}')
+        );
+        $result = ApiException::wrapRequestException($source);
+
+        $this->assertSame('Foo', $result->getMessage());
         $this->assertSame($source, $result->getPrevious());
         $this->assertSame($request, $result->getRequest());
         $this->assertSame($response, $result->getResponse());

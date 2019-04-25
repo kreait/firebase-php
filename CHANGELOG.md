@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Fixed `TypeError`s when processing certain API exceptions ([#295](https://github.com/kreait/firebase-php/issues/295))
+
 ## 4.20.0 - 2019-03-28
 
 * Sent emails can now be localized by providing a `$locale` parameter to the following methods:

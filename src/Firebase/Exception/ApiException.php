@@ -4,6 +4,7 @@ namespace Kreait\Firebase\Exception;
 
 use Fig\Http\Message\StatusCodeInterface as StatusCode;
 use GuzzleHttp\Exception\RequestException;
+use InvalidArgumentException;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -32,7 +33,14 @@ class ApiException extends \RuntimeException implements FirebaseException
     {
         $request = $e->getRequest();
         $response = $e->getResponse();
-        $message = self::getPreciseMessage($response, $default = $e->getMessage());
+        $message = null;
+
+        if ($response) {
+            $message = self::getPreciseMessage($response);
+        }
+
+        $message = $message ?: $e->getMessage();
+
         $code = $e->getCode();
 
         $class = self::getTargetClassFromStatusCode($code);
@@ -65,14 +73,28 @@ class ApiException extends \RuntimeException implements FirebaseException
         return static::class;
     }
 
-    private static function getPreciseMessage(ResponseInterface $response = null, string $default = null): string
+    private static function getPreciseMessage(ResponseInterface $response)
     {
-        $message = $default ?? '';
+        $responseBody = (string) $response->getBody();
 
-        if ($response && JSON::isValid($responseBody = (string) $response->getBody())) {
-            $message = JSON::decode($responseBody, true)['error'] ?? null;
+        if (!JSON::isValid($responseBody)) {
+            return null;
         }
 
-        return $message;
+        try {
+            $data = JSON::decode($responseBody, true);
+        } catch (InvalidArgumentException $e) {
+            return null;
+        }
+
+        if (is_string($data['error']['message'] ?? null)) {
+            return $data['error']['message'];
+        }
+
+        if (is_string($data['error'] ?? null)) {
+            return $data['error'];
+        }
+
+        return null;
     }
 }
