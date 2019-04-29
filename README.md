@@ -4,6 +4,7 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 
 [![Current version](https://img.shields.io/packagist/v/kreait/firebase-php.svg)](https://packagist.org/packages/kreait/firebase-php)
 [![Supported PHP version](https://img.shields.io/packagist/php-v/kreait/firebase-php.svg)]()
+[![Monthly Downloads](https://img.shields.io/packagist/dm/kreait/firebase-php.svg)](https://packagist.org/packages/kreait/firebase-php/stats)
 [![Total Downloads](https://img.shields.io/packagist/dt/kreait/firebase-php.svg)](https://packagist.org/packages/kreait/firebase-php/stats)
 [![Gitter](https://badges.gitter.im/kreait/firebase-php.svg)](https://gitter.im/kreait/firebase-php)
 
@@ -52,7 +53,7 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 | 2.x     | EOL         | >= 7.0      | EOL     |
 | 3.x     | EOL         | >= 7.0      | EOL     |
 | 4.x     | Latest      | >= 7.0      | active  |
-| 5.x     | Development | >= 7.2      | active  |
+| 5.x     | Development | >= 7.3      | active  |
 
 ## License
 
