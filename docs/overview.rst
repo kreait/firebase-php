@@ -104,7 +104,7 @@ Issues/Support
 **************
 
 - For bugs, feature requests and past issues: `Github issue tracker <https://github.com/kreait/firebase-php/issues/>`_
-- For help with and discussion about the PHP SDK: `Gitter Channel dedicated to this library <https://gitter.im/kreait/firebase-php>`_
+- For help with and discussion about the PHP SDK: `Discord channel dedicated to this library <https://discord.gg/nbgVfty>`_
 - For questions about Firebase in general: `Stack Overflow <https://stackoverflow.com/questions/tagged/firebase>`_ and the `Firebase Slack Community <https://firebase.community>`_.
 
 

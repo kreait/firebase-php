@@ -1,4 +1,4 @@
-Please avoid using the issue tracker for questions or help. Submitting issues to this repository are usually reserved for bugs, feature requests, or changes to the source code. We have a help channel at https://gitter.im/kreait/firebase-php (you can sign in with your GitHub account). If nobody can answer your question, tag @jeromegamez in your question.
+Please avoid using the issue tracker for questions or help. Submitting issues to this repository are usually reserved for bugs, feature requests, or changes to the source code. We have a help channel on Discord at https://discord.gg/nbgVfty.
 
 Also see past issues and https://firebase-php.readthedocs.io/en/latest/troubleshooting.html to check if your problem has already been covered.
 

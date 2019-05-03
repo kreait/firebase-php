@@ -15,8 +15,8 @@ Interact with `Google Firebase <https://firebase.google.com>`_ from your PHP app
 .. image:: https://img.shields.io/packagist/dt/kreait/firebase-php.svg
    :target: https://packagist.org/packages/kreait/firebase-php
    :alt: Total downloads
-.. image:: https://badges.gitter.im/kreait/firebase-php.svg
-   :target: https://gitter.im/kreait/firebase-php
+.. image:: https://img.shields.io/discord/523866370778333184.svg?color=7289da&logo=discord
+   :target: https://discord.gg/nbgVfty
    :alt: Community chat
 
 .. note::

@@ -6,7 +6,7 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 [![Supported PHP version](https://img.shields.io/packagist/php-v/kreait/firebase-php.svg)]()
 [![Monthly Downloads](https://img.shields.io/packagist/dm/kreait/firebase-php.svg)](https://packagist.org/packages/kreait/firebase-php/stats)
 [![Total Downloads](https://img.shields.io/packagist/dt/kreait/firebase-php.svg)](https://packagist.org/packages/kreait/firebase-php/stats)
-[![Gitter](https://badges.gitter.im/kreait/firebase-php.svg)](https://gitter.im/kreait/firebase-php)
+[![Discord](https://img.shields.io/discord/523866370778333184.svg?color=7289da&logo=discord)](https://discord.gg/nbgVfty)
 
 [![Build Status](https://travis-ci.org/kreait/firebase-php.svg?branch=master)](https://travis-ci.org/kreait/firebase-php)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kreait_firebase-php&metric=alert_status)](https://sonarcloud.io/dashboard?id=kreait_firebase-php)
@@ -21,7 +21,7 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 - [Tutorials](https://firebase-php.readthedocs.io/en/latest/tutorials.html)
 - Support
   - [Issue Tracker](https://github.com/kreait/firebase-php/issues/)
-  - [Gitter Chat](https://gitter.im/kreait/firebase-php)
+  - [Discord Chat](https://discord.gg/nbgVfty)
   - [Stack Overflow](https://stackoverflow.com/questions/tagged/firebase+php)
 
 ## Feature matrix
