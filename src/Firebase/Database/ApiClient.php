@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Request;
 use Kreait\Firebase\Exception\ApiException;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\UriInterface;
 
 class ApiClient
 {
@@ -28,11 +29,71 @@ class ApiClient
         return JSON::decode((string) $response->getBody(), true);
     }
 
+    /**
+     * @internal This method should only be used in the context of Database transations
+     *
+     * @param UriInterface|string $uri
+     *
+     * @return array
+     */
+    public function getWithETag($uri): array
+    {
+        $response = $this->request('GET', $uri, [
+            'headers' => [
+                'X-Firebase-ETag' => 'true',
+            ],
+        ]);
+
+        $value = JSON::decode((string) $response->getBody(), true);
+        $etag = $response->getHeaderLine('ETag');
+
+        return [
+            'value' => $value,
+            'etag' => $etag,
+        ];
+    }
+
     public function set($uri, $value)
     {
         $response = $this->request('PUT', $uri, ['json' => $value]);
 
         return JSON::decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * @internal This method should only be used in the context of Database transations
+     *
+     * @param UriInterface|string $uri
+     * @param mixed $value
+     * @param string $etag
+     *
+     * @return mixed
+     */
+    public function setWithEtag($uri, $value, string $etag)
+    {
+        $response = $this->request('PUT', $uri, [
+            'headers' => [
+                'if-match' => $etag,
+            ],
+            'json' => $value,
+        ]);
+
+        return JSON::decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * @internal This method should only be used in the context of Database transations
+     *
+     * @param UriInterface|string $uri
+     * @param string $etag
+     */
+    public function removeWithEtag($uri, string $etag)
+    {
+        $this->request('DELETE', $uri, [
+            'headers' => [
+                'if-match' => $etag,
+            ],
+        ]);
     }
 
     public function updateRules($uri, RuleSet $ruleSet)
