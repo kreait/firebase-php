@@ -6,6 +6,7 @@ use function GuzzleHttp\Psr7\uri_for;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\RuleSet;
+use Kreait\Firebase\Database\Transaction;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
 use Psr\Http\Message\UriInterface;
@@ -117,5 +118,12 @@ class Database
     public function updateRules(RuleSet $ruleSet)
     {
         $this->client->updateRules($this->uri->withPath('.settings/rules'), $ruleSet);
+    }
+
+    public function runTransaction(callable $callable)
+    {
+        $transaction = new Transaction($this->client);
+
+        return $callable($transaction);
     }
 }

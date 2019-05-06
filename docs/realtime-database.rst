@@ -355,6 +355,95 @@ You can also delete by specifying null as the value for another write operation 
 
 You can use this technique with `update()` to delete multiple children in a single API call.
 
+*********************
+Database transactions
+*********************
+
+You can use transaction to update data according to its existing state. For example, if you want to increase
+an upvote counter, and want to make sure the count accurately reflects multiple, simultaneous upvotes,
+use a transaction to write the new value to the counter. Instead of two writes that change the
+counter to the same number, one of the write requests fails and you can then retry the
+request with the new value.
+
+Replace data inside a transaction
+=================================
+
+.. code-block:: php
+
+    $counterRef = $db->getReference('counter');
+
+    $db->runTransaction(function (Transaction $transaction) use ($counterRef) {
+
+        // You have to snapshot the reference in order to change its value
+        $counterSnapshot = $transaction->snapshot($counterRef);
+
+        // Get the existing value from the snapshot
+        $counter = $counterSnapshot->getValue() ?: 0;
+        $newCounter = ++$counter;
+
+        // If the value hasn't changed in the Realtime Database while we are
+        // incrementing it, the transaction will be a success.
+        $transaction->set($counterRef, $newCounter);
+    });
+
+Delete data inside a transaction
+================================
+
+Likewise, you can wrap the removal of a reference in a transaction as well: you can remove the reference
+only if it hasn't changed in the meantime.
+
+.. code-block:: php
+
+    $toBeDeleted = $db->getReference('to-be-deleted');
+
+    $db->runTransaction(function (Transaction $transaction) use ($toBeDeleted) {
+
+        $transaction->snapshot($toBeDeleted);
+
+        $transaction->remove($toBeDeleted);
+    });
+
+Handling transaction failures
+=============================
+
+If you haven't snapshotted a reference before trying to change it, the operation will fail
+with a ``\Kreait\Firebase\Exception\Database\ReferenceHasNotBeenSnapshotted`` error.
+
+If the reference has changed in the Realtime Database after you started the transaction,
+the transaction will fail with a ``\Kreait\Firebase\Exception\Database\TransactionFailed``
+error.
+
+.. code-block:: php
+
+    $ref = $db->getReference('my-ref');
+
+    try {
+        $db->runTransaction(function (Transaction $transaction) use ($ref) {
+
+            // $transaction->snapshot($ref);
+
+            $ref->set('value change without a transaction');
+
+            $transaction->set($ref, 'this will fail');
+        });
+
+    } catch (ReferenceHasNotBeenSnapshotted $e) {
+
+        $referenceInQuestion = $e->getReference();
+
+        echo $e->getReference()->getUri().': '.$e->getMessage();
+
+    } catch (TransactionFailed $e) {
+
+        $referenceInQuestion = $e->getReference();
+        $failedRequest = $e->getRequest();
+        $failureResponse = $e->getResponse();
+
+        echo $e->getReference()->getUri().': '.$e->getMessage();
+
+    }
+
+
 ************************
 Debugging API exceptions
 ************************
