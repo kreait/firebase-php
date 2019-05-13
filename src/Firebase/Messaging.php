@@ -56,6 +56,26 @@ class Messaging
     }
 
     /**
+     * @param $messages
+     * @return array
+     */
+    public function sendAll($messages): array
+    {
+        if (count($messages) > 100) {
+            throw new InvalidArgumentException(
+                'Send a maximum of 100 messages only.'
+            );
+        }
+        $messages = array_map(function($message) {
+            return $this->checkMessage($message);
+        }, $messages);
+
+        $response = $this->messagingApi->sendMessages($messages);
+
+        return JSON::decode((string) $response->getBody(), true);
+    }
+
+    /**
      * @param array|CloudMessage|Message $message
      *
      * @throws InvalidArgumentException
@@ -65,15 +85,7 @@ class Messaging
      */
     public function validate($message): array
     {
-        if (\is_array($message)) {
-            $message = CloudMessage::fromArray($message);
-        }
-
-        if (!($message instanceof Message)) {
-            throw new InvalidArgumentException(
-                'Unsupported message type. Use an array or a class implementing %s'.Message::class
-            );
-        }
+        $message = $this->checkMessage($message);
 
         try {
             $response = $this->messagingApi->validateMessage($message);
@@ -115,6 +127,21 @@ class Messaging
         $response = $this->topicManagementApi->unsubscribeFromTopic($topic, $tokens);
 
         return JSON::decode((string) $response->getBody(), true);
+    }
+
+    private function checkMessage($message): Message
+    {
+        if (\is_array($message)) {
+            $message = CloudMessage::fromArray($message);
+        }
+
+        if (!($message instanceof Message)) {
+            throw new InvalidArgumentException(
+                'Unsupported message type. Use an array or a class implementing %s'.Message::class
+            );
+        }
+
+        return $message;
     }
 
     private function ensureArrayOfRegistrationTokens($tokenOrTokens): array

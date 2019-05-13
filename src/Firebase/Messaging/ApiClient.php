@@ -27,6 +27,13 @@ class ApiClient
         ]);
     }
 
+    public function sendMessages(array $messages): ResponseInterface
+    {
+        return $this->request('POST', 'messages:sendAll', [
+            'json' => ['messages' => array_map(function($message) {return $message->jsonSerialize();}, $messages)],
+        ]);
+    }
+
     public function validateMessage(Message $message): ResponseInterface
     {
         return $this->request('POST', 'messages:send', [
