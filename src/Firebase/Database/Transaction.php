@@ -43,15 +43,13 @@ class Transaction
      *
      * @throws ReferenceHasNotBeenSnapshotted
      * @throws TransactionFailed
-     *
-     * @return mixed
      */
     public function set(Reference $reference, $value)
     {
         $etag = $this->getEtagForReference($reference);
 
         try {
-            return $this->apiClient->setWithEtag($reference->getUri(), $value, $etag);
+            $this->apiClient->setWithEtag($reference->getUri(), $value, $etag);
         } catch (ApiException $e) {
             throw TransactionFailed::forReferenceAndApiException($reference, $e);
         }

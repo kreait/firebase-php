@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* Fixed return value on `Kreait\Firebase\Database\Transaction::set()`: it returned the HTTP response, but should
+  return nothing.
+
 ## 4.21.0 - 2019-05-14
 
 * You can now wrap Realtime Database Saves and Deletions in Transactions/Conditional requests. 
