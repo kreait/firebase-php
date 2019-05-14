@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.21.0 - 2019-05-14
 
 * You can now wrap Realtime Database Saves and Deletions in Transactions/Conditional requests. 
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/realtime-database.html#database-transactions)) 
