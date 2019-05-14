@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.21.1 - 2019-05-14
 
 * Fixed return value on `Kreait\Firebase\Database\Transaction::set()`: it returned the HTTP response, but should
   return nothing.
