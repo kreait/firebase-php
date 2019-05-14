@@ -370,6 +370,8 @@ Replace data inside a transaction
 
 .. code-block:: php
 
+    use Kreait\Firebase\Database\Transaction;
+
     $counterRef = $db->getReference('counter');
 
     $db->runTransaction(function (Transaction $transaction) use ($counterRef) {
@@ -394,6 +396,8 @@ only if it hasn't changed in the meantime.
 
 .. code-block:: php
 
+    use Kreait\Firebase\Database\Transaction;
+
     $toBeDeleted = $db->getReference('to-be-deleted');
 
     $db->runTransaction(function (Transaction $transaction) use ($toBeDeleted) {
@@ -414,6 +418,10 @@ the transaction will fail with a ``\Kreait\Firebase\Exception\Database\Transacti
 error.
 
 .. code-block:: php
+
+    use Kreait\Firebase\Database\Transaction;
+    use Kreait\Firebase\Exception\Database\ReferenceHasNotBeenSnapshotted;
+    use Kreait\Firebase\Exception\Database\TransactionFailed;
 
     $ref = $db->getReference('my-ref');
 
