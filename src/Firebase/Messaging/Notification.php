@@ -18,6 +18,11 @@ class Notification implements \JsonSerializable
      */
     private $body;
 
+    /**
+     * @var string|null
+     */
+    private $sound;
+
     private function __construct(string $title = null, string $body = null)
     {
         $this->title = $title;
@@ -57,6 +62,14 @@ class Notification implements \JsonSerializable
         return $notification;
     }
 
+    public function withSound(): self
+    {
+        $notification = clone $this;
+        $notification->sound = 'default';
+
+        return $notification;
+    }
+
     /**
      * @return string|null
      */
@@ -78,6 +91,7 @@ class Notification implements \JsonSerializable
         return array_filter([
             'title' => $this->title,
             'body' => $this->body,
+            'sound' => $this->sound,
         ], function ($value) {
             return $value !== null;
         });
