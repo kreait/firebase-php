@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+* `Kreait\Firebase\Messaging\CloudMessage` can now be created without a target. The existence 
+  of a message target is now validated on send. This enables re-using a message for multiple 
+  targets.
+
 ## 4.21.1 - 2019-05-14
 
 * Fixed return value on `Kreait\Firebase\Database\Transaction::set()`: it returned the HTTP response, but should

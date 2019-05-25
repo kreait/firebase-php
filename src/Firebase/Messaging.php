@@ -50,6 +50,11 @@ class Messaging
                 'Unsupported message type. Use an array or a class implementing %s'.Message::class
             );
         }
+
+        if (($message instanceof CloudMessage) && !$message->hasTarget()) {
+            throw new InvalidArgumentException('The given message has no target');
+        }
+
         $response = $this->messagingApi->sendMessage($message);
 
         return JSON::decode((string) $response->getBody(), true);

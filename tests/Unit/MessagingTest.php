@@ -7,6 +7,7 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\ApiClient;
+use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\TopicManagementApiClient;
 use Kreait\Firebase\Tests\UnitTestCase;
 
@@ -95,6 +96,16 @@ class MessagingTest extends UnitTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->validate('string');
+    }
+
+    public function testItWillNotSendAMessageWithoutATarget()
+    {
+        $message = CloudMessage::new();
+
+        $this->assertFalse($message->hasTarget());
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->messaging->send($message);
     }
 
     public function validTokenProvider()

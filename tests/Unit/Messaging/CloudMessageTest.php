@@ -33,4 +33,9 @@ class CloudMessageTest extends TestCase
 
         $this->assertSame($encodedOriginal, $encodedChanged);
     }
+
+    public function testAnEmptyMessageHasNotTarget()
+    {
+        $this->assertFalse(CloudMessage::new()->hasTarget());
+    }
 }

@@ -9,7 +9,7 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 class CloudMessage implements Message
 {
     /**
-     * @var MessageTarget
+     * @var MessageTarget|null
      */
     private $target;
 
@@ -55,19 +55,22 @@ class CloudMessage implements Message
         return (new self())->withChangedTarget($type, $value);
     }
 
+    public static function new(): self
+    {
+        return new self();
+    }
+
     public static function fromArray(array $data): self
     {
-        if ($targetValue = $data[MessageTarget::CONDITION] ?? null) {
-            $targetType = MessageTarget::CONDITION;
-        } elseif ($targetValue = $data[MessageTarget::TOKEN] ?? null) {
-            $targetType = MessageTarget::TOKEN;
-        } elseif ($targetValue = $data[MessageTarget::TOPIC] ?? null) {
-            $targetType = MessageTarget::TOPIC;
-        } else {
-            throw new InvalidArgumentException('Missing target field');
-        }
+        $new = new self();
 
-        $new = (new self())->withChangedTarget($targetType, (string) $targetValue);
+        if ($targetValue = $data[MessageTarget::CONDITION] ?? null) {
+            $new = $new->withChangedTarget(MessageTarget::CONDITION, (string) $targetValue);
+        } elseif ($targetValue = $data[MessageTarget::TOKEN] ?? null) {
+            $new = $new->withChangedTarget(MessageTarget::TOKEN, (string) $targetValue);
+        } elseif ($targetValue = $data[MessageTarget::TOPIC] ?? null) {
+            $new = $new->withChangedTarget(MessageTarget::TOPIC, (string) $targetValue);
+        }
 
         if ($data['data'] ?? null) {
             $new = $new->withData($data['data']);
@@ -176,15 +179,25 @@ class CloudMessage implements Message
         return $new;
     }
 
+    public function hasTarget(): bool
+    {
+        return $this->target ? true : false;
+    }
+
     public function jsonSerialize()
     {
-        return array_filter([
-            $this->target->type() => $this->target->value(),
+        $data = [
             'data' => $this->data,
             'notification' => $this->notification,
             'android' => $this->androidConfig,
             'apns' => $this->apnsConfig,
             'webpush' => $this->webPushConfig,
-        ]);
+        ];
+
+        if ($this->target) {
+            $data[$this->target->type()] = $this->target->value();
+        }
+
+        return array_filter($data);
     }
 }
