@@ -41,23 +41,23 @@ class MessagingException extends \RuntimeException implements FirebaseException
 
         switch ($code) {
             case 400:
-                $error = new InvalidMessage($message ?: 'Invalid message', $code);
+                $error = new InvalidMessage($message ?: 'Invalid message', $code, $e);
                 break;
             case 401:
             case 403:
-                $error = new AuthenticationError($message ?: 'Authentication error', $code);
+                $error = new AuthenticationError($message ?: 'Authentication error', $code, $e);
                 break;
             case 404:
-                $error = new NotFound($message ?: 'Not found', $code);
+                $error = new NotFound($message ?: 'Not found', $code, $e);
                 break;
             case 500:
-                $error = new ServerError($message ?: 'Server error', $code);
+                $error = new ServerError($message ?: 'Server error', $code, $e);
                 break;
             case 503:
-                $error = new ServerUnavailable($message ?: 'Server unavailable', $code);
+                $error = new ServerUnavailable($message ?: 'Server unavailable', $code, $e);
                 break;
             default:
-                $error = new UnknownError($message ?: 'Unknown error', $code);
+                $error = new UnknownError($message ?: 'Unknown error', $code, $e);
                 break;
         }
 
