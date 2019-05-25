@@ -56,11 +56,11 @@ class FromEnvironmentVariable
             return (string) $value;
         }
 
-        if ($value = $_ENV[$value] ?? null) {
+        if ($value = $_ENV[$name] ?? null) {
             return (string) $value;
         }
 
-        if ($value = $_SERVER[$value] ?? null) {
+        if ($value = $_SERVER[$name] ?? null) {
             return (string) $value;
         }
 

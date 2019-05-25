@@ -17,11 +17,13 @@ use function GuzzleHttp\Psr7\uri_for;
 use Kreait\Firebase;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\LogicException;
 use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\GcpMetadata;
 use Psr\Http\Message\UriInterface;
+use Psr\SimpleCache\CacheInterface;
 
 class Factory
 {
@@ -36,12 +38,12 @@ class Factory
     protected $defaultStorageBucket;
 
     /**
-     * @var ServiceAccount
+     * @var ServiceAccount|null
      */
     protected $serviceAccount;
 
     /**
-     * @var Discoverer
+     * @var Discoverer|null
      */
     protected $serviceAccountDiscoverer;
 
@@ -56,7 +58,7 @@ class Factory
     protected $claims = [];
 
     /**
-     * @var \Psr\SimpleCache\CacheInterface
+     * @var CacheInterface
      */
     protected $verifierCache;
 
@@ -74,6 +76,11 @@ class Factory
 
     protected static $storageBucketNamePattern = '%s.appspot.com';
 
+    public function __construct()
+    {
+        $this->serviceAccountDiscoverer = new Discoverer();
+    }
+
     public function withServiceAccount(ServiceAccount $serviceAccount): self
     {
         $factory = clone $this;
@@ -86,6 +93,14 @@ class Factory
     {
         $factory = clone $this;
         $factory->serviceAccountDiscoverer = $discoverer;
+
+        return $factory;
+    }
+
+    public function withDisabledAutoDiscovery(): self
+    {
+        $factory = clone $this;
+        $factory->serviceAccountDiscoverer = null;
 
         return $factory;
     }
@@ -107,15 +122,15 @@ class Factory
     }
 
     /**
-     * @param \Psr\SimpleCache\CacheInterface $cache
+     * @param CacheInterface $cache
      *
-     * @throws \Kreait\Firebase\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @return self
      */
     public function withVerifierCache($cache): self
     {
-        if (!is_a($cache, $expected = 'Psr\SimpleCache\CacheInterface')) {
+        if (!is_a($cache, $expected = CacheInterface::class)) {
             throw new InvalidArgumentException('The verififier cache must be an instance of '.$expected);
         }
 
@@ -161,15 +176,14 @@ class Factory
         return new Firebase($database, $auth, $storage, $remoteConfig, $messaging);
     }
 
-    protected function getServiceAccountDiscoverer(): Discoverer
-    {
-        return $this->serviceAccountDiscoverer ?? new Discoverer();
-    }
-
     protected function getServiceAccount(): ServiceAccount
     {
+        if (!$this->serviceAccount && $this->serviceAccountDiscoverer) {
+            $this->serviceAccount = $this->serviceAccountDiscoverer->discover();
+        }
+
         if (!$this->serviceAccount) {
-            $this->serviceAccount = $this->getServiceAccountDiscoverer()->discover();
+            throw new LogicException('No service account has been configured.');
         }
 
         return $this->serviceAccount;

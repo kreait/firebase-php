@@ -3,6 +3,7 @@
 namespace Kreait\Firebase\Tests\Unit;
 
 use Kreait\Firebase;
+use Kreait\Firebase\Exception\LogicException;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\ServiceAccount\Discoverer;
@@ -100,5 +101,13 @@ class FactoryTest extends UnitTestCase
 
         $this->expectException(Firebase\Exception\InvalidArgumentException::class);
         $this->factory->withVerifierCache($cache);
+    }
+
+    public function testServiceAccountDiscoveryCanBeDisabled()
+    {
+        $factory = $this->factory->withDisabledAutoDiscovery();
+
+        $this->expectException(LogicException::class);
+        $factory->create();
     }
 }

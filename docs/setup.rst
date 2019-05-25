@@ -93,6 +93,20 @@ You can use your own, custom autodiscovery methods as well:
         ->withServiceAccountDiscoverer($myDiscoverer)
         ->create();
 
+Disabling the autodiscovery
+===========================
+
+You can also disable the autodiscovery. This can be useful to ensure that it will not be
+triggered in case an explicitely given service account is invalid.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Factory;
+
+    $firebase = (new Factory)
+        ->withServiceAccount($serviceAccount)
+        ->withDisabledAutoDiscovery()
+        ->create();
 
 *******************
 Custom Database URI

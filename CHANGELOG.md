@@ -3,10 +3,11 @@
 ## Unreleased
 
 * `Kreait\Firebase\Messaging\CloudMessage` can now be created without a target. The existence 
-  of a message target is now validated on send. This enables re-using a message for multiple 
-  targets.
+  of a message target is now validated on send. This enables re-using a message for multiple targets.
 * Improved reliability of discovering a ServiceAccount from environment variables. 
-  (thanks to [@Shifu33](https://github.com/Shifu33)) for helping to find and test this) 
+  (huge thanks to [@Shifu33](https://github.com/Shifu33) for helping to find and test this)
+* It is now possible to disable the ServiceAccount discovery by calling 
+  `Kreait\Firebase\Factory::withDisabledAutoDiscovery()` ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#disabling-the-autodiscovery))
 
 ## 4.21.1 - 2019-05-14
 
