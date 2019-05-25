@@ -10,11 +10,11 @@ class FromEnvironmentVariable
     /**
      * @var string
      */
-    private $value;
+    private $name;
 
-    public function __construct(string $value)
+    public function __construct(string $name)
     {
-        $this->value = $value;
+        $this->name = $name;
     }
 
     /**
@@ -24,9 +24,9 @@ class FromEnvironmentVariable
      */
     public function __invoke(): ServiceAccount
     {
-        $msg = sprintf('%s: The environment variable "%s"', static::class, $this->value);
+        $msg = sprintf('%s: The environment variable "%s"', static::class, $this->name);
 
-        if (!($path = getenv($this->value))) {
+        if (!($path = $this->getValueFromEnvironment($this->name))) {
             throw new ServiceAccountDiscoveryFailed(sprintf('%s is not set.', $msg));
         }
 
@@ -39,5 +39,31 @@ class FromEnvironmentVariable
                 sprintf('%s, but has errors: %s', $msg, $e->getMessage())
             );
         }
+    }
+
+    /**
+     * @codeCoverageIgnore
+     *
+     * @return string|null
+     */
+    private function getValueFromEnvironment(string $name)
+    {
+        if ($value = getenv($name, true)) {
+            return (string) $value;
+        }
+
+        if ($value = getenv($name, false)) {
+            return (string) $value;
+        }
+
+        if ($value = $_ENV[$value] ?? null) {
+            return (string) $value;
+        }
+
+        if ($value = $_SERVER[$value] ?? null) {
+            return (string) $value;
+        }
+
+        return null;
     }
 }
