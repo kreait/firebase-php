@@ -7,6 +7,8 @@ https://github.com/jeromegamez/firebase-php-examples .
 
 In addition, the SDK has been featured in the following tutorials:
 
+- `How to integrate Laravel with Google Firebase <https://medium.com/@javinunez/how-to-integrate-laravel-with-google-firebase-512188adae13>`_
+  by `Javier Núñez <https://twitter.com/javiernunezfdez>`_ (April 2019)
 - `Integrate Firebase With PHP and Optimize Your Real Time Communication <https://www.cloudways.com/blog/php-firebase-integration/>`_
   by `Shahroze Nawaz <https://twitter.com/_shahroznawaz>`_ (November 2018)
 - `Firebase and PHP Video Series <https://youtu.be/3ACxp56r7ag>`_ by `Arthur Mann <https://twitter.com/ArthiMann>`_ (August 2018)
