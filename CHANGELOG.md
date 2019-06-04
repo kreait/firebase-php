@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* Custom attributes can now be deleted from a user with 
+  `Kreait\Firebase\Auth::deleteCustomUserAttributes($uid)` ([#300](https://github.com/kreait/firebase-php/issues/300))
+
 ## 4.22.0 - 2019-05-26
 
 * `Kreait\Firebase\Messaging\CloudMessage` can now be created without a target. The existence 

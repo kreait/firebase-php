@@ -280,12 +280,18 @@ class Auth
     /**
      * @param Uid|string $uid
      * @param array $attributes
-     *
-     * @return UserRecord
      */
     public function setCustomUserAttributes($uid, array $attributes): UserRecord
     {
         return $this->updateUser($uid, Request\UpdateUser::new()->withCustomAttributes($attributes));
+    }
+
+    /**
+     * @param Uid|string $uid
+     */
+    public function deleteCustomUserAttributes($uid): UserRecord
+    {
+        return $this->updateUser($uid, Request\UpdateUser::new()->withCustomAttributes([]));
     }
 
     /**

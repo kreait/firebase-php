@@ -354,6 +354,21 @@ class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
+    public function testDeleteCustomUserAttributes()
+    {
+        $user = $this->auth->createUser([]);
+        $claims = ['foo' => 'bar'];
+
+        $updatedUser = $this->auth->setCustomUserAttributes($user->uid, $claims);
+        // Make sure the claims are set, so that we can ensure that they are removed afterwards
+        $this->assertEquals($claims, $updatedUser->customAttributes);
+
+        $userWithDeletedCustomAttributes = $this->auth->deleteCustomUserAttributes($user->uid);
+        $this->assertEmpty($userWithDeletedCustomAttributes->customAttributes);
+
+        $this->auth->deleteUser($user->uid);
+    }
+
     public function testUnlinkProvider()
     {
         $user = $this->auth->createUser([

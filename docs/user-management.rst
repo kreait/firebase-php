@@ -230,9 +230,9 @@ Enable a user
 
     $updatedUser = $auth->enableUser($uid);
 
-*********************
-Set custom attributes
-*********************
+************************
+Update custom attributes
+************************
 
 .. code-block:: php
 
@@ -243,6 +243,7 @@ Set custom attributes
     ];
 
     $updatedUser = $auth->setCustomUserAttributes($uid, $customAttributes);
+    $userWithDeletedCustomAttributes = $auth->deleteCustomUserAttributes($uid);
 
 .. note::
     Learn more about custom attributes/claims in the official documentation:
