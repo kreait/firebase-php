@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.24.0 - 2019-06-10
 
 * You can now send one message to multiple devices with `Kreait\Firebase\Messaging::sendMulticast($message, $deviceTokens)` 
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#send-messages-to-multiple-devices-multicast))
