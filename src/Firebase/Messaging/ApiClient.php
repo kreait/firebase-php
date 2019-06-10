@@ -4,6 +4,7 @@ namespace Kreait\Firebase\Messaging;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
 use Kreait\Firebase\Exception\MessagingException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
@@ -41,17 +42,24 @@ class ApiClient
     {
         $options = $options ?? [];
 
-        /** @var UriInterface $uri */
-        $uri = $this->client->getConfig('base_uri');
-        $path = rtrim($uri->getPath(), '/').'/'.ltrim($endpoint, '/');
-        $uri = $uri->withPath($path);
+        $request = $this->createRequest($method, $endpoint);
 
         try {
-            return $this->client->request($method, $uri, $options);
+            return $this->client->send($request, $options);
         } catch (RequestException $e) {
             throw MessagingException::fromRequestException($e);
         } catch (\Throwable $e) {
             throw new MessagingException($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    private function createRequest($method, $endpoint): Request
+    {
+        /** @var UriInterface $uri */
+        $uri = $this->client->getConfig('base_uri');
+        $path = rtrim($uri->getPath(), '/').'/'.ltrim($endpoint, '/');
+        $uri = $uri->withPath($path);
+
+        return new Request($method, $uri);
     }
 }

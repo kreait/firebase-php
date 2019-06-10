@@ -51,7 +51,7 @@ class ApiClientTest extends TestCase
     public function testCatchRequestException($requestException, $expectedClass)
     {
         $this->http->expects($this->once())
-            ->method('request')
+            ->method('send')
             ->willThrowException($requestException);
 
         try {
@@ -65,7 +65,7 @@ class ApiClientTest extends TestCase
     public function testCatchAnyException()
     {
         $this->http->expects($this->once())
-            ->method('request')
+            ->method('send')
             ->willThrowException(new \Exception());
 
         $this->expectException(MessagingException::class);
