@@ -5,6 +5,8 @@ namespace Kreait\Firebase\Tests\Unit;
 use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
+use Kreait\Firebase\Exception\Messaging\InvalidMessage;
+use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
@@ -13,20 +15,11 @@ use Kreait\Firebase\Tests\UnitTestCase;
 
 class MessagingTest extends UnitTestCase
 {
-    /**
-     * @var Messaging
-     */
-    private $messaging;
-
-    /**
-     * @var ApiClient
-     */
     private $messagingApi;
-
-    /**
-     * @var TopicManagementApiClient
-     */
     private $topicManagementApi;
+
+    /** @var Messaging */
+    private $messaging;
 
     protected function setUp()
     {
@@ -96,6 +89,21 @@ class MessagingTest extends UnitTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->validate('string');
+    }
+
+    public function testValidateMessageGivenAnUnknownDeviceToken()
+    {
+        $message = CloudMessage::withTarget(Messaging\MessageTarget::TOKEN, 'foo');
+        $e = $this->createMock(NotFound::class);
+        $e->method('response')->willReturn(new Response());
+
+        $this->messagingApi
+            ->method('validateMessage')
+            ->with($message)
+            ->willThrowException(new NotFound());
+
+        $this->expectException(InvalidMessage::class);
+        $this->messaging->validate($message);
     }
 
     public function testItWillNotSendAMessageWithoutATarget()
