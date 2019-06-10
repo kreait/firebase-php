@@ -23,26 +23,19 @@ component with ``$firebase->getMessaging()``.
 .. code-block:: php
 
     use Kreait\Firebase;
+    use Kreait\Firebase\Messaging\CloudMessage;
 
     $firebase = (new Firebase\Factory())->create();
     $messaging = $firebase->getMessaging();
 
+    $message = CloudMessage::withTarget(/* see sections below */)
+        ->withNotification(Notification::create('Title', 'Body'))
+        ->withData(['key' => 'value']);
+
     $messaging->send($message);
 
 A message must be an object implementing ``Kreait\Firebase\Messaging\Message`` or an array that can
-be parsed to one of the supported message types.
-
-The Supported message types are:
-
-- A message to a given topic ``Kreait\Firebase\Messaging\MessageToTopic``
-- A conditional message ``Kreait\Firebase\Messaging\ConditionalMessage``
-- A message to a specific device ``Kreait\Firebase\Messaging\MessageToRegistrationToken``
-
-A message can contain:
-
-- A notification ``Kreait\Firebase\Messaging\Notification``
-- Arbitrary data as an array of key-value pairs where all keys and values are strings
-- Target platform specific configuration
+be parsed to a ``Kreait\Firebase\Messaging\CloudMessage``.
 
 ***********************
 Send messages to topics
