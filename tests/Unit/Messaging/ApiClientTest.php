@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
-use GuzzleHttp\ClientInterface;
+use Exception;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Exception\Messaging\AuthenticationError;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\ServerError;
@@ -21,26 +23,22 @@ use PHPUnit\Framework\TestCase;
 
 class ApiClientTest extends TestCase
 {
-    /**
-     * @var ClientInterface
-     */
-    private $http;
+    /** @var MockHandler */
+    private $mock;
 
-    /**
-     * @var ApiClient
-     */
+    /** @var ApiClient */
     private $client;
 
     protected function setUp()
     {
-        $this->http = $this->createMock(ClientInterface::class);
-        $this->http
-            ->expects($this->any())
-            ->method('getConfig')
-            ->with('base_uri')
-            ->willReturn(new Uri('http://example.com'));
+        $this->mock = new MockHandler();
+        $handler = HandlerStack::create($this->mock);
+        $client = new Client([
+            'handler' => $handler,
+            'base_uri' => 'http://example.com',
+        ]);
 
-        $this->client = new ApiClient($this->http);
+        $this->client = new ApiClient($client);
     }
 
     /**
@@ -50,23 +48,15 @@ class ApiClientTest extends TestCase
      */
     public function testCatchRequestException($requestException, $expectedClass)
     {
-        $this->http->expects($this->once())
-            ->method('send')
-            ->willThrowException($requestException);
+        $this->mock->append($requestException);
 
-        try {
-            $this->client->sendMessage(MessageToTopic::create('a-topic'));
-        } catch (\Throwable $e) {
-            $this->assertInstanceOf(MessagingException::class, $e);
-            $this->assertInstanceOf($expectedClass, $e);
-        }
+        $this->expectException($expectedClass);
+        $this->client->sendMessage(MessageToTopic::create('a-topic'));
     }
 
     public function testCatchAnyException()
     {
-        $this->http->expects($this->once())
-            ->method('send')
-            ->willThrowException(new \Exception());
+        $this->mock->append(new Exception());
 
         $this->expectException(MessagingException::class);
 

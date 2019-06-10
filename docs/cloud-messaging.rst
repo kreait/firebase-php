@@ -133,6 +133,38 @@ Each of the Firebase client SDKs are able to generate these registration tokens:
 
     $messaging->send($message);
 
+*********************************************
+Send messages to multiple devices (Multicast)
+*********************************************
+
+You can send send one message to multiple devices:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Messaging\CloudMessage;
+
+    $deviceTokens = ['...', '...' /* ... */];
+
+    $message = CloudMessage::new(); // Any instance of Kreait\Messaging\Message
+
+    $sendReport = $messaging->sendMulticast($message, $deviceTokens);
+
+The returned value is an instance of ``Kreait\Firebase\Messaging\MulticastSendReport`` and provides you with
+methods to determine the successes and failures of the multicasted message:
+
+.. code-block:: php
+
+    $report = $messaging->sendMulticast($message, $deviceTokens);
+
+    echo 'Successful sends: '.$report->successes()->count().PHP_EOL;
+    echo 'Failed sends: '.$report->failures()->count().PHP_EOL;
+
+    if ($report->hasFailures()) {
+        foreach ($report->failures()->getItems() as $failure) {
+            echo $failure->error()->getMessage().PHP_EOL;
+        }
+    }
+
 
 *********************
 Adding a notification

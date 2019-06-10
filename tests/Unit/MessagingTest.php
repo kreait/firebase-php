@@ -116,6 +116,31 @@ class MessagingTest extends UnitTestCase
         $this->messaging->send($message);
     }
 
+    public function testItDoesNotAcceptInvalidMessagesWhenMulticasting()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->messaging->sendMulticast(new \stdClass(), []);
+    }
+
+    public function testItHandlesArraysWhenMulticasting()
+    {
+        $this->messaging->sendMulticast([], []);
+        $this->assertTrue($noExceptionHasBeenThrown = true);
+    }
+
+    public function testItHandlesNonCloudMessagesWhenMulticasting()
+    {
+        $message = new class() implements Messaging\Message {
+            public function jsonSerialize()
+            {
+                return [];
+            }
+        };
+
+        $this->messaging->sendMulticast($message, []);
+        $this->assertTrue($noExceptionHasBeenThrown = true);
+    }
+
     public function validTokenProvider()
     {
         return [

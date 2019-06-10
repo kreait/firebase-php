@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* You can now send one message to multiple devices with `Kreait\Firebase\Messaging::sendMulticast($message, $deviceTokens)` 
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#send-messages-to-multiple-devices-multicast))
+
 ## 4.23.0 - 2019-06-05
 
 * Custom attributes can now be deleted from a user with 
