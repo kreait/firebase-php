@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* When verifying ID tokens a leeway of 5 minutes is applied when verifying time based claims
+
 ## 4.24.0 - 2019-06-10
 
 * You can now send one message to multiple devices with `Kreait\Firebase\Messaging::sendMulticast($message, $deviceTokens)` 

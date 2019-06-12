@@ -182,6 +182,9 @@ Parameter                    Type         Description
     should not rely on it.
 
 .. note::
+    A leeway of 5 minutes is applied when verifying time based claims starting with release 4.25.0
+
+.. note::
     This library uses `lcobucci/jwt <https://github.com/lcobucci/jwt>`_ to work with JSON Web Tokens (JWT).
     You can find the usage instructions at
     `https://github.com/lcobucci/jwt/blob/3.2/README.md <https://github.com/lcobucci/jwt/blob/3.2/README.md>`_.
