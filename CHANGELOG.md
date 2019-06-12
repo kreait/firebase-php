@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.25.0 - 2019-06-12
 
 * When verifying ID tokens a leeway of 5 minutes is applied when verifying time based claims
 
