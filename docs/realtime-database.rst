@@ -359,6 +359,9 @@ You can use this technique with `update()` to delete multiple children in a sing
 Database transactions
 *********************
 
+.. note::
+    Support for database transactions has been added in release 4.21.0
+
 You can use transaction to update data according to its existing state. For example, if you want to increase
 an upvote counter, and want to make sure the count accurately reflects multiple, simultaneous upvotes,
 use a transaction to write the new value to the counter. Instead of two writes that change the
