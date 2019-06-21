@@ -10,7 +10,7 @@ fi
 
 if [ "${STATIC_ANALYSIS}" = "1" ]; then
   echo "Running static analysis"
-  vendor/bin/phpstan analyse src -c phpstan.neon --level=6 --no-progress -vvv
+  vendor/bin/phpstan analyse src -c phpstan.neon --level=7 --no-progress -vvv
 else
   echo "Not running static analysis"
 fi
