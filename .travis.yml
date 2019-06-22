@@ -1,30 +1,19 @@
+dist: xenial
 language: php
-
-addons:
-  sonarcloud:
-    organization: "kreait"
-
-env:
-  global:
-    - ALL_TESTS=0
-    - UNIT_TESTS=0
-    - STATIC_ANALYSIS=0
 
 matrix:
   fast_finish: true
   include:
-    - php: 7.0
+    - php: "7.0"
+      env: REPORT=true
       git:
         depth: false
-      env: ALL_TESTS=1
-    - php: 7.1
-      env: UNIT_TESTS=1
-    - php: 7.2
-      env: UNIT_TESTS=1
-    - php: 7.2
-      env: STATIC_ANALYSIS=1
-    - php: 7.3
-      env: UNIT_TESTS=1 COMPOSER_FLAGS=--ignore-platform-reqs # php-cs-fixer does not yet support PHP 7.3
+      addons:
+        sonarcloud:
+          organization: "kreait"
+    - php: "7.1"
+    - php: "7.2"
+    - php: "7.3"
 
 sudo: false
 
@@ -33,12 +22,22 @@ cache:
     - vendor
     - $HOME/.composer/cache
 
-before_install: .travis/before_install.sh
+before_install:
+  - |
+    if [ "$TRAVIS_SECURE_ENV_VARS" = "true" ]; then
+      openssl aes-256-cbc -K $encrypted_d51fa485ef84_key -iv $encrypted_d51fa485ef84_iv -in secrets.tar.enc -out secrets.tar -d;
+      tar xvf secrets.tar
+    fi
 
-install: .travis/install.sh
+install:
+  - composer update --no-interaction --no-suggest --no-progress
 
-script: .travis/build.sh
-
-notifications:
-  email:
-    - secure: "iiseqb4k4ckQkMJnZ6Tq3YP5ilTZE4CkVgarsBpPOn+c820nP9QokGpz82D4CTGy/UB1+DfCiFH9YAFrhLP5/9Go1CHP+wYkuz9W+E8q/rm9/nBO0xutoQhOfV3MxMid69E8i4QjODq3w5mOUrmpj/8gl2FyBU1Ro1xgPSYNEQ4="
+script:
+  - vendor/bin/phpstan analyse src -c phpstan.neon --level=7 --no-progress -vvv
+  - |
+    if [ "$REPORT" = "true" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+      vendor/bin/phpunit --coverage-clover=coverage-report.clover --log-junit=test-report.xml
+      sonar-scanner
+    else
+      vendor/bin/phpunit --testsuite unit
+    fi
