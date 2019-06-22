@@ -3,7 +3,7 @@
 
 tests: ## Executes the test suites
 	@vendor/bin/phpunit --testsuite unit
-	@vendor/bin/phpstan analyse src -c phpstan.neon --level=6 --no-progress -vvv
+	@vendor/bin/phpstan analyse src -c phpstan.neon --level=max
 
 integration-tests: ## Executes the integration test suite
 	@vendor/bin/phpunit --testsuite integration
