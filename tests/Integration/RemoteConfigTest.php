@@ -161,11 +161,6 @@ CONFIG;
 
     public function testGetVersion()
     {
-        $first = null;
-
-        foreach ($this->remoteConfig->listVersions(['limit' => 1]) as $version) {
-            $first = $version;
-        }
         foreach ($this->remoteConfig->listVersions(['limit' => 1]) as $version) {
             $same = $this->remoteConfig->getVersion($version->versionNumber());
 
