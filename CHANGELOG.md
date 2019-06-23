@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## Unreleased
+
+This is an under-the-hood release and should not affect any existing functionality:
+
+* Internal classes have been marked as `@internal`
+* Micro-Optimizations
+* PHPStan's analysis level has been set to `max`
+* `psr/simple-cache` was implicitely required and is now explicitely required
+* Simplified the Travis CI configuration (this should now enably PRs to be tested without errors)
+
 ## 4.25.0 - 2019-06-12
 
 * When verifying ID tokens a leeway of 5 minutes is applied when verifying time based claims
