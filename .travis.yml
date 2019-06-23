@@ -33,11 +33,11 @@ install:
   - composer update --no-interaction --no-suggest --no-progress
 
 script:
-  - vendor/bin/phpstan analyse src -c phpstan.neon --level=max --no-progress
+  - vendor/bin/phpstan analyse src tests -c phpstan.neon --level=max --no-progress
   - |
     if [ "$REPORT" = "true" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
-      vendor/bin/phpunit --coverage-clover=coverage-report.clover --log-junit=test-report.xml
+      vendor/bin/phpunit --testdox --coverage-clover=coverage-report.clover --log-junit=test-report.xml --testdox
       sonar-scanner
     else
-      vendor/bin/phpunit --testsuite unit
+      vendor/bin/phpunit --testdox --testsuite unit
     fi

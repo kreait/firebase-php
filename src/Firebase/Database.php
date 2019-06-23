@@ -2,7 +2,7 @@
 
 namespace Kreait\Firebase;
 
-use function GuzzleHttp\Psr7\uri_for;
+use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\RuleSet;
@@ -77,12 +77,7 @@ class Database
      */
     public function getReferenceFromUrl($uri): Reference
     {
-        try {
-            $uri = uri_for($uri);
-        } catch (\InvalidArgumentException $e) {
-            // Wrap exception so that everything stays inside the Firebase namespace
-            throw new InvalidArgumentException($e->getMessage(), $e->getCode());
-        }
+        $uri = $uri instanceof UriInterface ? $uri : new Uri($uri);
 
         if (($givenHost = $uri->getHost()) !== ($dbHost = $this->uri->getHost())) {
             throw new InvalidArgumentException(sprintf(

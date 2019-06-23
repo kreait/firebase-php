@@ -12,19 +12,12 @@ use Kreait\Firebase\Tests\UnitTestCase;
 
 class DatabaseTest extends UnitTestCase
 {
-    /**
-     * @var Uri
-     */
-    private $uri;
-
-    /**
-     * @var ApiClient|\PHPUnit_Framework_MockObject_MockObject
-     */
     private $apiClient;
 
-    /**
-     * @var Database
-     */
+    /** @var Uri */
+    private $uri;
+
+    /** @var Database */
     private $database;
 
     protected function setUp()
@@ -52,14 +45,6 @@ class DatabaseTest extends UnitTestCase
             Reference::class,
             $this->database->getReferenceFromUrl('https://database-uri.tld/foo/bar')
         );
-    }
-
-    public function testGetReferenceFromInvalidUrl()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        // We don't test any possibly invalid URL, this is already handled by the HTTP client library
-        $this->database->getReferenceFromUrl(false);
     }
 
     public function testGetReferenceFromNonMatchingUrl()

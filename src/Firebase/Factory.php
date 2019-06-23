@@ -16,7 +16,6 @@ use GuzzleHttp\HandlerStack;
 use function GuzzleHttp\Psr7\uri_for;
 use Kreait\Firebase;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
-use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\LogicException;
 use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\Http\Middleware;

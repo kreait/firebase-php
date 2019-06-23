@@ -161,19 +161,23 @@ CONFIG;
 
     public function testGetVersion()
     {
-        foreach ($this->remoteConfig->listVersions() as $first) {
-            break;
+        $first = null;
+
+        foreach ($this->remoteConfig->listVersions(['limit' => 1]) as $version) {
+            $first = $version;
         }
+        foreach ($this->remoteConfig->listVersions(['limit' => 1]) as $version) {
+            $same = $this->remoteConfig->getVersion($version->versionNumber());
 
-        $same = $this->remoteConfig->getVersion($first->versionNumber());
-
-        $this->assertTrue($first->versionNumber()->equalsTo($same->versionNumber()));
+            $this->assertTrue($version->versionNumber()->equalsTo($same->versionNumber()));
+        }
     }
 
     public function testFindVersionsWithLimit()
     {
         $counter = 0;
 
+        /* @noinspection PhpUnusedLocalVariableInspection */
         foreach ($this->remoteConfig->listVersions(['limit' => 1]) as $version) {
             ++$counter;
         }

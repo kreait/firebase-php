@@ -40,7 +40,7 @@ class Messaging
     }
 
     /**
-     * @param array|CloudMessage|Message $message
+     * @param array|CloudMessage|Message|mixed $message
      *
      * @return array
      */
@@ -66,7 +66,7 @@ class Messaging
     }
 
     /**
-     * @param array|Message $message
+     * @param array|Message|mixed $message
      * @param string[]|RegistrationToken[] $deviceTokens
      *
      * @return MulticastSendReport
@@ -118,7 +118,7 @@ class Messaging
     }
 
     /**
-     * @param array|CloudMessage|Message $message
+     * @param array|CloudMessage|Message|mixed $message
      *
      * @throws InvalidArgumentException
      * @throws InvalidMessage

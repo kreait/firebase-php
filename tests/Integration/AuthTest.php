@@ -46,7 +46,7 @@ class AuthTest extends IntegrationTestCase
         $check = $this->auth->createUserWithEmailAndPassword($email, $password);
 
         $this->assertSame($email, $check->email);
-        $this->assertFalse($check->emailVerified);
+        $this->assertSame(false, $check->emailVerified);
 
         $this->auth->deleteUser($check->uid);
     }
@@ -285,7 +285,7 @@ class AuthTest extends IntegrationTestCase
 
         $this->assertSame($uid, $userRecord->uid);
         $this->assertSame($displayName, $userRecord->displayName);
-        $this->assertTrue($userRecord->emailVerified);
+        $this->assertSame(true, $userRecord->emailVerified);
 
         $this->auth->deleteUser($uid);
     }

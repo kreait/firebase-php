@@ -267,12 +267,12 @@ class Auth
     }
 
     /**
-     * @param Email|string $email
+     * @param Email|mixed $email
      * @param UriInterface|string|null $continueUrl
      */
     public function sendPasswordResetEmail($email, $continueUrl = null, string $locale = null)
     {
-        $email = $email instanceof Email ? $email : new Email($email);
+        $email = $email instanceof Email ? $email : new Email((string) $email);
 
         $this->client->sendPasswordResetEmail((string) $email, (string) $continueUrl, $locale);
     }

@@ -11,9 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class OnGoogleCloudPlatformTest extends TestCase
 {
-    /**
-     * @var GcpMetadata
-     */
     private $metadata;
 
     protected function setUp()

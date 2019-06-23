@@ -16,14 +16,9 @@ use Kreait\Firebase\Tests\UnitTestCase;
 
 class ApiClientTest extends UnitTestCase
 {
-    /**
-     * @var ClientInterface
-     */
     private $http;
 
-    /**
-     * @var ApiClient
-     */
+    /** @var ApiClient */
     private $client;
 
     protected function setUp()
@@ -33,8 +28,6 @@ class ApiClientTest extends UnitTestCase
     }
 
     /**
-     * @param $requestException
-     * @param $expectedClass
      * @dataProvider requestExceptions
      */
     public function testCatchRequestException($requestException, $expectedClass)

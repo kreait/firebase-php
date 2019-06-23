@@ -14,14 +14,9 @@ use Psr\Http\Message\RequestInterface;
 
 class ApiClientTest extends UnitTestCase
 {
-    /**
-     * @var ClientInterface
-     */
     private $http;
 
-    /**
-     * @var ApiClient
-     */
+    /** @var ApiClient */
     private $client;
 
     protected function setUp()

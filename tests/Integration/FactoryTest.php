@@ -15,14 +15,14 @@ class FactoryTest extends IntegrationTestCase
         $invocations = 0;
 
         $firebase = self::$factory->withHttpClientConfig([
-            'on_headers' => function (ResponseInterface $response) use (&$invocations) {
+            'on_headers' => static function () use (&$invocations) {
                 ++$invocations;
             },
         ])->create();
 
         // Any request will do
         $firebase->getDatabase()->getRules();
-        $this->assertTrue($invocations > 0);
+        $this->assertGreaterThan(0, $invocations);
     }
 
     public function testItUsesAdditionalMiddlewares()

@@ -17,9 +17,6 @@ class EqualToTest extends UnitTestCase
     }
 
     /**
-     * @param $given
-     * @param $expected
-     *
      * @dataProvider valueProvider
      */
     public function testModifyUri($given, $expected)

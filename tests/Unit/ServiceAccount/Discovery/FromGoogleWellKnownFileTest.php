@@ -2,7 +2,6 @@
 
 namespace Kreait\Firebase\Tests\Unit\ServiceAccount\Discovery;
 
-use Google\Auth\CredentialsLoader;
 use Kreait\Firebase\Exception\ServiceAccountDiscoveryFailed;
 use Kreait\Firebase\ServiceAccount\Discovery\FromGoogleWellKnownFile;
 use Kreait\Firebase\Tests\UnitTestCase;

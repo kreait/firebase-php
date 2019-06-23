@@ -9,20 +9,15 @@ use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
 
 class ReferenceTest extends DatabaseTestCase
 {
-    /**
-     * @var Reference
-     */
+    /** @var Reference */
     private $ref;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->ref = self::$db->getReference(self::$refPrefix);
     }
 
     /**
-     * @param $key
-     * @param $value
-     *
      * @dataProvider validValues
      */
     public function testSetAndGet($key, $value)

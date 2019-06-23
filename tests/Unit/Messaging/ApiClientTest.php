@@ -42,8 +42,6 @@ class ApiClientTest extends TestCase
     }
 
     /**
-     * @param $requestException
-     * @param $expectedClass
      * @dataProvider requestExceptions
      */
     public function testCatchRequestException($requestException, $expectedClass)

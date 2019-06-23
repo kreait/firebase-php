@@ -1,4 +1,7 @@
 parameters:
+	ignoreErrors:
+		- '#Kreait\\Firebase\\Database\\Reference::getChild\(\) expects#'
 
 includes:
 	- vendor/phpstan/phpstan-phpunit/extension.neon
+	- vendor/jangregor/phpstan-prophecy/src/extension.neon

@@ -14,14 +14,9 @@ use Prophecy\Argument;
 
 class TopicManagementApiClientTest extends TestCase
 {
-    /**
-     * @var ClientInterface
-     */
     private $client;
 
-    /**
-     * @var TopicManagementApiClient
-     */
+    /** @var TopicManagementApiClient */
     private $sut;
 
     protected function setUp()

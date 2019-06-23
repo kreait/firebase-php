@@ -14,24 +14,11 @@ use Prophecy\Argument;
 
 class AuthTest extends UnitTestCase
 {
-    /**
-     * @var ApiClient
-     */
     private $apiClient;
-
-    /**
-     * @var Generator
-     */
     private $tokenGenerator;
-
-    /**
-     * @var Verifier
-     */
     private $idTokenVerifier;
 
-    /**
-     * @var Auth
-     */
+    /** @var Auth */
     private $auth;
 
     protected function setUp()

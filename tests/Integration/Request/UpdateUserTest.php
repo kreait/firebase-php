@@ -57,14 +57,14 @@ class UpdateUserTest extends IntegrationTestCase
                 ->withUid($uid = bin2hex(random_bytes(5)))
         );
 
-        $this->assertNotTrue($user->emailVerified);
+        $this->assertSame(false, $user->emailVerified);
         $this->assertNull($user->email);
 
         $updatedUser = $this->auth->updateUser($uid, UpdateUser::new()->markEmailAsVerified());
 
         $this->assertSame($user->uid, $updatedUser->uid);
         $this->assertNull($updatedUser->email);
-        $this->assertTrue($updatedUser->emailVerified);
+        $this->assertSame(true, $updatedUser->emailVerified);
 
         $this->auth->deleteUser($updatedUser->uid);
     }
@@ -77,13 +77,13 @@ class UpdateUserTest extends IntegrationTestCase
                 ->withUnverifiedEmail($email = $uid.'@example.org')
         );
 
-        $this->assertFalse($user->emailVerified);
+        $this->assertSame(false, $user->emailVerified);
 
         $updatedUser = $this->auth->updateUser($uid, UpdateUser::new()->markEmailAsVerified());
 
         $this->assertSame($user->uid, $updatedUser->uid);
         $this->assertSame($user->email, $updatedUser->email);
-        $this->assertTrue($updatedUser->emailVerified);
+        $this->assertSame(true, $updatedUser->emailVerified);
 
         $this->auth->deleteUser($updatedUser->uid);
     }
@@ -96,13 +96,13 @@ class UpdateUserTest extends IntegrationTestCase
                 ->withVerifiedEmail($email = $uid.'@example.org')
         );
 
-        $this->assertTrue($user->emailVerified);
+        $this->assertSame(true, $user->emailVerified);
 
         $updatedUser = $this->auth->updateUser($uid, UpdateUser::new()->markEmailAsUnverified());
 
         $this->assertSame($user->uid, $updatedUser->uid);
         $this->assertSame($user->email, $updatedUser->email);
-        $this->assertFalse($updatedUser->emailVerified);
+        $this->assertSame(false, $updatedUser->emailVerified);
 
         $this->auth->deleteUser($updatedUser->uid);
     }
