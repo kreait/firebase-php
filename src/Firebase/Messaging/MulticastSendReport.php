@@ -47,14 +47,14 @@ final class MulticastSendReport implements Countable
 
     public function successes(): self
     {
-        return self::withItems(array_filter($this->items, static function (SendReport $item) {
+        return self::withItems(\array_filter($this->items, static function (SendReport $item) {
             return $item->isSuccess();
         }));
     }
 
     public function failures(): self
     {
-        return self::withItems(array_filter($this->items, static function (SendReport $item) {
+        return self::withItems(\array_filter($this->items, static function (SendReport $item) {
             return $item->isFailure();
         }));
     }
@@ -66,6 +66,6 @@ final class MulticastSendReport implements Countable
 
     public function count(): int
     {
-        return count($this->items);
+        return \count($this->items);
     }
 }

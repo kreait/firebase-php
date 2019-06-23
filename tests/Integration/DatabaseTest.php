@@ -14,12 +14,12 @@ class DatabaseTest extends DatabaseTestCase
     {
         $credentialsPath = self::$fixturesDir.'/test_credentials.json';
 
-        if (!file_exists($credentialsPath)) {
+        if (!\file_exists($credentialsPath)) {
             self::markTestSkipped();
         }
 
-        $credentials = JSON::decode(file_get_contents($credentialsPath), true);
-        $credentials['project_id'] = str_replace('-&+§', ':', $credentials['project_id']);
+        $credentials = JSON::decode(\file_get_contents($credentialsPath), true);
+        $credentials['project_id'] = \str_replace('-&+§', ':', $credentials['project_id']);
 
         $serviceAccount = ServiceAccount::fromArray($credentials);
         $firebase = (new Factory())

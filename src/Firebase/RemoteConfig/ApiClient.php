@@ -52,13 +52,13 @@ class ApiClient
 
     public function listVersions(FindVersions $query, string $nextPageToken = null): ResponseInterface
     {
-        $uri = rtrim((string) $this->client->getConfig('base_uri'), '/').':listVersions';
+        $uri = \rtrim((string) $this->client->getConfig('base_uri'), '/').':listVersions';
 
         $since = $query->since() ? $query->since()->format('Y-m-d\TH:i:s.v\Z') : null;
         $until = $query->until() ? $query->until()->format('Y-m-d\TH:i:s.v\Z') : null;
         $upToVersion = $query->upToVersion() ? (string) $query->upToVersion() : null;
 
-        return $this->request('GET', $uri, array_filter([
+        return $this->request('GET', $uri, \array_filter([
             'startTime' => $since,
             'endTime' => $until,
             'endVersionNumber' => $upToVersion,
@@ -68,7 +68,7 @@ class ApiClient
 
     public function rollbackToVersion(VersionNumber $versionNumber): ResponseInterface
     {
-        $uri = rtrim((string) $this->client->getConfig('base_uri'), '/').':rollback';
+        $uri = \rtrim((string) $this->client->getConfig('base_uri'), '/').':rollback';
 
         return $this->request('POST', $uri, [
             'json' => [
@@ -81,7 +81,7 @@ class ApiClient
     {
         $options = $options ?? [];
 
-        $options = array_merge($options, [
+        $options = \array_merge($options, [
             'decode_content' => 'gzip', // sets content-type and deflates response body
         ]);
 

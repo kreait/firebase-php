@@ -34,7 +34,7 @@ class JSONTest extends UnitTestCase
 
     public function testIsValid()
     {
-        $this->assertTrue(JSON::isValid(json_encode([])));
+        $this->assertTrue(JSON::isValid(\json_encode([])));
         $this->assertFalse(JSON::isValid('<html></html>'));
     }
 
@@ -42,6 +42,6 @@ class JSONTest extends UnitTestCase
     {
         $data = ['foo' => 'bar'];
 
-        $this->assertSame(json_encode($data, JSON_PRETTY_PRINT), JSON::prettyPrint($data));
+        $this->assertSame(\json_encode($data, JSON_PRETTY_PRINT), JSON::prettyPrint($data));
     }
 }

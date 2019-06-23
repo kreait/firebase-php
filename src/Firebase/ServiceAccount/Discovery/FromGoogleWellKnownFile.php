@@ -15,7 +15,7 @@ class FromGoogleWellKnownFile
      */
     public function __invoke(): ServiceAccount
     {
-        $msg = sprintf('%s: The well known file', static::class);
+        $msg = \sprintf('%s: The well known file', static::class);
 
         if (!($credentials = @ServiceAccountCredentials::fromWellKnownFile())) {
             throw new ServiceAccountDiscoveryFailed($msg.' is not readable or invalid');

@@ -50,7 +50,7 @@ class ConditionalMessage implements Message
      */
     public static function fromArray(array $data): self
     {
-        if (!array_key_exists('condition', $data)) {
+        if (!\array_key_exists('condition', $data)) {
             throw new InvalidArgumentException('Missing field "condition"');
         }
 
@@ -87,7 +87,7 @@ class ConditionalMessage implements Message
 
     public function jsonSerialize()
     {
-        return array_filter([
+        return \array_filter([
             'condition' => $this->condition,
             'data' => $this->data,
             'notification' => $this->notification,

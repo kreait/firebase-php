@@ -10,7 +10,7 @@ trait ModifierTrait
 {
     protected function appendQueryParam(UriInterface $uri, string $key, $value): UriInterface
     {
-        $queryParams = array_merge(parse_query($uri->getQuery()), [$key => $value]);
+        $queryParams = \array_merge(parse_query($uri->getQuery()), [$key => $value]);
 
         $queryString = build_query($queryParams);
 

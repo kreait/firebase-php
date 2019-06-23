@@ -12,12 +12,12 @@ class FromGoogleWellKnownFileTest extends UnitTestCase
 
     protected function setUp()
     {
-        $this->backup = getenv('HOME');
+        $this->backup = \getenv('HOME');
     }
 
     protected function tearDown()
     {
-        putenv(sprintf('%s=%s', 'HOME', $this->backup));
+        \putenv(\sprintf('%s=%s', 'HOME', $this->backup));
     }
 
     public function testItKnowsWhenTheFileIsInvalid()
@@ -26,7 +26,7 @@ class FromGoogleWellKnownFileTest extends UnitTestCase
 
         $this->expectException(ServiceAccountDiscoveryFailed::class);
 
-        putenv('HOME'); // This will let the Google CredentialsLoader return null
+        \putenv('HOME'); // This will let the Google CredentialsLoader return null
         $discoverer();
     }
 }

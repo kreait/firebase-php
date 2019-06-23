@@ -87,11 +87,11 @@ class ApiException extends \RuntimeException implements FirebaseException
             return null;
         }
 
-        if (is_string($data['error']['message'] ?? null)) {
+        if (\is_string($data['error']['message'] ?? null)) {
             return $data['error']['message'];
         }
 
-        if (is_string($data['error'] ?? null)) {
+        if (\is_string($data['error'] ?? null)) {
             return $data['error'];
         }
 

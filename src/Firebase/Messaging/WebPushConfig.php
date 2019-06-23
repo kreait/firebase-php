@@ -25,7 +25,7 @@ class WebPushConfig implements Config
 
     public function jsonSerialize()
     {
-        return array_filter($this->rawConfig, function ($value) {
+        return \array_filter($this->rawConfig, function ($value) {
             return $value !== null;
         });
     }

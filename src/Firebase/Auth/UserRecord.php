@@ -106,14 +106,14 @@ class UserRecord implements \JsonSerializable
 
     private static function userInfoFromResponseData(array $data): array
     {
-        return array_map(function (array $userInfoData) {
+        return \array_map(function (array $userInfoData) {
             return UserInfo::fromResponseData($userInfoData);
         }, $data['providerUserInfo'] ?? []);
     }
 
     public function toArray(): array
     {
-        return get_object_vars($this);
+        return \get_object_vars($this);
     }
 
     public function jsonSerialize()

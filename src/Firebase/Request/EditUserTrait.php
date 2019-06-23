@@ -69,7 +69,7 @@ trait EditUserTrait
     protected static function withEditableProperties($request, array $properties)
     {
         foreach ($properties as $key => $value) {
-            switch (strtolower(preg_replace('/[^a-z]/i', '', $key))) {
+            switch (\strtolower(\preg_replace('/[^a-z]/i', '', $key))) {
                 case 'uid':
                 case 'localid':
                     $request = $request->withUid($value);
@@ -299,7 +299,7 @@ trait EditUserTrait
             $disableUser = false;
         }
 
-        $data = array_filter([
+        $data = \array_filter([
             'localId' => $this->uid,
             'disableUser' => $disableUser,
             'displayName' => $this->displayName,

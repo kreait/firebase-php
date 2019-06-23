@@ -103,7 +103,7 @@ class ApiClient
     {
         $batchSize = $batchSize ?? 1000;
 
-        return $this->request('downloadAccount', array_filter([
+        return $this->request('downloadAccount', \array_filter([
             'maxResults' => $batchSize,
             'nextPageToken' => $nextPageToken,
         ]));
@@ -195,7 +195,7 @@ class ApiClient
     {
         $headers = $locale ? ['X-Firebase-Locale' => $locale] : null;
 
-        $data = array_filter([
+        $data = \array_filter([
             'requestType' => 'VERIFY_EMAIL',
             'idToken' => $idToken,
             'continueUrl' => $continueUrl,
@@ -208,7 +208,7 @@ class ApiClient
     {
         $headers = $locale ? ['X-Firebase-Locale' => $locale] : null;
 
-        $data = array_filter([
+        $data = \array_filter([
             'email' => $email,
             'requestType' => 'PASSWORD_RESET',
             'continueUrl' => $continueUrl,
@@ -221,7 +221,7 @@ class ApiClient
     {
         return $this->request('setAccountInfo', [
             'localId' => $uid,
-            'validSince' => time(),
+            'validSince' => \time(),
         ]);
     }
 
@@ -239,7 +239,7 @@ class ApiClient
             $data = (object) []; // Will be '{}' instead of '[]' when JSON encoded
         }
 
-        $options = array_filter([
+        $options = \array_filter([
             'json' => $data,
             'headers' => $headers,
         ]);

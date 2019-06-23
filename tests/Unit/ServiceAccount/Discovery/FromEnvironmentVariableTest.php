@@ -20,12 +20,12 @@ class FromEnvironmentVariableTest extends UnitTestCase
 
     protected function tearDown()
     {
-        putenv($this->envVarName);
+        \putenv($this->envVarName);
     }
 
     public function testItWorks()
     {
-        putenv(sprintf('%s=%s', $this->envVarName, self::$fixturesDir.'/ServiceAccount/valid.json'));
+        \putenv(\sprintf('%s=%s', $this->envVarName, self::$fixturesDir.'/ServiceAccount/valid.json'));
 
         $sut = new FromEnvironmentVariable($this->envVarName);
         $sut();
@@ -43,7 +43,7 @@ class FromEnvironmentVariableTest extends UnitTestCase
 
     public function testItKnowWhenTheVariableHasAValueCausingAnError()
     {
-        putenv(sprintf('%s=%s', $this->envVarName, self::$fixturesDir.'/ServiceAccount/invalid.json'));
+        \putenv(\sprintf('%s=%s', $this->envVarName, self::$fixturesDir.'/ServiceAccount/invalid.json'));
 
         $this->expectException(ServiceAccountDiscoveryFailed::class);
 

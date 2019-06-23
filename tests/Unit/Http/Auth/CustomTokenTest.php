@@ -38,7 +38,7 @@ class CustomTokenTest extends UnitTestCase
         $this->assertArrayHasKey('auth_variable_override', $queryParams);
         $this->assertJson($queryParams['auth_variable_override']);
 
-        $this->assertEquals($expectedQueryParams, json_decode($queryParams['auth_variable_override'], true));
+        $this->assertEquals($expectedQueryParams, \json_decode($queryParams['auth_variable_override'], true));
     }
 
     public function customTokenProvider()

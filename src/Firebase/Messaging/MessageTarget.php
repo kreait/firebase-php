@@ -42,7 +42,7 @@ final class MessageTarget
      */
     public static function with(string $type, string $value): self
     {
-        $targetType = strtolower($type);
+        $targetType = \strtolower($type);
 
         $new = new self();
         $new->type = $targetType;
@@ -58,7 +58,7 @@ final class MessageTarget
                 $new->value = (string) Topic::fromValue($value);
                 break;
             default:
-                throw new InvalidArgumentException('Invalid target type "'.$type.'", valid type: "'.implode(', ', self::TYPES));
+                throw new InvalidArgumentException('Invalid target type "'.$type.'", valid type: "'.\implode(', ', self::TYPES));
         }
 
         return $new;

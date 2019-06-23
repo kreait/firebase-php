@@ -69,7 +69,7 @@ class ApiClient
     {
         /** @var UriInterface $uri */
         $uri = $this->client->getConfig('base_uri');
-        $path = rtrim($uri->getPath(), '/').'/'.ltrim($endpoint, '/');
+        $path = \rtrim($uri->getPath(), '/').'/'.\ltrim($endpoint, '/');
         $uri = $uri->withPath($path);
 
         return new Request($method, $uri);

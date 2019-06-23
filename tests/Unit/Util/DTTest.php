@@ -59,8 +59,8 @@ class DTTest extends TestCase
     public function validVariableValues()
     {
         return [
-            [microtime()],
-            [time()],
+            [\microtime()],
+            [\time()],
             [new DateTime('now', new DateTimeZone('America/Los_Angeles'))],
             [new DateTimeImmutable('now', new DateTimeZone('Asia/Bangkok'))],
         ];

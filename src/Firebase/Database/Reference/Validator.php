@@ -20,11 +20,11 @@ class Validator
      */
     public function validateUri(UriInterface $uri)
     {
-        $path = trim($uri->getPath(), '/');
+        $path = \trim($uri->getPath(), '/');
 
         $this->validateDepth($path);
 
-        foreach (explode('/', $path) as $key) {
+        foreach (\explode('/', $path) as $key) {
             $this->validateKeySize($key);
             $this->validateChars($key);
         }
@@ -32,10 +32,10 @@ class Validator
 
     private function validateDepth(string $path)
     {
-        $depth = substr_count($path, '/') + 1;
+        $depth = \substr_count($path, '/') + 1;
 
         if ($depth > self::MAX_DEPTH) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(\sprintf(
                 'A reference location must not more than %d levels deep, "%s" has %d.',
                 self::MAX_DEPTH, $path, $depth
             ));
@@ -44,8 +44,8 @@ class Validator
 
     private function validateKeySize(string $key)
     {
-        if (($length = mb_strlen($key, '8bit')) > self::MAX_KEY_SIZE) {
-            throw new InvalidArgumentException(sprintf(
+        if (($length = \mb_strlen($key, '8bit')) > self::MAX_KEY_SIZE) {
+            throw new InvalidArgumentException(\sprintf(
                 'A reference\'s child key must not be larger than %d bytes, "%s" has a size of %d bytes.',
                 self::MAX_KEY_SIZE, $key, $length
             ));
@@ -54,12 +54,12 @@ class Validator
 
     private function validateChars($key)
     {
-        $key = rawurldecode($key);
+        $key = \rawurldecode($key);
 
-        $pattern = sprintf('/[%s]/', preg_quote(self::INVALID_KEY_CHARS, '/'));
+        $pattern = \sprintf('/[%s]/', \preg_quote(self::INVALID_KEY_CHARS, '/'));
 
-        if (preg_match($pattern, $key)) {
-            throw new InvalidArgumentException(sprintf(
+        if (\preg_match($pattern, $key)) {
+            throw new InvalidArgumentException(\sprintf(
                 'The child key "%s" contains one of the following invalid characters: "%s"',
                 $key, self::INVALID_KEY_CHARS
             ));

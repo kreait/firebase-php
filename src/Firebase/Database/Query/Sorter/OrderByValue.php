@@ -21,7 +21,7 @@ final class OrderByValue implements Sorter
             return $value;
         }
 
-        asort($value);
+        \asort($value);
 
         return $value;
     }

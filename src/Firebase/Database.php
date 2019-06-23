@@ -80,7 +80,7 @@ class Database
         $uri = $uri instanceof UriInterface ? $uri : new Uri($uri);
 
         if (($givenHost = $uri->getHost()) !== ($dbHost = $this->uri->getHost())) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(\sprintf(
                 'The given URI\'s host "%s" is not covered by the database for the host "%s".',
                 $givenHost, $dbHost
             ));

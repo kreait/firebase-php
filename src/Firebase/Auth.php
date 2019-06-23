@@ -347,10 +347,10 @@ class Auth
         } catch (InvalidToken $e) {
             $verifiedToken = $idToken instanceof Token ? $idToken : (new Parser())->parse($idToken);
 
-            if (stripos($e->getMessage(), 'authentication time') !== false) {
+            if (\stripos($e->getMessage(), 'authentication time') !== false) {
                 $authTime = $verifiedToken->getClaim('auth_time', false);
 
-                if ($authTime && !$allowTimeInconsistencies && $authTime > time()) {
+                if ($authTime && !$allowTimeInconsistencies && $authTime > \time()) {
                     throw $e;
                 }
             } else {
@@ -420,7 +420,7 @@ class Auth
     public function unlinkProvider($uid, $provider): UserRecord
     {
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
-        $provider = array_map(function ($provider) {
+        $provider = \array_map(function ($provider) {
             return $provider instanceof Provider ? $provider : new Provider($provider);
         }, (array) $provider);
 

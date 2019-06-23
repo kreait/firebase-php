@@ -84,8 +84,8 @@ class Snapshot
      */
     public function getChild(string $path): self
     {
-        $path = trim($path, '/');
-        $expression = '"'.str_replace('/', '"."', $path).'"';
+        $path = \trim($path, '/');
+        $expression = '"'.\str_replace('/', '"."', $path).'"';
 
         $childValue = search($expression, $this->value);
 
@@ -117,8 +117,8 @@ class Snapshot
      */
     public function hasChild(string $path): bool
     {
-        $path = trim($path, '/');
-        $expression = '"'.str_replace('/', '"."', $path).'"';
+        $path = \trim($path, '/');
+        $expression = '"'.\str_replace('/', '"."', $path).'"';
 
         return search($expression, $this->value) !== null;
     }

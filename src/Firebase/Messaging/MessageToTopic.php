@@ -50,7 +50,7 @@ class MessageToTopic implements Message
      */
     public static function fromArray(array $data): self
     {
-        if (!array_key_exists('topic', $data)) {
+        if (!\array_key_exists('topic', $data)) {
             throw new InvalidArgumentException('Missing field "topic"');
         }
 
@@ -87,7 +87,7 @@ class MessageToTopic implements Message
 
     public function jsonSerialize()
     {
-        return array_filter([
+        return \array_filter([
             'topic' => $this->topic,
             'data' => $this->data,
             'notification' => $this->notification,

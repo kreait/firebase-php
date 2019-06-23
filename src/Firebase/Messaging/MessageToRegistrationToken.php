@@ -50,7 +50,7 @@ class MessageToRegistrationToken implements Message
      */
     public static function fromArray(array $data): self
     {
-        if (!array_key_exists('token', $data)) {
+        if (!\array_key_exists('token', $data)) {
             throw new InvalidArgumentException('Missing field "token"');
         }
 
@@ -87,7 +87,7 @@ class MessageToRegistrationToken implements Message
 
     public function jsonSerialize()
     {
-        return array_filter([
+        return \array_filter([
             'token' => $this->token,
             'data' => $this->data,
             'notification' => $this->notification,

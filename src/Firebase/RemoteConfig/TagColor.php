@@ -32,13 +32,13 @@ class TagColor
 
     public function __construct(string $value)
     {
-        $value = strtoupper($value);
+        $value = \strtoupper($value);
 
         if (!\in_array($value, self::VALID_COLORS, true)) {
             throw new InvalidArgumentException(
-                sprintf(
+                \sprintf(
                     'Invalid tag color "%s". Supported colors are "%s".',
-                    $value, implode('", "', self::VALID_COLORS)
+                    $value, \implode('", "', self::VALID_COLORS)
             ));
         }
 

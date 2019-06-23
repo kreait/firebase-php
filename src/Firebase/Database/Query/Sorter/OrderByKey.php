@@ -21,7 +21,7 @@ final class OrderByKey implements Sorter
             return $value;
         }
 
-        ksort($value);
+        \ksort($value);
 
         return $value;
     }

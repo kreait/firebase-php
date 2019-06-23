@@ -15,7 +15,7 @@ class RuleSet implements JsonSerializable
 
     private function __construct(array $rules)
     {
-        if (!array_key_exists('rules', $rules)) {
+        if (!\array_key_exists('rules', $rules)) {
             $rules = ['rules' => $rules];
         }
 

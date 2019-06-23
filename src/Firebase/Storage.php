@@ -47,7 +47,7 @@ class Storage
     {
         $name = $name ?: $this->defaultBucket;
 
-        if (!array_key_exists($name, $this->buckets)) {
+        if (!\array_key_exists($name, $this->buckets)) {
             $this->buckets[$name] = $this->storageClient->bucket($name);
         }
 
@@ -58,7 +58,7 @@ class Storage
     {
         $bucket = $this->getBucket($bucketName);
 
-        if (!array_key_exists($name = $bucket->name(), $this->filesystems)) {
+        if (!\array_key_exists($name = $bucket->name(), $this->filesystems)) {
             $adapter = new GoogleStorageAdapter($this->storageClient, $bucket);
             $this->filesystems[$name] = new Filesystem($adapter);
         }

@@ -23,11 +23,11 @@ class CreateUserTest extends IntegrationTestCase
     public function testCreateUser()
     {
         $request = CreateUser::new()
-            ->withUid($uid = bin2hex(random_bytes(5)))
+            ->withUid($uid = \bin2hex(\random_bytes(5)))
             ->withDisplayName($displayName = 'Some display name')
             ->withPhotoUrl($photoUrl = 'https://example.org/photo.jpg')
             ->withClearTextPassword('secret')
-            ->withPhoneNumber($phoneNumber = '+1234567'.random_int(1000, 9999))
+            ->withPhoneNumber($phoneNumber = '+1234567'.\random_int(1000, 9999))
             ->withVerifiedEmail($email = $uid.'@example.org');
 
         $user = $this->auth->createUser($request);
@@ -47,7 +47,7 @@ class CreateUserTest extends IntegrationTestCase
     public function testCreateUserWithoutEmailButMarkTheEmailAsVerified()
     {
         $request = CreateUser::new()
-            ->withUid($uid = bin2hex(random_bytes(5)))
+            ->withUid($uid = \bin2hex(\random_bytes(5)))
             ->markEmailAsVerified();
 
         $user = $this->auth->createUser($request);
@@ -62,7 +62,7 @@ class CreateUserTest extends IntegrationTestCase
     public function testCreateUserWithoutEmailButMarkTheEmailAsUnverified()
     {
         $request = CreateUser::new()
-            ->withUid($uid = bin2hex(random_bytes(5)))
+            ->withUid($uid = \bin2hex(\random_bytes(5)))
             ->markEmailAsUnverified();
 
         $user = $this->auth->createUser($request);

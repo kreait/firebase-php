@@ -16,7 +16,7 @@ final class EndAt implements Filter
 
     public function __construct($value)
     {
-        if (!is_scalar($value)) {
+        if (!\is_scalar($value)) {
             throw new InvalidArgumentException('Only scalar values are allowed for "endAt" queries.');
         }
 

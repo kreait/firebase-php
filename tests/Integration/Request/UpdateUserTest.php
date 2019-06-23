@@ -54,7 +54,7 @@ class UpdateUserTest extends IntegrationTestCase
     {
         $user = $this->auth->createUser(
             CreateUser::new()
-                ->withUid($uid = bin2hex(random_bytes(5)))
+                ->withUid($uid = \bin2hex(\random_bytes(5)))
         );
 
         $this->assertSame(false, $user->emailVerified);
@@ -73,7 +73,7 @@ class UpdateUserTest extends IntegrationTestCase
     {
         $user = $this->auth->createUser(
             CreateUser::new()
-                ->withUid($uid = bin2hex(random_bytes(5)))
+                ->withUid($uid = \bin2hex(\random_bytes(5)))
                 ->withUnverifiedEmail($email = $uid.'@example.org')
         );
 
@@ -92,7 +92,7 @@ class UpdateUserTest extends IntegrationTestCase
     {
         $user = $this->auth->createUser(
             CreateUser::new()
-                ->withUid($uid = bin2hex(random_bytes(5)))
+                ->withUid($uid = \bin2hex(\random_bytes(5)))
                 ->withVerifiedEmail($email = $uid.'@example.org')
         );
 
@@ -110,7 +110,7 @@ class UpdateUserTest extends IntegrationTestCase
     public function testUpdateUserWithCustomAttributes()
     {
         $request = CreateUser::new()
-            ->withUid($uid = bin2hex(random_bytes(5)));
+            ->withUid($uid = \bin2hex(\random_bytes(5)));
 
         $this->auth->createUser($request);
 
@@ -139,9 +139,9 @@ class UpdateUserTest extends IntegrationTestCase
     {
         $user = $this->auth->createUser(
             CreateUser::new()
-                ->withUid($uid = bin2hex(random_bytes(5)))
+                ->withUid($uid = \bin2hex(\random_bytes(5)))
                 ->withVerifiedEmail($email = $uid.'@example.org')
-                ->withPhoneNumber($phoneNumber = '+1234567'.random_int(1000, 9999))
+                ->withPhoneNumber($phoneNumber = '+1234567'.\random_int(1000, 9999))
         );
 
         $this->assertSame($phoneNumber, $user->phoneNumber);

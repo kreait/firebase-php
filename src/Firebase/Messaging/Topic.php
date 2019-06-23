@@ -20,10 +20,10 @@ class Topic implements \JsonSerializable
 
     public static function fromValue(string $value): self
     {
-        $value = trim(preg_replace('@^/topic/@', '', $value), '/');
+        $value = \trim(\preg_replace('@^/topic/@', '', $value), '/');
 
-        if (preg_match('/[^a-zA-Z0-9-_.~]$/', $value)) {
-            throw new InvalidArgument(sprintf('Malformed topic name "%s".', $value));
+        if (\preg_match('/[^a-zA-Z0-9-_.~]$/', $value)) {
+            throw new InvalidArgument(\sprintf('Malformed topic name "%s".', $value));
         }
 
         return new self($value);

@@ -11,9 +11,9 @@ class DT
     public static function toUTCDateTimeImmutable($value): DateTimeImmutable
     {
         $tz = new DateTimeZone('UTC');
-        $now = time();
+        $now = \time();
 
-        if (ctype_digit($value)) {
+        if (\ctype_digit($value)) {
             // Seconds
             if (\strlen($value) === \strlen($now)) {
                 return DateTimeImmutable::createFromFormat('U', $value)
@@ -22,7 +22,7 @@ class DT
 
             // Milliseconds
             if (\strlen($value) === \strlen($now * 1000)) {
-                return DateTimeImmutable::createFromFormat('U.u', sprintf('%F', $value / 1000))
+                return DateTimeImmutable::createFromFormat('U.u', \sprintf('%F', $value / 1000))
                     ->setTimezone($tz);
             }
         }
@@ -33,10 +33,10 @@ class DT
         }
 
         // microtime
-        if (preg_match('@(?P<msec>^0?\.\d+) (?P<sec>\d+)$@', $value, $matches)) {
+        if (\preg_match('@(?P<msec>^0?\.\d+) (?P<sec>\d+)$@', $value, $matches)) {
             $value = (float) $matches['sec'] + (float) $matches['msec'];
 
-            return DateTimeImmutable::createFromFormat('U.u', sprintf('%F', $value))
+            return DateTimeImmutable::createFromFormat('U.u', \sprintf('%F', $value))
                 ->setTimezone($tz);
         }
 

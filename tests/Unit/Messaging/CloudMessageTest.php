@@ -26,10 +26,10 @@ class CloudMessageTest extends TestCase
 
         $changed = $original->withChangedTarget(MessageTarget::TOKEN, 'baz');
 
-        $encodedOriginal = json_decode(json_encode($original), true);
+        $encodedOriginal = \json_decode(\json_encode($original), true);
         $encodedOriginal[MessageTarget::TOKEN] = 'baz';
 
-        $encodedChanged = json_decode(json_encode($changed), true);
+        $encodedChanged = \json_decode(\json_encode($changed), true);
 
         $this->assertSame($encodedOriginal, $encodedChanged);
     }

@@ -48,7 +48,7 @@ class ApiExceptionTest extends UnitTestCase
 
     public function testWrapClientExceptionBeingPermissionDenied()
     {
-        $response = new Response(401, [], json_encode(['error' => 'Permission denied']));
+        $response = new Response(401, [], \json_encode(['error' => 'Permission denied']));
         $source = new ClientException('Foo', $this->createMock(RequestInterface::class), $response);
         $result = ApiException::wrapRequestException($source);
 

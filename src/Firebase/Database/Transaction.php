@@ -77,7 +77,7 @@ class Transaction
     {
         $uri = (string) $reference->getUri();
 
-        if (array_key_exists($uri, $this->etags)) {
+        if (\array_key_exists($uri, $this->etags)) {
             return $this->etags[$uri];
         }
 

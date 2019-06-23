@@ -21,7 +21,7 @@ class OrderByKeyTest extends UnitTestCase
     public function testModifyUri()
     {
         $this->assertContains(
-            'orderBy='.rawurlencode('"$key"'),
+            'orderBy='.\rawurlencode('"$key"'),
             (string) $this->sorter->modifyUri(new Uri('http://domain.tld'))
         );
     }

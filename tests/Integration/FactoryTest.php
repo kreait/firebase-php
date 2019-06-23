@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
 class FactoryTest extends IntegrationTestCase
 {

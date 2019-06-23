@@ -42,7 +42,7 @@ class UidTest extends TestCase
     {
         return [
             [''],
-            [str_repeat('x', 129)],
+            [\str_repeat('x', 129)],
         ];
     }
 }

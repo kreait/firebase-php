@@ -28,7 +28,7 @@ class UserInfo implements \JsonSerializable
 
     public function toArray(): array
     {
-        return array_filter(get_object_vars($this));
+        return \array_filter(\get_object_vars($this));
     }
 
     public function jsonSerialize()

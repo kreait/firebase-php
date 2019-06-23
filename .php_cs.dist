@@ -5,10 +5,12 @@ $finder = PhpCsFixer\Finder::create()
 
 return PhpCsFixer\Config::create()
     ->setUsingCache(true)
+    ->setRiskyAllowed(true)
     ->setRules([
         '@Symfony' => true,
         'array_syntax' => ['syntax' => 'short'],
         'header_comment' => ['header' => ''],
+        'native_function_invocation' => true,
         'ordered_imports' => true,
         'phpdoc_align' => false,
         'phpdoc_order' => true,

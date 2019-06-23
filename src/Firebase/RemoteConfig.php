@@ -66,7 +66,7 @@ class RemoteConfig
 
         $etag = $response->getHeader('ETag');
 
-        return array_shift($etag);
+        return \array_shift($etag);
     }
 
     /**

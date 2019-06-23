@@ -27,19 +27,19 @@ class ServiceAccountTest extends UnitTestCase
         $this->symlinkedJsonFile = self::$fixturesDir.'/ServiceAccount/symlinked.json';
         $this->unreadableJsonFile = self::$fixturesDir.'/ServiceAccount/unreadable.json';
 
-        @chmod($this->unreadableJsonFile, 0000);
+        @\chmod($this->unreadableJsonFile, 0000);
 
         $this->serviceAccount = ServiceAccount::fromValue($this->validJsonFile);
     }
 
     protected function tearDown()
     {
-        @chmod($this->unreadableJsonFile, 0644);
+        @\chmod($this->unreadableJsonFile, 0644);
     }
 
     public function testGetters()
     {
-        $data = json_decode(file_get_contents($this->validJsonFile), true);
+        $data = \json_decode(\file_get_contents($this->validJsonFile), true);
 
         $this->assertSame($data['project_id'], $this->serviceAccount->getProjectId());
         $this->assertSame($data['client_id'], $this->serviceAccount->getClientId());
@@ -51,7 +51,7 @@ class ServiceAccountTest extends UnitTestCase
     {
         $this->assertInstanceOf(
             ServiceAccount::class,
-            ServiceAccount::fromValue(file_get_contents($this->validJsonFile))
+            ServiceAccount::fromValue(\file_get_contents($this->validJsonFile))
         );
     }
 
@@ -97,7 +97,7 @@ class ServiceAccountTest extends UnitTestCase
 
     public function testCreateFromArray()
     {
-        $data = json_decode(file_get_contents($this->validJsonFile), true);
+        $data = \json_decode(\file_get_contents($this->validJsonFile), true);
 
         $this->assertInstanceOf(ServiceAccount::class, ServiceAccount::fromValue($data));
     }

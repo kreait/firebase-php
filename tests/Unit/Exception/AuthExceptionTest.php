@@ -53,7 +53,7 @@ class AuthExceptionTest extends UnitTestCase
     public function testErrors()
     {
         foreach (AuthException::$errors as $identifier => $exceptionClass) {
-            $error = $this->createFirebaseError(sprintf('foo %s bar', $identifier));
+            $error = $this->createFirebaseError(\sprintf('foo %s bar', $identifier));
 
             $e = AuthException::fromRequestException($error);
 
@@ -75,7 +75,7 @@ class AuthExceptionTest extends UnitTestCase
         return new RequestException(
             'Firebase Error Test',
             $this->createMock(RequestInterface::class),
-            new Response(400, [], json_encode([
+            new Response(400, [], \json_encode([
                 'error' => [
                     'errors' => [
                         'domain' => 'global',

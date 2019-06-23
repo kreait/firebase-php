@@ -55,7 +55,7 @@ class AuthTest extends UnitTestCase
     public function testDisallowFutureTokens()
     {
         $tokenProphecy = $this->prophesize(Token::class);
-        $tokenProphecy->getClaim('iat')->willReturn(date('U'));
+        $tokenProphecy->getClaim('iat')->willReturn(\date('U'));
 
         $token = $tokenProphecy->reveal();
 
@@ -71,7 +71,7 @@ class AuthTest extends UnitTestCase
     public function testAllowFutureTokens()
     {
         $tokenProphecy = $this->prophesize(Token::class);
-        $tokenProphecy->getClaim('iat')->willReturn(date('U'));
+        $tokenProphecy->getClaim('iat')->willReturn(\date('U'));
 
         $token = $tokenProphecy->reveal();
 
@@ -87,7 +87,7 @@ class AuthTest extends UnitTestCase
     public function testAllowAuthTimeToBeInTheFuture()
     {
         $tokenProphecy = $this->prophesize(Token::class);
-        $tokenProphecy->getClaim('auth_time', Argument::any())->willReturn(date('U'));
+        $tokenProphecy->getClaim('auth_time', Argument::any())->willReturn(\date('U'));
 
         $token = $tokenProphecy->reveal();
 

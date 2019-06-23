@@ -189,12 +189,12 @@ class Factory
 
     protected function getDatabaseUriFromServiceAccount(ServiceAccount $serviceAccount): UriInterface
     {
-        return uri_for(sprintf(self::$databaseUriPattern, $serviceAccount->getSanitizedProjectId()));
+        return uri_for(\sprintf(self::$databaseUriPattern, $serviceAccount->getSanitizedProjectId()));
     }
 
     protected function getStorageBucketNameFromServiceAccount(ServiceAccount $serviceAccount): string
     {
-        return sprintf(self::$storageBucketNamePattern, $serviceAccount->getSanitizedProjectId());
+        return \sprintf(self::$storageBucketNamePattern, $serviceAccount->getSanitizedProjectId());
     }
 
     protected function createAuth(): Auth
@@ -295,7 +295,7 @@ class Factory
         }
         $stack->push($googleAuthTokenMiddleware);
 
-        $config = array_merge(
+        $config = \array_merge(
             $this->httpClientConfig,
             $config ?? [],
             [

@@ -40,7 +40,7 @@ class AuthTest extends IntegrationTestCase
     public function testCreateUserWithEmailAndPassword()
     {
         /** @noinspection NonSecureUniqidUsageInspection */
-        $email = uniqid('').'@domain.tld';
+        $email = \uniqid('').'@domain.tld';
         $password = 'foobar';
 
         $check = $this->auth->createUserWithEmailAndPassword($email, $password);
@@ -54,7 +54,7 @@ class AuthTest extends IntegrationTestCase
     public function testChangeUserPassword()
     {
         /** @noinspection NonSecureUniqidUsageInspection */
-        $email = uniqid('').'@domain.tld';
+        $email = \uniqid('').'@domain.tld';
 
         $user = $this->auth->createUserWithEmailAndPassword($email, 'old password');
 
@@ -68,7 +68,7 @@ class AuthTest extends IntegrationTestCase
     public function testChangeUserEmail()
     {
         /** @noinspection NonSecureUniqidUsageInspection */
-        $uniqid = uniqid('');
+        $uniqid = \uniqid('');
         $email = "${uniqid}@domain.tld";
         $newEmail = "${uniqid}-changed@domain.tld";
         $password = 'my password';
@@ -87,7 +87,7 @@ class AuthTest extends IntegrationTestCase
     public function testSendEmailVerification()
     {
         /** @noinspection NonSecureUniqidUsageInspection */
-        $uniqid = uniqid();
+        $uniqid = \uniqid();
         $email = "${uniqid}@domain.tld";
         $password = 'my password';
 
@@ -103,7 +103,7 @@ class AuthTest extends IntegrationTestCase
     public function testSendPasswordResetEmail()
     {
         /** @noinspection NonSecureUniqidUsageInspection */
-        $uniqid = uniqid();
+        $uniqid = \uniqid();
         $email = "${uniqid}@domain.tld";
         $password = 'my password';
 
@@ -168,7 +168,7 @@ class AuthTest extends IntegrationTestCase
         $idToken = JSON::decode($idTokenResponse->getBody()->getContents(), true)['idToken'];
 
         $this->auth->verifyIdToken($idToken, $checkIfRevoked = false);
-        sleep(1);
+        \sleep(1);
 
         $this->auth->revokeRefreshTokens($user->uid);
 
@@ -238,7 +238,7 @@ class AuthTest extends IntegrationTestCase
     public function testGetUserByNonExistingEmail()
     {
         $user = $this->auth->createUser([
-            'email' => $email = bin2hex(random_bytes(5)).'@domain.tld',
+            'email' => $email = \bin2hex(\random_bytes(5)).'@domain.tld',
         ]);
         $this->auth->deleteUser($user->uid);
 
@@ -248,7 +248,7 @@ class AuthTest extends IntegrationTestCase
 
     public function testGetUserByPhoneNumber()
     {
-        $phoneNumber = '+1234567'.random_int(1000, 9999);
+        $phoneNumber = '+1234567'.\random_int(1000, 9999);
 
         $user = $this->auth->createUser([
             'phoneNumber' => $phoneNumber,
@@ -263,7 +263,7 @@ class AuthTest extends IntegrationTestCase
 
     public function testGetUserByNonExistingPhoneNumber()
     {
-        $phoneNumber = '+1234567'.random_int(1000, 9999);
+        $phoneNumber = '+1234567'.\random_int(1000, 9999);
 
         $user = $this->auth->createUser([
             'phoneNumber' => $phoneNumber,
@@ -276,7 +276,7 @@ class AuthTest extends IntegrationTestCase
 
     public function testCreateUser()
     {
-        $uid = bin2hex(random_bytes(5));
+        $uid = \bin2hex(\random_bytes(5));
         $userRecord = $this->auth->createUser([
             'uid' => $uid,
             'displayName' => $displayName = 'A display name',
@@ -303,7 +303,7 @@ class AuthTest extends IntegrationTestCase
     public function testVerifyCorrectPassword()
     {
         $user = $this->auth->createUser(CreateUser::new()
-            ->withUid($uid = bin2hex(random_bytes(5)))
+            ->withUid($uid = \bin2hex(\random_bytes(5)))
             ->withEmail($email = $uid.'@domain.tld')
             ->withClearTextPassword($password = 'secret')
         );
@@ -318,7 +318,7 @@ class AuthTest extends IntegrationTestCase
     public function testVerifyIncorrectPassword()
     {
         $user = $this->auth->createUser(CreateUser::new()
-            ->withUid($uid = bin2hex(random_bytes(5)))
+            ->withUid($uid = \bin2hex(\random_bytes(5)))
             ->withEmail($email = $uid.'@domain.tld')
             ->withClearTextPassword('correct')
         );
@@ -372,9 +372,9 @@ class AuthTest extends IntegrationTestCase
     public function testUnlinkProvider()
     {
         $user = $this->auth->createUser([
-            'uid' => $uid = bin2hex(random_bytes(5)),
+            'uid' => $uid = \bin2hex(\random_bytes(5)),
             'verifiedEmail' => $email = $uid.'@domain.tld',
-            'phone' => $phoneNumber = '+1234567'.random_int(1000, 9999),
+            'phone' => $phoneNumber = '+1234567'.\random_int(1000, 9999),
         ]);
 
         $updatedUser = $this->auth->unlinkProvider($user->uid, 'phone');
@@ -388,12 +388,12 @@ class AuthTest extends IntegrationTestCase
     {
         $client = new Client();
         $keys = JSON::decode((string) $client->get(HttpKeyStore::KEYS_URL)->getBody(), true);
-        $keyIds = array_keys($keys);
-        $keyId = reset($keyIds);
+        $keyIds = \array_keys($keys);
+        $keyId = \reset($keyIds);
 
         $token = (new Builder())
-            ->setIssuedAt(strtotime('+1 hour'))
-            ->setExpiration(strtotime('+2 hours'))
+            ->setIssuedAt(\strtotime('+1 hour'))
+            ->setExpiration(\strtotime('+2 hours'))
             ->setHeader('kid', $keyId)
             ->sign(new \Lcobucci\JWT\Signer\Hmac\Sha256(), 'i am evil')
             ->getToken();

@@ -94,11 +94,11 @@ class Parameter implements \JsonSerializable
 
     public static function fromArray(array $data): self
     {
-        reset($data);
-        $parameterData = current($data);
+        \reset($data);
+        $parameterData = \current($data);
 
         $parameter = new self();
-        $parameter->name = key($data);
+        $parameter->name = \key($data);
         $parameter->defaultValue = DefaultValue::fromArray($parameterData['defaultValue'] ?? []);
 
         foreach ((array) ($parameterData['conditionalValues'] ?? []) as $key => $conditionalValueData) {
@@ -119,7 +119,7 @@ class Parameter implements \JsonSerializable
             $conditionalValues[$conditionalValue->conditionName()] = $conditionalValue->jsonSerialize();
         }
 
-        return array_filter([
+        return \array_filter([
             'defaultValue' => $this->defaultValue,
             'conditionalValues' => $conditionalValues,
             'description' => $this->description,

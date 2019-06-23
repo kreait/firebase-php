@@ -15,7 +15,7 @@ class DiscovererTest extends UnitTestCase
         $property = $rc->getProperty('methods');
         $property->setAccessible(true);
 
-        $this->assertGreaterThan(0, count($property->getValue($discoverer)));
+        $this->assertGreaterThan(0, \count($property->getValue($discoverer)));
     }
 
     public function testItDiscoversAServiceAccount()

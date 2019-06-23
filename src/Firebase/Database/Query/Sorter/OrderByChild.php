@@ -19,7 +19,7 @@ final class OrderByChild implements Sorter
 
     public function modifyUri(UriInterface $uri): UriInterface
     {
-        return $this->appendQueryParam($uri, 'orderBy', sprintf('"%s"', $this->childKey));
+        return $this->appendQueryParam($uri, 'orderBy', \sprintf('"%s"', $this->childKey));
     }
 
     public function modifyValue($value)
@@ -28,9 +28,9 @@ final class OrderByChild implements Sorter
             return $value;
         }
 
-        $expression = str_replace('/', '.', $this->childKey);
+        $expression = \str_replace('/', '.', $this->childKey);
 
-        uasort($value, function ($a, $b) use ($expression) {
+        \uasort($value, function ($a, $b) use ($expression) {
             return \JmesPath\search($expression, $a) <=> \JmesPath\search($expression, $b);
         });
 

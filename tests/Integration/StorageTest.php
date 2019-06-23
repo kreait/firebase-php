@@ -54,8 +54,8 @@ class StorageTest extends IntegrationTestCase
     public function testWriteFileOnFilesystem()
     {
         $fs = $this->storage->getFilesystem();
-        $path = 'tests/'.uniqid(__METHOD__, true);
-        $contents = random_bytes(1);
+        $path = 'tests/'.\uniqid(__METHOD__, true);
+        $contents = \random_bytes(1);
 
         $this->assertTrue($fs->put($path, $contents));
         $this->assertSame($contents, $fs->read($path));
