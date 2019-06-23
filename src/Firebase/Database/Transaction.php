@@ -20,6 +20,9 @@ class Transaction
      */
     private $etags;
 
+    /**
+     * @internal
+     */
     public function __construct(ApiClient $apiClient)
     {
         $this->apiClient = $apiClient;

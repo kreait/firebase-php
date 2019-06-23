@@ -25,6 +25,10 @@ class Template implements \JsonSerializable
      */
     private $conditions = [];
 
+    private function __construct()
+    {
+    }
+
     public static function new(): self
     {
         $template = new self();

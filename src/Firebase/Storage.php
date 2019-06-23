@@ -32,6 +32,9 @@ class Storage
      */
     private $filesystems = [];
 
+    /**
+     * @internal
+     */
     public function __construct(StorageClient $storageClient, string $defaultBucket)
     {
         $this->storageClient = $storageClient;

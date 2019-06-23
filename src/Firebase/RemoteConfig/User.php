@@ -25,6 +25,10 @@ final class User
      */
     private $imageUri;
 
+    private function __construct()
+    {
+    }
+
     /**
      * @internal
      */

@@ -35,6 +35,9 @@ class Firebase
      */
     private $messaging;
 
+    /**
+     * @internal
+     */
     public function __construct(Database $database, Auth $auth, Storage $storage, RemoteConfig $remoteConfig, Messaging $messaging)
     {
         $this->database = $database;

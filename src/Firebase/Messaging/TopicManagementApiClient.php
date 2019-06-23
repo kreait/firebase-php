@@ -7,6 +7,9 @@ use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Exception\MessagingException;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * @internal
+ */
 class TopicManagementApiClient
 {
     /**
@@ -14,6 +17,9 @@ class TopicManagementApiClient
      */
     private $client;
 
+    /**
+     * @internal
+     */
     public function __construct(ClientInterface $client)
     {
         $this->client = $client;

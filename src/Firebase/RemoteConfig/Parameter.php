@@ -28,6 +28,10 @@ class Parameter implements \JsonSerializable
      */
     private $conditionalValues = [];
 
+    private function __construct()
+    {
+    }
+
     public static function named(string $name, $defaultValue = null): self
     {
         if ($defaultValue === null) {

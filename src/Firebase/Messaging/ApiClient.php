@@ -12,6 +12,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Throwable;
 
+/**
+ * @internal
+ */
 class ApiClient
 {
     /**
@@ -19,6 +22,9 @@ class ApiClient
      */
     private $client;
 
+    /**
+     * @internal
+     */
     public function __construct(ClientInterface $client)
     {
         $this->client = $client;

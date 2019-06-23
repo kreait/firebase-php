@@ -47,6 +47,9 @@ final class Version
     {
     }
 
+    /**
+     * @internal
+     */
     public static function fromArray(array $data): self
     {
         $new = new self();

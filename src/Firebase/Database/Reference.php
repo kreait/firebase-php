@@ -32,12 +32,7 @@ class Reference
     private $validator;
 
     /**
-     * Creates a new Reference instance for the given URI which is accessed by
-     * the given API client and validated by the Validator (obviously).
-     *
-     * @param UriInterface $uri
-     * @param ApiClient $apiClient
-     * @param Validator|null $validator
+     * @internal
      *
      * @throws InvalidArgumentException if the reference URI is invalid
      */

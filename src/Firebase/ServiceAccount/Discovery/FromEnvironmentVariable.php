@@ -5,6 +5,9 @@ namespace Kreait\Firebase\ServiceAccount\Discovery;
 use Kreait\Firebase\Exception\ServiceAccountDiscoveryFailed;
 use Kreait\Firebase\ServiceAccount;
 
+/**
+ * @internal
+ */
 class FromEnvironmentVariable
 {
     /**
@@ -12,6 +15,9 @@ class FromEnvironmentVariable
      */
     private $name;
 
+    /**
+     * @internal
+     */
     public function __construct(string $name)
     {
         $this->name = $name;

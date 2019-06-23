@@ -6,6 +6,9 @@ use Kreait\Firebase\Exception\ServiceAccountDiscoveryFailed;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\GcpMetadata;
 
+/**
+ * @internal
+ */
 class OnGoogleCloudPlatform
 {
     /**
@@ -13,6 +16,9 @@ class OnGoogleCloudPlatform
      */
     private $metadata;
 
+    /**
+     * @internal
+     */
     public function __construct(GcpMetadata $metadata = null)
     {
         $this->metadata = $metadata ?: new GcpMetadata();

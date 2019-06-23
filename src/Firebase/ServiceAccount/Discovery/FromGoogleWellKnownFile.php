@@ -6,8 +6,18 @@ use Google\Auth\Credentials\ServiceAccountCredentials;
 use Kreait\Firebase\Exception\ServiceAccountDiscoveryFailed;
 use Kreait\Firebase\ServiceAccount;
 
+/**
+ * @internal
+ */
 class FromGoogleWellKnownFile
 {
+    /**
+     * @internal
+     */
+    public function __construct()
+    {
+    }
+
     /**
      * @throws ServiceAccountDiscoveryFailed
      *

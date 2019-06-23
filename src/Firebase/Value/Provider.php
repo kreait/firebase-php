@@ -6,6 +6,9 @@ namespace Kreait\Firebase\Value;
 
 use Kreait\Firebase\Value;
 
+/**
+ * @internal
+ */
 class Provider implements Value, \JsonSerializable
 {
     /**
@@ -13,6 +16,9 @@ class Provider implements Value, \JsonSerializable
      */
     private $value;
 
+    /**
+     * @internal
+     */
     public function __construct(string $value)
     {
         $this->value = $value;

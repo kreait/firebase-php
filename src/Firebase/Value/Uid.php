@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Value;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value;
 
+/**
+ * @internal
+ */
 class Uid implements Value, \JsonSerializable
 {
     /**
@@ -14,6 +17,9 @@ class Uid implements Value, \JsonSerializable
      */
     private $value;
 
+    /**
+     * @internal
+     */
     public function __construct(string $value)
     {
         if ($value === '' || \strlen($value) > 128) {

@@ -10,6 +10,9 @@ use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
+/**
+ * @internal
+ */
 class ApiClient
 {
     /**
@@ -17,6 +20,9 @@ class ApiClient
      */
     protected $httpClient;
 
+    /**
+     * @internal
+     */
     public function __construct(ClientInterface $httpClient)
     {
         $this->httpClient = $httpClient;

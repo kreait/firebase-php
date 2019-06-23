@@ -6,8 +6,14 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
+/**
+ * @internal
+ */
 class DT
 {
+    /**
+     * @internal
+     */
     public static function toUTCDateTimeImmutable($value): DateTimeImmutable
     {
         $tz = new DateTimeZone('UTC');

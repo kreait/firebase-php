@@ -5,6 +5,9 @@ namespace Kreait\Firebase\ServiceAccount\Discovery;
 use Kreait\Firebase\Exception\ServiceAccountDiscoveryFailed;
 use Kreait\Firebase\ServiceAccount;
 
+/**
+ * @internal
+ */
 class FromPath
 {
     /**
@@ -12,6 +15,9 @@ class FromPath
      */
     private $path;
 
+    /**
+     * @internal
+     */
     public function __construct(string $path)
     {
         $this->path = $path;

@@ -41,6 +41,9 @@ class Auth
      */
     private $idTokenVerifier;
 
+    /**
+     * @internal
+     */
     public function __construct(ApiClient $client, TokenGenerator $customToken, IdTokenVerifier $idTokenVerifier)
     {
         $this->client = $client;
@@ -48,6 +51,9 @@ class Auth
         $this->idTokenVerifier = $idTokenVerifier;
     }
 
+    /**
+     * @internal
+     */
     public function getApiClient(): ApiClient
     {
         return $this->client;

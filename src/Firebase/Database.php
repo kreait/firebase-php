@@ -31,11 +31,7 @@ class Database
     private $uri;
 
     /**
-     * Creates a new database instance for the given database URI
-     * which is accessed by the given API client.
-     *
-     * @param UriInterface $uri
-     * @param ApiClient $client
+     * @internal
      */
     public function __construct(UriInterface $uri, ApiClient $client)
     {

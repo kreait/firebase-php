@@ -28,6 +28,10 @@ class FindVersions
      */
     private $limit;
 
+    private function __construct()
+    {
+    }
+
     public static function fromArray(array $params): self
     {
         $new = new self();

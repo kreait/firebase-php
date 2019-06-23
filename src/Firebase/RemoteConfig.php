@@ -27,6 +27,9 @@ class RemoteConfig
      */
     private $client;
 
+    /**
+     * @internal
+     */
     public function __construct(ApiClient $client)
     {
         $this->client = $client;

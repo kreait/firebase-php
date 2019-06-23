@@ -44,11 +44,7 @@ class Query
     private $sorter;
 
     /**
-     * Creates a new Query for the given Reference which is
-     * executed by the given API client.
-     *
-     * @param Reference $reference
-     * @param ApiClient $apiClient
+     * @internal
      */
     public function __construct(Reference $reference, ApiClient $apiClient)
     {

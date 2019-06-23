@@ -31,6 +31,9 @@ class Snapshot
      */
     private $value;
 
+    /**
+     * @internal
+     */
     public function __construct(Reference $reference, $value)
     {
         $this->reference = $reference;

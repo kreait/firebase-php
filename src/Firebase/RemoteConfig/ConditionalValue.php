@@ -16,6 +16,9 @@ class ConditionalValue implements \JsonSerializable
      */
     private $value;
 
+    /**
+     * @internal
+     */
     public function __construct(string $conditionName, string $value)
     {
         $this->conditionName = $conditionName;

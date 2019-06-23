@@ -8,6 +8,9 @@ use Kreait\Firebase\Exception\RemoteConfigException;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * @internal
+ */
 class ApiClient
 {
     /**
@@ -15,6 +18,9 @@ class ApiClient
      */
     private $client;
 
+    /**
+     * @internal
+     */
     public function __construct(ClientInterface $client)
     {
         $this->client = $client;

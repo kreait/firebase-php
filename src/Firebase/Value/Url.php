@@ -9,6 +9,9 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value;
 use Psr\Http\Message\UriInterface;
 
+/**
+ * @internal
+ */
 class Url implements Value, \JsonSerializable
 {
     /**
@@ -16,6 +19,9 @@ class Url implements Value, \JsonSerializable
      */
     private $value;
 
+    /**
+     * @internal
+     */
     public function __construct(UriInterface $value)
     {
         $this->value = $value;
