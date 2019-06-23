@@ -46,7 +46,7 @@ class AuthException extends \RuntimeException implements FirebaseException
             $message = $errors['error']['message'] ?? $message;
         }
 
-        $candidates = \array_filter(\array_map(function ($key, $class) use ($message, $e) {
+        $candidates = \array_filter(\array_map(static function ($key, $class) use ($message, $e) {
             return \stripos($message, $key) !== false
                 ? new $class($e->getCode(), $e)
                 : null;
@@ -54,6 +54,6 @@ class AuthException extends \RuntimeException implements FirebaseException
 
         $fallback = new static($message, $e->getCode(), $e);
 
-        return \array_shift($candidates) ?? $fallback;
+        return \array_shift($candidates) ?: $fallback;
     }
 }

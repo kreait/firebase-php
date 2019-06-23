@@ -426,7 +426,7 @@ class Auth
     public function unlinkProvider($uid, $provider): UserRecord
     {
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
-        $provider = \array_map(function ($provider) {
+        $provider = \array_map(static function ($provider) {
             return $provider instanceof Provider ? $provider : new Provider($provider);
         }, (array) $provider);
 

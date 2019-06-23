@@ -130,14 +130,14 @@ trait EditUserTrait
     }
 
     /**
-     * @param Uid|string $uid
+     * @param Uid|mixed $uid
      *
      * @return static
      */
     public function withUid($uid)
     {
         $request = clone $this;
-        $request->uid = $uid instanceof Uid ? $uid : new Uid($uid);
+        $request->uid = $uid instanceof Uid ? $uid : new Uid((string) $uid);
 
         return $request;
     }
@@ -308,7 +308,7 @@ trait EditUserTrait
             'phoneNumber' => $this->phoneNumber,
             'photoUrl' => $this->photoUrl,
             'password' => $this->clearTextPassword,
-        ], function ($value) {
+        ], static function ($value) {
             return $value !== null;
         });
 

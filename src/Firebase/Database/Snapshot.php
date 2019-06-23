@@ -33,6 +33,9 @@ class Snapshot
 
     /**
      * @internal
+     *
+     * @param Reference $reference
+     * @param mixed $value
      */
     public function __construct(Reference $reference, $value)
     {

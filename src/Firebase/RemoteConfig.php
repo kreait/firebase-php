@@ -65,11 +65,9 @@ class RemoteConfig
     {
         $template = $template instanceof Template ? $template : Template::fromArray($template);
 
-        $response = $this->client->publishTemplate($template);
+        $etag = $this->client->publishTemplate($template)->getHeader('ETag');
 
-        $etag = $response->getHeader('ETag');
-
-        return \array_shift($etag);
+        return \array_shift($etag) ?: '';
     }
 
     /**

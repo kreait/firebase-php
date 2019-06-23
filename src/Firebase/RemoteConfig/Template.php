@@ -41,7 +41,7 @@ class Template implements \JsonSerializable
     public static function fromResponse(ResponseInterface $response): self
     {
         $etagHeader = $response->getHeader('ETag');
-        $etag = \array_shift($etagHeader) ?? '*';
+        $etag = \array_shift($etagHeader) ?: '*';
         $data = JSON::decode((string) $response->getBody(), true);
 
         return self::fromArray($data, $etag);
@@ -68,7 +68,7 @@ class Template implements \JsonSerializable
         return $this->etag;
     }
 
-    public function withParameter(Parameter $parameter)
+    public function withParameter(Parameter $parameter): Template
     {
         $this->assertThatAllConditionalValuesAreValid($parameter);
 
@@ -78,7 +78,7 @@ class Template implements \JsonSerializable
         return $template;
     }
 
-    public function withCondition(Condition $condition)
+    public function withCondition(Condition $condition): Template
     {
         $template = clone $this;
         $template->conditions[$condition->name()] = $condition;

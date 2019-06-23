@@ -30,7 +30,7 @@ class SendReport
         return $report;
     }
 
-    public static function failure(MessageTarget $target, \Throwable $error): self
+    public static function failure(MessageTarget $target, Throwable $error): self
     {
         $report = new self();
         $report->target = $target;

@@ -35,7 +35,7 @@ class Discoverer
     {
         $messages = [];
 
-        $serviceAccount = \array_reduce($this->methods, function ($discovered, callable $method) use (&$messages) {
+        $serviceAccount = \array_reduce($this->methods, static function ($discovered, callable $method) use (&$messages) {
             try {
                 $discovered = $discovered ?? $method();
             } catch (\Throwable $e) {

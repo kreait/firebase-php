@@ -161,6 +161,7 @@ class Factory
         $remoteConfig = $this->createRemoteConfig();
         $messaging = $this->createMessaging();
 
+        /* @noinspection PhpInternalEntityUsedInspection */
         return new Firebase($database, $auth, $storage, $remoteConfig, $messaging);
     }
 
@@ -261,8 +262,7 @@ class Factory
 
     protected function createMessaging(): Messaging
     {
-        $serviceAccount = $this->getServiceAccount();
-        $projectId = $serviceAccount->getSanitizedProjectId();
+        $projectId = $this->getServiceAccount()->getSanitizedProjectId();
 
         $messagingApiClient = new Messaging\ApiClient(
             $this->createApiClient([
@@ -337,9 +337,7 @@ class Factory
 
     protected function createStorage(): Storage
     {
-        $builder = $this->getGoogleCloudServiceBuilder();
-
-        $storageClient = $builder->storage([
+        $storageClient = $this->getGoogleCloudServiceBuilder()->storage([
             'projectId' => $this->getServiceAccount()->getSanitizedProjectId(),
         ]);
 

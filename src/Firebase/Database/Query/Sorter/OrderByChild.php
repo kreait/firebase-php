@@ -2,6 +2,7 @@
 
 namespace Kreait\Firebase\Database\Query\Sorter;
 
+use function JmesPath\search;
 use Kreait\Firebase\Database\Query\ModifierTrait;
 use Kreait\Firebase\Database\Query\Sorter;
 use Psr\Http\Message\UriInterface;
@@ -30,8 +31,8 @@ final class OrderByChild implements Sorter
 
         $expression = \str_replace('/', '.', $this->childKey);
 
-        \uasort($value, function ($a, $b) use ($expression) {
-            return \JmesPath\search($expression, $a) <=> \JmesPath\search($expression, $b);
+        \uasort($value, static function ($a, $b) use ($expression) {
+            return search($expression, $a) <=> search($expression, $b);
         });
 
         return $value;

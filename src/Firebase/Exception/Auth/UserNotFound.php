@@ -16,7 +16,7 @@ class UserNotFound extends AuthException
         parent::__construct($message, $code, $previous);
     }
 
-    public static function withCustomMessage(string $message)
+    public static function withCustomMessage(string $message): self
     {
         $exception = new self();
         $exception->message = $message;

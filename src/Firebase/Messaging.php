@@ -197,7 +197,7 @@ class Messaging
                 throw new InvalidArgument('Empty array of registration tokens.');
             }
 
-            return \array_map(function ($token) {
+            return \array_map(static function ($token) {
                 return $token instanceof RegistrationToken ? $token : RegistrationToken::fromValue($token);
             }, $tokenOrTokens);
         }

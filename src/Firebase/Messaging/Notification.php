@@ -78,7 +78,7 @@ class Notification implements \JsonSerializable
         return \array_filter([
             'title' => $this->title,
             'body' => $this->body,
-        ], function ($value) {
+        ], static function ($value) {
             return $value !== null;
         });
     }

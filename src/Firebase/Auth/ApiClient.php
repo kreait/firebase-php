@@ -119,6 +119,8 @@ class ApiClient
      * @deprecated 4.2.0
      * @see ApiClient::updateUser()
      *
+     * @param mixed $uid
+     *
      * @codeCoverageIgnore
      */
     public function enableUser($uid): ResponseInterface
@@ -133,6 +135,8 @@ class ApiClient
     /**
      * @deprecated 4.2.0
      * @see ApiClient::updateUser()
+     *
+     * @param mixed $uid
      *
      * @codeCoverageIgnore
      */
