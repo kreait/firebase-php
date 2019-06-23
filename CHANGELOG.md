@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.26.0 - 2019-06-23
 
 This is an under-the-hood release and should not affect any existing functionality:
 
