@@ -121,19 +121,8 @@ class Factory
         return $factory;
     }
 
-    /**
-     * @param CacheInterface $cache
-     *
-     * @throws InvalidArgumentException
-     *
-     * @return self
-     */
-    public function withVerifierCache($cache): self
+    public function withVerifierCache(CacheInterface $cache): self
     {
-        if (!is_a($cache, $expected = CacheInterface::class)) {
-            throw new InvalidArgumentException('The verififier cache must be an instance of '.$expected);
-        }
-
         $factory = clone $this;
         $factory->verifierCache = $cache;
 
