@@ -35,7 +35,7 @@
         "friendsofphp/php-cs-fixer": "^2.0",
         "jangregor/phpstan-prophecy": "^0.1.2",
         "phpstan/phpstan-phpunit": "^0.9.2",
-        "phpunit/phpunit": "^6.0|^7.0",
+        "phpunit/phpunit": "^6.0",
         "symfony/var-dumper": "^3.3"
     },
     "autoload": {
