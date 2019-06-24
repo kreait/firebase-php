@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit\Database\Query\Filter;
 
 use GuzzleHttp\Psr7\Uri;
@@ -7,6 +9,9 @@ use Kreait\Firebase\Database\Query\Filter\EndAt;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class EndAtTest extends UnitTestCase
 {
     public function testCreateWithInvalidValue()

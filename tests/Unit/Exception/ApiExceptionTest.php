@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit\Exception;
 
 use GuzzleHttp\Exception\ClientException;
@@ -10,6 +12,9 @@ use Kreait\Firebase\Exception\PermissionDenied;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * @internal
+ */
 class ApiExceptionTest extends UnitTestCase
 {
     public function testWrapClientException()

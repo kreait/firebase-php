@@ -49,9 +49,6 @@ class Parameter implements \JsonSerializable
         return $parameter;
     }
 
-    /**
-     * @return string
-     */
     public function name(): string
     {
         return $this->name;

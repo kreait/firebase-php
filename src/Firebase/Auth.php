@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase;
 
 use Firebase\Auth\Token\Domain\Generator as TokenGenerator;
@@ -110,8 +112,6 @@ class Auth
      * @param array|Request\CreateUser $properties
      *
      * @throws InvalidArgumentException if invalid properties have been provided
-     *
-     * @return UserRecord
      */
     public function createUser($properties): UserRecord
     {
@@ -133,8 +133,6 @@ class Auth
      * @param array|Request\UpdateUser $properties
      *
      * @throws InvalidArgumentException if invalid properties have been provided
-     *
-     * @return UserRecord
      */
     public function updateUser($uid, $properties): UserRecord
     {
@@ -154,8 +152,6 @@ class Auth
     /**
      * @param Email|string $email
      * @param ClearTextPassword|string $password
-     *
-     * @return UserRecord
      */
     public function createUserWithEmailAndPassword($email, $password): UserRecord
     {
@@ -204,8 +200,6 @@ class Auth
     /**
      * @param Uid|string $uid
      * @param ClearTextPassword|string $newPassword
-     *
-     * @return UserRecord
      */
     public function changeUserPassword($uid, $newPassword): UserRecord
     {
@@ -215,8 +209,6 @@ class Auth
     /**
      * @param Uid|string $uid
      * @param Email|string $newEmail
-     *
-     * @return UserRecord
      */
     public function changeUserEmail($uid, $newEmail): UserRecord
     {
@@ -225,8 +217,6 @@ class Auth
 
     /**
      * @param Uid|string $uid
-     *
-     * @return UserRecord
      */
     public function enableUser($uid): UserRecord
     {
@@ -235,8 +225,6 @@ class Auth
 
     /**
      * @param Uid|string $uid
-     *
-     * @return UserRecord
      */
     public function disableUser($uid): UserRecord
     {
@@ -285,7 +273,6 @@ class Auth
 
     /**
      * @param Uid|string $uid
-     * @param array $attributes
      */
     public function setCustomUserAttributes($uid, array $attributes): UserRecord
     {
@@ -303,8 +290,6 @@ class Auth
     /**
      * @param Uid|string $uid
      * @param array $claims
-     *
-     * @return Token
      */
     public function createCustomToken($uid, array $claims = null): Token
     {
@@ -339,8 +324,8 @@ class Auth
      */
     public function verifyIdToken($idToken, bool $checkIfRevoked = null, bool $allowTimeInconsistencies = null): Token
     {
-        $checkIfRevoked = $checkIfRevoked ?? false;
-        $allowTimeInconsistencies = $allowTimeInconsistencies ?? false;
+        $checkIfRevoked = $checkIfRevoked ?: false;
+        $allowTimeInconsistencies = $allowTimeInconsistencies ?: false;
 
         try {
             $verifiedToken = $this->idTokenVerifier->verifyIdToken($idToken);
@@ -353,7 +338,7 @@ class Auth
         } catch (InvalidToken $e) {
             $verifiedToken = $idToken instanceof Token ? $idToken : (new Parser())->parse($idToken);
 
-            if (\stripos($e->getMessage(), 'authentication time') !== false) {
+            if (\mb_stripos($e->getMessage(), 'authentication time') !== false) {
                 $authTime = $verifiedToken->getClaim('auth_time', false);
 
                 if ($authTime && !$allowTimeInconsistencies && $authTime > \time()) {
@@ -430,7 +415,7 @@ class Auth
             return $provider instanceof Provider ? $provider : new Provider($provider);
         }, (array) $provider);
 
-        $response = $this->client->unlinkProvider($uid, $provider);
+        $response = $this->client->unlinkProvider((string) $uid, $provider);
 
         $uid = JSON::decode((string) $response->getBody(), true)['localId'];
 

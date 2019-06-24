@@ -42,8 +42,6 @@ class ConditionalMessage implements Message
      * @deprecated 4.14 Use CloudMessage::fromArray() instead
      * @see CloudMessage::fromArray()
      *
-     * @param array $data
-     *
      * @throws InvalidArgumentException
      *
      * @return ConditionalMessage

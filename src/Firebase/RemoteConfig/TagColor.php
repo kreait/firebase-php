@@ -32,7 +32,7 @@ class TagColor
 
     public function __construct(string $value)
     {
-        $value = \strtoupper($value);
+        $value = \mb_strtoupper($value);
 
         if (!\in_array($value, self::VALID_COLORS, true)) {
             throw new InvalidArgumentException(

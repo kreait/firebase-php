@@ -76,8 +76,6 @@ class RemoteConfig
      * @param VersionNumber|mixed $versionNumber
      *
      * @throws VersionNotFound
-     *
-     * @return Version
      */
     public function getVersion($versionNumber): Version
     {
@@ -100,8 +98,6 @@ class RemoteConfig
      * @param VersionNumber|mixed $versionNumber
      *
      * @throws VersionNotFound
-     *
-     * @return Template
      */
     public function rollbackToVersion($versionNumber): Template
     {

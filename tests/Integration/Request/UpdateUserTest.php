@@ -10,6 +10,9 @@ use Kreait\Firebase\Request\UpdateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Kreait\Firebase\Util\JSON;
 
+/**
+ * @internal
+ */
 class UpdateUserTest extends IntegrationTestCase
 {
     /**
@@ -57,7 +60,7 @@ class UpdateUserTest extends IntegrationTestCase
                 ->withUid($uid = \bin2hex(\random_bytes(5)))
         );
 
-        $this->assertSame(false, $user->emailVerified);
+        $this->assertTrue($user->emailVerified !== true);
         $this->assertNull($user->email);
 
         $updatedUser = $this->auth->updateUser($uid, UpdateUser::new()->markEmailAsVerified());

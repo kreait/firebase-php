@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Util;
 
 use DateTimeImmutable;
@@ -23,13 +25,13 @@ class DT
 
         if (\ctype_digit($value)) {
             // Seconds
-            if (\strlen($value) === \strlen($now)) {
-                return DateTimeImmutable::createFromFormat('U', $value)
+            if (\mb_strlen((string) $value) === \mb_strlen((string) $now)) {
+                return DateTimeImmutable::createFromFormat('U', (string) $value)
                     ->setTimezone($tz);
             }
 
             // Milliseconds
-            if (\strlen($value) === \strlen($now * 1000)) {
+            if (\mb_strlen((string) $value) === \mb_strlen((string) ($now * 1000))) {
                 return DateTimeImmutable::createFromFormat('U.u', \sprintf('%F', $value / 1000))
                     ->setTimezone($tz);
             }

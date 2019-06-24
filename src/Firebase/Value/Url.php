@@ -12,7 +12,7 @@ use Psr\Http\Message\UriInterface;
 /**
  * @internal
  */
-class Url implements Value, \JsonSerializable
+class Url implements \JsonSerializable, Value
 {
     /**
      * @var UriInterface

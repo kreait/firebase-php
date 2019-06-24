@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit\ServiceAccount\Discovery;
 
 use Kreait\Firebase\Exception\ServiceAccountDiscoveryFailed;
 use Kreait\Firebase\ServiceAccount\Discovery\FromEnvironmentVariable;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class FromEnvironmentVariableTest extends UnitTestCase
 {
     /**

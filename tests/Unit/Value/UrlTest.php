@@ -9,6 +9,9 @@ use Kreait\Firebase\Value\Url;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UriInterface;
 
+/**
+ * @internal
+ */
 class UrlTest extends TestCase
 {
     /**

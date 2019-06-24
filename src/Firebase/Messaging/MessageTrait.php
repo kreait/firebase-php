@@ -75,8 +75,6 @@ trait MessageTrait
     }
 
     /**
-     * @param array $data
-     *
      * @return static
      */
     public function withData(array $data)
@@ -88,8 +86,6 @@ trait MessageTrait
     }
 
     /**
-     * @param AndroidConfig $androidConfig
-     *
      * @return static
      */
     public function withAndroidConfig(AndroidConfig $androidConfig)
@@ -101,8 +97,6 @@ trait MessageTrait
     }
 
     /**
-     * @param ApnsConfig $apnsConfig
-     *
      * @return static
      */
     public function withApnsConfig(ApnsConfig $apnsConfig)
@@ -114,8 +108,6 @@ trait MessageTrait
     }
 
     /**
-     * @param WebPushConfig $webPushConfig
-     *
      * @return static
      */
     public function withWebPushConfig(WebPushConfig $webPushConfig)

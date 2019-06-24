@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Auth;
 
 use GuzzleHttp\ClientInterface;
@@ -33,14 +35,10 @@ class ApiClient
     /**
      * Takes a custom token and exchanges it with an ID token.
      *
-     * @param Token $token
-     *
      * @see https://firebase.google.com/docs/reference/rest/auth/#section-verify-custom-token
      *
      * @throws InvalidCustomToken
      * @throws CredentialsMismatch
-     *
-     * @return ResponseInterface
      */
     public function exchangeCustomTokenForIdAndRefreshToken(Token $token): ResponseInterface
     {
@@ -78,11 +76,7 @@ class ApiClient
     /**
      * Returns a user for the given email address.
      *
-     * @param string $email
-     *
      * @throws EmailNotFound
-     *
-     * @return ResponseInterface
      */
     public function getUserByEmail(string $email): ResponseInterface
     {
@@ -93,10 +87,6 @@ class ApiClient
 
     /**
      * Returns a user for the given phone number.
-     *
-     * @param string $phoneNumber
-     *
-     * @return ResponseInterface
      */
     public function getUserByPhoneNumber(string $phoneNumber): ResponseInterface
     {

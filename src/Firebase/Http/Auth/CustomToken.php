@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Http\Auth;
 
 use function GuzzleHttp\Psr7\build_query;

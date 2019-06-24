@@ -8,6 +8,9 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\PhoneNumber;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class PhoneNumberTest extends TestCase
 {
     /**

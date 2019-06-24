@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Tests\Integration\Database;
 use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
 
+/**
+ * @internal
+ */
 class RuleSetTest extends DatabaseTestCase
 {
     public function testDefault()

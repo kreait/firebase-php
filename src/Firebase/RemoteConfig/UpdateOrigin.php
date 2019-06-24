@@ -6,7 +6,7 @@ namespace Kreait\Firebase\RemoteConfig;
 
 use Kreait\Firebase\Value;
 
-final class UpdateOrigin implements Value, \JsonSerializable
+final class UpdateOrigin implements \JsonSerializable, Value
 {
     const UNSPECIFIED = 'REMOTE_CONFIG_UPDATE_ORIGIN_UNSPECIFIED';
     const CONSOLE = 'CONSOLE';

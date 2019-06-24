@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Database;
 
 use function JmesPath\search;
@@ -34,7 +36,6 @@ class Snapshot
     /**
      * @internal
      *
-     * @param Reference $reference
      * @param mixed $value
      */
     public function __construct(Reference $reference, $value)
@@ -64,8 +65,6 @@ class Snapshot
      * Returns the Reference for the location that generated this Snapshot.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#ref
-     *
-     * @return Reference
      */
     public function getReference(): Reference
     {
@@ -81,8 +80,6 @@ class Snapshot
      * Snapshot (that is, a Snapshot whose value is null) is returned.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#child
-     *
-     * @param string $path
      *
      * @throws InvalidArgumentException if the given child path is invalid
      *
@@ -104,8 +101,6 @@ class Snapshot
      * It is a convenience method for `$snapshot->getValue() !== null`.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#exists
-     *
-     * @return bool
      */
     public function exists(): bool
     {
@@ -116,10 +111,6 @@ class Snapshot
      * Returns true if the specified child path has (non-null) data.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#hasChild
-     *
-     * @param string $path
-     *
-     * @return bool
      */
     public function hasChild(string $path): bool
     {
@@ -138,8 +129,6 @@ class Snapshot
      * it is empty (in which case {@see getValue()} will return null).
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#hasChildren
-     *
-     * @return bool
      */
     public function hasChildren(): bool
     {
@@ -150,8 +139,6 @@ class Snapshot
      * Returns the number of child properties of this Snapshot.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#numChildren
-     *
-     * @return int
      */
     public function numChildren(): int
     {

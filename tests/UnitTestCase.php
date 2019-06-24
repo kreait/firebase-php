@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests;
 
 use Kreait\Firebase\ServiceAccount;
@@ -15,19 +17,19 @@ abstract class UnitTestCase extends FirebaseTestCase
 
         $mock->expects($this->any())
             ->method('getProjectId')
-        ->willReturn('project');
+            ->willReturn('project');
 
         $mock->expects($this->any())
             ->method('getClientId')
-        ->willReturn('client');
+            ->willReturn('client');
 
         $mock->expects($this->any())
             ->method('getClientEmail')
-        ->willReturn('client@email.tld');
+            ->willReturn('client@email.tld');
 
         $mock->expects($this->any())
             ->method('getPrivateKey')
-        ->willReturn('-----BEGIN RSA PRIVATE KEY-----
+            ->willReturn('-----BEGIN RSA PRIVATE KEY-----
 MIICXQIBAAKBgQC9fUon04iPvcWzwNwMLkiNQizaid+DaUdyv759FfbRxfj7hTWT
 BwWxdPMRc7bVGcaPSD4ZzTB8EyiwjfZw5FuunHhC90ihtRS3CULrcLOtZdyY0OXo
 dLyg0+r74hI64DAUUm8Q3XE81ZMpZD8ZX12EsjGH6cWkSlW0/q8NsL6llwIDAQAB

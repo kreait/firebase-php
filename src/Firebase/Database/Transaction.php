@@ -41,7 +41,6 @@ class Transaction
     }
 
     /**
-     * @param Reference $reference
      * @param mixed $value
      *
      * @throws ReferenceHasNotBeenSnapshotted

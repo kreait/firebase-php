@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Tests\Unit\RemoteConfig;
 use Kreait\Firebase\RemoteConfig\DefaultValue;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class DefaultValueTest extends TestCase
 {
     public function testCreateInAppDefaultValue()

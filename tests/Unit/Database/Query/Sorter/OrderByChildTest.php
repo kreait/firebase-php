@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit\Database\Query\Sorter;
 
 use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database\Query\Sorter\OrderByChild;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class OrderByChildTest extends UnitTestCase
 {
     /**

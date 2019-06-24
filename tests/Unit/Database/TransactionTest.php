@@ -10,6 +10,9 @@ use Kreait\Firebase\Database\Transaction;
 use Kreait\Firebase\Exception\Database\ReferenceHasNotBeenSnapshotted;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class TransactionTest extends TestCase
 {
     /** @var Transaction */

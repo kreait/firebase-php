@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Tests\Unit\Messaging;
 use Kreait\Firebase\Messaging\WebPushConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class WebPushConfigTest extends UnitTestCase
 {
     /**

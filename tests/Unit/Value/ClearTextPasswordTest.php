@@ -8,6 +8,9 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\ClearTextPassword;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ClearTextPasswordTest extends TestCase
 {
     /**

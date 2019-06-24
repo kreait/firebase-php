@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Tests\Unit\Messaging;
 use Kreait\Firebase\Messaging\ApnsConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class ApnsConfigTest extends UnitTestCase
 {
     /**

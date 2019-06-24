@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\ServiceAccount\Discovery;
 
 use Google\Auth\Credentials\ServiceAccountCredentials;
@@ -20,8 +22,6 @@ class FromGoogleWellKnownFile
 
     /**
      * @throws ServiceAccountDiscoveryFailed
-     *
-     * @return ServiceAccount
      */
     public function __invoke(): ServiceAccount
     {

@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Tests\Unit\Messaging;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class RegistrationTokenTest extends TestCase
 {
     /**

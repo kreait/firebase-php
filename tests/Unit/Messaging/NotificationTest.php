@@ -8,6 +8,9 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class NotificationTest extends UnitTestCase
 {
     public function testCreateEmptyNotification()
@@ -50,7 +53,6 @@ class NotificationTest extends UnitTestCase
     }
 
     /**
-     * @param array $data
      * @dataProvider invalidDataProvider
      */
     public function testCreateWithInvalidData(array $data)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit\Exception;
 
 use Kreait\Firebase\Database\Query;
@@ -8,6 +10,9 @@ use Kreait\Firebase\Exception\QueryException;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * @internal
+ */
 class QueryExceptionTest extends UnitTestCase
 {
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Database;
 
 use Kreait\Firebase\Database\Reference\Validator;
@@ -65,8 +67,6 @@ class Reference
 
     /**
      * Returns the full path to a reference.
-     *
-     * @return string
      */
     public function getPath(): string
     {
@@ -113,8 +113,6 @@ class Reference
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Reference#child
      *
-     * @param string $path
-     *
      * @throws InvalidArgumentException if the path is invalid
      *
      * @return Reference
@@ -134,10 +132,6 @@ class Reference
      * Generates a new Query object ordered by the specified child key.
      *
      * @see Query::orderByChild()
-     *
-     * @param string $path
-     *
-     * @return Query
      */
     public function orderByChild(string $path): Query
     {
@@ -148,8 +142,6 @@ class Reference
      * Generates a new Query object ordered by key.
      *
      * @see Query::orderByKey()
-     *
-     * @return Query
      */
     public function orderByKey(): Query
     {
@@ -160,8 +152,6 @@ class Reference
      * Generates a new Query object ordered by child values.
      *
      * @see Query::orderByValue()
-     *
-     * @return Query
      */
     public function orderByValue(): Query
     {
@@ -172,10 +162,6 @@ class Reference
      * Generates a new Query limited to the first specific number of children.
      *
      * @see Query::limitToFirst()
-     *
-     * @param int $limit
-     *
-     * @return Query
      */
     public function limitToFirst(int $limit): Query
     {
@@ -186,10 +172,6 @@ class Reference
      * Generates a new Query object limited to the last specific number of children.
      *
      * @see Query::limitToLast()
-     *
-     * @param int $limit
-     *
-     * @return Query
      */
     public function limitToLast(int $limit): Query
     {
@@ -202,8 +184,6 @@ class Reference
      * @see Query::startAt()
      *
      * @param int|float|string|bool $value $value
-     *
-     * @return Query
      */
     public function startAt($value): Query
     {
@@ -216,8 +196,6 @@ class Reference
      * @see Query::endAt()
      *
      * @param int|float|string|bool $value
-     *
-     * @return Query
      */
     public function endAt($value): Query
     {
@@ -230,8 +208,6 @@ class Reference
      * @see Query::equalTo()
      *
      * @param int|float|string|bool $value
-     *
-     * @return Query
      */
     public function equalTo($value): Query
     {
@@ -242,8 +218,6 @@ class Reference
      * Creates a Query with shallow results.
      *
      * @see Query::shallow()
-     *
-     * @return Query
      */
     public function shallow(): Query
     {
@@ -310,8 +284,6 @@ class Reference
      * Returns a data snapshot of the current location.
      *
      * @throws ApiException if the API reported an error
-     *
-     * @return Snapshot
      */
     public function getSnapshot(): Snapshot
     {
@@ -383,8 +355,6 @@ class Reference
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Reference#update
      *
-     * @param array $values
-     *
      * @throws ApiException if the API reported an error
      *
      * @return Reference
@@ -408,8 +378,6 @@ class Reference
      * you will get a permission-denied error.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Reference#toString
-     *
-     * @return UriInterface
      */
     public function getUri(): UriInterface
     {
@@ -430,8 +398,6 @@ class Reference
 
     /**
      * Returns a new query for the current reference.
-     *
-     * @return Query
      */
     private function query(): Query
     {

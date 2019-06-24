@@ -22,7 +22,7 @@ class Condition implements \JsonSerializable
     {
         $value = \str_replace('"', "'", $value);
 
-        if ((\substr_count($value, "'") % 2) !== 0) {
+        if ((\mb_substr_count($value, "'") % 2) !== 0) {
             throw new InvalidArgument(\sprintf('The condition "%s" contains an uneven amount of quotes.', $value));
         }
 

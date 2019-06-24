@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit;
 
 use GuzzleHttp\Psr7\Response;
@@ -13,6 +15,9 @@ use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\TopicManagementApiClient;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class MessagingTest extends UnitTestCase
 {
     private $messagingApi;

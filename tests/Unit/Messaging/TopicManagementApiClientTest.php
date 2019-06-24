@@ -12,6 +12,9 @@ use Kreait\Firebase\Messaging\TopicManagementApiClient;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
+/**
+ * @internal
+ */
 class TopicManagementApiClientTest extends TestCase
 {
     private $client;

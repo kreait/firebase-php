@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Database;
 
 use Kreait\Firebase\Database\Query\Filter;
@@ -57,8 +59,6 @@ class Query
      * Returns a Reference to the Query's location.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#ref
-     *
-     * @return Reference
      */
     public function getReference(): Reference
     {
@@ -69,8 +69,6 @@ class Query
      * Returns a data snapshot of the current location.
      *
      * @throws QueryException if an error occurred
-     *
-     * @return Snapshot
      */
     public function getSnapshot(): Snapshot
     {
@@ -155,8 +153,6 @@ class Query
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#limitToFirst
      *
-     * @param int $limit
-     *
      * @return Query
      */
     public function limitToFirst(int $limit): self
@@ -168,8 +164,6 @@ class Query
      * Generates a new Query object limited to the last specific number of children.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#limitToLast
-     *
-     * @param int $limit
      *
      * @return Query
      */
@@ -185,8 +179,6 @@ class Query
      * the same query is an error.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#orderByChild
-     *
-     * @param string $childKey
      *
      * @throws QueryException if the query is already ordered
      *
@@ -262,8 +254,6 @@ class Query
      *
      * Append '.json' to the URL when typed into a browser to download JSON formatted data.
      * If the location is secured (not publicly readable) you will get a permission-denied error.
-     *
-     * @return UriInterface
      */
     public function getUri(): UriInterface
     {

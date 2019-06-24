@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit\Http\Auth;
 
 use GuzzleHttp\Psr7;
 use Kreait\Firebase\Http\Auth\CustomToken;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class CustomTokenTest extends UnitTestCase
 {
     /**
@@ -21,7 +26,6 @@ class CustomTokenTest extends UnitTestCase
     /**
      * @param string $uid
      * @param array $claims
-     * @param array $expectedQueryParams
      *
      * @dataProvider customTokenProvider
      */

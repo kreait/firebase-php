@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit\ServiceAccount;
 
 use Kreait\Firebase\Exception\ServiceAccountDiscoveryFailed;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class DiscovererTest extends UnitTestCase
 {
     public function testItHasDefaultMethods()
@@ -22,7 +27,7 @@ class DiscovererTest extends UnitTestCase
     {
         $serviceAccount = $this->createServiceAccountMock();
 
-        $method = function () use ($serviceAccount) {
+        $method = static function () use ($serviceAccount) {
             return $serviceAccount;
         };
 
@@ -34,7 +39,7 @@ class DiscovererTest extends UnitTestCase
     {
         $exception = new \Exception('Not found');
 
-        $method = function () use ($exception) {
+        $method = static function () use ($exception) {
             throw $exception;
         };
 

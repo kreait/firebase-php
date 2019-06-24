@@ -60,7 +60,6 @@ trait EditUserTrait
 
     /**
      * @param static $request
-     * @param array $properties
      *
      * @throws InvalidArgumentException when invalid properties have been provided
      *
@@ -69,7 +68,7 @@ trait EditUserTrait
     protected static function withEditableProperties($request, array $properties)
     {
         foreach ($properties as $key => $value) {
-            switch (\strtolower(\preg_replace('/[^a-z]/i', '', $key))) {
+            switch (\mb_strtolower(\preg_replace('/[^a-z]/i', '', $key))) {
                 case 'uid':
                 case 'localid':
                     $request = $request->withUid($value);
@@ -184,8 +183,6 @@ trait EditUserTrait
     }
 
     /**
-     * @param string $displayName
-     *
      * @return static
      */
     public function withDisplayName(string $displayName)
@@ -206,8 +203,7 @@ trait EditUserTrait
         if ($phoneNumber) {
             $phoneNumber = $phoneNumber instanceof PhoneNumber
                 ? $phoneNumber
-                : new PhoneNumber($phoneNumber)
-            ;
+                : new PhoneNumber($phoneNumber);
         }
         $request = clone $this;
         $request->phoneNumber = $phoneNumber;
@@ -284,8 +280,7 @@ trait EditUserTrait
         $request = clone $this;
         $request->clearTextPassword = $clearTextPassword instanceof ClearTextPassword
             ? $clearTextPassword
-            : new ClearTextPassword($clearTextPassword)
-        ;
+            : new ClearTextPassword($clearTextPassword);
 
         return $request;
     }

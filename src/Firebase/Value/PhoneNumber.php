@@ -13,7 +13,7 @@ use libphonenumber\PhoneNumberUtil;
 /**
  * @internal
  */
-class PhoneNumber implements Value, \JsonSerializable
+class PhoneNumber implements \JsonSerializable, Value
 {
     /**
      * @var string

@@ -8,6 +8,9 @@ use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\Topic;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class TopicTest extends TestCase
 {
     /**

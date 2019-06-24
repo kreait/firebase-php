@@ -8,6 +8,9 @@ use Kreait\Firebase\RemoteConfig\Condition;
 use Kreait\Firebase\RemoteConfig\ConditionalValue;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class ConditionalValueTest extends UnitTestCase
 {
     public function testCreate()

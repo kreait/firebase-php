@@ -122,7 +122,7 @@ class UserRecord implements \JsonSerializable
         $data['metadata'] = $this->metadata->jsonSerialize();
 
         if ($data['tokensValidAfterTime']) {
-            $data['tokensValidAfterTime'] = $data['tokensValidAfterTime']->format(DATE_ATOM);
+            $data['tokensValidAfterTime'] = $data['tokensValidAfterTime']->format(\DATE_ATOM);
         }
 
         return $data;

@@ -32,8 +32,6 @@ class ConditionalValue implements \JsonSerializable
 
     /**
      * @param string|Condition $condition
-     *
-     * @return self
      */
     public static function basedOn($condition): self
     {

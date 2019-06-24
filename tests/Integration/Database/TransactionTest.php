@@ -10,6 +10,9 @@ use Kreait\Firebase\Exception\ApiException;
 use Kreait\Firebase\Exception\Database\TransactionFailed;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
 
+/**
+ * @internal
+ */
 class TransactionTest extends DatabaseTestCase
 {
     /**

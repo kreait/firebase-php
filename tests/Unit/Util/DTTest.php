@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Util;
 
-use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use Kreait\Firebase\Util\DT;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class DTTest extends TestCase
 {
     /**
@@ -52,7 +54,7 @@ class DTTest extends TestCase
             'milliseconds_2' => ['1234567890.123000', 1234567890123],
             'date_string' => ['345254400.000000', '10.12.1980'],
             'timezoned_1' => ['345328496.789012', '10.12.1980 12:34:56.789012 -08:00'],
-            'timezoned_2' => ['345328496.789012', new DateTime('10.12.1980 12:34:56.789012', new DateTimeZone('America/Los_Angeles'))],
+            'timezoned_2' => ['345328496.789012', new \DateTimeImmutable('10.12.1980 12:34:56.789012', new DateTimeZone('America/Los_Angeles'))],
         ];
     }
 
@@ -61,7 +63,7 @@ class DTTest extends TestCase
         return [
             [\microtime()],
             [\time()],
-            [new DateTime('now', new DateTimeZone('America/Los_Angeles'))],
+            [new \DateTimeImmutable('now', new DateTimeZone('America/Los_Angeles'))],
             [new DateTimeImmutable('now', new DateTimeZone('Asia/Bangkok'))],
         ];
     }

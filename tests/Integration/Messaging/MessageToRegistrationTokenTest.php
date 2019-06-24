@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Tests\Integration\Messaging;
 use Kreait\Firebase\Messaging\MessageToRegistrationToken;
 use Kreait\Firebase\Tests\Integration\MessageTestCase;
 
+/**
+ * @internal
+ */
 class MessageToRegistrationTokenTest extends MessageTestCase
 {
     /**

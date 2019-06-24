@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit;
 
 use Firebase\Auth\Token\Domain\Generator;
@@ -12,6 +14,9 @@ use Kreait\Firebase\Tests\UnitTestCase;
 use Lcobucci\JWT\Token;
 use Prophecy\Argument;
 
+/**
+ * @internal
+ */
 class AuthTest extends UnitTestCase
 {
     private $apiClient;

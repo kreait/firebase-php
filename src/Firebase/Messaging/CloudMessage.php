@@ -44,7 +44,6 @@ class CloudMessage implements Message
 
     /**
      * @param string $type One of "condition", "token", "topic"
-     * @param string $value
      *
      * @throws InvalidArgumentException if the target type or value is invalid
      *
@@ -97,7 +96,6 @@ class CloudMessage implements Message
 
     /**
      * @param string $type One of "condition", "token", "topic"
-     * @param string $value
      *
      * @throws InvalidArgumentException if the target type or value is invalid
      *

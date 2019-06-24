@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Tests\Integration\Messaging;
 use Kreait\Firebase\Messaging\ConditionalMessage;
 use Kreait\Firebase\Tests\Integration\MessageTestCase;
 
+/**
+ * @internal
+ */
 class ConditionalMessageTest extends MessageTestCase
 {
     private $condition;

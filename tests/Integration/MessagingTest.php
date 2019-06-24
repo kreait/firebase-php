@@ -10,6 +10,9 @@ use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
+/**
+ * @internal
+ */
 class MessagingTest extends IntegrationTestCase
 {
     /**
@@ -68,7 +71,7 @@ class MessagingTest extends IntegrationTestCase
 
         $success = $report->successes()->getItems()[0];
         $this->assertSame($valid, $success->target()->value());
-        $this->assertInternalType('string', $success->result());
+        $this->assertInternalType('array', $success->result());
         $this->assertArrayHasKey('name', $success->result() ?: []);
 
         $failure = $report->failures()->getItems()[0];

@@ -9,6 +9,9 @@ use Kreait\Firebase\ServiceAccount\Discovery\OnGoogleCloudPlatform;
 use Kreait\GcpMetadata;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class OnGoogleCloudPlatformTest extends TestCase
 {
     private $metadata;

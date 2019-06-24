@@ -41,8 +41,6 @@ final class UpdateUser implements Request
     }
 
     /**
-     * @param array $properties
-     *
      * @throws InvalidArgumentException when invalid properties have been provided
      */
     public static function withProperties(array $properties): self
@@ -50,7 +48,7 @@ final class UpdateUser implements Request
         $request = self::withEditableProperties(new self(), $properties);
 
         foreach ($properties as $key => $value) {
-            switch (\strtolower(\preg_replace('/[^a-z]/i', '', $key))) {
+            switch (\mb_strtolower(\preg_replace('/[^a-z]/i', '', $key))) {
                 case 'deletephoto':
                 case 'deletephotourl':
                 case 'removephoto':
@@ -65,7 +63,7 @@ final class UpdateUser implements Request
                 case 'deleteattribute':
                 case 'deleteattributes':
                     foreach ((array) $value as $deleteAttribute) {
-                        switch (\strtolower(\preg_replace('/[^a-z]/i', '', $deleteAttribute))) {
+                        switch (\mb_strtolower(\preg_replace('/[^a-z]/i', '', $deleteAttribute))) {
                             case 'displayname':
                                 $request = $request->withRemovedDisplayName();
                                 break;

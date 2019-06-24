@@ -8,6 +8,9 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Util\JSON;
 
+/**
+ * @internal
+ */
 class DatabaseTest extends DatabaseTestCase
 {
     public function testWithSanitizableProjectId()
@@ -15,7 +18,7 @@ class DatabaseTest extends DatabaseTestCase
         $credentialsPath = self::$fixturesDir.'/test_credentials.json';
 
         if (!\file_exists($credentialsPath)) {
-            self::markTestSkipped();
+            $this->markTestSkipped();
         }
 
         $credentials = JSON::decode(\file_get_contents($credentialsPath), true);

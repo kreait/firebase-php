@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Http;
 
 use Psr\Http\Message\RequestInterface;
@@ -8,8 +10,6 @@ class Middleware
 {
     /**
      * Ensures that the ".json" suffix is added to URIs and that the content type is set correctly.
-     *
-     * @return callable
      */
     public static function ensureJsonSuffix(): callable
     {
@@ -18,7 +18,7 @@ class Middleware
                 $uri = $request->getUri();
                 $path = $uri->getPath();
 
-                if (\substr($path, -5) !== '.json') {
+                if (\mb_substr($path, -5) !== '.json') {
                     $uri = $uri->withPath($path.'.json');
                     $request = $request->withUri($uri);
                 }
@@ -30,10 +30,6 @@ class Middleware
 
     /**
      * Adds custom authentication to a request.
-     *
-     * @param Auth $override
-     *
-     * @return callable
      */
     public static function overrideAuth(Auth $override): callable
     {

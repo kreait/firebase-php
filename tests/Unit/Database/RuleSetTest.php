@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Tests\Unit\Database;
 use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class RuleSetTest extends UnitTestCase
 {
     public function testCustomWithMissingRulesKey()

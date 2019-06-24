@@ -44,8 +44,6 @@ class Messaging
 
     /**
      * @param array|CloudMessage|Message|mixed $message
-     *
-     * @return array
      */
     public function send($message): array
     {
@@ -71,8 +69,6 @@ class Messaging
     /**
      * @param array|Message|mixed $message
      * @param string[]|RegistrationToken[] $deviceTokens
-     *
-     * @return MulticastSendReport
      */
     public function sendMulticast($message, array $deviceTokens): MulticastSendReport
     {
@@ -116,8 +112,7 @@ class Messaging
 
                 return MulticastSendReport::withItems($reports);
             })
-            ->wait()
-        ;
+            ->wait();
     }
 
     /**
@@ -125,8 +120,6 @@ class Messaging
      *
      * @throws InvalidArgumentException
      * @throws InvalidMessage
-     *
-     * @return array
      */
     public function validate($message): array
     {
@@ -153,8 +146,6 @@ class Messaging
     /**
      * @param string|Topic $topic
      * @param RegistrationToken|RegistrationToken[]|string|string[] $registrationTokenOrTokens
-     *
-     * @return array
      */
     public function subscribeToTopic($topic, $registrationTokenOrTokens): array
     {
@@ -169,8 +160,6 @@ class Messaging
     /**
      * @param string|Topic $topic
      * @param RegistrationToken|RegistrationToken[]|string|string[] $registrationTokenOrTokens
-     *
-     * @return array
      */
     public function unsubscribeFromTopic($topic, $registrationTokenOrTokens): array
     {

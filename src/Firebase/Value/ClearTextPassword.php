@@ -10,7 +10,7 @@ use Kreait\Firebase\Value;
 /**
  * @internal
  */
-class ClearTextPassword implements Value, \JsonSerializable
+class ClearTextPassword implements \JsonSerializable, Value
 {
     /**
      * @var string
@@ -22,7 +22,7 @@ class ClearTextPassword implements Value, \JsonSerializable
      */
     public function __construct(string $value)
     {
-        if (\strlen($value) < 6) {
+        if (\mb_strlen($value) < 6) {
             throw new InvalidArgumentException('A password must be a string with at least 6 characters.');
         }
 

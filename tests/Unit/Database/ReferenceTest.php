@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit\Database;
 
 use GuzzleHttp\Psr7\Uri;
@@ -12,6 +14,9 @@ use Kreait\Firebase\Exception\OutOfRangeException;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Http\Message\UriInterface;
 
+/**
+ * @internal
+ */
 class ReferenceTest extends UnitTestCase
 {
     /**

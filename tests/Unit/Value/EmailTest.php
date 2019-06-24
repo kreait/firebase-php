@@ -8,6 +8,9 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\Email;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class EmailTest extends TestCase
 {
     /**

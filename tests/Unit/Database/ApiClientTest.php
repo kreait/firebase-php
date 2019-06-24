@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit\Database;
 
 use GuzzleHttp\ClientInterface;
@@ -11,6 +13,9 @@ use Kreait\Firebase\Exception\ApiException;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * @internal
+ */
 class ApiClientTest extends UnitTestCase
 {
     /**

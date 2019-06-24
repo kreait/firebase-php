@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Tests\Unit\Value;
 use Kreait\Firebase\Value\Provider;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ProviderTest extends TestCase
 {
     /**

@@ -8,6 +8,9 @@ use Kreait\Firebase\Auth;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
+/**
+ * @internal
+ */
 class CreateUserTest extends IntegrationTestCase
 {
     /**

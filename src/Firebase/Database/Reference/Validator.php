@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Database\Reference;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
@@ -13,8 +15,6 @@ class Validator
 
     /**
      * Checks the reference URI for invalid properties.
-     *
-     * @param UriInterface $uri
      *
      * @throws InvalidArgumentException on
      */
@@ -32,7 +32,7 @@ class Validator
 
     private function validateDepth(string $path)
     {
-        $depth = \substr_count($path, '/') + 1;
+        $depth = \mb_substr_count($path, '/') + 1;
 
         if ($depth > self::MAX_DEPTH) {
             throw new InvalidArgumentException(\sprintf(

@@ -14,6 +14,9 @@ use Kreait\Firebase\RemoteConfig\TagColor;
 use Kreait\Firebase\RemoteConfig\Template;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
+/**
+ * @internal
+ */
 class RemoteConfigTest extends IntegrationTestCase
 {
     private $template = <<<CONFIG
@@ -105,14 +108,12 @@ CONFIG;
             ->withDefaultValue('Welcome!')
             ->withDescription('This is a welcome message')
             ->withConditionalValue($germanWelcomeMessage)
-            ->withConditionalValue($frenchWelcomeMessage)
-        ;
+            ->withConditionalValue($frenchWelcomeMessage);
 
         $template = Template::new()
             ->withCondition($germanLanguageCondition)
             ->withCondition($frenchLanguageCondition)
-            ->withParameter($welcomeMessageParameter)
-        ;
+            ->withParameter($welcomeMessageParameter);
 
         $this->remoteConfig->publish($template);
 

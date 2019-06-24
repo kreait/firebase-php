@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit\Http;
 
 use GuzzleHttp\Psr7;
@@ -8,6 +10,9 @@ use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * @internal
+ */
 class MiddlewareTest extends UnitTestCase
 {
     /**
@@ -23,7 +28,7 @@ class MiddlewareTest extends UnitTestCase
     protected function setUp()
     {
         $this->request = new Psr7\Request('GET', 'http://domain.tld');
-        $this->handler = function (RequestInterface $request, array $options = []) {
+        $this->handler = static function (RequestInterface $request, array $options = []) {
             return $request;
         };
     }

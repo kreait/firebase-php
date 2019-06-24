@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Tests\Unit\Messaging;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class AndroidConfigTest extends UnitTestCase
 {
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase;
 
 use GuzzleHttp\Psr7\Uri;
@@ -47,8 +49,6 @@ class Database
      * @param string $path
      *
      * @throws InvalidArgumentException
-     *
-     * @return Reference
      */
     public function getReference(string $path = null): Reference
     {
@@ -68,8 +68,6 @@ class Database
      *
      * @throws InvalidArgumentException If the URL is invalid
      * @throws OutOfRangeException If the URL is not in the same domain as the current database
-     *
-     * @return Reference
      */
     public function getReferenceFromUrl($uri): Reference
     {
@@ -89,8 +87,6 @@ class Database
      * Retrieve Firebase Database Rules.
      *
      * @see https://firebase.google.com/docs/database/rest/app-management#retrieving-firebase-realtime-database-rules
-     *
-     * @return RuleSet
      */
     public function getRules(): RuleSet
     {
@@ -103,8 +99,6 @@ class Database
      * Update Firebase Database Rules.
      *
      * @see https://firebase.google.com/docs/database/rest/app-management#updating-firebase-realtime-database-rules
-     *
-     * @param RuleSet $ruleSet
      */
     public function updateRules(RuleSet $ruleSet)
     {

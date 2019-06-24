@@ -21,6 +21,9 @@ use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\MessageToTopic;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ApiClientTest extends TestCase
 {
     /** @var MockHandler */

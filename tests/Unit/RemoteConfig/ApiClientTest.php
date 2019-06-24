@@ -14,6 +14,9 @@ use Kreait\Firebase\Exception\RemoteConfigException;
 use Kreait\Firebase\RemoteConfig\ApiClient;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class ApiClientTest extends UnitTestCase
 {
     private $http;

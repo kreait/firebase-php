@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\RemoteConfig;
 
 use GuzzleHttp\ClientInterface;

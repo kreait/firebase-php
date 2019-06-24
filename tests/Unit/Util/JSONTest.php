@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit\Util;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Kreait\Firebase\Util\JSON;
 
+/**
+ * @internal
+ */
 class JSONTest extends UnitTestCase
 {
     public function testEncodeJson()
@@ -17,7 +22,7 @@ class JSONTest extends UnitTestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        JSON::encode(INF);
+        JSON::encode(\INF);
     }
 
     public function testDecodeJson()
@@ -42,6 +47,6 @@ class JSONTest extends UnitTestCase
     {
         $data = ['foo' => 'bar'];
 
-        $this->assertSame(\json_encode($data, JSON_PRETTY_PRINT), JSON::prettyPrint($data));
+        $this->assertSame(\json_encode($data, \JSON_PRETTY_PRINT), JSON::prettyPrint($data));
     }
 }

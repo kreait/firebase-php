@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Tests\Integration\Messaging;
 use Kreait\Firebase\Messaging\MessageToTopic;
 use Kreait\Firebase\Tests\Integration\MessageTestCase;
 
+/**
+ * @internal
+ */
 class MessageToTopicTest extends MessageTestCase
 {
     private $topic;

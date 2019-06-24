@@ -10,6 +10,9 @@ use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\Notification;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class CloudMessageTest extends TestCase
 {
     public function testInvalidTargetCausesError()

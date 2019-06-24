@@ -10,6 +10,9 @@ use Kreait\Firebase\RemoteConfig\Parameter;
 use Kreait\Firebase\RemoteConfig\Template;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class TemplateTest extends UnitTestCase
 {
     public function testCreateWithInvalidConditionalValue()

@@ -9,10 +9,12 @@ use Kreait\Firebase\Messaging\ConditionalMessage;
 use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class ConditionalMessageTest extends UnitTestCase
 {
     /**
-     * @param array $input
      * @dataProvider validDataProvider
      */
     public function testCreateFromArray(array $input)
@@ -31,8 +33,6 @@ class ConditionalMessageTest extends UnitTestCase
     }
 
     /**
-     * @param array $data
-     *
      * @dataProvider invalidDataProvider
      */
     public function testCreateFromArrayWithInvalidData(array $data)
@@ -49,13 +49,13 @@ class ConditionalMessageTest extends UnitTestCase
         return [
             'with_data' => [$base + [
                 'data' => ['foo' => 'bar'],
-                ]],
+            ]],
             'with_notification' => [$base + [
                 'notification' => [
                     'title' => 'notification title',
                     'body' => 'notification body',
                 ],
-                ]],
+            ]],
             'with_notification_and_data' => [$base + [
                 'data' => ['foo' => 'bar'],
                 'notification' => [

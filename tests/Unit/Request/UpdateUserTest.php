@@ -9,6 +9,9 @@ use Kreait\Firebase\Request\UpdateUser;
 use Kreait\Firebase\Util\JSON;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class UpdateUserTest extends TestCase
 {
     /**

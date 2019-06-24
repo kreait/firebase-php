@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Tests\Integration\Database;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
 
+/**
+ * @internal
+ */
 class ReferenceTest extends DatabaseTestCase
 {
     /** @var Reference */

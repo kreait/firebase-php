@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Exception;
 
 use GuzzleHttp\Exception\RequestException;
@@ -32,11 +34,6 @@ class AuthException extends \RuntimeException implements FirebaseException
         PhoneNumberExists::IDENTIFIER => PhoneNumberExists::class,
     ];
 
-    /**
-     * @param RequestException $e
-     *
-     * @return self
-     */
     public static function fromRequestException(RequestException $e): self
     {
         $message = $e->getMessage();
@@ -47,7 +44,7 @@ class AuthException extends \RuntimeException implements FirebaseException
         }
 
         $candidates = \array_filter(\array_map(static function ($key, $class) use ($message, $e) {
-            return \stripos($message, $key) !== false
+            return \mb_stripos($message, $key) !== false
                 ? new $class($e->getCode(), $e)
                 : null;
         }, \array_keys(self::$errors), self::$errors));

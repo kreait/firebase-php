@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Database;
 
 use GuzzleHttp\ClientInterface;
@@ -39,8 +41,6 @@ class ApiClient
      * @internal This method should only be used in the context of Database transations
      *
      * @param UriInterface|string $uri
-     *
-     * @return array
      */
     public function getWithETag($uri): array
     {
@@ -71,7 +71,6 @@ class ApiClient
      *
      * @param UriInterface|string $uri
      * @param mixed $value
-     * @param string $etag
      *
      * @return mixed
      */
@@ -91,7 +90,6 @@ class ApiClient
      * @internal This method should only be used in the context of Database transations
      *
      * @param UriInterface|string $uri
-     * @param string $etag
      */
     public function removeWithEtag($uri, string $etag)
     {
@@ -105,7 +103,7 @@ class ApiClient
     public function updateRules($uri, RuleSet $ruleSet)
     {
         $response = $this->request('PUT', $uri, [
-            'body' => \json_encode($ruleSet, JSON_PRETTY_PRINT),
+            'body' => \json_encode($ruleSet, \JSON_PRETTY_PRINT),
         ]);
 
         return JSON::decode((string) $response->getBody(), true);

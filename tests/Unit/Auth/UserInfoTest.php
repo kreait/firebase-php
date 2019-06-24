@@ -8,6 +8,9 @@ use Kreait\Firebase\Auth\UserInfo;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Kreait\Firebase\Util\JSON;
 
+/**
+ * @internal
+ */
 class UserInfoTest extends UnitTestCase
 {
     public function testJsonEncode()

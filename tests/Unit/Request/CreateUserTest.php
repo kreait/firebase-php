@@ -9,6 +9,9 @@ use Kreait\Firebase\Value\ClearTextPassword;
 use Kreait\Firebase\Value\PhoneNumber;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class CreateUserTest extends TestCase
 {
     public function testCreateNew()

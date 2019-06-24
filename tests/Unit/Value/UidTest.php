@@ -8,6 +8,9 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\Uid;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class UidTest extends TestCase
 {
     /**

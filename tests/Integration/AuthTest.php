@@ -16,6 +16,9 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
 use Kreait\Firebase\Util\JSON;
 use Lcobucci\JWT\Builder;
 
+/**
+ * @internal
+ */
 class AuthTest extends IntegrationTestCase
 {
     /**
@@ -69,8 +72,8 @@ class AuthTest extends IntegrationTestCase
     {
         /** @noinspection NonSecureUniqidUsageInspection */
         $uniqid = \uniqid('');
-        $email = "${uniqid}@domain.tld";
-        $newEmail = "${uniqid}-changed@domain.tld";
+        $email = "{$uniqid}@domain.tld";
+        $newEmail = "{$uniqid}-changed@domain.tld";
         $password = 'my password';
 
         $user = $this->auth->createUserWithEmailAndPassword($email, $password);
@@ -88,7 +91,7 @@ class AuthTest extends IntegrationTestCase
     {
         /** @noinspection NonSecureUniqidUsageInspection */
         $uniqid = \uniqid();
-        $email = "${uniqid}@domain.tld";
+        $email = "{$uniqid}@domain.tld";
         $password = 'my password';
 
         $user = $this->auth->createUserWithEmailAndPassword($email, $password);
@@ -104,7 +107,7 @@ class AuthTest extends IntegrationTestCase
     {
         /** @noinspection NonSecureUniqidUsageInspection */
         $uniqid = \uniqid();
-        $email = "${uniqid}@domain.tld";
+        $email = "{$uniqid}@domain.tld";
         $password = 'my password';
 
         $user = $this->auth->createUserWithEmailAndPassword($email, $password);

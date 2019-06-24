@@ -9,7 +9,7 @@ use Kreait\Firebase\Value;
 /**
  * @internal
  */
-class Provider implements Value, \JsonSerializable
+class Provider implements \JsonSerializable, Value
 {
     /**
      * @var string

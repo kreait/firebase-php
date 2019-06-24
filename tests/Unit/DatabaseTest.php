@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit;
 
 use GuzzleHttp\Psr7\Uri;
@@ -10,6 +12,9 @@ use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class DatabaseTest extends UnitTestCase
 {
     private $apiClient;

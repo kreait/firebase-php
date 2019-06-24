@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Tests\Integration;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * @internal
+ */
 class FactoryTest extends IntegrationTestCase
 {
     public function testItUsesCustomHttpClientOptions()
@@ -29,8 +32,8 @@ class FactoryTest extends IntegrationTestCase
         $invocations = 0;
 
         $firebase = self::$factory->withHttpClientMiddlewares([
-            function (callable $handler) use (&$invocations) {
-                return function (RequestInterface $request, array $options) use ($handler, &$invocations) {
+            static function (callable $handler) use (&$invocations) {
+                return static function (RequestInterface $request, array $options) use ($handler, &$invocations) {
                     ++$invocations;
 
                     return $handler($request, $options);

@@ -8,6 +8,9 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Messaging\MessageTarget;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class MessageTargetTest extends TestCase
 {
     public function testInvalidTargetCausesError()

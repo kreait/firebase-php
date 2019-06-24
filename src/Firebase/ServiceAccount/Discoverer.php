@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\ServiceAccount;
 
 use Google\Auth\CredentialsLoader;
@@ -46,7 +48,7 @@ class Discoverer
         });
 
         if (!($serviceAccount instanceof ServiceAccount)) {
-            throw new ServiceAccountDiscoveryFailed(\implode(PHP_EOL, $messages));
+            throw new ServiceAccountDiscoveryFailed(\implode(\PHP_EOL, $messages));
         }
 
         return $serviceAccount;

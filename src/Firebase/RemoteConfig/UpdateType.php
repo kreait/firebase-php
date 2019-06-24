@@ -6,7 +6,7 @@ namespace Kreait\Firebase\RemoteConfig;
 
 use Kreait\Firebase\Value;
 
-final class UpdateType implements Value, \JsonSerializable
+final class UpdateType implements \JsonSerializable, Value
 {
     const UNSPECIFIED = 'REMOTE_CONFIG_UPDATE_TYPE_UNSPECIFIED';
     const INCREMENTAL_UPDATE = 'INCREMENTAL_UPDATE';

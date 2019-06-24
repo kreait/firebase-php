@@ -9,6 +9,9 @@ use Kreait\Firebase\RemoteConfig\DefaultValue;
 use Kreait\Firebase\RemoteConfig\Parameter;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class ParameterTest extends UnitTestCase
 {
     public function testCreateWithImplicitDefaultValue()

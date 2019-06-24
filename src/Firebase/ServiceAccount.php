@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
@@ -62,7 +64,7 @@ class ServiceAccount
 
     public function withClientEmail(string $value): self
     {
-        if (!\filter_var($value, FILTER_VALIDATE_EMAIL)) {
+        if (!\filter_var($value, \FILTER_VALIDATE_EMAIL)) {
             throw new InvalidArgumentException(\sprintf('"%s" is not a valid email.', $value));
         }
         $serviceAccount = clone $this;
@@ -178,8 +180,6 @@ class ServiceAccount
     }
 
     /**
-     * @param Discoverer|null $discoverer
-     *
      * @return ServiceAccount
      */
     public static function discover(Discoverer $discoverer = null): self

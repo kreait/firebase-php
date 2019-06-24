@@ -8,6 +8,9 @@ use Kreait\Firebase\RemoteConfig\Condition;
 use Kreait\Firebase\RemoteConfig\TagColor;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+/**
+ * @internal
+ */
 class ConditionTest extends UnitTestCase
 {
     /**

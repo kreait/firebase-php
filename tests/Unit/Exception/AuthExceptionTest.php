@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit\Exception;
 
 use GuzzleHttp\Exception\RequestException;
@@ -9,6 +11,9 @@ use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * @internal
+ */
 class AuthExceptionTest extends UnitTestCase
 {
     /**

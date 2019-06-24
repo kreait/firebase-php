@@ -12,6 +12,9 @@ use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * @internal
+ */
 class ApiClientTest extends UnitTestCase
 {
     private $http;

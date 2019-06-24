@@ -9,6 +9,9 @@ use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Kreait\Firebase\Util\JSON;
 
+/**
+ * @internal
+ */
 class CustomTokenViaGoogleIamTest extends IntegrationTestCase
 {
     /**

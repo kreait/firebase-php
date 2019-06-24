@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Tests\Unit;
 
 use Kreait\Firebase;
@@ -10,6 +12,9 @@ use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\SimpleCache\CacheInterface;
 
+/**
+ * @internal
+ */
 class FactoryTest extends UnitTestCase
 {
     /**
@@ -89,8 +94,8 @@ class FactoryTest extends UnitTestCase
     public function testItAcceptsAdditionalHttpClientMiddlewares()
     {
         $factory = $this->factory->withHttpClientMiddlewares([
-            function () {},
-            'name' => function () {},
+            static function () {},
+            'name' => static function () {},
         ]);
 
         $this->assertInstanceOf(Firebase::class, $factory->create());

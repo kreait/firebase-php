@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Exception;
 
 use GuzzleHttp\Exception\RequestException;
@@ -18,11 +20,6 @@ class RemoteConfigException extends \RuntimeException implements FirebaseExcepti
         ValidationFailed::IDENTIFER => ValidationFailed::class,
     ];
 
-    /**
-     * @param RequestException $e
-     *
-     * @return self
-     */
     public static function fromRequestException(RequestException $e): self
     {
         $message = $e->getMessage();
@@ -33,7 +30,7 @@ class RemoteConfigException extends \RuntimeException implements FirebaseExcepti
         }
 
         $candidates = \array_filter(\array_map(static function ($key, $class) use ($message, $e) {
-            return \stripos($message, $key) !== false
+            return \mb_stripos($message, $key) !== false
                 ? new $class($message, $e->getCode(), $e)
                 : null;
         }, \array_keys(self::$errors), self::$errors));

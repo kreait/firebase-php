@@ -40,8 +40,8 @@ class UserMetaData implements \JsonSerializable
     {
         $data = $this->toArray();
 
-        $data['createdAt'] = $data['createdAt']->format(DATE_ATOM);
-        $data['lastLoginAt'] = $data['lastLoginAt'] ? $data['lastLoginAt']->format(DATE_ATOM) : $data['lastLoginAt'];
+        $data['createdAt'] = $data['createdAt']->format(\DATE_ATOM);
+        $data['lastLoginAt'] = $data['lastLoginAt'] ? $data['lastLoginAt']->format(\DATE_ATOM) : $data['lastLoginAt'];
 
         return $data;
     }

@@ -10,6 +10,9 @@ use Kreait\Firebase\Storage;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use League\Flysystem\FilesystemInterface;
 
+/**
+ * @internal
+ */
 class StorageTest extends IntegrationTestCase
 {
     /**
