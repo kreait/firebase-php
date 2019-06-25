@@ -1,26 +1,16 @@
-dist: xenial
 language: php
 
-matrix:
-  fast_finish: true
-  include:
-    - php: "7.0"
-      env: REPORT=true
-      git:
-        depth: false
-      addons:
-        sonarcloud:
-          organization: "kreait"
-    - php: "7.1"
-    - php: "7.2"
-    - php: "7.3"
+php:
+  - "7.0"
+  - "7.1"
+  - "7.2"
+  - "7.3"
 
-sudo: false
+stages:
+  - Tests
+  - Report
 
-cache:
-  directories:
-    - vendor
-    - $HOME/.composer/cache
+stage: Tests
 
 before_install:
   - |
@@ -33,11 +23,35 @@ install:
   - composer update --no-interaction --no-suggest --no-progress
 
 script:
-  - vendor/bin/phpstan analyse src tests -c phpstan.neon --level=max --no-progress
-  - |
-    if [ "$REPORT" = "true" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
-      vendor/bin/phpunit --testdox --coverage-clover=coverage-report.clover --log-junit=test-report.xml --testdox
-      sonar-scanner
-    else
-      vendor/bin/phpunit --testdox --testsuite unit
-    fi
+  - vendor/bin/phpunit --testsuite=unit
+
+jobs:
+  include:
+    - stage: Tests
+      name: "Static Analysis"
+      php: "7.0"
+      script:
+        - vendor/bin/phpstan analyse src tests -c phpstan.neon --level=max --no-progress
+    - stage: Tests
+      name: "Integration tests"
+      php: "7.0"
+      script:
+        - vendor/bin/phpunit --testsuite=integration
+      if: repo = "kreait/firebase-php" AND type != pull_request
+    - stage: Report
+      name: "Code Coverage"
+      php: "7.0"
+      git:
+        depth: false
+      addons:
+        sonarcloud:
+          organization: "kreait"
+      script:
+        - vendor/bin/phpunit --coverage-clover=coverage-report.clover --log-junit=test-report.xml
+        - sonar-scanner
+      if: repo = "kreait/firebase-php" AND type != pull_request
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
