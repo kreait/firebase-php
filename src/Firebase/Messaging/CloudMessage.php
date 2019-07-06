@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Messaging;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 
 class CloudMessage implements Message
 {
@@ -62,6 +63,13 @@ class CloudMessage implements Message
     public static function fromArray(array $data): self
     {
         $new = new self();
+
+        if (\count(\array_intersect(\array_keys($data), MessageTarget::TYPES)) > 1) {
+            throw new InvalidArgument(
+                'A message can only have one of the following targets: '
+                .\implode(', ', MessageTarget::TYPES)
+            );
+        }
 
         if ($targetValue = $data[MessageTarget::CONDITION] ?? null) {
             $new = $new->withChangedTarget(MessageTarget::CONDITION, (string) $targetValue);

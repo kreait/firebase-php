@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bugfixes
+
+Removed ability to specify multiple message targets (Condition/Token/Topic) at once when creating an FCM message
+through `CloudMessage::fromArray()`. Previously, only the first matched target was used. Now, an `InvalidArgument`
+exception is thrown.
+
 ## 4.26.0 - 2019-06-23
 
 This is an under-the-hood release and should not affect any existing functionality:
