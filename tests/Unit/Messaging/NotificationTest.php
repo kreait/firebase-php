@@ -19,25 +19,29 @@ class NotificationTest extends UnitTestCase
 
         $this->assertNull($notification->title());
         $this->assertNull($notification->body());
+        $this->assertNull($notification->imageUrl());
         $this->assertEmpty($notification->jsonSerialize());
     }
 
     public function testCreateWithEmptyStrings()
     {
-        $notification = Notification::create('', '');
+        $notification = Notification::create('', '', '');
         $this->assertSame('', $notification->title());
         $this->assertSame('', $notification->body());
-        $this->assertEquals(['title' => '', 'body' => ''], $notification->jsonSerialize());
+        $this->assertSame('', $notification->imageUrl());
+        $this->assertEquals(['title' => '', 'body' => '', 'image' => ''], $notification->jsonSerialize());
     }
 
     public function testCreateWithValidFields()
     {
         $notification = Notification::create()
             ->withTitle($title = 'My Title')
-            ->withBody($body = 'My Body');
+            ->withBody($body = 'My Body')
+            ->withImageUrl($imageUrl = 'https://domain.tld/image.ext');
 
         $this->assertSame($title, $notification->title());
         $this->assertSame($body, $notification->body());
+        $this->assertSame($imageUrl, $notification->imageUrl());
     }
 
     public function testCreateFromValidArray()
@@ -45,10 +49,12 @@ class NotificationTest extends UnitTestCase
         $notification = Notification::fromArray($array = [
             'title' => $title = 'My Title',
             'body' => $body = 'My Body',
+            'image' => $imageUrl = 'https://domain.tld/image.ext',
         ]);
 
         $this->assertSame($title, $notification->title());
         $this->assertSame($body, $notification->body());
+        $this->assertSame($imageUrl, $notification->imageUrl());
         $this->assertEquals($array, $notification->jsonSerialize());
     }
 
@@ -66,6 +72,7 @@ class NotificationTest extends UnitTestCase
         return [
             'non_string_title' => [['title' => 1]],
             'non_string_body' => [['body' => 1]],
+            'non_string_image_url' => [['image' => 1]],
         ];
     }
 }

@@ -8,25 +8,25 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 
 class Notification implements \JsonSerializable
 {
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $title;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $body;
 
-    private function __construct(string $title = null, string $body = null)
+    /** @var string|null */
+    private $imageUrl;
+
+    private function __construct(string $title = null, string $body = null, string $imageUrl = null)
     {
         $this->title = $title;
         $this->body = $body;
+        $this->imageUrl = $imageUrl;
     }
 
-    public static function create(string $title = null, string $body = null): self
+    public static function create(string $title = null, string $body = null, string $imageUrl = null): self
     {
-        return new self($title, $body);
+        return new self($title, $body, $imageUrl);
     }
 
     public static function fromArray(array $data): self
@@ -34,7 +34,8 @@ class Notification implements \JsonSerializable
         try {
             return new self(
                 $data['title'] ?? null,
-                $data['body'] ?? null
+                $data['body'] ?? null,
+                $data['image'] ?? null
             );
         } catch (\Throwable $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
@@ -57,6 +58,14 @@ class Notification implements \JsonSerializable
         return $notification;
     }
 
+    public function withImageUrl(string $imageUrl): self
+    {
+        $notification = clone $this;
+        $notification->imageUrl = $imageUrl;
+
+        return $notification;
+    }
+
     /**
      * @return string|null
      */
@@ -73,11 +82,20 @@ class Notification implements \JsonSerializable
         return $this->body;
     }
 
+    /**
+     * @return string|null
+     */
+    public function imageUrl()
+    {
+        return $this->imageUrl;
+    }
+
     public function jsonSerialize()
     {
         return \array_filter([
             'title' => $this->title,
             'body' => $this->body,
+            'image' => $this->imageUrl,
         ], static function ($value) {
             return $value !== null;
         });

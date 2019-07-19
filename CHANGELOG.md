@@ -2,11 +2,15 @@
 
 ## Unreleased
 
-### Bugfixes
+### Added
 
-Removed ability to specify multiple message targets (Condition/Token/Topic) at once when creating an FCM message
-through `CloudMessage::fromArray()`. Previously, only the first matched target was used. Now, an `InvalidArgument`
-exception is thrown.
+- Notifications can now be provided with an image URL ((Documentation)[https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#adding-a-notification])
+
+### Changed
+
+- Removed ability to specify multiple message targets (Condition/Token/Topic) at once when creating an FCM message
+  through `CloudMessage::fromArray()`. Previously, only the first matched target was used. Now, an `InvalidArgument`
+  exception is thrown.
 
 ## 4.26.0 - 2019-06-23
 

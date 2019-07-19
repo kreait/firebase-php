@@ -183,17 +183,20 @@ are both optional.
 
     $title = 'My Notification Title';
     $body = 'My Notification Body';
+    $imageUrl = 'http://lorempixel.com/400/200/';
 
     $notification = Notification::fromArray([
         'title' => $title,
-        'body' => $body
+        'body' => $body,
+        'image => $imageUrl,
     ]);
 
     $notification = Notification::create($title, $body);
 
     $notification = Notification::create()
         ->withTitle($title)
-        ->withBody($body);
+        ->withBody($body)
+        ->withImageUrl($imageUrl);
 
 Once you have created a message with one of the methods described below,
 you can attach the notification to it:

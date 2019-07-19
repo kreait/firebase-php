@@ -50,6 +50,7 @@ abstract class MessageTestCase extends IntegrationTestCase
             'notification' => [
                 'title' => 'Notification title',
                 'body' => 'Notification body',
+                'image' => 'http://lorempixel.com/400/200/',
             ],
             'data' => [
                 'key_1' => 'Value 1',
