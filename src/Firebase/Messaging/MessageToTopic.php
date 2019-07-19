@@ -74,6 +74,10 @@ class MessageToTopic implements Message
             $message = $message->withWebPushConfig(WebPushConfig::fromArray($data['webpush']));
         }
 
+        if ($data['fcm_options'] ?? null) {
+            $message = $message->withFcmOptions(FcmOptions::fromArray($data['fcm_options']));
+        }
+
         return $message;
     }
 
@@ -92,6 +96,7 @@ class MessageToTopic implements Message
             'android' => $this->androidConfig,
             'apns' => $this->apnsConfig,
             'webpush' => $this->webPushConfig,
+            'fcm_options' => $this->fcmOptions,
         ]);
     }
 }

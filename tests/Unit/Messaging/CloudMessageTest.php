@@ -7,6 +7,7 @@ namespace Kreait\Firebase\Tests\Unit\Messaging;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\FcmOptions;
 use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\Notification;
 use PHPUnit\Framework\TestCase;
@@ -41,6 +42,18 @@ class CloudMessageTest extends TestCase
     public function testAnEmptyMessageHasNotTarget()
     {
         $this->assertFalse(CloudMessage::new()->hasTarget());
+    }
+
+    public function testWithChangedFcmOptions()
+    {
+        $options = FcmOptions::create()->withAnalyticsLabel($label = 'my-label');
+        $message = CloudMessage::new()->withFcmOptions($options);
+
+        $messageData = \json_decode(\json_encode($message), true);
+
+        $this->assertArrayHasKey('fcm_options', $messageData);
+        $this->assertArrayHasKey('analytics_label', $messageData['fcm_options']);
+        $this->assertSame($label, $messageData['fcm_options']['analytics_label']);
     }
 
     /**

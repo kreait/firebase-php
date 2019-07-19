@@ -74,12 +74,15 @@ class ConditionalMessage implements Message
             $message = $message->withWebPushConfig(WebPushConfig::fromArray($data['webpush']));
         }
 
+        if ($data['fcm_options'] ?? null) {
+            $message = $message->withFcmOptions(FcmOptions::fromArray($data['fcm_options']));
+        }
+
         return $message;
     }
 
     public function condition(): string
     {
-        // TODO Change this to return a Condition instance in 5.0
         return (string) $this->condition;
     }
 
@@ -92,6 +95,7 @@ class ConditionalMessage implements Message
             'android' => $this->androidConfig,
             'apns' => $this->apnsConfig,
             'webpush' => $this->webPushConfig,
+            'fcm_options' => $this->fcmOptions,
         ]);
     }
 }

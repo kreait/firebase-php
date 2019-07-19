@@ -337,6 +337,26 @@ You can find the full WebPush configuration reference in the official documentat
 
     $message = $message->withWebPushConfig($config);
 
+***************************************
+Adding platform independent FCM options
+***************************************
+
+You can find the full FCM Options configuration reference in the official documentation:
+`REST Resource: projects.messages.fcm_options <https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#fcmoptions>`_
+
+.. code-block:: php
+
+    use Kreait\Firebase\Messaging\FcmOptions;
+
+    $fcmOptions = FcmOptions::create()
+        ->withAnalyticsLabel('my-analytics-label');
+    // or
+    $fcmOptions = [
+        'analytics_label' => 'my-analytics-label';
+    ];
+
+    $message = $message->withFcmOptions($fcmOptions);
+
 **************************************
 Sending a fully configured raw message
 **************************************
@@ -349,10 +369,8 @@ Sending a fully configured raw message
     use Kreait\Firebase\Messaging\RawMessageFromArray;
 
     $message = new RawMessageFromArray([
-            'topic' => 'my-topic',
-            // 'condition' => "'TopicA' in topics && ('TopicB' in topics || 'TopicC' in topics)",
-            // 'token' => '...',
             'notification' => [
+                // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#notification
                 'title' => 'Notification title',
                 'body' => 'Notification body',
                 'image' => 'http://lorempixel.com/400/200/',
@@ -362,6 +380,7 @@ Sending a fully configured raw message
                 'key_2' => 'Value 2',
             ],
             'android' => [
+                // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidconfig
                 'ttl' => '3600s',
                 'priority' => 'normal',
                 'notification' => [
@@ -372,6 +391,7 @@ Sending a fully configured raw message
                 ],
             ],
             'apns' => [
+                // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#apnsconfig
                 'headers' => [
                     'apns-priority' => '10',
                 ],
@@ -386,15 +406,17 @@ Sending a fully configured raw message
                 ],
             ],
             'webpush' => [
+                // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
                 'notification' => [
                     'title' => '$GOOG up 1.43% on the day',
                     'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
                     'icon' => 'https://my-server/icon.png',
                 ],
-                'fcm_options' => [
-                    'link' => 'https://my-server/some-page',
-                ],
             ],
+            'fcm_options' => [
+                // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#fcmoptions
+                'analytics_label' => 'some-analytics-label'
+            ]
         ]);
 
     $firebase->getMessaging()->send($message);
