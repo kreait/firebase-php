@@ -8,6 +8,7 @@ use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\RawMessageFromArray;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 /**
@@ -31,6 +32,16 @@ class MessagingTest extends IntegrationTestCase
         $message['condition'] = "'dogs' in topics || 'cats' in topics";
 
         $result = $this->messaging->send($message);
+
+        $this->assertArrayHasKey('name', $result);
+    }
+
+    public function testSendRawMessage()
+    {
+        $data = MessageTestCase::createFullMessageData();
+        $data['condition'] = "'dogs' in topics || 'cats' in topics";
+
+        $result = $this->messaging->send(new RawMessageFromArray($data));
 
         $this->assertArrayHasKey('name', $result);
     }

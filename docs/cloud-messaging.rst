@@ -37,6 +37,14 @@ component with ``$firebase->getMessaging()``.
 A message must be an object implementing ``Kreait\Firebase\Messaging\Message`` or an array that can
 be parsed to a ``Kreait\Firebase\Messaging\CloudMessage``.
 
+You can use ``Kreait\Firebase\Messaging\RawMessageFromArray`` to create a message without the SDK checking it
+for validity before sending it. This gives you full control over the sent message, but also means that you
+have to send/validate a message in order to know if it's valid or not.
+
+.. note::
+    If you notice that a field is not supported by the SDK yet, please open an issue on the issue tracker, so that others
+    can benefit from it as well.
+
 ***********************
 Send messages to topics
 ***********************
@@ -338,15 +346,16 @@ Sending a fully configured raw message
 
 .. code-block:: php
 
-    $firebase
-        ->getMessaging()
-        ->send([
+    use Kreait\Firebase\Messaging\RawMessageFromArray;
+
+    $message = new RawMessageFromArray([
             'topic' => 'my-topic',
             // 'condition' => "'TopicA' in topics && ('TopicB' in topics || 'TopicC' in topics)",
             // 'token' => '...',
             'notification' => [
                 'title' => 'Notification title',
                 'body' => 'Notification body',
+                'image' => 'http://lorempixel.com/400/200/',
             ],
             'data' => [
                 'key_1' => 'Value 1',
@@ -386,7 +395,9 @@ Sending a fully configured raw message
                     'link' => 'https://my-server/some-page',
                 ],
             ],
-        ])
+        ]);
+
+    $firebase->getMessaging()->send($message);
 
 *******************
 Validating messages

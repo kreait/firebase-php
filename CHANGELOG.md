@@ -4,13 +4,18 @@
 
 ### Added
 
-- Notifications can now be provided with an image URL ((Documentation)[https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#adding-a-notification])
+- Notifications can now be provided with an image URL
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#adding-a-notification))
+- You can use `Kreait\Firebase\Messaging\RawMessageFromArray(array $data)` to create a message without the SDK 
+  checking it for validity before sending it. This gives you full control over the sent message, but also 
+  means that you have to send/validate a message in order to know if it's valid or not.
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#sending-a-fully-configured-raw-message))
 
 ### Changed
 
 - Removed ability to specify multiple message targets (Condition/Token/Topic) at once when creating an FCM message
-  through `CloudMessage::fromArray()`. Previously, only the first matched target was used. Now, an `InvalidArgument`
-  exception is thrown.
+  through `CloudMessage::fromArray()`. Previously, only the first matched target was used. 
+  Now, an `InvalidArgument` exception is thrown.
 
 ## 4.26.0 - 2019-06-23
 
