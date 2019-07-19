@@ -24,26 +24,24 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
   - [Discord Chat](https://discord.gg/nbgVfty)
   - [Stack Overflow](https://stackoverflow.com/questions/tagged/firebase+php)
 
-## Feature matrix
+## Components
 
-| Feature | PHP | Node.js | Java | Python | Go |
-| --- | :---: | :---: | :---: | :---: | :---: |
-| [Custom Token Minting](https://firebase.google.com/docs/auth/admin/create-custom-tokens) | ✅ | ✅ | ✅ | ✅ | ✅ |
-| [ID Token Verification](https://firebase.google.com/docs/auth/admin/verify-id-tokens)	| ✅ | ✅ | ✅ | ✅ | ✅ |
-| [Realtime Database API](https://firebase.google.com/docs/database/admin/start) | ✅* | ✅ | ✅ | ✅* | ✅ |
-| [User Management API](https://firebase.google.com/docs/auth/admin/manage-users) | ✅ | ✅ | ✅ | ✅ | ✅ |
-| [Remote Config](https://firebase.google.com/docs/remote-config/) | ✅ | | | | |
-| [Cloud Messaging API](https://firebase.google.com/docs/cloud-messaging/admin/) | ✅ | ✅ | ✅ | ✅ | ✅ |				
-| [Cloud Storage API](https://firebase.google.com/docs/storage/admin/start) | ✅ | ✅ | ✅ | ✅ | ✅ |
-| [Cloud Firestore API](https://firebase.google.com/docs/firestore/) | # | ✅ | ✅ | ✅ | ✅ |
+| Feature | |
+| --- | :---: |
+| [Custom Token Minting](https://firebase.google.com/docs/auth/admin/create-custom-tokens) | ✅ |
+| [ID Token Verification](https://firebase.google.com/docs/auth/admin/verify-id-tokens)	| ✅ |
+| [Realtime Database](https://firebase.google.com/docs/database/admin/start) | ✅ |
+| [User Management](https://firebase.google.com/docs/auth/admin/manage-users) | ✅ |
+| [Remote Config](https://firebase.google.com/docs/remote-config/) | ✅ |
+| [Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/admin/) | ✅ |				
+| [Cloud Storage](https://firebase.google.com/docs/storage/admin/start) | ✅ |
 
-> \* The Realtime Database API currently does not support realtime event listeners.
+An integration with [google/cloud-firestore](https://github.com/GoogleCloudPlatform/google-cloud-php-firestore) 
+is currently not available to avoid the need to install the `grpc` PHP extension when using this SDK.
 
-> \# An integration with [google/cloud-firestore](https://github.com/GoogleCloudPlatform/google-cloud-php-firestore) 
-  is currently not available to avoid the need to install the `grpc` PHP extension when using this SDK.
-> The following projects provide support for Firestore without the need to install the `grpc` PHP extension:
-> - [ahsankhatri/firestore-php](https://github.com/ahsankhatri/firestore-php)
-> - [morrislaptop/firestore-php](https://github.com/morrislaptop/firestore-php)
+The following projects provide support for Firestore without the need to install the `grpc` PHP extension:
+- [ahsankhatri/firestore-php](https://github.com/ahsankhatri/firestore-php)
+- [morrislaptop/firestore-php](https://github.com/morrislaptop/firestore-php)
 
 ## Versions
 
