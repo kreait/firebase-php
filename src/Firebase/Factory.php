@@ -272,7 +272,7 @@ class Factory
             ])
         );
 
-        $topicManagementApiClient = new Messaging\TopicManagementApiClient(
+        $appInstanceApiClient = new Messaging\AppInstanceApiClient(
             $this->createApiClient([
                 'base_uri' => 'https://iid.googleapis.com',
                 'headers' => [
@@ -281,7 +281,7 @@ class Factory
             ])
         );
 
-        return new Messaging($messagingApiClient, $topicManagementApiClient);
+        return new Messaging($messagingApiClient, $appInstanceApiClient);
     }
 
     public function createApiClient(array $config = null, array $additionalScopes = null): Client

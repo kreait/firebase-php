@@ -11,8 +11,8 @@ use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\ApiClient;
+use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\TopicManagementApiClient;
 use Kreait\Firebase\Tests\UnitTestCase;
 
 /**
@@ -21,7 +21,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 class MessagingTest extends UnitTestCase
 {
     private $messagingApi;
-    private $topicManagementApi;
+    private $appInstanceApi;
 
     /** @var Messaging */
     private $messaging;
@@ -29,9 +29,9 @@ class MessagingTest extends UnitTestCase
     protected function setUp()
     {
         $this->messagingApi = $this->createMock(ApiClient::class);
-        $this->topicManagementApi = $this->createMock(TopicManagementApiClient::class);
+        $this->appInstanceApi = $this->createMock(AppInstanceApiClient::class);
 
-        $this->messaging = new Messaging($this->messagingApi, $this->topicManagementApi);
+        $this->messaging = new Messaging($this->messagingApi, $this->appInstanceApi);
     }
 
     public function testSendInvalidObject()
@@ -51,7 +51,7 @@ class MessagingTest extends UnitTestCase
      */
     public function testSubscribeToTopicWithValidTokens($tokens)
     {
-        $this->topicManagementApi->expects($this->once())
+        $this->appInstanceApi->expects($this->once())
             ->method($this->anything())
             ->willReturn(new Response(200, [], '[]'));
 
@@ -73,7 +73,7 @@ class MessagingTest extends UnitTestCase
      */
     public function testUnsubscribeFromTopicWithValidTokens($tokens)
     {
-        $this->topicManagementApi->expects($this->once())
+        $this->appInstanceApi->expects($this->once())
             ->method($this->anything())
             ->willReturn(new Response(200, [], '[]'));
 

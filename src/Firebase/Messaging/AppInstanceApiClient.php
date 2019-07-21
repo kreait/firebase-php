@@ -12,7 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * @internal
  */
-class TopicManagementApiClient
+class AppInstanceApiClient
 {
     /**
      * @var ClientInterface

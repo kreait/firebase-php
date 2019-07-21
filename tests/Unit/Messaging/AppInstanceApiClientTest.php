@@ -8,24 +8,24 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use Kreait\Firebase\Exception\MessagingException;
-use Kreait\Firebase\Messaging\TopicManagementApiClient;
+use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
 /**
  * @internal
  */
-class TopicManagementApiClientTest extends TestCase
+class AppInstanceApiClientTest extends TestCase
 {
     private $client;
 
-    /** @var TopicManagementApiClient */
+    /** @var AppInstanceApiClient */
     private $sut;
 
     protected function setUp()
     {
         $this->client = $this->prophesize(ClientInterface::class);
-        $this->sut = new TopicManagementApiClient($this->client->reveal());
+        $this->sut = new AppInstanceApiClient($this->client->reveal());
     }
 
     public function testRequestExceptionIsConvertedToMessagingException()

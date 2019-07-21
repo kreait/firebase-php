@@ -10,6 +10,7 @@ use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Messaging\ApiClient;
+use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\MessageTarget;
@@ -17,7 +18,6 @@ use Kreait\Firebase\Messaging\MulticastSendReport;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Messaging\SendReport;
 use Kreait\Firebase\Messaging\Topic;
-use Kreait\Firebase\Messaging\TopicManagementApiClient;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
 
@@ -29,17 +29,17 @@ class Messaging
     private $messagingApi;
 
     /**
-     * @var TopicManagementApiClient
+     * @var AppInstanceApiClient
      */
-    private $topicManagementApi;
+    private $appInstanceApi;
 
     /**
      * @internal
      */
-    public function __construct(ApiClient $messagingApiClient, TopicManagementApiClient $topicManagementApiClient)
+    public function __construct(ApiClient $messagingApiClient, AppInstanceApiClient $appInstanceApiClient)
     {
         $this->messagingApi = $messagingApiClient;
-        $this->topicManagementApi = $topicManagementApiClient;
+        $this->appInstanceApi = $appInstanceApiClient;
     }
 
     /**
@@ -152,7 +152,7 @@ class Messaging
         $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
         $tokens = $this->ensureArrayOfRegistrationTokens($registrationTokenOrTokens);
 
-        $response = $this->topicManagementApi->subscribeToTopic($topic, $tokens);
+        $response = $this->appInstanceApi->subscribeToTopic($topic, $tokens);
 
         return JSON::decode((string) $response->getBody(), true);
     }
@@ -166,7 +166,7 @@ class Messaging
         $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
         $tokens = $this->ensureArrayOfRegistrationTokens($registrationTokenOrTokens);
 
-        $response = $this->topicManagementApi->unsubscribeFromTopic($topic, $tokens);
+        $response = $this->appInstanceApi->unsubscribeFromTopic($topic, $tokens);
 
         return JSON::decode((string) $response->getBody(), true);
     }
