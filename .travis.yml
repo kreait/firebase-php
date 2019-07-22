@@ -38,6 +38,11 @@ jobs:
       script:
         - vendor/bin/phpunit --testsuite=integration
       if: repo = "kreait/firebase-php" AND type != pull_request
+    - stage: Tests
+      name: "Code Style checks"
+      php: "7.3"
+      script:
+        - vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no
     - stage: Report
       name: "Code Coverage"
       php: "7.0"
