@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Http;
 
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class Middleware
 {
@@ -36,6 +37,27 @@ class Middleware
         return static function (callable $handler) use ($override) {
             return static function (RequestInterface $request, array $options = null) use ($handler, $override) {
                 return $handler($override->authenticateRequest($request), $options ?? []);
+            };
+        };
+    }
+
+    /**
+     * Parse multipart response body to array of response body.
+     */
+    public static function parseMultipartResponse(): callable
+    {
+        return static function (callable $handler) {
+            return static function (RequestInterface $request, array $options = null) use ($handler) {
+                $promise = $handler($request, $options ?? []);
+                return $promise->then(
+                    function (ResponseInterface $response) {
+                        $contentType = $response->getHeader('Content-Type') ?? [];
+                        if (mb_strstr(implode(', ', $contentType), '/', true) === 'multipart') {
+                            return new MultipartResponse($response);
+                        }
+                        return $response;
+                    }
+                );
             };
         };
     }

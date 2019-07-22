@@ -6,12 +6,17 @@ namespace Kreait\Firebase\Tests\Unit;
 
 use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\Messaging\AuthenticationError;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\Messaging\NotFound;
+use Kreait\Firebase\Exception\Messaging\ServerError;
+use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
+use Kreait\Firebase\Exception\Messaging\UnknownError;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\TopicManagementApiClient;
 use Kreait\Firebase\Tests\UnitTestCase;
 
@@ -41,6 +46,24 @@ class MessagingTest extends UnitTestCase
     }
 
     public function testSendInvalidArray()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->messaging->send([]);
+    }
+
+    public function testSendAllInvalidObject()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->messaging->sendAll([new \stdClass()]);
+    }
+
+    public function testSendAllInvalidArray()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->messaging->send([[]]);
+    }
+
+    public function testSendAllInvalidArray2()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->send([]);
@@ -121,6 +144,60 @@ class MessagingTest extends UnitTestCase
         $this->messaging->send($message);
     }
 
+    public function testItWillNotSendMessagesWithoutATarget()
+    {
+        $message = CloudMessage::new();
+
+        $this->assertFalse($message->hasTarget());
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->messaging->sendAll([$message]);
+    }
+
+    /**
+     * @dataProvider responses
+     */
+    public function testCatchSubRequestException($response, $exceptionClass)
+    {
+        $target = MessageTarget::with(MessageTarget::TOKEN, '');
+        /* @var SendReport */
+        $sendReport = $this->invokeMethod($this->messaging, 'buildSendReport', [$target, $response]);
+        $this->assertNotNull($sendReport->error());
+        $this->assertEquals($exceptionClass, get_class($sendReport->error()));
+        $this->assertFalse($sendReport->isSuccess());
+    }
+
+    public function responses(): array
+    {
+        $responseBody = '{}';
+        return [
+            [
+                new Response(400, [], $responseBody),
+                InvalidMessage::class,
+            ],
+            [
+                new Response(401, [], $responseBody),
+                AuthenticationError::class,
+            ],
+            [
+                new Response(403, [], $responseBody),
+                AuthenticationError::class,
+            ],
+            [
+                new Response(500, [], $responseBody),
+                ServerError::class,
+            ],
+            [
+                new Response(503, [], $responseBody),
+                ServerUnavailable::class,
+            ],
+            [
+                new Response(418, [], $responseBody),
+                UnknownError::class,
+            ]
+        ];
+    }
+
     public function testItDoesNotAcceptInvalidMessagesWhenMulticasting()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -163,5 +240,14 @@ class MessagingTest extends UnitTestCase
             [[]],
             [1],
         ];
+    }
+
+    public function invokeMethod(&$object, $methodName, array $parameters = array())
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
     }
 }

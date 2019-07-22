@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Http;
 
+use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7;
 use Kreait\Firebase\Http\Auth;
 use Kreait\Firebase\Http\Middleware;
+use Kreait\Firebase\Http\MultipartResponse;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Http\Message\RequestInterface;
 
@@ -19,6 +22,11 @@ class MiddlewareTest extends UnitTestCase
      * @var Psr7\Request
      */
     private $request;
+
+    /**
+     * @var \Closure
+     */
+    private $promise;
 
     /**
      * @var \Closure
@@ -60,5 +68,19 @@ class MiddlewareTest extends UnitTestCase
         $request = $handlerClosure($this->request);
 
         $this->assertSame($authenticatedRequest, $request);
+    }
+
+    public function testParseMultipartResponse()
+    {
+        $middleware = Middleware::parseMultipartResponse();
+        $inner = new Promise(function () use (&$inner) { $inner->resolve(new \GuzzleHttp\Psr7\Response(200, ['Content-Type' => ['multipart/mixed; boundary=batch_e115af19-2deb-4ed7-be7d-cc2e43699be1']])); });
+        $promise = static function (RequestInterface $request, array $options = []) use (&$inner) {
+            return $inner;
+        };
+        $handlerClosure = $middleware($promise);
+        /** @var PromiseInterface $request */
+        $response = $handlerClosure($this->request)->wait();
+
+        $this->assertInstanceOf(MultipartResponse::class, $response);
     }
 }

@@ -9,9 +9,11 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\Messaging\NotFound;
+use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Message;
+use Kreait\Firebase\Messaging\CloudMessageCollection;
 use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\MulticastSendReport;
 use Kreait\Firebase\Messaging\RegistrationToken;
@@ -23,6 +25,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class Messaging
 {
+    const FCM_MAX_BATCH_SIZE = 100;
+
     /**
      * @var ApiClient
      */
@@ -47,16 +51,7 @@ class Messaging
      */
     public function send($message): array
     {
-        if (\is_array($message)) {
-            $message = CloudMessage::fromArray($message);
-        }
-
-        if (!($message instanceof Message)) {
-            throw new InvalidArgumentException(
-                'Unsupported message type. Use an array or a class implementing %s'.Message::class
-            );
-        }
-
+        $message = $this->checkMessage($message);
         if (($message instanceof CloudMessage) && !$message->hasTarget()) {
             throw new InvalidArgumentException('The given message has no target');
         }
@@ -67,52 +62,56 @@ class Messaging
     }
 
     /**
+     * @param array $messages
+     * @return array
+     */
+    public function sendAll(array $messages): MulticastSendReport
+    {
+        if (count($messages) > self::FCM_MAX_BATCH_SIZE) {
+            throw new InvalidArgumentException(
+                sprintf('messages list must not contain more than %d items', self::FCM_MAX_BATCH_SIZE)
+            );
+        }
+
+        $collection = new CloudMessageCollection;
+        foreach ($messages as $message) {
+            $message = $this->checkMessage($message);
+            if (($message instanceof CloudMessage) && !$message->hasTarget()) {
+                throw new InvalidArgumentException('The given message has no target');
+            }
+            $collection->addMessage($message);
+        }
+
+        $reports = [];
+        $sendResponse = $this->messagingApi->sendBatchRequest($collection);
+        $requests = $collection->getIterator();
+        while ($body = $sendResponse->getBody()) {
+            $reports[] = $this->buildSendReport($requests->current()->getTarget(), \GuzzleHttp\Psr7\parse_response((string) $body));
+            $requests->next();
+        }
+
+        return MulticastSendReport::withItems($reports);
+    }
+
+    /**
      * @param array|Message|mixed $message
      * @param string[]|RegistrationToken[] $deviceTokens
      */
     public function sendMulticast($message, array $deviceTokens): MulticastSendReport
     {
-        if (\is_array($message)) {
-            $message = CloudMessage::fromArray($message);
-        }
-
-        if (!($message instanceof Message)) {
-            throw new InvalidArgumentException(
-                'Unsupported message type. Use an array or a class implementing %s'.Message::class
-            );
-        }
-
+        $message = $this->checkMessage($message);
         if (!($message instanceof CloudMessage)) {
             $message = CloudMessage::fromArray($message->jsonSerialize());
         }
 
-        $promises = [];
+        $messages = [];
 
         foreach ($deviceTokens as $token) {
             $target = MessageTarget::with(MessageTarget::TOKEN, (string) $token);
-            $message = $message->withChangedTarget($target->type(), $target->value());
-            $promises[$target->value()] = $this->messagingApi->sendMessageAsync($message);
+            $messages[] = $message->withChangedTarget($target->type(), $target->value());
         }
 
-        return Promise\settle($promises)
-            ->then(static function (array $results) {
-                $reports = [];
-
-                foreach ($results as $tokenString => $result) {
-                    $target = MessageTarget::with(MessageTarget::TOKEN, $tokenString);
-                    if ($result['state'] === Promise\PromiseInterface::FULFILLED) {
-                        /** @var ResponseInterface $response */
-                        $response = $result['value'];
-                        $data = JSON::decode((string) $response->getBody(), true);
-                        $reports[] = SendReport::success($target, $data);
-                    } else {
-                        $reports[] = SendReport::failure($target, $result['reason']);
-                    }
-                }
-
-                return MulticastSendReport::withItems($reports);
-            })
-            ->wait();
+        return $this->sendAll($messages);
     }
 
     /**
@@ -123,16 +122,7 @@ class Messaging
      */
     public function validate($message): array
     {
-        if (\is_array($message)) {
-            $message = CloudMessage::fromArray($message);
-        }
-
-        if (!($message instanceof Message)) {
-            throw new InvalidArgumentException(
-                'Unsupported message type. Use an array or a class implementing %s'.Message::class
-            );
-        }
-
+        $message = $this->checkMessage($message);
         try {
             $response = $this->messagingApi->validateMessage($message);
         } catch (NotFound $e) {
@@ -192,5 +182,30 @@ class Messaging
         }
 
         throw new InvalidArgument('Invalid registration tokens.');
+    }
+
+
+    private function checkMessage($message): Message
+    {
+        if (\is_array($message)) {
+            $message = CloudMessage::fromArray($message);
+        }
+        if (!($message instanceof Message)) {
+            throw new InvalidArgumentException(
+                'Unsupported message type. Use an array or a class implementing %s' . Message::class
+            );
+        }
+        return $message;
+    }
+
+    private function buildSendReport($target, ResponseInterface $response)
+    {
+        $isSuccess = $response->getStatusCode() === 200;
+        if ($isSuccess) {
+            $data = JSON::decode((string) $response->getBody(), true);
+            return SendReport::success($target, $data);
+        } else {
+            return SendReport::failure($target, MessagingException::fromResponse($response));
+        }
     }
 }

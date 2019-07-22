@@ -11,6 +11,10 @@ final class MulticastSendReport implements Countable
     /** @var SendReport[] */
     private $items = [];
 
+
+    /** @var int */
+    private $successCount = 0;
+
     private function __construct()
     {
     }
@@ -33,6 +37,9 @@ final class MulticastSendReport implements Countable
     {
         $new = clone $this;
         $new->items[] = $report;
+        if ($report->isSuccess()) {
+            $this->successCount++;
+        }
 
         return $new;
     }
@@ -67,5 +74,20 @@ final class MulticastSendReport implements Countable
     public function count(): int
     {
         return \count($this->items);
+    }
+
+    public function getSuccessCount()
+    {
+        return $this->successCount;
+    }
+
+    public function toArray(): array
+    {
+        $count = $this->count();
+        return [
+            'responses' => $this->getItems(),
+            'successCount' => $this->getSuccessCount(),
+            'failureCount' => $count - $this->getSuccessCount(),
+        ];
     }
 }

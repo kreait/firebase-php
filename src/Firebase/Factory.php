@@ -266,11 +266,14 @@ class Factory
     {
         $projectId = $this->getServiceAccount()->getSanitizedProjectId();
 
-        $messagingApiClient = new Messaging\ApiClient(
-            $this->createApiClient([
-                'base_uri' => 'https://fcm.googleapis.com/v1/projects/'.$projectId,
-            ])
-        );
+        $http = $this->createApiClient([
+            'base_uri' => 'https://fcm.googleapis.com/v1/projects/'.$projectId,
+        ]);
+
+        /** @var HandlerStack $handler */
+        $handler = $http->getConfig('handler');
+        $handler->push(Middleware::parseMultipartResponse(), 'multipart_parser');
+        $messagingApiClient = new Messaging\ApiClient($http);
 
         $topicManagementApiClient = new Messaging\TopicManagementApiClient(
             $this->createApiClient([

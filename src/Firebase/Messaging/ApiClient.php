@@ -8,6 +8,7 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
+use function GuzzleHttp\Psr7\stream_for;
 use Kreait\Firebase\Exception\MessagingException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -17,19 +18,22 @@ use Throwable;
 /**
  * @internal
  */
-class ApiClient
+class ApiClient extends BaseClient
 {
+    const FIREBASE_MESSAGING_BATCH_URL = 'https://fcm.googleapis.com/batch';
+
     /**
-     * @var ClientInterface
+     * @var BatchRequestClient
      */
-    private $client;
+    protected $batchRequestClient;
 
     /**
      * @internal
      */
     public function __construct(ClientInterface $client)
     {
-        $this->client = $client;
+        parent::__construct($client);
+        $this->batchRequestClient = new BatchRequestClient($client, self::FIREBASE_MESSAGING_BATCH_URL);
     }
 
     public function sendMessage(Message $message): ResponseInterface
@@ -44,6 +48,23 @@ class ApiClient
         return $this->sendAsync($request, [
             'json' => ['message' => $message->jsonSerialize()],
         ]);
+    }
+
+    public function sendBatchRequest(CloudMessageCollection $messages): ResponseInterface
+    {
+        return $this->sendBatchRequestAsync($messages)->wait();
+    }
+
+    public function sendBatchRequestAsync(CloudMessageCollection $messages): PromiseInterface
+    {
+        $collection = new SubRequestCollection;
+        foreach ($messages as $message) {
+            $request = $this->createRequest('POST', 'messages:send')
+                ->withBody(stream_for(json_encode(['message' => $message->jsonSerialize()])));
+            $collection->addRequest($request);
+        }
+
+        return $this->batchRequestClient->sendBatchRequestAsync($collection);
     }
 
     public function validateMessage(Message $message): ResponseInterface
@@ -61,34 +82,5 @@ class ApiClient
                 'validate_only' => true,
             ],
         ]);
-    }
-
-    private function sendAsync(RequestInterface $request, array $options = null): PromiseInterface
-    {
-        $options = $options ?? [];
-
-        return $this->client->sendAsync($request, $options)
-            ->then(null, function (Throwable $e) {
-                throw $this->convertError($e);
-            });
-    }
-
-    private function createRequest(string $method, string $endpoint): Request
-    {
-        /** @var UriInterface $uri */
-        $uri = $this->client->getConfig('base_uri');
-        $path = \rtrim($uri->getPath(), '/').'/'.\ltrim($endpoint, '/');
-        $uri = $uri->withPath($path);
-
-        return new Request($method, $uri);
-    }
-
-    private function convertError(Throwable $error): MessagingException
-    {
-        if ($error instanceof RequestException) {
-            return MessagingException::fromRequestException($error);
-        }
-
-        return new MessagingException($error->getMessage(), $error->getCode(), $error);
     }
 }
