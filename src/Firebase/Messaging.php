@@ -9,7 +9,9 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\Messaging\NotFound;
+use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\ApiClient;
+use Kreait\Firebase\Messaging\AppInstance;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Message;
@@ -171,6 +173,36 @@ class Messaging
         return JSON::decode((string) $response->getBody(), true);
     }
 
+    /**
+     * @see https://developers.google.com/instance-id/reference/server#results
+     *
+     * @param RegistrationToken|string $registrationToken
+     *
+     * @throws InvalidArgument if the registration token is invalid
+     */
+    public function getAppInstance($registrationToken): AppInstance
+    {
+        $token = $registrationToken instanceof RegistrationToken
+            ? $registrationToken
+            : RegistrationToken::fromValue($registrationToken);
+
+        try {
+            $response = $this->appInstanceApi->getAppInstance((string) $token);
+        } catch (MessagingException $e) {
+            // The token is invalid
+            throw new InvalidArgument("The registration token '{$token}' is invalid");
+        }
+
+        $data = JSON::decode((string) $response->getBody(), true);
+
+        return AppInstance::fromRawData($token, $data);
+    }
+
+    /**
+     * @param mixed $tokenOrTokens
+     *
+     * @return RegistrationToken[]
+     */
     private function ensureArrayOfRegistrationTokens($tokenOrTokens): array
     {
         if ($tokenOrTokens instanceof RegistrationToken) {
@@ -181,16 +213,26 @@ class Messaging
             return [RegistrationToken::fromValue($tokenOrTokens)];
         }
 
-        if (\is_array($tokenOrTokens)) {
-            if (empty($tokenOrTokens)) {
-                throw new InvalidArgument('Empty array of registration tokens.');
-            }
-
-            return \array_map(static function ($token) {
-                return $token instanceof RegistrationToken ? $token : RegistrationToken::fromValue($token);
-            }, $tokenOrTokens);
+        if (!\is_array($tokenOrTokens)) {
+            $tokenOrTokens = [$tokenOrTokens];
         }
 
-        throw new InvalidArgument('Invalid registration tokens.');
+        $tokens = [];
+
+        foreach ($tokenOrTokens as $value) {
+            if ($value instanceof RegistrationToken) {
+                $tokens[] = $value;
+            } elseif ($value instanceof AppInstance) {
+                $tokens[] = $value->registrationToken();
+            } elseif (\is_string($value)) {
+                $tokens[] = RegistrationToken::fromValue($value);
+            }
+        }
+
+        if (empty($tokens)) {
+            throw new InvalidArgument('Invalid or empty list of registration tokens.');
+        }
+
+        return $tokens;
     }
 }

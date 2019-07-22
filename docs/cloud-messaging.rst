@@ -485,3 +485,87 @@ You can unsubscribe one or multiple devices from a topic by passing registration
 .. note::
     You can unsubscribe up to 1,000 devices in a single request. If you provide an array with over 1,000
     registration tokens, the operation will fail with an error.
+
+
+***********************
+App instance management
+***********************
+
+A registration token is related to an application that generated it. You can retrieve current information
+about an app instance by passing a registration token to the ``getAppInstance()`` method.
+
+.. code-block:: php
+
+    $registrationToken = '...';
+
+    $appInstance = $firebase->getMessaging()->getAppInstance($registrationToken);
+    // Return the full information as provided by the Firebase API
+    $instanceInfo = $appInstance->rawData();
+
+    /* Example output for an Android application instance:
+        [
+          "applicationVersion" => "1060100"
+          "connectDate" => "2019-07-21"
+          "attestStatus" => "UNKNOWN"
+          "application" => "com.vendor.application"
+          "scope" => "*"
+          "authorizedEntity" => "..."
+          "rel" => array:1 [
+            "topics" => array:3 [
+              "test-topic" => array:1 [
+                "addDate" => "2019-07-21"
+              ]
+              "test-topic-5d35b46a15094" => array:1 [
+                "addDate" => "2019-07-22"
+              ]
+              "test-topic-5d35b46b66c31" => array:1 [
+                "addDate" => "2019-07-22"
+              ]
+            ]
+          ]
+          "connectionType" => "WIFI"
+          "appSigner" => "..."
+          "platform" => "ANDROID"
+        ]
+    */
+
+    /* Example output for a web application instance
+        [
+          "application" => "webpush"
+          "scope" => ""
+          "authorizedEntity" => "..."
+          "rel" => array:1 [
+            "topics" => array:2 [
+              "test-topic-5d35b445b830a" => array:1 [
+                "addDate" => "2019-07-22"
+              ]
+              "test-topic-5d35b446c0839" => array:1 [
+                "addDate" => "2019-07-22"
+              ]
+            ]
+          ]
+          "platform" => "BROWSER"
+        ]
+    */
+
+.. note::
+    As the data returned by the Google Instance ID API can return differently formed results depending on the
+    application or platform, it is currently difficult to add reliable convenience methods for specific
+    fields in the raw data.
+
+Working with topic subscriptions
+--------------------------------
+
+You can retrieve all topic subscriptions for an app instance with the ``topicSubscriptions()`` method:
+
+.. code-block:: php
+
+    $messaging = $firebase->getMessaging();
+    $appInstance = $messaging->getAppInstance('<registration token>');
+
+    /** @var \Kreait\Firebase\Messaging\TopicSubscriptions $subscriptions */
+    $subscriptions = $appInstance->topicSubscriptions();
+
+    foreach ($subscriptions as $subscription) {
+        echo "{$subscription->token()} is subscribed to {$subscription->topic()}\n";
+    }

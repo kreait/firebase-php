@@ -47,6 +47,11 @@ class AppInstanceApiClient
         ]);
     }
 
+    public function getAppInstance(string $registrationToken): ResponseInterface
+    {
+        return $this->request('GET', '/iid/'.$registrationToken.'?details=true');
+    }
+
     private function request($method, $endpoint, array $options = null): ResponseInterface
     {
         try {

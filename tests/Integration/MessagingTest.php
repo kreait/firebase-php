@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging;
@@ -67,6 +68,10 @@ class MessagingTest extends IntegrationTestCase
 
     public function testSendMulticastWithValidAndInvalidTarget()
     {
+        if (empty(self::$registrationTokens)) {
+            $this->markTestSkipped();
+        }
+
         $message = CloudMessage::fromArray([]);
         $tokens = [
             $valid = self::$registrationTokens[0],
@@ -97,7 +102,7 @@ class MessagingTest extends IntegrationTestCase
         }
 
         $this->messaging->subscribeToTopic('foo', self::$registrationTokens);
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->addToAssertionCount(1);
     }
 
     public function testUnsubscribeFromTopic()
@@ -107,6 +112,41 @@ class MessagingTest extends IntegrationTestCase
         }
 
         $this->messaging->unsubscribeFromTopic('foo', self::$registrationTokens);
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->addToAssertionCount(1);
+    }
+
+    public function testChangeTopicSubscription()
+    {
+        if (empty(self::$registrationTokens)) {
+            $this->markTestSkipped();
+        }
+
+        $topicName = \uniqid('topic', false);
+        $token = Messaging\RegistrationToken::fromValue(self::$registrationTokens[0]);
+
+        $this->messaging->subscribeToTopic($topicName, $token);
+        $this->assertTrue($this->messaging->getAppInstance($token)->isSubscribedToTopic($topicName));
+
+        $this->messaging->unsubscribeFromTopic($topicName, $token);
+        $this->assertFalse($this->messaging->getAppInstance($token)->isSubscribedToTopic($topicName));
+    }
+
+    public function testGetAppInstance()
+    {
+        if (empty(self::$registrationTokens)) {
+            $this->markTestSkipped();
+        }
+
+        $token = self::$registrationTokens[0];
+
+        $appInstance = $this->messaging->getAppInstance($token);
+
+        $this->assertSame($token, $appInstance->registrationToken()->value());
+    }
+
+    public function testGetAppInstanceWithInvalidToken()
+    {
+        $this->expectException(InvalidArgument::class);
+        $this->messaging->getAppInstance('foo');
     }
 }

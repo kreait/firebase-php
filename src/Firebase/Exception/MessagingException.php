@@ -29,15 +29,20 @@ class MessagingException extends \RuntimeException implements FirebaseException
     public static function fromRequestException(RequestException $e): self
     {
         $errors = [];
-        $reasonPhrase = null;
+        $message = 'Unknown error';
+        $code = $e->getCode();
 
         if ($response = $e->getResponse()) {
             $errors = self::getErrorsFromResponse($response);
-            $reasonPhrase = $response->getReasonPhrase();
+            $message = $response->getReasonPhrase();
         }
 
-        $code = (int) ($errors['error']['code'] ?? $e->getCode());
-        $message = $errors['error']['message'] ?? $reasonPhrase;
+        if (\is_array($errors['error'] ?? null)) {
+            $code = (int) ($errors['error']['code'] ?? $code);
+            $message = $errors['error']['message'] ?? $message;
+        } elseif (\is_string($errors['error'] ?? null)) {
+            $message = $errors['error'];
+        }
 
         switch ($code) {
             case 400:

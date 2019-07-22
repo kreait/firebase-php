@@ -59,13 +59,10 @@ class MessagingTest extends UnitTestCase
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
 
-    /**
-     * @dataProvider invalidTokenProvider
-     */
-    public function testSubscribeToTopicWithInvalidTokens($tokens)
+    public function testSubscribeToTopicWithEmptyTokenList()
     {
         $this->expectException(InvalidArgument::class);
-        $this->messaging->subscribeToTopic('topic', $tokens);
+        $this->messaging->subscribeToTopic('topic', []);
     }
 
     /**
@@ -81,13 +78,10 @@ class MessagingTest extends UnitTestCase
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
 
-    /**
-     * @dataProvider invalidTokenProvider
-     */
-    public function testUnsubscribeFromTopicWithInvalidTokens($tokens)
+    public function testUnsubscribeFromTopicWithEmptyTokenList()
     {
         $this->expectException(InvalidArgument::class);
-        $this->messaging->unsubscribeFromTopic('topic', $tokens);
+        $this->messaging->unsubscribeFromTopic('topic', []);
     }
 
     public function testValidateMessageGivenAnInvalidArgument()
@@ -153,15 +147,6 @@ class MessagingTest extends UnitTestCase
             [['foo']],
             [Messaging\RegistrationToken::fromValue('foo')],
             [[Messaging\RegistrationToken::fromValue('foo')]],
-        ];
-    }
-
-    public function invalidTokenProvider()
-    {
-        return [
-            [null],
-            [[]],
-            [1],
         ];
     }
 }
