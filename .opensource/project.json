@@ -1,0 +1,15 @@
+{
+    "name": "Firebase Admin SDK for PHP (unofficial)",
+    "platforms": [
+        "PHP",
+        "Admin"
+    ],
+    "content": "README.md",
+    "pages": [],
+    "related": [
+        "firebase/firebase-admin-java",
+        "firebase/firebase-admin-go",
+        "firebase/firebase-admin-node",
+        "firebase/firebase-admin-python"
+    ]
+}
