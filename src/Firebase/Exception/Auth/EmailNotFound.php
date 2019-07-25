@@ -5,16 +5,8 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Exception\Auth;
 
 use Kreait\Firebase\Exception\AuthException;
-use Throwable;
+use RuntimeException;
 
-class EmailNotFound extends AuthException
+final class EmailNotFound extends RuntimeException implements AuthException
 {
-    const IDENTIFIER = 'EMAIL_NOT_FOUND';
-
-    public function __construct($code = 0, Throwable $previous = null)
-    {
-        $message = 'There is no user record corresponding to this identifier. The user may have been deleted.';
-
-        parent::__construct($message, $code, $previous);
-    }
 }

@@ -6,23 +6,21 @@ namespace Kreait\Firebase\Auth;
 
 use Firebase\Auth\Token\Domain\Generator;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
-use Kreait\Firebase\Exception\AuthException;
+use InvalidArgumentException;
+use Kreait\Firebase\Exception\Auth\AuthError;
+use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Util\JSON;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Token;
+use Throwable;
 
 class CustomTokenViaGoogleIam implements Generator
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $clientEmail;
 
-    /**
-     * @var ClientInterface
-     */
+    /** @var ClientInterface */
     private $client;
 
     public function __construct(string $clientEmail, ClientInterface $client)
@@ -59,16 +57,20 @@ class CustomTokenViaGoogleIam implements Generator
                     'bytesToSign' => \base64_encode($token->getPayload()),
                 ],
             ]);
-        } catch (RequestException $e) {
-            throw AuthException::fromRequestException($e);
+        } catch (Throwable $e) {
+            throw (new AuthApiExceptionConverter())->convertException($e);
         }
 
         $result = JSON::decode((string) $response->getBody(), true);
 
         if ($base64EncodedSignature = $result['signature'] ?? null) {
-            return (new Parser())->parse(((string) $token).$base64EncodedSignature);
+            try {
+                return (new Parser())->parse(((string) $token).$base64EncodedSignature);
+            } catch (InvalidArgumentException $e) {
+                throw new AuthError('The custom token API returned an unexpected value: '.$e->getMessage(), $e->getCode(), $e);
+            }
         }
 
-        throw new AuthException('Unable to create custom token.');
+        throw new AuthError('Unable to create custom token.');
     }
 }

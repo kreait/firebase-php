@@ -5,29 +5,30 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests;
 
 use Kreait\Firebase\ServiceAccount;
+use PHPUnit\Framework\MockObject\MockObject;
 
 abstract class UnitTestCase extends FirebaseTestCase
 {
     /**
-     * @return ServiceAccount|\PHPUnit_Framework_MockObject_MockObject
+     * @return ServiceAccount|MockObject
      */
     protected function createServiceAccountMock()
     {
         $mock = $this->createMock(ServiceAccount::class);
 
-        $mock->expects($this->any())
+        $mock
             ->method('getProjectId')
             ->willReturn('project');
 
-        $mock->expects($this->any())
+        $mock
             ->method('getClientId')
             ->willReturn('client');
 
-        $mock->expects($this->any())
+        $mock
             ->method('getClientEmail')
             ->willReturn('client@email.tld');
 
-        $mock->expects($this->any())
+        $mock
             ->method('getPrivateKey')
             ->willReturn('-----BEGIN RSA PRIVATE KEY-----
 MIICXQIBAAKBgQC9fUon04iPvcWzwNwMLkiNQizaid+DaUdyv759FfbRxfj7hTWT

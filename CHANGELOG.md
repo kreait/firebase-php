@@ -6,9 +6,15 @@
 
 #### Cloud Messaging
 
-- It is now possible to retrieve extended information about application instances related to a 
+* It is now possible to retrieve extended information about application instances related to a 
   registration token, including the topics an application instance/registration token is subscribed to.
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#app-instance-management))
+
+### Changed
+
+#### Under the hood
+
+* `Kreait\Firebase\Exception\AuthException` is now an interface implemented by specific errors instead of an extensible class.  
 
 ## 4.27.0 - 2019-07-19
 
@@ -16,20 +22,20 @@
 
 #### Cloud Messaging
 
-- Notifications can now be provided with an image URL
+* Notifications can now be provided with an image URL
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#adding-a-notification))
-- You can use `Kreait\Firebase\Messaging\RawMessageFromArray(array $data)` to create a message
+* You can use `Kreait\Firebase\Messaging\RawMessageFromArray(array $data)` to create a message
   without the SDK checking it for validity before sending it. This gives you full control over the sent 
   message, but also means that you have to send/validate a message in order to know if it's valid or not.
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#sending-a-fully-configured-raw-message))
-- It is now possible to add platform independent FCM options to a message.
+* It is now possible to add platform independent FCM options to a message.
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#adding-platform-independent-fcm-options))
 
 ### Changed
 
 #### Cloud Messaging
 
-- Removed ability to specify multiple message targets (Condition/Token/Topic) at once when creating an FCM message
+* Removed ability to specify multiple message targets (Condition/Token/Topic) at once when creating an FCM message
   through `CloudMessage::fromArray()`. Previously, only the first matched target was used. 
   Now, an `InvalidArgument` exception is thrown.
 

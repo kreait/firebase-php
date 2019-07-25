@@ -7,6 +7,6 @@ namespace Kreait\Firebase\Exception\Auth;
 use Kreait\Firebase\Exception\AuthException;
 use RuntimeException;
 
-final class UserDisabled extends RuntimeException implements AuthException
+final class AuthError extends RuntimeException implements AuthException
 {
 }

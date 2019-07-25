@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Auth;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Exception\Auth\CredentialsMismatch;
 use Kreait\Firebase\Exception\Auth\EmailNotFound;
 use Kreait\Firebase\Exception\Auth\InvalidCustomToken;
-use Kreait\Firebase\Exception\AuthException;
+use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Request;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
@@ -19,10 +18,11 @@ use Psr\Http\Message\ResponseInterface;
  */
 class ApiClient
 {
-    /**
-     * @var ClientInterface
-     */
+    /** @var ClientInterface */
     private $client;
+
+    /** @var AuthApiExceptionConverter */
+    private $errorHandler;
 
     /**
      * @internal
@@ -30,6 +30,7 @@ class ApiClient
     public function __construct(ClientInterface $client)
     {
         $this->client = $client;
+        $this->errorHandler = new AuthApiExceptionConverter();
     }
 
     /**
@@ -246,10 +247,8 @@ class ApiClient
 
         try {
             return $this->client->request('POST', $uri, $options);
-        } catch (RequestException $e) {
-            throw AuthException::fromRequestException($e);
         } catch (\Throwable $e) {
-            throw new AuthException($e->getMessage(), $e->getCode(), $e);
+            throw $this->errorHandler->convertException($e);
         }
     }
 }

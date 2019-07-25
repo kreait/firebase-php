@@ -6,13 +6,12 @@ namespace Kreait\Firebase\Exception\Auth;
 
 use Kreait\Firebase\Exception\AuthException;
 use Lcobucci\JWT\Token;
+use RuntimeException;
 use Throwable;
 
-class RevokedIdToken extends AuthException
+final class RevokedIdToken extends RuntimeException implements AuthException
 {
-    /**
-     * @var Token
-     */
+    /** @var Token */
     private $token;
 
     public function __construct(Token $token, string $message = '', int $code = 0, Throwable $previous = null)
