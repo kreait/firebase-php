@@ -35,16 +35,16 @@ class CustomTokenViaGoogleIam implements Generator
         $expiration = $expiresAt ? $expiresAt->getTimestamp() : $now + (60 * 60);
 
         $builder = (new Builder())
-            ->setHeader('alg', 'RS256')
-            ->set('uid', (string) $uid)
-            ->setIssuer($this->clientEmail)
-            ->setSubject($this->clientEmail)
-            ->setIssuedAt($now)
-            ->setExpiration($expiration)
-            ->setAudience('https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit');
+            ->withHeader('alg', 'RS256')
+            ->withClaim('uid', (string) $uid)
+            ->issuedBy($this->clientEmail)
+            ->relatedTo($this->clientEmail)
+            ->issuedAt($now)
+            ->expiresAt($expiration)
+            ->permittedFor('https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit');
 
         if (!empty($claims)) {
-            $builder->set('claims', $claims);
+            $builder = $builder->withClaim('claims', $claims);
         }
 
         $token = $builder->getToken();
