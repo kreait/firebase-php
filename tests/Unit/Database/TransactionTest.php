@@ -4,30 +4,70 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Database;
 
+use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\Transaction;
+use Kreait\Firebase\Exception\Database\DatabaseError;
 use Kreait\Firebase\Exception\Database\ReferenceHasNotBeenSnapshotted;
+use Kreait\Firebase\Exception\Database\TransactionFailed;
 use PHPUnit\Framework\TestCase;
+use Throwable;
 
 /**
  * @internal
  */
 class TransactionTest extends TestCase
 {
+    private $apiClient;
+
     /** @var Transaction */
     private $transaction;
 
     protected function setUp()
     {
-        $this->transaction = new Transaction($this->createMock(ApiClient::class));
+        $this->apiClient = $this->createMock(ApiClient::class);
+
+        $this->transaction = new Transaction($this->apiClient);
     }
 
     public function testAReferenceCanNotBeChangedIfItHasNotBeenSnapshotted()
     {
         $reference = $this->createMock(Reference::class);
 
-        $this->expectException(ReferenceHasNotBeenSnapshotted::class);
-        $this->transaction->set($reference, 'does not matter');
+        try {
+            $this->transaction->set($reference, 'does not matter');
+        } catch (ReferenceHasNotBeenSnapshotted $e) {
+            $this->assertSame($reference, $e->getReference());
+        } catch (Throwable $e) {
+            $this->fail('A '.ReferenceHasNotBeenSnapshotted::class.' should have been thrown');
+        }
+    }
+
+    public function testATransactionCanFail()
+    {
+        $reference = $this->createMock(Reference::class);
+        $reference->method('getUri')->willReturn($uri = new Uri('https://domain.tld'));
+
+        $this->apiClient
+            ->method('getWithETag')
+            ->with($uri)
+            ->willReturn(['etag' => 'etag', 'value' => 'old value']);
+
+        $this->apiClient
+            ->method('setWithEtag')
+            ->with($uri)
+            ->willThrowException(new DatabaseError());
+
+        $this->transaction->snapshot($reference);
+
+        try {
+            $this->transaction->set($reference, 'new value');
+            $this->fail('An exception should have been thrown');
+        } catch (TransactionFailed $e) {
+            $this->assertSame($reference, $e->getReference());
+        } catch (Throwable $e) {
+            $this->fail('A '.TransactionFailed::class.' should have been thrown');
+        }
     }
 }

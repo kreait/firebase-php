@@ -6,8 +6,8 @@ namespace Kreait\Firebase\Database;
 
 use Kreait\Firebase\Database\Query\Filter;
 use Kreait\Firebase\Database\Query\Sorter;
-use Kreait\Firebase\Exception\ApiException;
-use Kreait\Firebase\Exception\QueryException;
+use Kreait\Firebase\Exception\Database\UnsupportedQuery;
+use Kreait\Firebase\Exception\DatabaseException;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -68,14 +68,14 @@ class Query
     /**
      * Returns a data snapshot of the current location.
      *
-     * @throws QueryException if an error occurred
+     * @throws UnsupportedQuery if an error occurred
      */
     public function getSnapshot(): Snapshot
     {
         try {
             $value = $this->apiClient->get($this->getUri());
-        } catch (ApiException $e) {
-            throw QueryException::fromApiException($e, $this);
+        } catch (DatabaseException $e) {
+            throw new UnsupportedQuery($this, $e->getMessage(), $e->getCode(), $e->getPrevious());
         }
 
         if ($this->sorter) {
@@ -92,7 +92,7 @@ class Query
     /**
      * Convenience method for {@see getSnapshot()}->getValue().
      *
-     * @throws QueryException if an error occurred
+     * @throws UnsupportedQuery if an error occurred
      *
      * @return mixed
      */
@@ -180,7 +180,7 @@ class Query
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#orderByChild
      *
-     * @throws QueryException if the query is already ordered
+     * @throws UnsupportedQuery if the query is already ordered
      *
      * @return Query
      */
@@ -199,7 +199,7 @@ class Query
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#orderByKey
      *
-     * @throws QueryException if the query is already ordered
+     * @throws UnsupportedQuery if the query is already ordered
      *
      * @return Query
      */
@@ -219,7 +219,7 @@ class Query
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#orderByValue
      *
-     * @throws QueryException if the query is already ordered
+     * @throws UnsupportedQuery if the query is already ordered
      *
      * @return Query
      */
@@ -293,7 +293,7 @@ class Query
     private function withSorter(Sorter $sorter): self
     {
         if ($this->sorter) {
-            throw new QueryException($this, 'This query is already ordered.');
+            throw new UnsupportedQuery($this, 'This query is already ordered.');
         }
 
         $query = clone $this;

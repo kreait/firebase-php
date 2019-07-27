@@ -5,30 +5,27 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Exception\Database;
 
 use Kreait\Firebase\Database\Reference;
-use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Exception\DatabaseException;
 use RuntimeException;
+use Throwable;
 
-final class ReferenceHasNotBeenSnapshotted extends RuntimeException implements FirebaseException
+final class ReferenceHasNotBeenSnapshotted extends RuntimeException implements DatabaseException
 {
-    /** @var Reference|null */
+    /** @var Reference */
     private $reference;
 
-    public static function with(Reference $reference): self
+    public function __construct(Reference $query, string $message = '', int $code = 0, Throwable $previous = null)
     {
-        $message = 'Before updating or deleting a reference, you must snapshot it.';
-        $message .= ' See https://firebase-php.readthedocs.io/en/latest/realtime-database.html#database-transactions';
-        $message .= ' for more information.';
+        if (!$message) {
+            $message = "The reference {$query->getPath()} has not been snapshotted.";
+        }
 
-        $error = new self($message);
-        $error->reference = $reference;
+        parent::__construct($message, $code, $previous);
 
-        return $error;
+        $this->reference = $query;
     }
 
-    /**
-     * @return Reference|null
-     */
-    public function getReference()
+    public function getReference(): Reference
     {
         return $this->reference;
     }

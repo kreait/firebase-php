@@ -14,7 +14,11 @@
 
 #### Under the hood
 
-* `Kreait\Firebase\Exception\AuthException` is now an interface implemented by specific errors instead of an extensible class.
+* The components now have dedicated catchable exception interfaces, e.g. `Kreait\Firebase\Exception\AuthException` or 
+  `Kreait\Firebase\Exception\DatabaseException`
+* The following exceptions are now interfaces implemented by specific errors instead of extensible classes:
+  * `Kreait\Firebase\Exception\AuthException`
+  * `Kreait\Firebase\Exception\DatabaseException` (new)
 * `Kreait\Firebase\Auth\CustomTokenViaGoogleIam` is no longer using deprecated methods to build a custom token.  
 
 ## 4.27.0 - 2019-07-19

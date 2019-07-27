@@ -9,7 +9,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\Database\ApiClient;
-use Kreait\Firebase\Exception\ApiException;
+use Kreait\Firebase\Exception\DatabaseException;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Http\Message\ResponseInterface;
 
@@ -83,7 +83,7 @@ class ApiClientTest extends UnitTestCase
             ->method($this->anything())
             ->willThrowException(new RequestException('foo', $request));
 
-        $this->expectException(ApiException::class);
+        $this->expectException(DatabaseException::class);
 
         $this->client->get($this->targetUrl);
     }
@@ -94,7 +94,7 @@ class ApiClientTest extends UnitTestCase
             ->method($this->anything())
             ->willThrowException(new \Exception());
 
-        $this->expectException(ApiException::class);
+        $this->expectException(DatabaseException::class);
 
         $this->client->get($this->targetUrl);
     }

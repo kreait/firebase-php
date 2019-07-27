@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Database;
 
-use Kreait\Firebase\Exception\ApiException;
 use Kreait\Firebase\Exception\Database\ReferenceHasNotBeenSnapshotted;
 use Kreait\Firebase\Exception\Database\TransactionFailed;
+use Kreait\Firebase\Exception\DatabaseException;
 
 class Transaction
 {
@@ -52,8 +52,8 @@ class Transaction
 
         try {
             $this->apiClient->setWithEtag($reference->getUri(), $value, $etag);
-        } catch (ApiException $e) {
-            throw TransactionFailed::forReferenceAndApiException($reference, $e);
+        } catch (DatabaseException $e) {
+            throw TransactionFailed::onReference($reference, $e);
         }
     }
 
@@ -67,8 +67,8 @@ class Transaction
 
         try {
             $this->apiClient->removeWithEtag($reference->getUri(), $etag);
-        } catch (ApiException $e) {
-            throw TransactionFailed::forReferenceAndApiException($reference, $e);
+        } catch (DatabaseException $e) {
+            throw TransactionFailed::onReference($reference, $e);
         }
     }
 
@@ -83,6 +83,6 @@ class Transaction
             return $this->etags[$uri];
         }
 
-        throw ReferenceHasNotBeenSnapshotted::with($reference);
+        throw new ReferenceHasNotBeenSnapshotted($reference);
     }
 }

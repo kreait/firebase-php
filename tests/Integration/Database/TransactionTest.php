@@ -6,9 +6,11 @@ namespace Kreait\Firebase\Tests\Integration\Database;
 
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\Transaction;
-use Kreait\Firebase\Exception\ApiException;
 use Kreait\Firebase\Exception\Database\TransactionFailed;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 /**
  * @internal
@@ -83,7 +85,7 @@ class TransactionTest extends DatabaseTestCase
             try {
                 $transaction->set($firstRef, $newFirstValue);
                 $this->fail('An exception should have been thrown');
-            } catch (ApiException $e) {
+            } catch (TransactionFailed $e) {
                 // this is expected
             }
 
@@ -106,20 +108,45 @@ class TransactionTest extends DatabaseTestCase
 
     public function testATransactionPreventsADeletionWhenTheRemoteHasChanged()
     {
-        $firstRef = $this->ref->getChild(__FUNCTION__);
-        $firstRef->set(['key' => 'value']);
+        $ref = $this->ref->getChild(__FUNCTION__);
+        $ref->set(['key' => 'value']);
 
         $this->expectException(TransactionFailed::class);
 
-        self::$db->runTransaction(static function (Transaction $transaction) use ($firstRef) {
+        self::$db->runTransaction(static function (Transaction $transaction) use ($ref) {
             // Register a transaction for the given reference
-            $transaction->snapshot($firstRef);
+            $transaction->snapshot($ref);
 
             // Set the value without a transaction
-            $firstRef->set('new value');
+            $ref->set('new value');
 
             // This should fail
-            $transaction->remove($firstRef);
+            $transaction->remove($ref);
         });
+    }
+
+    public function testATransactionErrorContainsTheRequestAndResponse()
+    {
+        $ref = $this->ref->getChild(__FUNCTION__);
+        $ref->set(['key' => 'value']);
+
+        try {
+            self::$db->runTransaction(static function (Transaction $transaction) use ($ref) {
+                // Register a transaction for the given reference
+                $transaction->snapshot($ref);
+
+                // Set the value without a transaction
+                $ref->set('new value');
+
+                // This should fail
+                $transaction->remove($ref);
+            });
+            $this->fail('An exception should have been thrown');
+        } catch (TransactionFailed $e) {
+            $this->assertInstanceOf(RequestInterface::class, $e->getRequest());
+            $this->assertInstanceOf(ResponseInterface::class, $e->getResponse());
+        } catch (Throwable $e) {
+            $this->fail('A '.TransactionFailed::class.' should have been thrown');
+        }
     }
 }

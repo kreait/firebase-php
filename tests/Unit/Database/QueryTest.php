@@ -9,12 +9,13 @@ use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Query;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\Snapshot;
-use Kreait\Firebase\Exception\ApiException;
-use Kreait\Firebase\Exception\IndexNotDefined;
+use Kreait\Firebase\Exception\Database\DatabaseError;
+use Kreait\Firebase\Exception\Database\UnsupportedQuery;
+use Kreait\Firebase\Exception\IndexNotDefined as DeprecatedIndexNotDefined;
 use Kreait\Firebase\Exception\QueryException;
 use Kreait\Firebase\Tests\UnitTestCase;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
+use Throwable;
 
 /**
  * @internal
@@ -100,38 +101,39 @@ class QueryTest extends UnitTestCase
 
     public function testOnlyOneSorterIsAllowed()
     {
-        $this->expectException(QueryException::class);
-
-        $this->query->orderByKey()->orderByValue();
+        try {
+            $this->query->orderByKey()->orderByValue();
+        } catch (\Throwable $e) {
+            $this->assertInstanceOf(QueryException::class, $e);
+            $this->assertInstanceOf(UnsupportedQuery::class, $e);
+        }
     }
 
     public function testWrapsApiExceptions()
     {
-        $exception = $this->createMock(ApiException::class);
+        $exception = new DatabaseError();
 
         $this->apiClient
-            ->expects($this->any())
             ->method('get')->with($this->anything())
             ->willThrowException($exception);
 
-        $this->expectException(QueryException::class);
+        $this->expectException(UnsupportedQuery::class);
 
         $this->query->getSnapshot();
     }
 
     public function testIndexNotDefined()
     {
-        $request = $this->createMock(RequestInterface::class);
-
-        $exception = new ApiException($request, 'foo index not defined bar');
-
         $this->apiClient
-            ->expects($this->any())
             ->method('get')->with($this->anything())
-            ->willThrowException($exception);
+            ->willThrowException(new DatabaseError('foo index not defined bar'));
 
-        $this->expectException(IndexNotDefined::class);
-
-        $this->query->getSnapshot();
+        try {
+            $this->query->getSnapshot();
+            $this->fail('An exception should have been thrown');
+        } catch (Throwable $e) {
+            $this->assertInstanceOf(UnsupportedQuery::class, $e);
+            $this->assertInstanceOf(DeprecatedIndexNotDefined::class, $e);
+        }
     }
 }
