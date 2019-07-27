@@ -19,11 +19,19 @@ use Kreait\Firebase\Exception\Auth\PhoneNumberExists;
 use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\Auth\WeakPassword;
-use Kreait\Firebase\Util\JSON;
+use Kreait\Firebase\Http\ErrorResponseParser;
 use Throwable;
 
 final class AuthApiExceptionConverter implements ExceptionConverter
 {
+    /** @var ErrorResponseParser */
+    private $responseParser;
+
+    public function __construct()
+    {
+        $this->responseParser = new ErrorResponseParser();
+    }
+
     /**
      * @return AuthException
      */
@@ -45,13 +53,7 @@ final class AuthApiExceptionConverter implements ExceptionConverter
         }
 
         if ($response = $e->getResponse()) {
-            $responseBody = (string) $response->getBody();
-
-            try {
-                $message = JSON::decode($responseBody, true)['error']['message'] ?? $message;
-            } catch (InvalidArgumentException $e) {
-                $message = $responseBody;
-            }
+            $message = $this->responseParser->extractErrorReason($response);
         }
 
         if (\mb_stripos($message, 'credentials_mismatch') !== false) {

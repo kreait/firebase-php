@@ -25,8 +25,6 @@ final class RevokedIdToken extends RuntimeException implements AuthException
 
     public function getToken(): Token
     {
-        // @codeCoverageIgnoreStart
         return $this->token;
-        // @codeCoverageIgnoreEnd
     }
 }
