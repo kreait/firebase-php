@@ -2,7 +2,7 @@
 .PHONY: tests coverage view-coverage cs docs view-docs tag
 
 tests: ## Executes the test suites
-	@vendor/bin/phpunit --testdox --testsuite unit
+	@vendor/bin/phpunit --testsuite unit
 	@vendor/bin/phpstan analyse src tests -c phpstan.neon --level=max
 
 integration-tests: ## Executes the integration test suite
