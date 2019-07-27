@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration\Auth;
 
-use Kreait\Firebase\Auth;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
+use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Tests\IntegrationTestCase;
-use Kreait\Firebase\Util\JSON;
+use PHPUnit\Framework\AssertionFailedError;
+use Throwable;
 
 /**
  * @internal
@@ -19,38 +20,34 @@ class CustomTokenViaGoogleIamTest extends IntegrationTestCase
      */
     private $generator;
 
-    /**
-     * @var Auth
-     */
-    private $auth;
-
     protected function setUp()
     {
         $this->generator = new CustomTokenViaGoogleIam(
             self::$serviceAccount->getClientEmail(),
             self::$factory->createApiClient()
         );
-
-        $this->auth = self::$firebase->getAuth();
     }
 
     public function testCreateCustomToken()
     {
-        $user = $this->auth->createUser([]);
+        $this->generator->createCustomToken('some-uid', ['a-claim' => 'a-value']);
+        $this->addToAssertionCount(1);
+    }
 
-        $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
-            $this->generator->createCustomToken($user->uid, ['a-claim' => 'a-value'])
-        );
-        $idToken = JSON::decode($idTokenResponse->getBody()->getContents(), true)['idToken'];
+    public function testCreateCustomTokenWithAnInvalidClientEmail()
+    {
+        $generator = new CustomTokenViaGoogleIam('user@domain.tld', self::$factory->createApiClient());
 
-        $verifiedToken = $this->auth->verifyIdToken($idToken);
-
-        $this->assertTrue($verifiedToken->hasClaim('a-claim'));
-        $this->assertSame('a-value', $verifiedToken->getClaim('a-claim'));
-
-        $this->assertTrue($verifiedToken->hasClaim('user_id'));
-        $this->assertSame($user->uid, $verifiedToken->getClaim('user_id'));
-
-        $this->auth->deleteUser($user->uid);
+        try {
+            $generator->createCustomToken('some-uid', ['kid' => '$&§']);
+            $this->fail('An exception should have been thrown');
+        } catch (AuthException $e) {
+            $this->addToAssertionCount(1);
+        } catch (AssertionFailedError $e) {
+            $this->fail($e->getMessage());
+        } catch (Throwable $e) {
+            echo \get_class($e);
+            $this->fail('An '.AuthException::class.' should have been thrown');
+        }
     }
 }
