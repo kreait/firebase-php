@@ -4,6 +4,15 @@
 
 ### Added
 
+#### General
+
+* The SDK is now able to handle connection issues more gracefully. The following exceptions will now be thrown 
+  when a connection could not be established:
+  * `Kreait\Firebase\Auth\ApiConnectionFailed`
+  * `Kreait\Firebase\Database\ApiConnectionFailed`
+  * `Kreait\Firebase\Messaging\ApiConnectionFailed`
+  * `Kreait\Firebase\RemoteConfig\ApiConnectionFailed`
+
 #### Cloud Messaging
 
 * It is now possible to retrieve extended information about application instances related to a 
@@ -20,6 +29,7 @@
   * `Kreait\Firebase\Exception\AuthException`
   * `Kreait\Firebase\Exception\DatabaseException` (new)
   * `Kreait\Firebase\Exception\MessagingException`
+  * `Kreait\Firebase\Exception\RemoteConfigException`
 * `Kreait\Firebase\Auth\CustomTokenViaGoogleIam` is no longer using deprecated methods to build a custom token.
 * Getting requests and responses from exceptions is now considered deprecated. If you want to debug HTTP requests,
   use the Firebase factory to debug the HTTP client via configuration or an additional middleware.    
