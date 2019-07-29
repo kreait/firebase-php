@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
-use Kreait\Firebase\Exception\RemoteConfig\OperationAborted;
 use Kreait\Firebase\Exception\RemoteConfig\ValidationFailed;
+use Kreait\Firebase\Exception\RemoteConfig\VersionMismatch;
 use Kreait\Firebase\RemoteConfig;
 use Kreait\Firebase\RemoteConfig\Condition;
 use Kreait\Firebase\RemoteConfig\ConditionalValue;
@@ -86,7 +86,7 @@ CONFIG;
 
         $this->remoteConfig->publish($published);
 
-        $this->expectException(OperationAborted::class);
+        $this->expectException(VersionMismatch::class);
         $this->remoteConfig->publish($published);
     }
 

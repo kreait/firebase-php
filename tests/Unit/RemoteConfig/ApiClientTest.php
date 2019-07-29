@@ -10,6 +10,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\Exception\RemoteConfig\OperationAborted;
 use Kreait\Firebase\Exception\RemoteConfig\PermissionDenied;
+use Kreait\Firebase\Exception\RemoteConfig\RemoteConfigError;
 use Kreait\Firebase\Exception\RemoteConfigException;
 use Kreait\Firebase\RemoteConfig\ApiClient;
 use Kreait\Firebase\Tests\UnitTestCase;
@@ -74,7 +75,7 @@ class ApiClientTest extends UnitTestCase
             ],
             [
                 new RequestException('Forbidden', $request, new Response(403, [], '{"error":{"message":"UNKOWN"}}')),
-                RemoteConfigException::class,
+                RemoteConfigError::class,
             ],
         ];
     }

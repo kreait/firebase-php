@@ -57,7 +57,7 @@ class RemoteConfig
     /**
      * @param Template|array $template
      *
-     * @throws RemoteConfigException
+     *@throws RemoteConfigException
      *
      * @return string The etag value of the published template that can be compared to in later calls
      */

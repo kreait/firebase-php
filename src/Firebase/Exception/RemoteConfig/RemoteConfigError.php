@@ -7,6 +7,6 @@ namespace Kreait\Firebase\Exception\RemoteConfig;
 use Kreait\Firebase\Exception\RemoteConfigException;
 use RuntimeException;
 
-final class ValidationFailed extends RuntimeException implements RemoteConfigException
+final class RemoteConfigError extends RuntimeException implements RemoteConfigException
 {
 }

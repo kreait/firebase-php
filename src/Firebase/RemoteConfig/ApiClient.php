@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\RemoteConfig;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
-use Kreait\Firebase\Exception\RemoteConfigException;
+use Kreait\Firebase\Exception\RemoteConfigApiExceptionConverter;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
@@ -16,10 +15,11 @@ use Throwable;
  */
 class ApiClient
 {
-    /**
-     * @var ClientInterface
-     */
+    /** @var ClientInterface */
     private $client;
+
+    /** @var RemoteConfigApiExceptionConverter */
+    private $errorHandler;
 
     /**
      * @internal
@@ -27,6 +27,7 @@ class ApiClient
     public function __construct(ClientInterface $client)
     {
         $this->client = $client;
+        $this->errorHandler = new RemoteConfigApiExceptionConverter();
     }
 
     public function getTemplate(): ResponseInterface
@@ -100,10 +101,8 @@ class ApiClient
 
         try {
             return $this->client->request($method, $uri, $options);
-        } catch (RequestException $e) {
-            throw RemoteConfigException::fromRequestException($e);
         } catch (Throwable $e) {
-            throw new RemoteConfigException($e->getMessage(), $e->getCode(), $e);
+            throw $this->errorHandler->convertException($e);
         }
     }
 }
