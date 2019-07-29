@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.28.0 - 2019-07-29
 
 ### Added
 
