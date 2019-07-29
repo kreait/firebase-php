@@ -126,3 +126,38 @@ enabled for your project:
 - Realtime Database Rules: https://console.cloud.google.com/apis/library/firebaserules.googleapis.com
 - Remote Config: https://console.cloud.google.com/apis/library/firebaseremoteconfig.googleapis.com
 - Storage: https://console.cloud.google.com/apis/library/storage-component.googleapis.com
+
+*******************
+Proxy configuration
+*******************
+
+If you need to access the Firebase/Google APIs through a proxy, you can configure the SDK to use one via
+`Guzzle's proxy configuration <http://docs.guzzlephp.org/en/stable/request-options.html#proxy>`_:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Factory;
+
+    $firebase = (new Factory)
+        ->withHttpClientConfig([
+            'proxy' => 'tcp://<host>:<port>'
+        ])
+        ->create();
+
+**********************
+Debugging API requests
+**********************
+
+In order to debug HTTP requests to the Firebase/Google APIs, you can set
+`Guzzle's debug option <http://docs.guzzlephp.org/en/stable/request-options.html#debug>`_ to ``true`` in the
+HTTP client config:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Factory;
+
+    $firebase = (new Factory)
+        ->withHttpClientConfig([
+            'debug' => true
+        ])
+        ->create();
