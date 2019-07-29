@@ -7,6 +7,7 @@ namespace Kreait\Firebase\Util;
 use DateTimeImmutable;
 use DateTimeZone;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Throwable;
 
 /**
  * @internal
@@ -35,7 +36,7 @@ class DT
 
         try {
             $value = (string) $value;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
 
@@ -66,7 +67,7 @@ class DT
 
         try {
             return (new DateTimeImmutable($value))->setTimezone($tz);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
     }

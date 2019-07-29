@@ -7,7 +7,9 @@ namespace Kreait\Firebase\Messaging;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
+use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
+use Kreait\Firebase\Exception\MessagingException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
@@ -33,6 +35,10 @@ class ApiClient
         $this->errorHandler = new MessagingApiExceptionConverter();
     }
 
+    /**
+     * @throws MessagingException
+     * @throws FirebaseException
+     */
     public function sendMessage(Message $message): ResponseInterface
     {
         return $this->sendMessageAsync($message)->wait();
@@ -47,6 +53,10 @@ class ApiClient
         ]);
     }
 
+    /**
+     * @throws MessagingException
+     * @throws FirebaseException
+     */
     public function validateMessage(Message $message): ResponseInterface
     {
         return $this->validateMessageAsync($message)->wait();

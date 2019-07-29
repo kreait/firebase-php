@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Util;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Throwable;
 
 /**
  * @internal
@@ -82,7 +83,7 @@ class JSON
             self::decode($value);
 
             return true;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return false;
         }
     }

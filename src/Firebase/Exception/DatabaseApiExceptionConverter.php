@@ -22,6 +22,9 @@ final class DatabaseApiExceptionConverter implements ExceptionConverter
         $this->responseParser = new ErrorResponseParser();
     }
 
+    /**
+     * @return DatabaseException
+     */
     public function convertException(Throwable $exception): FirebaseException
     {
         if ($exception instanceof RequestException) {
@@ -37,11 +40,11 @@ final class DatabaseApiExceptionConverter implements ExceptionConverter
         $code = $e->getCode();
 
         if ($e instanceof ConnectException) {
-            return new ApiConnectionFailed('Unable to connect to the API: '.$e->getMessage(), $e->getCode(), $e);
+            return new ApiConnectionFailed('Unable to connect to the API: '.$message, $code, $e);
         }
 
         if ($response = $e->getResponse()) {
-            $message = $this->responseParser->extractErrorReason($response);
+            $message = $this->responseParser->getErrorReasonFromResponse($response);
             $code = $response->getStatusCode();
         }
 
@@ -53,6 +56,6 @@ final class DatabaseApiExceptionConverter implements ExceptionConverter
                 return new Database\PreconditionFailed($message, $code, $e);
         }
 
-        return new DatabaseError($message, $e->getCode(), $e);
+        return new DatabaseError($message, $code, $e);
     }
 }

@@ -13,6 +13,7 @@ use Kreait\Firebase\RemoteConfig\Parameter;
 use Kreait\Firebase\RemoteConfig\TagColor;
 use Kreait\Firebase\RemoteConfig\Template;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use Throwable;
 
 /**
  * @internal
@@ -129,7 +130,7 @@ CONFIG;
         try {
             $this->remoteConfig->validate($template);
             $this->fail('A '.ValidationFailed::class.' should have been thrown');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->assertInstanceOf(ValidationFailed::class, $e);
         }
 
@@ -145,7 +146,7 @@ CONFIG;
         try {
             $this->remoteConfig->validate($template);
             $this->fail('A '.ValidationFailed::class.' should have been thrown');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->assertInstanceOf(ValidationFailed::class, $e);
         }
 

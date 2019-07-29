@@ -8,6 +8,7 @@ use Kreait\Firebase;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Util\JSON;
+use Throwable;
 
 abstract class IntegrationTestCase extends FirebaseTestCase
 {
@@ -45,7 +46,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
         try {
             self::$serviceAccount = ServiceAccount::fromJsonFile($credentialsPath);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             self::markTestSkipped('The integration tests require a credentials file at "'.$credentialsPath.'"."');
 
             return;

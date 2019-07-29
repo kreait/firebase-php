@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Messaging;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Throwable;
 
 class Notification implements \JsonSerializable
 {
@@ -37,7 +38,7 @@ class Notification implements \JsonSerializable
                 $data['body'] ?? null,
                 $data['image'] ?? null
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
     }

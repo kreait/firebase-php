@@ -103,7 +103,7 @@ class QueryTest extends UnitTestCase
     {
         try {
             $this->query->orderByKey()->orderByValue();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->assertInstanceOf(QueryException::class, $e);
             $this->assertInstanceOf(UnsupportedQuery::class, $e);
         }

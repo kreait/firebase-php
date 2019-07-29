@@ -47,59 +47,61 @@ final class AuthApiExceptionConverter implements ExceptionConverter
     private function convertGuzzleRequestException(RequestException $e): AuthException
     {
         $message = $e->getMessage();
+        $code = $e->getCode();
 
         if ($e instanceof ConnectException) {
-            return new ApiConnectionFailed('Unable to connect to the API: '.$e->getMessage(), $e->getCode(), $e);
+            return new ApiConnectionFailed('Unable to connect to the API: '.$message, $code, $e);
         }
 
         if ($response = $e->getResponse()) {
-            $message = $this->responseParser->extractErrorReason($response);
+            $message = $this->responseParser->getErrorReasonFromResponse($response);
+            $code = $response->getStatusCode();
         }
 
         if (\mb_stripos($message, 'credentials_mismatch') !== false) {
-            return new CredentialsMismatch('Invalid custom token: The custom token corresponds to a different Firebase project.', $e->getCode(), $e);
+            return new CredentialsMismatch('Invalid custom token: The custom token corresponds to a different Firebase project.', $code, $e);
         }
 
         if (\mb_stripos($message, 'email_exists') !== false) {
-            return new EmailExists('The email address is already in use by another account.', $e->getCode(), $e);
+            return new EmailExists('The email address is already in use by another account.', $code, $e);
         }
 
         if (\mb_stripos($message, 'email_not_found') !== false) {
-            return new EmailNotFound('There is no user record corresponding to this identifier. The user may have been deleted.', $e->getCode(), $e);
+            return new EmailNotFound('There is no user record corresponding to this identifier. The user may have been deleted.', $code, $e);
         }
 
         if (\mb_stripos($message, 'invalid_custom_token') !== false) {
-            return new InvalidCustomToken('Invalid custom token: The custom token format is incorrect or the token is invalid for some reason (e.g. expired, invalid signature, etc.)', $e->getCode(), $e);
+            return new InvalidCustomToken('Invalid custom token: The custom token format is incorrect or the token is invalid for some reason (e.g. expired, invalid signature, etc.)', $code, $e);
         }
 
         if (\mb_stripos($message, 'invalid_password') !== false) {
-            return new InvalidPassword('The password is invalid or the user does not have a password.', $e->getCode(), $e);
+            return new InvalidPassword('The password is invalid or the user does not have a password.', $code, $e);
         }
 
         if (\mb_stripos($message, 'missing_password') !== false) {
-            return new MissingPassword('Missing Password', $e->getCode(), $e);
+            return new MissingPassword('Missing Password', $code, $e);
         }
 
         if (\mb_stripos($message, 'operation_not_allowed') !== false) {
-            return new OperationNotAllowed('Operation not allowed.', $e->getCode(), $e);
+            return new OperationNotAllowed('Operation not allowed.', $code, $e);
         }
 
         if (\mb_stripos($message, 'user_disabled') !== false) {
-            return new UserDisabled('The user account has been disabled by an administrator.', $e->getCode(), $e);
+            return new UserDisabled('The user account has been disabled by an administrator.', $code, $e);
         }
 
         if (\mb_stripos($message, 'user_not_found') !== false) {
-            return new UserNotFound('There is no user record corresponding to this identifier. The user may have been deleted.', $e->getCode(), $e);
+            return new UserNotFound('There is no user record corresponding to this identifier. The user may have been deleted.', $code, $e);
         }
 
         if (\mb_stripos($message, 'weak_password') !== false) {
-            return new WeakPassword('The password must be 6 characters long or more.', $e->getCode(), $e);
+            return new WeakPassword('The password must be 6 characters long or more.', $code, $e);
         }
 
         if (\mb_stripos($message, 'phone_number_exists') !== false) {
-            return new PhoneNumberExists('The phone number is already in use by another account.', $e->getCode(), $e);
+            return new PhoneNumberExists('The phone number is already in use by another account.', $code, $e);
         }
 
-        return new AuthError($message, $e->getCode(), $e);
+        return new AuthError($message, $code, $e);
     }
 }

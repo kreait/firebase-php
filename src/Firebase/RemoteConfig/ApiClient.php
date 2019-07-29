@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Exception\RemoteConfigException;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 /**
  * @internal
@@ -101,7 +102,7 @@ class ApiClient
             return $this->client->request($method, $uri, $options);
         } catch (RequestException $e) {
             throw RemoteConfigException::fromRequestException($e);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new RemoteConfigException($e->getMessage(), $e->getCode(), $e);
         }
     }

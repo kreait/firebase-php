@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Messaging;
 
 use GuzzleHttp\ClientInterface;
+use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
+use Kreait\Firebase\Exception\MessagingException;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 /**
  * @internal
@@ -28,6 +31,13 @@ class AppInstanceApiClient
         $this->errorHandler = new MessagingApiExceptionConverter();
     }
 
+    /**
+     * @param Topic|string $topic
+     * @param RegistrationToken[]|string[] $tokens
+     *
+     * @throws FirebaseException
+     * @throws MessagingException
+     */
     public function subscribeToTopic($topic, array $tokens): ResponseInterface
     {
         return $this->request('POST', '/iid/v1:batchAdd', [
@@ -38,6 +48,13 @@ class AppInstanceApiClient
         ]);
     }
 
+    /**
+     * @param Topic|string $topic
+     * @param RegistrationToken[]|string[] $tokens
+     *
+     * @throws FirebaseException
+     * @throws MessagingException
+     */
     public function unsubscribeFromTopic($topic, array $tokens): ResponseInterface
     {
         return $this->request('POST', '/iid/v1:batchRemove', [
@@ -49,18 +66,23 @@ class AppInstanceApiClient
     }
 
     /**
-     * @throws \Kreait\Firebase\Exception\FirebaseException
+     * @throws FirebaseException
+     * @throws MessagingException
      */
     public function getAppInstance(string $registrationToken): ResponseInterface
     {
         return $this->request('GET', '/iid/'.$registrationToken.'?details=true');
     }
 
-    private function request($method, $endpoint, array $options = null): ResponseInterface
+    /**
+     * @throws FirebaseException
+     * @throws MessagingException
+     */
+    private function request(string $method, string $endpoint, array $options = null): ResponseInterface
     {
         try {
             return $this->client->request($method, $endpoint, $options ?? []);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw $this->errorHandler->convertException($e);
         }
     }

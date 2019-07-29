@@ -7,6 +7,7 @@ namespace Kreait\Firebase;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\Firebase\Util\JSON;
+use Throwable;
 
 class ServiceAccount
 {
@@ -159,13 +160,13 @@ class ServiceAccount
         try {
             $file = new \SplFileObject($filePath);
             $json = $file->fread($file->getSize());
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new InvalidArgumentException(\sprintf('%s can not be read: %s', $filePath, $e->getMessage()));
         }
 
         try {
             return self::fromJson($json);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new InvalidArgumentException(\sprintf('%s could not be parsed to a Service Account: %s', $filePath, $e->getMessage()));
         }
     }

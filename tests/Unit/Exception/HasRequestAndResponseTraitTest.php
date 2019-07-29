@@ -19,7 +19,7 @@ final class HasRequestAndResponseTraitTest extends TestCase
     /** @test */
     public function it_has_nothing()
     {
-        $sut = new class extends Exception {
+        $sut = new class() extends Exception {
             use HasRequestAndResponse;
         };
 

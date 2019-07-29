@@ -8,6 +8,7 @@ use function GuzzleHttp\Psr7\uri_for;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value;
 use Psr\Http\Message\UriInterface;
+use Throwable;
 
 /**
  * @internal
@@ -31,7 +32,7 @@ class Url implements \JsonSerializable, Value
     {
         try {
             return new self(uri_for($value));
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
     }

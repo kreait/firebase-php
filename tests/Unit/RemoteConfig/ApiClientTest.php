@@ -13,6 +13,7 @@ use Kreait\Firebase\Exception\RemoteConfig\PermissionDenied;
 use Kreait\Firebase\Exception\RemoteConfigException;
 use Kreait\Firebase\RemoteConfig\ApiClient;
 use Kreait\Firebase\Tests\UnitTestCase;
+use Throwable;
 
 /**
  * @internal
@@ -41,7 +42,7 @@ class ApiClientTest extends UnitTestCase
 
         try {
             $this->client->getTemplate();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->assertInstanceOf(RemoteConfigException::class, $e);
             $this->assertInstanceOf($expectedClass, $e);
         }

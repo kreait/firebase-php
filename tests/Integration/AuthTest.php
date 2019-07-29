@@ -15,6 +15,7 @@ use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Kreait\Firebase\Util\JSON;
 use Lcobucci\JWT\Builder;
+use Throwable;
 
 /**
  * @internal
@@ -177,7 +178,7 @@ class AuthTest extends IntegrationTestCase
 
         try {
             $this->auth->verifyIdToken($idToken, $checkIfRevoked = true);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->assertInstanceOf(RevokedIdToken::class, $e);
         }
 
@@ -329,7 +330,7 @@ class AuthTest extends IntegrationTestCase
         try {
             $this->auth->verifyPassword($email, 'incorrect');
             $this->fail(InvalidPassword::class.' should have been thrown');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->assertInstanceOf(InvalidPassword::class, $e);
         } finally {
             $this->auth->deleteUser($user->uid);

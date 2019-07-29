@@ -11,6 +11,7 @@ use Kreait\Firebase\Exception\DatabaseException;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
+use Throwable;
 
 /**
  * @internal
@@ -175,7 +176,7 @@ class ApiClient
     /**
      * @param UriInterface|string $uri
      *
-     * @throws \Kreait\Firebase\Exception\DatabaseException
+     * @throws DatabaseException
      */
     private function request(string $method, $uri, array $options = null): ResponseInterface
     {
@@ -185,7 +186,7 @@ class ApiClient
 
         try {
             return $this->httpClient->send($request, $options);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw $this->errorHandler->convertException($e);
         }
     }

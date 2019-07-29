@@ -7,21 +7,16 @@ namespace Kreait\Firebase\Exception\Database;
 use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Exception\FirebaseException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Kreait\Firebase\Exception\HasRequestAndResponse;
 use RuntimeException;
 use Throwable;
 
 final class TransactionFailed extends RuntimeException implements FirebaseException
 {
+    use HasRequestAndResponse;
+
     /** @var Reference */
     private $reference;
-
-    /** @var RequestInterface|null */
-    private $request;
-
-    /** @var ResponseInterface|null */
-    private $response;
 
     public function __construct(Reference $query, $message = '', $code = 0, Throwable $previous = null)
     {
@@ -65,25 +60,5 @@ final class TransactionFailed extends RuntimeException implements FirebaseExcept
     public function getReference(): Reference
     {
         return $this->reference;
-    }
-
-    /**
-     * @deprecated 4.28.0
-     *
-     * @return RequestInterface|null
-     */
-    public function getRequest()
-    {
-        return $this->request;
-    }
-
-    /**
-     * @deprecated 4.28.0
-     *
-     * @return ResponseInterface|null
-     */
-    public function getResponse()
-    {
-        return $this->response;
     }
 }
