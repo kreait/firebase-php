@@ -93,13 +93,11 @@ class MessagingTest extends UnitTestCase
     public function testValidateMessageGivenAnUnknownDeviceToken()
     {
         $message = CloudMessage::withTarget(Messaging\MessageTarget::TOKEN, 'foo');
-        $e = $this->createMock(NotFound::class);
-        $e->method('response')->willReturn(new Response());
 
         $this->messagingApi
             ->method('validateMessage')
             ->with($message)
-            ->willThrowException(new NotFound());
+            ->willThrowException((new NotFound())->withResponse(new Response()));
 
         $this->expectException(InvalidMessage::class);
         $this->messaging->validate($message);

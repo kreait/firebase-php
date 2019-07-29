@@ -12,13 +12,13 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\Exception\Messaging\AuthenticationError;
-use Kreait\Firebase\Exception\Messaging\InvalidArgument;
+use Kreait\Firebase\Exception\Messaging\InvalidMessage;
+use Kreait\Firebase\Exception\Messaging\MessagingError;
 use Kreait\Firebase\Exception\Messaging\ServerError;
 use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
-use Kreait\Firebase\Exception\Messaging\UnknownError;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\ApiClient;
-use Kreait\Firebase\Messaging\MessageToTopic;
+use Kreait\Firebase\Messaging\CloudMessage;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -52,7 +52,7 @@ class ApiClientTest extends TestCase
         $this->mock->append($requestException);
 
         $this->expectException($expectedClass);
-        $this->client->sendMessage(MessageToTopic::create('a-topic'));
+        $this->client->sendMessage(CloudMessage::new());
     }
 
     public function testCatchAnyException()
@@ -61,7 +61,7 @@ class ApiClientTest extends TestCase
 
         $this->expectException(MessagingException::class);
 
-        $this->client->sendMessage(MessageToTopic::create('a-topic'));
+        $this->client->sendMessage(CloudMessage::new());
     }
 
     public function requestExceptions(): array
@@ -72,7 +72,7 @@ class ApiClientTest extends TestCase
         return [
             [
                 new RequestException('Bad Request', $request, new Response(400, [], $responseBody)),
-                InvalidArgument::class,
+                InvalidMessage::class,
             ],
             [
                 new RequestException('Unauthorized', $request, new Response(401, [], $responseBody)),
@@ -92,7 +92,7 @@ class ApiClientTest extends TestCase
             ],
             [
                 new RequestException('I\'m a teapot', $request, new Response(418, [], $responseBody)),
-                UnknownError::class,
+                MessagingError::class,
             ],
         ];
     }

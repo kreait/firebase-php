@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Messaging;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
-use Kreait\Firebase\Exception\MessagingException;
+use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -14,10 +13,11 @@ use Psr\Http\Message\ResponseInterface;
  */
 class AppInstanceApiClient
 {
-    /**
-     * @var ClientInterface
-     */
+    /** @var ClientInterface */
     private $client;
+
+    /** @var MessagingApiExceptionConverter */
+    private $errorHandler;
 
     /**
      * @internal
@@ -25,6 +25,7 @@ class AppInstanceApiClient
     public function __construct(ClientInterface $client)
     {
         $this->client = $client;
+        $this->errorHandler = new MessagingApiExceptionConverter();
     }
 
     public function subscribeToTopic($topic, array $tokens): ResponseInterface
@@ -47,6 +48,9 @@ class AppInstanceApiClient
         ]);
     }
 
+    /**
+     * @throws \Kreait\Firebase\Exception\FirebaseException
+     */
     public function getAppInstance(string $registrationToken): ResponseInterface
     {
         return $this->request('GET', '/iid/'.$registrationToken.'?details=true');
@@ -56,10 +60,8 @@ class AppInstanceApiClient
     {
         try {
             return $this->client->request($method, $endpoint, $options ?? []);
-        } catch (RequestException $e) {
-            throw MessagingException::fromRequestException($e);
         } catch (\Throwable $e) {
-            throw new MessagingException($e->getMessage(), $e->getCode(), $e);
+            throw $this->errorHandler->convertException($e);
         }
     }
 }

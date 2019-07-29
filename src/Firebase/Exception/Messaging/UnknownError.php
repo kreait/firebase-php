@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Exception\Messaging;
 
-use Kreait\Firebase\Exception\MessagingException;
-
-class UnknownError extends MessagingException
+/**
+ * @deprecated 4.28.0 catch specific exceptions or \Kreait\Firebase\Exception\MessagingException instead
+ */
+interface UnknownError
 {
 }

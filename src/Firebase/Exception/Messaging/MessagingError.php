@@ -9,7 +9,7 @@ use Kreait\Firebase\Exception\MessagingException;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 
-final class InvalidMessage extends RuntimeException implements MessagingException
+final class MessagingError extends RuntimeException implements MessagingException, UnknownError
 {
     use HasRequestAndResponse;
 

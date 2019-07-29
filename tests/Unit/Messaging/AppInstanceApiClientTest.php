@@ -4,45 +4,52 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
-use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 
 /**
  * @internal
  */
 class AppInstanceApiClientTest extends TestCase
 {
-    private $client;
+    /** @var MockHandler */
+    private $mock;
 
     /** @var AppInstanceApiClient */
-    private $sut;
+    private $client;
 
     protected function setUp()
     {
-        $this->client = $this->prophesize(ClientInterface::class);
-        $this->sut = new AppInstanceApiClient($this->client->reveal());
+        $this->mock = new MockHandler();
+
+        $handler = HandlerStack::create($this->mock);
+        $client = new Client([
+            'handler' => $handler,
+            'base_uri' => 'http://example.com',
+        ]);
+
+        $this->client = new AppInstanceApiClient($client);
     }
 
     public function testRequestExceptionIsConvertedToMessagingException()
     {
-        $e = new RequestException('Foo', new Request('POST', 'https://fake.org'));
-        $this->client->request(Argument::cetera())->willThrow($e);
+        $this->mock->append(new RequestException('Foo', new Request('POST', 'https://fake.org')));
 
         $this->expectException(MessagingException::class);
-        $this->sut->subscribeToTopic('foo', ['bar']);
+        $this->client->subscribeToTopic('foo', ['bar']);
     }
 
     public function testAnyThrowableIsConvertedToMessagingException()
     {
-        $e = new \Exception('Foo', 999);
-        $this->client->request(Argument::cetera())->willThrow($e);
+        $this->mock->append(new \Exception('Foo', 999));
 
         $this->expectException(MessagingException::class);
-        $this->sut->subscribeToTopic('foo', ['bar']);
+        $this->client->subscribeToTopic('foo', ['bar']);
     }
 }

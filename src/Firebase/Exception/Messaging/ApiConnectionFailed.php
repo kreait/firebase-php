@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Exception\Messaging;
 
-use InvalidArgumentException;
 use Kreait\Firebase\Exception\HasRequestAndResponse;
 use Kreait\Firebase\Exception\MessagingException;
+use RuntimeException;
 
-final class InvalidArgument extends InvalidArgumentException implements MessagingException
+final class ApiConnectionFailed extends RuntimeException implements MessagingException
 {
     use HasRequestAndResponse;
 

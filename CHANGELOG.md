@@ -12,14 +12,17 @@
 
 ### Changed
 
-#### Under the hood
+#### General
 
-* The components now have dedicated catchable exception interfaces, e.g. `Kreait\Firebase\Exception\AuthException` or 
-  `Kreait\Firebase\Exception\DatabaseException`
+* Each component now has its own catchable exception interface, e.g. `Kreait\Firebase\Exception\AuthException` or 
+  `Kreait\Firebase\Exception\DatabaseException`.
 * The following exceptions are now interfaces implemented by specific errors instead of extensible classes:
   * `Kreait\Firebase\Exception\AuthException`
   * `Kreait\Firebase\Exception\DatabaseException` (new)
-* `Kreait\Firebase\Auth\CustomTokenViaGoogleIam` is no longer using deprecated methods to build a custom token.  
+  * `Kreait\Firebase\Exception\MessagingException`
+* `Kreait\Firebase\Auth\CustomTokenViaGoogleIam` is no longer using deprecated methods to build a custom token.
+* Getting requests and responses from exceptions is now considered deprecated. If you want to debug HTTP requests,
+  use the Firebase factory to debug the HTTP client via configuration or an additional middleware.    
 
 ## 4.27.0 - 2019-07-19
 

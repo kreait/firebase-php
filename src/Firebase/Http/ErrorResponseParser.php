@@ -10,7 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 
 final class ErrorResponseParser
 {
-    public function extractErrorReason(ResponseInterface $response): string
+    public function getErrorReasonFromResponse(ResponseInterface $response): string
     {
         $responseBody = (string) $response->getBody();
 
@@ -29,5 +29,14 @@ final class ErrorResponseParser
         }
 
         return $responseBody;
+    }
+
+    public function getErrorsFromResponse(ResponseInterface $response): array
+    {
+        try {
+            return JSON::decode((string) $response->getBody(), true);
+        } catch (\InvalidArgumentException $e) {
+            return [];
+        }
     }
 }

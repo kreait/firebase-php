@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Messaging;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
-use Kreait\Firebase\Exception\MessagingException;
+use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
@@ -19,10 +18,11 @@ use Throwable;
  */
 class ApiClient
 {
-    /**
-     * @var ClientInterface
-     */
+    /** @var ClientInterface */
     private $client;
+
+    /** @var MessagingApiExceptionConverter */
+    private $errorHandler;
 
     /**
      * @internal
@@ -30,6 +30,7 @@ class ApiClient
     public function __construct(ClientInterface $client)
     {
         $this->client = $client;
+        $this->errorHandler = new MessagingApiExceptionConverter();
     }
 
     public function sendMessage(Message $message): ResponseInterface
@@ -69,7 +70,7 @@ class ApiClient
 
         return $this->client->sendAsync($request, $options)
             ->then(null, function (Throwable $e) {
-                throw $this->convertError($e);
+                throw $this->errorHandler->convertException($e);
             });
     }
 
@@ -81,14 +82,5 @@ class ApiClient
         $uri = $uri->withPath($path);
 
         return new Request($method, $uri);
-    }
-
-    private function convertError(Throwable $error): MessagingException
-    {
-        if ($error instanceof RequestException) {
-            return MessagingException::fromRequestException($error);
-        }
-
-        return new MessagingException($error->getMessage(), $error->getCode(), $error);
     }
 }
