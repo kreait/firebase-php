@@ -178,8 +178,11 @@ class AuthTest extends IntegrationTestCase
 
         try {
             $this->auth->verifyIdToken($idToken, $checkIfRevoked = true);
+            $this->fail('An exception should have been thrown');
+        } catch (RevokedIdToken $e) {
+            $this->assertSame($user->uid, $e->getToken()->getClaim('user_id'));
         } catch (Throwable $e) {
-            $this->assertInstanceOf(RevokedIdToken::class, $e);
+            $this->fail('A '.RevokedIdToken::class.' should have been thrown');
         }
 
         $this->auth->deleteUser($user->uid);
