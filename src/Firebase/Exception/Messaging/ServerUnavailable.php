@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Exception\Messaging;
 
+use Kreait\Firebase\Exception\HasErrors;
 use Kreait\Firebase\Exception\HasRequestAndResponse;
 use Kreait\Firebase\Exception\MessagingException;
 use Psr\Http\Message\ResponseInterface;
@@ -12,9 +13,7 @@ use RuntimeException;
 final class ServerUnavailable extends RuntimeException implements MessagingException
 {
     use HasRequestAndResponse;
-
-    /** @var string[] */
-    private $errors = [];
+    use HasErrors;
 
     /**
      * @internal
@@ -30,11 +29,6 @@ final class ServerUnavailable extends RuntimeException implements MessagingExcep
         $new->response = $this->response;
 
         return $new;
-    }
-
-    public function errors(): array
-    {
-        return $this->errors;
     }
 
     /**
