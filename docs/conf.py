@@ -23,6 +23,10 @@ import sphinx_rtd_theme
 
 html_theme = 'sphinx_rtd_theme'
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme_options = {
+    'canonical_url': 'https://firebase-php.readthedocs.io',
+    'analytics_id': 'UA-82654714-3'
+}
 
 ### Syntax Highlighting
 from sphinx.highlighting import lexers
@@ -37,7 +41,7 @@ html_context = {
   "display_github": True,
   "github_user": "kreait",
   "github_repo": "firebase-php",
-  "github_version": "master",
+  "github_version": "",
   "conf_py_path": "/docs/",
   "source_suffix": ".rst",
 }
