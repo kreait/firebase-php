@@ -30,6 +30,18 @@ class ConditionTest extends TestCase
         Condition::fromValue($value);
     }
 
+    public function testNoMoreThanFiveTopics()
+    {
+        $valid = "'a' in topics && 'b' in topics || 'c' in topics || 'd' in topics || 'e' in topics";
+        $invalid = $valid." || 'f' in topics";
+
+        Condition::fromValue($valid);
+        $this->addToAssertionCount(1);
+
+        $this->expectException(InvalidArgument::class);
+        Condition::fromValue($invalid);
+    }
+
     public function valueProvider()
     {
         return [

@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## Unreleased
+
+### Added
+
+#### Cloud Messaging
+
+* A condition will now ensure that no more than five topics are provided. Previously, the Firebase REST API would 
+  have rejected the message with a non-specific "Invalid condition expression provided."
+
 ## 4.28.0 - 2019-07-29
 
 ### Added

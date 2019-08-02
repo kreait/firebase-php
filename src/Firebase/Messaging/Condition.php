@@ -26,6 +26,10 @@ class Condition implements \JsonSerializable
             throw new InvalidArgument(\sprintf('The condition "%s" contains an uneven amount of quotes.', $value));
         }
 
+        if (\mb_substr_count(\mb_strtolower($value), 'in topics') > 5) {
+            throw new InvalidArgument(\sprintf('The condition "%s" containts more than 5 topics.', $value));
+        }
+
         return new self($value);
     }
 
