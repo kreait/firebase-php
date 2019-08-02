@@ -89,6 +89,16 @@ You can create a message to a topic in one of the following ways:
 Send conditional messages
 *************************
 
+.. warning::
+    OR-conditions are currently not processed correctly by the Firebase Rest API, leading to undelivered messages.
+    This can be resolved by splitting up a message to an OR-condition into multiple messages to AND-conditions.
+    So one conditional message to ``'a' in topics || 'b' in topics`` should be sent as two messages
+    to the conditions ``'a' in topics && !('b' in topics)`` and ``'b' in topics && !('a' in topics)``
+
+    References:
+        - https://github.com/firebase/quickstart-js/issues/183
+        - https://stackoverflow.com/a/52302136/284325
+
 Sometimes you want to send a message to a combination of topics. This is done by specifying a condition, which is a boolean expression that specifies the target topics. For example, the following condition will send messages to devices that are subscribed to ``TopicA`` and either ``TopicB`` or ``TopicC``:
 
 ``"'TopicA' in topics && ('TopicB' in topics || 'TopicC' in topics)"``
