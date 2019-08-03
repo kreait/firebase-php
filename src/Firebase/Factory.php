@@ -224,9 +224,7 @@ class Factory
             return new CustomTokenGenerator($serviceAccount->getClientEmail(), $serviceAccount->getPrivateKey());
         }
 
-        $http = $this->createApiClient(null, ['https://www.googleapis.com/auth/iam']);
-
-        return new CustomTokenViaGoogleIam($serviceAccount->getClientEmail(), $http);
+        return new CustomTokenViaGoogleIam($serviceAccount->getClientEmail(), $this->createApiClient());
     }
 
     protected function createDatabase(): Database
@@ -284,12 +282,11 @@ class Factory
         return new Messaging($messagingApiClient, $appInstanceApiClient);
     }
 
-    public function createApiClient(array $config = null, array $additionalScopes = null): Client
+    public function createApiClient(array $config = null): Client
     {
         $config = $config ?? [];
-        $additionalScopes = $additionalScopes ?? [];
 
-        $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware($additionalScopes);
+        $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware();
 
         $stack = HandlerStack::create();
         foreach ($this->httpClientMiddlewares as $middleware) {
@@ -309,18 +306,19 @@ class Factory
         return new Client($config);
     }
 
-    protected function createGoogleAuthTokenMiddleware(array $additionalScopes = null): AuthTokenMiddleware
+    protected function createGoogleAuthTokenMiddleware(): AuthTokenMiddleware
     {
         $serviceAccount = $this->getServiceAccount();
 
         $scopes = [
+            'https://www.googleapis.com/auth/iam',
             'https://www.googleapis.com/auth/cloud-platform',
             'https://www.googleapis.com/auth/firebase',
             'https://www.googleapis.com/auth/firebase.database',
             'https://www.googleapis.com/auth/firebase.messaging',
             'https://www.googleapis.com/auth/firebase.remoteconfig',
             'https://www.googleapis.com/auth/userinfo.email',
-        ] + ($additionalScopes ?? []);
+        ];
 
         if ($serviceAccount->hasClientId() && $serviceAccount->hasPrivateKey()) {
             $credentials = new ServiceAccountCredentials($scopes, [
