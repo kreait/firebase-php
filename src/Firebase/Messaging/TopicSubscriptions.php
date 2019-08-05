@@ -4,51 +4,33 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging;
 
-use ArrayIterator;
 use Countable;
+use Generator;
 use IteratorAggregate;
 
 final class TopicSubscriptions implements Countable, IteratorAggregate
 {
     /** @var TopicSubscription[] */
-    private $subscriptions = [];
+    private $subscriptions;
 
-    /**
-     * @param TopicSubscription[] $subscriptions
-     */
-    public function __construct(array $subscriptions = [])
+    public function __construct(TopicSubscription ...$subscriptions)
     {
-        foreach ($subscriptions as $subscription) {
-            if ($subscription instanceof TopicSubscription) {
-                $this->add($subscription);
-            }
-        }
-    }
-
-    public function add(TopicSubscription $subscription)
-    {
-        $this->subscriptions[$subscription->topic()->value()] = $subscription;
+        $this->subscriptions = $subscriptions;
     }
 
     public function filter(callable $filter): self
     {
-        return new self(\array_filter($this->subscriptions, $filter));
+        return new self(...\array_filter($this->subscriptions, $filter));
     }
 
     /**
-     * @return TopicSubscription[]
-     */
-    public function toArray(): array
-    {
-        return $this->subscriptions;
-    }
-
-    /**
-     * @return ArrayIterator|TopicSubscription[]
+     * @codeCoverageIgnore
+     *
+     * @return Generator|TopicSubscription[]
      */
     public function getIterator()
     {
-        return new ArrayIterator($this->subscriptions);
+        yield from $this->subscriptions;
     }
 
     public function count()
