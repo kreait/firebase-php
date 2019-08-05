@@ -9,6 +9,9 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
+/**
+ * @codeCoverageIgnore
+ */
 trait HasRequestAndResponse
 {
     /** @var RequestInterface|null */

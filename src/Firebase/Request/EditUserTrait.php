@@ -11,6 +11,9 @@ use Kreait\Firebase\Value\PhoneNumber;
 use Kreait\Firebase\Value\Uid;
 use Kreait\Firebase\Value\Url;
 
+/**
+ * @codeCoverageIgnore
+ */
 trait EditUserTrait
 {
     /**

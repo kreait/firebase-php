@@ -8,6 +8,9 @@ use function GuzzleHttp\Psr7\build_query;
 use function GuzzleHttp\Psr7\parse_query;
 use Psr\Http\Message\UriInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 trait ModifierTrait
 {
     protected function appendQueryParam(UriInterface $uri, string $key, $value): UriInterface
