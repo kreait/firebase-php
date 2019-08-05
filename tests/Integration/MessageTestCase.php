@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Messaging;
-use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 abstract class MessageTestCase extends IntegrationTestCase
@@ -22,26 +21,15 @@ abstract class MessageTestCase extends IntegrationTestCase
 
     protected function setUp()
     {
-        $this->messaging = self::$firebase->getMessaging();
+        $this->messaging = static::$firebase->getMessaging();
 
-        $this->fullMessageData = self::createFullMessageData();
+        $this->fullMessageData = static::createFullMessageData();
     }
 
     protected function assertSuccessfulMessage($message)
     {
-        $result = $this->messaging->send($message);
-
-        $this->assertTrue($noExceptionHasBeenThrown = true);
-
-        return $result;
-    }
-
-    abstract public function testSendEmptyMessage();
-
-    public function testSendFullMessage()
-    {
-        $message = CloudMessage::fromArray($this->fullMessageData);
-        $this->assertSuccessfulMessage($message);
+        $this->messaging->send($message);
+        $this->addToAssertionCount(1);
     }
 
     public static function createFullMessageData(): array
@@ -67,6 +55,10 @@ abstract class MessageTestCase extends IntegrationTestCase
                     'icon' => 'stock_ticker_update',
                     'color' => '#f45342',
                 ],
+                'fcm_options' => [
+                    // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#fcmoptions
+                    'analytics_label' => 'android-specific-analytics-label',
+                ],
             ],
             'apns' => [
                 // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#apnsconfig
@@ -82,6 +74,10 @@ abstract class MessageTestCase extends IntegrationTestCase
                         'badge' => 42,
                     ],
                 ],
+                'fcm_options' => [
+                    // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#fcmoptions
+                    'analytics_label' => 'apns-specific-analytics-label',
+                ],
             ],
             'webpush' => [
                 // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
@@ -89,6 +85,10 @@ abstract class MessageTestCase extends IntegrationTestCase
                     'title' => '$GOOG up 1.43% on the day',
                     'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
                     'icon' => 'https://my-server/icon.png',
+                ],
+                'fcm_options' => [
+                    // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushfcmoptions
+                    'link' => 'https://my-server/path/to/target',
                 ],
             ],
             'fcm_options' => [
