@@ -153,7 +153,7 @@ class AuthTest extends IntegrationTestCase
         $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
             $this->auth->createCustomToken($user->uid)
         );
-        $idToken = JSON::decode($idTokenResponse->getBody()->getContents(), true)['idToken'];
+        $idToken = JSON::decode((string) $idTokenResponse->getBody(), true)['idToken'];
 
         $this->auth->verifyIdToken($idToken);
 
@@ -169,7 +169,7 @@ class AuthTest extends IntegrationTestCase
         $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
             $this->auth->createCustomToken($user->uid)
         );
-        $idToken = JSON::decode($idTokenResponse->getBody()->getContents(), true)['idToken'];
+        $idToken = JSON::decode((string) $idTokenResponse->getBody(), true)['idToken'];
 
         $this->auth->verifyIdToken($idToken, $checkIfRevoked = false);
         \sleep(1);
@@ -195,7 +195,7 @@ class AuthTest extends IntegrationTestCase
         $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
             $this->auth->createCustomToken($user->uid)
         );
-        $idToken = JSON::decode($idTokenResponse->getBody()->getContents(), true)['idToken'];
+        $idToken = JSON::decode((string) $idTokenResponse->getBody(), true)['idToken'];
 
         $this->auth->verifyIdToken((string) $idToken);
 

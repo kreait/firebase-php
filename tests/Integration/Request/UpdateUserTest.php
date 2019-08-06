@@ -130,7 +130,7 @@ class UpdateUserTest extends IntegrationTestCase
         $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
             $this->auth->createCustomToken($user->uid)
         );
-        $idToken = $this->auth->verifyIdToken(JSON::decode($idTokenResponse->getBody()->getContents(), true)['idToken']);
+        $idToken = $this->auth->verifyIdToken(JSON::decode((string) $idTokenResponse->getBody(), true)['idToken']);
 
         $this->assertTrue($idToken->getClaim('admin'));
         $this->assertSame('1234', $idToken->getClaim('groupId'));
