@@ -7,6 +7,7 @@ namespace Kreait\Firebase\RemoteConfig;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 class Template implements \JsonSerializable
 {
@@ -25,6 +26,9 @@ class Template implements \JsonSerializable
      */
     private $conditions = [];
 
+    /** @var Version|null */
+    private $version;
+
     private function __construct()
     {
     }
@@ -38,6 +42,9 @@ class Template implements \JsonSerializable
         return $template;
     }
 
+    /**
+     * @internal
+     */
     public static function fromResponse(ResponseInterface $response): self
     {
         $etagHeader = $response->getHeader('ETag');
@@ -60,12 +67,39 @@ class Template implements \JsonSerializable
             $template->parameters[$name] = Parameter::fromArray([$name => $parameterData]);
         }
 
+        if (\is_array($data['version'] ?? null)) {
+            try {
+                $template->version = Version::fromArray($data['version']);
+            } catch (Throwable $e) {
+                $template->version = null;
+            }
+        }
+
         return $template;
     }
 
-    public function getEtag(): string
+    /**
+     * @internal
+     */
+    public function etag(): string
     {
         return $this->etag;
+    }
+
+    /**
+     * @return Parameter[]
+     */
+    public function parameters(): array
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * @return Version|null
+     */
+    public function version()
+    {
+        return $this->version;
     }
 
     public function withParameter(Parameter $parameter): Template

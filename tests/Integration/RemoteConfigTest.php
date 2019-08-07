@@ -6,12 +6,14 @@ namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Exception\RemoteConfig\ValidationFailed;
 use Kreait\Firebase\Exception\RemoteConfig\VersionMismatch;
+use Kreait\Firebase\Exception\RemoteConfig\VersionNotFound;
 use Kreait\Firebase\RemoteConfig;
 use Kreait\Firebase\RemoteConfig\Condition;
 use Kreait\Firebase\RemoteConfig\ConditionalValue;
 use Kreait\Firebase\RemoteConfig\Parameter;
 use Kreait\Firebase\RemoteConfig\TagColor;
 use Kreait\Firebase\RemoteConfig\Template;
+use Kreait\Firebase\RemoteConfig\UpdateType;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Throwable;
 
@@ -63,29 +65,33 @@ CONFIG;
         $this->remoteConfig = self::$firebase->getRemoteConfig();
     }
 
-    public function testPublishAndGet()
+    public function testForcePublishAndGet()
     {
         $template = RemoteConfig\Template::fromArray(\json_decode($this->template, true));
 
-        $etag = $this->remoteConfig->publish($template);
+        $this->remoteConfig->publish($template);
 
-        $check = $this->remoteConfig->get();
+        $version = $this->remoteConfig->get()->version();
 
-        $this->assertSame($etag, $check->getEtag());
+        if (!$version) {
+            $this->fail('The template has no version');
+        }
+
+        $this->assertTrue($version->updateType()->equalsTo(UpdateType::FORCED_UPDATE));
     }
 
     public function testPublishOutdatedConfig()
     {
         $initial = RemoteConfig\Template::fromArray(\json_decode($this->template, true));
 
-        $initialEtag = $this->remoteConfig->publish($initial);
+        $this->remoteConfig->publish($initial);
 
         $published = $this->remoteConfig->get();
 
-        $this->assertSame($initialEtag, $published->getEtag());
-
         $this->remoteConfig->publish($published);
 
+        // The published template has now a different etag, so publishing it again
+        // with our old etag value should fail
         $this->expectException(VersionMismatch::class);
         $this->remoteConfig->publish($published);
     }
@@ -117,29 +123,34 @@ CONFIG;
             ->withParameter($welcomeMessageParameter);
 
         $this->remoteConfig->publish($template);
-
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->addToAssertionCount(1);
     }
 
-    public function testValidateTemplate()
+    public function testValidateValidTemplate()
     {
-        $current = $this->remoteConfig->get();
+        $template = Template::fromArray(\json_decode($this->template, true));
 
+        $this->remoteConfig->validate($template);
+        $this->addToAssertionCount(1);
+    }
+
+    public function testValidateInvalidTemplate()
+    {
         $template = $this->templateWithTooManyParameters();
 
-        try {
-            $this->remoteConfig->validate($template);
-            $this->fail('A '.ValidationFailed::class.' should have been thrown');
-        } catch (Throwable $e) {
-            $this->assertInstanceOf(ValidationFailed::class, $e);
-        }
-
-        $this->assertSame($current->getEtag(), $this->remoteConfig->get()->getEtag());
+        $this->expectException(ValidationFailed::class);
+        $this->remoteConfig->validate($template);
     }
 
     public function testPublishInvalidTemplate()
     {
-        $current = $this->remoteConfig->get();
+        $version = $this->remoteConfig->get()->version();
+
+        if (!$version) {
+            $this->fail('The template has no version');
+        }
+
+        $currentVersionNumber = $version->versionNumber();
 
         $template = $this->templateWithTooManyParameters();
 
@@ -150,36 +161,129 @@ CONFIG;
             $this->assertInstanceOf(ValidationFailed::class, $e);
         }
 
-        $this->assertSame($current->getEtag(), $this->remoteConfig->get()->getEtag());
+        $refetchedVersion = $this->remoteConfig->get()->version();
+
+        if (!$refetchedVersion) {
+            $this->fail('The template has no version');
+        }
+
+        $this->assertTrue($currentVersionNumber->equalsTo($refetchedVersion->versionNumber()));
     }
 
-    public function testListVersions()
+    public function testRollback()
     {
-        foreach ($this->remoteConfig->listVersions() as $version) {
-            $this->assertInstanceOf(RemoteConfig\Version::class, $version);
-            break;
+        $initialVersion = $this->remoteConfig->get()->version();
+
+        if (!$initialVersion) {
+            $this->fail('The template has no version');
         }
+
+        $initialVersionNumber = $initialVersion->versionNumber();
+
+        $query = RemoteConfig\FindVersions::all()
+            ->withLimit(2)
+            ->upToVersion($initialVersionNumber);
+
+        $targetVersionNumber = null;
+        foreach ($this->remoteConfig->listVersions($query) as $version) {
+            $versionNumber = $version->versionNumber();
+
+            if (!$versionNumber->equalsTo($initialVersionNumber)) {
+                $targetVersionNumber = $versionNumber;
+            }
+        }
+
+        if (!$targetVersionNumber) {
+            $this->fail('A previous version number should have been retrieved');
+        }
+
+        $this->remoteConfig->rollbackToVersion($targetVersionNumber);
+
+        $newVersion = $this->remoteConfig->get()->version();
+
+        if (!$newVersion) {
+            $this->fail('The new template has no version');
+        }
+
+        $newVersionNumber = $newVersion->versionNumber();
+        $rollbackSource = $newVersion->rollbackSource();
+
+        if (!$rollbackSource) {
+            $this->fail('The new template version has no rollback source');
+        }
+
+        $this->assertFalse($newVersionNumber->equalsTo($initialVersionNumber));
+        $this->assertTrue($rollbackSource->equalsTo($targetVersionNumber));
+    }
+
+    public function testListVersionsWithoutFilters()
+    {
+        if ($this->remoteConfig->listVersions()->valid()) {
+            // We don't need to do something with it, just check that it returns results
+            $this->addToAssertionCount(1);
+        }
+    }
+
+    public function testFindVersionsWithFilters()
+    {
+        $currentVersion = $this->remoteConfig->get()->version();
+
+        if (!$currentVersion) {
+            $this->fail('The new template has no version');
+        }
+
+        $query = [
+            'startingAt' => '2019-05-09',
+            'endingAt' => 'yesterday',
+            'upToVersion' => $currentVersion->versionNumber(),
+            'pageSize' => 1,
+            'limit' => $limit = 2,
+        ];
+
+        $counter = 0;
+
+        $versions = $this->remoteConfig->listVersions($query);
+        while ($versions->valid()) {
+            ++$counter;
+
+            // Protect us from an infinite loop
+            if ($counter > $limit) {
+                $this->fail('The query returned more values than expected');
+            }
+
+            $versions->next();
+        }
+
+        $this->assertSame($limit, $counter);
     }
 
     public function testGetVersion()
     {
-        foreach ($this->remoteConfig->listVersions(['limit' => 1]) as $version) {
-            $same = $this->remoteConfig->getVersion($version->versionNumber());
+        $currentVersion = $this->remoteConfig->get()->version();
 
-            $this->assertTrue($version->versionNumber()->equalsTo($same->versionNumber()));
+        if (!$currentVersion) {
+            $this->fail('The template has no version');
         }
+
+        $currentVersionNumber = $currentVersion->versionNumber();
+
+        $check = $this->remoteConfig->getVersion($currentVersionNumber);
+
+        $this->assertTrue($check->versionNumber()->equalsTo($currentVersionNumber));
     }
 
-    public function testFindVersionsWithLimit()
+    public function testGetNonExistingVersion()
     {
-        $counter = 0;
+        $currentVersion = $this->remoteConfig->get()->version();
 
-        /* @noinspection PhpUnusedLocalVariableInspection */
-        foreach ($this->remoteConfig->listVersions(['limit' => 1]) as $version) {
-            ++$counter;
+        if (!$currentVersion) {
+            $this->fail('The template has no version');
         }
 
-        $this->assertSame(1, $counter);
+        $nextButNonExisting = (int) (string) $currentVersion->versionNumber() + 100;
+
+        $this->expectException(VersionNotFound::class);
+        $this->remoteConfig->getVersion($nextButNonExisting);
     }
 
     private function templateWithTooManyParameters()

@@ -2,6 +2,10 @@
 Remote Config
 #############
 
+.. image:: https://img.shields.io/badge/available_since-v4.3-yellowgreen
+   :target: https://github.com/kreait/firebase-php/releases/tag/4.3.0
+   :alt: Available since v4.3
+
 Change the behavior and appearance of your app without publishing an app update.
 
 Firebase Remote Config is a cloud service that lets you change the behavior and appearance of your app without
@@ -38,8 +42,10 @@ Get the Remote Config
 
 .. code-block:: php
 
-    $template = $remoteConfig->get();
-    echo json_encode($template, JSON_PRETTY_PRINT);
+    $template = $remoteConfig->get(); // Returns a Kreait\Firebase\RemoteConfig\Template
+
+    // Added in 4.29.0
+    $version = $template->version(); // Returns a Kreait\Firebase\RemoteConfig\Version
 
 **************************
 Create a new Remote Config
@@ -106,6 +112,10 @@ Conditional values
 Validation
 **********
 
+.. image:: https://img.shields.io/badge/available_since-v4.16-yellowgreen
+   :target: https://github.com/kreait/firebase-php/releases/tag/4.16.0
+   :alt: Available since v4.16
+
 Usually, the SDK will protect you from creating an invalid Remote Config template in the first
 place. If you want to be sure, you can validate the template with a call to the Firebase API:
 
@@ -137,14 +147,15 @@ Publish the Remote Config
         echo $e->getMessage();
     }
 
-**************
-Change history
-**************
+*********************
+Remote Config history
+*********************
+
+.. image:: https://img.shields.io/badge/available_since-v4.16-yellowgreen
+   :target: https://github.com/kreait/firebase-php/releases/tag/4.16.0
+   :alt: Available since v4.16
 
 Since August 23, 2018, Firebase provides a change history for your published Remote configs.
-
-Versions
---------
 
 The following properties are available from a ``Kreait\Firebase\RemoteConfig\Version`` object:
 
@@ -162,22 +173,67 @@ The following properties are available from a ``Kreait\Firebase\RemoteConfig\Ver
 List versions
 -------------
 
-To enhance performance and prevent memory issues when retrieving a huge amount of users,
+To enhance performance and prevent memory issues when retrieving a huge amount of versions,
 this methods returns a `Generator <http://php.net/manual/en/language.generators.overview.php>`_.
 
 .. code-block:: php
 
-    $users = ;
-
     foreach ($auth->listVersions() as $version) {
-        /** @var \Kreait\Firebase\RemoteConfig\Version $user */
+        /** @var \Kreait\Firebase\RemoteConfig\Version $version */
         // ...
     }
+
     // or
-    array_map(function (\Kreait\Firebase\RemoteConfig\Version $user) {
+
+    array_map(function (\Kreait\Firebase\RemoteConfig\Version $version) {
         // ...
     }, iterator_to_array($auth->listVersions()));
 
+Filtering
+---------
+
+.. image:: https://img.shields.io/badge/available_since-v4.29-yellowgreen
+   :target: https://github.com/kreait/firebase-php/releases/tag/4.29.0
+   :alt: Available since v4.29
+
+You can filter the results of ``RemoteConfig::listVersions()``:
+
+.. code-block:: php
+
+    use Kreait\Firebase\RemoteConfig\FindVersions;
+
+    $query = FindVersions::all()
+        // Versions created/updated after August 1st, 2019 at midnight
+        ->startingAt(new DateTime('2019-08-01 00:00:00'))
+        // Versions created/updated before August 7th, 2019 at the end of the day
+        ->endingAt(new DateTime('2019-08-06 23:59:59'))
+        // Versions with version numbers smaller than 3464
+        ->upToVersion(VersionNumber::fromValue(3463))
+        // Setting a page size can results in faster first results,
+        // but results in more request
+        ->withPageSize(5)
+        // Stop querying after the first 10 results
+        ->withLimit(10)
+    ;
+
+    // Alternative array notation
+
+    $query = [
+        'startingAt' => '2019-08-01',
+        'endingAt' => '2019-08-07',
+        'upToVersion' => 9999,
+        'pageSize' => 5,
+        'limit' => 10,
+    ];
+
+    $remoteConfig = $firebase->getRemoteConfig();
+
+    foreach ($remoteConfig->listVersions($query) as $version) {
+        echo "Version number: {$version->versionNumber()}\n";
+        echo "Last updated at {$version->updatedAt()->format('Y-m-d H:i:s')}\n";
+        // ...
+        echo "\n---\n";
+    }
 
 Get a specific version
 ----------------------

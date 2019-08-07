@@ -57,7 +57,7 @@ class RemoteConfig
     /**
      * @param Template|array $template
      *
-     *@throws RemoteConfigException
+     * @throws RemoteConfigException
      *
      * @return string The etag value of the published template that can be compared to in later calls
      */
@@ -120,6 +120,7 @@ class RemoteConfig
         $query = $query instanceof FindVersions ? $query : FindVersions::fromArray((array) $query);
         $pageToken = null;
         $count = 0;
+        $limit = $query->limit();
 
         do {
             $response = $this->client->listVersions($query, $pageToken);
@@ -129,7 +130,7 @@ class RemoteConfig
                 ++$count;
                 yield Version::fromArray($versionData);
 
-                if ($count === (int) $query->limit()) {
+                if ($count === $limit) {
                     return;
                 }
             }

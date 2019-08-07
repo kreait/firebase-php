@@ -40,7 +40,7 @@ class ApiClient
         return $this->request('PUT', 'remoteConfig', [
             'headers' => [
                 'Content-Type' => 'application/json; UTF-8',
-                'If-Match' => $template->getEtag(),
+                'If-Match' => $template->etag(),
             ],
             'query' => [
                 'validate_only' => 'true',
@@ -54,30 +54,38 @@ class ApiClient
         return $this->request('PUT', 'remoteConfig', [
             'headers' => [
                 'Content-Type' => 'application/json; UTF-8',
-                'If-Match' => $template->getEtag(),
+                'If-Match' => $template->etag(),
             ],
             'body' => JSON::encode($template),
         ]);
     }
 
+    /**
+     * @see https://firebase.google.com/docs/reference/remote-config/rest/v1/projects.remoteConfig/listVersions
+     */
     public function listVersions(FindVersions $query, string $nextPageToken = null): ResponseInterface
     {
         $uri = \rtrim((string) $this->client->getConfig('base_uri'), '/').':listVersions';
 
         $since = $query->since();
         $until = $query->until();
-        $upToVersion = $query->upToVersion();
+        $lastVersionNumber = $query->lastVersionNumber();
+        $pageSize = $query->pageSize();
 
         $since = $since ? $since->format('Y-m-d\TH:i:s.v\Z') : null;
         $until = $until ? $until->format('Y-m-d\TH:i:s.v\Z') : null;
-        $upToVersion = $upToVersion ? (string) $upToVersion : null;
+        $lastVersionNumber = $lastVersionNumber ? (string) $lastVersionNumber : null;
+        $pageSize = $pageSize ? (string) $pageSize : null;
 
-        return $this->request('GET', $uri, \array_filter([
-            'startTime' => $since,
-            'endTime' => $until,
-            'endVersionNumber' => $upToVersion,
-            'nextPageToken' => $nextPageToken,
-        ]));
+        return $this->request('GET', $uri, [
+            'query' => \array_filter([
+                'startTime' => $since,
+                'endTime' => $until,
+                'endVersionNumber' => $lastVersionNumber,
+                'pageSize' => $pageSize,
+                'pageToken' => $nextPageToken,
+            ]),
+        ]);
     }
 
     public function rollbackToVersion(VersionNumber $versionNumber): ResponseInterface

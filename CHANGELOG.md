@@ -9,6 +9,15 @@
 * A condition will now ensure that no more than five topics are provided. Previously, the Firebase REST API would 
   have rejected the message with a non-specific "Invalid condition expression provided."
   
+#### Remote Config
+
+* The Remote Config history can now be filtered. 
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/remote-config.html#filtering))
+* A published Remote Config template now contains a version that can be retrieved with 
+  `Kreait\Firebase\RemoteConfig\Template::getVersion()`
+* The parameters of a Remote Config template can now be retrieved with
+  `Kreait\Firebase\RemoteConfig\Template::getParameters()`
+  
 ### Changed
 
 #### Cloud Messaging

@@ -44,6 +44,9 @@ final class VersionNumber implements \JsonSerializable, Value
 
     public function equalsTo($other): bool
     {
+        $a = $this->value;
+        $b = (string) $other;
+
         return $this->value === (string) $other;
     }
 }
