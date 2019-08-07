@@ -8,6 +8,13 @@
 
 * A condition will now ensure that no more than five topics are provided. Previously, the Firebase REST API would 
   have rejected the message with a non-specific "Invalid condition expression provided."
+  
+### Changed
+
+#### Cloud Messaging
+
+* Values passed to `Kreait\Firebase\Messaging\MessageData::withData()` will now be casted to strings instead of
+  throwing InvalidArgument exceptions when they are not strings.
 
 ## 4.28.0 - 2019-07-29
 
