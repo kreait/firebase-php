@@ -4,35 +4,38 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase;
 
-use GuzzleHttp\Promise;
+use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Exception\MessagingException;
+use Kreait\Firebase\Http\ResponseWithSubResponses;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\AppInstance;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Http\Request\SendMessage;
+use Kreait\Firebase\Messaging\Http\Request\SendMessages;
+use Kreait\Firebase\Messaging\Http\Request\SendMessageToTokens;
+use Kreait\Firebase\Messaging\Http\Request\ValidateMessage;
 use Kreait\Firebase\Messaging\Message;
-use Kreait\Firebase\Messaging\MessageTarget;
+use Kreait\Firebase\Messaging\Messages;
 use Kreait\Firebase\Messaging\MulticastSendReport;
 use Kreait\Firebase\Messaging\RegistrationToken;
-use Kreait\Firebase\Messaging\SendReport;
+use Kreait\Firebase\Messaging\RegistrationTokens;
 use Kreait\Firebase\Messaging\Topic;
 use Kreait\Firebase\Util\JSON;
-use Psr\Http\Message\ResponseInterface;
 
 class Messaging
 {
-    /**
-     * @var ApiClient
-     */
+    /** @var string */
+    private $projectId;
+
+    /** @var ApiClient */
     private $messagingApi;
 
-    /**
-     * @var AppInstanceApiClient
-     */
+    /** @var AppInstanceApiClient */
     private $appInstanceApi;
 
     /**
@@ -42,103 +45,90 @@ class Messaging
     {
         $this->messagingApi = $messagingApiClient;
         $this->appInstanceApi = $appInstanceApiClient;
+
+        // Extract the project ID from the client config (this will be refactored later)
+        $baseUri = (string) $this->messagingApi->getClient()->getConfig('base_uri');
+        $uriParts = \explode('/', $baseUri);
+        $this->projectId = \array_pop($uriParts);
     }
 
     /**
-     * @param array|CloudMessage|Message|mixed $message
+     * @param array|Message|mixed $message
+     *
+     * @throws InvalidArgumentException
+     * @throws MessagingException
+     * @throws FirebaseException
      */
     public function send($message): array
     {
-        if (\is_array($message)) {
-            $message = CloudMessage::fromArray($message);
-        }
+        $message = $this->makeMessage($message);
 
-        if (!($message instanceof Message)) {
-            throw new InvalidArgumentException(
-                'Unsupported message type. Use an array or a class implementing %s'.Message::class
-            );
-        }
-
-        if (($message instanceof CloudMessage) && !$message->hasTarget()) {
-            throw new InvalidArgumentException('The given message has no target');
-        }
-
-        $response = $this->messagingApi->sendMessage($message);
+        $request = new SendMessage($this->projectId, $message);
+        $response = $this->messagingApi->send($request);
 
         return JSON::decode((string) $response->getBody(), true);
     }
 
     /**
      * @param array|Message|mixed $message
-     * @param string[]|RegistrationToken[] $deviceTokens
+     * @param RegistrationToken[]|string[]|RegistrationTokens $registrationTokens
+     *
+     * @throws InvalidArgumentException if the message is invalid
+     * @throws MessagingException if the API request failed
+     * @throws FirebaseException if something very unexpected happened (never :))
      */
-    public function sendMulticast($message, array $deviceTokens): MulticastSendReport
+    public function sendMulticast($message, $registrationTokens): MulticastSendReport
     {
-        if (\is_array($message)) {
-            $message = CloudMessage::fromArray($message);
-        }
+        $message = $this->makeMessage($message);
+        $registrationTokens = $this->makeRegistrationTokens($registrationTokens);
 
-        if (!($message instanceof Message)) {
-            throw new InvalidArgumentException(
-                'Unsupported message type. Use an array or a class implementing %s'.Message::class
-            );
-        }
+        $request = new SendMessageToTokens($this->projectId, $message, new RegistrationTokens(...$registrationTokens));
+        /** @var ResponseWithSubResponses $response */
+        $response = $this->messagingApi->send($request);
 
-        if (!($message instanceof CloudMessage)) {
-            $message = CloudMessage::fromArray($message->jsonSerialize());
-        }
-
-        $promises = [];
-
-        foreach ($deviceTokens as $token) {
-            $target = MessageTarget::with(MessageTarget::TOKEN, (string) $token);
-            $message = $message->withChangedTarget($target->type(), $target->value());
-            $promises[$target->value()] = $this->messagingApi->sendMessageAsync($message);
-        }
-
-        return Promise\settle($promises)
-            ->then(static function (array $results) {
-                $reports = [];
-
-                foreach ($results as $tokenString => $result) {
-                    $target = MessageTarget::with(MessageTarget::TOKEN, $tokenString);
-                    if ($result['state'] === Promise\PromiseInterface::FULFILLED) {
-                        /** @var ResponseInterface $response */
-                        $response = $result['value'];
-                        $data = JSON::decode((string) $response->getBody(), true);
-                        $reports[] = SendReport::success($target, $data);
-                    } else {
-                        $reports[] = SendReport::failure($target, $result['reason']);
-                    }
-                }
-
-                return MulticastSendReport::withItems($reports);
-            })
-            ->wait();
+        return MulticastSendReport::fromRequestsAndResponses($request->subRequests(), $response->subResponses());
     }
 
     /**
-     * @param array|CloudMessage|Message|mixed $message
+     * @param array[]|Message[]|Messages $messages
+     *
+     * @throws InvalidArgumentException if the message is invalid
+     * @throws MessagingException if the API request failed
+     * @throws FirebaseException if something very unexpected happened (never :))
+     */
+    public function sendAll($messages): MulticastSendReport
+    {
+        $ensuredMessages = [];
+
+        foreach ($messages as $message) {
+            $ensuredMessages[] = $this->makeMessage($message);
+        }
+
+        $request = new SendMessages($this->projectId, new Messages(...$ensuredMessages));
+        /** @var ResponseWithSubResponses $response */
+        $response = $this->messagingApi->send($request);
+
+        return MulticastSendReport::fromRequestsAndResponses($request->subRequests(), $response->subResponses());
+    }
+
+    /**
+     * @param array|Message|mixed $message
      *
      * @throws InvalidArgumentException
      * @throws InvalidMessage
+     * @throws MessagingException
+     * @throws FirebaseException
      */
     public function validate($message): array
     {
-        if (\is_array($message)) {
-            $message = CloudMessage::fromArray($message);
-        }
+        $message = $this->makeMessage($message);
 
-        if (!($message instanceof Message)) {
-            throw new InvalidArgumentException(
-                'Unsupported message type. Use an array or a class implementing %s'.Message::class
-            );
-        }
-
+        $request = new ValidateMessage($this->projectId, $message);
         try {
-            $response = $this->messagingApi->validateMessage($message);
+            $response = $this->messagingApi->send($request);
         } catch (NotFound $e) {
-            $error = (new InvalidMessage($e->getMessage(), $e->getCode(), $e->getPrevious()))->withErrors($e->errors());
+            $error = new InvalidMessage($e->getMessage(), $e->getCode(), $e->getPrevious());
+            $error = $error->withErrors($e->errors());
 
             if ($response = $e->response()) {
                 $error = $error->withResponse($response);
@@ -153,11 +143,14 @@ class Messaging
     /**
      * @param string|Topic $topic
      * @param RegistrationToken|RegistrationToken[]|string|string[] $registrationTokenOrTokens
+     *
+     * @throws MessagingException
+     * @throws FirebaseException
      */
     public function subscribeToTopic($topic, $registrationTokenOrTokens): array
     {
         $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
-        $tokens = $this->ensureArrayOfRegistrationTokens($registrationTokenOrTokens);
+        $tokens = $this->makeRegistrationTokens($registrationTokenOrTokens);
 
         $response = $this->appInstanceApi->subscribeToTopic($topic, $tokens);
 
@@ -167,11 +160,14 @@ class Messaging
     /**
      * @param string|Topic $topic
      * @param RegistrationToken|RegistrationToken[]|string|string[] $registrationTokenOrTokens
+     *
+     * @throws MessagingException
+     * @throws FirebaseException
      */
     public function unsubscribeFromTopic($topic, $registrationTokenOrTokens): array
     {
         $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
-        $tokens = $this->ensureArrayOfRegistrationTokens($registrationTokenOrTokens);
+        $tokens = $this->makeRegistrationTokens($registrationTokenOrTokens);
 
         $response = $this->appInstanceApi->unsubscribeFromTopic($topic, $tokens);
 
@@ -184,6 +180,7 @@ class Messaging
      * @param RegistrationToken|string $registrationToken
      *
      * @throws InvalidArgument if the registration token is invalid
+     * @throws FirebaseException
      */
     public function getAppInstance($registrationToken): AppInstance
     {
@@ -206,9 +203,11 @@ class Messaging
     /**
      * @param mixed $tokenOrTokens
      *
+     * @throws InvalidArgumentException
+     *
      * @return RegistrationToken[]
      */
-    private function ensureArrayOfRegistrationTokens($tokenOrTokens): array
+    private function makeRegistrationTokens($tokenOrTokens): array
     {
         if ($tokenOrTokens instanceof RegistrationToken) {
             return [$tokenOrTokens];
@@ -218,17 +217,11 @@ class Messaging
             return [RegistrationToken::fromValue($tokenOrTokens)];
         }
 
-        if (!\is_array($tokenOrTokens)) {
-            $tokenOrTokens = [$tokenOrTokens];
-        }
-
         $tokens = [];
 
         foreach ($tokenOrTokens as $value) {
             if ($value instanceof RegistrationToken) {
                 $tokens[] = $value;
-            } elseif ($value instanceof AppInstance) {
-                $tokens[] = $value->registrationToken();
             } elseif (\is_string($value)) {
                 $tokens[] = RegistrationToken::fromValue($value);
             }
@@ -239,5 +232,25 @@ class Messaging
         }
 
         return $tokens;
+    }
+
+    /**
+     * @param mixed $message
+     *
+     * @throws InvalidArgumentException
+     */
+    private function makeMessage($message): Message
+    {
+        if ($message instanceof Message) {
+            return $message;
+        }
+
+        if (!\is_array($message)) {
+            throw new InvalidArgumentException(
+                'Unsupported message type. Use an array or a class implementing %s'.Message::class
+            );
+        }
+
+        return CloudMessage::fromArray($message);
     }
 }

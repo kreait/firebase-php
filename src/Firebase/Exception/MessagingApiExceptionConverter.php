@@ -14,6 +14,7 @@ use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Exception\Messaging\ServerError;
 use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
 use Kreait\Firebase\Http\ErrorResponseParser;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 /**
@@ -44,42 +45,36 @@ class MessagingApiExceptionConverter
         return new MessagingError($exception->getMessage(), $exception->getCode(), $exception);
     }
 
-    private function convertGuzzleRequestException(RequestException $e): MessagingException
+    public function convertResponse(ResponseInterface $response, Throwable $previous = null): MessagingException
     {
-        $message = $e->getMessage();
-        $code = $e->getCode();
+        $code = $response->getStatusCode();
 
-        if ($e instanceof ConnectException) {
-            return new ApiConnectionFailed($message, $code, $e);
+        if ($code < 400) {
+            throw new InvalidArgumentException('Cannot convert a non-failed response to an exception');
         }
 
-        $errors = [];
-
-        if ($response = $e->getResponse()) {
-            $errors = $this->responseParser->getErrorsFromResponse($response);
-            $message = $this->responseParser->getErrorReasonFromResponse($response);
-            $code = $response->getStatusCode();
-        }
+        $errors = $this->responseParser->getErrorsFromResponse($response);
+        $message = $this->responseParser->getErrorReasonFromResponse($response);
 
         switch ($code) {
             case 400:
-                $convertedError = new InvalidMessage($message, $code, $e);
+                $convertedError = new InvalidMessage($message, $code, $previous);
                 break;
             case 401:
             case 403:
-                $convertedError = new AuthenticationError($message, $code, $e);
+                $convertedError = new AuthenticationError($message, $code, $previous);
                 break;
             case 404:
-                $convertedError = new NotFound($message, $code, $e);
+                $convertedError = new NotFound($message, $code, $previous);
                 break;
             case 500:
-                $convertedError = new ServerError($message, $code, $e);
+                $convertedError = new ServerError($message, $code, $previous);
                 break;
             case 503:
-                $convertedError = new ServerUnavailable($message, $code, $e);
+                $convertedError = new ServerUnavailable($message, $code, $previous);
                 break;
             default:
-                $convertedError = new MessagingError($message, $code, $e);
+                $convertedError = new MessagingError($message, $code, $previous);
                 break;
         }
 
@@ -90,5 +85,18 @@ class MessagingApiExceptionConverter
         }
 
         return $convertedError;
+    }
+
+    private function convertGuzzleRequestException(RequestException $e): MessagingException
+    {
+        if ($e instanceof ConnectException) {
+            return new ApiConnectionFailed($e->getMessage(), $e->getCode(), $e);
+        }
+
+        if ($response = $e->getResponse()) {
+            return $this->convertResponse($response);
+        }
+
+        return new MessagingError($e->getMessage(), $e->getCode(), $e);
     }
 }

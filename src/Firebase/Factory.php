@@ -293,6 +293,7 @@ class Factory
             $stack->push($middleware);
         }
         $stack->push($googleAuthTokenMiddleware);
+        $stack->push(Middleware::responseWithSubResponses());
 
         $config = \array_merge(
             $this->httpClientConfig,

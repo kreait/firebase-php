@@ -95,6 +95,34 @@ class MessagingTest extends IntegrationTestCase
         $this->assertInstanceOf(MessagingException::class, $failure->error());
     }
 
+    public function testSendMessageToDifferentTargets()
+    {
+        if (empty(self::$registrationTokens)) {
+            $this->markTestSkipped();
+        }
+
+        $token = self::$registrationTokens[0];
+        $topic = __FUNCTION__;
+        $condition = "'{$topic}' in topics";
+        $invalidToken = 'invalid_token';
+
+        $this->messaging->subscribeToTopic($topic, $token);
+
+        $message = CloudMessage::new()->withNotification(['title' => 'Token Notification', 'body' => 'Token body']);
+
+        $tokenMessage = $message->withChangedTarget('token', $token);
+        $topicMessage = $message->withChangedTarget('topic', $topic);
+        $conditionMessage = $message->withChangedTarget('condition', $condition);
+        $invalidMessage = $message->withChangedTarget('token', $invalidToken);
+
+        $messages = [$tokenMessage, $topicMessage, $conditionMessage, $invalidMessage];
+
+        $report = $this->messaging->sendAll($messages);
+
+        $this->assertCount(3, $report->successes());
+        $this->assertCount(1, $report->failures());
+    }
+
     public function testSubscribeToTopic()
     {
         if (empty(self::$registrationTokens)) {

@@ -6,11 +6,13 @@ namespace Kreait\Firebase\Tests\Unit\Messaging;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Kreait\Firebase\Exception\Messaging\ApiConnectionFailed;
 use Kreait\Firebase\Exception\Messaging\AuthenticationError;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\Messaging\MessagingError;
@@ -18,7 +20,6 @@ use Kreait\Firebase\Exception\Messaging\ServerError;
 use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\ApiClient;
-use Kreait\Firebase\Messaging\CloudMessage;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -52,7 +53,7 @@ class ApiClientTest extends TestCase
         $this->mock->append($requestException);
 
         $this->expectException($expectedClass);
-        $this->client->sendMessage(CloudMessage::new());
+        $this->client->send(new Request('GET', 'http://example.com'));
     }
 
     public function testCatchAnyException()
@@ -61,7 +62,7 @@ class ApiClientTest extends TestCase
 
         $this->expectException(MessagingException::class);
 
-        $this->client->sendMessage(CloudMessage::new());
+        $this->client->send(new Request('GET', 'http://example.com'));
     }
 
     public function requestExceptions(): array
@@ -93,6 +94,10 @@ class ApiClientTest extends TestCase
             [
                 new RequestException('I\'m a teapot', $request, new Response(418, [], $responseBody)),
                 MessagingError::class,
+            ],
+            [
+                new ConnectException('Connection failed', $request),
+                ApiConnectionFailed::class,
             ],
         ];
     }

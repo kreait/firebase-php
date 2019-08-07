@@ -6,13 +6,13 @@ namespace Kreait\Firebase\Messaging;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7\Request;
 use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Exception\MessagingException;
+use Kreait\Firebase\Messaging\Http\Request\SendMessage;
+use Kreait\Firebase\Messaging\Http\Request\ValidateMessage;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
 use Throwable;
 
 /**
@@ -26,6 +26,9 @@ class ApiClient
     /** @var MessagingApiExceptionConverter */
     private $errorHandler;
 
+    /** @var string */
+    private $projectId;
+
     /**
      * @internal
      */
@@ -33,64 +36,75 @@ class ApiClient
     {
         $this->client = $client;
         $this->errorHandler = new MessagingApiExceptionConverter();
+
+        // Extract the project ID from the client config (this will be refactored later)
+        $baseUri = (string) $client->getConfig('base_uri');
+        $uriParts = \explode('/', $baseUri);
+        $this->projectId = (string) \array_pop($uriParts);
     }
 
     /**
-     * @throws MessagingException
-     * @throws FirebaseException
+     * @internal
+     *
+     * @deprecated 4.29.0
+     */
+    public function getClient(): ClientInterface
+    {
+        return $this->client;
+    }
+
+    /**
+     * @deprecated 4.29.0
      */
     public function sendMessage(Message $message): ResponseInterface
     {
-        return $this->sendMessageAsync($message)->wait();
-    }
-
-    public function sendMessageAsync(Message $message): PromiseInterface
-    {
-        $request = $this->createRequest('POST', 'messages:send');
-
-        return $this->sendAsync($request, [
-            'json' => ['message' => $message->jsonSerialize()],
-        ]);
+        return $this->send(new SendMessage($this->projectId, $message));
     }
 
     /**
-     * @throws MessagingException
-     * @throws FirebaseException
+     * @deprecated 4.29.0
+     */
+    public function sendMessageAsync(Message $message): PromiseInterface
+    {
+        return $this->sendAsync(new SendMessage($this->projectId, $message));
+    }
+
+    /**
+     * @deprecated 4.29.0
      */
     public function validateMessage(Message $message): ResponseInterface
     {
-        return $this->validateMessageAsync($message)->wait();
+        return $this->send(new ValidateMessage($this->projectId, $message));
     }
 
+    /**
+     * @deprecated 4.29.0
+     */
     public function validateMessageAsync(Message $message): PromiseInterface
     {
-        $request = $this->createRequest('POST', 'messages:send');
-
-        return $this->sendAsync($request, [
-            'json' => [
-                'message' => $message->jsonSerialize(),
-                'validate_only' => true,
-            ],
-        ]);
+        return $this->sendAsync(new ValidateMessage($this->projectId, $message));
     }
 
-    private function sendAsync(RequestInterface $request, array $options = null): PromiseInterface
+    /**
+     * @internal
+     *
+     * @throws MessagingException
+     * @throws FirebaseException
+     */
+    public function send(RequestInterface $request): ResponseInterface
     {
-        $options = $options ?? [];
+        try {
+            return $this->client->send($request);
+        } catch (Throwable $e) {
+            throw $this->errorHandler->convertException($e);
+        }
+    }
 
-        return $this->client->sendAsync($request, $options)
+    private function sendAsync(RequestInterface $request): PromiseInterface
+    {
+        return $this->client->sendAsync($request)
             ->then(null, function (Throwable $e) {
                 throw $this->errorHandler->convertException($e);
             });
-    }
-
-    private function createRequest(string $method, string $endpoint): Request
-    {
-        /** @var UriInterface $uri */
-        $uri = $this->client->getConfig('base_uri');
-        $path = \rtrim($uri->getPath(), '/').'/'.\ltrim($endpoint, '/');
-        $uri = $uri->withPath($path);
-
-        return new Request($method, $uri);
     }
 }

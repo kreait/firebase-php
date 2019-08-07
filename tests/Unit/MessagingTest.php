@@ -13,6 +13,7 @@ use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Tests\UnitTestCase;
 
 /**
@@ -95,8 +96,7 @@ class MessagingTest extends UnitTestCase
         $message = CloudMessage::withTarget(Messaging\MessageTarget::TOKEN, 'foo');
 
         $this->messagingApi
-            ->method('validateMessage')
-            ->with($message)
+            ->method('send')
             ->willThrowException((new NotFound())->withResponse(new Response()));
 
         $this->expectException(InvalidMessage::class);
@@ -119,23 +119,20 @@ class MessagingTest extends UnitTestCase
         $this->messaging->sendMulticast(new \stdClass(), []);
     }
 
-    public function testItHandlesArraysWhenMulticasting()
+    public function testAMulticastMessageCannotBeTooLarge()
     {
-        $this->messaging->sendMulticast([], []);
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $tokens = \array_fill(0, 101, 'token');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->messaging->sendMulticast(CloudMessage::new(), $tokens);
     }
 
-    public function testItHandlesNonCloudMessagesWhenMulticasting()
+    public function testSendAllCannotBeTooLarge()
     {
-        $message = new class() implements Messaging\Message {
-            public function jsonSerialize()
-            {
-                return [];
-            }
-        };
+        $messages = \array_fill(0, 101, CloudMessage::new());
 
-        $this->messaging->sendMulticast($message, []);
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->expectException(InvalidArgumentException::class);
+        $this->messaging->sendAll($messages);
     }
 
     public function validTokenProvider()
@@ -143,8 +140,8 @@ class MessagingTest extends UnitTestCase
         return [
             ['foo'],
             [['foo']],
-            [Messaging\RegistrationToken::fromValue('foo')],
-            [[Messaging\RegistrationToken::fromValue('foo')]],
+            [RegistrationToken::fromValue('foo')],
+            [[RegistrationToken::fromValue('foo')]],
         ];
     }
 }
