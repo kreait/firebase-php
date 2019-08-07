@@ -211,7 +211,7 @@ are both optional.
     $notification = Notification::fromArray([
         'title' => $title,
         'body' => $body,
-        'image => $imageUrl,
+        'image' => $imageUrl,
     ]);
 
     $notification = Notification::create($title, $body);
