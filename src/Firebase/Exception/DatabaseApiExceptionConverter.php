@@ -12,11 +12,17 @@ use Kreait\Firebase\Exception\Database\DatabaseError;
 use Kreait\Firebase\Http\ErrorResponseParser;
 use Throwable;
 
-final class DatabaseApiExceptionConverter implements ExceptionConverter
+/**
+ * @internal
+ */
+class DatabaseApiExceptionConverter
 {
     /** @var ErrorResponseParser */
     private $responseParser;
 
+    /**
+     * @internal
+     */
     public function __construct()
     {
         $this->responseParser = new ErrorResponseParser();

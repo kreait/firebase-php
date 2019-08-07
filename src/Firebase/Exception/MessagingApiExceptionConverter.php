@@ -16,11 +16,17 @@ use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
 use Kreait\Firebase\Http\ErrorResponseParser;
 use Throwable;
 
-class MessagingApiExceptionConverter implements ExceptionConverter
+/**
+ * @internal
+ */
+class MessagingApiExceptionConverter
 {
     /** @var ErrorResponseParser */
     private $responseParser;
 
+    /**
+     * @internal
+     */
     public function __construct()
     {
         $this->responseParser = new ErrorResponseParser();

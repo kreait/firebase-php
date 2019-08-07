@@ -22,11 +22,17 @@ use Kreait\Firebase\Exception\Auth\WeakPassword;
 use Kreait\Firebase\Http\ErrorResponseParser;
 use Throwable;
 
-final class AuthApiExceptionConverter implements ExceptionConverter
+/**
+ * @internal
+ */
+class AuthApiExceptionConverter
 {
     /** @var ErrorResponseParser */
     private $responseParser;
 
+    /**
+     * @internal
+     */
     public function __construct()
     {
         $this->responseParser = new ErrorResponseParser();

@@ -11,11 +11,17 @@ use Kreait\Firebase\Exception\RemoteConfig\RemoteConfigError;
 use Kreait\Firebase\Http\ErrorResponseParser;
 use Throwable;
 
-class RemoteConfigApiExceptionConverter implements ExceptionConverter
+/**
+ * @internal
+ */
+class RemoteConfigApiExceptionConverter
 {
     /** @var ErrorResponseParser */
     private $responseParser;
 
+    /**
+     * @internal
+     */
     public function __construct()
     {
         $this->responseParser = new ErrorResponseParser();
