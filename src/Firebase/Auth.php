@@ -107,6 +107,22 @@ class Auth
     }
 
     /**
+     * @param array $filters
+     * @return \Generator
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
+    public function listUsersByFilters(array $filters): \Generator
+    {
+        $response = $this->client->getUsersByFilters($filters);
+        $result = JSON::decode((string) $response->getBody(), true);
+
+        foreach ((array) ($result['users'] ?? []) as $userData) {
+            yield UserRecord::fromResponseData($userData);
+        }
+    }
+
+    /**
      * Creates a new user with the provided properties.
      *
      * @param array|Request\CreateUser $properties

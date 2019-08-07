@@ -116,6 +116,20 @@ class ApiClient
     }
 
     /**
+     * @param array $filters
+     * @return ResponseInterface
+     * @throws AuthException
+     * @throws FirebaseException
+     */
+    public function getUsersByFilters(array $filters): ResponseInterface
+    {
+        return $this->request(
+            'getAccountInfo',
+            $this->transformFiltersValue($filters)
+        );
+    }
+
+    /**
      * @throws AuthException
      * @throws FirebaseException
      */
@@ -320,5 +334,20 @@ class ApiClient
         } catch (Throwable $e) {
             throw $this->errorHandler->convertException($e);
         }
+    }
+
+    /**
+     * @param array $filters
+     *
+     * @return array
+     */
+    protected function transformFiltersValue(array $filters): array
+    {
+        return array_map(
+            function ($filter) {
+                return [$filter];
+            },
+            \array_filter($filters)
+        );
     }
 }
