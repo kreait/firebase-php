@@ -6,6 +6,9 @@
 
 #### Cloud Messaging
 
+* Added `Kreait\Firebase\Messaging::sendAll()` to send up to 100 messages to multiple targets (tokens, topics and
+  conditions) in one request.
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#send-multiple-messages-at-once))
 * A condition will now ensure that no more than five topics are provided. Previously, the Firebase REST API would 
   have rejected the message with a non-specific "Invalid condition expression provided."
   
@@ -22,6 +25,8 @@
 
 #### Cloud Messaging
 
+* `Kreait\Firebase\Messaging::sendMulticast()` now makes full use of the FCM batch API, resulting in substantial
+  perfomance improvements.
 * Values passed to `Kreait\Firebase\Messaging\MessageData::withData()` will now be casted to strings instead of
   throwing InvalidArgument exceptions when they are not strings.
 

@@ -163,7 +163,7 @@ Send messages to multiple devices (Multicast)
    :target: https://github.com/kreait/firebase-php/releases/tag/4.24.0
    :alt: Available since v4.24
 
-You can send send one message to multiple devices:
+You can send send one message to up to 100 devices:
 
 .. code-block:: php
 
@@ -191,6 +191,29 @@ methods to determine the successes and failures of the multicasted message:
         }
     }
 
+******************************
+Send multiple messages at once
+******************************
+
+.. image:: https://img.shields.io/badge/available_since-v4.29-yellowgreen
+   :target: https://github.com/kreait/firebase-php/releases/tag/4.29.0
+   :alt: Available since v4.29
+
+You can send send up to 100 prepared messages (each message has a token, topic or condition as a target) in one go:
+
+.. code-block:: php
+
+    use ;
+
+    $messages = [
+        // Up to 100 items, either objects implementing Kreait\Firebase\Messaging\Message
+        // or arrays that can be used to create valid to Kreait\Firebase\Messaging\Cloudmessage instances
+    ];
+
+    $message = CloudMessage::new(); // Any instance of Kreait\Messaging\Message
+
+    /** @var Kreait\Firebase\Messaging\MulticastSendReport $sendReport **/
+    $sendReport = $messaging->sendAll($messages);
 
 *********************
 Adding a notification
