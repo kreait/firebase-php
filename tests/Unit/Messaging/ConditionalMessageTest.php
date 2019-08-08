@@ -6,73 +6,40 @@ namespace Kreait\Firebase\Tests\Unit\Messaging;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Messaging\ConditionalMessage;
-use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Tests\UnitTestCase;
 
 /**
  * @internal
+ *
+ * @deprecated 4.29.0
  */
 class ConditionalMessageTest extends UnitTestCase
 {
-    /**
-     * @dataProvider validDataProvider
-     */
-    public function testCreateFromArray(array $input)
+    public function testCreate()
     {
-        $message = ConditionalMessage::fromArray($input);
+        $message = ConditionalMessage::create('condition');
 
-        $this->assertSame($input['condition'], $message->condition());
-
-        if (isset($input['data'])) {
-            $this->assertEquals($input['data'], $message->data());
-        }
-
-        if (isset($input['notification'])) {
-            $this->assertInstanceOf(Notification::class, $message->notification());
-        }
+        $this->assertInstanceOf(ConditionalMessage::class, $message);
+        $this->assertSame('condition', $message->condition());
     }
 
-    /**
-     * @dataProvider invalidDataProvider
-     */
-    public function testCreateFromArrayWithInvalidData(array $data)
+    public function testCreateWithoutCondition()
     {
         $this->expectException(InvalidArgumentException::class);
-
-        ConditionalMessage::fromArray($data);
+        ConditionalMessage::fromArray([]);
     }
 
-    public function validDataProvider(): array
+    public function testCreateFromArray()
     {
-        $base = ['condition' => "'foo' in topics || 'cats' in topics"];
+        $message = ConditionalMessage::fromArray(['condition' => 'condition']);
 
-        return [
-            'with_data' => [$base + [
-                'data' => ['foo' => 'bar'],
-            ]],
-            'with_notification' => [$base + [
-                'notification' => [
-                    'title' => 'notification title',
-                    'body' => 'notification body',
-                ],
-            ]],
-            'with_notification_and_data' => [$base + [
-                'data' => ['foo' => 'bar'],
-                'notification' => [
-                    'title' => 'notification title',
-                    'body' => 'notification body',
-                ], ],
-            ],
-        ];
+        $this->assertInstanceOf(ConditionalMessage::class, $message);
+        $this->assertSame('condition', $message->condition());
     }
 
-    public function invalidDataProvider(): array
+    public function testCreateFromArrayWithoutCondition()
     {
-        return [
-            'missing_condition' => [[]],
-            'invalid_notification' => [[
-                'notification' => [],
-            ]],
-        ];
+        $this->expectException(InvalidArgumentException::class);
+        ConditionalMessage::fromArray([]);
     }
 }

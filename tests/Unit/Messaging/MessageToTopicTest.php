@@ -6,73 +6,40 @@ namespace Kreait\Firebase\Tests\Unit\Messaging;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Messaging\MessageToTopic;
-use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Tests\UnitTestCase;
 
 /**
  * @internal
+ *
+ * @deprecated 4.29.0
  */
 class MessageToTopicTest extends UnitTestCase
 {
-    /**
-     * @dataProvider validDataProvider
-     */
-    public function testCreateFromArray(array $input)
+    public function testCreate()
     {
-        $message = MessageToTopic::fromArray($input);
+        $message = MessageToTopic::create('topic');
 
-        $this->assertSame($input['topic'], $message->topic());
-
-        if (isset($input['data'])) {
-            $this->assertEquals($input['data'], $message->data());
-        }
-
-        if (isset($input['notification'])) {
-            $this->assertInstanceOf(Notification::class, $message->notification());
-        }
+        $this->assertInstanceOf(MessageToTopic::class, $message);
+        $this->assertSame('topic', $message->topic());
     }
 
-    /**
-     * @dataProvider invalidDataProvider
-     */
-    public function testCreateFromArrayWithInvalidData(array $data)
+    public function testCreateWithoutTopic()
     {
         $this->expectException(InvalidArgumentException::class);
-
-        MessageToTopic::fromArray($data);
+        MessageToTopic::fromArray([]);
     }
 
-    public function validDataProvider(): array
+    public function testCreateFromArray()
     {
-        $base = ['topic' => 'my-topic'];
+        $message = MessageToTopic::fromArray(['topic' => 'topic']);
 
-        return [
-            'with_data' => [$base + [
-                'data' => ['foo' => 'bar'],
-            ]],
-            'with_notification' => [$base + [
-                'notification' => [
-                    'title' => 'notification title',
-                    'body' => 'notification body',
-                ],
-            ]],
-            'with_notification_and_data' => [$base + [
-                'data' => ['foo' => 'bar'],
-                'notification' => [
-                    'title' => 'notification title',
-                    'body' => 'notification body',
-                ], ],
-            ],
-        ];
+        $this->assertInstanceOf(MessageToTopic::class, $message);
+        $this->assertSame('topic', $message->topic());
     }
 
-    public function invalidDataProvider(): array
+    public function testCreateFromArrayWithoutTopic()
     {
-        return [
-            'missing_topic' => [[]],
-            'invalid_notification' => [[
-                'notification' => [],
-            ]],
-        ];
+        $this->expectException(InvalidArgumentException::class);
+        MessageToTopic::fromArray([]);
     }
 }

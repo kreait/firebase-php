@@ -6,73 +6,40 @@ namespace Kreait\Firebase\Tests\Unit\Messaging;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Messaging\MessageToRegistrationToken;
-use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Tests\UnitTestCase;
 
 /**
  * @internal
+ *
+ * @deprecated 4.29.0
  */
 class MessageToRegistrationTokenTest extends UnitTestCase
 {
-    /**
-     * @dataProvider validDataProvider
-     */
-    public function testCreateFromArray(array $input)
+    public function testCreate()
     {
-        $message = MessageToRegistrationToken::fromArray($input);
+        $message = MessageToRegistrationToken::create('token');
 
-        $this->assertSame($input['token'], $message->token());
-
-        if (isset($input['data'])) {
-            $this->assertEquals($input['data'], $message->data());
-        }
-
-        if (isset($input['notification'])) {
-            $this->assertInstanceOf(Notification::class, $message->notification());
-        }
+        $this->assertInstanceOf(MessageToRegistrationToken::class, $message);
+        $this->assertSame('token', $message->token());
     }
 
-    /**
-     * @dataProvider invalidDataProvider
-     */
-    public function testCreateFromArrayWithInvalidData(array $data)
+    public function testCreateWithoutToken()
     {
         $this->expectException(InvalidArgumentException::class);
-
-        MessageToRegistrationToken::fromArray($data);
+        MessageToRegistrationToken::fromArray([]);
     }
 
-    public function validDataProvider(): array
+    public function testCreateFromArray()
     {
-        $base = ['token' => 'my-token'];
+        $message = MessageToRegistrationToken::fromArray(['token' => 'token']);
 
-        return [
-            'with_data' => [$base + [
-                'data' => ['foo' => 'bar'],
-            ]],
-            'with_notification' => [$base + [
-                'notification' => [
-                    'title' => 'notification title',
-                    'body' => 'notification body',
-                ],
-            ]],
-            'with_notification_and_data' => [$base + [
-                'data' => ['foo' => 'bar'],
-                'notification' => [
-                    'title' => 'notification title',
-                    'body' => 'notification body',
-                ], ],
-            ],
-        ];
+        $this->assertInstanceOf(MessageToRegistrationToken::class, $message);
+        $this->assertSame('token', $message->token());
     }
 
-    public function invalidDataProvider(): array
+    public function testCreateFromArrayWithoutToken()
     {
-        return [
-            'missing_token' => [[]],
-            'invalid_notification' => [[
-                'notification' => [],
-            ]],
-        ];
+        $this->expectException(InvalidArgumentException::class);
+        MessageToRegistrationToken::fromArray([]);
     }
 }

@@ -7,7 +7,7 @@ namespace Kreait\Firebase\Tests\Integration\Messaging;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Message;
-use Kreait\Firebase\Tests\Integration\MessageTestCase;
+use Kreait\Firebase\Tests\Integration\MessagingTest;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 /**
@@ -33,7 +33,7 @@ final class ApiClientTest extends IntegrationTestCase
 
         $this->client = new ApiClient($httpClient);
 
-        $messageData = MessageTestCase::createFullMessageData();
+        $messageData = MessagingTest::createFullMessageData();
         $messageData['condition'] = "'dogs' in topics || 'cats' in topics";
 
         $this->validMessage = CloudMessage::fromArray($messageData);

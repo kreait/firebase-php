@@ -39,21 +39,27 @@ class CloudMessage implements Message
      *
      * @throws InvalidArgumentException if the target type or value is invalid
      *
-     * @return CloudMessage
+     * @return static
      */
-    public static function withTarget(string $type, string $value): self
+    public static function withTarget(string $type, string $value)
     {
-        return (new self())->withChangedTarget($type, $value);
+        return self::new()->withChangedTarget($type, $value);
     }
 
-    public static function new(): self
+    /**
+     * @return static
+     */
+    public static function new()
     {
-        return new self();
+        return new static();
     }
 
-    public static function fromArray(array $data): self
+    /**
+     * @return static
+     */
+    public static function fromArray(array $data)
     {
-        $new = new self();
+        $new = new static();
 
         if (\count(\array_intersect(\array_keys($data), MessageTarget::TYPES)) > 1) {
             throw new InvalidArgument(
@@ -102,9 +108,9 @@ class CloudMessage implements Message
      *
      * @throws InvalidArgumentException if the target type or value is invalid
      *
-     * @return CloudMessage
+     * @return static
      */
-    public function withChangedTarget(string $type, string $value): self
+    public function withChangedTarget(string $type, string $value)
     {
         $new = clone $this;
         $new->target = MessageTarget::with($type, $value);
@@ -117,9 +123,9 @@ class CloudMessage implements Message
      *
      * @throws InvalidArgumentException
      *
-     * @return CloudMessage
+     * @return static
      */
-    public function withData($data): self
+    public function withData($data)
     {
         $new = clone $this;
         $new->data = $data instanceof MessageData ? $data : MessageData::fromArray($data);
@@ -132,9 +138,9 @@ class CloudMessage implements Message
      *
      * @throws InvalidArgumentException
      *
-     * @return CloudMessage
+     * @return static
      */
-    public function withNotification($notification): self
+    public function withNotification($notification)
     {
         $new = clone $this;
         $new->notification = $notification instanceof Notification ? $notification : Notification::fromArray($notification);
@@ -147,9 +153,9 @@ class CloudMessage implements Message
      *
      * @throws InvalidArgumentException
      *
-     * @return CloudMessage
+     * @return static
      */
-    public function withAndroidConfig($config): self
+    public function withAndroidConfig($config)
     {
         $new = clone $this;
         $new->androidConfig = $config instanceof AndroidConfig ? $config : AndroidConfig::fromArray($config);
@@ -162,9 +168,9 @@ class CloudMessage implements Message
      *
      * @throws InvalidArgumentException
      *
-     * @return CloudMessage
+     * @return static
      */
-    public function withApnsConfig($config): self
+    public function withApnsConfig($config)
     {
         $new = clone $this;
         $new->apnsConfig = $config instanceof ApnsConfig ? $config : ApnsConfig::fromArray($config);
@@ -174,8 +180,10 @@ class CloudMessage implements Message
 
     /**
      * @param WebPushConfig|array $config
+     *
+     * @return static
      */
-    public function withWebPushConfig($config): self
+    public function withWebPushConfig($config)
     {
         $new = clone $this;
         $new->webPushConfig = $config instanceof WebPushConfig ? $config : WebPushConfig::fromArray($config);
@@ -185,8 +193,10 @@ class CloudMessage implements Message
 
     /**
      * @param FcmOptions|array $options
+     *
+     * @return static
      */
-    public function withFcmOptions($options): self
+    public function withFcmOptions($options)
     {
         $new = clone $this;
         $new->fcmOptions = $options instanceof FcmOptions ? $options : FcmOptions::fromArray($options);

@@ -9,19 +9,10 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 /**
  * @deprecated 4.14 Use CloudMessage instead
  */
-class MessageToTopic implements Message
+class MessageToTopic extends CloudMessage
 {
-    use MessageTrait;
-
-    /**
-     * @var Topic
-     */
+    /** @var Topic */
     private $topic;
-
-    private function __construct(Topic $topic)
-    {
-        $this->topic = $topic;
-    }
 
     /**
      * @deprecated 4.14 Use CloudMessage::withTarget('topic', $topic) instead
@@ -35,7 +26,10 @@ class MessageToTopic implements Message
     {
         $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
 
-        return new self($topic);
+        $message = static::withTarget('condition', $topic->value());
+        $message->topic = $topic;
+
+        return $message;
     }
 
     /**
@@ -48,55 +42,23 @@ class MessageToTopic implements Message
      */
     public static function fromArray(array $data): self
     {
-        if (!\array_key_exists('topic', $data)) {
+        if (!($topic = $data['topic'] ?? null)) {
             throw new InvalidArgumentException('Missing field "topic"');
         }
 
-        $message = self::create($data['topic']);
+        $topic = $topic instanceof Topic ? $topic : Topic::fromValue((string) $topic);
 
-        if ($data['data'] ?? null) {
-            $message = $message->withData($data['data']);
-        }
-
-        if ($data['notification'] ?? null) {
-            $message = $message->withNotification(Notification::fromArray($data['notification']));
-        }
-
-        if ($data['android'] ?? null) {
-            $message = $message->withAndroidConfig(AndroidConfig::fromArray($data['android']));
-        }
-
-        if ($data['apns'] ?? null) {
-            $message = $message->withApnsConfig(ApnsConfig::fromArray($data['apns']));
-        }
-
-        if ($data['webpush'] ?? null) {
-            $message = $message->withWebPushConfig(WebPushConfig::fromArray($data['webpush']));
-        }
-
-        if ($data['fcm_options'] ?? null) {
-            $message = $message->withFcmOptions(FcmOptions::fromArray($data['fcm_options']));
-        }
+        $message = parent::fromArray($data);
+        $message->topic = $topic;
 
         return $message;
     }
 
+    /**
+     * @deprecated 4.29.0 Use CloudMessage instead
+     */
     public function topic(): string
     {
-        // TODO Change this to return a Topic instance in 5.0
         return (string) $this->topic;
-    }
-
-    public function jsonSerialize()
-    {
-        return \array_filter([
-            'topic' => $this->topic,
-            'data' => $this->data,
-            'notification' => $this->notification,
-            'android' => $this->androidConfig,
-            'apns' => $this->apnsConfig,
-            'webpush' => $this->webPushConfig,
-            'fcm_options' => $this->fcmOptions,
-        ]);
     }
 }

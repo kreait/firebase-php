@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use DateTimeImmutable;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\MessagingException;
@@ -27,9 +28,75 @@ class MessagingTest extends IntegrationTestCase
         $this->messaging = self::$firebase->getMessaging();
     }
 
+    public static function createFullMessageData(): array
+    {
+        return [
+            'notification' => [
+                // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#notification
+                'title' => 'Notification title',
+                'body' => 'Notification body',
+                'image' => 'http://lorempixel.com/400/200/',
+            ],
+            'data' => [
+                'key_1' => 'Value 1',
+                'key_2' => 'Value 2',
+            ],
+            'android' => [
+                // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidconfig
+                'ttl' => '3600s',
+                'priority' => 'normal',
+                'notification' => [
+                    'title' => '$GOOG up 1.43% on the day',
+                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                    'icon' => 'stock_ticker_update',
+                    'color' => '#f45342',
+                ],
+                'fcm_options' => [
+                    // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#fcmoptions
+                    'analytics_label' => 'android-specific-analytics-label',
+                ],
+            ],
+            'apns' => [
+                // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#apnsconfig
+                'headers' => [
+                    'apns-priority' => '10',
+                ],
+                'payload' => [
+                    'aps' => [
+                        'alert' => [
+                            'title' => '$GOOG up 1.43% on the day',
+                            'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                        ],
+                        'badge' => 42,
+                    ],
+                ],
+                'fcm_options' => [
+                    // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#fcmoptions
+                    'analytics_label' => 'apns-specific-analytics-label',
+                ],
+            ],
+            'webpush' => [
+                // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
+                'notification' => [
+                    'title' => '$GOOG up 1.43% on the day',
+                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                    'icon' => 'https://my-server/icon.png',
+                ],
+                'fcm_options' => [
+                    // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushfcmoptions
+                    'link' => 'https://my-server/path/to/target',
+                ],
+            ],
+            'fcm_options' => [
+                // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#fcmoptions
+                'analytics_label' => 'some-analytics-label',
+            ],
+        ];
+    }
+
     public function testSendMessage()
     {
-        $message = MessageTestCase::createFullMessageData();
+        $message = self::createFullMessageData();
         $message['condition'] = "'dogs' in topics || 'cats' in topics";
 
         $result = $this->messaging->send($message);
@@ -39,7 +106,7 @@ class MessagingTest extends IntegrationTestCase
 
     public function testSendRawMessage()
     {
-        $data = MessageTestCase::createFullMessageData();
+        $data = self::createFullMessageData();
         $data['condition'] = "'dogs' in topics || 'cats' in topics";
 
         $result = $this->messaging->send(new RawMessageFromArray($data));
@@ -49,7 +116,7 @@ class MessagingTest extends IntegrationTestCase
 
     public function testValidateValidMessage()
     {
-        $message = MessageTestCase::createFullMessageData();
+        $message = self::createFullMessageData();
         $message['condition'] = "'dogs' in topics || 'cats' in topics";
 
         $result = $this->messaging->validate($message);
@@ -59,7 +126,7 @@ class MessagingTest extends IntegrationTestCase
 
     public function testValidateInvalidMessage()
     {
-        $message = MessageTestCase::createFullMessageData();
+        $message = self::createFullMessageData();
         $message['token'] = 'invalid-and-non-existing-device-token';
 
         $this->expectException(InvalidMessage::class);
@@ -123,37 +190,38 @@ class MessagingTest extends IntegrationTestCase
         $this->assertCount(1, $report->failures());
     }
 
-    public function testSubscribeToTopic()
+    public function testManageTopicSubscriptions()
     {
         if (empty(self::$registrationTokens)) {
             $this->markTestSkipped();
         }
 
-        $this->messaging->subscribeToTopic('foo', self::$registrationTokens);
-        $this->addToAssertionCount(1);
-    }
-
-    public function testUnsubscribeFromTopic()
-    {
-        if (empty(self::$registrationTokens)) {
-            $this->markTestSkipped();
-        }
-
-        $this->messaging->unsubscribeFromTopic('foo', self::$registrationTokens);
-        $this->addToAssertionCount(1);
-    }
-
-    public function testChangeTopicSubscription()
-    {
-        if (empty(self::$registrationTokens)) {
-            $this->markTestSkipped();
-        }
-
+        $token = self::$registrationTokens[0];
         $topicName = \uniqid('topic', false);
-        $token = Messaging\RegistrationToken::fromValue(self::$registrationTokens[0]);
+
+        $appInstance = $this->messaging->getAppInstance($token);
+        foreach ($appInstance->topicSubscriptions() as $subscription) {
+            $this->messaging->unsubscribeFromTopic($subscription->topic(), $subscription->registrationToken());
+        }
+
+        $appInstance = $this->messaging->getAppInstance($token);
+        $this->assertCount(0, $appInstance->topicSubscriptions());
 
         $this->messaging->subscribeToTopic($topicName, $token);
-        $this->assertTrue($this->messaging->getAppInstance($token)->isSubscribedToTopic($topicName));
+
+        $appInstance = $this->messaging->getAppInstance($token);
+        $this->assertTrue($appInstance->isSubscribedToTopic($topicName));
+
+        $subscriptions = $appInstance->topicSubscriptions();
+        $this->assertGreaterThan(0, $subscriptions->count());
+
+        foreach ($subscriptions as $subscription) {
+            $this->assertSame($subscription->topic()->value(), $topicName);
+            $this->assertSame(
+                $subscription->subscribedAt()->format('Y-m-d'),
+                (new DateTimeImmutable())->format('Y-m-d')
+            );
+        }
 
         $this->messaging->unsubscribeFromTopic($topicName, $token);
         $this->assertFalse($this->messaging->getAppInstance($token)->isSubscribedToTopic($topicName));

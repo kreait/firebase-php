@@ -9,19 +9,10 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 /**
  * @deprecated 4.14 Use CloudMessage instead
  */
-class ConditionalMessage implements Message
+class ConditionalMessage extends CloudMessage
 {
-    use MessageTrait;
-
-    /**
-     * @var Condition
-     */
+    /** @var Condition */
     private $condition;
-
-    private function __construct(Condition $condition)
-    {
-        $this->condition = $condition;
-    }
 
     /**
      * @deprecated 4.14 Use CloudMessage::withTarget('condition', $condition) instead
@@ -35,7 +26,10 @@ class ConditionalMessage implements Message
     {
         $condition = $condition instanceof Condition ? $condition : Condition::fromValue($condition);
 
-        return new self($condition);
+        $message = static::withTarget('condition', $condition->value());
+        $message->condition = $condition;
+
+        return $message;
     }
 
     /**
@@ -44,58 +38,27 @@ class ConditionalMessage implements Message
      *
      * @throws InvalidArgumentException
      *
-     * @return ConditionalMessage
+     * @return static
      */
-    public static function fromArray(array $data): self
+    public static function fromArray(array $data)
     {
-        if (!\array_key_exists('condition', $data)) {
+        if (!($condition = $data['condition'] ?? null)) {
             throw new InvalidArgumentException('Missing field "condition"');
         }
 
-        $message = self::create($data['condition']);
+        $condition = $condition instanceof Condition ? $condition : Condition::fromValue((string) $condition);
 
-        if ($data['data'] ?? null) {
-            $message = $message->withData($data['data']);
-        }
-
-        if ($data['notification'] ?? null) {
-            $message = $message->withNotification(Notification::fromArray($data['notification']));
-        }
-
-        if ($data['android'] ?? null) {
-            $message = $message->withAndroidConfig(AndroidConfig::fromArray($data['android']));
-        }
-
-        if ($data['apns'] ?? null) {
-            $message = $message->withApnsConfig(ApnsConfig::fromArray($data['apns']));
-        }
-
-        if ($data['webpush'] ?? null) {
-            $message = $message->withWebPushConfig(WebPushConfig::fromArray($data['webpush']));
-        }
-
-        if ($data['fcm_options'] ?? null) {
-            $message = $message->withFcmOptions(FcmOptions::fromArray($data['fcm_options']));
-        }
+        $message = parent::fromArray($data);
+        $message->condition = $condition;
 
         return $message;
     }
 
+    /**
+     * @deprecated 4.29.0 Use CloudMessage instead
+     */
     public function condition(): string
     {
         return (string) $this->condition;
-    }
-
-    public function jsonSerialize()
-    {
-        return \array_filter([
-            'condition' => $this->condition,
-            'data' => $this->data,
-            'notification' => $this->notification,
-            'android' => $this->androidConfig,
-            'apns' => $this->apnsConfig,
-            'webpush' => $this->webPushConfig,
-            'fcm_options' => $this->fcmOptions,
-        ]);
     }
 }
