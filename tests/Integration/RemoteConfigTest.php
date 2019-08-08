@@ -233,8 +233,8 @@ CONFIG;
         }
 
         $query = [
-            'startingAt' => '2019-05-09',
-            'endingAt' => 'yesterday',
+            'startingAt' => '2019-06-01',
+            'endingAt' => '2019-08-08',
             'upToVersion' => $currentVersion->versionNumber(),
             'pageSize' => 1,
             'limit' => $limit = 2,
