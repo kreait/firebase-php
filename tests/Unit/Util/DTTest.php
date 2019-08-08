@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Kreait\Firebase\Util\DT;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * @internal
@@ -61,10 +62,15 @@ class DTTest extends TestCase
     public function validVariableValues()
     {
         return [
-            [\microtime()],
-            [\time()],
-            [new \DateTimeImmutable('now', new DateTimeZone('America/Los_Angeles'))],
-            [new DateTimeImmutable('now', new DateTimeZone('Asia/Bangkok'))],
+            'null' => [null],
+            'zero' => [0],
+            'zero_as_string' => ['0'],
+            'true' => [true],
+            'false' => [false],
+            'microtime' => [\microtime()],
+            'time' => [\time()],
+            'now in LA' => [new \DateTimeImmutable('now', new DateTimeZone('America/Los_Angeles'))],
+            'now in Bangkok' => [new DateTimeImmutable('now', new DateTimeZone('Asia/Bangkok'))],
         ];
     }
 
@@ -72,6 +78,7 @@ class DTTest extends TestCase
     {
         return [
             ['foo'],
+            [new stdClass()],
         ];
     }
 }
