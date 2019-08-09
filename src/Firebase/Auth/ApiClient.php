@@ -116,8 +116,6 @@ class ApiClient
     }
 
     /**
-     * @param array $filters
-     * @return ResponseInterface
      * @throws AuthException
      * @throws FirebaseException
      */
@@ -125,7 +123,7 @@ class ApiClient
     {
         return $this->request(
             'getAccountInfo',
-            $this->transformFiltersValue($filters)
+            self::transformFiltersValue($filters)
         );
     }
 
@@ -336,15 +334,10 @@ class ApiClient
         }
     }
 
-    /**
-     * @param array $filters
-     *
-     * @return array
-     */
-    protected function transformFiltersValue(array $filters): array
+    private static function transformFiltersValue(array $filters): array
     {
-        return array_map(
-            function ($filter) {
+        return \array_map(
+            static function ($filter) {
                 return [$filter];
             },
             \array_filter($filters)

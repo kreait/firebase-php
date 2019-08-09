@@ -107,8 +107,6 @@ class Auth
     }
 
     /**
-     * @param array $filters
-     * @return \Generator
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      */
