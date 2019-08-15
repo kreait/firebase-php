@@ -26,6 +26,9 @@ use Kreait\GcpMetadata;
 use Psr\Http\Message\UriInterface;
 use Psr\SimpleCache\CacheInterface;
 
+/**
+ * @internal
+ */
 class Factory
 {
     /**
@@ -200,7 +203,7 @@ class Factory
         return \sprintf(self::$storageBucketNamePattern, $serviceAccount->getSanitizedProjectId());
     }
 
-    protected function createAuth(): Auth
+    public function createAuth(): Auth
     {
         $http = $this->createApiClient([
             'base_uri' => 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/',
@@ -227,7 +230,7 @@ class Factory
         return new CustomTokenViaGoogleIam($serviceAccount->getClientEmail(), $this->createApiClient());
     }
 
-    protected function createDatabase(): Database
+    public function createDatabase(): Database
     {
         $http = $this->createApiClient();
 
@@ -251,7 +254,7 @@ class Factory
         return new Database($this->getDatabaseUri(), new Database\ApiClient($http));
     }
 
-    protected function createRemoteConfig(): RemoteConfig
+    public function createRemoteConfig(): RemoteConfig
     {
         $http = $this->createApiClient([
             'base_uri' => 'https://firebaseremoteconfig.googleapis.com/v1/projects/'.$this->getServiceAccount()->getSanitizedProjectId().'/remoteConfig',
@@ -260,7 +263,7 @@ class Factory
         return new RemoteConfig(new RemoteConfig\ApiClient($http));
     }
 
-    protected function createMessaging(): Messaging
+    public function createMessaging(): Messaging
     {
         $projectId = $this->getServiceAccount()->getSanitizedProjectId();
 
@@ -336,7 +339,7 @@ class Factory
         return new AuthTokenMiddleware($credentials);
     }
 
-    protected function createStorage(): Storage
+    public function createStorage(): Storage
     {
         $storageClient = $this->getGoogleCloudServiceBuilder()->storage([
             'projectId' => $this->getServiceAccount()->getSanitizedProjectId(),

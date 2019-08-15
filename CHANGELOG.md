@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased
+
+### Changed
+
+``Kreait\Firebase\Factory`` now exposes the methods to create the single components (Auth, Messaging, Remote Config,
+Storage) directly in order to enable its usage in [kreait/laravel-firebase](https://github.com/kreait/laravel-firebase).
+
 ## 4.29.0 - 2019-08-13
 
 ### Added
