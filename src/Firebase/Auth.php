@@ -6,15 +6,15 @@ namespace Kreait\Firebase;
 
 use Firebase\Auth\Token\Domain\Generator as TokenGenerator;
 use Firebase\Auth\Token\Domain\Verifier as IdTokenVerifier;
-use Firebase\Auth\Token\Exception\InvalidSignature;
 use Firebase\Auth\Token\Exception\InvalidToken;
 use Firebase\Auth\Token\Exception\IssuedInTheFuture;
+use Firebase\Auth\Token\Exception\UnknownKey;
+use Generator;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
-use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\ClearTextPassword;
@@ -61,6 +61,12 @@ class Auth
         return $this->client;
     }
 
+    /**
+     * @param Uid|string $uid
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
     public function getUser($uid): UserRecord
     {
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
@@ -77,16 +83,13 @@ class Auth
     }
 
     /**
-     * @param int $maxResults
-     * @param int $batchSize
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      *
-     * @return \Generator|UserRecord[]
+     * @return Generator|UserRecord[]
      */
-    public function listUsers(int $maxResults = null, int $batchSize = null): \Generator
+    public function listUsers(int $maxResults = 1000, int $batchSize = 1000): Generator
     {
-        $maxResults = $maxResults ?? 1000;
-        $batchSize = $batchSize ?? 1000;
-
         $pageToken = null;
         $count = 0;
 
@@ -111,7 +114,8 @@ class Auth
      *
      * @param array|Request\CreateUser $properties
      *
-     * @throws InvalidArgumentException if invalid properties have been provided
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      */
     public function createUser($properties): UserRecord
     {
@@ -132,7 +136,8 @@ class Auth
      * @param Uid|string $uid
      * @param array|Request\UpdateUser $properties
      *
-     * @throws InvalidArgumentException if invalid properties have been provided
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      */
     public function updateUser($uid, $properties): UserRecord
     {
@@ -152,6 +157,9 @@ class Auth
     /**
      * @param Email|string $email
      * @param ClearTextPassword|string $password
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      */
     public function createUserWithEmailAndPassword($email, $password): UserRecord
     {
@@ -162,6 +170,12 @@ class Auth
         );
     }
 
+    /**
+     * @param Email|string $email
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
     public function getUserByEmail($email): UserRecord
     {
         $email = $email instanceof Email ? $email : new Email($email);
@@ -177,6 +191,12 @@ class Auth
         return UserRecord::fromResponseData($data['users'][0]);
     }
 
+    /**
+     * @param PhoneNumber|string $phoneNumber
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
     public function getUserByPhoneNumber($phoneNumber): UserRecord
     {
         $phoneNumber = $phoneNumber instanceof PhoneNumber ? $phoneNumber : new PhoneNumber($phoneNumber);
@@ -192,6 +212,10 @@ class Auth
         return UserRecord::fromResponseData($data['users'][0]);
     }
 
+    /**
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
     public function createAnonymousUser(): UserRecord
     {
         return $this->createUser(Request\CreateUser::new());
@@ -200,6 +224,9 @@ class Auth
     /**
      * @param Uid|string $uid
      * @param ClearTextPassword|string $newPassword
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      */
     public function changeUserPassword($uid, $newPassword): UserRecord
     {
@@ -209,6 +236,9 @@ class Auth
     /**
      * @param Uid|string $uid
      * @param Email|string $newEmail
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      */
     public function changeUserEmail($uid, $newEmail): UserRecord
     {
@@ -217,6 +247,9 @@ class Auth
 
     /**
      * @param Uid|string $uid
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      */
     public function enableUser($uid): UserRecord
     {
@@ -225,6 +258,9 @@ class Auth
 
     /**
      * @param Uid|string $uid
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      */
     public function disableUser($uid): UserRecord
     {
@@ -233,6 +269,10 @@ class Auth
 
     /**
      * @param Uid|string $uid
+     *
+     * @throws UserNotFound
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      */
     public function deleteUser($uid)
     {
@@ -247,25 +287,39 @@ class Auth
 
     /**
      * @param Uid|string $uid
-     * @param UriInterface|string $continueUrl
+     * @param UriInterface|string|null $continueUrl
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      */
     public function sendEmailVerification($uid, $continueUrl = null, string $locale = null)
     {
+        if ($continueUrl !== null) {
+            $continueUrl = (string) $continueUrl;
+        }
+
         $response = $this->client->exchangeCustomTokenForIdAndRefreshToken(
             $this->createCustomToken($uid)
         );
 
         $idToken = JSON::decode((string) $response->getBody(), true)['idToken'];
 
-        $this->client->sendEmailVerification($idToken, (string) $continueUrl, $locale);
+        $this->client->sendEmailVerification($idToken, $continueUrl, $locale);
     }
 
     /**
      * @param Email|mixed $email
      * @param UriInterface|string|null $continueUrl
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      */
     public function sendPasswordResetEmail($email, $continueUrl = null, string $locale = null)
     {
+        if ($continueUrl !== null) {
+            $continueUrl = (string) $continueUrl;
+        }
+
         $email = $email instanceof Email ? $email : new Email((string) $email);
 
         $this->client->sendPasswordResetEmail((string) $email, (string) $continueUrl, $locale);
@@ -273,6 +327,9 @@ class Auth
 
     /**
      * @param Uid|string $uid
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      */
     public function setCustomUserAttributes($uid, array $attributes): UserRecord
     {
@@ -281,6 +338,9 @@ class Auth
 
     /**
      * @param Uid|string $uid
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      */
     public function deleteCustomUserAttributes($uid): UserRecord
     {
@@ -289,12 +349,9 @@ class Auth
 
     /**
      * @param Uid|string $uid
-     * @param array $claims
      */
-    public function createCustomToken($uid, array $claims = null): Token
+    public function createCustomToken($uid, array $claims = []): Token
     {
-        $claims = $claims ?? [];
-
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
 
         return $this->tokenGenerator->createCustomToken($uid, $claims);
@@ -316,17 +373,12 @@ class Auth
      * @param bool $allowTimeInconsistencies whether to allow tokens that have mismatching timestamps
      *
      * @throws InvalidToken
-     * @throws IssuedInTheFuture
-     * @throws RevokedIdToken
-     * @throws InvalidSignature
-     *
-     * @return Token the verified token
+     * @throws UnknownKey if the token's kid header doesnt' contain a known key
+     * @throws Exception\FirebaseException
+     * @throws Exception\AuthException
      */
-    public function verifyIdToken($idToken, bool $checkIfRevoked = null, bool $allowTimeInconsistencies = null): Token
+    public function verifyIdToken($idToken, bool $checkIfRevoked = false, bool $allowTimeInconsistencies = false): Token
     {
-        $checkIfRevoked = $checkIfRevoked ?: false;
-        $allowTimeInconsistencies = $allowTimeInconsistencies ?: false;
-
         try {
             $verifiedToken = $this->idTokenVerifier->verifyIdToken($idToken);
         } catch (IssuedInTheFuture $e) {
@@ -378,6 +430,8 @@ class Auth
      * @param ClearTextPassword|string $password
      *
      * @throws InvalidPassword if the given password does not match the given email address
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      *
      * @return UserRecord if the combination of email and password is correct
      */
@@ -400,6 +454,9 @@ class Auth
      * ID token generated before revocation will be rejected with a token expired error.
      *
      * @param Uid|string $uid the user whose tokens are to be revoked
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      */
     public function revokeRefreshTokens($uid)
     {
@@ -408,6 +465,13 @@ class Auth
         $this->client->revokeRefreshTokens((string) $uid);
     }
 
+    /**
+     * @param Uid|string $uid
+     * @param Provider[]|string[]|string $provider
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
     public function unlinkProvider($uid, $provider): UserRecord
     {
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
