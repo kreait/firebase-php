@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.30.0 - 2019-08-16
 
 ### Changed
 
