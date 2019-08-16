@@ -217,10 +217,7 @@ class MessagingTest extends IntegrationTestCase
 
         foreach ($subscriptions as $subscription) {
             $this->assertSame($subscription->topic()->value(), $topicName);
-            $this->assertSame(
-                $subscription->subscribedAt()->format('Y-m-d'),
-                (new DateTimeImmutable())->format('Y-m-d')
-            );
+            $this->assertLessThanOrEqual(new DateTimeImmutable(), $subscription->subscribedAt());
         }
 
         $this->messaging->unsubscribeFromTopic($topicName, $token);
