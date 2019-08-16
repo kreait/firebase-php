@@ -7,7 +7,6 @@ namespace Kreait\Firebase\Tests\Unit;
 use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database;
 use Kreait\Firebase\Database\ApiClient;
-use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
@@ -35,7 +34,12 @@ class DatabaseTest extends UnitTestCase
 
     public function testGetReference()
     {
-        $this->assertInstanceOf(Reference::class, $this->database->getReference('any'));
+        $this->assertSame('/any', $this->database->getReference('any')->getUri()->getPath());
+    }
+
+    public function testGetRootReference()
+    {
+        $this->assertSame('/', $this->database->getReference()->getUri()->getPath());
     }
 
     public function testGetReferenceWithInvalidPath()
@@ -46,10 +50,9 @@ class DatabaseTest extends UnitTestCase
 
     public function testGetReferenceFromUrl()
     {
-        $this->assertInstanceOf(
-            Reference::class,
-            $this->database->getReferenceFromUrl('https://database-uri.tld/foo/bar')
-        );
+        $url = 'https://database-uri.tld/foo/bar';
+
+        $this->assertSame($url, (string) $this->database->getReferenceFromUrl($url)->getUri());
     }
 
     public function testGetReferenceFromNonMatchingUrl()

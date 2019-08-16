@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## Unreleased
+
+### Changed
+
+#### Database
+
+* Fixed a deprecation warning when getting the root reference with `Kreait\Firebase\Database::getReference()` 
+  without giving a path.
+
 ## 4.30.0 - 2019-08-16
 
 ### Changed

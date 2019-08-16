@@ -46,14 +46,18 @@ class Database
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Database#ref
      *
-     * @param string $path
-     *
      * @throws InvalidArgumentException
      */
     public function getReference(string $path = null): Reference
     {
+        $path = \trim((string) $path);
+
+        if ($path === '') {
+            $path = '/';
+        }
+
         try {
-            return new Reference($this->uri->withPath($path ?? ''), $this->client);
+            return new Reference($this->uri->withPath($path), $this->client);
         } catch (\InvalidArgumentException $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
