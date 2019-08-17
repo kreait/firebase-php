@@ -9,6 +9,7 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Riverline\MultiPartParser\Converters\PSR7;
 use Riverline\MultiPartParser\StreamedPart;
+use Throwable;
 
 final class ResponseWithSubResponses implements HasSubResponses, ResponseInterface
 {
@@ -30,10 +31,14 @@ final class ResponseWithSubResponses implements HasSubResponses, ResponseInterfa
 
     private function getSubResponsesFromResponse(ResponseInterface $response): Responses
     {
-        $parser = PSR7::convert($response);
+        try {
+            $parser = PSR7::convert($response);
+        } catch (Throwable $e) {
+            return new Responses();
+        }
 
         if (!$parser->isMultiPart()) {
-            throw new InvalidArgumentException('The response is not a response with subresponses.');
+            return new Responses();
         }
 
         $subResponses = [];

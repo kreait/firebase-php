@@ -8,6 +8,13 @@
 
 * Fixed a deprecation warning when getting the root reference with `Kreait\Firebase\Database::getReference()` 
   without giving a path.
+  
+#### Messaging
+
+* When sending multiple messages at once, it can happen in some cases that the HTTP sub-responses can not be parsed
+  which would cause an exception. Until we figure out the cause, those exceptions are now caught, with the caveat
+  that the resulting send-report is not correct (it will show 0 successes and 0 failures even if the messages
+  were successfully sent).
 
 ## 4.30.0 - 2019-08-16
 
