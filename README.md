@@ -16,6 +16,9 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 ## Resources
 
 - [Documentation](https://firebase-php.readthedocs.io/)
+- Integrations
+  - [Laravel](https://github.com/kreait/laravel-firebase)
+  - [Symfony](https://github.com/kreait/firebase-bundle)
 - [Example project](https://github.com/jeromegamez/firebase-php-examples)
 - [Tutorials](https://firebase-php.readthedocs.io/en/latest/tutorials.html)
 - Support

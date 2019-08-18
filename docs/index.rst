@@ -42,5 +42,6 @@ User Guide
     storage
     remote-config
     cloud-messaging
+    framework-integrations
     tutorials
     troubleshooting
