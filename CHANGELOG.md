@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## Unreleased
+
+### Changed
+
+#### Auth
+
+* The third parameter of `Kreait\Firebase\Auth::verifyIdToken()` (`$allowTimeInconsistencies`) has been deprecated
+  because, since 4.25.0, a default leeway of 5 minutes is already applied. Using it will trigger a `E_USER_DEPRECATED`
+  warning.
+* Previously the "verified" status of an user email could be `null` if not defined - it will now be `false` by default 
+
 ## 4.30.1 - 2019-08-17
 
 ### Changed

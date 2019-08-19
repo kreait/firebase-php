@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Kreait\Firebase;
 
 use Firebase\Auth\Token\Domain\Generator as TokenGenerator;
-use Firebase\Auth\Token\Domain\Verifier as IdTokenVerifier;
+use Firebase\Auth\Token\Domain\Verifier;
 use Firebase\Auth\Token\Exception\InvalidToken;
-use Firebase\Auth\Token\Exception\IssuedInTheFuture;
 use Firebase\Auth\Token\Exception\UnknownKey;
 use Generator;
 use Kreait\Firebase\Auth\ApiClient;
+use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
@@ -22,7 +22,6 @@ use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\PhoneNumber;
 use Kreait\Firebase\Value\Provider;
 use Kreait\Firebase\Value\Uid;
-use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\UriInterface;
 
@@ -39,14 +38,14 @@ class Auth
     private $tokenGenerator;
 
     /**
-     * @var IdTokenVerifier
+     * @var Verifier
      */
     private $idTokenVerifier;
 
     /**
      * @internal
      */
-    public function __construct(ApiClient $client, TokenGenerator $customToken, IdTokenVerifier $idTokenVerifier)
+    public function __construct(ApiClient $client, TokenGenerator $customToken, Verifier $idTokenVerifier)
     {
         $this->client = $client;
         $this->tokenGenerator = $customToken;
@@ -370,43 +369,38 @@ class Auth
      *
      * @param Token|string $idToken the JWT to verify
      * @param bool $checkIfRevoked whether to check if the ID token is revoked
-     * @param bool $allowTimeInconsistencies whether to allow tokens that have mismatching timestamps
+     * @param bool $allowTimeInconsistencies Deprecated since 4.31
      *
      * @throws InvalidToken
      * @throws UnknownKey if the token's kid header doesnt' contain a known key
      * @throws Exception\FirebaseException
      * @throws Exception\AuthException
      */
-    public function verifyIdToken($idToken, bool $checkIfRevoked = false, bool $allowTimeInconsistencies = false): Token
+    public function verifyIdToken($idToken, bool $checkIfRevoked = false, /* @deprecated */ bool $allowTimeInconsistencies = null): Token
     {
-        try {
-            $verifiedToken = $this->idTokenVerifier->verifyIdToken($idToken);
-        } catch (IssuedInTheFuture $e) {
-            if (!$allowTimeInconsistencies) {
-                throw $e;
-            }
+        // @codeCoverageIgnoreStart
+        if (\is_bool($allowTimeInconsistencies)) {
+            // @see https://github.com/firebase/firebase-admin-dotnet/pull/29
+            \trigger_error(
+                'The parameter $allowTimeInconsistencies is deprecated and was replaced with a default leeway of 300 seconds.',
+                \E_USER_DEPRECATED
+            );
+        }
+        // @codeCoverageIgnoreEnd
 
-            $verifiedToken = $e->getToken();
-        } catch (InvalidToken $e) {
-            $verifiedToken = $idToken instanceof Token ? $idToken : (new Parser())->parse($idToken);
+        $leewayInSeconds = 300;
+        $verifier = $this->idTokenVerifier;
 
-            if (\mb_stripos($e->getMessage(), 'authentication time') !== false) {
-                $authTime = $verifiedToken->getClaim('auth_time', false);
-
-                if ($authTime && !$allowTimeInconsistencies && $authTime > \time()) {
-                    throw $e;
-                }
-            } else {
-                throw $e;
-            }
+        if ($verifier instanceof IdTokenVerifier) {
+            $verifier = $verifier->withLeewayInSeconds($leewayInSeconds);
         }
 
-        if ($checkIfRevoked && $allowTimeInconsistencies) {
-            throw new InvalidToken($verifiedToken, 'Allowing mismatching timestamps cannot be combined with token revokation checks.');
-        }
+        $verifiedToken = $verifier->verifyIdToken($idToken);
 
         if ($checkIfRevoked) {
             $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->getClaim('auth_time'));
+            $tokenAuthenticatedAt = $tokenAuthenticatedAt->modify('-'.$leewayInSeconds.' seconds');
+
             $validSince = $this->getUser($verifiedToken->getClaim('sub'))->tokensValidAfterTime;
 
             if ($validSince && ($tokenAuthenticatedAt < $validSince)) {

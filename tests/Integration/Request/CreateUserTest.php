@@ -57,7 +57,7 @@ class CreateUserTest extends IntegrationTestCase
 
         $this->assertSame($uid, $user->uid);
         $this->assertNull($user->email);
-        $this->assertNull($user->emailVerified);
+        $this->assertFalse($user->emailVerified);
 
         $this->auth->deleteUser($user->uid);
     }
@@ -72,7 +72,7 @@ class CreateUserTest extends IntegrationTestCase
 
         $this->assertSame($uid, $user->uid);
         $this->assertNull($user->email);
-        $this->assertNull($user->emailVerified);
+        $this->assertFalse($user->emailVerified);
 
         $this->auth->deleteUser($user->uid);
     }

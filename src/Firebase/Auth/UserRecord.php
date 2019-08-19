@@ -21,9 +21,9 @@ class UserRecord implements \JsonSerializable
     public $email;
 
     /**
-     * @var bool|null
+     * @var bool
      */
-    public $emailVerified;
+    public $emailVerified = false;
 
     /**
      * @var string|null
@@ -79,7 +79,7 @@ class UserRecord implements \JsonSerializable
         $record = new self();
         $record->uid = $data['localId'];
         $record->email = $data['email'] ?? null;
-        $record->emailVerified = $data['emailVerified'] ?? null;
+        $record->emailVerified = $data['emailVerified'] ?? false;
         $record->displayName = $data['displayName'] ?? null;
         $record->photoUrl = $data['photoUrl'] ?? null;
         $record->phoneNumber = $data['phoneNumber'] ?? null;

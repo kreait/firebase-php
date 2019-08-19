@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
-use Firebase\Auth\Token\Exception\InvalidSignature;
-use Firebase\Auth\Token\HttpKeyStore;
-use GuzzleHttp\Client;
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
@@ -14,7 +11,6 @@ use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Kreait\Firebase\Util\JSON;
-use Lcobucci\JWT\Builder;
 use Throwable;
 
 /**
@@ -50,7 +46,7 @@ class AuthTest extends IntegrationTestCase
         $check = $this->auth->createUserWithEmailAndPassword($email, $password);
 
         $this->assertSame($email, $check->email);
-        $this->assertSame(false, $check->emailVerified);
+        $this->assertFalse($check->emailVerified);
 
         $this->auth->deleteUser($check->uid);
     }
@@ -65,8 +61,7 @@ class AuthTest extends IntegrationTestCase
         $this->auth->changeUserPassword($user->uid, 'new password');
 
         $this->auth->deleteUser($user->uid);
-
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->addToAssertionCount(1);
     }
 
     public function testChangeUserEmail()
@@ -97,11 +92,10 @@ class AuthTest extends IntegrationTestCase
 
         $user = $this->auth->createUserWithEmailAndPassword($email, $password);
 
-        $this->auth->sendEmailVerification($user->uid);
+        $this->auth->sendEmailVerification($user->uid, 'http://localhost', 'de');
 
         $this->auth->deleteUser($user->uid);
-
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->addToAssertionCount(1);
     }
 
     public function testSendPasswordResetEmail()
@@ -113,11 +107,10 @@ class AuthTest extends IntegrationTestCase
 
         $user = $this->auth->createUserWithEmailAndPassword($email, $password);
 
-        $this->auth->sendPasswordResetEmail($user->email);
+        $this->auth->sendPasswordResetEmail($user->email, 'http://localhost', 'de');
 
         $this->auth->deleteUser($user->uid);
-
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->addToAssertionCount(1);
     }
 
     public function testListUsers()
@@ -129,7 +122,7 @@ class AuthTest extends IntegrationTestCase
             $this->auth->createUser([]),
         ];
 
-        $userRecords = $this->auth->listUsers($maxResults = 2, $batchSize = 1);
+        $userRecords = $this->auth->listUsers($maxResults = 2, 1);
 
         $count = 0;
         foreach ($userRecords as $userData) {
@@ -142,8 +135,6 @@ class AuthTest extends IntegrationTestCase
         foreach ($createdUsers as $createdUser) {
             $this->auth->deleteUser($createdUser->uid);
         }
-
-        $this->assertTrue($noExceptionHasBeenThrown = true);
     }
 
     public function testVerifyIdToken()
@@ -158,8 +149,7 @@ class AuthTest extends IntegrationTestCase
         $this->auth->verifyIdToken($idToken);
 
         $this->auth->deleteUser($user->uid);
-
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->addToAssertionCount(1);
     }
 
     public function testRevokeRefreshTokens()
@@ -200,8 +190,7 @@ class AuthTest extends IntegrationTestCase
         $this->auth->verifyIdToken((string) $idToken);
 
         $this->auth->deleteUser($user->uid);
-
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->addToAssertionCount(1);
     }
 
     public function testDisableAndEnableUser()
@@ -292,7 +281,8 @@ class AuthTest extends IntegrationTestCase
 
         $this->assertSame($uid, $userRecord->uid);
         $this->assertSame($displayName, $userRecord->displayName);
-        $this->assertSame(true, $userRecord->emailVerified);
+        $this->assertTrue($userRecord->emailVerified);
+        $this->assertSame($email, $userRecord->email);
 
         $this->auth->deleteUser($uid);
     }
@@ -301,10 +291,8 @@ class AuthTest extends IntegrationTestCase
     {
         $user = $this->auth->createUser([]);
         $this->auth->updateUser($user->uid, []);
-
-        $this->assertTrue($noExceptionHasBeenThrown = true);
-
         $this->auth->deleteUser($user->uid);
+        $this->addToAssertionCount(1);
     }
 
     public function testVerifyCorrectPassword()
@@ -380,8 +368,8 @@ class AuthTest extends IntegrationTestCase
     {
         $user = $this->auth->createUser([
             'uid' => $uid = \bin2hex(\random_bytes(5)),
-            'verifiedEmail' => $email = $uid.'@domain.tld',
-            'phone' => $phoneNumber = '+1234567'.\random_int(1000, 9999),
+            'verifiedEmail' => $uid.'@domain.tld',
+            'phone' => '+1234567'.\random_int(1000, 9999),
         ]);
 
         $updatedUser = $this->auth->unlinkProvider($user->uid, 'phone');
@@ -389,23 +377,5 @@ class AuthTest extends IntegrationTestCase
         $this->assertNull($updatedUser->phoneNumber);
 
         $this->auth->deleteUser($user->uid);
-    }
-
-    public function testDisallowFutureTokensWithAnInvalidSignature()
-    {
-        $client = new Client();
-        $keys = JSON::decode((string) $client->get(HttpKeyStore::KEYS_URL)->getBody(), true);
-        $keyIds = \array_keys($keys);
-        $keyId = \reset($keyIds);
-
-        $token = (new Builder())
-            ->setIssuedAt(\strtotime('+1 hour'))
-            ->setExpiration(\strtotime('+2 hours'))
-            ->setHeader('kid', $keyId)
-            ->sign(new \Lcobucci\JWT\Signer\Hmac\Sha256(), 'i am evil')
-            ->getToken();
-
-        $this->expectException(InvalidSignature::class);
-        $this->auth->verifyIdToken($token, false, true);
     }
 }
