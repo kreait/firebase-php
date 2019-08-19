@@ -18,6 +18,7 @@ use GuzzleHttp\HandlerStack;
 use function GuzzleHttp\Psr7\uri_for;
 use Kreait\Firebase;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
+use Kreait\Firebase\Clock\SystemClock;
 use Kreait\Firebase\Exception\LogicException;
 use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\Http\Middleware;
@@ -29,12 +30,12 @@ use Psr\SimpleCache\CacheInterface;
 class Factory
 {
     /**
-     * @var UriInterface
+     * @var UriInterface|null
      */
     protected $databaseUri;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $defaultStorageBucket;
 
@@ -77,9 +78,13 @@ class Factory
 
     protected static $storageBucketNamePattern = '%s.appspot.com';
 
+    /** @var Clock */
+    protected $clock;
+
     public function __construct()
     {
         $this->serviceAccountDiscoverer = new Discoverer();
+        $this->clock = new SystemClock();
     }
 
     public function withServiceAccount(ServiceAccount $serviceAccount): self
@@ -142,6 +147,14 @@ class Factory
     {
         $factory = clone $this;
         $factory->httpClientMiddlewares = $middlewares;
+
+        return $factory;
+    }
+
+    public function withClock(Clock $clock): self
+    {
+        $factory = clone $this;
+        $factory->clock = $clock;
 
         return $factory;
     }
@@ -211,9 +224,10 @@ class Factory
 
         $customTokenGenerator = $this->createCustomTokenGenerator();
         $keyStore = new HttpKeyStore(new Client(), $this->verifierCache ?: new InMemoryCache());
-        $verifier = new Verifier($serviceAccount->getSanitizedProjectId(), $keyStore);
+        $baseVerifier = new Verifier($serviceAccount->getSanitizedProjectId(), $keyStore);
+        $idTokenVerifier = new Firebase\Auth\IdTokenVerifier($baseVerifier, $this->clock);
 
-        return new Auth($apiClient, $customTokenGenerator, $verifier);
+        return new Auth($apiClient, $customTokenGenerator, $idTokenVerifier);
     }
 
     public function createCustomTokenGenerator(): Generator

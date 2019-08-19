@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit;
 
+use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase;
 use Kreait\Firebase\Exception\LogicException;
 use Kreait\Firebase\Factory;
@@ -37,7 +38,7 @@ class FactoryTest extends UnitTestCase
         $this->serviceAccount = ServiceAccount::fromJsonFile(self::$fixturesDir.'/ServiceAccount/valid.json');
 
         $this->discoverer = $this->createMock(Discoverer::class);
-        $this->discoverer->expects($this->any())
+        $this->discoverer
             ->method('discover')
             ->willReturn($this->serviceAccount);
 
@@ -46,9 +47,11 @@ class FactoryTest extends UnitTestCase
 
     public function testItAcceptsACustomDatabaseUri()
     {
-        $factory = $this->factory->withDatabaseUri('http://domain.tld');
+        $uri = new Uri('http://domain.tld/');
+        $databaseUri = $this->factory->withDatabaseUri($uri)->createDatabase()->getReference()->getUri();
 
-        $this->assertInstanceOf(Firebase::class, $factory->create());
+        $this->assertSame($uri->getScheme(), $databaseUri->getScheme());
+        $this->assertSame($uri->getHost(), $databaseUri->getHost());
     }
 
     public function testItAcceptsACustomDefaultStorageBucket()
