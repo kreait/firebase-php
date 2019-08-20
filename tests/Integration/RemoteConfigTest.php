@@ -254,7 +254,7 @@ CONFIG;
             $versions->next();
         }
 
-        $this->assertSame($limit, $counter);
+        $this->assertLessThanOrEqual($limit, $counter);
     }
 
     public function testGetVersion()
