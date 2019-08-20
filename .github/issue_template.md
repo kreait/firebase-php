@@ -10,8 +10,9 @@ Briefly describe the issue you are experiencing (or the feature you want to see 
 
 ## Environment
 
+- Operating System: _e.g. Windows, Linux_ 
 - PHP Version (`php -v`):
-- Firebase PHP SDK version (`composer show | grep kreait`):
+- `kreait/*` library versions (`composer show | grep kreait`):
 
 ## Details
 
