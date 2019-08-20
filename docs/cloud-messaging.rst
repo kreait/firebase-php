@@ -362,7 +362,7 @@ You can find the full WebPush configuration reference in the official documentat
     use Kreait\Firebase\Messaging\WebPushConfig;
 
     // Example from https://firebase.google.com/docs/cloud-messaging/admin/send-messages#webpush_specific_fields
-    $config = ApnsConfig::fromArray([
+    $config = WebPushConfig::fromArray([
         'notification' => [
             'title' => '$GOOG up 1.43% on the day',
             'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
