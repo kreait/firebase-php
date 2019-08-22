@@ -162,6 +162,20 @@ class MessagingTest extends IntegrationTestCase
         $this->assertInstanceOf(MessagingException::class, $failure->error());
     }
 
+    /**
+     * @see https://github.com/kreait/firebase-php/issues/317
+     */
+    public function testSendMulticastMessageToOneRecipientOnly()
+    {
+        if (empty(self::$registrationTokens)) {
+            $this->markTestSkipped();
+        }
+
+        $report = $this->messaging->sendMulticast(CloudMessage::new(), [self::$registrationTokens[0]]);
+
+        $this->assertCount(1, $report->successes());
+    }
+
     public function testSendMessageToDifferentTargets()
     {
         if (empty(self::$registrationTokens)) {
