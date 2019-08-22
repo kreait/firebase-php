@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.31.0 - 2019-08-22
 
 ### Bugfixes
 
