@@ -51,7 +51,7 @@ class Middleware
                 return $handler($request, $options ?: [])
                     ->then(static function (ResponseInterface $response) {
                         $isMultiPart = \mb_stristr($response->getHeaderLine('Content-Type'), 'multipart') !== false;
-                        $hasMultipleStartLines = ((int) \preg_match_all('@http/[\S]+\s@i', (string) $response->getBody())) > 1;
+                        $hasMultipleStartLines = ((int) \preg_match_all('@http/[\S]+\s@i', (string) $response->getBody())) >= 1;
 
                         if ($isMultiPart && $hasMultipleStartLines) {
                             return new ResponseWithSubResponses($response);

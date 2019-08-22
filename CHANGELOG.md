@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Bugfixes
+
+#### Messaging
+
+* Fixed the inability to correctly parse a response from the Firebase Batch Messaging when `Messaging::sendMulticast()`
+  or `Messaging::sendAll()` was used with only one recipient. 
+
 ### Changed
 
 #### Auth
