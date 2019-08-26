@@ -11,7 +11,7 @@ use Firebase\Auth\Token\Exception\InvalidSignature;
 use Firebase\Auth\Token\Exception\InvalidToken;
 use Firebase\Auth\Token\Exception\IssuedInTheFuture;
 use Firebase\Auth\Token\Exception\UnknownKey;
-use Kreait\Firebase\Clock;
+use Kreait\Clock;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Token;
