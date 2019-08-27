@@ -29,7 +29,7 @@ class DatabaseTest extends DatabaseTestCase
             ->withServiceAccount($serviceAccount)
             ->create();
 
-        $firebase->getDatabase()->getRules();
+        $firebase->getDatabase()->getRuleSet();
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
 }

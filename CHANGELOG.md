@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Unreleased
+
+### Changes
+
+#### Realtime Database
+
+- `Kreait\Firebase\Database::getRules()` has been deprecated in favor of `Kreait\Firebase\Database::getRuleSet()` 
+
 ## 4.31.0 - 2019-08-22
 
 ### Bugfixes

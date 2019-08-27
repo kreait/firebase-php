@@ -69,7 +69,19 @@ class DatabaseTest extends UnitTestCase
             ->with($this->uri->withPath('.settings/rules'))
             ->willReturn($expected = RuleSet::default()->getRules());
 
-        $ruleSet = $this->database->getRules();
+        $ruleSet = $this->database->getRuleSet();
+
+        $this->assertEquals($expected, $ruleSet->getRules());
+    }
+
+    public function testGetRuleSet()
+    {
+        $this->apiClient->expects($this->once())
+            ->method('get')
+            ->with($this->uri->withPath('.settings/rules'))
+            ->willReturn($expected = RuleSet::default()->getRules());
+
+        $ruleSet = $this->database->getRuleSet();
 
         $this->assertEquals($expected, $ruleSet->getRules());
     }

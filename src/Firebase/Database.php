@@ -92,11 +92,22 @@ class Database
      *
      * @see https://firebase.google.com/docs/database/rest/app-management#retrieving-firebase-realtime-database-rules
      */
-    public function getRules(): RuleSet
+    public function getRuleSet(): RuleSet
     {
         $rules = $this->client->get($this->uri->withPath('.settings/rules'));
 
         return RuleSet::fromArray($rules);
+    }
+
+    /**
+     * Retrieve Firebase Database Rules.
+     *
+     * @deprecated 4.32.0 Use \Kreait\Firebase\Database::getRuleSet() instead
+     * @see getRuleSet()
+     */
+    public function getRules(): RuleSet
+    {
+        return $this->getRuleSet();
     }
 
     /**

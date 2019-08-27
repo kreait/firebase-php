@@ -23,7 +23,7 @@ class FactoryTest extends IntegrationTestCase
         ])->create();
 
         // Any request will do
-        $firebase->getDatabase()->getRules();
+        $firebase->getDatabase()->getRuleSet();
         $this->assertGreaterThan(0, $invocations);
     }
 
@@ -42,7 +42,7 @@ class FactoryTest extends IntegrationTestCase
         ])->create();
 
         // Any request will do
-        $firebase->getDatabase()->getRules();
+        $firebase->getDatabase()->getRuleSet();
         $this->assertTrue($invocations > 0);
     }
 }

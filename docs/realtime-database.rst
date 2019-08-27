@@ -518,7 +518,7 @@ Learn more about the usage of Firebase Realtime Database Rules in the
 
         $db->updateRules($ruleSet);
 
-        $freshRuleSet = $db->getRules(); // Returns a new RuleSet instance
+        $freshRuleSet = $db->getRuleSet(); // Returns a new RuleSet instance
         $actualRules = $ruleSet->getRules(); // returns an array
 
 

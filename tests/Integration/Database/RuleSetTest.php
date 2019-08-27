@@ -18,7 +18,7 @@ class RuleSetTest extends DatabaseTestCase
 
         self::$db->updateRules($ruleSet);
 
-        $this->assertEquals($ruleSet, self::$db->getRules());
+        $this->assertEquals($ruleSet, self::$db->getRuleSet());
     }
 
     public function testPublic()
@@ -27,7 +27,7 @@ class RuleSetTest extends DatabaseTestCase
 
         self::$db->updateRules($ruleSet);
 
-        $this->assertEquals($ruleSet, self::$db->getRules());
+        $this->assertEquals($ruleSet, self::$db->getRuleSet());
     }
 
     public function testPrivate()
@@ -36,6 +36,6 @@ class RuleSetTest extends DatabaseTestCase
 
         self::$db->updateRules($ruleSet);
 
-        $this->assertEquals($ruleSet, self::$db->getRules());
+        $this->assertEquals($ruleSet, self::$db->getRuleSet());
     }
 }
