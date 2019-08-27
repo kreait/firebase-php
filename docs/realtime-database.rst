@@ -321,7 +321,7 @@ Server values
 =============
 
 Server values can be written at a location using a placeholder value which is an object with a single
-`.sv` key. The value for that key is the type of server value you wish to set.
+``.sv`` key. The value for that key is the type of server value you wish to set.
 
 Firebase currently supports only one server value: ``timestamp``. You can either set it
 manually in your write operation, or use a constant from the ``Firebase\Database`` class.
@@ -340,20 +340,20 @@ The following to usages are equivalent:
 Delete data [#f3]_
 ==================
 
-The simplest way to delete data is to call remove() on a reference to the location of that data.
+You can delete a reference, including all data it contains, with the ``remove()`` method:
 
 .. code-block:: php
 
     $db->getReference('posts')->remove();
 
 You can also delete by specifying null as the value for another write operation such as
-`set()` or `update()`.
+``set()`` or ``update()``.
 
 .. code-block:: php
 
     $db->getReference('posts')->set(null);
 
-You can use this technique with `update()` to delete multiple children in a single API call.
+You can use this technique with ``update()`` to delete multiple children in a single API call.
 
 *********************
 Database transactions
@@ -504,7 +504,7 @@ Learn more about the usage of Firebase Realtime Database Rules in the
         // Firebase console and the Admin SDKs.
         $ruleSet = RuleSet::private();
 
-        // You can of course define custom rules
+        // You can define custom rules
         $ruleSet = RuleSet::fromArray(['rules' => [
             '.read' => true,
             '.write' => false,

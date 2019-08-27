@@ -33,7 +33,7 @@ By default, the SDK is able to autodiscover the Service Account for your project
    * on Linux/MacOS: ``$HOME/.config/gcloud/application_default_credentials.json``
    * on Windows: ``$APPDATA/gcloud/application_default_credentials.json``
 
-If one of the conditions above is met, creating a new Firebase instance is as easy as this:
+If one of the conditions above is met, you can create a new Firebase instance without further configuration:
 
 .. code-block:: php
 
