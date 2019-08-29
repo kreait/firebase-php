@@ -85,6 +85,7 @@ Get information about a specific user
 
     $user = $auth->getUser('some-uid');
     $user = $auth->getUserByEmail('user@domain.tld');
+    $user = $auth->getUserByPhoneNumber('+49-123-456789');
 
 *************
 Create a user
