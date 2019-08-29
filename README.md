@@ -53,7 +53,6 @@ The following projects provide support for Firestore without the need to install
 | 2.x     | EOL         | >= 7.0      | EOL     |
 | 3.x     | EOL         | >= 7.0      | EOL     |
 | 4.x     | Latest      | >= 7.0      | active  |
-| 5.x     | Development | >= 7.3      | active  |
 
 ## License
 
