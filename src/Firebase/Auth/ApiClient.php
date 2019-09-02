@@ -12,6 +12,7 @@ use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Request;
+use Kreait\Firebase\Value\Provider;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
@@ -304,6 +305,44 @@ class ApiClient
         return $this->request('setAccountInfo', [
             'localId' => $uid,
             'deleteProvider' => $providers,
+        ]);
+    }
+
+    /**
+     * @throws AuthException
+     * @throws FirebaseException
+     */
+    public function linkProviderThroughAccessToken(Provider $provider, string $accessToken): ResponseInterface
+    {
+        return $this->linkProvider($provider, $accessToken, 'access_token');
+    }
+
+    /**
+     * @throws AuthException
+     * @throws FirebaseException
+     */
+    public function linkProviderThroughIdToken(Provider $provider, string $idToken): ResponseInterface
+    {
+        return $this->linkProvider($provider, $idToken, 'id_token');
+    }
+
+    /**
+     * Links the given OAuth credential (e.g. Google ID token, or Facebook access token, etc) to Firebase.
+     * Basically logs in the user to Firebase, if the authentication provider is enabled for the project.
+     *
+     * @throws AuthException
+     * @throws FirebaseException
+     */
+    private function linkProvider(Provider $provider, string $token, string $tokenKeyName): ResponseInterface
+    {
+        return $this->request('https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp', [
+            'postBody' => \http_build_query([
+                $tokenKeyName => $token,
+                'providerId' => (string) $provider,
+            ]),
+            'returnSecureToken' => true,
+            'returnIdpCredential' => true,
+            'requestUri' => 'http://localhost', // this doesn't matter here, but required
         ]);
     }
 
