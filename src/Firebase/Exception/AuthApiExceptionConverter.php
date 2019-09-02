@@ -16,6 +16,7 @@ use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\MissingPassword;
 use Kreait\Firebase\Exception\Auth\OperationNotAllowed;
 use Kreait\Firebase\Exception\Auth\PhoneNumberExists;
+use Kreait\Firebase\Exception\Auth\ProviderLinkFailed;
 use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\Auth\WeakPassword;
@@ -106,6 +107,18 @@ class AuthApiExceptionConverter
 
         if (\mb_stripos($message, 'phone_number_exists') !== false) {
             return new PhoneNumberExists('The phone number is already in use by another account.', $code, $e);
+        }
+
+        if (\mb_stripos($message, 'invalid_idp_response') !== false) {
+            return new ProviderLinkFailed('The supplied auth credential is malformed or has expired.', $code, $e);
+        }
+
+        if (\mb_stripos($message, 'invalid_id_token') !== false) {
+            return new ProviderLinkFailed('The user\'s credential is no longer valid. The user must sign in again.', $code, $e);
+        }
+
+        if (\mb_stripos($message, 'federated_user_id_already_linked') !== false) {
+            return new ProviderLinkFailed('This credential is already associated with a different user account.', $code, $e);
         }
 
         return new AuthError($message, $code, $e);
