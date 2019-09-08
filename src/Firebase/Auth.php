@@ -11,6 +11,7 @@ use Firebase\Auth\Token\Exception\UnknownKey;
 use Generator;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\IdTokenVerifier;
+use Kreait\Firebase\Auth\LinkedProviderData;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
@@ -471,6 +472,50 @@ class Auth
         $response = $this->client->unlinkProvider((string) $uid, $provider);
 
         return $this->getUserRecordFromResponse($response);
+    }
+
+    /**
+     * Logs in the user to Firebase by a provider's access token (like Google, Facebook, Twitter, etc),
+     * if the authentication provider is enabled for the project.
+     *
+     * First, you have to get a valid access token for your provider manually.
+     *
+     * @param Provider|string $provider
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
+    public function linkProviderThroughAccessToken($provider, string $accessToken): LinkedProviderData
+    {
+        $provider = $provider instanceof Provider ? $provider : new Provider($provider);
+        $response = $this->client->linkProviderThroughAccessToken($provider, $accessToken);
+
+        return LinkedProviderData::fromResponseData(
+            $this->getUserRecordFromResponse($response),
+            JSON::decode((string) $response->getBody(), true)
+        );
+    }
+
+    /**
+     * Logs in the user to Firebase by a provider's ID token (like Google, Facebook, Twitter, etc),
+     * if the authentication provider is enabled for the project.
+     *
+     * First, you have to get a valid ID token for your provider manually.
+     *
+     * @param Provider|string $provider
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
+    public function linkProviderThroughIdToken($provider, string $idToken): LinkedProviderData
+    {
+        $provider = $provider instanceof Provider ? $provider : new Provider($provider);
+        $response = $this->client->linkProviderThroughIdToken($provider, $idToken);
+
+        return LinkedProviderData::fromResponseData(
+            $this->getUserRecordFromResponse($response),
+            JSON::decode((string) $response->getBody(), true)
+        );
     }
 
     /**
