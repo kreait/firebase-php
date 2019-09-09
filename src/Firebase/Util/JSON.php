@@ -7,9 +7,6 @@ namespace Kreait\Firebase\Util;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Throwable;
 
-/**
- * @internal
- */
 class JSON
 {
     /**
@@ -95,6 +92,6 @@ class JSON
      */
     public static function prettyPrint($value): string
     {
-        return self::encode($value, \JSON_PRETTY_PRINT);
+        return self::encode($value, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES);
     }
 }

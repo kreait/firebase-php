@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit;
 
+use DateTimeImmutable;
 use GuzzleHttp\Psr7\Uri;
-use Kreait\Firebase;
+use Kreait\Clock\FrozenClock;
 use Kreait\Firebase\Exception\LogicException;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
@@ -24,11 +25,6 @@ class FactoryTest extends UnitTestCase
     private $serviceAccount;
 
     /**
-     * @var Discoverer
-     */
-    private $discoverer;
-
-    /**
      * @var Factory
      */
     private $factory;
@@ -37,12 +33,12 @@ class FactoryTest extends UnitTestCase
     {
         $this->serviceAccount = ServiceAccount::fromJsonFile(self::$fixturesDir.'/ServiceAccount/valid.json');
 
-        $this->discoverer = $this->createMock(Discoverer::class);
-        $this->discoverer
+        $discoverer = $this->createMock(Discoverer::class);
+        $discoverer
             ->method('discover')
             ->willReturn($this->serviceAccount);
 
-        $this->factory = (new Factory())->withServiceAccountDiscoverer($this->discoverer);
+        $this->factory = (new Factory())->withServiceAccountDiscoverer($discoverer);
     }
 
     public function testItAcceptsACustomDatabaseUri()
@@ -56,59 +52,62 @@ class FactoryTest extends UnitTestCase
 
     public function testItAcceptsACustomDefaultStorageBucket()
     {
-        $factory = $this->factory->withDefaultStorageBucket('foo');
+        $firebase = $this->factory->withDefaultStorageBucket('foo')->create();
 
-        $firebase = $factory->create();
-
-        $this->assertInstanceOf(Firebase::class, $firebase);
         $this->assertSame('foo', $firebase->getStorage()->getBucket()->name());
     }
 
     public function testItAcceptsAServiceAccount()
     {
-        $factory = $this->factory->withServiceAccount($this->serviceAccount);
+        $this->factory->withServiceAccount($this->serviceAccount)->create();
+        $this->addToAssertionCount(1);
+    }
 
-        $this->assertInstanceOf(Firebase::class, $factory->create());
+    public function testItAcceptsAClock()
+    {
+        $this->factory->withClock(new FrozenClock(new DateTimeImmutable()))->create();
+        $this->addToAssertionCount(1);
     }
 
     public function testItAcceptsAnAuthOverride()
     {
-        $factory = $this->factory->asUser('some-uid', ['some' => 'claim']);
-
-        $this->assertInstanceOf(Firebase::class, $factory->create());
+        $this->factory->asUser('some-uid', ['some' => 'claim'])->create();
+        $this->addToAssertionCount(1);
     }
 
     public function testItAcceptsAVerifierCache()
     {
         $cache = $this->createMock(CacheInterface::class);
 
-        $factory = $this->factory->withVerifierCache($cache);
-
-        $this->assertInstanceOf(Firebase::class, $factory->create());
+        $this->factory->withVerifierCache($cache)->create();
+        $this->addToAssertionCount(1);
     }
 
     public function testItAcceptsACustomHttpClientConfig()
     {
-        $factory = $this->factory->withHttpClientConfig(['key' => 'value']);
-
-        $this->assertInstanceOf(Firebase::class, $factory->create());
+        $this->factory->withHttpClientConfig(['key' => 'value'])->create();
+        $this->addToAssertionCount(1);
     }
 
     public function testItAcceptsAdditionalHttpClientMiddlewares()
     {
-        $factory = $this->factory->withHttpClientMiddlewares([
+        $this->factory->withHttpClientMiddlewares([
             static function () {},
             'name' => static function () {},
-        ]);
+        ])->create();
 
-        $this->assertInstanceOf(Firebase::class, $factory->create());
+        $this->addToAssertionCount(1);
     }
 
     public function testServiceAccountDiscoveryCanBeDisabled()
     {
-        $factory = $this->factory->withDisabledAutoDiscovery();
-
         $this->expectException(LogicException::class);
-        $factory->create();
+        $this->factory->withDisabledAutoDiscovery()->create();
+    }
+
+    public function testDynamicLinksCanBeCreatedWithoutADefaultDomain()
+    {
+        $this->factory->createDynamicLinksService();
+        $this->addToAssertionCount(1);
     }
 }

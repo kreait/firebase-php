@@ -30,13 +30,14 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 
 | Feature | |
 | --- | :---: |
-| [Custom Token Minting](https://firebase.google.com/docs/auth/admin/create-custom-tokens) | ✅ |
-| [ID Token Verification](https://firebase.google.com/docs/auth/admin/verify-id-tokens)	| ✅ |
-| [Realtime Database](https://firebase.google.com/docs/database/admin/start) | ✅ |
-| [User Management](https://firebase.google.com/docs/auth/admin/manage-users) | ✅ |
-| [Remote Config](https://firebase.google.com/docs/remote-config/) | ✅ |
 | [Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/admin/) | ✅ |				
 | [Cloud Storage](https://firebase.google.com/docs/storage/admin/start) | ✅ |
+| [Custom Token Minting](https://firebase.google.com/docs/auth/admin/create-custom-tokens) | ✅ |
+| [Dynamic Links](https://firebase.google.com/docs/dynamic-links/rest) | ✅ |
+| [ID Token Verification](https://firebase.google.com/docs/auth/admin/verify-id-tokens)	| ✅ |
+| [Realtime Database](https://firebase.google.com/docs/database/admin/start) | ✅ |
+| [Remote Config](https://firebase.google.com/docs/remote-config/) | ✅ |
+| [User Management](https://firebase.google.com/docs/auth/admin/manage-users) | ✅ |
 
 An integration with [google/cloud-firestore](https://github.com/GoogleCloudPlatform/google-cloud-php-firestore) 
 is currently not available to avoid the need to install the `grpc` PHP extension when using this SDK.

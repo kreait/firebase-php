@@ -2,33 +2,24 @@
 
 ## Unreleased
 
-### Enhancements
+### Added
+
+#### Dynamic Links
+
+You can now create dynamic links with the Firebase Admin SDK for PHP. ([Documentation](https://firebase-php.readthedocs.io/en/latest/dynamic-links.html))
+
+### Changes
+
+#### General
 
 * It is now possible to give the path to a Service Account JSON file directly to the factory instead of instantiating a
-  `ServiceAccount` instance beforehand. Instead of 
+  `ServiceAccount` instance beforehand.
   
   ```php
-  use Kreait\Firebase\Factory;
-  use Kreait\Firebase\ServiceAccount;
-
-  $serviceAccount = ServiceAccount::fromJsonFile('/path/to/google-service-account.json');
-
-  $firebase = (new Factory)
-      ->withServiceAccount($serviceAccount)
-      ->create();
-  ```
-  
-  you can now write
-  
-  ```php
-  use Kreait\Firebase\Factory;
-  
-  $firebase = (new Factory)
+  $firebase = (new Kreait\Firebase\Factory())
       ->withServiceAccount('/path/to/google-service-account.json')
       ->create();
   ``` 
-
-### Changes
 
 #### Realtime Database
 

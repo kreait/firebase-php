@@ -24,6 +24,7 @@ use Kreait\Firebase\Exception\LogicException;
 use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\ServiceAccount\Discoverer;
+use Kreait\Firebase\Value\Url;
 use Kreait\GcpMetadata;
 use Psr\Http\Message\UriInterface;
 use Psr\SimpleCache\CacheInterface;
@@ -297,6 +298,20 @@ class Factory
         );
 
         return new Messaging($messagingApiClient, $appInstanceApiClient);
+    }
+
+    /**
+     * @param string|Url|UriInterface|mixed $defaultDynamicLinksDomain
+     */
+    public function createDynamicLinksService($defaultDynamicLinksDomain = null): DynamicLinks
+    {
+        $apiClient = $this->createApiClient();
+
+        if ($defaultDynamicLinksDomain) {
+            return DynamicLinks::withApiClientAndDefaultDomain($apiClient, $defaultDynamicLinksDomain);
+        }
+
+        return DynamicLinks::withApiClient($apiClient);
     }
 
     public function createApiClient(array $config = null): Client

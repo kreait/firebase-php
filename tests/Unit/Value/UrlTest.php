@@ -7,7 +7,6 @@ namespace Kreait\Firebase\Tests\Unit\Value;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\Url;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\UriInterface;
 
 /**
  * @internal
@@ -21,10 +20,12 @@ class UrlTest extends TestCase
     {
         $url = Url::fromValue($value);
 
-        $this->assertSame($value, (string) $url);
-        $this->assertSame($value, $url->jsonSerialize());
-        $this->assertTrue($url->equalsTo($value));
-        $this->assertInstanceOf(UriInterface::class, $url->toUri());
+        $check = (string) $value;
+
+        $this->assertSame($check, (string) $url);
+        $this->assertSame($check, (string) $url->toUri());
+        $this->assertSame($check, $url->jsonSerialize());
+        $this->assertTrue($url->equalsTo($check));
     }
 
     /**
@@ -40,6 +41,12 @@ class UrlTest extends TestCase
     {
         return [
             ['http://domain.tld'],
+            [new class() {
+                public function __toString()
+                {
+                    return 'https://domain.tld';
+                }
+            }],
         ];
     }
 

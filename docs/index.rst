@@ -36,12 +36,13 @@ User Guide
 
     overview
     setup
+    cloud-messaging
     realtime-database
     authentication
     user-management
+    dynamic-links
     storage
     remote-config
-    cloud-messaging
     framework-integrations
     tutorials
     troubleshooting

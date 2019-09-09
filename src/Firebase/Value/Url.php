@@ -28,8 +28,17 @@ class Url implements \JsonSerializable, Value
         $this->value = $value;
     }
 
+    /**
+     * @param string|UriInterface|mixed $value
+     *
+     * @throws InvalidArgumentException
+     */
     public static function fromValue($value): self
     {
+        if (\is_object($value) && \method_exists($value, '__toString')) {
+            $value = (string) $value;
+        }
+
         try {
             return new self(uri_for($value));
         } catch (Throwable $e) {
