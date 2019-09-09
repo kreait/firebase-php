@@ -232,9 +232,11 @@ CONFIG;
             $this->fail('The new template has no version');
         }
 
+        $currentVersionUpdateDate = $currentVersion->updatedAt();
+
         $query = [
-            'startingAt' => '2019-06-01',
-            'endingAt' => '2019-08-08',
+            'startingAt' => $currentVersionUpdateDate->modify('-2 months'),
+            'endingAt' => $currentVersionUpdateDate,
             'upToVersion' => $currentVersion->versionNumber(),
             'pageSize' => 1,
             'limit' => $limit = 2,
