@@ -10,12 +10,9 @@ rate limiting.
 .. code-block:: php
 
     use Kreait\Firebase\Factory;
-    use Kreait\Firebase\ServiceAccount;
-
-    $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
 
     $firebase = (new Factory)
-        ->withServiceAccount($serviceAccount)
+        ->withServiceAccount('/path/to/google-service-account.json')
         ->create();
 
     $auth = $firebase->getAuth();

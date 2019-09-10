@@ -2,11 +2,37 @@
 
 ## Unreleased
 
+### Enhancements
+
+* It is now possible to give the path to a Service Account JSON file directly to the factory instead of instantiating a
+  `ServiceAccount` instance beforehand. Instead of 
+  
+  ```php
+  use Kreait\Firebase\Factory;
+  use Kreait\Firebase\ServiceAccount;
+
+  $serviceAccount = ServiceAccount::fromJsonFile('/path/to/google-service-account.json');
+
+  $firebase = (new Factory)
+      ->withServiceAccount($serviceAccount)
+      ->create();
+  ```
+  
+  you can now write
+  
+  ```php
+  use Kreait\Firebase\Factory;
+  
+  $firebase = (new Factory)
+      ->withServiceAccount('/path/to/google-service-account.json')
+      ->create();
+  ``` 
+
 ### Changes
 
 #### Realtime Database
 
-- `Kreait\Firebase\Database::getRules()` has been deprecated in favor of `Kreait\Firebase\Database::getRuleSet()` 
+- `Kreait\Firebase\Database::getRules()` has been deprecated in favor of `Kreait\Firebase\Database::getRuleSet()`
 
 ## 4.31.0 - 2019-08-22
 
@@ -17,7 +43,7 @@
 * Fixed the inability to correctly parse a response from the Firebase Batch Messaging when `Messaging::sendMulticast()`
   or `Messaging::sendAll()` was used with only one recipient. 
 
-### Changed
+### Changes
 
 #### Auth
 
@@ -28,7 +54,7 @@
 
 ## 4.30.1 - 2019-08-17
 
-### Changed
+### Changes
 
 #### Database
 
@@ -44,7 +70,7 @@
 
 ## 4.30.0 - 2019-08-16
 
-### Changed
+### Changes
 
 ``Kreait\Firebase\Factory`` now exposes the methods to create the single components (Auth, Messaging, Remote Config,
 Storage) directly in order to enable its usage in [kreait/laravel-firebase](https://github.com/kreait/laravel-firebase).
@@ -70,7 +96,7 @@ Storage) directly in order to enable its usage in [kreait/laravel-firebase](http
 * The parameters of a Remote Config template can now be retrieved with
   `Kreait\Firebase\RemoteConfig\Template::getParameters()`
   
-### Changed
+### Changes
 
 #### Cloud Messaging
 
@@ -98,7 +124,7 @@ Storage) directly in order to enable its usage in [kreait/laravel-firebase](http
   registration token, including the topics an application instance/registration token is subscribed to.
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#app-instance-management))
 
-### Changed
+### Changes
 
 #### General
 
@@ -128,7 +154,7 @@ Storage) directly in order to enable its usage in [kreait/laravel-firebase](http
 * It is now possible to add platform independent FCM options to a message.
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#adding-platform-independent-fcm-options))
 
-### Changed
+### Changes
 
 #### Cloud Messaging
 

@@ -69,14 +69,9 @@ of this project's `GitHub repository <https://github.com/kreait/firebase-php/>`_
     require __DIR__.'/vendor/autoload.php';
 
     use Kreait\Firebase\Factory;
-    use Kreait\Firebase\ServiceAccount;
-
-    // This assumes that you have placed the Firebase credentials in the same directory
-    // as this PHP file.
-    $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
 
     $firebase = (new Factory)
-        ->withServiceAccount($serviceAccount)
+        ->withServiceAccount('/path/to/google-service-account.json')
         // The following line is optional if the project id in your credentials file
         // is identical to the subdomain of your Firebase project. If you need it,
         // make sure to replace the URL with the URL of your project.

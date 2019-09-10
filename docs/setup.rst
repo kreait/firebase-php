@@ -41,19 +41,6 @@ If one of the conditions above is met, you can create a new Firebase instance wi
 
     $firebase = (new Factory)->create();
 
-A more explicit alternative:
-
-.. code-block:: php
-
-    use Kreait\Firebase\Factory;
-    use Kreait\Firebase\ServiceAccount;
-
-    $serviceAccount = ServiceAccount::discover();
-
-    $firebase = (new Factory)
-        ->withServiceAccount($serviceAccount)
-        ->create();
-
 
 Manually
 ========
@@ -63,11 +50,9 @@ You can also pass the path to the Service Account JSON file explicitly:
 .. code-block:: php
 
     use Kreait\Firebase\Factory;
-    use Kreait\Firebase\ServiceAccount;
 
-    $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/firebase_credentials.json');
     $firebase = (new Factory)
-        ->withServiceAccount($serviceAccount)
+        ->withServiceAccount('/path/to/firebase_credentials.json')
         ->create();
 
 

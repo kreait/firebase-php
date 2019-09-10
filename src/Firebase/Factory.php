@@ -88,8 +88,10 @@ class Factory
         $this->clock = new SystemClock();
     }
 
-    public function withServiceAccount(ServiceAccount $serviceAccount): self
+    public function withServiceAccount($serviceAccount): self
     {
+        $serviceAccount = ServiceAccount::fromValue($serviceAccount);
+
         $factory = clone $this;
         $factory->serviceAccount = $serviceAccount;
 

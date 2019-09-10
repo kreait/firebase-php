@@ -32,12 +32,9 @@ your Firebase project, that instance has complete read and write access to your 
 .. code-block:: php
 
         use Kreait\Firebase\Factory;
-        use Kreait\Firebase\ServiceAccount;
-
-        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
 
         $firebase = (new Factory)
-            ->withServiceAccount($serviceAccount)
+            ->withServiceAccount('/path/to/google-service-account.json')
             ->create();
 
 .. note::
@@ -80,15 +77,12 @@ Then, on your server, when you initialize the Firebase app, use the ``asUser($ui
 with the identifier you used to represent your service in your Security Rules.
 
 .. code-block:: php
-   :emphasize-lines: 8
+   :emphasize-lines: 5
 
     use Kreait\Firebase\Factory;
-    use Kreait\Firebase\ServiceAccount;
-
-    $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
 
     $firebase = (new Factory)
-        ->withServiceAccount($serviceAccount)
+        ->withServiceAccount('/path/to/google-service-account.json')
         ->asUser('my-service-worker')
         ->create();
 
@@ -204,15 +198,12 @@ Here is an example using the `Symfony Cache Component <https://symfony.com/doc/c
 .. code-block:: php
 
         use Kreait\Firebase\Factory;
-        use Kreait\Firebase\ServiceAccount;
         use Symfony\Component\Cache\Simple\FilesystemCache;
 
         $cache = new FilesystemCache();
 
-        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
-
         $firebase = (new Factory)
-            ->withServiceAccount($serviceAccount)
+            ->withServiceAccount('/path/to/google-service-account.json')
             ->withVerifierCache($cache)
             ->create();
 
