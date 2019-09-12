@@ -1,0 +1,26 @@
+repository:
+  # See https://developer.github.com/v3/repos/#edit for all available settings.
+  name: firebase-php
+  description: ":fire:+:elephant: Unofficial Firebase Admin SDK for PHP"
+  homepage: https://firebase-php.readthedocs.io/
+  private: false
+  has_downloads: true
+  has_issues: true
+  has_pages: false
+  has_projects: false
+  has_wiki: false
+  is_template: false
+  default_branch: master
+  allow_squash_merge: true
+  allow_merge_commit: false
+  allow_rebase_merge: true
+
+labels:
+  - name: bug
+    color: FC2929
+  - name: feature
+    color: AAFFB4
+  - name: needs-more-info
+    color: f3ffa8
+  - name: wontfix
+    color: EDEDED
