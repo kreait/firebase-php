@@ -34,6 +34,7 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 | [Cloud Storage](https://firebase.google.com/docs/storage/admin/start) | ✅ |
 | [Custom Token Minting](https://firebase.google.com/docs/auth/admin/create-custom-tokens) | ✅ |
 | [Dynamic Links](https://firebase.google.com/docs/dynamic-links/rest) | ✅ |
+| [Dynamic Link Analytics](https://firebase.google.com/docs/dynamic-links/analytics) | ✅ |
 | [ID Token Verification](https://firebase.google.com/docs/auth/admin/verify-id-tokens)	| ✅ |
 | [Realtime Database](https://firebase.google.com/docs/database/admin/start) | ✅ |
 | [Remote Config](https://firebase.google.com/docs/remote-config/) | ✅ |
