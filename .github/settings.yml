@@ -1,7 +1,7 @@
 repository:
   # See https://developer.github.com/v3/repos/#edit for all available settings.
   name: firebase-php
-  description: ":fire:+:elephant: Unofficial Firebase Admin SDK for PHP"
+  description: "Unofficial Firebase Admin SDK for PHP"
   homepage: https://firebase-php.readthedocs.io/
   private: false
   has_downloads: true
