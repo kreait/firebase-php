@@ -6,7 +6,19 @@
 
 #### Dynamic Links
 
-You can now create dynamic links with the Firebase Admin SDK for PHP. ([Documentation](https://firebase-php.readthedocs.io/en/latest/dynamic-links.html))
+* You can now create Dynamic Links and retrieve statistics for Dynamic Links. ([Documentation](https://firebase-php.readthedocs.io/en/latest/dynamic-links.html))
+  
+  ```php
+  use Kreait\Firebase;
+
+  $firebaseFactory = new Firebase\Factory();
+
+  $dynamicLinksDomain = 'https://example.page.link';
+  $dynamicLinks = $firebaseFactory->createDynamicLinksService($dynamicLinksDomain);
+  
+  $shortLink = $dynamicLinks->createShortLink('https://domain.tld/some/path');
+  $stats = $dynamicLinks->getStatistics('https://example.page.link/wXYZ');
+  ```
 
 ### Changes
 
@@ -16,10 +28,12 @@ You can now create dynamic links with the Firebase Admin SDK for PHP. ([Document
   `ServiceAccount` instance beforehand.
   
   ```php
-  $firebase = (new Kreait\Firebase\Factory())
+  use Kreait\Firebase;
+  
+  $firebase = (new Firebase\Factory())
       ->withServiceAccount('/path/to/google-service-account.json')
       ->create();
-  ``` 
+  ```
 
 #### Realtime Database
 

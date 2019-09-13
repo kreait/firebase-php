@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
-use InvalidArgumentException;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 use Kreait\Firebase\DynamicLinks;
 use Kreait\Firebase\Tests\IntegrationTestCase;
@@ -86,16 +85,11 @@ final class DynamicLinksTest extends IntegrationTestCase
     }
 
     /** @test */
-    public function it_rejects_an_invalid_creation_parameter()
+    public function it_gets_link_statistics()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->service->createShortLink(true);
-    }
-
-    /** @test */
-    public function it_rejects_an_invalid_shortening_parameter()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->service->shortenLongDynamicLink(true);
+        // It always returns at least an empty result. Unfortunately, we don't have "real" dynamic links
+        // to test with, but we can at least test that the flow works
+        $this->service->getStatistics($this->domain.'/abcd', 13);
+        $this->addToAssertionCount(1);
     }
 }

@@ -9,12 +9,15 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use InvalidArgumentException;
 use Kreait\Firebase\DynamicLink\AnalyticsInfo;
 use Kreait\Firebase\DynamicLink\AnalyticsInfo\GooglePlayAnalytics;
 use Kreait\Firebase\DynamicLink\AnalyticsInfo\ITunesConnectAnalytics;
 use Kreait\Firebase\DynamicLink\AndroidInfo;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink\FailedToCreateDynamicLink;
+use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink;
+use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink\FailedToGetStatisticsForDynamicLink;
 use Kreait\Firebase\DynamicLink\IOSInfo;
 use Kreait\Firebase\DynamicLink\NavigationInfo;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
@@ -98,6 +101,13 @@ final class DynamicLinksTest extends TestCase
     }
 
     /** @test */
+    public function it_rejects_an_invalid_creation_parameter()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->service->createShortLink(true);
+    }
+
+    /** @test */
     public function creation_fails_if_no_connection_is_available()
     {
         $connectionError = ConnectException::create($this->createMock(RequestInterface::class));
@@ -108,7 +118,7 @@ final class DynamicLinksTest extends TestCase
     }
 
     /** @test */
-    public function creation_fails_on_unsuccesful_response()
+    public function creation_fails_on_unsuccessful_response()
     {
         $this->httpHandler->append($response = new Response(400, [], '{}'));
 
@@ -122,6 +132,15 @@ final class DynamicLinksTest extends TestCase
             $this->assertSame($action, $e->action());
             $this->assertSame($response, $e->response());
         }
+    }
+
+    /** @test */
+    public function creation_fails_gracefully_if_an_unsuccessful_response_cannot_be_parsed()
+    {
+        $this->httpHandler->append($response = new Response(400, [], 'probably html'));
+
+        $this->expectException(FailedToCreateDynamicLink::class);
+        $this->service->createDynamicLink('https://domain.tld/irrelevant');
     }
 
     /** @test */
@@ -147,6 +166,13 @@ final class DynamicLinksTest extends TestCase
     }
 
     /** @test */
+    public function it_rejects_an_invalid_shortening_parameter()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->service->shortenLongDynamicLink(true);
+    }
+
+    /** @test */
     public function shortening_fails_if_no_connection_is_available()
     {
         $connectionError = ConnectException::create($this->createMock(RequestInterface::class));
@@ -157,7 +183,7 @@ final class DynamicLinksTest extends TestCase
     }
 
     /** @test */
-    public function shortening_fails_on_unsuccesful_response()
+    public function shortening_fails_on_unsuccessful_response()
     {
         $this->httpHandler->append($response = new Response(400, [], '{}'));
 
@@ -170,6 +196,129 @@ final class DynamicLinksTest extends TestCase
             $this->assertJsonStringEqualsJsonString(\json_encode($action), \json_encode($e->action()));
             $this->assertSame($response, $e->response());
         }
+    }
+
+    /** @test */
+    public function shortening_fails_gracefully_if_an_unsuccessful_response_cannot_be_parsed()
+    {
+        $this->httpHandler->append($response = new Response(400, [], 'probably html'));
+
+        $this->expectException(FailedToShortenLongDynamicLink::class);
+        $this->service->shortenLongDynamicLink('https://domain.tld/irrelevant');
+    }
+
+    /** @test */
+    public function it_gets_link_statistics()
+    {
+        $this->httpHandler->append(
+            new Response(200, [], \json_encode($responseData = [
+                'linkEventStats' => [
+                    ['platform' => 'ANDROID', 'count' => '10', 'event' => 'CLICK'],
+                    ['platform' => 'DESKTOP', 'count' => '20', 'event' => 'CLICK'],
+                    ['platform' => 'IOS', 'count' => '30', 'event' => 'CLICK'],
+
+                    ['platform' => 'ANDROID', 'count' => '10', 'event' => 'REDIRECT'],
+                    ['platform' => 'IOS', 'count' => '20', 'event' => 'REDIRECT'],
+
+                    ['platform' => 'ANDROID', 'count' => '10', 'event' => 'APP_INSTALL'],
+                    ['platform' => 'IOS', 'count' => '20', 'event' => 'APP_INSTALL'],
+
+                    ['platform' => 'ANDROID', 'count' => '10', 'event' => 'APP_FIRST_OPEN'],
+                    ['platform' => 'IOS', 'count' => '20', 'event' => 'APP_FIRST_OPEN'],
+
+                    ['platform' => 'ANDROID', 'count' => '10', 'event' => 'APP_RE_OPEN'],
+                    ['platform' => 'IOS', 'count' => '20', 'event' => 'APP_RE_OPEN'],
+                ],
+            ]))
+        );
+
+        $stats = $this->service->getStatistics($this->dynamicLinksDomain.'/abcd');
+        $eventStats = $stats->eventStatistics();
+
+        $this->assertEquals($responseData, $stats->rawData());
+        $this->assertCount(180, $eventStats);
+
+        $this->assertCount(60, $eventStats->clicks());
+        $this->assertCount(10, $eventStats->clicks()->onAndroid());
+        $this->assertCount(20, $eventStats->clicks()->onDesktop());
+        $this->assertCount(30, $eventStats->clicks()->onIOS());
+        $this->assertCount(10, $eventStats->onAndroid()->clicks());
+        $this->assertCount(20, $eventStats->onDesktop()->clicks());
+        $this->assertCount(30, $eventStats->onIOS()->clicks());
+
+        $this->assertCount(30, $eventStats->redirects());
+        $this->assertCount(10, $eventStats->redirects()->onAndroid());
+        $this->assertCount(0, $eventStats->redirects()->onDesktop());
+        $this->assertCount(20, $eventStats->redirects()->onIOS());
+        $this->assertCount(10, $eventStats->onAndroid()->redirects());
+        $this->assertCount(0, $eventStats->onDesktop()->redirects());
+        $this->assertCount(20, $eventStats->onIOS()->redirects());
+
+        $this->assertCount(30, $eventStats->appInstalls());
+        $this->assertCount(10, $eventStats->appInstalls()->onAndroid());
+        $this->assertCount(0, $eventStats->appInstalls()->onDesktop());
+        $this->assertCount(20, $eventStats->appInstalls()->onIOS());
+        $this->assertCount(10, $eventStats->onAndroid()->appInstalls());
+        $this->assertCount(0, $eventStats->onDesktop()->appInstalls());
+        $this->assertCount(20, $eventStats->onIOS()->appInstalls());
+
+        $this->assertCount(30, $eventStats->appFirstOpens());
+        $this->assertCount(10, $eventStats->appFirstOpens()->onAndroid());
+        $this->assertCount(0, $eventStats->appFirstOpens()->onDesktop());
+        $this->assertCount(20, $eventStats->appFirstOpens()->onIOS());
+        $this->assertCount(10, $eventStats->onAndroid()->appFirstOpens());
+        $this->assertCount(0, $eventStats->onDesktop()->appFirstOpens());
+        $this->assertCount(20, $eventStats->onIOS()->appFirstOpens());
+
+        $this->assertCount(30, $eventStats->appReOpens());
+        $this->assertCount(10, $eventStats->appReOpens()->onAndroid());
+        $this->assertCount(0, $eventStats->appReOpens()->onDesktop());
+        $this->assertCount(20, $eventStats->appReOpens()->onIOS());
+        $this->assertCount(10, $eventStats->onAndroid()->appReOpens());
+        $this->assertCount(0, $eventStats->onDesktop()->appReOpens());
+        $this->assertCount(20, $eventStats->onIOS()->appReOpens());
+    }
+
+    /** @test */
+    public function it_rejects_an_invalid_link_stats_parameter()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->service->getStatistics(true);
+    }
+
+    /** @test */
+    public function link_stats_fail_if_no_connection_is_available()
+    {
+        $connectionError = ConnectException::create($this->createMock(RequestInterface::class));
+        $this->httpHandler->append($connectionError);
+
+        $this->expectException(FailedToGetStatisticsForDynamicLink::class);
+        $this->service->getStatistics('anything');
+    }
+
+    /** @test */
+    public function link_stats_fail_on_unsuccessful_response()
+    {
+        $this->httpHandler->append($response = new Response(400, [], '{}'));
+
+        $action = GetStatisticsForDynamicLink::forLink('anything');
+
+        try {
+            $this->service->getStatistics($action);
+            $this->fail('An exception should have been thrown');
+        } catch (FailedToGetStatisticsForDynamicLink $e) {
+            $this->assertSame($action, $e->action());
+            $this->assertSame($response, $e->response());
+        }
+    }
+
+    /** @test */
+    public function link_stats_fail_gracefully_if_an_unsuccessful_response_cannot_be_parsed()
+    {
+        $this->httpHandler->append($response = new Response(400, [], 'probably html'));
+
+        $this->expectException(FailedToGetStatisticsForDynamicLink::class);
+        $this->service->getStatistics('https://domain.tld/irrelevant');
     }
 
     /** @test */

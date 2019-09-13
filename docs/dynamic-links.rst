@@ -12,7 +12,7 @@ You can create short Dynamic Links with the Firebase Admin SDK for PHP. Dynamic 
 - an array containing Dynamic Link parameters
 - an action created with builder methods
 
-and will return a URL like ``https://example.page.link/WXYZ``.
+and will return a URL like ``https://example.page.link/wXYZ``.
 
 
 .. note::
@@ -58,7 +58,7 @@ You can create a Dynamic Link by using one of the methods below. Each method wil
 
 .. code-block:: php
 
-    use use Kreait\Firebase\DynamicLink\CreateDynamicLink;
+    use use Kreait\Firebase\DynamicLink\CreateDynamicLink\FailedToCreateDynamicLink;
 
     $url = 'https://www.example.com/some/path';
 
@@ -68,7 +68,7 @@ You can create a Dynamic Link by using one of the methods below. Each method wil
 
         $link = $dynamicLinks->createShortLink($url);
         $link = $dynamicLinks->createDynamicLink($url, CreateDynamicLink::WITH_SHORT_SUFFIX);
-    } catch (CreateDynamicLink\FailedToCreateDynamicLink $e) {
+    } catch (FailedToCreateDynamicLink $e) {
         echo $e->getMessage(); exit;
     }
 
@@ -100,7 +100,7 @@ you can convert it to a short link:
 
 .. code-block:: php
 
-    use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
+    use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink\FailedToShortenLongDynamicLink;
 
     $longLink = 'https://example.page.link?link=https://domain.tld/some/path';
 
@@ -108,11 +108,72 @@ you can convert it to a short link:
         $link = $dynamicLinks->shortenLongDynamicLink($longLink);
         $link = $dynamicLinks->shortenLongDynamicLink($longLink, ShortenLongDynamicLink::WITH_UNGUESSABLE_SUFFIX);
         $link = $dynamicLinks->shortenLongDynamicLink($longLink, ShortenLongDynamicLink::WITH_SHORT_SUFFIX);
-    } catch (ShortenLongDynamicLink\FailedToShortenLongDynamicLink $e) {
+    } catch (FailedToShortenLongDynamicLink $e) {
         echo $e->getMessage(); exit;
     }
 
 If ``shortenLongDynamicLink()`` is called without a second parameter, the Dynamic Link is created with an unguessable suffix.
+
+*******************
+Get link statistics
+*******************
+
+You can use this REST API to get analytics data for each of your short Dynamic Links, whether created in the console
+or programmatically.
+
+.. note::
+    These statistics might not include events that have been logged within the last 36 hours.
+
+.. code-block:: php
+
+    use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink\FailedToGetStatisticsForDynamicLink;
+
+    try {
+        $stats = $dynamicLinks->getStatistics('https://example.page.link/wXYZ);
+        $stats = $dynamicLinks->getStatistics('https://example.page.link/wXYZ, 14); // duration in days
+    } catch (FailedToGetStatisticsForDynamicLink $e) {
+        echo $e->getMessage(); exit;
+    }
+
+If ``getStatistics()`` is called without a second parameter, stats will include the statistics of the past 7 days.
+
+The returned object will be an instance of ``Kreait\Firebase\DynamicLink\DynamicLinkStatistics``, which currently
+only includes event statistics. You can access the raw returned data with `$stats->rawData()`.
+
+Event Statistics
+----------------
+
+Firebase Dynamic Links tracks the number of times each of your short Dynamic Links have been clicked, as well as the
+number of times a click resulted in a redirect, app install, app first-open, or app re-open, including the platform
+on which that event occurred.
+
+Each of the following methods returns a (filtered) instance of ``Kreait\Firebase\DynamicLink\EventStatistics`` which
+supports any combination of filters and is countable with ``count()`` or ``->count()`` as shown below:
+
+.. code-block:: php
+
+    $eventStats = $stats->eventStatistics();
+
+    $allClicks = $eventStats->clicks();
+    $allRedirects = $eventStats->redirects();
+    $allAppInstalls = $eventStats->appInstalls();
+    $allAppFirstOpens = $eventStats->appFirstOpens();
+    $allAppReOpens = $eventStats->appReOpens();
+
+    $allAndroidEvents = $eventStats->onAndroid();
+    $allDesktopEvents = $eventStats->onDesktop();
+    $allIOSEvents = $eventStats->onIOS();
+
+    $clicksOnDesktop = $eventStats->clicks()->onDesktop();
+    $appInstallsOnAndroid = $eventStats->onAndroid()->appInstalls();
+    $appReOpensOnIOS = $eventStats->appReOpens()->onIOS();
+
+    $totalAmountOfClicks = count($eventStats->clicks());
+    $totalAmountOfAppFirstOpensOnAndroid = $eventStats->appFirstOpens()->onAndroid()->count();
+
+    $custom = $eventStats->filter(function (array $eventGroup) {
+        return $eventGroup['platform'] === 'CUSTOM_PLATFORM_THAT_THE_SDK_DOES_NOT_KNOW_YET';
+    });
 
 **************
 Advanced usage

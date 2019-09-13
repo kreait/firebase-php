@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Kreait\Firebase;
 
 use GuzzleHttp\ClientInterface;
+use InvalidArgumentException;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink\FailedToCreateDynamicLink;
+use Kreait\Firebase\DynamicLink\DynamicLinkStatistics;
+use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink\FailedToShortenLongDynamicLink;
-use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\Url;
 use Psr\Http\Message\UriInterface;
 
@@ -109,6 +111,23 @@ final class DynamicLinks
         return (new ShortenLongDynamicLink\GuzzleApiClientHandler($this->apiClient))->handle($action);
     }
 
+    /**
+     * @param string|Url|UriInterface|GetStatisticsForDynamicLink|mixed $dynamicLinkOrAction
+     *
+     * @throws InvalidArgumentException
+     * @throws GetStatisticsForDynamicLink\FailedToGetStatisticsForDynamicLink
+     */
+    public function getStatistics($dynamicLinkOrAction, int $durationInDays = null): DynamicLinkStatistics
+    {
+        $action = $this->ensureGetStatisticsAction($dynamicLinkOrAction);
+
+        if ($durationInDays) {
+            $action = $action->withDurationInDays($durationInDays);
+        }
+
+        return (new DynamicLink\GetStatisticsForDynamicLink\GuzzleApiClientHandler($this->apiClient))->handle($action);
+    }
+
     private function ensureCreateAction($actionOrParametersOrUrl): CreateDynamicLink
     {
         if ($this->isStringable($actionOrParametersOrUrl)) {
@@ -138,6 +157,19 @@ final class DynamicLinks
 
         if ($actionOrParametersOrUrl instanceof ShortenLongDynamicLink) {
             return $actionOrParametersOrUrl;
+        }
+
+        throw new InvalidArgumentException('Unsupported action');
+    }
+
+    private function ensureGetStatisticsAction($actionOrUrl): GetStatisticsForDynamicLink
+    {
+        if ($this->isStringable($actionOrUrl)) {
+            return GetStatisticsForDynamicLink::forLink($actionOrUrl);
+        }
+
+        if ($actionOrUrl instanceof GetStatisticsForDynamicLink) {
+            return $actionOrUrl;
         }
 
         throw new InvalidArgumentException('Unsupported action');
