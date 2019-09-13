@@ -55,7 +55,7 @@ final class MessageTarget
                 $new->value = (string) Topic::fromValue($value);
                 break;
             default:
-                throw new InvalidArgumentException('Invalid target type "'.$type.'", valid type: "'.\implode(', ', self::TYPES));
+                throw new InvalidArgumentException("Invalid target type '{$type}', valid types: ".\implode(', ', self::TYPES));
         }
 
         return $new;

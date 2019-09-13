@@ -75,7 +75,7 @@ class Auth
         $data = JSON::decode((string) $response->getBody(), true);
 
         if (empty($data['users'][0])) {
-            throw new UserNotFound('No user with uid "'.$uid.'" found.');
+            throw new UserNotFound("No user with uid '{$uid}' found.");
         }
 
         return UserRecord::fromResponseData($data['users'][0]);
@@ -184,7 +184,7 @@ class Auth
         $data = JSON::decode((string) $response->getBody(), true);
 
         if (empty($data['users'][0])) {
-            throw new UserNotFound('No user with email "'.$email.'" found.');
+            throw new UserNotFound("No user with email '{$email}' found.");
         }
 
         return UserRecord::fromResponseData($data['users'][0]);
@@ -205,7 +205,7 @@ class Auth
         $data = JSON::decode((string) $response->getBody(), true);
 
         if (empty($data['users'][0])) {
-            throw new UserNotFound('No user with phone number "'.$phoneNumber.'" found.');
+            throw new UserNotFound("No user with phone number '{$phoneNumber}' found.");
         }
 
         return UserRecord::fromResponseData($data['users'][0]);
@@ -280,7 +280,7 @@ class Auth
         try {
             $this->client->deleteUser((string) $uid);
         } catch (UserNotFound $e) {
-            throw new UserNotFound('No user with uid "'.$uid.'" found.');
+            throw new UserNotFound("No user with uid '{$uid}' found.");
         }
     }
 
