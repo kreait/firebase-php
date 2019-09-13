@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 
+use InvalidArgumentException;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Util\JSON;
@@ -20,7 +21,13 @@ final class FailedToShortenLongDynamicLink extends RuntimeException implements F
 
     public static function withActionAndResponse(ShortenLongDynamicLink $action, ResponseInterface $response): self
     {
-        $message = JSON::decode((string) $response->getBody(), true)['error']['message'] ?? 'Failed to shorten long dynamic link';
+        $fallbackMessage = 'Failed to shorten long dynamic link';
+
+        try {
+            $message = JSON::decode((string) $response->getBody(), true)['error']['message'] ?? $fallbackMessage;
+        } catch (InvalidArgumentException $e) {
+            $message = $fallbackMessage;
+        }
 
         $error = new self($message);
         $error->action = $action;
