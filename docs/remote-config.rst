@@ -33,8 +33,8 @@ method of your Firebase instance:
 
     use Kreait\Firebase;
 
-    $firebase = (new Firebase\Factory())->create();
-    $remoteConfig = $firebase->getRemoteConfig();
+    $factory = new Firebase\Factory();
+    $remoteConfig = $factory->createRemoteConfig();
 
 *********************
 Get the Remote Config
@@ -226,7 +226,7 @@ You can filter the results of ``RemoteConfig::listVersions()``:
         'limit' => 10,
     ];
 
-    $remoteConfig = $firebase->getRemoteConfig();
+    $remoteConfig = $factory->createRemoteConfig();
 
     foreach ($remoteConfig->listVersions($query) as $version) {
         echo "Version number: {$version->versionNumber()}\n";

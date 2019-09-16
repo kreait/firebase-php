@@ -11,11 +11,9 @@ rate limiting.
 
     use Kreait\Firebase\Factory;
 
-    $firebase = (new Factory)
+    $auth = (new Factory)
         ->withServiceAccount('/path/to/google-service-account.json')
-        ->create();
-
-    $auth = $firebase->getAuth();
+        ->createAuth();
 
 ************
 User Records
@@ -329,16 +327,18 @@ If the check fails, a ``RevokedIdToken`` exception will be thrown.
 
     use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 
+    $auth = $factory->createAuth();
+
     $idTokenString = '...';
 
-    $verifiedIdToken = $firebase->getAuth()->verifyIdToken($idTokenString);
+    $verifiedIdToken = $auth->verifyIdToken($idTokenString);
 
     $uid = $verifiedIdToken->getClaim('sub');
 
-    $firebase->getAuth()->revokeRefreshTokens($uid);
+    $auth->revokeRefreshTokens($uid);
 
     try {
-        $verifiedIdToken = $firebase->getAuth()->verifyIdToken($idTokenString, true);
+        $verifiedIdToken = $auth->verifyIdToken($idTokenString, true);
     } catch (RevokedIdToken $e) {
         echo $e->getMessage();
     }

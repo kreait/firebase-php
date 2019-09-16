@@ -25,11 +25,10 @@ class DatabaseTest extends DatabaseTestCase
         $credentials['project_id'] = \str_replace('-&+§', ':', $credentials['project_id']);
 
         $serviceAccount = ServiceAccount::fromArray($credentials);
-        $firebase = (new Factory())
+        (new Factory())
             ->withServiceAccount($serviceAccount)
-            ->create();
-
-        $firebase->getDatabase()->getRuleSet();
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+            ->createDatabase()
+            ->getRuleSet();
+        $this->addToAssertionCount(1);
     }
 }

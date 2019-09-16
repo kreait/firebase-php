@@ -21,16 +21,15 @@ Before you start, please read about Firebase Remote Config in the official docum
 Getting started
 ***************
 
-After having initialized your Firebase project instance, you can access the Cloud Messaging
-component with ``$firebase->getMessaging()``.
+After having initialized the Firebase Factory, you can access the Cloud Messaging
+component with ``$factory->createMessaging()``.
 
 .. code-block:: php
 
     use Kreait\Firebase;
     use Kreait\Firebase\Messaging\CloudMessage;
 
-    $firebase = (new Firebase\Factory())->create();
-    $messaging = $firebase->getMessaging();
+    $messaging = (new Firebase\Factory())->createMessaging();
 
     $message = CloudMessage::withTarget(/* see sections below */)
         ->withNotification(Notification::create('Title', 'Body'))
@@ -414,6 +413,8 @@ Sending a fully configured raw message
 
     use Kreait\Firebase\Messaging\RawMessageFromArray;
 
+    $messaging = $factory->createMessaging();
+
     $message = new RawMessageFromArray([
             'notification' => [
                 // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#notification
@@ -465,7 +466,7 @@ Sending a fully configured raw message
             ]
         ]);
 
-    $firebase->getMessaging()->send($message);
+    $messaging->send($message);
 
 *******************
 Validating messages
@@ -483,8 +484,10 @@ error message(s) that the API returned.
 
     use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 
+    $messaging = $factory->createMessaging();
+
     try {
-        $firebase->getMessaging()->validate($message);
+        $messaging->validate($message);
     } catch (InvalidMessage $e) {
         print_r($e->errors());
     }
@@ -511,9 +514,9 @@ You can subscribe one or multiple devices to a topic by passing registration tok
         // ...
     };
 
-    $firebase
-        ->getMessaging()
-        ->subscribeToTopic($topic, $registrationTokens);
+    $messaging = $factory->createMessaging();
+
+    $messaging->subscribeToTopic($topic, $registrationTokens);
 
 .. note::
     You can subscribe up to 1,000 devices in a single request. If you provide an array with over 1,000
@@ -532,9 +535,9 @@ You can unsubscribe one or multiple devices from a topic by passing registration
         // ...
     };
 
-    $firebase
-        ->getMessaging()
-        ->unsubscribeFromTopic($topic, $registrationTokens);
+    $messaging = $factory->createMessaging();
+
+    $messaging->unsubscribeFromTopic($topic, $registrationTokens);
 
 .. note::
     You can unsubscribe up to 1,000 devices in a single request. If you provide an array with over 1,000
@@ -556,7 +559,9 @@ about an app instance by passing a registration token to the ``getAppInstance()`
 
     $registrationToken = '...';
 
-    $appInstance = $firebase->getMessaging()->getAppInstance($registrationToken);
+    $messagig = $factory->createMessaging();
+
+    $appInstance = $messaging->getAppInstance($registrationToken);
     // Return the full information as provided by the Firebase API
     $instanceInfo = $appInstance->rawData();
 
@@ -618,7 +623,7 @@ You can retrieve all topic subscriptions for an app instance with the ``topicSub
 
 .. code-block:: php
 
-    $messaging = $firebase->getMessaging();
+    $messaging = $factory->createMessaging();
     $appInstance = $messaging->getAppInstance('<registration token>');
 
     /** @var \Kreait\Firebase\Messaging\TopicSubscriptions $subscriptions */

@@ -33,13 +33,13 @@ By default, the SDK is able to autodiscover the Service Account for your project
    * on Linux/MacOS: ``$HOME/.config/gcloud/application_default_credentials.json``
    * on Windows: ``$APPDATA/gcloud/application_default_credentials.json``
 
-If one of the conditions above is met, you can create a new Firebase instance without further configuration:
+If one of the conditions above is met, you can create a new Firebase factory instance without further configuration:
 
 .. code-block:: php
 
     use Kreait\Firebase\Factory;
 
-    $firebase = (new Factory)->create();
+    $factory = new Factory();
 
 
 Manually
@@ -51,9 +51,8 @@ You can also pass the path to the Service Account JSON file explicitly:
 
     use Kreait\Firebase\Factory;
 
-    $firebase = (new Factory)
-        ->withServiceAccount('/path/to/firebase_credentials.json')
-        ->create();
+    $factory = (new Factory())
+        ->withServiceAccount('/path/to/firebase_credentials.json');
 
 
 Use your own autodiscovery
@@ -74,9 +73,8 @@ You can use your own, custom autodiscovery methods as well:
         }
     ]);
 
-    $firebase = (new Factory)
-        ->withServiceAccountDiscoverer($myDiscoverer)
-        ->create();
+    $factory = (new Factory())
+        ->withServiceAccountDiscoverer($myDiscoverer);
 
 Disabling the autodiscovery
 ===========================
@@ -88,10 +86,9 @@ triggered in case an explicitely given service account is invalid.
 
     use Kreait\Firebase\Factory;
 
-    $firebase = (new Factory)
+    $factory = (new Factory())
         ->withServiceAccount($serviceAccount)
-        ->withDisabledAutoDiscovery()
-        ->create();
+        ->withDisabledAutoDiscovery();
 
 *******************
 Custom Database URI
@@ -104,9 +101,8 @@ be explicit, you can configure the Factory like this:
 
     use Kreait\Firebase\Factory;
 
-    $firebase = (new Factory)
-        ->withDatabaseUri('https://my-project.firebaseio.com')
-        ->create();
+    $factory = (new Factory())
+        ->withDatabaseUri('https://my-project.firebaseio.com');
 
 ***********************************
 HTTP Client Options and middlewares
@@ -131,7 +127,6 @@ information on how to use middlewares.
         // see http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html#middleware
     ];
 
-    $firebase = (new Factory)
+    $factory = (new Factory)
         ->withHttpClientConfig($httpConfig)
-        ->withHttpClientMiddlewares($httpMiddlewares)
-        ->create();
+        ->withHttpClientMiddlewares($httpMiddlewares);

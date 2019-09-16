@@ -172,8 +172,21 @@ class Factory
         return $factory;
     }
 
+    /**
+     * @deprecated 4.33 Use the component-specific create*() methods instead.
+     * @see createAuth()
+     * @see createDatabase()
+     * @see createMessaging()
+     * @see createRemoteConfig()
+     * @see createStorage()
+     */
     public function create(): Firebase
     {
+        \trigger_error(
+            __METHOD__.' is deprecated. Use the component-specific create*() methods instead.',
+            \E_USER_DEPRECATED
+        );
+
         $database = $this->createDatabase();
         $auth = $this->createAuth();
         $storage = $this->createStorage();

@@ -62,7 +62,7 @@ CONFIG;
 
     protected function setUp()
     {
-        $this->remoteConfig = self::$firebase->getRemoteConfig();
+        $this->remoteConfig = self::$factory->createRemoteConfig();
     }
 
     public function testForcePublishAndGet()

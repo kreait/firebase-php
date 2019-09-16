@@ -15,28 +15,27 @@ method of your Firebase instance:
 
 .. code-block:: php
 
-    use Kreait\Firebase;
+    use Kreait\Firebase\Factory;
 
-    $firebase = (new Firebase\Factory())->create();
-    $storage = $firebase->getStorage();
+    $storage = (new Factory())->createStorage();
 
 **********************
 Default Storage bucket
 **********************
 
 The SDK assumes that your project's default storage bucket name has the format ``<project-id>.appspot.com``
-and will configure the ``$firebase`` instance accordingly.
+and will configure the storage instance accordingly.
 
 If you want to change the default bucket your instance works with, you can specify the name when using
 the factory:
 
 .. code-block:: php
 
-    use Kreait\Firebase;
+    use Kreait\Firebase\Factory;
 
-    $firebase = (new Firebase\Factory())
+    $storage = (new Factory())
         ->withDefaultStorageBucket('another-default-bucket')
-        ->create();
+        ->createStorage();
 
 You can access the files on your storage in the following ways:
 

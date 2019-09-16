@@ -25,7 +25,7 @@ class MessagingTest extends IntegrationTestCase
 
     protected function setUp()
     {
-        $this->messaging = self::$firebase->getMessaging();
+        $this->messaging = self::$factory->createMessaging();
     }
 
     public static function createFullMessageData(): array

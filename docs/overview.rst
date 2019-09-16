@@ -70,15 +70,14 @@ of this project's `GitHub repository <https://github.com/kreait/firebase-php/>`_
 
     use Kreait\Firebase\Factory;
 
-    $firebase = (new Factory)
+    $factory = (new Factory)
         ->withServiceAccount('/path/to/google-service-account.json')
         // The following line is optional if the project id in your credentials file
         // is identical to the subdomain of your Firebase project. If you need it,
         // make sure to replace the URL with the URL of your project.
-        ->withDatabaseUri('https://my-project.firebaseio.com')
-        ->create();
+        ->withDatabaseUri('https://my-project.firebaseio.com');
 
-    $database = $firebase->getDatabase();
+    $database = $factory->createDatabase();
 
     $newPost = $database
         ->getReference('blog/posts')

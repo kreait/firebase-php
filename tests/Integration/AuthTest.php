@@ -25,7 +25,7 @@ class AuthTest extends IntegrationTestCase
 
     protected function setUp()
     {
-        $this->auth = self::$firebase->getAuth();
+        $this->auth = self::$factory->createAuth();
     }
 
     public function testCreateAnonymousUser()

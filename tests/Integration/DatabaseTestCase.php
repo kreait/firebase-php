@@ -23,7 +23,7 @@ abstract class DatabaseTestCase extends IntegrationTestCase
     {
         parent::setUpBeforeClass();
 
-        self::$db = self::$firebase->getDatabase();
+        self::$db = self::$factory->createDatabase();
         self::$refPrefix = 'tests';
 
         self::$db->getReference(self::$refPrefix)->remove();

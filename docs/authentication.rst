@@ -33,9 +33,10 @@ your Firebase project, that instance has complete read and write access to your 
 
         use Kreait\Firebase\Factory;
 
-        $firebase = (new Factory)
-            ->withServiceAccount('/path/to/google-service-account.json')
-            ->create();
+        $factory = (new Factory)
+            ->withServiceAccount('/path/to/google-service-account.json');
+
+        $auth = $factory->createAuth();
 
 .. note::
     Your service only has as much access as the service account used to authenticate it. For example, you can limit
@@ -45,6 +46,9 @@ your Firebase project, that instance has complete read and write access to your 
 ************************************
 Authenticate with limited privileges
 ************************************
+
+.. note::
+    This currently only applies to connections made to the Realtime Database.
 
 As a best practice, a service should have access to only the resources it needs.
 
@@ -81,10 +85,10 @@ with the identifier you used to represent your service in your Security Rules.
 
     use Kreait\Firebase\Factory;
 
-    $firebase = (new Factory)
+    $database = (new Factory)
         ->withServiceAccount('/path/to/google-service-account.json')
         ->asUser('my-service-worker')
-        ->create();
+        ->createDatabase();
 
 
 ***************************
@@ -99,7 +103,7 @@ These tokens expire after one hour.
 
     $uid = 'some-uid';
 
-    $customToken = $firebase->getAuth()->createCustomToken($uid);
+    $customToken = $factory->createAuth()->createCustomToken($uid);
 
 You can also optionally specify additional claims to be included in the custom token. For example,
 below, a premiumAccount field has been added to the custom token, which will be available in
@@ -112,7 +116,7 @@ the auth / request.auth objects in your Security Rules:
         'premiumAccount' => true
     ];
 
-    $customToken = $firebase->getAuth()->createCustomToken($uid, $additionalClaims);
+    $customToken = $factory->createAuth()->createCustomToken($uid, $additionalClaims);
 
     $customTokenString = (string) $customToken;
 
@@ -150,14 +154,16 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
 
     $idTokenString = '...';
 
+    $auth = $factory->createAuth();
+
     try {
-        $verifiedIdToken = $firebase->getAuth()->verifyIdToken($idTokenString);
+        $verifiedIdToken = $auth->verifyIdToken($idTokenString);
     } catch (InvalidToken $e) {
         echo $e->getMessage();
     }
 
     $uid = $verifiedIdToken->getClaim('sub');
-    $user = $firebase->getAuth()->getUser($uid);
+    $user = $auth->getUser($uid);
 
 ``Auth::verifyIdToken()`` accepts up to three parameters:
 
@@ -202,10 +208,9 @@ Here is an example using the `Symfony Cache Component <https://symfony.com/doc/c
 
         $cache = new FilesystemCache();
 
-        $firebase = (new Factory)
+        $factory = (new Factory)
             ->withServiceAccount('/path/to/google-service-account.json')
-            ->withVerifierCache($cache)
-            ->create();
+            ->withVerifierCache($cache);
 
 .. rubric:: References
 

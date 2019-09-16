@@ -52,41 +52,40 @@ class FactoryTest extends UnitTestCase
 
     public function testItAcceptsACustomDefaultStorageBucket()
     {
-        $firebase = $this->factory->withDefaultStorageBucket('foo')->create();
+        $storage = $this->factory->withDefaultStorageBucket('foo')->createStorage();
 
-        $this->assertSame('foo', $firebase->getStorage()->getBucket()->name());
+        $this->assertSame('foo', $storage->getBucket()->name());
     }
 
     public function testItAcceptsAServiceAccount()
     {
-        $this->factory->withServiceAccount($this->serviceAccount)->create();
+        $this->factory->withServiceAccount($this->serviceAccount);
         $this->addToAssertionCount(1);
     }
 
     public function testItAcceptsAClock()
     {
-        $this->factory->withClock(new FrozenClock(new DateTimeImmutable()))->create();
+        $this->factory->withClock(new FrozenClock(new DateTimeImmutable()));
         $this->addToAssertionCount(1);
     }
 
     public function testItAcceptsAnAuthOverride()
     {
-        $this->factory->asUser('some-uid', ['some' => 'claim'])->create();
+        $this->factory->asUser('some-uid', ['some' => 'claim']);
         $this->addToAssertionCount(1);
     }
 
     public function testItAcceptsAVerifierCache()
     {
-        $cache = $this->createMock(CacheInterface::class);
-
-        $this->factory->withVerifierCache($cache)->create();
+        $this->factory->withVerifierCache($this->createMock(CacheInterface::class));
         $this->addToAssertionCount(1);
     }
 
     public function testItAcceptsACustomHttpClientConfig()
     {
-        $this->factory->withHttpClientConfig(['key' => 'value'])->create();
-        $this->addToAssertionCount(1);
+        $apiClient = $this->factory->withHttpClientConfig(['key' => 'value'])->createApiClient();
+
+        $this->assertSame('value', $apiClient->getConfig('key'));
     }
 
     public function testItAcceptsAdditionalHttpClientMiddlewares()
@@ -94,7 +93,7 @@ class FactoryTest extends UnitTestCase
         $this->factory->withHttpClientMiddlewares([
             static function () {},
             'name' => static function () {},
-        ])->create();
+        ])->createApiClient();
 
         $this->addToAssertionCount(1);
     }
@@ -102,7 +101,7 @@ class FactoryTest extends UnitTestCase
     public function testServiceAccountDiscoveryCanBeDisabled()
     {
         $this->expectException(LogicException::class);
-        $this->factory->withDisabledAutoDiscovery()->create();
+        $this->factory->withDisabledAutoDiscovery()->createAuth();
     }
 
     public function testDynamicLinksCanBeCreatedWithoutADefaultDomain()

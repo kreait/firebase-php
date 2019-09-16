@@ -97,8 +97,10 @@ If you chose to ignore the issue, you can catch the exception and return the ID 
     use Firebase\Auth\Token\Exception\InvalidToken;
     use Firebase\Auth\Token\Exception\IssuedInTheFuture;
 
+    $auth = $factory->createAuth();
+
     try {
-        return $firebase->getAuth()->verifyIdToken($idTokenString);
+        return $auth->verifyIdToken($idTokenString);
     } catch (IssuedInTheFuture $e) {
         return $e->getToken();
     } catch (InvalidIdToken $e) {
@@ -138,11 +140,10 @@ If you need to access the Firebase/Google APIs through a proxy, you can configur
 
     use Kreait\Firebase\Factory;
 
-    $firebase = (new Factory)
+    $factory = (new Factory())
         ->withHttpClientConfig([
             'proxy' => 'tcp://<host>:<port>'
-        ])
-        ->create();
+        ]);
 
 **********************
 Debugging API requests
@@ -156,8 +157,7 @@ HTTP client config:
 
     use Kreait\Firebase\Factory;
 
-    $firebase = (new Factory)
+    $factory = (new Factory())
         ->withHttpClientConfig([
             'debug' => true
-        ])
-        ->create();
+        ]);

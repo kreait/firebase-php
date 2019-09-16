@@ -43,10 +43,10 @@ After having initialized your Firebase project instance, you can access the Dyna
 
     use Kreait\Firebase;
 
-    $firebaseFactory = new Firebase\Factory();
+    $factory = new Firebase\Factory();
 
     $dynamicLinksDomain = 'https://example.page.link';
-    $dynamicLinks = $firebaseFactory->createDynamicLinksService($dynamicLinksDomain);
+    $dynamicLinks = $factory->createDynamicLinksService($dynamicLinksDomain);
 
 
 *********************
