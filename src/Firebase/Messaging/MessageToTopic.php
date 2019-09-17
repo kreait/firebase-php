@@ -24,6 +24,11 @@ class MessageToTopic extends CloudMessage
      */
     public static function create($topic): self
     {
+        \trigger_error(
+            __METHOD__.' is deprecated. Use \Kreait\Firebase\CloudMessage::withTarget() instead.',
+            \E_USER_DEPRECATED
+        );
+
         $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
 
         $message = static::withTarget('condition', $topic->value());
@@ -42,6 +47,11 @@ class MessageToTopic extends CloudMessage
      */
     public static function fromArray(array $data): self
     {
+        \trigger_error(
+            __METHOD__.' is deprecated. Use \Kreait\Firebase\CloudMessage::fromArray() instead.',
+            \E_USER_DEPRECATED
+        );
+
         if (!($topic = $data['topic'] ?? null)) {
             throw new InvalidArgumentException('Missing field "topic"');
         }

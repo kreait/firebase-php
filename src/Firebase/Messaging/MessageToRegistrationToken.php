@@ -24,6 +24,11 @@ class MessageToRegistrationToken extends CloudMessage
      */
     public static function create($token)
     {
+        \trigger_error(
+            __METHOD__.' is deprecated. Use \Kreait\Firebase\CloudMessage::withTarget() instead.',
+            \E_USER_DEPRECATED
+        );
+
         $token = $token instanceof RegistrationToken ? $token : RegistrationToken::fromValue($token);
 
         $message = static::withTarget('token', $token->value());
@@ -42,6 +47,11 @@ class MessageToRegistrationToken extends CloudMessage
      */
     public static function fromArray(array $data)
     {
+        \trigger_error(
+            __METHOD__.' is deprecated. Use \Kreait\Firebase\CloudMessage::fromArray() instead.',
+            \E_USER_DEPRECATED
+        );
+
         if (!($token = $data['token'] ?? null)) {
             throw new InvalidArgumentException('Missing field "token"');
         }

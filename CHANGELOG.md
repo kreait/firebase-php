@@ -1,5 +1,44 @@
 # CHANGELOG
 
+## Unreleased
+
+### Changes
+
+* Using the `Kreait\Firebase` class has been deprecated. Please instantiate the services you need directly:
+
+```php
+<?php
+
+use Kreait\Firebase;
+
+# deprecated
+$firebase = (new Firebase\Factory())
+    // ->withServiceAccount(...)
+    // ->...
+    ->create()
+;
+
+$auth = $firebase->getAuth();
+$database = $firebase->getDatabase();
+$messaging = $firebase->getMessaging();
+$remoteConfig = $firebase->getRemoteConfig();
+$storage = $firebase->getStorage();
+
+# recommended
+$factory = (new Firebase\Factory())
+    // ->withServiceAccount(...)
+    // ->...
+;
+
+$auth = $factory->createAuth();
+$database = $factory->createDatabase();
+$messaging = $factory->createMessaging();
+$remoteConfig = $factory->createRemoteConfig();
+$storage = $factory->createStorage();
+```
+
+* Calling a deprecated method will trigger a `E_USER_DEPRECATED` warning (only if PHP is configured to show them). 
+
 ## 4.32.0 - 2019-09-13
 
 ### Added

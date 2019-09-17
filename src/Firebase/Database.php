@@ -50,9 +50,7 @@ class Database
      */
     public function getReference(string $path = null): Reference
     {
-        $path = \trim((string) $path);
-
-        if ($path === '') {
+        if ($path === null || \trim($path) === '') {
             $path = '/';
         }
 
@@ -107,6 +105,11 @@ class Database
      */
     public function getRules(): RuleSet
     {
+        \trigger_error(
+            __METHOD__.' is deprecated. Use \Kreait\Firebase\Database::getRuleSet() instead.',
+            \E_USER_DEPRECATED
+        );
+
         return $this->getRuleSet();
     }
 

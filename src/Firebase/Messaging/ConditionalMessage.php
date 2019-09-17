@@ -24,6 +24,11 @@ class ConditionalMessage extends CloudMessage
      */
     public static function create($condition): self
     {
+        \trigger_error(
+            __METHOD__.' is deprecated. Use \Kreait\Firebase\CloudMessage::withTarget() instead.',
+            \E_USER_DEPRECATED
+        );
+
         $condition = $condition instanceof Condition ? $condition : Condition::fromValue($condition);
 
         $message = static::withTarget('condition', $condition->value());
@@ -42,6 +47,11 @@ class ConditionalMessage extends CloudMessage
      */
     public static function fromArray(array $data)
     {
+        \trigger_error(
+            __METHOD__.' is deprecated. Use \Kreait\Firebase\CloudMessage::fromArray() instead.',
+            \E_USER_DEPRECATED
+        );
+
         if (!($condition = $data['condition'] ?? null)) {
             throw new InvalidArgumentException('Missing field "condition"');
         }

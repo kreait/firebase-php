@@ -83,6 +83,8 @@ class ApiClient
      */
     public function signupNewUser(string $email = null, string $password = null): ResponseInterface
     {
+        \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
+
         return $this->createUser(
             Request\CreateUser::new()
                 ->withUnverifiedEmail($email)
@@ -142,6 +144,8 @@ class ApiClient
      */
     public function enableUser($uid): ResponseInterface
     {
+        \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
+
         return $this->updateUser(
             Request\UpdateUser::new()
                 ->withUid($uid)
@@ -162,6 +166,8 @@ class ApiClient
      */
     public function disableUser($uid): ResponseInterface
     {
+        \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
+
         return $this->updateUser(
             Request\UpdateUser::new()
                 ->withUid($uid)
@@ -191,6 +197,8 @@ class ApiClient
      */
     public function changeUserPassword(string $uid, string $newPassword): ResponseInterface
     {
+        \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
+
         return $this->updateUser(
             Request\UpdateUser::new()
                 ->withUid($uid)
@@ -209,6 +217,8 @@ class ApiClient
      */
     public function changeUserEmail(string $uid, string $newEmail): ResponseInterface
     {
+        \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
+
         return $this->updateUser(
             Request\UpdateUser::new()
                 ->withUid($uid)
