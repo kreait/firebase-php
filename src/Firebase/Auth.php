@@ -23,6 +23,7 @@ use Kreait\Firebase\Value\PhoneNumber;
 use Kreait\Firebase\Value\Provider;
 use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Token;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
 class Auth
@@ -124,9 +125,7 @@ class Auth
 
         $response = $this->client->createUser($request);
 
-        $uid = JSON::decode((string) $response->getBody(), true)['localId'];
-
-        return $this->getUser($uid);
+        return $this->getUserRecordFromResponse($response);
     }
 
     /**
@@ -148,9 +147,7 @@ class Auth
 
         $response = $this->client->updateUser($request);
 
-        $uid = JSON::decode((string) $response->getBody(), true)['localId'];
-
-        return $this->getUser($uid);
+        return $this->getUserRecordFromResponse($response);
     }
 
     /**
@@ -436,9 +433,7 @@ class Auth
 
         $response = $this->client->verifyPassword((string) $email, (string) $password);
 
-        $uid = JSON::decode((string) $response->getBody(), true)['localId'];
-
-        return $this->getUser($uid);
+        return $this->getUserRecordFromResponse($response);
     }
 
     /**
@@ -475,6 +470,17 @@ class Auth
 
         $response = $this->client->unlinkProvider((string) $uid, $provider);
 
+        return $this->getUserRecordFromResponse($response);
+    }
+
+    /**
+     * Gets the user ID from the response and queries a full UserRecord object for it.
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
+    private function getUserRecordFromResponse(ResponseInterface $response): UserRecord
+    {
         $uid = JSON::decode((string) $response->getBody(), true)['localId'];
 
         return $this->getUser($uid);
