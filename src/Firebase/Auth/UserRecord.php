@@ -111,6 +111,9 @@ class UserRecord implements \JsonSerializable
         }, $data['providerUserInfo'] ?? []);
     }
 
+    /**
+     * @deprecated 4.33
+     */
     public function toArray(): array
     {
         return \get_object_vars($this);
@@ -118,12 +121,11 @@ class UserRecord implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $data = $this->toArray();
-        $data['metadata'] = $this->metadata->jsonSerialize();
+        $data = \get_object_vars($this);
 
-        if ($data['tokensValidAfterTime']) {
-            $data['tokensValidAfterTime'] = $data['tokensValidAfterTime']->format(\DATE_ATOM);
-        }
+        $data['tokensValidAfterTime'] = $this->tokensValidAfterTime
+            ? $this->tokensValidAfterTime->format(\DATE_ATOM)
+            : null;
 
         return $data;
     }

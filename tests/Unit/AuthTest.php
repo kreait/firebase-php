@@ -4,20 +4,35 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit;
 
+use DateTimeImmutable;
 use Firebase\Auth\Token\Domain\Generator;
 use Firebase\Auth\Token\Domain\Verifier;
 use Firebase\Auth\Token\Exception\IssuedInTheFuture;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Psr7\Response;
+use Kreait\Clock\FrozenClock;
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Tests\UnitTestCase;
+use Kreait\Firebase\Value\Provider;
 use Lcobucci\JWT\Token;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @internal
  */
-class AuthTest extends UnitTestCase
+final class AuthTest extends UnitTestCase
 {
+    /** @var FrozenClock */
+    private $clock;
+
+    /** @var MockHandler */
+    private $mockHandler;
+
+    /** @var ApiClient */
     private $apiClient;
+
     private $tokenGenerator;
     private $idTokenVerifier;
 
@@ -26,9 +41,12 @@ class AuthTest extends UnitTestCase
 
     protected function setUp()
     {
+        $this->mockHandler = new MockHandler();
+        $this->clock = new FrozenClock(new DateTimeImmutable());
+
         $this->tokenGenerator = $this->createMock(Generator::class);
         $this->idTokenVerifier = $this->createMock(Verifier::class);
-        $this->apiClient = $this->createMock(ApiClient::class);
+        $this->apiClient = new ApiClient(new Client(['handler' => $this->mockHandler]));
         $this->auth = new Auth($this->apiClient, $this->tokenGenerator, $this->idTokenVerifier);
     }
 
@@ -85,5 +103,87 @@ class AuthTest extends UnitTestCase
 
         $verifiedToken = $this->auth->verifyIdToken('foo', false);
         $this->assertSame($token, $verifiedToken);
+    }
+
+    public function testLinkGoogleAccountThroughIdToken()
+    {
+        $federatedData = [
+            'federatedId' => 'https://accounts.google.com/123456789012345678901',
+            'providerId' => 'google.com',
+            'email' => 'user@gmail.com',
+            'emailVerified' => true,
+            'firstName' => 'First',
+            'fullName' => 'First Last',
+            'photoUrl' => 'https://lh3.googleusercontent.com/a-/AAuE7mD3yDp6gsOr7xlNYPjP6kVVhjjQ771wdgNu29Sh=s96-c',
+            'originalEmail' => 'user@domain.tld',
+            'localId' => 'firebase-uid',
+            'displayName' => 'Display Name',
+            'idToken' => 'id-token',
+            'refreshToken' => 'refresh-token',
+            'expiresIn' => 3600,
+            'oauthAccessToken' => 'oauth-access-token',
+            'oauthIdToken' => 'oauth-id-token',
+            'rawUserInfo' => '{}',
+            'kind' => 'identitytoolkit#VerifyAssertionResponse',
+            'createdAt' => $this->clock->now()->getTimestamp(),
+        ];
+
+        $userData = [
+            'users' => [[
+                'localId' => 'firebase-uid',
+                'idToken' => 'idToken',
+                'createdAt' => $this->clock->now()->getTimestamp(),
+            ]],
+        ];
+
+        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], \json_encode($federatedData)));
+        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], \json_encode($userData)));
+
+        $result = $this->auth->linkProviderThroughIdToken(Provider::GOOGLE, 'some-id-token');
+
+        $this->assertSame('id-token', $result->idToken);
+        $this->assertSame('oauth-access-token', $result->oauthAccessToken);
+        $this->assertSame('refresh-token', $result->refreshToken);
+    }
+
+    public function testLinkGoogleAccountThroughAccessToken()
+    {
+        $federatedData = [
+            'federatedId' => 'https://accounts.google.com/123456789012345678901',
+            'providerId' => 'google.com',
+            'email' => 'user@gmail.com',
+            'emailVerified' => true,
+            'firstName' => 'First',
+            'fullName' => 'First Last',
+            'photoUrl' => 'https://lh3.googleusercontent.com/a-/AAuE7mD3yDp6gsOr7xlNYPjP6kVVhjjQ771wdgNu29Sh=s96-c',
+            'originalEmail' => 'user@domain.tld',
+            'localId' => 'firebase-uid',
+            'displayName' => 'Display Name',
+            'idToken' => 'id-token',
+            'refreshToken' => 'refresh-token',
+            'expiresIn' => 3600,
+            'oauthAccessToken' => 'oauth-access-token',
+            'oauthIdToken' => 'oauth-id-token',
+            'rawUserInfo' => '{}',
+            'kind' => 'identitytoolkit#VerifyAssertionResponse',
+            'createdAt' => $this->clock->now()->getTimestamp(),
+        ];
+
+        $userData = [
+            'users' => [[
+                'localId' => 'firebase-uid',
+                'idToken' => 'idToken',
+                'createdAt' => $this->clock->now()->getTimestamp(),
+            ]],
+        ];
+
+        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], \json_encode($federatedData)));
+        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], \json_encode($userData)));
+
+        $result = $this->auth->linkProviderThroughAccessToken(Provider::GOOGLE, 'some-access-token');
+
+        $this->assertSame('id-token', $result->idToken);
+        $this->assertSame('oauth-access-token', $result->oauthAccessToken);
+        $this->assertSame('refresh-token', $result->refreshToken);
     }
 }

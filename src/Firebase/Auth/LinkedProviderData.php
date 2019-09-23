@@ -74,13 +74,8 @@ class LinkedProviderData implements \JsonSerializable
         return $providerData;
     }
 
-    public function toArray(): array
-    {
-        return \get_object_vars($this);
-    }
-
     public function jsonSerialize()
     {
-        return $this->toArray();
+        return \get_object_vars($this);
     }
 }

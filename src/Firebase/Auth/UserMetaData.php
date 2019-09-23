@@ -31,6 +31,9 @@ class UserMetaData implements \JsonSerializable
         return $metadata;
     }
 
+    /**
+     * @deprecated 4.33
+     */
     public function toArray(): array
     {
         return \get_object_vars($this);
@@ -38,10 +41,10 @@ class UserMetaData implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        $data = $this->toArray();
+        $data = \get_object_vars($this);
 
-        $data['createdAt'] = $data['createdAt']->format(\DATE_ATOM);
-        $data['lastLoginAt'] = $data['lastLoginAt'] ? $data['lastLoginAt']->format(\DATE_ATOM) : $data['lastLoginAt'];
+        $data['createdAt'] = $this->createdAt ? $this->createdAt->format(\DATE_ATOM) : null;
+        $data['lastLoginAt'] = $this->lastLoginAt ? $this->lastLoginAt->format(\DATE_ATOM) : null;
 
         return $data;
     }
