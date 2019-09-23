@@ -17,7 +17,6 @@ use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Kreait\Firebase\Value\Provider;
 use Lcobucci\JWT\Token;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * @internal

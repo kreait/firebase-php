@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Tests\Unit\Auth;
 
 use Kreait\Firebase\Auth\UserInfo;
 use Kreait\Firebase\Tests\UnitTestCase;
-use Kreait\Firebase\Util\JSON;
 
 /**
  * @internal
@@ -20,7 +19,9 @@ class UserInfoTest extends UnitTestCase
             'providerId' => 'some-provider',
         ]);
 
-        $expected = ['uid' => 'some-uid', 'providerId' => 'some-provider'];
-        $this->assertEquals($expected, JSON::decode(JSON::encode($info), true));
+        $decoded = \json_decode(\json_encode($info), false);
+
+        $this->assertSame($info->uid, $decoded->uid);
+        $this->assertSame($info->providerId, $decoded->providerId);
     }
 }

@@ -225,10 +225,14 @@ class MessagingTest extends IntegrationTestCase
         $subscriptions = $appInstance->topicSubscriptions();
         $this->assertGreaterThan(0, $subscriptions->count());
 
+        $topicNames = [];
+
         foreach ($subscriptions as $subscription) {
-            $this->assertSame($subscription->topic()->value(), $topicName);
+            $topicNames[] = $subscription->topic()->value();
             $this->assertLessThanOrEqual(new DateTimeImmutable(), $subscription->subscribedAt());
         }
+
+        $this->assertContains($topicName, $topicNames);
 
         $this->messaging->unsubscribeFromTopic($topicName, $token);
         $this->assertFalse($this->messaging->getAppInstance($token)->isSubscribedToTopic($topicName));
