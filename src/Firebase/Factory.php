@@ -96,7 +96,7 @@ class Factory
         $factory = clone $this;
         $factory->serviceAccount = $serviceAccount;
 
-        return $factory;
+        return $factory->withDisabledAutoDiscovery();
     }
 
     public function withServiceAccountDiscoverer(Discoverer $discoverer): self

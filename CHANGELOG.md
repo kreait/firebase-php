@@ -8,6 +8,7 @@
 
 ### Changes
 
+* When using `Kreait\Firebase\Factory::withServiceAccount()` auto-discovery will be disabled.
 * Using the `Kreait\Firebase` class has been deprecated. Please instantiate the services you need directly:
 
 ```php
