@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+* It is now possible to override the HTTP Handler used for API requests ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#using-a-custom-http-handler))
+
 ### Changes
 
 * Using the `Kreait\Firebase` class has been deprecated. Please instantiate the services you need directly:

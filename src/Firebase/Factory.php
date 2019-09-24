@@ -139,18 +139,21 @@ class Factory
         return $factory;
     }
 
-    public function withHttpClientConfig(array $config): self
+    public function withHttpClientConfig(array $config = null): self
     {
         $factory = clone $this;
-        $factory->httpClientConfig = $config;
+        $factory->httpClientConfig = $config ?? [];
 
         return $factory;
     }
 
-    public function withHttpClientMiddlewares(array $middlewares): self
+    /**
+     * @param callable[]|null $middlewares
+     */
+    public function withHttpClientMiddlewares(array $middlewares = null): self
     {
         $factory = clone $this;
-        $factory->httpClientMiddlewares = $middlewares;
+        $factory->httpClientMiddlewares = $middlewares ?? [];
 
         return $factory;
     }
@@ -330,24 +333,26 @@ class Factory
     public function createApiClient(array $config = null): Client
     {
         $config = $config ?? [];
+        // If present, the config given to this method override fields passed to withHttpClientConfig()
+        $config = \array_merge($this->httpClientConfig, $config);
 
         $googleAuthTokenMiddleware = $this->createGoogleAuthTokenMiddleware();
 
-        $stack = HandlerStack::create();
-        foreach ($this->httpClientMiddlewares as $middleware) {
-            $stack->push($middleware);
-        }
-        $stack->push($googleAuthTokenMiddleware);
-        $stack->push(Middleware::responseWithSubResponses());
+        $handler = $config['handler'] ?? null;
 
-        $config = \array_merge(
-            $this->httpClientConfig,
-            $config ?? [],
-            [
-                'handler' => $stack,
-                'auth' => 'google_auth',
-            ]
-        );
+        if (!($handler instanceof HandlerStack)) {
+            $handler = HandlerStack::create($handler);
+        }
+
+        foreach ($this->httpClientMiddlewares as $middleware) {
+            $handler->push($middleware);
+        }
+
+        $handler->push($googleAuthTokenMiddleware);
+        $handler->push(Middleware::responseWithSubResponses());
+
+        $config['handler'] = $handler;
+        $config['auth'] = 'google_auth';
 
         return new Client($config);
     }
@@ -373,7 +378,10 @@ class Factory
                 'private_key' => $serviceAccount->getPrivateKey(),
             ]);
         } elseif ((new GcpMetadata())->isAvailable()) {
+            // @codeCoverageIgnoreStart
+            // We can't test this programatically when not on GCE/GCP
             $credentials = new GCECredentials();
+        // @codeCoverageIgnoreEnd
         } else {
             throw new RuntimeException('Unable to determine credentials.');
         }

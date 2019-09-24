@@ -130,3 +130,23 @@ information on how to use middlewares.
     $factory = (new Factory)
         ->withHttpClientConfig($httpConfig)
         ->withHttpClientMiddlewares($httpMiddlewares);
+
+Using a custom HTTP Handler
+===========================
+
+By default, Guzzle will choose the most appropriate HTTP handler to perform HTTP requests. You can override the handler
+by using
+
+.. code-block:: php
+
+    use Kreait\Firebase\Factory;
+    use GuzzleHttp\Handler\MockHandler;
+    use GuzzleHttp\Handler\StreamHandler;
+    use GuzzleHttp\Handler\CurlHandler;
+    use GuzzleHttp\Handler\CurlMultiHandler;
+
+    // for example (or one of the above)
+    $handler = new StreamHandler();
+
+    $factory = (new Factory)
+        ->withHttpClientConfig(['handler' => $handler]);

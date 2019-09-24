@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit;
 
 use DateTimeImmutable;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Uri;
 use Kreait\Clock\FrozenClock;
 use Kreait\Firebase\Exception\LogicException;
@@ -108,5 +109,22 @@ class FactoryTest extends UnitTestCase
     {
         $this->factory->createDynamicLinksService();
         $this->addToAssertionCount(1);
+    }
+
+    public function testCreateDatabaseAsUser()
+    {
+        $this->factory->asUser('custom-uid', ['custom' => 'claim'])->createDatabase();
+        // Not testing if the HandlerStack actually has the custom auth handler, but it's covering the code
+        // Shame on me, I'll be better in 5.x, I promise
+        $this->addToAssertionCount(1);
+    }
+
+    public function testCreateApiClientWithCustomHandlerStack()
+    {
+        $stack = HandlerStack::create();
+
+        $apiClient = $this->factory->createApiClient(['handler' => $stack]);
+
+        $this->assertSame($stack, $apiClient->getConfig('handler'));
     }
 }
