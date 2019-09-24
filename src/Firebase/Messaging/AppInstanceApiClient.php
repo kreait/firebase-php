@@ -40,7 +40,7 @@ class AppInstanceApiClient
      */
     public function subscribeToTopic($topic, array $tokens): ResponseInterface
     {
-        return $this->request('POST', '/iid/v1:batchAdd', [
+        return $this->requestApi('POST', '/iid/v1:batchAdd', [
             'json' => [
                 'to' => '/topics/'.$topic,
                 'registration_tokens' => $tokens,
@@ -57,7 +57,7 @@ class AppInstanceApiClient
      */
     public function unsubscribeFromTopic($topic, array $tokens): ResponseInterface
     {
-        return $this->request('POST', '/iid/v1:batchRemove', [
+        return $this->requestApi('POST', '/iid/v1:batchRemove', [
             'json' => [
                 'to' => '/topics/'.$topic,
                 'registration_tokens' => $tokens,
@@ -71,14 +71,14 @@ class AppInstanceApiClient
      */
     public function getAppInstance(string $registrationToken): ResponseInterface
     {
-        return $this->request('GET', '/iid/'.$registrationToken.'?details=true');
+        return $this->requestApi('GET', '/iid/'.$registrationToken.'?details=true');
     }
 
     /**
      * @throws FirebaseException
      * @throws MessagingException
      */
-    private function request(string $method, string $endpoint, array $options = null): ResponseInterface
+    private function requestApi(string $method, string $endpoint, array $options = null): ResponseInterface
     {
         try {
             return $this->client->request($method, $endpoint, $options ?? []);

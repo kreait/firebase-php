@@ -8,6 +8,7 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Request;
 use Kreait\Firebase\Exception\DatabaseApiExceptionConverter;
 use Kreait\Firebase\Exception\DatabaseException;
+use Kreait\Firebase\Http\WrappedGuzzleClient;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
@@ -16,10 +17,9 @@ use Throwable;
 /**
  * @internal
  */
-class ApiClient
+class ApiClient implements ClientInterface
 {
-    /** @var ClientInterface */
-    protected $httpClient;
+    use WrappedGuzzleClient;
 
     /** @var DatabaseApiExceptionConverter */
     protected $errorHandler;
@@ -29,7 +29,7 @@ class ApiClient
      */
     public function __construct(ClientInterface $httpClient)
     {
-        $this->httpClient = $httpClient;
+        $this->client = $httpClient;
         $this->errorHandler = new DatabaseApiExceptionConverter();
     }
 
@@ -42,7 +42,7 @@ class ApiClient
      */
     public function get($uri)
     {
-        $response = $this->request('GET', $uri);
+        $response = $this->requestApi('GET', $uri);
 
         return JSON::decode((string) $response->getBody(), true);
     }
@@ -56,7 +56,7 @@ class ApiClient
      */
     public function getWithETag($uri): array
     {
-        $response = $this->request('GET', $uri, [
+        $response = $this->requestApi('GET', $uri, [
             'headers' => [
                 'X-Firebase-ETag' => 'true',
             ],
@@ -81,7 +81,7 @@ class ApiClient
      */
     public function set($uri, $value)
     {
-        $response = $this->request('PUT', $uri, ['json' => $value]);
+        $response = $this->requestApi('PUT', $uri, ['json' => $value]);
 
         return JSON::decode((string) $response->getBody(), true);
     }
@@ -98,7 +98,7 @@ class ApiClient
      */
     public function setWithEtag($uri, $value, string $etag)
     {
-        $response = $this->request('PUT', $uri, [
+        $response = $this->requestApi('PUT', $uri, [
             'headers' => [
                 'if-match' => $etag,
             ],
@@ -117,7 +117,7 @@ class ApiClient
      */
     public function removeWithEtag($uri, string $etag)
     {
-        $this->request('DELETE', $uri, [
+        $this->requestApi('DELETE', $uri, [
             'headers' => [
                 'if-match' => $etag,
             ],
@@ -133,7 +133,7 @@ class ApiClient
      */
     public function updateRules($uri, RuleSet $ruleSet)
     {
-        $response = $this->request('PUT', $uri, [
+        $response = $this->requestApi('PUT', $uri, [
             'body' => \json_encode($ruleSet, \JSON_PRETTY_PRINT),
         ]);
 
@@ -148,7 +148,7 @@ class ApiClient
      */
     public function push($uri, $value): string
     {
-        $response = $this->request('POST', $uri, ['json' => $value]);
+        $response = $this->requestApi('POST', $uri, ['json' => $value]);
 
         return JSON::decode((string) $response->getBody(), true)['name'];
     }
@@ -160,7 +160,7 @@ class ApiClient
      */
     public function remove($uri)
     {
-        $this->request('DELETE', $uri);
+        $this->requestApi('DELETE', $uri);
     }
 
     /**
@@ -170,7 +170,7 @@ class ApiClient
      */
     public function update($uri, array $values)
     {
-        $this->request('PATCH', $uri, ['json' => $values]);
+        $this->requestApi('PATCH', $uri, ['json' => $values]);
     }
 
     /**
@@ -178,14 +178,14 @@ class ApiClient
      *
      * @throws DatabaseException
      */
-    private function request(string $method, $uri, array $options = null): ResponseInterface
+    private function requestApi(string $method, $uri, array $options = null): ResponseInterface
     {
         $options = $options ?? [];
 
         $request = new Request($method, $uri);
 
         try {
-            return $this->httpClient->send($request, $options);
+            return $this->send($request, $options);
         } catch (Throwable $e) {
             throw $this->errorHandler->convertException($e);
         }

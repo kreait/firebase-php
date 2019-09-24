@@ -5,18 +5,21 @@ declare(strict_types=1);
 namespace Kreait\Firebase\RemoteConfig;
 
 use GuzzleHttp\ClientInterface;
+use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Exception\RemoteConfigApiExceptionConverter;
+use Kreait\Firebase\Exception\RemoteConfigException;
+use Kreait\Firebase\Http\WrappedGuzzleClient;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\UriInterface;
 use Throwable;
 
 /**
  * @internal
  */
-class ApiClient
+class ApiClient implements ClientInterface
 {
-    /** @var ClientInterface */
-    private $client;
+    use WrappedGuzzleClient;
 
     /** @var RemoteConfigApiExceptionConverter */
     private $errorHandler;
@@ -30,14 +33,22 @@ class ApiClient
         $this->errorHandler = new RemoteConfigApiExceptionConverter();
     }
 
+    /**
+     * @throws FirebaseException
+     * @throws RemoteConfigException
+     */
     public function getTemplate(): ResponseInterface
     {
-        return $this->request('GET', 'remoteConfig');
+        return $this->requestApi('GET', 'remoteConfig');
     }
 
+    /**
+     * @throws FirebaseException
+     * @throws RemoteConfigException
+     */
     public function validateTemplate(Template $template): ResponseInterface
     {
-        return $this->request('PUT', 'remoteConfig', [
+        return $this->requestApi('PUT', 'remoteConfig', [
             'headers' => [
                 'Content-Type' => 'application/json; UTF-8',
                 'If-Match' => $template->etag(),
@@ -49,9 +60,13 @@ class ApiClient
         ]);
     }
 
+    /**
+     * @throws FirebaseException
+     * @throws RemoteConfigException
+     */
     public function publishTemplate(Template $template): ResponseInterface
     {
-        return $this->request('PUT', 'remoteConfig', [
+        return $this->requestApi('PUT', 'remoteConfig', [
             'headers' => [
                 'Content-Type' => 'application/json; UTF-8',
                 'If-Match' => $template->etag(),
@@ -62,6 +77,9 @@ class ApiClient
 
     /**
      * @see https://firebase.google.com/docs/reference/remote-config/rest/v1/projects.remoteConfig/listVersions
+     *
+     * @throws FirebaseException
+     * @throws RemoteConfigException
      */
     public function listVersions(FindVersions $query, string $nextPageToken = null): ResponseInterface
     {
@@ -77,7 +95,7 @@ class ApiClient
         $lastVersionNumber = $lastVersionNumber ? (string) $lastVersionNumber : null;
         $pageSize = $pageSize ? (string) $pageSize : null;
 
-        return $this->request('GET', $uri, [
+        return $this->requestApi('GET', $uri, [
             'query' => \array_filter([
                 'startTime' => $since,
                 'endTime' => $until,
@@ -88,18 +106,31 @@ class ApiClient
         ]);
     }
 
+    /**
+     * @throws FirebaseException
+     * @throws RemoteConfigException
+     */
     public function rollbackToVersion(VersionNumber $versionNumber): ResponseInterface
     {
         $uri = \rtrim((string) $this->client->getConfig('base_uri'), '/').':rollback';
 
-        return $this->request('POST', $uri, [
+        return $this->requestApi('POST', $uri, [
             'json' => [
                 'version_number' => (string) $versionNumber,
             ],
         ]);
     }
 
-    private function request($method, $uri, array $options = null)
+    /** @noinspection PhpDocMissingThrowsInspection */
+
+    /**
+     * @param string $method
+     * @param string|UriInterface $uri
+     *
+     * @throws FirebaseException
+     * @throws RemoteConfigException
+     */
+    private function requestApi($method, $uri, array $options = null): ResponseInterface
     {
         $options = $options ?? [];
 

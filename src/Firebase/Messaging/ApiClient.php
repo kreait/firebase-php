@@ -9,6 +9,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Exception\MessagingException;
+use Kreait\Firebase\Http\WrappedGuzzleClient;
 use Kreait\Firebase\Messaging\Http\Request\SendMessage;
 use Kreait\Firebase\Messaging\Http\Request\ValidateMessage;
 use Psr\Http\Message\RequestInterface;
@@ -18,10 +19,9 @@ use Throwable;
 /**
  * @internal
  */
-class ApiClient
+class ApiClient implements ClientInterface
 {
-    /** @var ClientInterface */
-    private $client;
+    use WrappedGuzzleClient;
 
     /** @var MessagingApiExceptionConverter */
     private $errorHandler;
@@ -86,12 +86,10 @@ class ApiClient
     }
 
     /**
-     * @internal
-     *
      * @throws MessagingException
      * @throws FirebaseException
      */
-    public function send(RequestInterface $request): ResponseInterface
+    public function send(RequestInterface $request, array $options = []): ResponseInterface
     {
         try {
             return $this->client->send($request);
@@ -100,9 +98,9 @@ class ApiClient
         }
     }
 
-    private function sendAsync(RequestInterface $request): PromiseInterface
+    public function sendAsync(RequestInterface $request, array $options = []): PromiseInterface
     {
-        return $this->client->sendAsync($request)
+        return $this->client->sendAsync($request, $options)
             ->then(null, function (Throwable $e) {
                 throw $this->errorHandler->convertException($e);
             });

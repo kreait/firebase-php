@@ -11,6 +11,7 @@ use Kreait\Firebase\Exception\Auth\InvalidCustomToken;
 use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Http\WrappedGuzzleClient;
 use Kreait\Firebase\Request;
 use Kreait\Firebase\Value\Provider;
 use Lcobucci\JWT\Token;
@@ -20,10 +21,9 @@ use Throwable;
 /**
  * @internal
  */
-class ApiClient
+class ApiClient implements ClientInterface
 {
-    /** @var ClientInterface */
-    private $client;
+    use WrappedGuzzleClient;
 
     /** @var AuthApiExceptionConverter */
     private $errorHandler;
@@ -49,7 +49,7 @@ class ApiClient
      */
     public function exchangeCustomTokenForIdAndRefreshToken(Token $token): ResponseInterface
     {
-        return $this->request('verifyCustomToken', [
+        return $this->requestApi('verifyCustomToken', [
             'token' => (string) $token,
             'returnSecureToken' => true,
         ]);
@@ -61,7 +61,7 @@ class ApiClient
      */
     public function createUser(Request\CreateUser $request): ResponseInterface
     {
-        return $this->request('signupNewUser', $request);
+        return $this->requestApi('signupNewUser', $request);
     }
 
     /**
@@ -70,7 +70,7 @@ class ApiClient
      */
     public function updateUser(Request\UpdateUser $request): ResponseInterface
     {
-        return $this->request('setAccountInfo', $request);
+        return $this->requestApi('setAccountInfo', $request);
     }
 
     /**
@@ -102,7 +102,7 @@ class ApiClient
      */
     public function getUserByEmail(string $email): ResponseInterface
     {
-        return $this->request('getAccountInfo', [
+        return $this->requestApi('getAccountInfo', [
             'email' => [$email],
         ]);
     }
@@ -113,7 +113,7 @@ class ApiClient
      */
     public function getUserByPhoneNumber(string $phoneNumber): ResponseInterface
     {
-        return $this->request('getAccountInfo', [
+        return $this->requestApi('getAccountInfo', [
             'phoneNumber' => [$phoneNumber],
         ]);
     }
@@ -126,7 +126,7 @@ class ApiClient
     {
         $batchSize = $batchSize ?? 1000;
 
-        return $this->request('downloadAccount', \array_filter([
+        return $this->requestApi('downloadAccount', \array_filter([
             'maxResults' => $batchSize,
             'nextPageToken' => $nextPageToken,
         ]));
@@ -182,7 +182,7 @@ class ApiClient
      */
     public function deleteUser(string $uid): ResponseInterface
     {
-        return $this->request('deleteAccount', [
+        return $this->requestApi('deleteAccount', [
             'localId' => $uid,
         ]);
     }
@@ -233,7 +233,7 @@ class ApiClient
      */
     public function getAccountInfo(string $uid): ResponseInterface
     {
-        return $this->request('getAccountInfo', [
+        return $this->requestApi('getAccountInfo', [
             'localId' => [$uid],
         ]);
     }
@@ -244,7 +244,7 @@ class ApiClient
      */
     public function verifyPassword(string $email, string $password): ResponseInterface
     {
-        return $this->request('verifyPassword', [
+        return $this->requestApi('verifyPassword', [
             'email' => $email,
             'password' => $password,
         ]);
@@ -264,7 +264,7 @@ class ApiClient
             'continueUrl' => $continueUrl,
         ]);
 
-        return $this->request('getOobConfirmationCode', $data, $headers);
+        return $this->requestApi('getOobConfirmationCode', $data, $headers);
     }
 
     /**
@@ -281,7 +281,7 @@ class ApiClient
             'continueUrl' => $continueUrl,
         ]);
 
-        return $this->request('getOobConfirmationCode', $data, $headers);
+        return $this->requestApi('getOobConfirmationCode', $data, $headers);
     }
 
     /**
@@ -290,7 +290,7 @@ class ApiClient
      */
     public function revokeRefreshTokens(string $uid): ResponseInterface
     {
-        return $this->request('setAccountInfo', [
+        return $this->requestApi('setAccountInfo', [
             'localId' => $uid,
             'validSince' => \time(),
         ]);
@@ -302,7 +302,7 @@ class ApiClient
      */
     public function unlinkProvider(string $uid, array $providers): ResponseInterface
     {
-        return $this->request('setAccountInfo', [
+        return $this->requestApi('setAccountInfo', [
             'localId' => $uid,
             'deleteProvider' => $providers,
         ]);
@@ -335,7 +335,7 @@ class ApiClient
      */
     private function linkProvider(Provider $provider, string $token, string $tokenKeyName): ResponseInterface
     {
-        return $this->request('https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp', [
+        return $this->requestApi('https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp', [
             'postBody' => \http_build_query([
                 $tokenKeyName => $token,
                 'providerId' => (string) $provider,
@@ -353,7 +353,7 @@ class ApiClient
      * @throws AuthException
      * @throws FirebaseException
      */
-    private function request(string $uri, $data, array $headers = null): ResponseInterface
+    private function requestApi(string $uri, $data, array $headers = null): ResponseInterface
     {
         if ($data instanceof \JsonSerializable && empty($data->jsonSerialize())) {
             $data = (object) []; // Will be '{}' instead of '[]' when JSON encoded
@@ -365,7 +365,7 @@ class ApiClient
         ]);
 
         try {
-            return $this->client->request('POST', $uri, $options);
+            return $this->request('POST', $uri, $options);
         } catch (Throwable $e) {
             throw $this->errorHandler->convertException($e);
         }
