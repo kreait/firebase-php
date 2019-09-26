@@ -80,9 +80,9 @@ class Messaging
     public function sendMulticast($message, $registrationTokens): MulticastSendReport
     {
         $message = $this->makeMessage($message);
-        $registrationTokens = $this->makeRegistrationTokens($registrationTokens);
+        $registrationTokens = $this->ensureNonEmptyRegistrationTokens($registrationTokens);
 
-        $request = new SendMessageToTokens($this->projectId, $message, new RegistrationTokens(...$registrationTokens));
+        $request = new SendMessageToTokens($this->projectId, $message, $registrationTokens);
         /** @var ResponseWithSubResponses $response */
         $response = $this->messagingApi->send($request);
 
@@ -142,7 +142,7 @@ class Messaging
 
     /**
      * @param string|Topic $topic
-     * @param RegistrationToken|RegistrationToken[]|string|string[] $registrationTokenOrTokens
+     * @param mixed $registrationTokenOrTokens
      *
      * @throws MessagingException
      * @throws FirebaseException
@@ -150,16 +150,16 @@ class Messaging
     public function subscribeToTopic($topic, $registrationTokenOrTokens): array
     {
         $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
-        $tokens = $this->makeRegistrationTokens($registrationTokenOrTokens);
+        $tokens = $this->ensureNonEmptyRegistrationTokens($registrationTokenOrTokens);
 
-        $response = $this->appInstanceApi->subscribeToTopic($topic, $tokens);
+        $response = $this->appInstanceApi->subscribeToTopic($topic, $tokens->asStrings());
 
         return JSON::decode((string) $response->getBody(), true);
     }
 
     /**
      * @param string|Topic $topic
-     * @param RegistrationToken|RegistrationToken[]|string|string[] $registrationTokenOrTokens
+     * @param mixed $registrationTokenOrTokens
      *
      * @throws MessagingException
      * @throws FirebaseException
@@ -167,9 +167,9 @@ class Messaging
     public function unsubscribeFromTopic($topic, $registrationTokenOrTokens): array
     {
         $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
-        $tokens = $this->makeRegistrationTokens($registrationTokenOrTokens);
+        $tokens = $this->ensureNonEmptyRegistrationTokens($registrationTokenOrTokens);
 
-        $response = $this->appInstanceApi->unsubscribeFromTopic($topic, $tokens);
+        $response = $this->appInstanceApi->unsubscribeFromTopic($topic, $tokens->asStrings());
 
         return JSON::decode((string) $response->getBody(), true);
     }
@@ -201,40 +201,6 @@ class Messaging
     }
 
     /**
-     * @param mixed $tokenOrTokens
-     *
-     * @throws InvalidArgumentException
-     *
-     * @return RegistrationToken[]
-     */
-    private function makeRegistrationTokens($tokenOrTokens): array
-    {
-        if ($tokenOrTokens instanceof RegistrationToken) {
-            return [$tokenOrTokens];
-        }
-
-        if (\is_string($tokenOrTokens)) {
-            return [RegistrationToken::fromValue($tokenOrTokens)];
-        }
-
-        $tokens = [];
-
-        foreach ($tokenOrTokens as $value) {
-            if ($value instanceof RegistrationToken) {
-                $tokens[] = $value;
-            } elseif (\is_string($value)) {
-                $tokens[] = RegistrationToken::fromValue($value);
-            }
-        }
-
-        if (empty($tokens)) {
-            throw new InvalidArgument('Invalid or empty list of registration tokens.');
-        }
-
-        return $tokens;
-    }
-
-    /**
      * @param mixed $message
      *
      * @throws InvalidArgumentException
@@ -252,5 +218,26 @@ class Messaging
         }
 
         return CloudMessage::fromArray($message);
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @throws InvalidArgument
+     */
+    private function ensureNonEmptyRegistrationTokens($value): RegistrationTokens
+    {
+        try {
+            $tokens = RegistrationTokens::fromValue($value);
+        } catch (InvalidArgumentException $e) {
+            // We have to wrap the exception for BC reasons
+            throw new InvalidArgument($e->getMessage());
+        }
+
+        if ($tokens->isEmpty()) {
+            throw new InvalidArgument('Empty list of registration tokens.');
+        }
+
+        return $tokens;
     }
 }

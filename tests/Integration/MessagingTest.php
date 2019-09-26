@@ -11,6 +11,7 @@ use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\RawMessageFromArray;
+use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 /**
@@ -219,7 +220,7 @@ class MessagingTest extends IntegrationTestCase
 
         $this->messaging->subscribeToTopic($topicName, $token);
 
-        $appInstance = $this->messaging->getAppInstance($token);
+        $appInstance = $this->messaging->getAppInstance(RegistrationToken::fromValue($token));
         $this->assertTrue($appInstance->isSubscribedToTopic($topicName));
 
         $subscriptions = $appInstance->topicSubscriptions();

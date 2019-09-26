@@ -17,7 +17,10 @@ class RegistrationTokenTest extends TestCase
      */
     public function testFromValue($expected, $value)
     {
-        $this->assertSame($expected, RegistrationToken::fromValue($value)->value());
+        $token = RegistrationToken::fromValue($value);
+
+        $this->assertSame($expected, $token->value());
+        $this->assertSame('"'.$token.'"', \json_encode($token));
     }
 
     public function valueProvider()

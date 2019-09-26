@@ -15,6 +15,7 @@ use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Tests\UnitTestCase;
+use stdClass;
 
 /**
  * @internal
@@ -58,6 +59,12 @@ class MessagingTest extends UnitTestCase
 
         $this->messaging->subscribeToTopic('topic', $tokens);
         $this->assertTrue($noExceptionHasBeenThrown = true);
+    }
+
+    public function testSubscribeToTopicWithInvalidTokens()
+    {
+        $this->expectException(InvalidArgument::class);
+        $this->messaging->subscribeToTopic('topic', new stdClass());
     }
 
     public function testSubscribeToTopicWithEmptyTokenList()
