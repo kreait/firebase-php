@@ -4,7 +4,8 @@
 
 ### Added
 
-* It is now possible to override the HTTP Handler used for API requests ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#using-a-custom-http-handler))
+* It is now possible to override the HTTP Handler used for API requests. ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#using-a-custom-http-handler))
+* You can now access your project's Firestore database. ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-firestore.html))
 
 ### Changes
 

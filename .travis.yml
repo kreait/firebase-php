@@ -31,12 +31,22 @@ jobs:
       name: "Static Analysis"
       php: "7.0"
       script:
+        - pecl install grpc
+        - composer require google/cloud-firestore:^1.8
         - vendor/bin/phpstan analyse src tests -c phpstan.neon --level=max --no-progress
     - stage: Tests
       name: "Integration tests"
       php: "7.0"
       script:
         - vendor/bin/phpunit --testsuite=integration
+      if: repo = "kreait/firebase-php" AND type != pull_request
+    - stage: Tests
+      name: "Firestore tests"
+      php: "7.0"
+      script:
+        - pecl install grpc
+        - composer require google/cloud-firestore:^1.8
+        - vendor/bin/phpunit --group=firestore
       if: repo = "kreait/firebase-php" AND type != pull_request
     - stage: Tests
       name: "Code Style checks"
@@ -52,6 +62,8 @@ jobs:
         sonarcloud:
           organization: "kreait"
       script:
+        - pecl install grpc
+        - composer require google/cloud-firestore:^1.8
         - vendor/bin/phpunit --coverage-clover=coverage-report.clover --log-junit=test-report.xml
         - sonar-scanner
       if: repo = "kreait/firebase-php" AND type != pull_request

@@ -31,6 +31,7 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 | Feature | |
 | --- | :---: |
 | [Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/admin/) | ✅ |				
+| [Cloud Firestore](https://firebase.google.com/docs/firestore) | ✅ |
 | [Cloud Storage](https://firebase.google.com/docs/storage/admin/start) | ✅ |
 | [Custom Token Minting](https://firebase.google.com/docs/auth/admin/create-custom-tokens) | ✅ |
 | [Dynamic Links](https://firebase.google.com/docs/dynamic-links/rest) | ✅ |
@@ -39,13 +40,6 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 | [Realtime Database](https://firebase.google.com/docs/database/admin/start) | ✅ |
 | [Remote Config](https://firebase.google.com/docs/remote-config/) | ✅ |
 | [User Management](https://firebase.google.com/docs/auth/admin/manage-users) | ✅ |
-
-An integration with [google/cloud-firestore](https://github.com/GoogleCloudPlatform/google-cloud-php-firestore) 
-is currently not available to avoid the need to install the `grpc` PHP extension when using this SDK.
-
-The following projects provide support for Firestore without the need to install the `grpc` PHP extension:
-- [ahsankhatri/firestore-php](https://github.com/ahsankhatri/firestore-php)
-- [morrislaptop/firestore-php](https://github.com/morrislaptop/firestore-php)
 
 ## Versions
 

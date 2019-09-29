@@ -40,6 +40,9 @@
         "phpunit/phpunit": "^6.0",
         "symfony/var-dumper": "^3.3"
     },
+    "suggest": {
+        "google/cloud-firestore": "^1.0 to use the Firestore component"
+    },
     "autoload": {
         "psr-4": {
             "Kreait\\Firebase\\": "src/Firebase"

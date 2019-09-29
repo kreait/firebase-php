@@ -37,6 +37,7 @@ User Guide
     overview
     setup
     cloud-messaging
+    cloud-firestore
     realtime-database
     authentication
     user-management

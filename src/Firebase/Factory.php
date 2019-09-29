@@ -13,6 +13,8 @@ use Google\Auth\Credentials\GCECredentials;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\Middleware\AuthTokenMiddleware;
 use Google\Cloud\Core\ServiceBuilder;
+use Google\Cloud\Firestore\FirestoreClient;
+use Google\Cloud\Storage\StorageClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use function GuzzleHttp\Psr7\uri_for;
@@ -28,9 +30,20 @@ use Kreait\Firebase\Value\Url;
 use Kreait\GcpMetadata;
 use Psr\Http\Message\UriInterface;
 use Psr\SimpleCache\CacheInterface;
+use Throwable;
 
 class Factory
 {
+    const API_CLIENT_SCOPES = [
+        'https://www.googleapis.com/auth/iam',
+        'https://www.googleapis.com/auth/cloud-platform',
+        'https://www.googleapis.com/auth/firebase',
+        'https://www.googleapis.com/auth/firebase.database',
+        'https://www.googleapis.com/auth/firebase.messaging',
+        'https://www.googleapis.com/auth/firebase.remoteconfig',
+        'https://www.googleapis.com/auth/userinfo.email',
+    ];
+
     /**
      * @var UriInterface|null
      */
@@ -330,6 +343,48 @@ class Factory
         return DynamicLinks::withApiClient($apiClient);
     }
 
+    public function createFirestore(array $firestoreClientConfig = null): Firestore
+    {
+        $client = $this->createFirestoreClient($firestoreClientConfig);
+
+        return Firestore::withFirestoreClient($client);
+    }
+
+    private function createFirestoreClient(array $config = null): FirestoreClient
+    {
+        $config = $config ?: [];
+
+        try {
+            return $this->getGoogleCloudServiceBuilder()->firestore($config);
+            // @codeCoverageIgnoreStart
+        } catch (Throwable $e) {
+            throw new RuntimeException('Unable to create a FirestoreClient: '.$e->getMessage(), $e->getCode(), $e);
+        }
+        // @codeCoverageIgnoreEnd
+    }
+
+    public function createStorage(array $storageClientConfig = null): Storage
+    {
+        $storageClientConfig = $storageClientConfig ?: [];
+
+        $client = $this->createStorageClient($storageClientConfig);
+
+        return new Storage($client, $this->getStorageBucketName());
+    }
+
+    private function createStorageClient(array $config = null): StorageClient
+    {
+        $config = $config ?: [];
+
+        try {
+            return $this->getGoogleCloudServiceBuilder()->storage($config);
+            // @codeCoverageIgnoreStart
+        } catch (Throwable $e) {
+            throw new RuntimeException('Unable to create a StorageClient: '.$e->getMessage(), $e->getCode(), $e);
+        }
+        // @codeCoverageIgnoreEnd
+    }
+
     public function createApiClient(array $config = null): Client
     {
         $config = $config ?? [];
@@ -361,18 +416,8 @@ class Factory
     {
         $serviceAccount = $this->getServiceAccount();
 
-        $scopes = [
-            'https://www.googleapis.com/auth/iam',
-            'https://www.googleapis.com/auth/cloud-platform',
-            'https://www.googleapis.com/auth/firebase',
-            'https://www.googleapis.com/auth/firebase.database',
-            'https://www.googleapis.com/auth/firebase.messaging',
-            'https://www.googleapis.com/auth/firebase.remoteconfig',
-            'https://www.googleapis.com/auth/userinfo.email',
-        ];
-
         if ($serviceAccount->hasClientId() && $serviceAccount->hasPrivateKey()) {
-            $credentials = new ServiceAccountCredentials($scopes, [
+            $credentials = new ServiceAccountCredentials(self::API_CLIENT_SCOPES, [
                 'client_email' => $serviceAccount->getClientEmail(),
                 'client_id' => $serviceAccount->getClientId(),
                 'private_key' => $serviceAccount->getPrivateKey(),
@@ -389,34 +434,32 @@ class Factory
         return new AuthTokenMiddleware($credentials);
     }
 
-    public function createStorage(): Storage
-    {
-        $storageClient = $this->getGoogleCloudServiceBuilder()->storage([
-            'projectId' => $this->getServiceAccount()->getSanitizedProjectId(),
-        ]);
-
-        return new Storage($storageClient, $this->getStorageBucketName());
-    }
-
     protected function getGoogleCloudServiceBuilder(): ServiceBuilder
     {
-        $serviceAccount = $this->getServiceAccount();
-
-        $config = [
-            'projectId' => $serviceAccount->getProjectId(),
-        ];
-
-        if ($serviceAccount->hasClientId() && $serviceAccount->hasPrivateKey()) {
-            $config = [
-                'keyFile' => [
-                    'client_email' => $serviceAccount->getClientEmail(),
-                    'client_id' => $serviceAccount->getClientId(),
-                    'private_key' => $serviceAccount->getPrivateKey(),
-                    'type' => 'service_account',
-                ],
-            ];
+        try {
+            $serviceAccount = $this->getServiceAccount();
+        } catch (LogicException $e) {
+            $serviceAccount = null;
         }
 
-        return new ServiceBuilder($config);
+        $config = [];
+
+        if ($serviceAccount && $filePath = $serviceAccount->getFilePath()) {
+            $config['keyFilePath'] = $filePath;
+        } elseif ($serviceAccount && $serviceAccount->hasClientId() && $serviceAccount->hasPrivateKey()) {
+            $config['keyFile'] = \array_filter([
+                'client_email' => $serviceAccount->getClientEmail(),
+                'client_id' => $serviceAccount->getClientId(),
+                'private_key' => $serviceAccount->getPrivateKey(),
+                'project_id' => $serviceAccount->getProjectId(),
+                'type' => 'service_account',
+            ]);
+        }
+
+        try {
+            return new ServiceBuilder($config);
+        } catch (Throwable $e) {
+            throw new RuntimeException('Unable to create a Google ServiceBuilder: '.$e->getMessage(), $e->getCode(), $e);
+        }
     }
 }
