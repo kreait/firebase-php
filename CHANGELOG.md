@@ -9,8 +9,7 @@
 
 ### Changes
 
-* When using `Kreait\Firebase\Factory::withServiceAccount()` auto-discovery will be disabled.
-* Using the `Kreait\Firebase` class has been deprecated. Please instantiate the services you need directly:
+* Using the `Kreait\Firebase` class has been deprecated. Please instantiate the services you need directly: 
 
 ```php
 <?php
@@ -43,6 +42,10 @@ $remoteConfig = $factory->createRemoteConfig();
 $storage = $factory->createStorage();
 ```
 
+* When using `Kreait\Firebase\Factory::withServiceAccount()` auto-discovery will be disabled.
+* The direct integration of [`league/flystem`](https://github.com/thephpleague/flysystem) via
+  [`superbalist/flysystem-google-storage`](https://github.com/Superbalist/flysystem-google-cloud-storage) and
+  by `\Kreait\Firebase\Storage::getFilesystem()` has been deprecated.
 * Calling a deprecated method will trigger a `E_USER_DEPRECATED` warning (only if PHP is configured to show them). 
 
 ## 4.32.0 - 2019-09-13
@@ -568,7 +571,7 @@ so existing behaviour doesn't change.
 ### New features
 
 * Added support for the Firebase Cloud Storage
-  ([Documentation](https://firebase-php.readthedocs.io/en/latest/storage.html))
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-storage.html))
 
 ## 4.0.2 - 2018-02-22
 

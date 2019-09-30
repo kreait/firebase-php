@@ -38,11 +38,11 @@ User Guide
     setup
     cloud-messaging
     cloud-firestore
+    cloud-storage
     realtime-database
     authentication
     user-management
     dynamic-links
-    storage
     remote-config
     framework-integrations
     tutorials

@@ -57,8 +57,13 @@ class Storage
         return $this->buckets[$name];
     }
 
+    /**
+     * @deprecated 4.33
+     */
     public function getFilesystem(string $bucketName = null): FilesystemInterface
     {
+        \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
+
         $bucket = $this->getBucket($bucketName);
 
         if (!\array_key_exists($name = $bucket->name(), $this->filesystems)) {
