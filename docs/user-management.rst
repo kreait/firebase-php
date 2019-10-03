@@ -277,7 +277,7 @@ Verify a password
 Verify an email address
 ***********************
 
-Unless a user verifies the email address assigned to them, their email address will be markes as ``unverified``.
+Unless a user verifies the email address assigned to them, their email address will be marked as ``unverified``.
 
 You can send a verification email to a user with the following method:
 
