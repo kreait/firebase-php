@@ -13,16 +13,6 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class NotificationTest extends UnitTestCase
 {
-    public function testCreateEmptyNotification()
-    {
-        $notification = Notification::create();
-
-        $this->assertNull($notification->title());
-        $this->assertNull($notification->body());
-        $this->assertNull($notification->imageUrl());
-        $this->assertEmpty($notification->jsonSerialize());
-    }
-
     public function testCreateWithEmptyStrings()
     {
         $notification = Notification::create('', '', '');
@@ -34,7 +24,7 @@ class NotificationTest extends UnitTestCase
 
     public function testCreateWithValidFields()
     {
-        $notification = Notification::create()
+        $notification = Notification::create('title', 'body')
             ->withTitle($title = 'My Title')
             ->withBody($body = 'My Body')
             ->withImageUrl($imageUrl = 'https://domain.tld/image.ext');
@@ -70,6 +60,7 @@ class NotificationTest extends UnitTestCase
     public function invalidDataProvider(): array
     {
         return [
+            'empty_title_and_body' => [['title' => null, 'body' => null]],
             'non_string_title' => [['title' => 1]],
             'non_string_body' => [['body' => 1]],
             'non_string_image_url' => [['image' => 1]],

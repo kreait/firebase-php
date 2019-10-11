@@ -4,10 +4,29 @@
 
 ### Added
 
-* It is now possible to override the HTTP Handler used for API requests. ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#using-a-custom-http-handler))
+#### Firestore
+
 * You can now access your project's Firestore database. ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-firestore.html))
 
+#### General
+
+* It is now possible to override the HTTP Handler used for API requests. ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#using-a-custom-http-handler))
+
 ### Changes
+
+#### Messaging
+
+* When sending a message with a notification that has neither a title nor a body, the Firebase API returns an error.
+  This is now prevented by checking for the existence of one of both when creating a notification. It is still
+  possible to explicitely use empty strings.
+
+#### Storage
+
+* The direct integration of [`league/flystem`](https://github.com/thephpleague/flysystem) via
+  [`superbalist/flysystem-google-storage`](https://github.com/Superbalist/flysystem-google-cloud-storage) and
+  by `\Kreait\Firebase\Storage::getFilesystem()` has been deprecated.
+
+#### General
 
 * Using the `Kreait\Firebase` class has been deprecated. Please instantiate the services you need directly: 
 
@@ -33,6 +52,7 @@ $storage = $firebase->getStorage();
 $factory = (new Firebase\Factory())
     // ->withServiceAccount(...)
     // ->...
+    // no call to ->create()
 ;
 
 $auth = $factory->createAuth();
@@ -43,9 +63,6 @@ $storage = $factory->createStorage();
 ```
 
 * When using `Kreait\Firebase\Factory::withServiceAccount()` auto-discovery will be disabled.
-* The direct integration of [`league/flystem`](https://github.com/thephpleague/flysystem) via
-  [`superbalist/flysystem-google-storage`](https://github.com/Superbalist/flysystem-google-cloud-storage) and
-  by `\Kreait\Firebase\Storage::getFilesystem()` has been deprecated.
 * Calling a deprecated method will trigger a `E_USER_DEPRECATED` warning (only if PHP is configured to show them). 
 
 ## 4.32.0 - 2019-09-13

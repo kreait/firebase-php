@@ -23,6 +23,10 @@ class Notification implements \JsonSerializable
         $this->title = $title;
         $this->body = $body;
         $this->imageUrl = $imageUrl;
+
+        if ($this->title === null && $this->body === null) {
+            throw new InvalidArgumentException('The title and body of a notification cannot both be NULL');
+        }
     }
 
     public static function create(string $title = null, string $body = null, string $imageUrl = null): self
