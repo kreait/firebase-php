@@ -12,7 +12,6 @@ use Firebase\Auth\Token\Verifier;
 use Google\Auth\Credentials\GCECredentials;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\Middleware\AuthTokenMiddleware;
-use Google\Cloud\Core\ServiceBuilder;
 use Google\Cloud\Firestore\FirestoreClient;
 use Google\Cloud\Storage\StorageClient;
 use GuzzleHttp\Client;
@@ -353,14 +352,13 @@ class Factory
     private function createFirestoreClient(array $config = null): FirestoreClient
     {
         $config = $config ?: [];
+        $config = \array_merge($this->googleClientAuthConfig(), $config);
 
         try {
-            return $this->getGoogleCloudServiceBuilder()->firestore($config);
-            // @codeCoverageIgnoreStart
+            return new FirestoreClient($config);
         } catch (Throwable $e) {
             throw new RuntimeException('Unable to create a FirestoreClient: '.$e->getMessage(), $e->getCode(), $e);
         }
-        // @codeCoverageIgnoreEnd
     }
 
     public function createStorage(array $storageClientConfig = null): Storage
@@ -375,14 +373,13 @@ class Factory
     private function createStorageClient(array $config = null): StorageClient
     {
         $config = $config ?: [];
+        $config = \array_merge($this->googleClientAuthConfig(), $config);
 
         try {
-            return $this->getGoogleCloudServiceBuilder()->storage($config);
-            // @codeCoverageIgnoreStart
+            return new StorageClient($config);
         } catch (Throwable $e) {
             throw new RuntimeException('Unable to create a StorageClient: '.$e->getMessage(), $e->getCode(), $e);
         }
-        // @codeCoverageIgnoreEnd
     }
 
     public function createApiClient(array $config = null): Client
@@ -434,7 +431,7 @@ class Factory
         return new AuthTokenMiddleware($credentials);
     }
 
-    protected function getGoogleCloudServiceBuilder(): ServiceBuilder
+    protected function googleClientAuthConfig(): array
     {
         try {
             $serviceAccount = $this->getServiceAccount();
@@ -456,10 +453,6 @@ class Factory
             ]);
         }
 
-        try {
-            return new ServiceBuilder($config);
-        } catch (Throwable $e) {
-            throw new RuntimeException('Unable to create a Google ServiceBuilder: '.$e->getMessage(), $e->getCode(), $e);
-        }
+        return $config;
     }
 }

@@ -1,5 +1,15 @@
 # CHANGELOG
 
+### Unreleased
+
+### Changes
+
+#### Internal
+
+* Storage and Firestore clients are now instantiated directly instead of relying on the `ServiceBuilder` class that
+  comes with the `google/cloud-core` package. This enables the usage of `google/cloud-core` versions smaller than
+  `1.19` (for example in older projects that can't use newer versions)
+
 ## 4.33.0 - 2019-10-11
 
 ### Added

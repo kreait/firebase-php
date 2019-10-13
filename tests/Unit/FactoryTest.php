@@ -14,6 +14,7 @@ use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\SimpleCache\CacheInterface;
+use RuntimeException;
 
 /**
  * @internal
@@ -56,6 +57,14 @@ class FactoryTest extends UnitTestCase
         $storage = $this->factory->withDefaultStorageBucket('foo')->createStorage();
 
         $this->assertSame('foo', $storage->getBucket()->name());
+    }
+
+    public function testItRejectsAnInvalidStorageConfiguration()
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessageRegExp('/Unable to create a StorageClient.*/');
+
+        $this->factory->createStorage(['keyFilePath' => 'foo']);
     }
 
     public function testItAcceptsAServiceAccount()
