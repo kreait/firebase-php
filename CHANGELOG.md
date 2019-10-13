@@ -10,7 +10,7 @@
   comes with the `google/cloud-core` package. This enables the usage of `google/cloud-core` versions smaller than
   `1.19` (for example in older projects that can't use newer versions)
 
-## 4.33.0 - 2019-10-11
+## 4.34.0 - 2019-10-13
 
 ### Added
 
