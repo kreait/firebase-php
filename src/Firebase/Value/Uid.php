@@ -7,9 +7,6 @@ namespace Kreait\Firebase\Value;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value;
 
-/**
- * @internal
- */
 class Uid implements \JsonSerializable, Value
 {
     /**

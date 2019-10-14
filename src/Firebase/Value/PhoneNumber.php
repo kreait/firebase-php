@@ -10,9 +10,6 @@ use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 
-/**
- * @internal
- */
 class PhoneNumber implements \JsonSerializable, Value
 {
     /**

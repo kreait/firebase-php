@@ -10,9 +10,6 @@ use Kreait\Firebase\Value;
 use Psr\Http\Message\UriInterface;
 use Throwable;
 
-/**
- * @internal
- */
 class Url implements \JsonSerializable, Value
 {
     /**
