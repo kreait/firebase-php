@@ -191,20 +191,15 @@ class Factory
      * @deprecated 4.33 Use the component-specific create*() methods instead.
      * @see createAuth()
      * @see createDatabase()
+     * @see createFirestore()
      * @see createMessaging()
      * @see createRemoteConfig()
      * @see createStorage()
      */
     public function create(): Firebase
     {
-        $database = $this->createDatabase();
-        $auth = $this->createAuth();
-        $storage = $this->createStorage();
-        $remoteConfig = $this->createRemoteConfig();
-        $messaging = $this->createMessaging();
-
         /* @noinspection PhpInternalEntityUsedInspection */
-        return new Firebase($database, $auth, $storage, $remoteConfig, $messaging);
+        return new Firebase($this);
     }
 
     protected function getServiceAccount(): ServiceAccount

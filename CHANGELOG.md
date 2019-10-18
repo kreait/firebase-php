@@ -11,6 +11,7 @@
 * Storage and Firestore clients are now instantiated directly instead of relying on the `ServiceBuilder` class that
   comes with the `google/cloud-core` package. This enables the usage of `google/cloud-core` versions smaller than
   `1.19` (for example in older projects that can't use newer versions)
+* `Kreait\Firebase\Factory` is now injected into `Kreait\Firebase` instead of each individual component.
 
 ## 4.34.0 - 2019-10-13
 
