@@ -197,11 +197,6 @@ class Factory
      */
     public function create(): Firebase
     {
-        \trigger_error(
-            __METHOD__.' is deprecated. Use the component-specific create*() methods instead.',
-            \E_USER_DEPRECATED
-        );
-
         $database = $this->createDatabase();
         $auth = $this->createAuth();
         $storage = $this->createStorage();

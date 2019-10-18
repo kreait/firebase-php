@@ -4,6 +4,8 @@
 
 ### Changes
 
+* Removed deprecation warnings (`E_USER_DEPRECATED`) when using `Kreait\Firebase` and `Kreait\Firebase\Factory` 
+
 #### Internal
 
 * Storage and Firestore clients are now instantiated directly instead of relying on the `ServiceBuilder` class that

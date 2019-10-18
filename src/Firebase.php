@@ -60,11 +60,6 @@ class Firebase
      */
     public function getDatabase(): Database
     {
-        \trigger_error(
-            __METHOD__.' is deprecated. Use \Kreait\Firebase\Factory::createDatabase() instead.',
-            \E_USER_DEPRECATED
-        );
-
         return $this->database;
     }
 
@@ -74,11 +69,6 @@ class Firebase
      */
     public function getAuth(): Auth
     {
-        \trigger_error(
-            __METHOD__.' is deprecated. Use \Kreait\Firebase\Factory::createAuth() instead.',
-            \E_USER_DEPRECATED
-        );
-
         return $this->auth;
     }
 
@@ -88,11 +78,6 @@ class Firebase
      */
     public function getStorage(): Storage
     {
-        \trigger_error(
-            __METHOD__.' is deprecated. Use \Kreait\Firebase\Factory::createStorage() instead.',
-            \E_USER_DEPRECATED
-        );
-
         return $this->storage;
     }
 
@@ -102,11 +87,6 @@ class Firebase
      */
     public function getRemoteConfig(): RemoteConfig
     {
-        \trigger_error(
-            __METHOD__.' is deprecated. Use \Kreait\Firebase\Factory::createRemoteConfig() instead.',
-            \E_USER_DEPRECATED
-        );
-
         return $this->remoteConfig;
     }
 
@@ -116,10 +96,6 @@ class Firebase
      */
     public function getMessaging(): Messaging
     {
-        \trigger_error(
-            __METHOD__.' is deprecated. Use \Kreait\Firebase\Factory::createMessaging() instead.',
-            \E_USER_DEPRECATED
-        );
 
         return $this->messaging;
     }
