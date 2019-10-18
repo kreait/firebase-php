@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### Unreleased
+## 4.35.0 - 2019-10-18
 
 ### Changes
 
@@ -13,7 +13,7 @@
   `1.19` (for example in older projects that can't use newer versions)
 * `Kreait\Firebase\Factory` is now injected into `Kreait\Firebase` instead of each individual component.
 
-## 4.35.0 - 2019-10-18
+## 4.34.0 - 2019-10-13
 
 ### Added
 
