@@ -21,7 +21,7 @@ final class ValidateMessage implements RequestInterface
         $body = stream_for(\json_encode(['message' => $message, 'validate_only' => true]));
         $headers = [
             'Content-Type' => 'application/json; charset=UTF-8',
-            'Content-Length' => \mb_strlen((string) $body),
+            'Content-Length' => $body->getSize(),
         ];
 
         $this->wrappedRequest = new Request('POST', $uri, $headers, $body);

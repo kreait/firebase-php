@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased
+
+### Bugfixes
+
+- Replaced usages of `mb_strlen()` with `Psr\Http\Message\StreamInterface::getSize()` to determine the Content-Length
+  of a request to prevent unexpected side effects [#348](https://github.com/kreait/firebase-php/pull/348).
+
 ## 4.35.0 - 2019-10-18
 
 ### Changes
