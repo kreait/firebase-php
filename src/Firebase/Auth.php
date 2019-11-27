@@ -445,7 +445,7 @@ class Auth
      * - EXPIRED_OOB_CODE: The action code has expired.
      * - INVALID_OOB_CODE: The action code is invalid. This can happen if the code is malformed, expired, or has already been used.
      *
-     * @param string $oobCode
+     * @param string $oobCode The email action code sent to the user's email for resetting the password.
      * @return mixed
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
@@ -456,6 +456,29 @@ class Auth
         $response = $this->client->verifyPasswordResetCode($oobCode);
 
         return JSON::decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Confirm the reset password
+     *
+     * 4 errors code possible:
+     * - OPERATION_NOT_ALLOWED: Password sign-in is disabled for this project.
+     * - EXPIRED_OOB_CODE: The action code has expired.
+     * - INVALID_OOB_CODE: The action code is invalid. This can happen if the code is malformed, expired, or has already been used.
+     * - USER_DISABLED: The user account has been disabled by an administrator.
+     *
+     * @param string $oobCode The email action code sent to the user's email for resetting the password.
+     * @param string $newPassword The user's new password.
+     * @return mixed
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     * @see https://firebase.google.com/docs/reference/rest/auth#section-confirm-reset-password
+     */
+    public function confirmPasswordReset(string $oobCode, string $newPassword)
+    {
+        $response = $this->client->confirmPasswordReset($oobCode, $newPassword);
+
+        return JSON::decode((string)$response->getBody(), true);
     }
 
     /**
