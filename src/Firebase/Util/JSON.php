@@ -31,8 +31,7 @@ class JSON
 
         $json = \json_encode($value, $options, $depth);
         if (\json_last_error() !== \JSON_ERROR_NONE) {
-            throw new InvalidArgumentException(
-                'json_encode error: '.\json_last_error_msg());
+            throw new InvalidArgumentException('json_encode error: '.\json_last_error_msg());
         }
 
         return $json;
@@ -60,8 +59,7 @@ class JSON
     {
         $data = \json_decode($json, $assoc ?? false, $depth ?? 512, $options ?? 0);
         if (\json_last_error() !== \JSON_ERROR_NONE) {
-            throw new InvalidArgumentException(
-                'json_decode error: '.\json_last_error_msg());
+            throw new InvalidArgumentException('json_decode error: '.\json_last_error_msg());
         }
 
         return $data;

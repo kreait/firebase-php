@@ -50,7 +50,7 @@ class ApiClient implements ClientInterface
     public function exchangeCustomTokenForIdAndRefreshToken(Token $token): ResponseInterface
     {
         return $this->requestApi('verifyCustomToken', [
-            'token' => (string)$token,
+            'token' => (string) $token,
             'returnSecureToken' => true,
         ]);
     }
@@ -76,15 +76,15 @@ class ApiClient implements ClientInterface
     /**
      * @throws AuthException
      * @throws FirebaseException
+     *
      * @deprecated 4.2.0
      * @see ApiClient::createUser()
      *
      * @codeCoverageIgnore
-     *
      */
     public function signupNewUser(string $email = null, string $password = null): ResponseInterface
     {
-        \trigger_error(__METHOD__ . ' is deprecated.', \E_USER_DEPRECATED);
+        \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
 
         return $this->createUser(
             Request\CreateUser::new()
@@ -139,13 +139,13 @@ class ApiClient implements ClientInterface
      *
      * @throws AuthException
      * @throws FirebaseException
-     * @see ApiClient::updateUser()
      *
+     * @see ApiClient::updateUser()
      * @deprecated 4.2.0
      */
     public function enableUser($uid): ResponseInterface
     {
-        \trigger_error(__METHOD__ . ' is deprecated.', \E_USER_DEPRECATED);
+        \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
 
         return $this->updateUser(
             Request\UpdateUser::new()
@@ -161,13 +161,13 @@ class ApiClient implements ClientInterface
      *
      * @throws AuthException
      * @throws FirebaseException
+     *
      * @deprecated 4.2.0
      * @see ApiClient::updateUser()
-     *
      */
     public function disableUser($uid): ResponseInterface
     {
-        \trigger_error(__METHOD__ . ' is deprecated.', \E_USER_DEPRECATED);
+        \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
 
         return $this->updateUser(
             Request\UpdateUser::new()
@@ -190,15 +190,15 @@ class ApiClient implements ClientInterface
     /**
      * @throws AuthException
      * @throws FirebaseException
+     *
      * @deprecated 4.2.0
      * @see ApiClient::updateUser()
      *
      * @codeCoverageIgnore
-     *
      */
     public function changeUserPassword(string $uid, string $newPassword): ResponseInterface
     {
-        \trigger_error(__METHOD__ . ' is deprecated.', \E_USER_DEPRECATED);
+        \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
 
         return $this->updateUser(
             Request\UpdateUser::new()
@@ -210,15 +210,15 @@ class ApiClient implements ClientInterface
     /**
      * @throws AuthException
      * @throws FirebaseException
+     *
      * @deprecated 4.2.0
      * @see ApiClient::updateUser()
      *
      * @codeCoverageIgnore
-     *
      */
     public function changeUserEmail(string $uid, string $newEmail): ResponseInterface
     {
-        \trigger_error(__METHOD__ . ' is deprecated.', \E_USER_DEPRECATED);
+        \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
 
         return $this->updateUser(
             Request\UpdateUser::new()
@@ -285,22 +285,22 @@ class ApiClient implements ClientInterface
     }
 
     /**
-     * @param string $oobCode The email action code sent to the user's email for resetting the password.
-     * @return ResponseInterface
+     * @param string $oobCode the email action code sent to the user's email for resetting the password
+     *
      * @throws AuthException
      * @throws FirebaseException
      */
     public function verifyPasswordResetCode(string $oobCode): ResponseInterface
     {
         return $this->requestApi('resetPassword', [
-            'oobCode' => $oobCode
+            'oobCode' => $oobCode,
         ]);
     }
 
     /**
-     * @param string $oobCode The email action code sent to the user's email for resetting the password.
-     * @param string $newPassword The user's new password.
-     * @return ResponseInterface
+     * @param string $oobCode the email action code sent to the user's email for resetting the password
+     * @param string $newPassword the user's new password
+     *
      * @throws AuthException
      * @throws FirebaseException
      */
@@ -308,7 +308,7 @@ class ApiClient implements ClientInterface
     {
         return $this->requestApi('resetPassword', [
             'oobCode' => $oobCode,
-            'newPassword' => $newPassword
+            'newPassword' => $newPassword,
         ]);
     }
 
@@ -366,7 +366,7 @@ class ApiClient implements ClientInterface
         return $this->requestApi('https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp', [
             'postBody' => \http_build_query([
                 $tokenKeyName => $token,
-                'providerId' => (string)$provider,
+                'providerId' => (string) $provider,
             ]),
             'returnSecureToken' => true,
             'returnIdpCredential' => true,
@@ -384,7 +384,7 @@ class ApiClient implements ClientInterface
     private function requestApi(string $uri, $data, array $headers = null): ResponseInterface
     {
         if ($data instanceof \JsonSerializable && empty($data->jsonSerialize())) {
-            $data = (object)[]; // Will be '{}' instead of '[]' when JSON encoded
+            $data = (object) []; // Will be '{}' instead of '[]' when JSON encoded
         }
 
         $options = \array_filter([

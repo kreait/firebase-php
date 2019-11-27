@@ -41,9 +41,7 @@ class FromEnvironmentVariable
         try {
             return (new FromPath($path))();
         } catch (ServiceAccountDiscoveryFailed $e) {
-            throw new ServiceAccountDiscoveryFailed(
-                \sprintf('%s, but has errors: %s', $msg, $e->getMessage())
-            );
+            throw new ServiceAccountDiscoveryFailed(\sprintf('%s, but has errors: %s', $msg, $e->getMessage()));
         }
     }
 

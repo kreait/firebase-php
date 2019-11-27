@@ -35,11 +35,7 @@ class TagColor
         $value = \mb_strtoupper($value);
 
         if (!\in_array($value, self::VALID_COLORS, true)) {
-            throw new InvalidArgumentException(
-                \sprintf(
-                    'Invalid tag color "%s". Supported colors are "%s".',
-                    $value, \implode('", "', self::VALID_COLORS)
-            ));
+            throw new InvalidArgumentException(\sprintf('Invalid tag color "%s". Supported colors are "%s".', $value, \implode('", "', self::VALID_COLORS)));
         }
 
         $this->value = $value;
