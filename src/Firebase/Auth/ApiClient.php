@@ -285,6 +285,19 @@ class ApiClient implements ClientInterface
     }
 
     /**
+     * @param string $oobCode The email action code sent to the user's email for resetting the password.
+     * @return ResponseInterface
+     * @throws AuthException
+     * @throws FirebaseException
+     */
+    public function verifyPasswordResetCode(string $oobCode): ResponseInterface
+    {
+        return $this->requestApi('resetPassword', [
+            'oobCode' => $oobCode
+        ]);
+    }
+
+    /**
      * @throws AuthException
      * @throws FirebaseException
      */

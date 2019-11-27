@@ -438,6 +438,27 @@ class Auth
     }
 
     /**
+     * Verifies password reset code
+     *
+     * 3 errors code possible if the oobCode is invalid:
+     * - OPERATION_NOT_ALLOWED: Password sign-in is disabled for this project.
+     * - EXPIRED_OOB_CODE: The action code has expired.
+     * - INVALID_OOB_CODE: The action code is invalid. This can happen if the code is malformed, expired, or has already been used.
+     *
+     * @param string $oobCode
+     * @return mixed
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     * @see https://firebase.google.com/docs/reference/rest/auth#section-verify-password-reset-code
+     */
+    public function verifyPasswordResetCode(string $oobCode)
+    {
+        $response = $this->client->verifyPasswordResetCode($oobCode);
+
+        return JSON::decode((string) $response->getBody(), true);
+    }
+
+    /**
      * Revokes all refresh tokens for the specified user identified by the uid provided.
      * In addition to revoking all refresh tokens for a user, all ID tokens issued
      * before revocation will also be revoked on the Auth backend. Any request with an
