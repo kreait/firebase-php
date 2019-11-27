@@ -11,7 +11,9 @@ use Kreait\Firebase\Exception\Auth\AuthError;
 use Kreait\Firebase\Exception\Auth\CredentialsMismatch;
 use Kreait\Firebase\Exception\Auth\EmailExists;
 use Kreait\Firebase\Exception\Auth\EmailNotFound;
+use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidCustomToken;
+use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\MissingPassword;
 use Kreait\Firebase\Exception\Auth\OperationNotAllowed;
@@ -119,6 +121,22 @@ class AuthApiExceptionConverter
 
         if (\mb_stripos($message, 'federated_user_id_already_linked') !== false) {
             return new ProviderLinkFailed('This credential is already associated with a different user account.', $code, $e);
+        }
+
+        if (\mb_stripos($message, 'USER_DISABLED') !== false) {
+            return new UserDisabled('The user account has been disabled by an administrator.', $code, $e);
+        }
+
+        if (\mb_stripos($message, 'OPERATION_NOT_ALLOWED') !== false) {
+            return new OperationNotAllowed('Operation not allowed.', $code, $e);
+        }
+
+        if (\mb_stripos($message, 'EXPIRED_OOB_CODE') !== false) {
+            return new ExpiredOobCode('The action code has expired.', $code, $e);
+        }
+
+        if (\mb_stripos($message, 'INVALID_OOB_CODE') !== false) {
+            return new InvalidOobCode('The action code is invalid. This can happen if the code is malformed, expired, or has already been used.', $code, $e);
         }
 
         return new AuthError($message, $code, $e);
