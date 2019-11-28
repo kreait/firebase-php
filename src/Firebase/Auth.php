@@ -72,9 +72,9 @@ class Auth
     {
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
 
-        $response = $this->client->getAccountInfo((string) $uid);
+        $response = $this->client->getAccountInfo((string)$uid);
 
-        $data = JSON::decode((string) $response->getBody(), true);
+        $data = JSON::decode((string)$response->getBody(), true);
 
         if (empty($data['users'][0])) {
             throw new UserNotFound("No user with uid '{$uid}' found.");
@@ -84,10 +84,10 @@ class Auth
     }
 
     /**
-     * @throws Exception\AuthException
+     * @return Generator|UserRecord[]
      * @throws Exception\FirebaseException
      *
-     * @return Generator|UserRecord[]
+     * @throws Exception\AuthException
      */
     public function listUsers(int $maxResults = 1000, int $batchSize = 1000): Generator
     {
@@ -96,9 +96,9 @@ class Auth
 
         do {
             $response = $this->client->downloadAccount($batchSize, $pageToken);
-            $result = JSON::decode((string) $response->getBody(), true);
+            $result = JSON::decode((string)$response->getBody(), true);
 
-            foreach ((array) ($result['users'] ?? []) as $userData) {
+            foreach ((array)($result['users'] ?? []) as $userData) {
                 yield UserRecord::fromResponseData($userData);
 
                 if (++$count === $maxResults) {
@@ -177,9 +177,9 @@ class Auth
     {
         $email = $email instanceof Email ? $email : new Email($email);
 
-        $response = $this->client->getUserByEmail((string) $email);
+        $response = $this->client->getUserByEmail((string)$email);
 
-        $data = JSON::decode((string) $response->getBody(), true);
+        $data = JSON::decode((string)$response->getBody(), true);
 
         if (empty($data['users'][0])) {
             throw new UserNotFound("No user with email '{$email}' found.");
@@ -198,9 +198,9 @@ class Auth
     {
         $phoneNumber = $phoneNumber instanceof PhoneNumber ? $phoneNumber : new PhoneNumber($phoneNumber);
 
-        $response = $this->client->getUserByPhoneNumber((string) $phoneNumber);
+        $response = $this->client->getUserByPhoneNumber((string)$phoneNumber);
 
-        $data = JSON::decode((string) $response->getBody(), true);
+        $data = JSON::decode((string)$response->getBody(), true);
 
         if (empty($data['users'][0])) {
             throw new UserNotFound("No user with phone number '{$phoneNumber}' found.");
@@ -276,7 +276,7 @@ class Auth
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
 
         try {
-            $this->client->deleteUser((string) $uid);
+            $this->client->deleteUser((string)$uid);
         } catch (UserNotFound $e) {
             throw new UserNotFound("No user with uid '{$uid}' found.");
         }
@@ -292,14 +292,14 @@ class Auth
     public function sendEmailVerification($uid, $continueUrl = null, string $locale = null)
     {
         if ($continueUrl !== null) {
-            $continueUrl = (string) $continueUrl;
+            $continueUrl = (string)$continueUrl;
         }
 
         $response = $this->client->exchangeCustomTokenForIdAndRefreshToken(
             $this->createCustomToken($uid)
         );
 
-        $idToken = JSON::decode((string) $response->getBody(), true)['idToken'];
+        $idToken = JSON::decode((string)$response->getBody(), true)['idToken'];
 
         $this->client->sendEmailVerification($idToken, $continueUrl, $locale);
     }
@@ -314,12 +314,12 @@ class Auth
     public function sendPasswordResetEmail($email, $continueUrl = null, string $locale = null)
     {
         if ($continueUrl !== null) {
-            $continueUrl = (string) $continueUrl;
+            $continueUrl = (string)$continueUrl;
         }
 
-        $email = $email instanceof Email ? $email : new Email((string) $email);
+        $email = $email instanceof Email ? $email : new Email((string)$email);
 
-        $this->client->sendPasswordResetEmail((string) $email, (string) $continueUrl, $locale);
+        $this->client->sendPasswordResetEmail((string)$email, (string)$continueUrl, $locale);
     }
 
     /**
@@ -374,8 +374,11 @@ class Auth
      * @throws Exception\FirebaseException
      * @throws Exception\AuthException
      */
-    public function verifyIdToken($idToken, bool $checkIfRevoked = false, /* @deprecated */ bool $allowTimeInconsistencies = null): Token
-    {
+    public function verifyIdToken(
+        $idToken,
+        bool $checkIfRevoked = false,
+        /* @deprecated */ bool $allowTimeInconsistencies = null
+    ): Token {
         // @codeCoverageIgnoreStart
         if (\is_bool($allowTimeInconsistencies)) {
             // @see https://github.com/firebase/firebase-admin-dotnet/pull/29
@@ -397,7 +400,7 @@ class Auth
 
         if ($checkIfRevoked) {
             $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->getClaim('auth_time'));
-            $tokenAuthenticatedAt = $tokenAuthenticatedAt->modify('-'.$leewayInSeconds.' seconds');
+            $tokenAuthenticatedAt = $tokenAuthenticatedAt->modify('-' . $leewayInSeconds . ' seconds');
 
             $validSince = $this->getUser($verifiedToken->getClaim('sub'))->tokensValidAfterTime;
 
@@ -421,18 +424,18 @@ class Auth
      * @param Email|string $email
      * @param ClearTextPassword|string $password
      *
-     * @throws InvalidPassword if the given password does not match the given email address
+     * @return UserRecord if the combination of email and password is correct
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      *
-     * @return UserRecord if the combination of email and password is correct
+     * @throws InvalidPassword if the given password does not match the given email address
      */
     public function verifyPassword($email, $password): UserRecord
     {
         $email = $email instanceof Email ? $email : new Email($email);
         $password = $password instanceof ClearTextPassword ? $password : new ClearTextPassword($password);
 
-        $response = $this->client->verifyPassword((string) $email, (string) $password);
+        $response = $this->client->verifyPassword((string)$email, (string)$password);
 
         return $this->getUserRecordFromResponse($response);
     }
@@ -458,11 +461,11 @@ class Auth
     {
         $response = $this->client->verifyPasswordResetCode($oobCode);
 
-        return JSON::decode((string) $response->getBody(), true);
+        return JSON::decode((string)$response->getBody(), true);
     }
 
     /**
-     * Confirm the reset password.
+     * Reset the user password with the oobCode.
      *
      * 4 errors code possible:
      * - OPERATION_NOT_ALLOWED: Password sign-in is disabled for this project.
@@ -472,21 +475,23 @@ class Auth
      *
      * @param string $oobCode the email action code sent to the user's email for resetting the password
      * @param mixed $newPassword the user's new password
+     * @param bool $invalidateTokens Invalidate tokens issued with the previous password
      *
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
-     *
-     * @return mixed
-     *
      * @see https://firebase.google.com/docs/reference/rest/auth#section-confirm-reset-password
      */
-    public function confirmPasswordReset(string $oobCode, $newPassword)
+    public function resetPasswordWithActionCode(string $oobCode, $newPassword, bool $invalidateTokens = true)
     {
         $newPassword = $newPassword instanceof ClearTextPassword ? $newPassword : new ClearTextPassword($$newPassword);
 
         $response = $this->client->confirmPasswordReset($oobCode, $newPassword);
 
-        return JSON::decode((string) $response->getBody(), true);
+        $email = JSON::decode((string)$response->getBody(), true)['email'] ?? null;
+
+        if ($invalidateTokens && $email) {
+            $this->revokeRefreshTokens($this->getUserByEmail($email)->uid);
+        }
     }
 
     /**
@@ -504,7 +509,7 @@ class Auth
     {
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
 
-        $this->client->revokeRefreshTokens((string) $uid);
+        $this->client->revokeRefreshTokens((string)$uid);
     }
 
     /**
@@ -519,9 +524,9 @@ class Auth
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
         $provider = \array_map(static function ($provider) {
             return $provider instanceof Provider ? $provider : new Provider($provider);
-        }, (array) $provider);
+        }, (array)$provider);
 
-        $response = $this->client->unlinkProvider((string) $uid, $provider);
+        $response = $this->client->unlinkProvider((string)$uid, $provider);
 
         return $this->getUserRecordFromResponse($response);
     }
@@ -544,7 +549,7 @@ class Auth
 
         return LinkedProviderData::fromResponseData(
             $this->getUserRecordFromResponse($response),
-            JSON::decode((string) $response->getBody(), true)
+            JSON::decode((string)$response->getBody(), true)
         );
     }
 
@@ -566,7 +571,7 @@ class Auth
 
         return LinkedProviderData::fromResponseData(
             $this->getUserRecordFromResponse($response),
-            JSON::decode((string) $response->getBody(), true)
+            JSON::decode((string)$response->getBody(), true)
         );
     }
 
@@ -578,7 +583,7 @@ class Auth
      */
     private function getUserRecordFromResponse(ResponseInterface $response): UserRecord
     {
-        $uid = JSON::decode((string) $response->getBody(), true)['localId'];
+        $uid = JSON::decode((string)$response->getBody(), true)['localId'];
 
         return $this->getUser($uid);
     }
