@@ -133,20 +133,19 @@ class ApiClient implements ClientInterface
     }
 
     /**
+     * @deprecated 4.2.0
+     * @see ApiClient::updateUser()
+     *
      * @param mixed $uid
      *
      * @codeCoverageIgnore
      *
      * @throws AuthException
      * @throws FirebaseException
-     *
-     * @see ApiClient::updateUser()
-     * @deprecated 4.2.0
      */
     public function enableUser($uid): ResponseInterface
     {
         \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
-
         return $this->updateUser(
             Request\UpdateUser::new()
                 ->withUid($uid)
@@ -159,16 +158,15 @@ class ApiClient implements ClientInterface
      *
      * @codeCoverageIgnore
      *
-     * @throws AuthException
-     * @throws FirebaseException
-     *
      * @deprecated 4.2.0
      * @see ApiClient::updateUser()
+     *
+     * @throws AuthException
+     * @throws FirebaseException
      */
     public function disableUser($uid): ResponseInterface
     {
         \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
-
         return $this->updateUser(
             Request\UpdateUser::new()
                 ->withUid($uid)
@@ -188,18 +186,17 @@ class ApiClient implements ClientInterface
     }
 
     /**
-     * @throws AuthException
-     * @throws FirebaseException
-     *
      * @deprecated 4.2.0
      * @see ApiClient::updateUser()
      *
      * @codeCoverageIgnore
+     *
+     * @throws AuthException
+     * @throws FirebaseException
      */
     public function changeUserPassword(string $uid, string $newPassword): ResponseInterface
     {
         \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
-
         return $this->updateUser(
             Request\UpdateUser::new()
                 ->withUid($uid)
@@ -208,24 +205,24 @@ class ApiClient implements ClientInterface
     }
 
     /**
-     * @throws AuthException
-     * @throws FirebaseException
-     *
      * @deprecated 4.2.0
      * @see ApiClient::updateUser()
      *
      * @codeCoverageIgnore
+     *
+     * @throws AuthException
+     * @throws FirebaseException
      */
     public function changeUserEmail(string $uid, string $newEmail): ResponseInterface
     {
         \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
-
         return $this->updateUser(
             Request\UpdateUser::new()
                 ->withUid($uid)
                 ->withEmail($newEmail)
         );
     }
+
 
     /**
      * @throws AuthException

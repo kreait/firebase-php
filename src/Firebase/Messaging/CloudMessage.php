@@ -62,7 +62,10 @@ class CloudMessage implements Message
         $new = new static();
 
         if (\count(\array_intersect(\array_keys($data), MessageTarget::TYPES)) > 1) {
-            throw new InvalidArgument('A message can only have one of the following targets: '.\implode(', ', MessageTarget::TYPES));
+            throw new InvalidArgument(
+                'A message can only have one of the following targets: '
+                .\implode(', ', MessageTarget::TYPES)
+            );
         }
 
         if ($targetValue = $data[MessageTarget::CONDITION] ?? null) {
