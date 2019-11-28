@@ -123,19 +123,11 @@ class AuthApiExceptionConverter
             return new ProviderLinkFailed('This credential is already associated with a different user account.', $code, $e);
         }
 
-        if (\mb_stripos($message, 'USER_DISABLED') !== false) {
-            return new UserDisabled('The user account has been disabled by an administrator.', $code, $e);
-        }
-
-        if (\mb_stripos($message, 'OPERATION_NOT_ALLOWED') !== false) {
-            return new OperationNotAllowed('Operation not allowed.', $code, $e);
-        }
-
-        if (\mb_stripos($message, 'EXPIRED_OOB_CODE') !== false) {
+        if (\mb_stripos($message, 'expired_oob_code') !== false) {
             return new ExpiredOobCode('The action code has expired.', $code, $e);
         }
 
-        if (\mb_stripos($message, 'INVALID_OOB_CODE') !== false) {
+        if (\mb_stripos($message, 'invalid_oob_code') !== false) {
             return new InvalidOobCode('The action code is invalid. This can happen if the code is malformed, expired, or has already been used.', $code, $e);
         }
 
