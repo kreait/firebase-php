@@ -471,7 +471,7 @@ class Auth
      * - USER_DISABLED: The user account has been disabled by an administrator.
      *
      * @param string $oobCode the email action code sent to the user's email for resetting the password
-     * @param string $newPassword the user's new password
+     * @param mixed $newPassword the user's new password
      *
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
@@ -480,8 +480,10 @@ class Auth
      *
      * @see https://firebase.google.com/docs/reference/rest/auth#section-confirm-reset-password
      */
-    public function confirmPasswordReset(string $oobCode, string $newPassword)
+    public function confirmPasswordReset(string $oobCode, $newPassword)
     {
+        $newPassword = $newPassword instanceof ClearTextPassword ? $newPassword : new ClearTextPassword($$newPassword);
+
         $response = $this->client->confirmPasswordReset($oobCode, $newPassword);
 
         return JSON::decode((string) $response->getBody(), true);

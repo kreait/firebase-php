@@ -74,13 +74,13 @@ class ApiClient implements ClientInterface
     }
 
     /**
-     * @throws AuthException
-     * @throws FirebaseException
-     *
      * @deprecated 4.2.0
      * @see ApiClient::createUser()
      *
      * @codeCoverageIgnore
+     *
+     * @throws AuthException
+     * @throws FirebaseException
      */
     public function signupNewUser(string $email = null, string $password = null): ResponseInterface
     {
@@ -299,12 +299,12 @@ class ApiClient implements ClientInterface
 
     /**
      * @param string $oobCode the email action code sent to the user's email for resetting the password
-     * @param string $newPassword the user's new password
+     * @param mixed $newPassword the user's new password
      *
-     * @throws AuthException
+     * @return ResponseInterface
      * @throws FirebaseException
      */
-    public function confirmPasswordReset(string $oobCode, string $newPassword): ResponseInterface
+    public function confirmPasswordReset(string $oobCode, $newPassword): ResponseInterface
     {
         return $this->requestApi('resetPassword', [
             'oobCode' => $oobCode,
