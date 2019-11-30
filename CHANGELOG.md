@@ -2,15 +2,27 @@
 
 ## Unreleased
 
-- Made custom PSR-7 messages with wrapped messages immutable (until now only the wrapped messages were immutable)
-- Added PHP 7.4 to the testing matrix
-- Increased FCM batch request limit to 500 (see [firebase/firebase-admin-node#699](https://github.com/firebase/firebase-admin-node/pull/696))
+### Auth
+
+* Added methods to verify password reset codes and confirm password reset requests
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#verify-a-password-reset-code)),
+  thanks to [@joemugen](https://github.com/joemugen)
+
+### Messaging
+
+* Increased FCM batch request limit to 500 (see [firebase/firebase-admin-node#699](https://github.com/firebase/firebase-admin-node/pull/696))
+
+### General
+
+* Made custom PSR-7 messages with wrapped messages immutable (until now only the wrapped messages were immutable)
+* Added PHP 7.4 to the testing matrix
+
 
 ## 4.35.1 - 2019-11-01
 
 ### Bugfixes
 
-- Replaced usages of `mb_strlen()` with `Psr\Http\Message\StreamInterface::getSize()` to determine the Content-Length
+* Replaced usages of `mb_strlen()` with `Psr\Http\Message\StreamInterface::getSize()` to determine the Content-Length
   of a request to prevent unexpected side effects [#348](https://github.com/kreait/firebase-php/pull/348).
 
 ## 4.35.0 - 2019-10-18
@@ -918,5 +930,4 @@ to see which changes in your code are required when upgrading from 2.x to 3.0.
 
 ## 1.x
 
-* The changelog for version 1.x can be found here:
-  https://github.com/kreait/firebase-php/blob/1.x/CHANGELOG.md
+* The changelog for version 1.x can be found at https://github.com/kreait/firebase-php/blob/1.1/CHANGELOG.md

@@ -287,7 +287,7 @@ You can send a verification email to a user with the following method:
 
     // The method has an optional second parameter to specify where the user should be redirected
     // to after they have have verified their email address
-    $auth->sendEmailVerification($uid, 'https//my-application.com/email-verified');
+    $auth->sendEmailVerification($uid, 'https://my-application.com/email-verified');
 
     // The method has an optional third parameter to specifiy the locale of the sent email
     // Without it, your Firebase project's configured default language will be used
@@ -306,12 +306,59 @@ You can send an email allowing a user to reset their password with the following
 
     // The method has an optional second parameter to specify where the user should be redirected
     // to after they have have reset their password
-    $auth->sendPasswordResetEmail('user@domain.tld', 'https//my-application.com/password-reset');
+    $auth->sendPasswordResetEmail('user@domain.tld', 'https://my-application.com/password-reset');
 
     // The method has an optional third parameter to specifiy the locale of the sent email
     // Without it, your Firebase project's configured default language will be used
     $auth->sendPasswordResetEmail('user@domain.tld', null, 'fr');
 
+****************************
+Verify a password reset code
+****************************
+
+.. note::
+    Out of the box, Firebase handles the verification of password reset requests. You can use your own
+    server to handle account management emails by following the instructions on
+    `Customize account management emails and SMS messages <https://support.google.com/firebase/answer/7000714>`_
+
+.. code-block:: php
+
+    $oobCode = '...'; // Extract the OOB code from the request url (not scope of the SDK (yet :)))
+
+    try {
+        $auth->verifyPasswordResetCode($oobCode);
+    } catch (\Kreait\Firebase\Exception\Auth\ExpiredOobCode $e) {
+        // Handle the case of an expired reset code
+    } catch (\Kreait\Firebase\Exception\Auth\InvalidOobCode $e) {
+        // Handle the case of an invalid reset code
+    } catch (\Kreait\Firebase\Exception\AuthException $e) {
+        // Another error has occurred
+    }
+
+************************
+Confirm a password reset
+************************
+
+.. note::
+    Out of the box, Firebase handles the confirmation of password reset requests. You can use your own
+    server to handle account management emails by following the instructions on
+    `Customize account management emails and SMS messages <https://support.google.com/firebase/answer/7000714>`_
+
+.. code-block:: php
+
+    $oobCode = '...'; // Extract the OOB code from the request url (not scope of the SDK (yet :)))
+    $newPassword = '...';
+    $invalidatePreviousSessions = true; // default, will revoke current user refresh tokens
+
+    try {
+        $auth->confirmPasswordReset($oobCode, $newPassword, $invalidatePreviousSessions);
+    } catch (\Kreait\Firebase\Exception\Auth\ExpiredOobCode $e) {
+        // Handle the case of an expired reset code
+    } catch (\Kreait\Firebase\Exception\Auth\InvalidOobCode $e) {
+        // Handle the case of an invalid reset code
+    } catch (\Kreait\Firebase\Exception\AuthException $e) {
+        // Another error has occurred
+    }
 
 *******************************
 Invalidate user sessions [#f1]_
