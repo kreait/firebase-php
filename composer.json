@@ -35,11 +35,11 @@
         "superbalist/flysystem-google-storage": "^7.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.15",
-        "jangregor/phpstan-prophecy": "^0.1.2",
-        "phpstan/phpstan-phpunit": "^0.9.2",
-        "phpunit/phpunit": "^6.0",
-        "symfony/var-dumper": "^3.3"
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "jangregor/phpstan-prophecy": "^0.1.2|^0.2|^0.3|^0.4.2",
+        "phpstan/phpstan-phpunit": "^0.9.4|^0.11.2",
+        "phpunit/phpunit": "^6.5.14|^7.5.17",
+        "symfony/var-dumper": "^3.4|^4.4|^5.0"
     },
     "suggest": {
         "google/cloud-firestore": "^1.0 to use the Firestore component"
@@ -58,10 +58,7 @@
         }
     },
     "config": {
-        "sort-packages": true,
-        "platform": {
-            "php": "7.0.33"
-        }
+        "sort-packages": true
     },
     "extra": {
         "branch-alias": {
