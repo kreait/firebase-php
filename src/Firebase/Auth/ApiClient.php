@@ -7,7 +7,11 @@ namespace Kreait\Firebase\Auth;
 use GuzzleHttp\ClientInterface;
 use Kreait\Firebase\Exception\Auth\CredentialsMismatch;
 use Kreait\Firebase\Exception\Auth\EmailNotFound;
+use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidCustomToken;
+use Kreait\Firebase\Exception\Auth\InvalidOobCode;
+use Kreait\Firebase\Exception\Auth\OperationNotAllowed;
+use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\FirebaseException;
@@ -291,10 +295,9 @@ class ApiClient implements ClientInterface
     }
 
     /**
-     * @param string $oobCode the email action code sent to the user's email for resetting the password
-     *
-     * @throws AuthException
-     * @throws FirebaseException
+     * @throws ExpiredOobCode
+     * @throws InvalidOobCode
+     * @throws OperationNotAllowed
      */
     public function verifyPasswordResetCode(string $oobCode): ResponseInterface
     {
@@ -304,12 +307,12 @@ class ApiClient implements ClientInterface
     }
 
     /**
-     * @param string $oobCode the email action code sent to the user's email for resetting the password
-     * @param mixed $newPassword the user's new password
-     *
-     * @throws FirebaseException
+     * @throws ExpiredOobCode
+     * @throws InvalidOobCode
+     * @throws OperationNotAllowed
+     * @throws UserDisabled
      */
-    public function confirmPasswordReset(string $oobCode, $newPassword): ResponseInterface
+    public function confirmPasswordReset(string $oobCode, string $newPassword): ResponseInterface
     {
         return $this->requestApi('resetPassword', [
             'oobCode' => $oobCode,
