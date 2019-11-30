@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+- Made custom PSR-7 messages with wrapped messages immutable (until now only the wrapped messages were immutable)
+
 ## 4.35.1 - 2019-11-01
 
 ### Bugfixes
