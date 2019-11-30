@@ -45,6 +45,7 @@ return PhpCsFixer\Config::create()
         'phpdoc_order' => true,
         'phpdoc_trim_consecutive_blank_line_separation' => true,
         'simple_to_complex_string_variable' => true,
+        'single_line_throw' => false,
         'static_lambda' => true,
         'yoda_style' => false,
     ])

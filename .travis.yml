@@ -30,7 +30,7 @@ jobs:
   include:
     - stage: Tests
       name: "Static Analysis"
-      php: "7.0"
+      php: "7.4snapshot"
       script:
         - pecl install grpc
         - composer require google/cloud-firestore:^1.8
@@ -51,7 +51,7 @@ jobs:
       if: repo = "kreait/firebase-php" AND type != pull_request
     - stage: Tests
       name: "Code Style checks"
-      php: "7.3"
+      php: "7.4snapshot"
       script:
         - vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no
     - stage: Report
