@@ -13,8 +13,12 @@ use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Auth\LinkedProviderData;
 use Kreait\Firebase\Auth\UserRecord;
+use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
+use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
+use Kreait\Firebase\Exception\Auth\OperationNotAllowed;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
+use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
@@ -438,56 +442,50 @@ class Auth
     }
 
     /**
-     * Verifies password reset code.
+     * Verifies the given password reset code.
      *
-     * 3 errors code possible if the oobCode is invalid:
-     * - OPERATION_NOT_ALLOWED: Password sign-in is disabled for this project.
-     * - EXPIRED_OOB_CODE: The action code has expired.
-     * - INVALID_OOB_CODE: The action code is invalid. This can happen if the code is malformed, expired, or has already been used.
+     * @see https://firebase.google.com/docs/reference/rest/auth#section-verify-password-reset-code
      *
-     * @param string $oobCode the email action code sent to the user's email for resetting the password
-     *
+     * @throws ExpiredOobCode
+     * @throws InvalidOobCode
+     * @throws OperationNotAllowed
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      *
-     * @return mixed
-     *
-     * @see https://firebase.google.com/docs/reference/rest/auth#section-verify-password-reset-code
+     * @return void
      */
     public function verifyPasswordResetCode(string $oobCode)
     {
-        $response = $this->client->verifyPasswordResetCode($oobCode);
-
-        return JSON::decode((string) $response->getBody(), true);
+        $this->client->verifyPasswordResetCode($oobCode);
     }
 
     /**
-     * Reset the user password with the oobCode.
+     * Applies the password reset requested via the given OOB code.
      *
-     * 4 errors code possible:
-     * - OPERATION_NOT_ALLOWED: Password sign-in is disabled for this project.
-     * - EXPIRED_OOB_CODE: The action code has expired.
-     * - INVALID_OOB_CODE: The action code is invalid. This can happen if the code is malformed, expired, or has already been used.
-     * - USER_DISABLED: The user account has been disabled by an administrator.
+     * @see https://firebase.google.com/docs/reference/rest/auth#section-confirm-reset-password
      *
      * @param string $oobCode the email action code sent to the user's email for resetting the password
-     * @param mixed $newPassword the user's new password
-     * @param bool $invalidateTokens Invalidate tokens issued with the previous password
+     * @param ClearTextPassword|string $newPassword
+     * @param bool $invalidatePreviousSessions Invalidate sessions initialized with the previous credentials
      *
+     * @throws ExpiredOobCode
+     * @throws InvalidOobCode
+     * @throws OperationNotAllowed
+     * @throws UserDisabled
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      *
-     * @see https://firebase.google.com/docs/reference/rest/auth#section-confirm-reset-password
+     * @return void
      */
-    public function resetPasswordWithActionCode(string $oobCode, $newPassword, bool $invalidateTokens = true)
+    public function confirmPasswordReset(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true)
     {
-        $newPassword = $newPassword instanceof ClearTextPassword ? $newPassword : new ClearTextPassword($$newPassword);
+        $newPassword = $newPassword instanceof ClearTextPassword ? $newPassword : new ClearTextPassword($newPassword);
 
-        $response = $this->client->confirmPasswordReset($oobCode, $newPassword);
+        $response = $this->client->confirmPasswordReset($oobCode, (string) $newPassword);
 
         $email = JSON::decode((string) $response->getBody(), true)['email'] ?? null;
 
-        if ($invalidateTokens && $email) {
+        if ($invalidatePreviousSessions && $email) {
             $this->revokeRefreshTokens($this->getUserByEmail($email)->uid);
         }
     }

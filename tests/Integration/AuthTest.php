@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Auth;
+use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
@@ -372,5 +373,11 @@ class AuthTest extends IntegrationTestCase
         $this->assertNull($updatedUser->phoneNumber);
 
         $this->auth->deleteUser($user->uid);
+    }
+
+    public function testInvalidPasswordResetCode()
+    {
+        $this->expectException(InvalidOobCode::class);
+        $this->auth->verifyPasswordResetCode('invalid');
     }
 }
