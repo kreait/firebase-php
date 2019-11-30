@@ -41,15 +41,23 @@ class Messaging
     /**
      * @internal
      */
-    public function __construct(ApiClient $messagingApiClient, AppInstanceApiClient $appInstanceApiClient)
+    public function __construct(ApiClient $messagingApiClient, AppInstanceApiClient $appInstanceApiClient, string $projectId = null)
     {
         $this->messagingApi = $messagingApiClient;
         $this->appInstanceApi = $appInstanceApiClient;
+        $this->projectId = $projectId ?: $this->determineProjectIdFromMessagingApiClient($messagingApiClient);
+    }
 
-        // Extract the project ID from the client config (this will be refactored later)
-        $baseUri = (string) $this->messagingApi->getClient()->getConfig('base_uri');
-        $uriParts = \explode('/', $baseUri);
-        $this->projectId = \array_pop($uriParts);
+    private function determineProjectIdFromMessagingApiClient(ApiClient $client): string
+    {
+        $baseUri = $client->getConfig('base_uri');
+        $uriParts = \explode('/', (string) $baseUri);
+
+        if (!($projectId = \array_pop($uriParts))) {
+            throw new InvalidArgumentException("Project ID could not be determined from {$baseUri}");
+        }
+
+        return $projectId;
     }
 
     /**

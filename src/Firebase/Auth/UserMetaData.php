@@ -10,7 +10,7 @@ use Kreait\Firebase\Util\DT;
 class UserMetaData implements \JsonSerializable
 {
     /**
-     * @var DateTimeImmutable
+     * @var DateTimeImmutable|null
      */
     public $createdAt;
 

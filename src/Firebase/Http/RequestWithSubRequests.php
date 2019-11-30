@@ -66,7 +66,10 @@ final class RequestWithSubRequests implements HasSubRequests, RequestInterface
 
         $request = new Request($this->method, $uri, $headers, $this->body, $version);
 
-        $request = $request->withHeader('Content-Length', $request->getBody()->getSize());
+        $contentLength = $request->getBody()->getSize();
+        if ($contentLength !== null) {
+            $request = $request->withHeader('Content-Length', (string) $contentLength);
+        }
 
         $this->wrappedRequest = $request;
     }

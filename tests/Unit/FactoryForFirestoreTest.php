@@ -31,7 +31,7 @@ final class FactoryForFirestoreTest extends UnitTestCase
 
     public function testCreateFirestoreFromServiceAccountAsArray()
     {
-        $serviceAccount = \json_decode(\file_get_contents(self::$fixturesDir.'/ServiceAccount/valid.json'), true);
+        $serviceAccount = \json_decode((string) \file_get_contents(self::$fixturesDir.'/ServiceAccount/valid.json'), true);
 
         (new Factory())
             ->withServiceAccount($serviceAccount)

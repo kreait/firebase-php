@@ -22,7 +22,7 @@ final class RegistrationTokens implements Countable, IteratorAggregate
     /**
      * @param mixed $values
      *
-     * @throws InvalidArgument
+     * @throws InvalidArgumentException
      */
     public static function fromValue($values): self
     {

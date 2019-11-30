@@ -48,7 +48,7 @@ final class UpdateUser implements Request
         $request = self::withEditableProperties(new self(), $properties);
 
         foreach ($properties as $key => $value) {
-            switch (\mb_strtolower(\preg_replace('/[^a-z]/i', '', $key))) {
+            switch (\mb_strtolower((string) \preg_replace('/[^a-z]/i', '', (string) $key))) {
                 case 'deletephoto':
                 case 'deletephotourl':
                 case 'removephoto':

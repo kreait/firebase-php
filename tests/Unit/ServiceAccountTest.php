@@ -44,7 +44,7 @@ class ServiceAccountTest extends UnitTestCase
 
     public function testGetters()
     {
-        $data = \json_decode(\file_get_contents($this->validJsonFile), true);
+        $data = \json_decode((string) \file_get_contents($this->validJsonFile), true);
 
         $this->assertSame($data['project_id'], $this->serviceAccount->getProjectId());
         $this->assertSame($data['client_id'], $this->serviceAccount->getClientId());
@@ -54,20 +54,20 @@ class ServiceAccountTest extends UnitTestCase
 
     public function testCreateFromJsonText()
     {
-        $this->assertInstanceOf(
-            ServiceAccount::class,
-            ServiceAccount::fromValue(\file_get_contents($this->validJsonFile))
-        );
+        ServiceAccount::fromValue(\file_get_contents($this->validJsonFile));
+        $this->addToAssertionCount(1);
     }
 
     public function testCreateFromJsonFile()
     {
-        $this->assertInstanceOf(ServiceAccount::class, ServiceAccount::fromValue($this->validJsonFile));
+        ServiceAccount::fromValue($this->validJsonFile);
+        $this->addToAssertionCount(1);
     }
 
     public function testCreateFromSymlinkedJsonFile()
     {
-        $this->assertInstanceOf(ServiceAccount::class, ServiceAccount::fromValue($this->symlinkedJsonFile));
+        ServiceAccount::fromValue($this->symlinkedJsonFile);
+        $this->addToAssertionCount(1);
     }
 
     public function testCreateFromMissingFile()
@@ -102,9 +102,10 @@ class ServiceAccountTest extends UnitTestCase
 
     public function testCreateFromArray()
     {
-        $data = \json_decode(\file_get_contents($this->validJsonFile), true);
+        $data = \json_decode((string) \file_get_contents($this->validJsonFile), true);
 
-        $this->assertInstanceOf(ServiceAccount::class, ServiceAccount::fromValue($data));
+        ServiceAccount::fromValue($data);
+        $this->addToAssertionCount(1);
     }
 
     public function testCreateFromServiceAccount()

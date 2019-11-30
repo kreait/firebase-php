@@ -124,4 +124,11 @@ trait WrappedPsr7Request
 
         return $request;
     }
+
+    public function subRequests(): Requests
+    {
+        return $this->wrappedRequest instanceof HasSubRequests
+            ? $this->wrappedRequest->subRequests()
+            : new Requests();
+    }
 }

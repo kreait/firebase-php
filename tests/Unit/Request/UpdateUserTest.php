@@ -21,7 +21,7 @@ class UpdateUserTest extends TestCase
     {
         $request = UpdateUser::withProperties($properties);
 
-        $this->assertEquals($expected, \json_decode(\json_encode($request), true));
+        $this->assertEquals($expected, $request->jsonSerialize());
     }
 
     public function testWithMissingUid()

@@ -74,7 +74,7 @@ class Factory
     protected $claims = [];
 
     /**
-     * @var CacheInterface
+     * @var CacheInterface|null
      */
     protected $verifierCache;
 
@@ -315,7 +315,7 @@ class Factory
             ])
         );
 
-        return new Messaging($messagingApiClient, $appInstanceApiClient);
+        return new Messaging($messagingApiClient, $appInstanceApiClient, $projectId);
     }
 
     /**

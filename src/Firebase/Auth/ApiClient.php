@@ -86,11 +86,17 @@ class ApiClient implements ClientInterface
     {
         \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
 
-        return $this->createUser(
-            Request\CreateUser::new()
-                ->withUnverifiedEmail($email)
-                ->withClearTextPassword($password)
-        );
+        $request = Request\CreateUser::new();
+
+        if ($email) {
+            $request = $request->withUnverifiedEmail($email);
+        }
+
+        if ($password) {
+            $request = $request->withClearTextPassword($password);
+        }
+
+        return $this->createUser($request);
     }
 
     /**

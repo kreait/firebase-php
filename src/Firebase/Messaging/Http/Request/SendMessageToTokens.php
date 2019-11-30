@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Messaging\Http\Request;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Http\HasSubRequests;
-use Kreait\Firebase\Http\Requests;
 use Kreait\Firebase\Http\WrappedPsr7Request;
 use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\Messages;
@@ -38,10 +37,5 @@ final class SendMessageToTokens implements HasSubRequests, RequestInterface
         }
 
         $this->wrappedRequest = new SendMessages($projectId, new Messages(...$messages));
-    }
-
-    public function subRequests(): Requests
-    {
-        return $this->wrappedRequest->subRequests();
     }
 }

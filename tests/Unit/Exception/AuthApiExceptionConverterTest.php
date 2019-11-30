@@ -23,6 +23,7 @@ use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\Auth\WeakPassword;
 use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Tests\UnitTestCase;
+use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -73,7 +74,7 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $requestException = new RequestException(
             'Firebase Error Test',
             new Request('GET', 'https://domain.tld'),
-            new Response(400, [], \json_encode([
+            new Response(400, [], JSON::encode([
                 'error' => [
                     'errors' => [
                         'domain' => 'global',

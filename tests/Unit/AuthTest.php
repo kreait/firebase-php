@@ -15,6 +15,7 @@ use Kreait\Clock\FrozenClock;
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Tests\UnitTestCase;
+use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\Provider;
 use Lcobucci\JWT\Token;
 
@@ -135,8 +136,8 @@ final class AuthTest extends UnitTestCase
             ]],
         ];
 
-        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], \json_encode($federatedData)));
-        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], \json_encode($userData)));
+        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], JSON::encode($federatedData)));
+        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], JSON::encode($userData)));
 
         $result = $this->auth->linkProviderThroughIdToken(Provider::GOOGLE, 'some-id-token');
 
@@ -176,8 +177,8 @@ final class AuthTest extends UnitTestCase
             ]],
         ];
 
-        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], \json_encode($federatedData)));
-        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], \json_encode($userData)));
+        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], JSON::encode($federatedData)));
+        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], JSON::encode($userData)));
 
         $result = $this->auth->linkProviderThroughAccessToken(Provider::GOOGLE, 'some-access-token');
 

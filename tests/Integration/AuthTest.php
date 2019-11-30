@@ -213,11 +213,6 @@ class AuthTest extends IntegrationTestCase
         $check = $this->auth->getUser($user->uid);
 
         $this->assertSame($user->uid, $check->uid);
-        $this->assertJson(@\json_encode($check));
-        $this->assertJson(@\json_encode($check->metadata));
-        foreach ($check->providerData as $userInfo) {
-            $this->assertJson(@\json_encode($userInfo));
-        }
 
         $this->auth->deleteUser($user->uid);
     }

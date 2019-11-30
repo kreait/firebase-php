@@ -27,7 +27,8 @@ class JSONTest extends UnitTestCase
 
     public function testDecodeJson()
     {
-        $this->assertSame(\json_decode('true'), JSON::decode('true'));
+        $this->assertSame(\json_decode('true', false), JSON::decode('true', false));
+        $this->assertSame(\json_decode('true', true), JSON::decode('true', true));
     }
 
     public function testDecodeInvalidJson()

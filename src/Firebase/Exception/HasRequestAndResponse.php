@@ -81,12 +81,20 @@ trait HasRequestAndResponse
      */
     private function getPreviousIfItIsARequestException()
     {
-        if (($this instanceof Throwable) && ($previous = $this->getPrevious()) && ($previous instanceof RequestException)) {
+        if (!($this instanceof Throwable)) {
+            return null;
+        }
+
+        if (!($previous = $this->getPrevious())) {
+            return null;
+        }
+
+        if ($previous instanceof RequestException) {
             return $previous;
         }
 
         /** @var Throwable $previous */
-        if ($previous && ($prePrevious = $previous->getPrevious()) && ($prePrevious instanceof RequestException)) {
+        if (($prePrevious = $previous->getPrevious()) && ($prePrevious instanceof RequestException)) {
             return $prePrevious;
         }
 

@@ -99,7 +99,7 @@ class Parameter implements \JsonSerializable
         $parameterData = \current($data);
 
         $parameter = new self();
-        $parameter->name = \key($data);
+        $parameter->name = (string) \key($data);
         $parameter->defaultValue = DefaultValue::fromArray($parameterData['defaultValue'] ?? []);
 
         foreach ((array) ($parameterData['conditionalValues'] ?? []) as $key => $conditionalValueData) {

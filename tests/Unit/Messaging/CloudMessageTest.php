@@ -10,6 +10,7 @@ use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\FcmOptions;
 use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\Notification;
+use Kreait\Firebase\Util\JSON;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,10 +32,10 @@ class CloudMessageTest extends TestCase
 
         $changed = $original->withChangedTarget(MessageTarget::TOKEN, 'baz');
 
-        $encodedOriginal = \json_decode(\json_encode($original), true);
+        $encodedOriginal = \json_decode(JSON::encode($original), true);
         $encodedOriginal[MessageTarget::TOKEN] = 'baz';
 
-        $encodedChanged = \json_decode(\json_encode($changed), true);
+        $encodedChanged = \json_decode(JSON::encode($changed), true);
 
         $this->assertSame($encodedOriginal, $encodedChanged);
     }
@@ -49,7 +50,7 @@ class CloudMessageTest extends TestCase
         $options = FcmOptions::create()->withAnalyticsLabel($label = 'my-label');
         $message = CloudMessage::new()->withFcmOptions($options);
 
-        $messageData = \json_decode(\json_encode($message), true);
+        $messageData = \json_decode(JSON::encode($message), true);
 
         $this->assertArrayHasKey('fcm_options', $messageData);
         $this->assertArrayHasKey('analytics_label', $messageData['fcm_options']);

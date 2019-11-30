@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
@@ -33,7 +34,22 @@ class MessagingTest extends UnitTestCase
         $this->messagingApi = $this->createMock(ApiClient::class);
         $this->appInstanceApi = $this->createMock(AppInstanceApiClient::class);
 
-        $this->messaging = new Messaging($this->messagingApi, $this->appInstanceApi);
+        $this->messaging = new Messaging($this->messagingApi, $this->appInstanceApi, 'project-id');
+    }
+
+    public function testDetermineProjectIdFromClientConfig()
+    {
+        $httpClient = new Client(['base_uri' => 'https://fcm.googleapis.com/v1/projects/project-id']);
+        $apiClient = new ApiClient($httpClient);
+
+        new Messaging($apiClient, $this->appInstanceApi);
+        $this->addToAssertionCount(1);
+    }
+
+    public function testWithUndeterminableProjectId()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        new Messaging($this->messagingApi, $this->appInstanceApi);
     }
 
     public function testSendInvalidObject()

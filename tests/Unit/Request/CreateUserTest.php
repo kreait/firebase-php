@@ -17,8 +17,7 @@ class CreateUserTest extends TestCase
     public function testCreateNew()
     {
         $request = CreateUser::new();
-
-        $this->assertEquals([], \json_decode(\json_encode($request), true));
+        $this->assertEmpty($request->jsonSerialize());
     }
 
     /**
@@ -28,7 +27,7 @@ class CreateUserTest extends TestCase
     {
         $request = CreateUser::withProperties($properties);
 
-        $this->assertEquals($expected, \json_decode(\json_encode($request), true));
+        $this->assertEquals($expected, $request->jsonSerialize());
     }
 
     public function propertiesProvider(): array

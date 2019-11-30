@@ -25,24 +25,16 @@ use Psr\Http\Message\UriInterface;
  */
 class Query
 {
-    /**
-     * @var Reference
-     */
+    /** @var Reference */
     private $reference;
 
-    /**
-     * @var ApiClient
-     */
+    /** @var ApiClient */
     private $apiClient;
 
-    /**
-     * @var Filter[]
-     */
+    /** @var Filter[] */
     private $filters;
 
-    /**
-     * @var Sorter
-     */
+    /** @var Sorter|null */
     private $sorter;
 
     /**

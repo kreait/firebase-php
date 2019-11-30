@@ -15,6 +15,7 @@ use Kreait\Firebase\Exception\Database\PermissionDenied;
 use Kreait\Firebase\Exception\DatabaseApiExceptionConverter;
 use Kreait\Firebase\Exception\DatabaseException;
 use Kreait\Firebase\Tests\UnitTestCase;
+use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -83,7 +84,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $e = new ClientException(
             'Foo',
             $request = $this->createMock(RequestInterface::class),
-            $response = new Response(401, [], \json_encode(['error' => 'Permission denied']))
+            $response = new Response(401, [], JSON::encode(['error' => 'Permission denied']))
         );
 
         $result = $this->converter->convertException($e);
@@ -106,7 +107,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $e = new ClientException(
             'Foo',
             $request = $this->createMock(RequestInterface::class),
-            $response = new Response(403, [], \json_encode(['error' => 'Permission denied']))
+            $response = new Response(403, [], JSON::encode(['error' => 'Permission denied']))
         );
 
         $result = $this->converter->convertException($e);

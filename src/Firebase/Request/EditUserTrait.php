@@ -71,7 +71,7 @@ trait EditUserTrait
     protected static function withEditableProperties($request, array $properties)
     {
         foreach ($properties as $key => $value) {
-            switch (\mb_strtolower(\preg_replace('/[^a-z]/i', '', $key))) {
+            switch (\mb_strtolower((string) \preg_replace('/[^a-z]/i', '', (string) $key))) {
                 case 'uid':
                 case 'localid':
                     $request = $request->withUid($value);
@@ -197,17 +197,16 @@ trait EditUserTrait
     }
 
     /**
-     * @param string|PhoneNumber $phoneNumber
+     * @param PhoneNumber|string|null $phoneNumber
      *
      * @return static
      */
     public function withPhoneNumber($phoneNumber)
     {
-        if ($phoneNumber) {
-            $phoneNumber = $phoneNumber instanceof PhoneNumber
-                ? $phoneNumber
-                : new PhoneNumber($phoneNumber);
-        }
+        $phoneNumber = $phoneNumber !== null
+            ? new PhoneNumber((string) $phoneNumber)
+            : null;
+
         $request = clone $this;
         $request->phoneNumber = $phoneNumber;
 

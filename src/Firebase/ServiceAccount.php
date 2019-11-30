@@ -171,7 +171,11 @@ class ServiceAccount
             $file = new \SplFileObject($filePath);
             $json = $file->fread($file->getSize());
         } catch (Throwable $e) {
-            throw new InvalidArgumentException(\sprintf('%s can not be read: %s', $filePath, $e->getMessage()));
+            throw new InvalidArgumentException("{$filePath} can not be read: {$e->getMessage()}");
+        }
+
+        if (!\is_string($json)) {
+            throw new InvalidArgumentException("{$filePath} can not be read");
         }
 
         try {

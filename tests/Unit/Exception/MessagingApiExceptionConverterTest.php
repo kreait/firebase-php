@@ -16,6 +16,7 @@ use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Exception\Messaging\ServerError;
 use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
+use Kreait\Firebase\Util\JSON;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use RuntimeException;
@@ -74,7 +75,7 @@ class MessagingApiExceptionConverterTest extends TestCase
         return new RequestException(
             'Firebase Error Test',
             new Request('GET', 'https://domain.tld'),
-            new Response($code, [], \json_encode([
+            new Response($code, [], JSON::encode([
                 'error' => [
                     'errors' => [
                         'domain' => 'global',

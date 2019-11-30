@@ -94,6 +94,7 @@ class ReferenceTest extends DatabaseTestCase
         $key = $ref->push('foo')->getKey();
 
         $this->assertSame(1, $ref->getSnapshot()->numChildren());
+        $this->assertNotNull($key);
 
         $ref->getChild($key)->set(null);
 

@@ -21,7 +21,7 @@ class DatabaseTest extends DatabaseTestCase
             $this->markTestSkipped();
         }
 
-        $credentials = JSON::decode(\file_get_contents($credentialsPath), true);
+        $credentials = JSON::decode((string) \file_get_contents($credentialsPath), true);
         $credentials['project_id'] = \str_replace('-&+§', ':', $credentials['project_id']);
 
         $serviceAccount = ServiceAccount::fromArray($credentials);

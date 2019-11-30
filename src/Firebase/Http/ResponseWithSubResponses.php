@@ -47,6 +47,10 @@ final class ResponseWithSubResponses implements HasSubResponses, ResponseInterfa
             $partHeaders = $part->getHeaders();
 
             $realPartStream = \fopen('php://temp', 'rwb');
+            if (!$realPartStream) {
+                continue;
+            }
+
             \fwrite($realPartStream, $part->getBody());
             \rewind($realPartStream);
             $realPart = new StreamedPart($realPartStream);

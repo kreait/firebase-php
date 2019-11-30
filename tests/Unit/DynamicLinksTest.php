@@ -24,6 +24,7 @@ use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink\FailedToShortenLongDynamicLink;
 use Kreait\Firebase\DynamicLink\SocialMetaTagInfo;
 use Kreait\Firebase\DynamicLinks;
+use Kreait\Firebase\Util\JSON;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
@@ -53,7 +54,7 @@ final class DynamicLinksTest extends TestCase
     public function it_creates_a_dynamic_link()
     {
         $this->httpHandler->append(
-            new Response(200, [], \json_encode($responseData = [
+            new Response(200, [], JSON::encode($responseData = [
                 'shortLink' => $shortLink = $this->dynamicLinksDomain.'/'.($suffix = 'short'),
                 'previewLink' => $previewLink = $shortLink.'?d=1',
                 'warning' => $warnings = [
@@ -75,14 +76,14 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, \json_decode(\json_encode($dynamicLink), true));
+        $this->assertEquals($responseData, \json_decode(JSON::encode($dynamicLink), true));
     }
 
     /** @test */
     public function it_creates_a_dynamic_link_from_an_array_of_parameters()
     {
         $this->httpHandler->append(
-            new Response(200, [], \json_encode($responseData = [
+            new Response(200, [], JSON::encode($responseData = [
                 'shortLink' => $shortLink = $this->dynamicLinksDomain.'/'.($suffix = 'short'),
                 'previewLink' => $previewLink = $shortLink.'?d=1',
             ]))
@@ -97,7 +98,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, \json_decode(\json_encode($dynamicLink), true));
+        $this->assertEquals($responseData, \json_decode(JSON::encode($dynamicLink), true));
     }
 
     /** @test */
@@ -147,7 +148,7 @@ final class DynamicLinksTest extends TestCase
     public function it_shortens_a_lonk_link_from_an_array_of_parameters()
     {
         $this->httpHandler->append(
-            new Response(200, [], \json_encode($responseData = [
+            new Response(200, [], JSON::encode($responseData = [
                 'shortLink' => $shortLink = $this->dynamicLinksDomain.'/'.($suffix = 'short'),
                 'previewLink' => $previewLink = $shortLink.'?d=1',
             ]))
@@ -162,7 +163,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, \json_decode(\json_encode($dynamicLink), true));
+        $this->assertEquals($responseData, \json_decode(JSON::encode($dynamicLink), true));
     }
 
     /** @test */
@@ -193,7 +194,7 @@ final class DynamicLinksTest extends TestCase
             $this->service->shortenLongDynamicLink($action);
             $this->fail('An exception should have been thrown');
         } catch (FailedToShortenLongDynamicLink $e) {
-            $this->assertJsonStringEqualsJsonString(\json_encode($action), \json_encode($e->action()));
+            $this->assertJsonStringEqualsJsonString(JSON::encode($action), JSON::encode($e->action()));
             $this->assertSame($response, $e->response());
         }
     }
@@ -211,7 +212,7 @@ final class DynamicLinksTest extends TestCase
     public function it_gets_link_statistics()
     {
         $this->httpHandler->append(
-            new Response(200, [], \json_encode($responseData = [
+            new Response(200, [], JSON::encode($responseData = [
                 'linkEventStats' => [
                     ['platform' => 'ANDROID', 'count' => '10', 'event' => 'CLICK'],
                     ['platform' => 'DESKTOP', 'count' => '20', 'event' => 'CLICK'],

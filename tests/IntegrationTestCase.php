@@ -29,7 +29,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     public static function setUpBeforeClass()
     {
         if (\file_exists($testDevices = self::$fixturesDir.'/test_devices.json')) {
-            self::$registrationTokens = JSON::decode(\file_get_contents($testDevices), true);
+            self::$registrationTokens = JSON::decode((string) \file_get_contents($testDevices), true);
         }
 
         $credentialsPath = self::$fixturesDir.'/test_credentials.json';
