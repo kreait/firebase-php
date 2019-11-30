@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Made custom PSR-7 messages with wrapped messages immutable (until now only the wrapped messages were immutable)
+- Added PHP 7.4 to the testing matrix
 
 ## 4.35.1 - 2019-11-01
 
