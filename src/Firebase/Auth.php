@@ -438,6 +438,61 @@ class Auth
     }
 
     /**
+     * Verifies password reset code.
+     *
+     * 3 errors code possible if the oobCode is invalid:
+     * - OPERATION_NOT_ALLOWED: Password sign-in is disabled for this project.
+     * - EXPIRED_OOB_CODE: The action code has expired.
+     * - INVALID_OOB_CODE: The action code is invalid. This can happen if the code is malformed, expired, or has already been used.
+     *
+     * @param string $oobCode the email action code sent to the user's email for resetting the password
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     *
+     * @return mixed
+     *
+     * @see https://firebase.google.com/docs/reference/rest/auth#section-verify-password-reset-code
+     */
+    public function verifyPasswordResetCode(string $oobCode)
+    {
+        $response = $this->client->verifyPasswordResetCode($oobCode);
+
+        return JSON::decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Reset the user password with the oobCode.
+     *
+     * 4 errors code possible:
+     * - OPERATION_NOT_ALLOWED: Password sign-in is disabled for this project.
+     * - EXPIRED_OOB_CODE: The action code has expired.
+     * - INVALID_OOB_CODE: The action code is invalid. This can happen if the code is malformed, expired, or has already been used.
+     * - USER_DISABLED: The user account has been disabled by an administrator.
+     *
+     * @param string $oobCode the email action code sent to the user's email for resetting the password
+     * @param mixed $newPassword the user's new password
+     * @param bool $invalidateTokens Invalidate tokens issued with the previous password
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     *
+     * @see https://firebase.google.com/docs/reference/rest/auth#section-confirm-reset-password
+     */
+    public function resetPasswordWithActionCode(string $oobCode, $newPassword, bool $invalidateTokens = true)
+    {
+        $newPassword = $newPassword instanceof ClearTextPassword ? $newPassword : new ClearTextPassword($$newPassword);
+
+        $response = $this->client->confirmPasswordReset($oobCode, $newPassword);
+
+        $email = JSON::decode((string) $response->getBody(), true)['email'] ?? null;
+
+        if ($invalidateTokens && $email) {
+            $this->revokeRefreshTokens($this->getUserByEmail($email)->uid);
+        }
+    }
+
+    /**
      * Revokes all refresh tokens for the specified user identified by the uid provided.
      * In addition to revoking all refresh tokens for a user, all ID tokens issued
      * before revocation will also be revoked on the Auth backend. Any request with an
