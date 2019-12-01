@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.36.0 - 2019-12-01
 
 ### Auth
 
