@@ -298,7 +298,7 @@ class Factory
 
     public function createMessaging(): Messaging
     {
-        $projectId = $this->getServiceAccount()->getSanitizedProjectId();
+        $projectId = $this->getServiceAccount()->getProjectId();
 
         $messagingApiClient = new Messaging\ApiClient(
             $this->createApiClient([
