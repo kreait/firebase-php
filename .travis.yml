@@ -47,7 +47,7 @@ jobs:
       script:
         - pecl install grpc
         - composer require google/cloud-firestore:^1.8
-        - vendor/bin/phpunit --group=firestore
+        - vendor/bin/phpunit --group=Firestore
       if: repo = "kreait/firebase-php" AND type != pull_request
     - stage: Tests
       name: "Code Style checks"
