@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.36.2 - 2019-12-05
 
 - Actually increased the FCM batch request limit to 500 (not just in the documentation)
 
