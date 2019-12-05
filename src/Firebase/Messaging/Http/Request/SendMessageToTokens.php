@@ -15,7 +15,7 @@ use Psr\Http\Message\RequestInterface;
 
 final class SendMessageToTokens implements HasSubRequests, RequestInterface
 {
-    const MAX_AMOUNT_OF_TOKENS = 100;
+    const MAX_AMOUNT_OF_TOKENS = 500;
 
     use WrappedPsr7Request;
 

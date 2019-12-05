@@ -144,7 +144,7 @@ class MessagingTest extends UnitTestCase
 
     public function testAMulticastMessageCannotBeTooLarge()
     {
-        $tokens = \array_fill(0, 101, 'token');
+        $tokens = \array_fill(0, 501, 'token');
 
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->sendMulticast(CloudMessage::new(), $tokens);
@@ -152,7 +152,7 @@ class MessagingTest extends UnitTestCase
 
     public function testSendAllCannotBeTooLarge()
     {
-        $messages = \array_fill(0, 101, CloudMessage::new());
+        $messages = \array_fill(0, 501, CloudMessage::new());
 
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->sendAll($messages);

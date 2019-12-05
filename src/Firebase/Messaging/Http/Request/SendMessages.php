@@ -14,7 +14,7 @@ use Psr\Http\Message\RequestInterface;
 
 final class SendMessages implements HasSubRequests, RequestInterface
 {
-    const MAX_AMOUNT_OF_MESSAGES = 100;
+    const MAX_AMOUNT_OF_MESSAGES = 500;
 
     use WrappedPsr7Request;
 
