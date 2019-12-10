@@ -9,9 +9,14 @@ use Firebase\Auth\Token\Domain\Verifier;
 use Firebase\Auth\Token\Exception\InvalidToken;
 use Firebase\Auth\Token\Exception\UnknownKey;
 use Generator;
+use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Auth\ApiClient;
+use Kreait\Firebase\Auth\CreateActionLink;
+use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
 use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Auth\LinkedProviderData;
+use Kreait\Firebase\Auth\SendActionLink;
+use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
@@ -324,6 +329,46 @@ class Auth
         $email = $email instanceof Email ? $email : new Email((string) $email);
 
         $this->client->sendPasswordResetEmail((string) $email, (string) $continueUrl, $locale);
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToCreateActionLink
+     */
+    public function getEmailActionLink(string $type, $email, $actionCodeSettings = null): string
+    {
+        $email = $email instanceof Email ? $email : new Email((string) $email);
+
+        if ($actionCodeSettings === null) {
+            $actionCodeSettings = ActionCodeSettings::none();
+        } else {
+            $actionCodeSettings = $actionCodeSettings instanceof ActionCodeSettings ? $actionCodeSettings : ActionCodeSettings::validated($actionCodeSettings);
+        }
+
+        return (new CreateActionLink\GuzzleApiClientHandler($this->client))
+            ->handle(CreateActionLink::new($type, $email, $actionCodeSettings));
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToSendActionLink
+     */
+    public function sendEmailActionLink(string $type, $email, $actionCodeSettings = null)
+    {
+        $email = $email instanceof Email ? $email : new Email((string) $email);
+
+        if ($actionCodeSettings === null) {
+            $actionCodeSettings = ActionCodeSettings::none();
+        } else {
+            $actionCodeSettings = $actionCodeSettings instanceof ActionCodeSettings ? $actionCodeSettings : ActionCodeSettings::validated($actionCodeSettings);
+        }
+
+        (new SendActionLink\GuzzleApiClientHandler($this->client))
+            ->handle(new SendActionLink(CreateActionLink::new($type, $email, $actionCodeSettings)));
     }
 
     /**
