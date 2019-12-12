@@ -10,6 +10,7 @@ use Firebase\Auth\Token\Exception\InvalidToken;
 use Firebase\Auth\Token\Exception\UnknownKey;
 use Generator;
 use Kreait\Firebase\Auth\ActionCodeSettings;
+use Kreait\Firebase\Auth\ActionCodeSettings\Validated as ValidatedActionCodeSettings;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\CreateActionLink;
 use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
@@ -18,6 +19,7 @@ use Kreait\Firebase\Auth\LinkedProviderData;
 use Kreait\Firebase\Auth\SendActionLink;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Auth\UserRecord;
+use Kreait\Firebase\Exception\Auth\AuthError;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
@@ -179,6 +181,7 @@ class Auth
     /**
      * @param Email|string $email
      *
+     * @throws UserNotFound
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      */
@@ -292,28 +295,35 @@ class Auth
     }
 
     /**
+     * @deprecated 4.37.0 Use \Kreait\Firebase\Auth::sendEmailActionLink('VERIFY_EMAIL', $email, ['continueUrl' => $continueUrl], $locale) instead.
+     * @see sendEmailActionLink()
+     *
      * @param Uid|string $uid
      * @param UriInterface|string|null $continueUrl
      *
+     * @throws UserNotFound
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      */
     public function sendEmailVerification($uid, $continueUrl = null, string $locale = null)
     {
-        if ($continueUrl !== null) {
-            $continueUrl = (string) $continueUrl;
+        $email = $this->getUser($uid)->email;
+
+        if (!$email) {
+            throw new AuthError("The user with the ID {$uid} has no assigned email address");
         }
 
-        $response = $this->client->exchangeCustomTokenForIdAndRefreshToken(
-            $this->createCustomToken($uid)
-        );
-
-        $idToken = JSON::decode((string) $response->getBody(), true)['idToken'];
-
-        $this->client->sendEmailVerification($idToken, $continueUrl, $locale);
+        try {
+            $this->sendEmailActionLink('VERIFY_EMAIL', $email, ['continueUrl' => $continueUrl], $locale);
+        } catch (FailedToSendActionLink $e) {
+            throw new AuthError($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
+     * @deprecated 4.37.0 Use \Kreait\Firebase\Auth::sendEmailActionLink('PASSWORD_RESET', $email, ['continueUrl' => $continueUrl], $locale) instead.
+     * @see sendEmailActionLink()
+     *
      * @param Email|mixed $email
      * @param UriInterface|string|null $continueUrl
      *
@@ -322,13 +332,11 @@ class Auth
      */
     public function sendPasswordResetEmail($email, $continueUrl = null, string $locale = null)
     {
-        if ($continueUrl !== null) {
-            $continueUrl = (string) $continueUrl;
+        try {
+            $this->sendEmailActionLink('PASSWORD_RESET', $email, ['continueUrl' => $continueUrl], $locale);
+        } catch (FailedToSendActionLink $e) {
+            throw new AuthError($e->getMessage(), $e->getCode(), $e);
         }
-
-        $email = $email instanceof Email ? $email : new Email((string) $email);
-
-        $this->client->sendPasswordResetEmail((string) $email, (string) $continueUrl, $locale);
     }
 
     /**
@@ -342,9 +350,11 @@ class Auth
         $email = $email instanceof Email ? $email : new Email((string) $email);
 
         if ($actionCodeSettings === null) {
-            $actionCodeSettings = ActionCodeSettings::none();
+            $actionCodeSettings = ValidatedActionCodeSettings::empty();
         } else {
-            $actionCodeSettings = $actionCodeSettings instanceof ActionCodeSettings ? $actionCodeSettings : ActionCodeSettings::validated($actionCodeSettings);
+            $actionCodeSettings = $actionCodeSettings instanceof ActionCodeSettings
+                ? $actionCodeSettings
+                : ValidatedActionCodeSettings::fromArray($actionCodeSettings);
         }
 
         return (new CreateActionLink\GuzzleApiClientHandler($this->client))
@@ -355,20 +365,23 @@ class Auth
      * @param Email|string $email
      * @param ActionCodeSettings|array|null $actionCodeSettings
      *
+     * @throws UserNotFound
      * @throws FailedToSendActionLink
      */
-    public function sendEmailActionLink(string $type, $email, $actionCodeSettings = null)
+    public function sendEmailActionLink(string $type, $email, $actionCodeSettings = null, string $locale = null)
     {
         $email = $email instanceof Email ? $email : new Email((string) $email);
 
         if ($actionCodeSettings === null) {
-            $actionCodeSettings = ActionCodeSettings::none();
+            $actionCodeSettings = ValidatedActionCodeSettings::empty();
         } else {
-            $actionCodeSettings = $actionCodeSettings instanceof ActionCodeSettings ? $actionCodeSettings : ActionCodeSettings::validated($actionCodeSettings);
+            $actionCodeSettings = $actionCodeSettings instanceof ActionCodeSettings
+                ? $actionCodeSettings
+                : ValidatedActionCodeSettings::fromArray($actionCodeSettings);
         }
 
         (new SendActionLink\GuzzleApiClientHandler($this->client))
-            ->handle(new SendActionLink(CreateActionLink::new($type, $email, $actionCodeSettings)));
+            ->handle(new SendActionLink(CreateActionLink::new($type, $email, $actionCodeSettings), $locale));
     }
 
     /**

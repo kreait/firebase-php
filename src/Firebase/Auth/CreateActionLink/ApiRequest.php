@@ -19,11 +19,13 @@ final class ApiRequest implements RequestInterface
     {
         $uri = uri_for('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode');
 
-        $body = stream_for(\json_encode([
+        $data = [
             'requestType' => $action->type(),
             'email' => $action->email(),
             'returnOobLink' => true,
-        ]));
+        ] + $action->settings()->toArray();
+
+        $body = stream_for(\json_encode($data));
 
         $headers = \array_filter([
             'Content-Type' => 'application/json; charset=UTF-8',
