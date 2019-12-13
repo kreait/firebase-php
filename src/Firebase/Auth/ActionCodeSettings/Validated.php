@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Auth\ActionCodeSettings;
 
 use function GuzzleHttp\Psr7\uri_for;
 use Kreait\Firebase\Auth\ActionCodeSettings;
+use Kreait\Firebase\Exception\InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
 final class Validated implements ActionCodeSettings
@@ -65,12 +66,14 @@ final class Validated implements ActionCodeSettings
                 case 'androidminimumversion':
                     $instance->androidMinimumVersion = (string) $value;
                     break;
-                case 'androidInstallApp':
+                case 'androidinstallapp':
                     $instance->androidInstallApp = (bool) $value;
                     break;
                 case 'iosbundleid':
                     $instance->iOSBundleId = (string) $value;
                     break;
+                default:
+                    throw new InvalidArgumentException("Unsupported action code setting '{$key}'");
             }
         }
 

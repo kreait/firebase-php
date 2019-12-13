@@ -261,6 +261,10 @@ class ApiClient implements ClientInterface
     }
 
     /**
+     * @deprecated 4.37.0
+     *
+     * @codeCoverageIgnore
+     *
      * @throws AuthException
      * @throws FirebaseException
      */
@@ -278,6 +282,10 @@ class ApiClient implements ClientInterface
     }
 
     /**
+     * @deprecated 4.37.0
+     *
+     * @codeCoverageIgnore
+     *
      * @throws AuthException
      * @throws FirebaseException
      */
