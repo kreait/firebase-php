@@ -6,7 +6,7 @@ namespace Kreait\Firebase\Auth\ActionCodeSettings;
 
 use Kreait\Firebase\Auth\ActionCodeSettings;
 
-final class Raw implements ActionCodeSettings
+final class RawActionCodeSettings implements ActionCodeSettings
 {
     /** @var array */
     private $settings;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Auth\ActionCodeSettings;
 
-use Kreait\Firebase\Auth\ActionCodeSettings\Raw;
+use Kreait\Firebase\Auth\ActionCodeSettings\RawActionCodeSettings;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,6 +17,6 @@ final class RawTest extends TestCase
     {
         $data = ['foo' => 'bar'];
 
-        $this->assertSame($data, (new Raw($data))->toArray());
+        $this->assertSame($data, (new RawActionCodeSettings($data))->toArray());
     }
 }

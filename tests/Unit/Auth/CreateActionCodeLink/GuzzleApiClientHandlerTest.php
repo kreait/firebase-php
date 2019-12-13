@@ -7,7 +7,7 @@ namespace Kreait\Firebase\Tests\Unit\Auth\CreateActionCodeLink;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Response;
-use Kreait\Firebase\Auth\ActionCodeSettings\Validated;
+use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Auth\CreateActionLink;
 use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
 use Kreait\Firebase\Auth\CreateActionLink\GuzzleApiClientHandler;
@@ -31,7 +31,7 @@ final class GuzzleApiClientHandlerTest extends TestCase
     protected function setUp()
     {
         $this->client = $this->prophesize(ClientInterface::class);
-        $this->action = CreateActionLink::new('SOME_TYPE', new Email('user@domain.tld'), Validated::empty());
+        $this->action = CreateActionLink::new('SOME_TYPE', new Email('user@domain.tld'), ValidatedActionCodeSettings::empty());
 
         $this->handler = new GuzzleApiClientHandler($this->client->reveal());
     }

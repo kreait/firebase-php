@@ -10,7 +10,7 @@ use Firebase\Auth\Token\Exception\InvalidToken;
 use Firebase\Auth\Token\Exception\UnknownKey;
 use Generator;
 use Kreait\Firebase\Auth\ActionCodeSettings;
-use Kreait\Firebase\Auth\ActionCodeSettings\Validated as ValidatedActionCodeSettings;
+use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\CreateActionLink;
 use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;

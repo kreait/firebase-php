@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
-use Kreait\Firebase\Auth\ActionCodeSettings\Validated;
+use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Value\Email;
 
 final class CreateActionLink
@@ -44,6 +44,6 @@ final class CreateActionLink
 
     public function settings(): ActionCodeSettings
     {
-        return $this->settings ?? Validated::empty();
+        return $this->settings ?? ValidatedActionCodeSettings::empty();
     }
 }

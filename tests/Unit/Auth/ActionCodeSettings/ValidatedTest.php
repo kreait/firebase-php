@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Auth\ActionCodeSettings;
 
 use InvalidArgumentException;
-use Kreait\Firebase\Auth\ActionCodeSettings\Validated;
+use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,19 +26,19 @@ final class ValidatedTest extends TestCase
             'iOSBundleId' => 'id.tld.domain.subdomain',
         ];
 
-        $this->assertEquals($input, Validated::fromArray($input)->toArray());
+        $this->assertEquals($input, ValidatedActionCodeSettings::fromArray($input)->toArray());
     }
 
     /** @test */
     public function it_rejects_invalid_settings()
     {
         $this->expectException(InvalidArgumentException::class);
-        Validated::fromArray(['foo' => 'bar']);
+        ValidatedActionCodeSettings::fromArray(['foo' => 'bar']);
     }
 
     /** @test */
     public function it_can_be_empty()
     {
-        $this->assertEmpty(Validated::empty()->toArray());
+        $this->assertEmpty(ValidatedActionCodeSettings::empty()->toArray());
     }
 }

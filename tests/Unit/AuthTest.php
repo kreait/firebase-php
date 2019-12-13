@@ -223,7 +223,7 @@ final class AuthTest extends UnitTestCase
         return [
             'empty' => [[]],
             'array' => [['continueUrl' => 'https://domain.tld']],
-            'object' => [new Auth\ActionCodeSettings\Raw([])],
+            'object' => [new Auth\ActionCodeSettings\RawActionCodeSettings([])],
         ];
     }
 

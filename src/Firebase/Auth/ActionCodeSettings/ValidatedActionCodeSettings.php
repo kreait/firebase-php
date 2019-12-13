@@ -9,7 +9,7 @@ use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
-final class Validated implements ActionCodeSettings
+final class ValidatedActionCodeSettings implements ActionCodeSettings
 {
     /** @var UriInterface|null */
     private $continueUrl;
