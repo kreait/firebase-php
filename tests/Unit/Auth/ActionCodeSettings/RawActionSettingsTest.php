@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-final class RawTest extends TestCase
+final class RawActionSettingsTest extends TestCase
 {
     /** @test */
     public function it_returns_what_it_receives()

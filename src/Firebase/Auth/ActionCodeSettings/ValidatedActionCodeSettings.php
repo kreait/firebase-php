@@ -52,6 +52,7 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
         foreach ($settings as $key => $value) {
             switch (\mb_strtolower($key)) {
                 case 'continueurl':
+                case 'url':
                     $instance->continueUrl = uri_for($value);
                     break;
                 case 'canhandlecodeinapp':
