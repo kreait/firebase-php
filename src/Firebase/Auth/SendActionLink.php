@@ -14,6 +14,9 @@ final class SendActionLink
     /** @var string|null */
     private $locale;
 
+    /** @var string|null */
+    private $idTokenString;
+
     public function __construct(CreateActionLink $action, string $locale = null)
     {
         $this->action = $action;
@@ -41,5 +44,39 @@ final class SendActionLink
     public function locale()
     {
         return $this->locale;
+    }
+
+    /**
+     * @internal
+     *
+     * Only to be used when the API endpoint expects the ID Token of the given user.
+     *
+     * Currently seems only to be the case on VERIFY_EMAIL actions.
+     *
+     * @see https://github.com/firebase/firebase-js-sdk/issues/1958
+     */
+    public function withIdTokenString(string $idTokenString): self
+    {
+        $instance = clone $this;
+        $instance->action = clone $this->action;
+        $instance->idTokenString = $idTokenString;
+
+        return $instance;
+    }
+
+    /**
+     * @internal
+     *
+     * Only to be used when the API endpoint expects the ID Token of the given user.
+     *
+     * Currently seems only to be the case on VERIFY_EMAIL actions.
+     *
+     * @see https://github.com/firebase/firebase-js-sdk/issues/1958
+     *
+     * @return string|null
+     */
+    public function idTokenString()
+    {
+        return $this->idTokenString;
     }
 }

@@ -37,6 +37,7 @@ use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
+use Throwable;
 
 class Auth
 {
@@ -380,8 +381,28 @@ class Auth
                 : ValidatedActionCodeSettings::fromArray($actionCodeSettings);
         }
 
-        (new SendActionLink\GuzzleApiClientHandler($this->client))
-            ->handle(new SendActionLink(CreateActionLink::new($type, $email, $actionCodeSettings), $locale));
+        $createAction = CreateActionLink::new($type, $email, $actionCodeSettings);
+        $sendAction = new SendActionLink($createAction, $locale);
+
+        if (\mb_strtolower($type) === 'verify_email') {
+            // The Firebase API expects an ID token for the user belonging to this email address
+            // see https://github.com/firebase/firebase-js-sdk/issues/1958
+            try {
+                $user = $this->getUserByEmail($email);
+            } catch (Throwable $e) {
+                throw new FailedToSendActionLink($e->getMessage(), $e->getCode(), $e);
+            }
+
+            try {
+                $idTokenString = $this->getIdTokenStringForUserByUid($user->uid);
+            } catch (Throwable $e) {
+                throw new FailedToSendActionLink($e->getMessage(), $e->getCode(), $e);
+            }
+
+            $sendAction = $sendAction->withIdTokenString($idTokenString);
+        }
+
+        (new SendActionLink\GuzzleApiClientHandler($this->client))->handle($sendAction);
     }
 
     /**
@@ -640,5 +661,20 @@ class Auth
         $uid = JSON::decode((string) $response->getBody(), true)['localId'];
 
         return $this->getUser($uid);
+    }
+
+    private function getIdTokenStringForUserByUid(string $uid): string
+    {
+        $customToken = $this->createCustomToken($uid);
+
+        $response = $this->client->exchangeCustomTokenForIdAndRefreshToken($customToken);
+
+        $data = JSON::decode((string) $response->getBody(), true);
+
+        if ($idToken = $data['idToken'] ?? null) {
+            return (string) $idToken;
+        }
+
+        throw new AuthError("Unable to convert exchange custom token for user with UID {$uid} to an ID token.");
     }
 }

@@ -24,6 +24,10 @@ final class ApiRequest implements RequestInterface
             'email' => $action->email(),
         ] + $action->settings()->toArray();
 
+        if ($idTokenString = $action->idTokenString()) {
+            $data['idToken'] = $idTokenString;
+        }
+
         $body = stream_for(\json_encode($data));
 
         $headers = \array_filter([
