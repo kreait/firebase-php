@@ -55,7 +55,7 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
                 case 'url':
                     $instance->continueUrl = uri_for($value);
                     break;
-                case 'canhandlecodeinapp':
+                case 'handlecodeinapp':
                     $instance->canHandleCodeInApp = (bool) $value;
                     break;
                 case 'dynamiclinkdomain':

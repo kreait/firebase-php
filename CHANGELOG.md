@@ -5,7 +5,7 @@
 ### Auth
 
 * Reworked action link (OOB mail) handling for better resilience and flexibility
-* Added methods
+* Added methods ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#email-link-for-sign-in))
   * `getEmailVerificationLink($email, $actionCodeSettings)`
   * `sendEmailVerificationLink($email, $actionCodeSettings, $locale)`
   * `getPasswordResetLink($email, $actionCodeSettings)`
