@@ -194,6 +194,39 @@ final class AuthTest extends UnitTestCase
         $this->assertSame('refresh-token', $result->refreshToken);
     }
 
+    /**
+     * @dataProvider validActionCodeSettings
+     */
+    public function testGetActionCodeLinkWithSettings($settings)
+    {
+        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], JSON::encode(['oobLink' => 'https://domain.tld'])));
+
+        $this->auth->getEmailActionLink('PASSWORD_RESET', 'user@domain.tld', $settings);
+
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * @dataProvider validActionCodeSettings
+     */
+    public function testSendActionCodeLinkWithSettings($settings)
+    {
+        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json']));
+
+        $this->auth->sendEmailActionLink('PASSWORD_RESET', 'user@domain.tld', $settings);
+
+        $this->addToAssertionCount(1);
+    }
+
+    public function validActionCodeSettings()
+    {
+        return [
+            'empty' => [[]],
+            'array' => [['continueUrl' => 'https://domain.tld']],
+            'object' => [new Auth\ActionCodeSettings\RawActionCodeSettings([])],
+        ];
+    }
+
     public function testVerifyPasswordResetCode()
     {
         $this->mockHandler->append($this->passwordResetSuccess('user@domain.tld'));

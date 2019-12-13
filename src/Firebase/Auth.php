@@ -9,10 +9,17 @@ use Firebase\Auth\Token\Domain\Verifier;
 use Firebase\Auth\Token\Exception\InvalidToken;
 use Firebase\Auth\Token\Exception\UnknownKey;
 use Generator;
+use Kreait\Firebase\Auth\ActionCodeSettings;
+use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Auth\ApiClient;
+use Kreait\Firebase\Auth\CreateActionLink;
+use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
 use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Auth\LinkedProviderData;
+use Kreait\Firebase\Auth\SendActionLink;
+use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Auth\UserRecord;
+use Kreait\Firebase\Exception\Auth\AuthError;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
@@ -30,6 +37,7 @@ use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
+use Throwable;
 
 class Auth
 {
@@ -174,6 +182,7 @@ class Auth
     /**
      * @param Email|string $email
      *
+     * @throws UserNotFound
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      */
@@ -287,28 +296,35 @@ class Auth
     }
 
     /**
+     * @deprecated 4.37.0 Use {@see \Kreait\Firebase\Auth::sendEmailVerificationLink()} instead.
+     * @see sendEmailVerificationLink()
+     *
      * @param Uid|string $uid
      * @param UriInterface|string|null $continueUrl
      *
+     * @throws UserNotFound
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      */
     public function sendEmailVerification($uid, $continueUrl = null, string $locale = null)
     {
-        if ($continueUrl !== null) {
-            $continueUrl = (string) $continueUrl;
+        $email = $this->getUser($uid)->email;
+
+        if (!$email) {
+            throw new AuthError("The user with the ID {$uid} has no assigned email address");
         }
 
-        $response = $this->client->exchangeCustomTokenForIdAndRefreshToken(
-            $this->createCustomToken($uid)
-        );
-
-        $idToken = JSON::decode((string) $response->getBody(), true)['idToken'];
-
-        $this->client->sendEmailVerification($idToken, $continueUrl, $locale);
+        try {
+            $this->sendEmailVerificationLink($email, ['continueUrl' => $continueUrl], $locale);
+        } catch (FailedToSendActionLink $e) {
+            throw new AuthError($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
+     * @deprecated 4.37.0 Use {@see \Kreait\Firebase\Auth::sendPasswordResetLink()} instead.
+     * @see sendPasswordResetLink()
+     *
      * @param Email|mixed $email
      * @param UriInterface|string|null $continueUrl
      *
@@ -317,13 +333,142 @@ class Auth
      */
     public function sendPasswordResetEmail($email, $continueUrl = null, string $locale = null)
     {
-        if ($continueUrl !== null) {
-            $continueUrl = (string) $continueUrl;
+        try {
+            $this->sendEmailActionLink('PASSWORD_RESET', $email, ['continueUrl' => $continueUrl], $locale);
+        } catch (FailedToSendActionLink $e) {
+            throw new AuthError($e->getMessage(), $e->getCode(), $e);
         }
+    }
 
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToCreateActionLink
+     */
+    public function getEmailActionLink(string $type, $email, $actionCodeSettings = null): string
+    {
         $email = $email instanceof Email ? $email : new Email((string) $email);
 
-        $this->client->sendPasswordResetEmail((string) $email, (string) $continueUrl, $locale);
+        if ($actionCodeSettings === null) {
+            $actionCodeSettings = ValidatedActionCodeSettings::empty();
+        } else {
+            $actionCodeSettings = $actionCodeSettings instanceof ActionCodeSettings
+                ? $actionCodeSettings
+                : ValidatedActionCodeSettings::fromArray($actionCodeSettings);
+        }
+
+        return (new CreateActionLink\GuzzleApiClientHandler($this->client))
+            ->handle(CreateActionLink::new($type, $email, $actionCodeSettings));
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws UserNotFound
+     * @throws FailedToSendActionLink
+     */
+    public function sendEmailActionLink(string $type, $email, $actionCodeSettings = null, string $locale = null)
+    {
+        $email = $email instanceof Email ? $email : new Email((string) $email);
+
+        if ($actionCodeSettings === null) {
+            $actionCodeSettings = ValidatedActionCodeSettings::empty();
+        } else {
+            $actionCodeSettings = $actionCodeSettings instanceof ActionCodeSettings
+                ? $actionCodeSettings
+                : ValidatedActionCodeSettings::fromArray($actionCodeSettings);
+        }
+
+        $createAction = CreateActionLink::new($type, $email, $actionCodeSettings);
+        $sendAction = new SendActionLink($createAction, $locale);
+
+        if (\mb_strtolower($type) === 'verify_email') {
+            // The Firebase API expects an ID token for the user belonging to this email address
+            // see https://github.com/firebase/firebase-js-sdk/issues/1958
+            try {
+                $user = $this->getUserByEmail($email);
+            } catch (Throwable $e) {
+                throw new FailedToSendActionLink($e->getMessage(), $e->getCode(), $e);
+            }
+
+            try {
+                $idTokenString = $this->getIdTokenStringForUserByUid($user->uid);
+            } catch (Throwable $e) {
+                throw new FailedToSendActionLink($e->getMessage(), $e->getCode(), $e);
+            }
+
+            $sendAction = $sendAction->withIdTokenString($idTokenString);
+        }
+
+        (new SendActionLink\GuzzleApiClientHandler($this->client))->handle($sendAction);
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToCreateActionLink
+     */
+    public function getEmailVerificationLink($email, $actionCodeSettings = null): string
+    {
+        return $this->getEmailActionLink('VERIFY_EMAIL', $email, $actionCodeSettings);
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToSendActionLink
+     */
+    public function sendEmailVerificationLink($email, $actionCodeSettings = null, string $locale = null)
+    {
+        $this->sendEmailActionLink('VERIFY_EMAIL', $email, $actionCodeSettings, $locale);
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToCreateActionLink
+     */
+    public function getPasswordResetLink($email, $actionCodeSettings = null): string
+    {
+        return $this->getEmailActionLink('PASSWORD_RESET', $email, $actionCodeSettings);
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToSendActionLink
+     */
+    public function sendPasswordResetLink($email, $actionCodeSettings = null, string $locale = null)
+    {
+        $this->sendEmailActionLink('PASSWORD_RESET', $email, $actionCodeSettings, $locale);
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToCreateActionLink
+     */
+    public function getSignInWithEmailLink($email, $actionCodeSettings = null): string
+    {
+        return $this->getEmailActionLink('EMAIL_SIGNIN', $email, $actionCodeSettings);
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToSendActionLink
+     */
+    public function sendSignInWithEmailLink($email, $actionCodeSettings = null, string $locale = null)
+    {
+        $this->sendEmailActionLink('EMAIL_SIGNIN', $email, $actionCodeSettings, $locale);
     }
 
     /**
@@ -582,5 +727,20 @@ class Auth
         $uid = JSON::decode((string) $response->getBody(), true)['localId'];
 
         return $this->getUser($uid);
+    }
+
+    private function getIdTokenStringForUserByUid(string $uid): string
+    {
+        $customToken = $this->createCustomToken($uid);
+
+        $response = $this->client->exchangeCustomTokenForIdAndRefreshToken($customToken);
+
+        $data = JSON::decode((string) $response->getBody(), true);
+
+        if ($idToken = $data['idToken'] ?? null) {
+            return (string) $idToken;
+        }
+
+        throw new AuthError("Unable to convert exchange custom token for user with UID {$uid} to an ID token.");
     }
 }

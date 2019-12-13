@@ -272,72 +272,141 @@ Verify a password
         echo $e->getMessage();
     }
 
+************************
+Using Email Action Codes
+************************
 
-***********************
-Verify an email address
-***********************
+.. image:: https://img.shields.io/badge/available_since-v4.37-yellowgreen
+   :target: https://github.com/kreait/firebase-php/releases/tag/4.37.0
+   :alt: Available since v4.37
 
-Unless a user verifies the email address assigned to them, their email address will be marked as ``unverified``.
+The Firebase Admin SDK provides the ability to send users emails containing links they can use for password resets,
+email address verification, and email-based sign-in. These emails are sent by Google and have limited
+customizability.
 
-You can send a verification email to a user with the following method:
+If you want to instead use your own email templates and your own email delivery service, you can use the
+Firebase Admin SDK to programmatically generate the action links for the above flows, which you can
+include in emails to your users.
 
-.. code-block:: php
-
-    $auth->sendEmailVerification($uid);
-
-    // The method has an optional second parameter to specify where the user should be redirected
-    // to after they have have verified their email address
-    $auth->sendEmailVerification($uid, 'https://my-application.com/email-verified');
-
-    // The method has an optional third parameter to specifiy the locale of the sent email
-    // Without it, your Firebase project's configured default language will be used
-    $auth->sendEmailVerification('user@domain.tld', null, 'de');
-
-
-***************************
-Send a password reset email
-***************************
-
-You can send an email allowing a user to reset their password with the following method:
-
-.. code-block:: php
-
-    $auth->sendPasswordResetEmail('user@domain.tld');
-
-    // The method has an optional second parameter to specify where the user should be redirected
-    // to after they have have reset their password
-    $auth->sendPasswordResetEmail('user@domain.tld', 'https://my-application.com/password-reset');
-
-    // The method has an optional third parameter to specifiy the locale of the sent email
-    // Without it, your Firebase project's configured default language will be used
-    $auth->sendPasswordResetEmail('user@domain.tld', null, 'fr');
-
-****************************
-Verify a password reset code
-****************************
+Action Code Settings
+====================
 
 .. note::
-    Out of the box, Firebase handles the verification of password reset requests. You can use your own
-    server to handle account management emails by following the instructions on
-    `Customize account management emails and SMS messages <https://support.google.com/firebase/answer/7000714>`_
+    Action Code Settings are optional.
+
+Action Code Settings allow you to pass additional state via a continue URL which is accessible after the user clicks
+the email link. This also provides the user the ability to go back to the app after the action is completed.
+In addition, you can specify whether to handle the email action link directly from a mobile application
+when it is installed or from a browser.
+
+For links that are meant to be opened via a mobile app, you’ll need to enable Firebase Dynamic Links and perform some
+tasks to detect these links from your mobile app. Refer to the instructions on how to
+`configure Firebase Dynamic Links <https://firebase.google.com/docs/auth/web/passing-state-in-email-actions#configuring_firebase_dynamic_links>`_
+for email actions.
+
+========================= =========== ===========
+Parameter                 Type        Description
+========================= =========== ===========
+``continueUrl``	          string|null Sets the continue URL
+``url``	                  string|null Alias for ``continueUrl``
+``handleCodeInApp``       bool|null    | Whether the email action link will be opened in a mobile app or a web link first.
+                                       | The default is false. When set to true, the action code link will be be sent
+                                       | as a Universal Link or Android App Link and will be opened by the app if
+                                       | installed. In the false case, the code will be sent to the web widget first
+                                       | and then on continue will redirect to the app if installed.
+``androidPackageName``    string|null  | Sets the Android package name. This will try to open the link in an android app
+                                       | if it is installed.
+``androidInstallApp``     bool|null    | Whether to install the Android app if the device supports it and the app is not
+                                       | already installed. If this field is provided without a ``androidPackageName``,
+                                       | an error is thrown explaining that the packageName must be provided in
+                                       | conjunction with this field.
+``androidMinimumVersion`` string|null  | If specified, and an older version of the app is installed,
+                                       | the user is taken to the Play Store to upgrade the app.
+                                       | The Android app needs to be registered in the Console.
+``iOSBundleId``           string|null  | Sets the iOS bundle ID. This will try to open the link in an iOS app if it is
+                                       | installed. The iOS app needs to be registered in the Console.
+========================= =========== ===========
+
+Example:
 
 .. code-block:: php
 
-    $oobCode = '...'; // Extract the OOB code from the request url (not scope of the SDK (yet :)))
+    $actionCodeSettings = [
+        'continueUrl' => 'https://www.example.com/checkout?cartId=1234',
+        'handleCodeInApp' => true,
+        'dynamicLinkDomain' => 'coolapp.page.link',
+        'androidPackageName' => 'com.example.android',
+        'androidMinimumVersion' => '12',
+        'androidInstallApp' => true,
+        'iOSBundleId' => 'com.example.ios',
+    ];
 
-    try {
-        $auth->verifyPasswordResetCode($oobCode);
-    } catch (\Kreait\Firebase\Exception\Auth\ExpiredOobCode $e) {
-        // Handle the case of an expired reset code
-    } catch (\Kreait\Firebase\Exception\Auth\InvalidOobCode $e) {
-        // Handle the case of an invalid reset code
-    } catch (\Kreait\Firebase\Exception\AuthException $e) {
-        // Another error has occurred
-    }
 
-************************
+Email verification
+==================
+
+To generate an email verification link, provide the existing user’s unverified email and optional Action Code Settings.
+The email used must belong to an existing user. Depending on the method you use, an email will be sent to the user,
+or you will get an email action link that you can use in a custom email.
+
+.. code-block:: php
+
+    $link = $auth->getEmailVerificationLink($email);
+    $link = $auth->getEmailVerificationLink($email, $actionCodeSettings);
+
+    $auth->sendEmailVerificationLink($email);
+    $auth->sendEmailVerificationLink($email, $actionCodeSettings);
+    $auth->sendEmailVerificationLink($email, null, $locale);
+    $auth->sendEmailVerificationLink($email, $actionCodeSettings, $locale);
+
+Password reset
+==============
+
+To generate a password reset link, provide the existing user’s email and optional Action Code Settings.
+The email used must belong to an existing user. Depending on the method you use, an email will be sent to the user,
+or you will get an email action link that you can use in a custom email.
+
+.. code-block:: php
+
+    $link = $auth->getPasswordResetLink($email);
+    $link = $auth->getPasswordResetLink($email, $actionCodeSettings);
+
+    $auth->sendPasswordResetLink($email);
+    $auth->sendPasswordResetLink($email, $actionCodeSettings);
+    $auth->sendPasswordResetLink($email, null, $locale);
+    $auth->sendPasswordResetLink($email, $actionCodeSettings, $locale);
+
+Email link for sign-in
+======================
+
+.. note::
+
+    Before you can authenticate users with email link sign-in, you will need to enable
+    `email link sign-in <https://firebase.google.com/docs/auth/web/email-link-auth#enable_email_link_sign-in_for_your_firebase_project>`_
+    for your Firebase project.
+
+.. note::
+
+    Unlike password reset and email verification, the email used does not necessarily need to belong to an existing user,
+    as this operation can be used to sign up new users into your app via email link.
+
+.. note::
+
+    The ActionCodeSettings object is required in this case to provide information on where to return the user after the
+    link is clicked for sign-in completion.
+
+To generate a sign-in link, provide the user’s email and Action Code Settings. Depending on the method you use,
+an email will be sent to the user, or you will get an email action link that you can use in a custom email.
+
+.. code-block:: php
+
+    $link = $auth->getSignInWithEmailLink($email, $actionCodeSettings);
+
+    $auth->sendSignInWithEmailLink($email, $actionCodeSettings);
+    $auth->sendSignInWithEmailLink($email, $actionCodeSettings, $locale);
+
 Confirm a password reset
-************************
+========================
 
 .. note::
     Out of the box, Firebase handles the confirmation of password reset requests. You can use your own

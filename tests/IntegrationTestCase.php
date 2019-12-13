@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests;
 
+use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Factory;
+use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Util\JSON;
 use Throwable;
@@ -47,5 +49,28 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         }
 
         self::$factory = (new Factory())->withServiceAccount(self::$serviceAccount);
+    }
+
+    protected function createUserWithEmailAndPassword(string $email = null, string $password = null): UserRecord
+    {
+        /** @noinspection NonSecureUniqidUsageInspection */
+        $uniqid = \uniqid();
+        $email = $email ?? "{$uniqid}@domain.tld";
+        $password = $password ?? $uniqid;
+
+        return self::$factory
+            ->createAuth()
+            ->createUser(
+                CreateUser::new()
+                    ->withUnverifiedEmail($email)
+                    ->withClearTextPassword($password)
+            );
+    }
+
+    protected function deleteUser($userOrUid)
+    {
+        $uid = $userOrUid instanceof UserRecord ? $userOrUid->uid : $userOrUid;
+
+        self::$factory->createAuth()->deleteUser($uid);
     }
 }

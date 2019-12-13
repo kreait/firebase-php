@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use function GuzzleHttp\Psr7\uri_for;
 use Kreait\Firebase\Auth;
+use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
+use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
@@ -12,6 +15,7 @@ use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Kreait\Firebase\Util\JSON;
+use Psr\Http\Message\UriInterface;
 use Throwable;
 
 /**
@@ -99,6 +103,28 @@ class AuthTest extends IntegrationTestCase
         $this->addToAssertionCount(1);
     }
 
+    public function testGetEmailVerificationLink()
+    {
+        $user = $this->createUserWithEmailAndPassword();
+
+        $link = $this->auth->getEmailVerificationLink((string) $user->email);
+
+        $this->assertInstanceOf(UriInterface::class, uri_for($link));
+
+        $this->deleteUser($user);
+    }
+
+    public function testSendEmailVerificationLink()
+    {
+        $user = $this->createUserWithEmailAndPassword();
+
+        $this->auth->sendEmailVerificationLink((string) $user->email);
+        // We can't test the reception, but if we don't get an error, we consider it working
+        $this->addToAssertionCount(1);
+
+        $this->deleteUser($user);
+    }
+
     public function testSendPasswordResetEmail()
     {
         /** @noinspection NonSecureUniqidUsageInspection */
@@ -112,6 +138,62 @@ class AuthTest extends IntegrationTestCase
 
         $this->auth->deleteUser($user->uid);
         $this->addToAssertionCount(1);
+    }
+
+    public function testGetPasswordResetLink()
+    {
+        $user = $this->createUserWithEmailAndPassword();
+
+        $link = $this->auth->getPasswordResetLink((string) $user->email);
+
+        $this->assertInstanceOf(UriInterface::class, uri_for($link));
+
+        $this->deleteUser($user);
+    }
+
+    public function testSendPasswordResetLink()
+    {
+        $user = $this->createUserWithEmailAndPassword();
+
+        $this->auth->sendPasswordResetLink((string) $user->email);
+        // We can't test the reception, but if we don't get an error, we consider it working
+        $this->addToAssertionCount(1);
+
+        $this->deleteUser($user);
+    }
+
+    public function testGetSignInWithEmailLink()
+    {
+        $user = $this->createUserWithEmailAndPassword();
+
+        $link = $this->auth->getSignInWithEmailLink((string) $user->email);
+
+        $this->assertInstanceOf(UriInterface::class, uri_for($link));
+
+        $this->deleteUser($user);
+    }
+
+    public function testSendSignInWithEmailLink()
+    {
+        $user = $this->createUserWithEmailAndPassword();
+
+        $this->auth->sendSignInWithEmailLink((string) $user->email);
+        // We can't test the reception, but if we don't get an error, we consider it working
+        $this->addToAssertionCount(1);
+
+        $this->deleteUser($user);
+    }
+
+    public function testGetUnsupportedEmailActionLink()
+    {
+        $this->expectException(FailedToCreateActionLink::class);
+        $this->auth->getEmailActionLink('unsupported', 'user@domain.tld');
+    }
+
+    public function testSendUnsupportedEmailActionLink()
+    {
+        $this->expectException(FailedToSendActionLink::class);
+        $this->auth->sendEmailActionLink('unsupported', 'user@domain.tld');
     }
 
     public function testListUsers()
