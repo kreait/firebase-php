@@ -296,8 +296,8 @@ class Auth
     }
 
     /**
-     * @deprecated 4.37.0 Use \Kreait\Firebase\Auth::sendEmailActionLink('VERIFY_EMAIL', $email, ['continueUrl' => $continueUrl], $locale) instead.
-     * @see sendEmailActionLink()
+     * @deprecated 4.37.0 Use {@see \Kreait\Firebase\Auth::sendEmailVerificationLink()} instead.
+     * @see sendEmailVerificationLink()
      *
      * @param Uid|string $uid
      * @param UriInterface|string|null $continueUrl
@@ -315,15 +315,15 @@ class Auth
         }
 
         try {
-            $this->sendEmailActionLink('VERIFY_EMAIL', $email, ['continueUrl' => $continueUrl], $locale);
+            $this->sendEmailVerificationLink($email, ['continueUrl' => $continueUrl], $locale);
         } catch (FailedToSendActionLink $e) {
             throw new AuthError($e->getMessage(), $e->getCode(), $e);
         }
     }
 
     /**
-     * @deprecated 4.37.0 Use \Kreait\Firebase\Auth::sendEmailActionLink('PASSWORD_RESET', $email, ['continueUrl' => $continueUrl], $locale) instead.
-     * @see sendEmailActionLink()
+     * @deprecated 4.37.0 Use {@see \Kreait\Firebase\Auth::sendPasswordResetLink()} instead.
+     * @see sendPasswordResetLink()
      *
      * @param Email|mixed $email
      * @param UriInterface|string|null $continueUrl
@@ -403,6 +403,72 @@ class Auth
         }
 
         (new SendActionLink\GuzzleApiClientHandler($this->client))->handle($sendAction);
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToCreateActionLink
+     */
+    public function getEmailVerificationLink($email, $actionCodeSettings = null): string
+    {
+        return $this->getEmailActionLink('VERIFY_EMAIL', $email, $actionCodeSettings);
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToSendActionLink
+     */
+    public function sendEmailVerificationLink($email, $actionCodeSettings = null, string $locale = null)
+    {
+        $this->sendEmailActionLink('VERIFY_EMAIL', $email, $actionCodeSettings, $locale);
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToCreateActionLink
+     */
+    public function getPasswordResetLink($email, $actionCodeSettings = null): string
+    {
+        return $this->getEmailActionLink('PASSWORD_RESET', $email, $actionCodeSettings);
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToSendActionLink
+     */
+    public function sendPasswordResetLink($email, $actionCodeSettings = null, string $locale = null)
+    {
+        $this->sendEmailActionLink('PASSWORD_RESET', $email, $actionCodeSettings, $locale);
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToCreateActionLink
+     */
+    public function getSignInWithEmailLink($email, $actionCodeSettings = null): string
+    {
+        return $this->getEmailActionLink('EMAIL_SIGNIN', $email, $actionCodeSettings);
+    }
+
+    /**
+     * @param Email|string $email
+     * @param ActionCodeSettings|array|null $actionCodeSettings
+     *
+     * @throws FailedToSendActionLink
+     */
+    public function sendSignInWithEmailLink($email, $actionCodeSettings = null, string $locale = null)
+    {
+        $this->sendEmailActionLink('EMAIL_SIGNIN', $email, $actionCodeSettings, $locale);
     }
 
     /**
