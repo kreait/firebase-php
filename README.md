@@ -25,6 +25,8 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
   - [Issue Tracker](https://github.com/kreait/firebase-php/issues/)
   - [Discord Chat](https://discord.gg/nbgVfty)
   - [Stack Overflow](https://stackoverflow.com/questions/tagged/firebase+php)
+- 3rd Party Packages
+  - [tatter/firebase](https://github.com/tattersoftware/codeigniter4-firebase): Integration for CodeIgniter 4 
 
 ## Components
 

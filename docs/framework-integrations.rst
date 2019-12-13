@@ -15,3 +15,9 @@ Symfony
 *******
 
 `kreait/firebase-bundle <https://github.com/kreait/firebase-bundle>`_
+
+***********
+CodeIgniter
+***********
+
+`tatter/firebase <https://github.com/tattersoftware/codeigniter4-firebase>`_
