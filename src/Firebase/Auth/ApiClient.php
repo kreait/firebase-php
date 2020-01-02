@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Auth;
 
 use GuzzleHttp\ClientInterface;
+use Kreait\Firebase\Auth;
 use Kreait\Firebase\Exception\Auth\CredentialsMismatch;
 use Kreait\Firebase\Exception\Auth\EmailNotFound;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
@@ -42,6 +43,10 @@ class ApiClient implements ClientInterface
     }
 
     /**
+     * @deprecated 4.41
+     * @see Auth::signInWithCustomToken()
+     * @codeCoverageIgnore
+     *
      * Takes a custom token and exchanges it with an ID token.
      *
      * @see https://firebase.google.com/docs/reference/rest/auth/#section-verify-custom-token
@@ -249,6 +254,10 @@ class ApiClient implements ClientInterface
     }
 
     /**
+     * @deprecated 4.41
+     * @see \Kreait\Firebase\Auth::signInWithEmailAndPassword()
+     * @codeCoverageIgnore
+     *
      * @throws AuthException
      * @throws FirebaseException
      */
@@ -353,6 +362,10 @@ class ApiClient implements ClientInterface
     }
 
     /**
+     * @deprecated 4.41
+     * @see \Kreait\Firebase\Auth::signInWithIdpAccessToken()
+     * @codeCoverageIgnore
+     *
      * @throws AuthException
      * @throws FirebaseException
      */
@@ -362,6 +375,10 @@ class ApiClient implements ClientInterface
     }
 
     /**
+     * @deprecated 4.41
+     * @see \Kreait\Firebase\Auth::signInWithIdpIdToken()
+     * @codeCoverageIgnore
+     *
      * @throws AuthException
      * @throws FirebaseException
      */
@@ -371,6 +388,9 @@ class ApiClient implements ClientInterface
     }
 
     /**
+     * @deprecated 4.41
+     * @codeCoverageIgnore
+     *
      * Links the given OAuth credential (e.g. Google ID token, or Facebook access token, etc) to Firebase.
      * Basically logs in the user to Firebase, if the authentication provider is enabled for the project.
      *

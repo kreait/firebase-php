@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## Unreleased
+
+### Auth
+
+* Added support for custom authentication Flows ([Documentation](https://firebase-php.readthedocs.io/en/latest/authentication.html#custom-authentication-flows))
+  * `Kreait\Firebase\Auth::signInAnonymously()`
+  * `Kreait\Firebase\Auth::signInAsUser($userOrUid, array $claims = null)`
+  * `Kreait\Firebase\Auth::signInWithCustomToken($customToken)`
+  * `Kreait\Firebase\Auth::signInWithEmailAndPassword($email, $clearTextPassword)`
+  * `Kreait\Firebase\Auth::signInWithRefreshToken($refreshToken)`
+  
+### Deprecations
+
+* `Kreait\Firebase\Auth::getApiClient()`
+* `Kreait\Firebase\Auth::linkProviderThroughAccessToken()`
+* `Kreait\Firebase\Auth::linkProviderThroughIdToken()`
+* `Kreait\Firebase\Auth::verifyPassword()`
+* `Kreait\Firebase\Auth\ApiClient::exchangeCustomTokenForIdAndRefreshToken()`
+* `Kreait\Firebase\Auth\ApiClient::linkProviderThroughAccessToken()`
+* `Kreait\Firebase\Auth\ApiClient::linkProviderThroughIdToken()`
+* `Kreait\Firebase\Auth\ApiClient::verifyPassword()`
+* `Kreait\Firebase\Auth\LinkedProviderData`
+* `Kreait\Firebase\Factory::asUser()`
+
 ## 4.40.1 - 2020-02-29
 
 * It was not possible to discover Service Accounts stored as JSON string in an environment variable.

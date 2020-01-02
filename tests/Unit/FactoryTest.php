@@ -79,12 +79,6 @@ class FactoryTest extends UnitTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function testItAcceptsAnAuthOverride()
-    {
-        $this->factory->asUser('some-uid', ['some' => 'claim']);
-        $this->addToAssertionCount(1);
-    }
-
     public function testItAcceptsAVerifierCache()
     {
         $this->factory->withVerifierCache($this->createMock(CacheInterface::class));
@@ -117,14 +111,6 @@ class FactoryTest extends UnitTestCase
     public function testDynamicLinksCanBeCreatedWithoutADefaultDomain()
     {
         $this->factory->createDynamicLinksService();
-        $this->addToAssertionCount(1);
-    }
-
-    public function testCreateDatabaseAsUser()
-    {
-        $this->factory->asUser('custom-uid', ['custom' => 'claim'])->createDatabase();
-        // Not testing if the HandlerStack actually has the custom auth handler, but it's covering the code
-        // Shame on me, I'll be better in 5.x, I promise
         $this->addToAssertionCount(1);
     }
 

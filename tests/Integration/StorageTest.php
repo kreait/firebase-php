@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Integration;
 
 use Google\Cloud\Storage\Bucket;
-use Google\Cloud\Storage\StorageClient;
 use Kreait\Firebase\Storage;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use League\Flysystem\FilesystemInterface;
@@ -27,7 +26,8 @@ class StorageTest extends IntegrationTestCase
 
     public function testGetStorageClient()
     {
-        $this->assertInstanceOf(StorageClient::class, $this->storage->getStorageClient());
+        $this->storage->getStorageClient();
+        $this->addToAssertionCount(1);
     }
 
     public function testGetBucket()

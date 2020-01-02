@@ -8,13 +8,13 @@ use function GuzzleHttp\Psr7\uri_for;
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
+use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
-use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\UriInterface;
 use Throwable;
 
@@ -88,21 +88,6 @@ class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testSendEmailVerification()
-    {
-        /** @noinspection NonSecureUniqidUsageInspection */
-        $uniqid = \uniqid();
-        $email = "{$uniqid}@domain.tld";
-        $password = 'my password';
-
-        $user = $this->auth->createUserWithEmailAndPassword($email, $password);
-
-        $this->auth->sendEmailVerification($user->uid, 'http://localhost', 'de');
-
-        $this->auth->deleteUser($user->uid);
-        $this->addToAssertionCount(1);
-    }
-
     public function testGetEmailVerificationLink()
     {
         $user = $this->createUserWithEmailAndPassword();
@@ -125,19 +110,21 @@ class AuthTest extends IntegrationTestCase
         $this->deleteUser($user);
     }
 
-    public function testSendPasswordResetEmail()
+    public function testSendEmailVerificationLinkToUnknownUser()
     {
-        /** @noinspection NonSecureUniqidUsageInspection */
-        $uniqid = \uniqid();
-        $email = "{$uniqid}@domain.tld";
-        $password = 'my password';
+        $this->expectException(FailedToSendActionLink::class);
+        $this->auth->sendEmailVerificationLink('unknown@domain.tld');
+    }
 
-        $user = $this->auth->createUserWithEmailAndPassword($email, $password);
+    public function testSendEmailVerificationLinkToDisabledUser()
+    {
+        $user = $this->createUserWithEmailAndPassword();
+        $this->auth->disableUser($user->uid);
 
-        $this->auth->sendPasswordResetEmail($user->email, 'http://localhost', 'de');
+        $this->expectException(FailedToSendActionLink::class);
+        $this->auth->sendEmailVerificationLink((string) $user->email);
 
-        $this->auth->deleteUser($user->uid);
-        $this->addToAssertionCount(1);
+        $this->deleteUser($user);
     }
 
     public function testGetPasswordResetLink()
@@ -222,57 +209,44 @@ class AuthTest extends IntegrationTestCase
 
     public function testVerifyIdToken()
     {
-        $user = $this->auth->createUser([]);
+        $idToken = $this->auth->signInAnonymously()->idToken();
+        $this->assertIsString($idToken);
 
-        $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
-            $this->auth->createCustomToken($user->uid)
-        );
-        $idToken = JSON::decode((string) $idTokenResponse->getBody(), true)['idToken'];
-
-        $this->auth->verifyIdToken($idToken);
-
-        $this->auth->deleteUser($user->uid);
+        $verifiedToken = $this->auth->verifyIdToken($idToken);
         $this->addToAssertionCount(1);
+
+        $this->auth->deleteUser($verifiedToken->getClaim('sub'));
     }
 
     public function testRevokeRefreshTokens()
     {
-        $user = $this->auth->createUser([]);
+        $idToken = $this->auth->signInAnonymously()->idToken();
+        $this->assertIsString($idToken);
 
-        $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
-            $this->auth->createCustomToken($user->uid)
-        );
-        $idToken = JSON::decode((string) $idTokenResponse->getBody(), true)['idToken'];
+        $uid = $this->auth->verifyIdToken($idToken, $checkIfRevoked = false)->getClaim('sub');
 
-        $this->auth->verifyIdToken($idToken, $checkIfRevoked = false);
+        $this->auth->revokeRefreshTokens($uid);
         \sleep(1);
-
-        $this->auth->revokeRefreshTokens($user->uid);
 
         try {
             $this->auth->verifyIdToken($idToken, $checkIfRevoked = true);
-            $this->fail('An exception should have been thrown');
         } catch (RevokedIdToken $e) {
-            $this->assertSame($user->uid, $e->getToken()->getClaim('user_id'));
+            $this->assertSame($uid, $e->getToken()->getClaim('user_id'));
         } catch (Throwable $e) {
-            $this->fail('A '.RevokedIdToken::class.' should have been thrown');
+            throw $e;
+        } finally {
+            $this->auth->deleteUser($uid);
         }
-
-        $this->auth->deleteUser($user->uid);
     }
 
     public function testVerifyIdTokenString()
     {
-        $user = $this->auth->createUser([]);
+        $idToken = $this->auth->signInAnonymously()->idToken();
+        $this->assertIsString($idToken);
 
-        $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
-            $this->auth->createCustomToken($user->uid)
-        );
-        $idToken = JSON::decode((string) $idTokenResponse->getBody(), true)['idToken'];
+        $verifiedToken = $this->auth->verifyIdToken($idToken);
 
-        $this->auth->verifyIdToken((string) $idToken);
-
-        $this->auth->deleteUser($user->uid);
+        $this->auth->deleteUser($verifiedToken->getClaim('sub'));
         $this->addToAssertionCount(1);
     }
 
@@ -461,5 +435,100 @@ class AuthTest extends IntegrationTestCase
     {
         $this->expectException(InvalidOobCode::class);
         $this->auth->verifyPasswordResetCode('invalid');
+    }
+
+    public function testSignInAsUser()
+    {
+        $user = $this->auth->createAnonymousUser();
+
+        $result = $this->auth->signInAsUser($user);
+
+        $this->assertIsString($result->idToken());
+        $this->assertNull($result->accessToken());
+        $this->assertIsString($result->refreshToken());
+
+        $this->auth->deleteUser($user->uid);
+    }
+
+    public function testSignInWithCustomToken()
+    {
+        $user = $this->auth->createAnonymousUser();
+
+        $customToken = $this->auth->createCustomToken($user->uid);
+
+        $result = $this->auth->signInWithCustomToken($customToken);
+
+        $this->assertIsString($result->idToken());
+        $this->assertNull($result->accessToken());
+        $this->assertIsString($result->refreshToken());
+
+        $this->auth->deleteUser($user->uid);
+    }
+
+    public function testSignInWithRefreshToken()
+    {
+        $user = $this->auth->createAnonymousUser();
+
+        // We need to sign in once to get a refresh token
+        $firstRefreshToken = $this->auth->signInAsUser($user)->refreshToken();
+        $this->assertIsString($firstRefreshToken);
+
+        $result = $this->auth->signInWithRefreshToken($firstRefreshToken);
+
+        $this->assertIsString($result->idToken());
+        $this->assertIsString($result->accessToken());
+        $this->assertIsString($result->refreshToken());
+
+        $this->auth->deleteUser($user->uid);
+    }
+
+    public function testSignInWithEmailAndPassword()
+    {
+        $email = \uniqid('', false).'@domain.tld';
+        $password = 'my-perfect-password';
+
+        $user = $this->createUserWithEmailAndPassword($email, $password);
+
+        $result = $this->auth->signInWithEmailAndPassword($email, $password);
+
+        $this->assertIsString($result->idToken());
+        $this->assertNull($result->accessToken());
+        $this->assertIsString($result->refreshToken());
+
+        $this->auth->deleteUser($user->uid);
+    }
+
+    public function testSignInAnonymously()
+    {
+        $result = $this->auth->signInAnonymously();
+
+        $idToken = $result->idToken();
+
+        $this->assertIsString($idToken);
+        $this->assertNull($result->accessToken());
+        $this->assertIsString($result->refreshToken());
+
+        $token = $this->auth->verifyIdToken($idToken);
+        $this->assertIsString($uid = $token->getClaim('sub', false));
+        $user = $this->auth->getUser($uid);
+        $this->addToAssertionCount(1);
+
+        $this->auth->deleteUser($user->uid);
+    }
+
+    public function testSignInWithIdpAccessToken()
+    {
+        // I don't know how to retrieve a current user access token programatically, so we'll
+        // test the failure case only here
+        $this->expectException(FailedToSignIn::class);
+        $this->auth->signInWithIdpAccessToken('google.com', 'invalid', uri_for('http://localhost'));
+    }
+
+    public function testSignInWithIdpIdToken()
+    {
+        // I don't know how to retrieve a current user access token programatically, so we'll
+        // test the failure case only here
+        $this->expectException(FailedToSignIn::class);
+        $this->auth->signInWithIdpIdToken('google.com', 'invalid', 'http://localhost');
     }
 }

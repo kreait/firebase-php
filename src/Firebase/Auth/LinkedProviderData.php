@@ -6,6 +6,11 @@ namespace Kreait\Firebase\Auth;
 
 use Kreait\Firebase\Value\Provider;
 
+/**
+ * @deprecated 4.41
+ * @see \Kreait\Firebase\Auth::signInWithIdpAccessToken()
+ * @see \Kreait\Firebase\Auth::signInWithIdpIdToken()
+ */
 class LinkedProviderData implements \JsonSerializable
 {
     /**

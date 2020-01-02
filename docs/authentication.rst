@@ -1,6 +1,13 @@
-#####################
-Authentication [#f1]_
-#####################
+##############
+Authentication
+##############
+
+Before you start, please read about Firebase Authentication in the official documentation:
+
+* `Introduction to the Admin Database API <https://firebase.google.com/docs/database/admin/start>`_
+* `Create custom tokens <https://firebase.google.com/docs/auth/admin/create-custom-tokens>`_
+* `Verify ID Tokens <https://firebase.google.com/docs/auth/admin/verify-id-tokens>`_
+* `Revoke refresh tokens <https://firebase.google.com/docs/reference/admin/node/admin.auth.Auth#revokeRefreshTokens>`_
 
 Before you can access the Firebase Realtime Database from a server using the Firebase Admin SDK,
 you must authenticate your server with Firebase. When you authenticate a server, rather than
@@ -21,79 +28,11 @@ across the entire database, you can protect against accidental writes by setting
 a read-only security rule and then initializing the Admin SDK with privileges
 limited by that rule.
 
+.. _create-custom-tokens:
 
-**********************************
-Authenticate with admin privileges
-**********************************
-
-When you initialize the Firebase Admin SDK with the credentials for a service account with the Editor role on
-your Firebase project, that instance has complete read and write access to your project's Realtime Database.
-
-.. code-block:: php
-
-        use Kreait\Firebase\Factory;
-
-        $factory = (new Factory)
-            ->withServiceAccount('/path/to/google-service-account.json');
-
-        $auth = $factory->createAuth();
-
-.. note::
-    Your service only has as much access as the service account used to authenticate it. For example, you can limit
-    your service to read-only by using a service account with the Reader role on your project. Similarly, a
-    service account with no role on the project is not able to read or write any data.
-
-************************************
-Authenticate with limited privileges
-************************************
-
-.. note::
-    This currently only applies to connections made to the Realtime Database.
-
-As a best practice, a service should have access to only the resources it needs.
-
-To get more fine-grained control over the resources a Firebase app instance can access, use a unique
-identifier in your `Security Rules <https://firebase.google.com/docs/database/security/>`_ to
-represent your service.
-
-Then set up appropriate rules which grant your service access to the resources it needs. For example:
-
-.. code-block:: js
-
-    {
-      "rules": {
-        "public_resource": {
-          ".read": true,
-          ".write": true
-        },
-        "some_resource": {
-          ".read": "auth.uid === 'my-service-worker'",
-          ".write": false
-        },
-        "another_resource": {
-          ".read": "auth.uid === 'my-service-worker'",
-          ".write": "auth.uid === 'my-service-worker'"
-        }
-      }
-    }
-
-Then, on your server, when you initialize the Firebase app, use the ``asUser($uid)`` method
-with the identifier you used to represent your service in your Security Rules.
-
-.. code-block:: php
-   :emphasize-lines: 5
-
-    use Kreait\Firebase\Factory;
-
-    $database = (new Factory)
-        ->withServiceAccount('/path/to/google-service-account.json')
-        ->asUser('my-service-worker')
-        ->createDatabase();
-
-
-***************************
-Create custom tokens [#f2]_
-***************************
+********************
+Create custom tokens
+********************
 
 The Firebase Admin SDK has a built-in method for creating custom tokens. At a minimum, you need to provide a uid,
 which can be any string but should uniquely identify the user or device you are authenticating.
@@ -125,10 +64,11 @@ the auth / request.auth objects in your Security Rules:
     You can find the usage instructions at
     `https://github.com/lcobucci/jwt/blob/3.2/README.md <https://github.com/lcobucci/jwt/blob/3.2/README.md>`_.
 
+.. _verify-a-firebase-id-token:
 
-*********************************
-Verify a Firebase ID Token [#f3]_
-*********************************
+**************************
+Verify a Firebase ID Token
+**************************
 
 If a Firebase client app communicates with your server, you might need to identify the currently signed-in user.
 To do so, verify the integrity and authenticity of the ID token and retrieve the uid from it.
@@ -207,8 +147,125 @@ Here is an example using the `Symfony Cache Component <https://symfony.com/doc/c
             ->withServiceAccount('/path/to/google-service-account.json')
             ->withVerifierCache($cache);
 
-.. rubric:: References
 
-.. [#f1] `Google: Introduction to the Admin Database API <https://firebase.google.com/docs/database/admin/start>`_
-.. [#f2] `Google: Create custom tokens <https://firebase.google.com/docs/auth/admin/create-custom-tokens>`_
-.. [#f3] `Google: Verify ID Tokens <https://firebase.google.com/docs/auth/admin/verify-id-tokens>`_
+***************************
+Custom Authentication Flows
+***************************
+
+.. image:: https://img.shields.io/badge/available_since-v4.41-yellowgreen
+   :target: https://github.com/kreait/firebase-php/releases/tag/4.41.0
+   :alt: Available since v4.41
+
+.. warning::
+    It is recommended that you use the Firebase Client SDKs to perform user authentication. Once
+    signed in via a client SDK, you should pass the logged-in user's current ID token to your
+    PHP endpoint and :ref:`verify the ID token <verify-a-firebase-id-token>` with each request
+    to your backend.
+
+Each of the methods documented below will return an instance of ``Kreait\Firebase\Auth\SignInResult\SignInResult``
+with the following accessors:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Auth;
+
+    // $signInResult = $auth->signIn*()
+
+    $signInResult->idToken(); // string|null
+    $signInResult->accessToken(); // string|null
+    $signInResult->refreshToken(); // string|null
+    $signInResult->data(); // array
+    $signInResult->asTokenResponse(); // array
+
+``SignInResult::data()`` returns the full payload of the response returned by the Firebase API,
+``SignInResult::asTokenResponse()`` returns the Sign-In result in a format that can be returned to
+clients:
+
+.. code-block:: php
+
+    $tokenResponse = [
+        'token_type' => 'Bearer',
+        'access_token' => '...',
+        'id_token' => '...',
+        'refresh_token' => '...',
+        'expires_in' => 3600,
+    ];
+
+.. note::
+    Not all sign-in methods return all types of tokens.
+
+
+Anonymous Sign In
+-----------------
+
+.. note::
+    This method will create a new user in the Firebase Auth User Database each time
+    it is invoked
+
+.. code-block:: php
+
+    $signInResult = $auth->signInAnonymously();
+
+
+Sign In with Email and Password
+-------------------------------
+
+.. code-block:: php
+
+    $signInResult = $auth->signInWithEmailAndPassword($email, $clearTextPassword);
+
+
+Sign In with a Custom Token
+---------------------------
+
+.. code-block:: php
+
+    $signInResult = $auth->signInWithCustomToken($customToken);
+
+
+Sign In with a Refresh Token
+----------------------------
+
+.. code-block:: php
+
+    $signInResult = $auth->signInWithRefreshToken($refreshToken);
+
+
+Sign In without a token
+-----------------------
+
+.. code-block:: php
+
+    $signInResult = $auth->signInAsUser($userOrUid, array $claims = null);
+
+
+************************
+Invalidate user sessions
+************************
+
+This will revoke all sessions for a specified user and disable any new ID tokens for existing sessions from getting
+minted. **Existing ID tokens may remain active until their natural expiration (one hour).** To verify that
+ID tokens are revoked, use ``Auth::verifyIdToken()`` with the second parameter set to ``true``.
+
+If the check fails, a ``RevokedIdToken`` exception will be thrown.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Exception\Auth\RevokedIdToken;
+
+    $auth->revokeRefreshTokens($uid);
+
+    try {
+        $verifiedIdToken = $auth->verifyIdToken($idTokenString, $checkIfRevoked = true);
+    } catch (RevokedIdToken $e) {
+        echo $e->getMessage();
+    }
+
+.. note::
+    Because Firebase ID tokens are stateless JWTs, you can determine a token has been revoked only by requesting the
+    token's status from the Firebase Authentication backend. For this reason, performing this check on your server
+    is an expensive operation, requiring an extra network round trip. You can avoid making this network request
+    by setting up Firebase Rules that check for revocation rather than using the Admin SDK to make the check.
+
+    For more information, please visit
+    `Google: Detect ID token revocation in Database Rules <https://firebase.google.com/docs/auth/admin/manage-sessions#detect_id_token_revocation_in_database_rules>`_
