@@ -13,11 +13,14 @@ use Kreait\Firebase\Exception\Auth\AuthError;
 use Kreait\Firebase\Exception\Auth\CredentialsMismatch;
 use Kreait\Firebase\Exception\Auth\EmailExists;
 use Kreait\Firebase\Exception\Auth\EmailNotFound;
+use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidCustomToken;
+use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\MissingPassword;
 use Kreait\Firebase\Exception\Auth\OperationNotAllowed;
 use Kreait\Firebase\Exception\Auth\PhoneNumberExists;
+use Kreait\Firebase\Exception\Auth\ProviderLinkFailed;
 use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\Auth\WeakPassword;
@@ -25,6 +28,7 @@ use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
+use RuntimeException;
 
 /**
  * @internal
@@ -63,6 +67,12 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         );
 
         $this->assertInstanceOf(ApiConnectionFailed::class, $this->converter->convertException($connectException));
+    }
+
+    /** @test */
+    public function it_can_handle_unknown_exceptions()
+    {
+        $this->assertInstanceOf(AuthError::class, $this->converter->convertException($e = new RuntimeException()));
     }
 
     /**
@@ -105,6 +115,11 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
             'a user was not found' => ['USER_NOT_FOUND', UserNotFound::class],
             'a password is too weak' => ['WEAK_PASSWORD', WeakPassword::class],
             'a phone number already exists' => ['PHONE_NUMBER_EXISTS', PhoneNumberExists::class],
+            'an idp credential is invalid' => ['INVALID_IDP_RESPONSE', ProviderLinkFailed::class],
+            'an idp credential is already linked' => ['FEDERATED_USER_ID_ALREADY_LINKED', ProviderLinkFailed::class],
+            'an id token is invalid or expired' => ['INVALID_ID_TOKEN', ProviderLinkFailed::class],
+            'an oob code is expired' => ['EXPIRED_OOB_CODE', ExpiredOobCode::class],
+            'an oob code is invalid' => ['INVALID_OOB_CODE', InvalidOobCode::class],
         ];
     }
 }

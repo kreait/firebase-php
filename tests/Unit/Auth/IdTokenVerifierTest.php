@@ -176,10 +176,6 @@ final class IdTokenVerifierTest extends TestCase
         $this->verifier->verifyIdToken($revealedToken);
     }
 
-    public function it_requires_an_expiration_date()
-    {
-    }
-
     public function invalidTokens()
     {
         return [

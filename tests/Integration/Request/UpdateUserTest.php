@@ -8,7 +8,6 @@ use Kreait\Firebase\Auth;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Request\UpdateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
-use Kreait\Firebase\Util\JSON;
 
 /**
  * @internal
@@ -126,14 +125,13 @@ class UpdateUserTest extends IntegrationTestCase
         $user = $this->auth->updateUser($uid, $request);
         $this->assertEquals($claims, $user->customAttributes);
 
-        // Make sure the custom claims are available in the user's ID token
-        $idTokenResponse = $this->auth->getApiClient()->exchangeCustomTokenForIdAndRefreshToken(
-            $this->auth->createCustomToken($user->uid)
-        );
-        $idToken = $this->auth->verifyIdToken(JSON::decode((string) $idTokenResponse->getBody(), true)['idToken']);
+        $idToken = $this->auth->signInAsUser($user)->idToken();
+        $this->assertNotNull($idToken);
 
-        $this->assertTrue($idToken->getClaim('admin'));
-        $this->assertSame('1234', $idToken->getClaim('groupId'));
+        $verifiedToken = $this->auth->verifyIdToken($idToken);
+
+        $this->assertTrue($verifiedToken->getClaim('admin'));
+        $this->assertSame('1234', $verifiedToken->getClaim('groupId'));
 
         $this->auth->deleteUser($uid);
     }

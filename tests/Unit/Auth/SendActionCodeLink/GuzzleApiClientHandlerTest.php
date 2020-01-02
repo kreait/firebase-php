@@ -57,4 +57,18 @@ final class GuzzleApiClientHandlerTest extends TestCase
         $this->expectException(FailedToSendActionLink::class);
         $this->handler->handle($this->sendAction);
     }
+
+    /** @test */
+    public function exceptions_contain_the_action_and_a_response()
+    {
+        $this->client->send(Argument::cetera())->willReturn($response = new Response(400));
+
+        try {
+            $this->handler->handle($this->sendAction);
+            $this->fail('An exception should have been thrown');
+        } catch (FailedToSendActionLink $e) {
+            $this->assertSame($this->sendAction, $e->action());
+            $this->assertSame($response, $e->response());
+        }
+    }
 }

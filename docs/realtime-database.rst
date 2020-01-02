@@ -262,8 +262,8 @@ a website might be set as follows:
 .. note::
     Using ``set()`` overwrites data at the specified location, including any child nodes.
 
-Update specific fields [#f1]_
-=============================
+Update specific fields
+======================
 
 To simultaneously write to specific children of a node without overwriting other child nodes,
 use the update() method.
@@ -295,8 +295,8 @@ to the recent activity feed and the posting user's activity feed using code like
        ->update($updates);
 
 
-Writing lists [#f2]_
-====================
+Writing lists
+=============
 
 Use the ``push()`` method to append data to a list in multiuser applications. The ``push()`` method
 generates a unique key every time a new child is added to the specified Firebase reference.
@@ -336,8 +336,8 @@ The following to usages are equivalent:
               ->set('created_at', Database::SERVER_TIMESTAMP);
 
 
-Delete data [#f3]_
-==================
+Delete data
+===========
 
 You can delete a reference, including all data it contains, with the ``remove()`` method:
 
@@ -519,13 +519,3 @@ Learn more about the usage of Firebase Realtime Database Rules in the
 
         $freshRuleSet = $db->getRuleSet(); // Returns a new RuleSet instance
         $actualRules = $ruleSet->getRules(); // returns an array
-
-
-.. rubric:: Footnotes
-
-.. [#f1] This example and its description is the same as in the official documentation:
-         `Update specific fields <https://firebase.google.com/docs/database/web/read-and-write#update_specific_fields>`_.
-.. [#f2] This example and its description is the same as in the official documentation:
-         `Append to a list of data <https://firebase.google.com/docs/database/web/lists-of-data#append_to_a_list_of_data>`_.
-.. [#f3] This example and its description is the same as in the official documentation:
-         `Delete data <https://firebase.google.com/docs/database/web/read-and-write#delete_data>`_.

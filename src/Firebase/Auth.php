@@ -12,6 +12,7 @@ use Firebase\Auth\Token\Exception\InvalidToken;
 use Firebase\Auth\Token\Exception\IssuedInTheFuture;
 use Firebase\Auth\Token\Exception\UnknownKey;
 use Generator;
+use Kreait\Clock;
 use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Auth\ApiClient;
@@ -21,6 +22,14 @@ use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Auth\LinkedProviderData;
 use Kreait\Firebase\Auth\SendActionLink;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
+use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
+use Kreait\Firebase\Auth\SignIn\Handler as SignInHandler;
+use Kreait\Firebase\Auth\SignInAnonymously;
+use Kreait\Firebase\Auth\SignInResult;
+use Kreait\Firebase\Auth\SignInWithCustomToken;
+use Kreait\Firebase\Auth\SignInWithEmailAndPassword;
+use Kreait\Firebase\Auth\SignInWithIdpCredentials;
+use Kreait\Firebase\Auth\SignInWithRefreshToken;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\AuthError;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
@@ -44,33 +53,44 @@ use Throwable;
 
 class Auth
 {
-    /**
-     * @var ApiClient
-     */
+    /** @var ApiClient */
     private $client;
 
-    /**
-     * @var TokenGenerator
-     */
+    /** @var TokenGenerator */
     private $tokenGenerator;
 
-    /**
-     * @var Verifier
-     */
+    /** @var Verifier */
     private $idTokenVerifier;
 
+    /** @var SignInHandler */
+    private $signInHandler;
+
     /**
+     * @param array<int, ApiClient|TokenGenerator|Verifier|Clock|SignInHandler> $x
+     *
      * @internal
      */
-    public function __construct(ApiClient $client, TokenGenerator $customToken, Verifier $idTokenVerifier)
+    public function __construct(...$x)
     {
-        $this->client = $client;
-        $this->tokenGenerator = $customToken;
-        $this->idTokenVerifier = $idTokenVerifier;
+        foreach ($x as $arg) {
+            if ($arg instanceof ApiClient) {
+                $this->client = $arg;
+            } elseif ($arg instanceof TokenGenerator) {
+                $this->tokenGenerator = $arg;
+            } elseif ($arg instanceof Verifier) {
+                $this->idTokenVerifier = $arg;
+            } elseif ($arg instanceof SignInHandler) {
+                $this->signInHandler = $arg;
+            }
+        }
     }
 
     /**
      * @internal
+     *
+     * @deprecated 4.41
+     * @noinspection ExposingInternalClassesInspection
+     * @codeCoverageIgnore
      */
     public function getApiClient(): ApiClient
     {
@@ -301,6 +321,7 @@ class Auth
     /**
      * @deprecated 4.37.0 Use {@see \Kreait\Firebase\Auth::sendEmailVerificationLink()} instead.
      * @see sendEmailVerificationLink()
+     * @codeCoverageIgnore
      *
      * @param Uid|string $uid
      * @param UriInterface|string|null $continueUrl
@@ -327,6 +348,7 @@ class Auth
     /**
      * @deprecated 4.37.0 Use {@see \Kreait\Firebase\Auth::sendPasswordResetLink()} instead.
      * @see sendPasswordResetLink()
+     * @codeCoverageIgnore
      *
      * @param Email|mixed $email
      * @param UriInterface|string|null $continueUrl
@@ -337,7 +359,7 @@ class Auth
     public function sendPasswordResetEmail($email, $continueUrl = null, string $locale = null)
     {
         try {
-            $this->sendEmailActionLink('PASSWORD_RESET', $email, ['continueUrl' => $continueUrl], $locale);
+            $this->sendPasswordResetLink($email, ['continueUrl' => $continueUrl], $locale);
         } catch (FailedToSendActionLink $e) {
             throw new AuthError($e->getMessage(), $e->getCode(), $e);
         }
@@ -397,12 +419,20 @@ class Auth
             }
 
             try {
-                $idTokenString = $this->getIdTokenStringForUserByUid($user->uid);
+                $signInResult = $this->signInAsUser($user);
             } catch (Throwable $e) {
                 throw new FailedToSendActionLink($e->getMessage(), $e->getCode(), $e);
             }
 
-            $sendAction = $sendAction->withIdTokenString($idTokenString);
+            if (!($idToken = $signInResult->idToken())) {
+                // @codeCoverageIgnoreStart
+                // This only happens if the response on Google's side has changed
+                // If it does, the tests will fail, but we don't have to cover that
+                throw new FailedToSendActionLink("Failed to send action link: Unable to retrieve ID token for user assigned to email {$email}");
+                // @codeCoverageIgnoreEnd
+            }
+
+            $sendAction = $sendAction->withIdTokenString($idToken);
         }
 
         (new SendActionLink\GuzzleApiClientHandler($this->client))->handle($sendAction);
@@ -476,6 +506,7 @@ class Auth
 
     /**
      * @param Uid|string $uid
+     * @param array<string, mixed> $attributes
      *
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
@@ -504,6 +535,10 @@ class Auth
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
 
         return $this->tokenGenerator->createCustomToken($uid, $claims);
+    }
+
+    public function parseJWT(string $token)
+    {
     }
 
     /**
@@ -575,6 +610,9 @@ class Auth
     }
 
     /**
+     * @deprecated 4.41 Use {@see \Kreait\Firebase\Auth::signInWithEmailAndPassword()} instead.
+     * @see signInWithEmailAndPassword()
+     *
      * Verifies wether the given email/password combination is correct and returns
      * a UserRecord when it is, an Exception otherwise.
      *
@@ -594,12 +632,17 @@ class Auth
      */
     public function verifyPassword($email, $password): UserRecord
     {
-        $email = $email instanceof Email ? $email : new Email($email);
-        $password = $password instanceof ClearTextPassword ? $password : new ClearTextPassword($password);
+        try {
+            $data = $this->signInWithEmailAndPassword($email, $password)->data();
+        } catch (FailedToSignIn $e) {
+            if (\mb_stripos($e->getMessage(), 'invalid_password') !== false) {
+                throw new InvalidPassword('The password is invalid or the user does not have a password.', $e->getCode(), $e);
+            }
 
-        $response = $this->client->verifyPassword((string) $email, (string) $password);
+            throw $e;
+        }
 
-        return $this->getUserRecordFromResponse($response);
+        return $this->getUser($data['localId']);
     }
 
     /**
@@ -689,6 +732,10 @@ class Auth
     }
 
     /**
+     * @deprecated 4.41 Use {@see \Kreait\Firebase\Auth::signInWithIdpAccessToken()} instead.
+     * @see signInWithIdpAccessToken()
+     * @codeCoverageIgnore
+     *
      * Logs in the user to Firebase by a provider's access token (like Google, Facebook, Twitter, etc),
      * if the authentication provider is enabled for the project.
      *
@@ -701,16 +748,17 @@ class Auth
      */
     public function linkProviderThroughAccessToken($provider, string $accessToken): LinkedProviderData
     {
-        $provider = $provider instanceof Provider ? $provider : new Provider($provider);
-        $response = $this->client->linkProviderThroughAccessToken($provider, $accessToken);
+        $data = $this->signInWithIdpAccessToken($provider, $accessToken)->data();
 
-        return LinkedProviderData::fromResponseData(
-            $this->getUserRecordFromResponse($response),
-            JSON::decode((string) $response->getBody(), true)
-        );
+        /* @noinspection PhpDeprecationInspection */
+        return LinkedProviderData::fromResponseData($this->getUser($data['localId']), $data);
     }
 
     /**
+     * @deprecated 4.41 Use {@see \Kreait\Firebase\Auth::signInWithIdpIdToken()} instead.
+     * @see signInWithIdpIdToken()
+     * @codeCoverageIgnore
+     *
      * Logs in the user to Firebase by a provider's ID token (like Google, Facebook, Twitter, etc),
      * if the authentication provider is enabled for the project.
      *
@@ -723,13 +771,135 @@ class Auth
      */
     public function linkProviderThroughIdToken($provider, string $idToken): LinkedProviderData
     {
-        $provider = $provider instanceof Provider ? $provider : new Provider($provider);
-        $response = $this->client->linkProviderThroughIdToken($provider, $idToken);
+        $data = $this->signInWithIdpIdToken($provider, $idToken)->data();
 
-        return LinkedProviderData::fromResponseData(
-            $this->getUserRecordFromResponse($response),
-            JSON::decode((string) $response->getBody(), true)
+        /* @noinspection PhpDeprecationInspection */
+        return LinkedProviderData::fromResponseData($this->getUser($data['localId']), $data);
+    }
+
+    /**
+     * @param UserRecord|Uid|string $user
+     *
+     * @throws FailedToSignIn
+     */
+    public function signInAsUser($user, array $claims = null): SignInResult
+    {
+        $claims = $claims ?? [];
+        $uid = $user instanceof UserRecord ? $user->uid : (string) $user;
+
+        return $this->signInHandler->handle(
+            SignInWithCustomToken::fromValue((string) $this->createCustomToken($uid, $claims))
         );
+    }
+
+    /**
+     * @param Token|string $token
+     *
+     * @throws FailedToSignIn
+     */
+    public function signInWithCustomToken($token): SignInResult
+    {
+        return $this->signInHandler->handle(
+            SignInWithCustomToken::fromValue((string) $token)
+        );
+    }
+
+    /**
+     * @throws FailedToSignIn
+     */
+    public function signInWithRefreshToken(string $refreshToken): SignInResult
+    {
+        return $this->signInHandler->handle(
+            SignInWithRefreshToken::fromValue($refreshToken)
+        );
+    }
+
+    /**
+     * @param string|Email $email
+     * @param string|ClearTextPassword $clearTextPassword
+     *
+     * @throws FailedToSignIn
+     */
+    public function signInWithEmailAndPassword($email, $clearTextPassword): SignInResult
+    {
+        $email = $email instanceof Email ? (string) $email : $email;
+        $clearTextPassword = $clearTextPassword instanceof ClearTextPassword ? (string) $clearTextPassword : $clearTextPassword;
+
+        return $this->signInHandler->handle(
+            SignInWithEmailAndPassword::fromValues($email, $clearTextPassword)
+        );
+    }
+
+    /**
+     * @throws FailedToSignIn
+     */
+    public function signInAnonymously(): SignInResult
+    {
+        $result = $this->signInHandler->handle(SignInAnonymously::new());
+
+        if ($result->idToken()) {
+            return $result;
+        }
+
+        if ($uid = ($result->data()['localId'] ?? null)) {
+            return $this->signInAsUser($uid);
+        }
+
+        throw new FailedToSignIn('Failed to sign in anonymously: No ID token or UID available');
+    }
+
+    /**
+     * @param Provider|string $provider
+     * @param UriInterface|string|null $redirectUrl
+     *
+     * @throws FailedToSignIn
+     */
+    public function signInWithIdpAccessToken($provider, string $accessToken, $redirectUrl = null): SignInResult
+    {
+        $provider = $provider instanceof Provider ? (string) $provider : $provider;
+        $redirectUrl = $redirectUrl ?? 'http://localhost';
+
+        if ($redirectUrl instanceof UriInterface) {
+            $redirectUrl = (string) $redirectUrl;
+        }
+
+        $action = SignInWithIdpCredentials::withAccessToken($provider, $accessToken);
+
+        if ($redirectUrl) {
+            $action = $action->withRequestUri($redirectUrl);
+        }
+
+        return $this->signInHandler->handle($action);
+    }
+
+    /**
+     * @param Provider|string $provider
+     * @param Token|string $idToken
+     * @param UriInterface|string|null $redirectUrl
+     *
+     * @throws FailedToSignIn
+     */
+    public function signInWithIdpIdToken($provider, $idToken, $redirectUrl = null): SignInResult
+    {
+        $provider = $provider instanceof Provider ? (string) $provider : $provider;
+
+        if ($idToken instanceof Token) {
+            $idToken = (string) $idToken;
+        }
+
+        $redirectUrl = $redirectUrl ?? 'http://localhost';
+
+        if ($redirectUrl instanceof UriInterface) {
+            $redirectUrl = (string) $redirectUrl;
+        }
+
+        $action = SignInWithIdpCredentials::withIdToken($provider, $idToken);
+
+        if ($redirectUrl) {
+            $action = $action->withRequestUri($redirectUrl);
+        }
+
+        return $this->signInHandler->handle($action);
     }
 
     /**
@@ -743,20 +913,5 @@ class Auth
         $uid = JSON::decode((string) $response->getBody(), true)['localId'];
 
         return $this->getUser($uid);
-    }
-
-    private function getIdTokenStringForUserByUid(string $uid): string
-    {
-        $customToken = $this->createCustomToken($uid);
-
-        $response = $this->client->exchangeCustomTokenForIdAndRefreshToken($customToken);
-
-        $data = JSON::decode((string) $response->getBody(), true);
-
-        if ($idToken = $data['idToken'] ?? null) {
-            return (string) $idToken;
-        }
-
-        throw new AuthError("Unable to convert exchange custom token for user with UID {$uid} to an ID token.");
     }
 }

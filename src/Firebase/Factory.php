@@ -179,6 +179,10 @@ class Factory
         return $factory;
     }
 
+    /**
+     * @deprecated 4.41
+     * @codeCoverageIgnore
+     */
     public function asUser(string $uid, array $claims = null): self
     {
         $factory = clone $this;
@@ -249,8 +253,9 @@ class Factory
         $keyStore = new HttpKeyStore(new Client(), $this->verifierCache ?: new InMemoryCache());
         $baseVerifier = new Verifier($serviceAccount->getSanitizedProjectId(), $keyStore);
         $idTokenVerifier = new Firebase\Auth\IdTokenVerifier($baseVerifier, $this->clock);
+        $signInHandler = new Firebase\Auth\SignIn\GuzzleHandler($http);
 
-        return new Auth($apiClient, $customTokenGenerator, $idTokenVerifier);
+        return new Auth($apiClient, $customTokenGenerator, $idTokenVerifier, $signInHandler);
     }
 
     public function createCustomTokenGenerator(): Generator
