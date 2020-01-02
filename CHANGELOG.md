@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Validate Cloud Message data before casting it to strings (and failing while doing it) ([#365](https://github.com/kreait/firebase-php/issues/365), [#368](https://github.com/kreait/firebase-php/issues/368))
+
 ## 4.37.0 - 2019-12-13
 
 ### Auth

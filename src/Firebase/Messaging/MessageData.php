@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging;
 
+use Kreait\Firebase\Exception\InvalidArgumentException;
+
 final class MessageData implements \JsonSerializable
 {
     /**
@@ -20,6 +22,10 @@ final class MessageData implements \JsonSerializable
         $messageData = new self();
 
         foreach ($data as $key => $value) {
+            if (!self::isStringable($key) || !self::isStringable($value)) {
+                throw new InvalidArgumentException('Message data must be a one-dimensional array of string(able) keys and values.');
+            }
+
             $messageData->data[(string) $key] = (string) $value;
         }
 
@@ -29,5 +35,10 @@ final class MessageData implements \JsonSerializable
     public function jsonSerialize()
     {
         return $this->data;
+    }
+
+    private static function isStringable($value): bool
+    {
+        return \is_string($value) || (\is_object($value) && \method_exists($value, '__toString'));
     }
 }
