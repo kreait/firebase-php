@@ -74,6 +74,10 @@ class ServiceAccountTest extends UnitTestCase
 
     public function testCreateFromSymlinkedJsonFile()
     {
+        if ($this->onWindows()) {
+            $this->markTestSkipped('Windows only support absolute symlinks');
+        }
+
         ServiceAccount::fromValue($this->symlinkedJsonFile);
         $this->addToAssertionCount(1);
     }
@@ -168,5 +172,10 @@ class ServiceAccountTest extends UnitTestCase
         return [
             ['example-com-api-project-xxxxxx', 'example.com:api-project-xxxxxx'],
         ];
+    }
+
+    private function onWindows()
+    {
+        return \mb_stripos(\PHP_OS, 'win') === 0;
     }
 }
