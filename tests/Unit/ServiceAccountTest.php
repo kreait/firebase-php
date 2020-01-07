@@ -14,6 +14,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 class ServiceAccountTest extends UnitTestCase
 {
     private $validJsonFile;
+    private $realpathedValidJsonFile;
     private $invalidJsonFile;
     private $malformedJsonFile;
     private $symlinkedJsonFile;
@@ -27,6 +28,7 @@ class ServiceAccountTest extends UnitTestCase
     protected function setUp()
     {
         $this->validJsonFile = self::$fixturesDir.'/ServiceAccount/valid.json';
+        $this->realpathedValidJsonFile = \realpath($this->validJsonFile);
         $this->malformedJsonFile = self::$fixturesDir.'/ServiceAccount/malformed.json';
         $this->invalidJsonFile = self::$fixturesDir.'/ServiceAccount/invalid.json';
         $this->symlinkedJsonFile = self::$fixturesDir.'/ServiceAccount/symlinked.json';
@@ -61,6 +63,12 @@ class ServiceAccountTest extends UnitTestCase
     public function testCreateFromJsonFile()
     {
         ServiceAccount::fromValue($this->validJsonFile);
+        $this->addToAssertionCount(1);
+    }
+
+    public function testCreateFromRealpathedJsonFile()
+    {
+        ServiceAccount::fromValue($this->realpathedValidJsonFile);
         $this->addToAssertionCount(1);
     }
 
