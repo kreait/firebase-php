@@ -1,3 +1,6 @@
 includes:
 	- vendor/phpstan/phpstan-phpunit/extension.neon
 	- vendor/jangregor/phpstan-prophecy/src/extension.neon
+
+parameters:
+	inferPrivatePropertyTypeFromConstructor: true

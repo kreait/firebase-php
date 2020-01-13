@@ -22,6 +22,10 @@ class CustomTokenViaGoogleIamTest extends IntegrationTestCase
 
     protected function setUp()
     {
+        if (!self::$serviceAccount) {
+            $this->markTestSkipped('The integration tests require credentials');
+        }
+
         $this->generator = new CustomTokenViaGoogleIam(
             self::$serviceAccount->getClientEmail(),
             self::$factory->createApiClient()

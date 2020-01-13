@@ -136,13 +136,14 @@ class MessagingTest extends IntegrationTestCase
 
     public function testSendMulticastWithValidAndInvalidTarget()
     {
-        if (empty(self::$registrationTokens)) {
-            $this->markTestSkipped();
+        \reset(self::$registrationTokens);
+        if ($token = \current(self::$registrationTokens)) {
+            $this->markTestSkipped('No registration token available');
         }
 
         $message = CloudMessage::fromArray([]);
         $tokens = [
-            $valid = self::$registrationTokens[0],
+            $valid = $token,
             $invalid = 'invalid',
         ];
 
@@ -168,22 +169,23 @@ class MessagingTest extends IntegrationTestCase
      */
     public function testSendMulticastMessageToOneRecipientOnly()
     {
-        if (empty(self::$registrationTokens)) {
-            $this->markTestSkipped();
+        \reset(self::$registrationTokens);
+        if ($token = \current(self::$registrationTokens)) {
+            $this->markTestSkipped('No registration token available');
         }
 
-        $report = $this->messaging->sendMulticast(CloudMessage::new(), [self::$registrationTokens[0]]);
+        $report = $this->messaging->sendMulticast(CloudMessage::new(), [$token]);
 
         $this->assertCount(1, $report->successes());
     }
 
     public function testSendMessageToDifferentTargets()
     {
-        if (empty(self::$registrationTokens)) {
-            $this->markTestSkipped();
+        \reset(self::$registrationTokens);
+        if ($token = \current(self::$registrationTokens)) {
+            $this->markTestSkipped('No registration token available');
         }
 
-        $token = self::$registrationTokens[0];
         $topic = __FUNCTION__;
         $condition = "'{$topic}' in topics";
         $invalidToken = 'invalid_token';
@@ -209,11 +211,11 @@ class MessagingTest extends IntegrationTestCase
 
     public function testManageTopicSubscriptions()
     {
-        if (empty(self::$registrationTokens)) {
-            $this->markTestSkipped();
+        \reset(self::$registrationTokens);
+        if ($token = \current(self::$registrationTokens)) {
+            $this->markTestSkipped('No registration token available');
         }
 
-        $token = self::$registrationTokens[0];
         $topicName = \uniqid('topic', false);
 
         $this->unsubscribeFromAllTopics($token);
@@ -241,11 +243,10 @@ class MessagingTest extends IntegrationTestCase
 
     public function testGetAppInstance()
     {
-        if (empty(self::$registrationTokens)) {
-            $this->markTestSkipped();
+        \reset(self::$registrationTokens);
+        if ($token = \current(self::$registrationTokens)) {
+            $this->markTestSkipped('No registration token available');
         }
-
-        $token = self::$registrationTokens[0];
 
         $appInstance = $this->messaging->getAppInstance($token);
 

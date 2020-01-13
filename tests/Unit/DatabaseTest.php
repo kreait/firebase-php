@@ -34,7 +34,7 @@ class DatabaseTest extends UnitTestCase
 
     public function testGetReference()
     {
-        $this->assertSame('/any', $this->database->getReference('any')->getUri()->getPath());
+        $this->assertSame('any', \trim($this->database->getReference('any')->getUri()->getPath(), '/'));
     }
 
     public function testGetRootReference()

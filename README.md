@@ -1,3 +1,4 @@
+
 # Firebase Admin SDK for PHP
 
 Interact with [Google Firebase](https://firebase.google.com) from your PHP application.
@@ -8,10 +9,12 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 [![Total Downloads](https://img.shields.io/packagist/dt/kreait/firebase-php.svg)](https://packagist.org/packages/kreait/firebase-php/stats)
 [![Discord](https://img.shields.io/discord/523866370778333184.svg?color=7289da&logo=discord)](https://discord.gg/nbgVfty)
 
-[![Build Status](https://travis-ci.org/kreait/firebase-php.svg?branch=master)](https://travis-ci.org/kreait/firebase-php)
+<!--
+[![Tests](https://github.com/kreait/firebase-php/workflows/Tests/badge.svg?branch=master)](https://github.com/kreait/firebase-php/actions)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=kreait_firebase-php&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=kreait_firebase-php)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=kreait_firebase-php&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=kreait_firebase-php)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=kreait_firebase-php&metric=coverage)](https://sonarcloud.io/dashboard?id=kreait_firebase-php)
+[![Code Coverage](https://codecov.io/gh/kreait/firebase-php/branch/master/graph/badge.svg)](https://codecov.io/gh/kreait/firebase-php)
+-->
 
 ## Resources
 

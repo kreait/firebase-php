@@ -25,6 +25,10 @@ final class ApiClientTest extends IntegrationTestCase
 
     protected function setUp()
     {
+        if (!self::$serviceAccount) {
+            $this->markTestSkipped('The integration tests require credentials');
+        }
+
         $projectId = self::$serviceAccount->getSanitizedProjectId();
 
         $httpClient = self::$factory->createApiClient([

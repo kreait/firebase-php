@@ -19,7 +19,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     protected static $factory;
 
     /**
-     * @var ServiceAccount
+     * @var ServiceAccount|null
      */
     protected static $serviceAccount;
 
@@ -30,25 +30,15 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
     public static function setUpBeforeClass()
     {
-        if (\file_exists($testDevices = self::$fixturesDir.'/test_devices.json')) {
-            self::$registrationTokens = JSON::decode((string) \file_get_contents($testDevices), true);
-        }
+        self::$serviceAccount = self::credentialsFromEnvironment() ?? self::credentialsFromFile();
 
-        $credentialsPath = self::$fixturesDir.'/test_credentials.json';
-
-        if (!\file_exists($credentialsPath)) {
-            self::markTestSkipped();
-        }
-
-        try {
-            self::$serviceAccount = ServiceAccount::fromJsonFile($credentialsPath);
-        } catch (Throwable $e) {
-            self::markTestSkipped('The integration tests require a credentials file at "'.$credentialsPath.'"."');
-
-            return;
+        if (!self::$serviceAccount) {
+            self::markTestSkipped('The integration tests require credentials');
         }
 
         self::$factory = (new Factory())->withServiceAccount(self::$serviceAccount);
+
+        self::$registrationTokens = self::registrationTokensFromEnvironment() ?? self::registrationTokensFromFile() ?? [];
     }
 
     protected function createUserWithEmailAndPassword(string $email = null, string $password = null): UserRecord
@@ -72,5 +62,73 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         $uid = $userOrUid instanceof UserRecord ? $userOrUid->uid : $userOrUid;
 
         self::$factory->createAuth()->deleteUser($uid);
+    }
+
+    /**
+     * @return ServiceAccount|null
+     */
+    private static function credentialsFromFile()
+    {
+        $credentialsPath = self::$fixturesDir.'/test_credentials.json';
+
+        if (!\file_exists($credentialsPath)) {
+            return null;
+        }
+
+        try {
+            return ServiceAccount::fromJsonFile($credentialsPath);
+        } catch (Throwable $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @return ServiceAccount|null
+     */
+    private static function credentialsFromEnvironment()
+    {
+        if ($credentials = getenv('FIREBASE_CREDENTIALS')) {
+            return ServiceAccount::fromValue($credentials);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array|null
+     */
+    private static function registrationTokensFromFile()
+    {
+        $path = self::$fixturesDir.'/test_credentials.json';
+
+        if (!\file_exists($path)) {
+            return null;
+        }
+
+        try {
+            if ($contents = file_get_contents($path)) {
+                return JSON::decode($contents, true);
+            }
+
+            return null;
+        } catch (Throwable $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @return array|null
+     */
+    private static function registrationTokensFromEnvironment()
+    {
+        if (!($tokens = getenv('TEST_REGISTRATION_TOKENS'))) {
+            return null;
+        }
+
+        try {
+            return JSON::decode($tokens, true);
+        } catch (Throwable $e) {
+            return null;
+        }
     }
 }
