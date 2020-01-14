@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.38.1 - 2020-01-14
 
 * Fixed malformed tokens not being caught during ID Token verification ([#370](https://github.com/kreait/firebase-php/issues/370))
 
