@@ -160,8 +160,9 @@ final class IdTokenVerifierTest extends TestCase
     public function invalidTokens()
     {
         return [
-            ['invalid'],
-            [new stdClass()],
+            'invalid format' => ['invalid'],
+            'invalid type' => [new stdClass()],
+            'valid format, but invalid parts' => ['x.y.z'],
         ];
     }
 

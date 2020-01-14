@@ -128,7 +128,7 @@ final class IdTokenVerifier implements Verifier
 
         try {
             return (new Parser())->parse((string) $token);
-        } catch (\InvalidArgumentException $e) {
+        } catch (Throwable $e) {
             throw new InvalidArgumentException('The given token could not be parsed: '.$e->getMessage());
         }
     }

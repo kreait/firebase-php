@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Fixed malformed tokens not being caught during ID Token verification ([#370](https://github.com/kreait/firebase-php/issues/370))
+
 ## 4.38.0 - 2020-01-02
 
 * Validate Cloud Message data before casting it to strings (and failing while doing it) ([#365](https://github.com/kreait/firebase-php/issues/365), [#368](https://github.com/kreait/firebase-php/issues/368))
