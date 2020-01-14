@@ -137,7 +137,7 @@ class MessagingTest extends IntegrationTestCase
     public function testSendMulticastWithValidAndInvalidTarget()
     {
         \reset(self::$registrationTokens);
-        if ($token = \current(self::$registrationTokens)) {
+        if (!($token = \current(self::$registrationTokens))) {
             $this->markTestSkipped('No registration token available');
         }
 
@@ -170,7 +170,7 @@ class MessagingTest extends IntegrationTestCase
     public function testSendMulticastMessageToOneRecipientOnly()
     {
         \reset(self::$registrationTokens);
-        if ($token = \current(self::$registrationTokens)) {
+        if (!($token = \current(self::$registrationTokens))) {
             $this->markTestSkipped('No registration token available');
         }
 
@@ -182,7 +182,7 @@ class MessagingTest extends IntegrationTestCase
     public function testSendMessageToDifferentTargets()
     {
         \reset(self::$registrationTokens);
-        if ($token = \current(self::$registrationTokens)) {
+        if (!($token = \current(self::$registrationTokens))) {
             $this->markTestSkipped('No registration token available');
         }
 
@@ -212,7 +212,7 @@ class MessagingTest extends IntegrationTestCase
     public function testManageTopicSubscriptions()
     {
         \reset(self::$registrationTokens);
-        if ($token = \current(self::$registrationTokens)) {
+        if (!($token = \current(self::$registrationTokens))) {
             $this->markTestSkipped('No registration token available');
         }
 
@@ -244,7 +244,7 @@ class MessagingTest extends IntegrationTestCase
     public function testGetAppInstance()
     {
         \reset(self::$registrationTokens);
-        if ($token = \current(self::$registrationTokens)) {
+        if (!($token = \current(self::$registrationTokens))) {
             $this->markTestSkipped('No registration token available');
         }
 

@@ -99,7 +99,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
      */
     private static function registrationTokensFromFile()
     {
-        $path = self::$fixturesDir.'/test_credentials.json';
+        $path = self::$fixturesDir.'/test_devices.json';
 
         if (!\file_exists($path)) {
             return null;
