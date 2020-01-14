@@ -190,8 +190,6 @@ class MessagingTest extends IntegrationTestCase
         $condition = "'{$topic}' in topics";
         $invalidToken = 'invalid_token';
 
-        $this->unsubscribeFromAllTopics($token);
-
         $this->messaging->subscribeToTopic($topic, $token);
 
         $message = CloudMessage::new()->withNotification(['title' => 'Token Notification', 'body' => 'Token body']);
@@ -217,9 +215,6 @@ class MessagingTest extends IntegrationTestCase
         }
 
         $topicName = \uniqid('topic', false);
-
-        $this->unsubscribeFromAllTopics($token);
-
         $this->messaging->subscribeToTopic($topicName, $token);
 
         $appInstance = $this->messaging->getAppInstance(RegistrationToken::fromValue($token));
@@ -257,16 +252,5 @@ class MessagingTest extends IntegrationTestCase
     {
         $this->expectException(InvalidArgument::class);
         $this->messaging->getAppInstance('foo');
-    }
-
-    private function unsubscribeFromAllTopics($token)
-    {
-        $appInstance = $this->messaging->getAppInstance($token);
-        foreach ($appInstance->topicSubscriptions() as $subscription) {
-            $this->messaging->unsubscribeFromTopic($subscription->topic(), $subscription->registrationToken());
-        }
-
-        $appInstance = $this->messaging->getAppInstance($token);
-        $this->assertCount(0, $appInstance->topicSubscriptions());
     }
 }
