@@ -7,6 +7,7 @@ namespace Kreait\Firebase\Tests\Unit;
 use DateTimeImmutable;
 use Firebase\Auth\Token\Domain\Generator;
 use Firebase\Auth\Token\Domain\Verifier;
+use Firebase\Auth\Token\Exception\InvalidToken;
 use Firebase\Auth\Token\Exception\IssuedInTheFuture;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -23,6 +24,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\Provider;
 use Lcobucci\JWT\Token;
+use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use RuntimeException;
 
@@ -110,6 +112,41 @@ final class AuthTest extends UnitTestCase
 
         $verifiedToken = $this->auth->verifyIdToken('foo', false);
         $this->assertSame($token, $verifiedToken);
+    }
+
+    public function testFailIfNoSubClaim()
+    {
+        $tokenProphecy = $this->prophesize(Token::class);
+        $tokenProphecy->getClaim('sub', Argument::cetera())->willReturn(false);
+        $tokenProphecy->getClaim('auth_time')->willReturn(\date('U'));
+
+        $token = $tokenProphecy->reveal();
+
+        $this->idTokenVerifier->method('verifyIdToken')->with($token)->willReturn($token);
+
+        $this->expectException(InvalidToken::class);
+        $this->expectExceptionMessageRegExp('/sub/i');
+        $this->auth->verifyIdToken($token, true);
+    }
+
+    public function testFailIfUserHasBeenDeletedInTheMeantime()
+    {
+        $uid = 'uid';
+
+        $tokenProphecy = $this->prophesize(Token::class);
+        $tokenProphecy->getClaim('sub', Argument::cetera())->willReturn($uid);
+        $tokenProphecy->getClaim('auth_time')->willReturn(\date('U'));
+
+        $token = $tokenProphecy->reveal();
+
+        // getAccountInfo response
+        $this->mockHandler->append(new Response(200, ['Content-Type' => 'application/json'], '{}'));
+
+        $this->idTokenVerifier->method('verifyIdToken')->with($token)->willReturn($token);
+
+        $this->expectException(InvalidToken::class);
+        $this->expectExceptionMessageRegExp('/found/i');
+        $this->auth->verifyIdToken($token, true);
     }
 
     public function testLinkGoogleAccountThroughIdToken()

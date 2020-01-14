@@ -6,7 +6,10 @@ namespace Kreait\Firebase;
 
 use Firebase\Auth\Token\Domain\Generator as TokenGenerator;
 use Firebase\Auth\Token\Domain\Verifier;
+use Firebase\Auth\Token\Exception\ExpiredToken;
+use Firebase\Auth\Token\Exception\InvalidSignature;
 use Firebase\Auth\Token\Exception\InvalidToken;
+use Firebase\Auth\Token\Exception\IssuedInTheFuture;
 use Firebase\Auth\Token\Exception\UnknownKey;
 use Generator;
 use Kreait\Firebase\Auth\ActionCodeSettings;
@@ -77,6 +80,7 @@ class Auth
     /**
      * @param Uid|string $uid
      *
+     * @throws UserNotFound
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      */
@@ -172,10 +176,9 @@ class Auth
      */
     public function createUserWithEmailAndPassword($email, $password): UserRecord
     {
-        return $this->createUser(
-            Request\CreateUser::new()
-                ->withUnverifiedEmail($email)
-                ->withClearTextPassword($password)
+        return $this->createUser(Request\CreateUser::new()
+            ->withUnverifiedEmail($email)
+            ->withClearTextPassword($password)
         );
     }
 
@@ -518,10 +521,12 @@ class Auth
      * @param bool $checkIfRevoked whether to check if the ID token is revoked
      * @param bool $allowTimeInconsistencies Deprecated since 4.31
      *
-     * @throws InvalidToken
+     * @throws \InvalidArgumentException if the token could not be parsed
+     * @throws InvalidToken if the token could be parsed, but is invalid for any reason (invalid signature, expired, time errors)
+     * @throws InvalidSignature if the signature doesn't match
+     * @throws ExpiredToken if the token is expired
+     * @throws IssuedInTheFuture if the token is issued in the future
      * @throws UnknownKey if the token's kid header doesnt' contain a known key
-     * @throws Exception\FirebaseException
-     * @throws Exception\AuthException
      */
     public function verifyIdToken($idToken, bool $checkIfRevoked = false, /* @deprecated */ bool $allowTimeInconsistencies = null): Token
     {
@@ -548,7 +553,17 @@ class Auth
             $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->getClaim('auth_time'));
             $tokenAuthenticatedAt = $tokenAuthenticatedAt->modify('-'.$leewayInSeconds.' seconds');
 
-            $validSince = $this->getUser($verifiedToken->getClaim('sub'))->tokensValidAfterTime;
+            if (!($sub = $verifiedToken->getClaim('sub', false))) {
+                throw new InvalidToken($verifiedToken, 'The token has no "sub" claim');
+            }
+
+            try {
+                $user = $this->getUser($sub);
+            } catch (Throwable $e) {
+                throw new InvalidToken($verifiedToken, "Error while getting the token's user: {$e->getMessage()}", $e->getCode(), $e);
+            }
+
+            $validSince = $user->tokensValidAfterTime ?? null;
 
             if ($validSince && ($tokenAuthenticatedAt < $validSince)) {
                 throw new RevokedIdToken($verifiedToken);
