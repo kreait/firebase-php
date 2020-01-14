@@ -165,21 +165,14 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
     $uid = $verifiedIdToken->getClaim('sub');
     $user = $auth->getUser($uid);
 
-``Auth::verifyIdToken()`` accepts up to three parameters:
+``Auth::verifyIdToken()`` accepts the following parameters:
 
 ============================ ============ ===========
 Parameter                    Type         Description
 ============================ ============ ===========
 ``idToken``                  string|Token **(required)** The ID token to verify
 ``checkIfRevoked``           boolean      (optional, default: ``false`` ) check if the ID token is revoked
-``allowTimeInconsistencies`` boolean      (optional, default: ``false`` ) allow a token even if it's timestamps are invalid
 ============================ ============ ===========
-
-.. warning::
-    Allowing time inconsistencies might impose a security risk. Do this only when you are not able
-    to fix your environment's time to be consistent with Google's servers. This parameter is here
-    for backwards compatibility reasons, and will be removed in the next major version. You
-    should not rely on it.
 
 .. note::
     A leeway of 5 minutes is applied when verifying time based claims starting with release 4.25.0
