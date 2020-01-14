@@ -65,7 +65,7 @@ jobs:
       script:
         - pecl install grpc
         - composer require google/cloud-firestore:^1.8
-        - vendor/bin/phpunit --coverage-clover=coverage.clover --log-junit=test-report.xml
+        - vendor/bin/phpunit --coverage-clover=coverage.xml --log-junit=test-report.xml
         - sonar-scanner
       if: repo = "kreait/firebase-php" AND type != pull_request
 
