@@ -151,6 +151,7 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
 .. code-block:: php
 
     use Firebase\Auth\Token\Exception\InvalidToken;
+    use Firebase\Auth\Token\Exception\UnknownKey;
 
     $idTokenString = '...';
 
@@ -158,8 +159,10 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
 
     try {
         $verifiedIdToken = $auth->verifyIdToken($idTokenString);
-    } catch (InvalidToken $e) {
-        echo $e->getMessage();
+    } catch (\InvalidArgumentException $e) {
+        echo 'The token could not be parsed: '.$e->getMessage();
+    } catch (InvalidToken|UnknownKey $e) {
+        echo 'The token is invalid: '.$e->getMessage();
     }
 
     $uid = $verifiedIdToken->getClaim('sub');
