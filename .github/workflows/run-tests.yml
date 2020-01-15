@@ -7,6 +7,7 @@ jobs:
   unit-tests:
     name: Unit Tests (PHP ${{matrix.php}}, ${{matrix.os}})
     runs-on: ${{matrix.os}}
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
 
     strategy:
       matrix:
@@ -61,6 +62,7 @@ jobs:
   static-code-analysis:
     name: Static Code Analysis
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
 
     steps:
       - name: Checkout code
@@ -96,6 +98,7 @@ jobs:
   coding-standards:
     name: Coding Standards
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
 
     steps:
       - name: Checkout code
@@ -128,6 +131,7 @@ jobs:
   integration-tests:
     name: Integration Tests with Code Coverage
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     needs: [unit-tests, coding-standards, static-code-analysis]
 
     steps:
