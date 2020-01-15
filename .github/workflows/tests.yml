@@ -4,23 +4,28 @@ on:
   push:
 
 jobs:
+  # Overview:
+  # - unit-tests
+  # - static-code-analysis
+  # - coding-standards
+  # - integration-tests (with code coverage, needs the above)
   unit-tests:
     name: Unit Tests (PHP ${{matrix.php}}, ${{matrix.os}})
-    runs-on: ${{matrix.os}}
+    runs-on: ${{matrix.os}}-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
 
     strategy:
       matrix:
-        php: [7.0, 7.1, 7.2, 7.3, 7.4]
-        os: [ubuntu-latest, windows-latest]
+        php: ["7.0", "7.1", "7.2", "7.3", "7.4"]
+        os: [ubuntu, windows]
         exclude:
-          - os: windows-latest
+          - os: windows
             php: 7.1
-          - os: windows-latest
+          - os: windows
             php: 7.2
-          - os: windows-latest
+          - os: windows
             php: 7.3
-          - os: windows-latest
+          - os: windows
             php: 7.4
 
     steps:
@@ -138,7 +143,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # A truncated git history might mess with sonarcloud's blame data
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v1
@@ -173,12 +178,14 @@ jobs:
           TEST_REGISTRATION_TOKENS: ${{secrets.TEST_REGISTRATION_TOKENS}}
         run: vendor/bin/phpunit --coverage-clover=coverage.xml --log-junit=test-report.xml
 
+# The current sonarcloud github action doesn't process the coverage report correctly
 #      - name: Upload reports to sonarcloud
 #        uses: sonarsource/sonarcloud-github-action@master
 #        env:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+      # CodeCov is used for reports on pull requests (to be seen how this works)
       - name: Upload coverage to CodeCov
         uses: codecov/codecov-action@v1
         with:
