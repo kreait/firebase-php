@@ -15,41 +15,55 @@ final class MessageDataTest extends TestCase
 {
     /**
      * @test
+     * @dataProvider validData
      */
-    public function it_accepts_stringable_object_values()
+    public function it_accepts_valid_data(array $data)
     {
-        $stringable = new class() {
-            public function __toString()
-            {
-                return 'value';
-            }
-        };
-
-        $data = MessageData::fromArray(['key' => $stringable]);
-        $this->assertEquals(['key' => 'value'], $data->jsonSerialize());
+        MessageData::fromArray($data);
+        $this->addToAssertionCount(1);
     }
 
     /**
      * @test
-     * @dataProvider invalidValues
+     * @dataProvider invalidData
      */
-    public function it_rejects_invalid_values(array $data)
+    public function it_rejects_invalid_data(array $data)
     {
         $this->expectException(InvalidArgumentException::class);
         MessageData::fromArray($data);
     }
 
-    public function invalidValues()
+    public function validData()
     {
         return [
-            'integer key' => [
-                [0 => 'string'],
+            'integer' => [
+                ['key' => 1],
             ],
-            'integer value' => [
-                ['key' => 0],
+            'float' => [
+                ['key' => 1.23],
             ],
-            'boolean value' => [
+            'true' => [
                 ['key' => true],
+            ],
+            'false' => [
+                ['key' => false],
+            ],
+            'object with __toString()' => [
+                ['key' => new class() {
+                    public function __toString()
+                    {
+                        return 'value';
+                    }
+                }],
+            ],
+        ];
+    }
+
+    public function invalidData()
+    {
+        return [
+            'nested array' => [
+                ['key' => ['sub_key' => 'sub_value']],
             ],
         ];
     }
