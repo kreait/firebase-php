@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.39.0 - 2020-01-17
 
 * Updated [`kreait/firebase-tokens`](https://github.com/kreait/firebase-tokens-php) to `^1.10` for better error handling and error messages
 * Added support for Guzzle 7 (requires [#256 in google/auth](https://github.com/googleapis/google-auth-library-php/pull/256) to be merged and released)
