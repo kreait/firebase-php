@@ -630,5 +630,5 @@ You can retrieve all topic subscriptions for an app instance with the ``topicSub
     $subscriptions = $appInstance->topicSubscriptions();
 
     foreach ($subscriptions as $subscription) {
-        echo "{$subscription->token()} is subscribed to {$subscription->topic()}\n";
+        echo "{$subscription->registrationToken()} is subscribed to {$subscription->topic()}\n";
     }
