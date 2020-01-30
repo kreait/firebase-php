@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Messaging: The SDK was unable to handle numeric/numbers-only subscription topics. ([#373](https://github.com/kreait/firebase-php/issues/373))
+
 ## 4.39.0 - 2020-01-17
 
 * Updated [`kreait/firebase-tokens`](https://github.com/kreait/firebase-tokens-php) to `^1.10` for better error handling and error messages

@@ -43,4 +43,35 @@ class AppInstanceTest extends TestCase
 
         $this->assertCount(2, $instance->topicSubscriptions());
     }
+
+    /** @test */
+    public function it_accepts_numeric_topic_names()
+    {
+        $token = RegistrationToken::fromValue('token');
+        $data = [
+            'application' => 'app-name',
+            'applicationVersion' => '12345',
+            'attestStatus' => 'ROOTED',
+            'platform' => 'a-platform',
+            'authorizedEntity' => 'this-is-the-project-id',
+            'connectionType' => 'WIFI',
+            'rel' => [
+                'topics' => [
+                    '123' => [
+                        'addDate' => '2019-01-01',
+                    ],
+                    456 => [
+                        'addDate' => '2019-01-02',
+                    ],
+                ],
+            ],
+        ];
+
+        $instance = AppInstance::fromRawData($token, $data);
+
+        $this->assertEquals($data, $instance->rawData());
+        $this->assertEquals($data, $instance->jsonSerialize());
+
+        $this->assertCount(2, $instance->topicSubscriptions());
+    }
 }
