@@ -127,6 +127,11 @@ final class MulticastSendReport implements Countable
         }));
     }
 
+    public function everything(): self
+    {
+        return self::withItems($this->items);
+    }
+
     public function hasFailures(): bool
     {
         return $this->failures()->count() > 0;

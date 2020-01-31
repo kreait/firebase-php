@@ -209,6 +209,11 @@ class CloudMessage implements Message
         return $this->target ? true : false;
     }
 
+    public function  getTarget()
+    {
+        return $this->target;
+    }
+    
     public function jsonSerialize()
     {
         $data = [
