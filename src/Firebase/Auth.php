@@ -550,9 +550,6 @@ class Auth
         $verifiedToken = $verifier->verifyIdToken($idToken);
 
         if ($checkIfRevoked) {
-            $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->getClaim('auth_time'));
-            $tokenAuthenticatedAt = $tokenAuthenticatedAt->modify('-'.$leewayInSeconds.' seconds');
-
             if (!($sub = $verifiedToken->getClaim('sub', false))) {
                 throw new InvalidToken($verifiedToken, 'The token has no "sub" claim');
             }
@@ -563,9 +560,17 @@ class Auth
                 throw new InvalidToken($verifiedToken, "Error while getting the token's user: {$e->getMessage()}", $e->getCode(), $e);
             }
 
-            $validSince = $user->tokensValidAfterTime ?? null;
+            // The timestamp, in seconds, which marks a boundary, before which Firebase ID token are considered revoked.
+            if (!($validSince = $user->tokensValidAfterTime ?? null)) {
+                return $verifiedToken;
+            }
 
-            if ($validSince && ($tokenAuthenticatedAt < $validSince)) {
+            $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->getClaim('auth_time'));
+            $tokenAuthenticatedAtWithLeeway = $tokenAuthenticatedAt->modify('-'.$leewayInSeconds.' seconds');
+
+            $validSinceWithLeeway = DT::toUTCDateTimeImmutable($validSince)->modify('-'.$leewayInSeconds.' seconds');
+
+            if ($tokenAuthenticatedAtWithLeeway < $validSinceWithLeeway) {
                 throw new RevokedIdToken($verifiedToken);
             }
         }
