@@ -550,12 +550,8 @@ class Auth
         $verifiedToken = $verifier->verifyIdToken($idToken);
 
         if ($checkIfRevoked) {
-            if (!($sub = $verifiedToken->getClaim('sub', false))) {
-                throw new InvalidToken($verifiedToken, 'The token has no "sub" claim');
-            }
-
             try {
-                $user = $this->getUser($sub);
+                $user = $this->getUser($verifiedToken->getClaim('sub'));
             } catch (Throwable $e) {
                 throw new InvalidToken($verifiedToken, "Error while getting the token's user: {$e->getMessage()}", $e->getCode(), $e);
             }
