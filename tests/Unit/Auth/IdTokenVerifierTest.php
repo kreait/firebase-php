@@ -39,6 +39,7 @@ final class IdTokenVerifierTest extends TestCase
     protected function setUp()
     {
         $this->token = $this->prophesize(Token::class);
+        $this->token->getClaim('sub', Argument::any())->willReturn('sub');
         $this->baseVerifier = $this->prophesize(Verifier::class);
         $this->clock = new FrozenClock(new DateTimeImmutable());
 
@@ -151,6 +152,28 @@ final class IdTokenVerifierTest extends TestCase
 
         $verifier->verifyIdToken($revealedToken);
         $this->addToAssertionCount(1);
+    }
+
+    /** @test */
+    public function it_rejects_an_empty_sub()
+    {
+        $this->token->getClaim('sub', Argument::any())->willReturn(''); // empty claim
+        $revealedToken = $this->token->reveal();
+        $this->baseVerifier->verifyIdToken($revealedToken)->willReturn($revealedToken);
+
+        $this->expectException(InvalidToken::class);
+        $this->verifier->verifyIdToken($revealedToken);
+    }
+
+    /** @test */
+    public function it_rejects_a_missing_sub()
+    {
+        $this->token->getClaim('sub', false)->willReturn(false); // missing claim
+        $revealedToken = $this->token->reveal();
+        $this->baseVerifier->verifyIdToken($revealedToken)->willReturn($revealedToken);
+
+        $this->expectException(InvalidToken::class);
+        $this->verifier->verifyIdToken($revealedToken);
     }
 
     public function it_requires_an_expiration_date()

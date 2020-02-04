@@ -114,21 +114,6 @@ final class AuthTest extends UnitTestCase
         $this->assertSame($token, $verifiedToken);
     }
 
-    public function testFailIfNoSubClaim()
-    {
-        $tokenProphecy = $this->prophesize(Token::class);
-        $tokenProphecy->getClaim('sub', Argument::cetera())->willReturn(false);
-        $tokenProphecy->getClaim('auth_time')->willReturn(\date('U'));
-
-        $token = $tokenProphecy->reveal();
-
-        $this->idTokenVerifier->method('verifyIdToken')->with($token)->willReturn($token);
-
-        $this->expectException(InvalidToken::class);
-        $this->expectExceptionMessageRegExp('/sub/i');
-        $this->auth->verifyIdToken($token, true);
-    }
-
     public function testFailIfUserHasBeenDeletedInTheMeantime()
     {
         $uid = 'uid';

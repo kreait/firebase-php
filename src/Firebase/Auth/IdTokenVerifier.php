@@ -52,6 +52,11 @@ final class IdTokenVerifier implements Verifier
         try {
             $this->verifier->verifyIdToken($token);
 
+            // We're using getClaim() instead of hasClaim() to also check for an empty value
+            if (!($token->getClaim('sub', false))) {
+                throw new InvalidToken($token, 'The token has no "sub" claim');
+            }
+
             return $token;
         } catch (UnknownKey $e) {
             throw $e;
