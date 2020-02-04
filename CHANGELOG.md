@@ -1,10 +1,13 @@
 # CHANGELOG
 
+## Unreleased
+
+* Auth: The revocation check on ID token rejected tokens younger than five minuts ([#377](https://github.com/kreait/firebase-php/issues/377))
+* Auth: Added missing check for a `sub` claim when verifying an ID token.
+
 ## 4.39.1 - 2020-01-30
 
 * Messaging: The SDK was unable to handle numeric/numbers-only subscription topics. ([#373](https://github.com/kreait/firebase-php/issues/373))
-* Auth: The revocation check on ID token rejected tokens younger than five minuts ([#377](https://github.com/kreait/firebase-php/issues/377))
-* Auth: Added missing check for a `sub` claim when verifying an ID token.
 
 ## 4.39.0 - 2020-01-17
 
