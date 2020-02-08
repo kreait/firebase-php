@@ -97,7 +97,7 @@ class ServiceAccount
     public function withPrivateKey(string $value): self
     {
         $serviceAccount = clone $this;
-        $serviceAccount->privateKey = $value;
+        $serviceAccount->privateKey = \str_replace('\n', "\n", $value);
 
         return $serviceAccount;
     }
