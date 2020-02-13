@@ -4,6 +4,7 @@
 
 * Auth: The revocation check on ID token rejected tokens younger than five minuts ([#377](https://github.com/kreait/firebase-php/issues/377))
 * Auth: Added missing check for a `sub` claim when verifying an ID token.
+* Messaging: Allow null values for message data fields ([#383](https://github.com/kreait/firebase-php/issues/383))
 
 ## 4.39.1 - 2020-01-30
 

@@ -48,6 +48,9 @@ final class MessageDataTest extends TestCase
             'false' => [
                 ['key' => false],
             ],
+            'null' => [
+                ['key' => null],
+            ],
             'object with __toString()' => [
                 ['key' => new class() {
                     public function __toString()
