@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.39.2 - 2020-02-13
 
 * Auth: The revocation check on ID token rejected tokens younger than five minuts ([#377](https://github.com/kreait/firebase-php/issues/377))
 * Auth: Added missing check for a `sub` claim when verifying an ID token.
