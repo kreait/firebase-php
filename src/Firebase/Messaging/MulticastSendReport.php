@@ -6,14 +6,11 @@ namespace Kreait\Firebase\Messaging;
 
 use Countable;
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\Exception\Messaging\InvalidMessage;
-use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Http\Requests;
 use Kreait\Firebase\Http\Responses;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
-use Throwable;
 
 final class MulticastSendReport implements Countable
 {
@@ -77,10 +74,8 @@ final class MulticastSendReport implements Countable
                 $target = MessageTarget::with(MessageTarget::TOPIC, (string) $topic);
             } elseif ($condition = $requestData['message']['condition'] ?? null) {
                 $target = MessageTarget::with(MessageTarget::CONDITION, (string) $condition);
-            }
-
-            if ($target === null) {
-                continue;
+            } else {
+                $target = MessageTarget::with(MessageTarget::UNKNOWN, 'unknown');
             }
 
             if ($response->getStatusCode() < 400) {

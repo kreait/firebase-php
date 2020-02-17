@@ -153,6 +153,8 @@ class MessagingTest extends IntegrationTestCase
         $this->assertTrue($report->hasFailures());
         $this->assertCount(1, $report->failures());
         $this->assertCount(1, $report->successes());
+        $this->assertCount(1, $report->invalidTokens());
+        $this->assertSame($invalid, $report->invalidTokens()[0]);
 
         $success = $report->successes()->getItems()[0];
         $this->assertSame($valid, $success->target()->value());
@@ -193,18 +195,19 @@ class MessagingTest extends IntegrationTestCase
         $this->messaging->subscribeToTopic($topic, $token);
 
         $message = CloudMessage::new()->withNotification(['title' => 'Token Notification', 'body' => 'Token body']);
+        $invalidMessage = new RawMessageFromArray(['invalid' => 'message']);
 
         $tokenMessage = $message->withChangedTarget('token', $token);
         $topicMessage = $message->withChangedTarget('topic', $topic);
         $conditionMessage = $message->withChangedTarget('condition', $condition);
-        $invalidMessage = $message->withChangedTarget('token', $invalidToken);
+        $invalidToken = $message->withChangedTarget('token', $invalidToken);
 
-        $messages = [$tokenMessage, $topicMessage, $conditionMessage, $invalidMessage];
+        $messages = [$tokenMessage, $topicMessage, $conditionMessage, $invalidToken, $invalidMessage];
 
         $report = $this->messaging->sendAll($messages);
 
         $this->assertCount(3, $report->successes());
-        $this->assertCount(1, $report->failures());
+        $this->assertCount(2, $report->failures());
     }
 
     public function testManageTopicSubscriptions()

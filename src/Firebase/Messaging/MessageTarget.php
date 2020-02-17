@@ -12,8 +12,11 @@ final class MessageTarget
     const TOKEN = 'token';
     const TOPIC = 'topic';
 
+    /** @internal */
+    const UNKNOWN = 'unknown';
+
     const TYPES = [
-        self::CONDITION, self::TOKEN, self::TOPIC,
+        self::CONDITION, self::TOKEN, self::TOPIC, self::UNKNOWN,
     ];
 
     /**
@@ -53,6 +56,9 @@ final class MessageTarget
                 break;
             case self::TOPIC:
                 $new->value = (string) Topic::fromValue($value);
+                break;
+            case self::UNKNOWN:
+                $new->value = $value;
                 break;
             default:
                 throw new InvalidArgumentException("Invalid target type '{$type}', valid types: ".\implode(', ', self::TYPES));

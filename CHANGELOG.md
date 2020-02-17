@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Messaging
+
+* MulticastSendReports now include errors concerning invalid requests (this can happen when
+  `Messaging::sendAll()` is used with invalid messages)
 * Added methods to improve working with Messaging Send Reports
   * `Kreait\Firebase\Messaging\SendReport::messageTargetWasInvalid(): bool`
   * `Kreait\Firebase\Messaging\SendReport::messageWasInvalid(): bool`
