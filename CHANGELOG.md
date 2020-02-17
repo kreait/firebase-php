@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## Unreleased
+
+* Added methods to improve working with Messaging Send Reports
+  * `Kreait\Firebase\Messaging\SendReport::messageTargetWasInvalid(): bool`
+  * `Kreait\Firebase\Messaging\SendReport::messageWasInvalid(): bool`
+  * `Kreait\Firebase\Messaging\SendReport::messageWasSentToUnknownToken(): bool`
+  * `Kreait\Firebase\Messaging\MulticastSendReport::filter(callable $callback)`
+  * `Kreait\Firebase\Messaging\MulticastSendReport::map(callable $callback)`
+  * `Kreait\Firebase\Messaging\MulticastSendReport::unknownTokens(): string[]`
+  * `Kreait\Firebase\Messaging\MulticastSendReport::invalidTokens(): string[]`
+
 ## 4.39.2 - 2020-02-13
 
 * Auth: The revocation check on ID token rejected tokens younger than five minuts ([#377](https://github.com/kreait/firebase-php/issues/377))

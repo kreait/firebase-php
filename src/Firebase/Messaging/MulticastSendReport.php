@@ -6,11 +6,14 @@ namespace Kreait\Firebase\Messaging;
 
 use Countable;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\Messaging\InvalidMessage;
+use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Http\Requests;
 use Kreait\Firebase\Http\Responses;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
+use Throwable;
 
 final class MulticastSendReport implements Countable
 {
@@ -115,21 +118,59 @@ final class MulticastSendReport implements Countable
 
     public function successes(): self
     {
-        return self::withItems(\array_filter($this->items, static function (SendReport $item) {
+        return $this->filter(static function (SendReport $item) {
             return $item->isSuccess();
-        }));
+        });
     }
 
     public function failures(): self
     {
-        return self::withItems(\array_filter($this->items, static function (SendReport $item) {
+        return $this->filter(static function (SendReport $item) {
             return $item->isFailure();
-        }));
+        });
     }
 
     public function hasFailures(): bool
     {
         return $this->failures()->count() > 0;
+    }
+
+    public function filter(callable $callback): self
+    {
+        return self::withItems(\array_filter($this->items, $callback));
+    }
+
+    public function map(callable $callback): array
+    {
+        return \array_map($callback, $this->items);
+    }
+
+    /**
+     * Returns all provided registration tokens that were not reachable.
+     *
+     * @return string[]
+     */
+    public function unknownTokens(): array
+    {
+        return $this->filter(static function (SendReport $report) {
+            return $report->messageWasSentToUnknownToken();
+        })->map(static function (SendReport $report) {
+            return $report->target()->value();
+        });
+    }
+
+    /**
+     * Returns all provided registration tokens that were invalid.
+     *
+     * @return string[]
+     */
+    public function invalidTokens(): array
+    {
+        return $this->filter(static function (SendReport $report) {
+            return $report->messageTargetWasInvalid();
+        })->map(static function (SendReport $report) {
+            return $report->target()->value();
+        });
     }
 
     public function count(): int
