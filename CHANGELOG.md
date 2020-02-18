@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.40.0 - 2020-02-18
 
 ### Messaging
 
