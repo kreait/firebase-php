@@ -5,151 +5,45 @@ on:
 
 jobs:
   # Overview:
-  # - unit-tests
-  # - static-code-analysis
-  # - coding-standards
+  # - tests (unit tests, static code analysis, coding standards)
   # - integration-tests (with code coverage, needs the above)
-  unit-tests:
-    name: Unit Tests (PHP ${{matrix.php}}, ${{matrix.os}})
-    runs-on: ${{matrix.os}}-latest
+  tests:
+    name: PHP ${{matrix.php}}
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
 
     strategy:
       matrix:
         php: ["7.0", "7.1", "7.2", "7.3", "7.4"]
-        os: [ubuntu, windows]
-        exclude:
-          - os: windows
-            php: 7.1
-          - os: windows
-            php: 7.2
-          - os: windows
-            php: 7.3
-          - os: windows
-            php: 7.4
+
+    env:
+      extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
+      key: cache-v2 # can be any string, change to clear the extension cache.
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v1
+      - name: Setup cache environment
+        id: cache-env
+        uses: shivammathur/cache-extensions@v1
         with:
-          php-version: ${{matrix.php}}
-          extensions: ctype, dom, json, mbstring, openssl, xml, zip, zlib
-          coverage: none
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.extensions }}
+          key: ${{ env.key }}
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Cache dependencies
+      - name: Cache extensions
         uses: actions/cache@v1
         with:
-          path: ${{steps.composer-cache.outputs.dir}}
-          key: ${{matrix.php}}-${{runner.os}}-unit-tests-composer-${{hashFiles('**/composer.json')}}
-          restore-keys: ${{matrix.php}}-${{runner.os}}-unit-tests-composer-
-
-      - name: Setup Problem Matchers for PHPUnit
-        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
-
-      - name: Install dependencies (stable)
-        if: "matrix.php != '7.0'"
-        run: composer update --prefer-stable --prefer-dist --no-interaction --no-suggest --no-progress
-
-      - name: Install dependencies (lowest)
-        if: "matrix.php == '7.0'"
-        run: composer update --prefer-lowest --prefer-dist --no-interaction --no-suggest --no-progress
-
-      - name: Run PHPUnit
-        run: vendor/bin/phpunit --testsuite=unit
-
-  static-code-analysis:
-    name: Static Code Analysis
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v1
+          path: ${{ steps.cache-env.outputs.dir }}
+          key: ${{ steps.cache-env.outputs.key }}
+          restore-keys: ${{ steps.cache-env.outputs.key }}
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v1
+        uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
-          extensions: ctype, dom, json, mbstring, openssl, xml, zip, zlib, grpc
-          tools: composer, pecl
-          coverage: none
-
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: ${{steps.composer-cache.outputs.dir}}
-          key: ${{matrix.php}}-${{runner.os}}-static-code-analysis-composer-${{hashFiles('**/composer.json')}}
-          restore-keys: ${{matrix.php}}-${{runner.os}}-static-code-analysis-composer-
-
-      - name: Install dependencies
-        run: |
-          composer install --prefer-dist --no-interaction --no-suggest --no-progress
-          composer require google/cloud-firestore:^1.8
-
-      - name: Run PHPStan
-        run: vendor/bin/phpstan analyse src tests -c phpstan.neon --level=max --no-progress
-
-  coding-standards:
-    name: Coding Standards
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v1
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v1
-        with:
-          php-version: 7.4
-          extensions: ctype, dom, json, mbstring, openssl, xml, zip, zlib
-          coverage: none
-
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: ${{steps.composer-cache.outputs.dir}}
-          key: ${{matrix.php}}-${{runner.os}}-coding-standards-composer-${{hashFiles('**/composer.json')}}
-          restore-keys: ${{matrix.php}}-${{runner.os}}-coding-standards-composer-
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction --no-suggest --no-progress
-
-      - name: Run PHP CS Fixer
-        run: vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no
-
-  integration-tests:
-    name: Integration Tests with Code Coverage
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
-    needs: [unit-tests, coding-standards, static-code-analysis]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 0 # A truncated git history might mess with sonarcloud's blame data
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v1
-        with:
-          php-version: 7.4
-          extensions: ctype, dom, json, mbstring, openssl, xml, zip, zlib, grpc
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.extensions }}
           tools: composer, pecl
           coverage: xdebug
 
@@ -160,17 +54,88 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v1
         with:
-          path: ${{steps.composer-cache.outputs.dir}}
-          key: ${{matrix.php}}-${{runner.os}}-integration-tests-composer-${{hashFiles('**/composer.json')}}
-          restore-keys: ${{matrix.php}}-${{runner.os}}-integration-tests-composer-
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies (stable)
+        if: "matrix.php != '7.0'"
+        run: composer update --prefer-stable --prefer-dist --no-interaction --no-suggest --no-progress
+
+      - name: Install dependencies (lowest)
+        if: "matrix.php == '7.0'"
+        run: composer update --prefer-lowest --prefer-dist --no-interaction --no-suggest --no-progress
 
       - name: Setup Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
+      - name: Run PHPStan
+        if: "matrix.php == '7.4'"
+        run: vendor/bin/phpstan analyse src tests -c phpstan.neon --level=max --no-progress
+
+      - name: Run PHP CS Fixer
+        if: "matrix.php == '7.4'"
+        run: vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --testsuite=unit
+
+  integration-tests:
+    name: Integration Tests with Code Coverage
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    needs: [tests]
+
+    env:
+      php-version: '7.4'
+      extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
+      key: cache-integration-v2 # can be any string, change to clear the extension cache.
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # A truncated git history might mess with sonarcloud's blame data
+
+      - name: Setup cache environment
+        id: cache-env
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ env.php-version }}
+          extensions: ${{ env.extensions }}
+          key: ${{ env.key }}
+
+      - name: Cache extensions
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.cache-env.outputs.dir }}
+          key: ${{ steps.cache-env.outputs.key }}
+          restore-keys: ${{ steps.cache-env.outputs.key }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.php-version }}
+          extensions: ${{ env.extensions }}
+          tools: composer, pecl
+          coverage: xdebug
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
       - name: Install dependencies
-        run: |
-          composer install --prefer-dist --no-interaction --no-suggest --no-progress
-          composer require google/cloud-firestore:^1.8
+        run: composer install --prefer-dist --no-interaction --no-suggest --no-progress
+
+      - name: Setup Problem Matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Run Integration Tests with Code Coverage
         env:
@@ -178,14 +143,13 @@ jobs:
           TEST_REGISTRATION_TOKENS: ${{secrets.TEST_REGISTRATION_TOKENS}}
         run: vendor/bin/phpunit --coverage-clover=coverage.xml --log-junit=test-report.xml
 
-# The current sonarcloud github action doesn't process the coverage report correctly
-#      - name: Upload reports to sonarcloud
-#        uses: sonarsource/sonarcloud-github-action@master
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # The current sonarcloud github action doesn't process the coverage report correctly
+      # - name: Upload reports to sonarcloud
+      #   uses: sonarsource/sonarcloud-github-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      # CodeCov is used for reports on pull requests (to be seen how this works)
       - name: Upload coverage to CodeCov
         uses: codecov/codecov-action@v1
         with:
