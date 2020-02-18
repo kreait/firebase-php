@@ -238,10 +238,10 @@ are both optional.
 
     $notification = Notification::create($title, $body);
 
-    $notification = Notification::create()
-        ->withTitle($title)
-        ->withBody($body)
-        ->withImageUrl($imageUrl);
+    $changedNotification = $notification
+        ->withTitle('Changed title')
+        ->withBody('Changed body)
+        ->withImageUrl('http://lorempixel.com/200/400/');
 
 Once you have created a message with one of the methods described below,
 you can attach the notification to it:
