@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Tests\Unit;
 
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Tests\UnitTestCase;
-use RuntimeException;
 use Throwable;
 
 /**
@@ -52,12 +51,5 @@ final class FactoryForFirestoreTest extends UnitTestCase
         } finally {
             \putenv('GOOGLE_APPLICATION_CREDENTIALS');
         }
-    }
-
-    public function testCreateFirestoreWithInvalidConfig()
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/Unable to create a FirestoreClient.*/');
-        (new Factory())->createFirestore(['keyFilePath' => 'foo']);
     }
 }
