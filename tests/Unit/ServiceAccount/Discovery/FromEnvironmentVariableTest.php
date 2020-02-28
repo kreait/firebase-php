@@ -28,14 +28,39 @@ class FromEnvironmentVariableTest extends UnitTestCase
         \putenv($this->envVarName);
     }
 
-    public function testItWorks()
+    public function testItWorksWithAFile()
     {
         \putenv(\sprintf('%s=%s', $this->envVarName, self::$fixturesDir.'/ServiceAccount/valid.json'));
 
         $sut = new FromEnvironmentVariable($this->envVarName);
         $sut();
 
-        $this->assertTrue($noExceptionWasThrown = true);
+        $this->addToAssertionCount(1);
+    }
+
+    public function testItWorksWithAJsonString()
+    {
+        $json = \json_encode(
+            \json_decode(
+                (string) \file_get_contents(self::$fixturesDir.'/ServiceAccount/valid.json'), true
+            )
+        );
+
+        \putenv(\sprintf('%s=%s', $this->envVarName, $json));
+
+        $sut = new FromEnvironmentVariable($this->envVarName);
+        $sut();
+
+        $this->addToAssertionCount(1);
+    }
+
+    public function testItRejectsAnInvalidJsonString()
+    {
+        \putenv(\sprintf('%s=%s', $this->envVarName, '{'));
+
+        $this->expectException(ServiceAccountDiscoveryFailed::class);
+        $sut = new FromEnvironmentVariable($this->envVarName);
+        $sut();
     }
 
     public function testItKnowWhenTheVariableIsNotSet()

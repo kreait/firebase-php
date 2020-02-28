@@ -6,6 +6,7 @@ namespace Kreait\Firebase\ServiceAccount\Discovery;
 
 use Kreait\Firebase\Exception\ServiceAccountDiscoveryFailed;
 use Kreait\Firebase\ServiceAccount;
+use Throwable;
 
 /**
  * @internal
@@ -36,11 +37,15 @@ class FromEnvironmentVariable
             throw new ServiceAccountDiscoveryFailed(\sprintf('%s is not set.', $msg));
         }
 
-        $msg .= \sprintf(' points to "%s"', $path);
+        if (\mb_strpos($path, '{') === 0) {
+            $msg .= 'is a JSON string';
+        } else {
+            $msg .= \sprintf(' points to "%s"', $path);
+        }
 
         try {
-            return (new FromPath($path))();
-        } catch (ServiceAccountDiscoveryFailed $e) {
+            return ServiceAccount::fromValue($path);
+        } catch (Throwable $e) {
             throw new ServiceAccountDiscoveryFailed(
                 \sprintf('%s, but has errors: %s', $msg, $e->getMessage())
             );
