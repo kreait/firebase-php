@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.40.1 - 2020-02-29
 
 * It was not possible to discover Service Accounts stored as JSON string in an environment variable.
 
