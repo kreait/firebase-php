@@ -53,7 +53,7 @@ class ApiClient implements ClientInterface
      */
     public function exchangeCustomTokenForIdAndRefreshToken(Token $token): ResponseInterface
     {
-        return $this->requestApi('verifyCustomToken', [
+        return $this->requestApi('https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken', [
             'token' => (string) $token,
             'returnSecureToken' => true,
         ]);
