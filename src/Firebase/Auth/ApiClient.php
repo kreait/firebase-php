@@ -51,10 +51,10 @@ class ApiClient implements ClientInterface
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function exchangeCustomTokenForIdAndRefreshToken(Token $token): ResponseInterface
+    public function exchangeCustomTokenForIdAndRefreshToken($token): ResponseInterface
     {
-        return $this->requestApi('verifyCustomToken', [
-            'token' => (string) $token,
+        return $this->requestApi('https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken', [
+            'token' => $token instanceof Token ? (string) $token : $token,
             'returnSecureToken' => true,
         ]);
     }
