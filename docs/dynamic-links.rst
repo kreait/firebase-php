@@ -129,8 +129,8 @@ or programmatically.
     use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink\FailedToGetStatisticsForDynamicLink;
 
     try {
-        $stats = $dynamicLinks->getStatistics('https://example.page.link/wXYZ);
-        $stats = $dynamicLinks->getStatistics('https://example.page.link/wXYZ, 14); // duration in days
+        $stats = $dynamicLinks->getStatistics('https://example.page.link/wXYZ');
+        $stats = $dynamicLinks->getStatistics('https://example.page.link/wXYZ', 14); // duration in days
     } catch (FailedToGetStatisticsForDynamicLink $e) {
         echo $e->getMessage(); exit;
     }
