@@ -130,6 +130,9 @@ enabled for your project:
 - Remote Config: https://console.cloud.google.com/apis/library/firebaseremoteconfig.googleapis.com
 - Storage: https://console.cloud.google.com/apis/library/storage-component.googleapis.com
 
+Please also make sure that the Service Account you are using for your project has all necessary
+roles and permissions as described in the official documentation at `Manage project access with Firebase IAM <https://firebase.google.com/docs/projects/iam/overview>`_.
+
 *******************
 Proxy configuration
 *******************
