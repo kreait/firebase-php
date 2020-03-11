@@ -8,6 +8,8 @@ Interact with [Google Firebase](https://firebase.google.com) from your PHP appli
 [![Monthly Downloads](https://img.shields.io/packagist/dm/kreait/firebase-php.svg)](https://packagist.org/packages/kreait/firebase-php/stats)
 [![Total Downloads](https://img.shields.io/packagist/dt/kreait/firebase-php.svg)](https://packagist.org/packages/kreait/firebase-php/stats)
 [![Discord](https://img.shields.io/discord/523866370778333184.svg?color=7289da&logo=discord)](https://discord.gg/nbgVfty)
+[![Sponsor](https://img.shields.io/static/v1?logo=GitHub&label=Sponsor&message=%E2%9D%A4&color=ff69b4)](https://github.com/sponsors/jeromegamez)
+
 
 [![Tests](https://github.com/kreait/firebase-php/workflows/Tests/badge.svg?branch=master)](https://github.com/kreait/firebase-php/actions)
 [![codecov](https://codecov.io/gh/kreait/firebase-php/branch/master/graph/badge.svg)](https://codecov.io/gh/kreait/firebase-php)

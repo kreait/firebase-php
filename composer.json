@@ -65,5 +65,11 @@
         "branch-alias": {
             "dev-master": "4.x-dev"
         }
-    }
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/jeromegamez"
+        }
+    ]
 }
