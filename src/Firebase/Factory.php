@@ -41,6 +41,7 @@ class Factory
         'https://www.googleapis.com/auth/firebase.messaging',
         'https://www.googleapis.com/auth/firebase.remoteconfig',
         'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/securetoken',
     ];
 
     /**
