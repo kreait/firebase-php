@@ -1,63 +1,59 @@
-
-# Firebase Admin SDK for PHP
-
-Interact with [Google Firebase](https://firebase.google.com) from your PHP application.
+# Firebase Admin PHP SDK
 
 [![Current version](https://img.shields.io/packagist/v/kreait/firebase-php.svg)](https://packagist.org/packages/kreait/firebase-php)
 [![Supported PHP version](https://img.shields.io/packagist/php-v/kreait/firebase-php.svg)]()
 [![Monthly Downloads](https://img.shields.io/packagist/dm/kreait/firebase-php.svg)](https://packagist.org/packages/kreait/firebase-php/stats)
 [![Total Downloads](https://img.shields.io/packagist/dt/kreait/firebase-php.svg)](https://packagist.org/packages/kreait/firebase-php/stats)
+[![Tests](https://github.com/kreait/firebase-php/workflows/Tests/badge.svg?branch=master)](https://github.com/kreait/firebase-php/actions)
+[![codecov](https://codecov.io/gh/kreait/firebase-php/branch/master/graph/badge.svg)](https://codecov.io/gh/kreait/firebase-php)
 [![Discord](https://img.shields.io/discord/523866370778333184.svg?color=7289da&logo=discord)](https://discord.gg/nbgVfty)
 [![Sponsor](https://img.shields.io/static/v1?logo=GitHub&label=Sponsor&message=%E2%9D%A4&color=ff69b4)](https://github.com/sponsors/jeromegamez)
 
+## Table of Contents
 
-[![Tests](https://github.com/kreait/firebase-php/workflows/Tests/badge.svg?branch=master)](https://github.com/kreait/firebase-php/actions)
-[![codecov](https://codecov.io/gh/kreait/firebase-php/branch/master/graph/badge.svg)](https://codecov.io/gh/kreait/firebase-php)
-<!--
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=kreait_firebase-php&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=kreait_firebase-php)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=kreait_firebase-php&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=kreait_firebase-php)
-[![Code Coverage](https://sonarcloud.io/api/project_badges/measure?project=kreait_firebase-php&metric=coverage)](https://sonarcloud.io/dashboard?id=kreait_firebase-php)
--->
+- [Overview](#overview)
+- [Installation](#installation)
+- [Documentation](#documentation)
+- [Support](#support)
+- [License](#license)
 
-## Resources
+## Overview
 
-- [Documentation](https://firebase-php.readthedocs.io/)
-- Integrations
-  - [Laravel](https://github.com/kreait/laravel-firebase)
-  - [Symfony](https://github.com/kreait/firebase-bundle)
-- [Example project](https://github.com/jeromegamez/firebase-php-examples)
-- [Tutorials](https://firebase-php.readthedocs.io/en/latest/tutorials.html)
-- Support
-  - [Issue Tracker](https://github.com/kreait/firebase-php/issues/)
-  - [Discord Chat](https://discord.gg/nbgVfty)
-  - [Stack Overflow](https://stackoverflow.com/questions/tagged/firebase+php)
-- 3rd Party Packages
-  - [tatter/firebase](https://github.com/tattersoftware/codeigniter4-firebase): Integration for CodeIgniter 4 
+[Firebase](https://firebase.google.com/) provides the tools and infrastructure you need to develop your app, grow your user base, and earn money. The Firebase Admin PHP SDK enables access to Firebase services from privileged environments (such as servers or cloud) in PHP.
 
-## Components
+For more information, visit the [Firebase Admin PHP SDK documentation](https://firebase-php.readthedocs.io/).
 
-| Feature | |
-| --- | :---: |
-| [Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/admin/) | ✅ |				
-| [Cloud Firestore](https://firebase.google.com/docs/firestore) | ✅ |
-| [Cloud Storage](https://firebase.google.com/docs/storage/admin/start) | ✅ |
-| [Custom Token Minting](https://firebase.google.com/docs/auth/admin/create-custom-tokens) | ✅ |
-| [Dynamic Links](https://firebase.google.com/docs/dynamic-links/rest) | ✅ |
-| [Dynamic Link Analytics](https://firebase.google.com/docs/dynamic-links/analytics) | ✅ |
-| [ID Token Verification](https://firebase.google.com/docs/auth/admin/verify-id-tokens)	| ✅ |
-| [Realtime Database](https://firebase.google.com/docs/database/admin/start) | ✅ |
-| [Remote Config](https://firebase.google.com/docs/remote-config/) | ✅ |
-| [User Management](https://firebase.google.com/docs/auth/admin/manage-users) | ✅ |
+## Installation
 
-## Versions
+The Firebase Admin PHP SDK is available on Packagist as [`kreait/firebase-php`](https://packagist.org/packages/kreait/firebase-php):
 
-| Version | Status      | PHP Version | Support |
-|---------|-------------|-------------|---------|
-| 1.x     | EOL         | >= 5.5      | EOL     |
-| 2.x     | EOL         | >= 7.0      | EOL     |
-| 3.x     | EOL         | >= 7.0      | EOL     |
-| 4.x     | Latest      | >= 7.0      | active  |
+```bash
+$ composer require kreait/firebase-php
+```
+
+Integrations for Laravel, Lumen and Symfony are available:
+
+- [kreait/laravel-firebase](https://packagist.org/packages/kreait/laravel-firebase)
+- [kreait/symfony-bundle](https://packagist.org/packages/kreait/symfony-bundle)
+
+## Documentation
+
+- [Authentication Guide](https://firebase-php.readthedocs.io/en/stable/authentication.html)
+- [Cloud Messaging Guide](https://firebase-php.readthedocs.io/en/stable/cloud-messaging.html)
+- [Cloud Storage Guide](https://firebase-php.readthedocs.io/en/stable/cloud-storage.html)
+- [Dynamic Links Guide](https://firebase-php.readthedocs.io/en/stable/dynamic-links.html)
+- [Firestore Guide](https://firebase-php.readthedocs.io/en/stable/cloud-firestore.html)
+- [Realtime Database Guide](https://firebase-php.readthedocs.io/en/stable/realtime-database.html)
+- [Remote Config Guide](https://firebase-php.readthedocs.io/en/stable/remote-config.html)
+
+## Support
+
+- [Issue Tracker](https://github.com/kreait/firebase-php/issues/)
+- [Discord Chat](https://discord.gg/nbgVfty)
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/firebase+php)
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE) for more information.
+Firebase Admin PHP SDK is licensed under the [MIT License](LICENSE).
+
+Your use of Firebase is governed by the [Terms of Service for Firebase Services](https://firebase.google.com/terms/).

@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.41.0 - 2020-03-16  
 
 ### Auth
 
