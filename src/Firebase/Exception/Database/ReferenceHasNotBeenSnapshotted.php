@@ -6,14 +6,11 @@ namespace Kreait\Firebase\Exception\Database;
 
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Exception\DatabaseException;
-use Kreait\Firebase\Exception\HasRequestAndResponse;
 use RuntimeException;
 use Throwable;
 
 final class ReferenceHasNotBeenSnapshotted extends RuntimeException implements DatabaseException
 {
-    use HasRequestAndResponse;
-
     /** @var Reference */
     private $reference;
 

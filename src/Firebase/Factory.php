@@ -179,34 +179,6 @@ class Factory
         return $factory;
     }
 
-    /**
-     * @deprecated 4.41
-     * @codeCoverageIgnore
-     */
-    public function asUser(string $uid, array $claims = null): self
-    {
-        $factory = clone $this;
-        $factory->uid = $uid;
-        $factory->claims = $claims ?? [];
-
-        return $factory;
-    }
-
-    /**
-     * @deprecated 4.33 Use the component-specific create*() methods instead.
-     * @see createAuth()
-     * @see createDatabase()
-     * @see createFirestore()
-     * @see createMessaging()
-     * @see createRemoteConfig()
-     * @see createStorage()
-     */
-    public function create(): Firebase
-    {
-        /* @noinspection PhpInternalEntityUsedInspection */
-        return new Firebase($this);
-    }
-
     protected function getServiceAccount(): ServiceAccount
     {
         if (!$this->serviceAccount && $this->serviceAccountDiscoverer) {

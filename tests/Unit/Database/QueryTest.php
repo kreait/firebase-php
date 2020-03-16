@@ -11,8 +11,6 @@ use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\Snapshot;
 use Kreait\Firebase\Exception\Database\DatabaseError;
 use Kreait\Firebase\Exception\Database\UnsupportedQuery;
-use Kreait\Firebase\Exception\IndexNotDefined as DeprecatedIndexNotDefined;
-use Kreait\Firebase\Exception\QueryException;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Http\Message\UriInterface;
 use Throwable;
@@ -104,7 +102,6 @@ class QueryTest extends UnitTestCase
         try {
             $this->query->orderByKey()->orderByValue();
         } catch (Throwable $e) {
-            $this->assertInstanceOf(QueryException::class, $e);
             $this->assertInstanceOf(UnsupportedQuery::class, $e);
         }
     }
@@ -133,7 +130,6 @@ class QueryTest extends UnitTestCase
             $this->fail('An exception should have been thrown');
         } catch (Throwable $e) {
             $this->assertInstanceOf(UnsupportedQuery::class, $e);
-            $this->assertInstanceOf(DeprecatedIndexNotDefined::class, $e);
         }
     }
 }

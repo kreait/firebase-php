@@ -78,9 +78,7 @@ class MessagingApiExceptionConverter
                 break;
         }
 
-        return $convertedError
-            ->withErrors($errors)
-            ->withResponse($response);
+        return $convertedError->withErrors($errors);
     }
 
     private function convertGuzzleRequestException(RequestException $e): MessagingException

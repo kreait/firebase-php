@@ -120,7 +120,7 @@ class MessagingTest extends UnitTestCase
 
         $this->messagingApi
             ->method('send')
-            ->willThrowException((new NotFound())->withResponse(new Response()));
+            ->willThrowException((new NotFound()));
 
         $this->expectException(InvalidMessage::class);
         $this->messaging->validate($message);

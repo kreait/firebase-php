@@ -98,22 +98,6 @@ class Database
     }
 
     /**
-     * Retrieve Firebase Database Rules.
-     *
-     * @deprecated 4.32.0 Use \Kreait\Firebase\Database::getRuleSet() instead
-     * @see getRuleSet()
-     */
-    public function getRules(): RuleSet
-    {
-        \trigger_error(
-            __METHOD__.' is deprecated. Use \Kreait\Firebase\Database::getRuleSet() instead.',
-            \E_USER_DEPRECATED
-        );
-
-        return $this->getRuleSet();
-    }
-
-    /**
      * Update Firebase Database Rules.
      *
      * @see https://firebase.google.com/docs/database/rest/app-management#updating-firebase-realtime-database-rules
