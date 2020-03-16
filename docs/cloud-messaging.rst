@@ -17,19 +17,43 @@ Before you start, please read about Firebase Remote Config in the official docum
 - `Introduction to Firebase Cloud Messaging <https://firebase.google.com/docs/cloud-messaging/>`_
 - `Introduction to Admin FCM API <https://firebase.google.com/docs/cloud-messaging/admin/>`_
 
+************************************
+Initializing the Messaging component
+************************************
+
+**With the SDK**
+
+.. code-block:: php
+
+    $messaging = $factory->createMessaging();
+
+**With Dependency Injection** (`Symfony Bundle <https://github.com/kreait/firebase-bundle>`_/`Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_)
+
+.. code-block:: php
+
+    use Kreait\Firebase\Messaging;
+
+    class MyService
+    {
+        public function __construct(Messaging $messaging)
+        {
+            $this->messaging = $messaging;
+        }
+    }
+
+**With the Laravel** ``app()`` **helper** (`Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_)
+
+.. code-block:: php
+
+    $messaging = app('firebase.messaging');
+
 ***************
 Getting started
 ***************
 
-After having initialized the Firebase Factory, you can access the Cloud Messaging
-component with ``$factory->createMessaging()``.
-
 .. code-block:: php
 
-    use Kreait\Firebase;
     use Kreait\Firebase\Messaging\CloudMessage;
-
-    $messaging = (new Firebase\Factory())->createMessaging();
 
     $message = CloudMessage::withTarget(/* see sections below */)
         ->withNotification(Notification::create('Title', 'Body'))
@@ -413,8 +437,6 @@ Sending a fully configured raw message
 
     use Kreait\Firebase\Messaging\RawMessageFromArray;
 
-    $messaging = $factory->createMessaging();
-
     $message = new RawMessageFromArray([
             'notification' => [
                 // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#notification
@@ -484,8 +506,6 @@ error message(s) that the API returned.
 
     use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 
-    $messaging = $factory->createMessaging();
-
     try {
         $messaging->validate($message);
     } catch (InvalidMessage $e) {
@@ -514,8 +534,6 @@ You can subscribe one or multiple devices to a topic by passing registration tok
         // ...
     };
 
-    $messaging = $factory->createMessaging();
-
     $messaging->subscribeToTopic($topic, $registrationTokens);
 
 .. note::
@@ -534,8 +552,6 @@ You can unsubscribe one or multiple devices from a topic by passing registration
     $registrationTokens = [
         // ...
     };
-
-    $messaging = $factory->createMessaging();
 
     $messaging->unsubscribeFromTopic($topic, $registrationTokens);
 
@@ -558,8 +574,6 @@ about an app instance by passing a registration token to the ``getAppInstance()`
 .. code-block:: php
 
     $registrationToken = '...';
-
-    $messagig = $factory->createMessaging();
 
     $appInstance = $messaging->getAppInstance($registrationToken);
     // Return the full information as provided by the Firebase API
@@ -623,7 +637,6 @@ You can retrieve all topic subscriptions for an app instance with the ``topicSub
 
 .. code-block:: php
 
-    $messaging = $factory->createMessaging();
     $appInstance = $messaging->getAppInstance('<registration token>');
 
     /** @var \Kreait\Firebase\Messaging\TopicSubscriptions $subscriptions */

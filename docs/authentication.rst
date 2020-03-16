@@ -28,6 +28,37 @@ across the entire database, you can protect against accidental writes by setting
 a read-only security rule and then initializing the Admin SDK with privileges
 limited by that rule.
 
+*******************************
+Initializing the Auth component
+*******************************
+
+**With the SDK**
+
+.. code-block:: php
+
+    $auth = $factory->createAuth();
+
+**With Dependency Injection** (`Symfony Bundle <https://github.com/kreait/firebase-bundle>`_/`Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_)
+
+.. code-block:: php
+
+    use Kreait\Firebase\Auth;
+
+    class MyService
+    {
+        public function __construct(Auth $auth)
+        {
+            $this->auth = $auth;
+        }
+    }
+
+**With the Laravel** ``app()`` **helper** (`Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_)
+
+.. code-block:: php
+
+    $auth = app('firebase.auth');
+
+
 .. _create-custom-tokens:
 
 ********************
@@ -42,7 +73,7 @@ These tokens expire after one hour.
 
     $uid = 'some-uid';
 
-    $customToken = $factory->createAuth()->createCustomToken($uid);
+    $customToken = $auth->createCustomToken($uid);
 
 You can also optionally specify additional claims to be included in the custom token. For example,
 below, a premiumAccount field has been added to the custom token, which will be available in
@@ -55,7 +86,7 @@ the auth / request.auth objects in your Security Rules:
         'premiumAccount' => true
     ];
 
-    $customToken = $factory->createAuth()->createCustomToken($uid, $additionalClaims);
+    $customToken = $auth->createCustomToken($uid, $additionalClaims);
 
     $customTokenString = (string) $customToken;
 
@@ -94,8 +125,6 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
 
     $idTokenString = '...';
 
-    $auth = $factory->createAuth();
-
     try {
         $verifiedIdToken = $auth->verifyIdToken($idTokenString);
     } catch (\InvalidArgumentException $e) {
@@ -133,6 +162,8 @@ The keys are cached in memory by default.
 If you want to cache the public keys more effectively, you can provide any
 `implementation of psr/simple-cache <https://packagist.org/providers/psr/simple-cache-implementation>`_ to the
 Firebase factory when creating your Firebase instance.
+
+For Symfony and Laravel, the Frameworks cache will automatically be used.
 
 Here is an example using the `Symfony Cache Component <https://symfony.com/doc/current/components/cache.html>`_:
 

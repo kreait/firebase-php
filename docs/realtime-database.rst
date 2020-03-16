@@ -5,14 +5,35 @@ Realtime Database
 .. note::
     The Realtime Database API currently does not support realtime event listeners.
 
-You can work with your Firebase application's Realtime Database by invoking the ``getDatabase()``
-method of your Firebase instance:
+********************************************
+Initializing the Realtime Database component
+********************************************
+
+**With the SDK**
 
 .. code-block:: php
 
-    use Kreait\Firebase\Factory;
+    $database = $factory->createDatabase();
 
-    $database = (new Factory())->createDatabase();
+**With Dependency Injection** (`Symfony Bundle <https://github.com/kreait/firebase-bundle>`_/`Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_)
+
+.. code-block:: php
+
+    use Kreait\Firebase\Database;
+
+    class MyService
+    {
+        public function __construct(Database $database)
+        {
+            $this->database = $database;
+        }
+    }
+
+**With the Laravel** ``app()`` **helper** (`Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_)
+
+.. code-block:: php
+
+    $database = app('firebase.database');
 
 
 ***************

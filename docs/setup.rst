@@ -12,14 +12,31 @@ In order to access a Firebase project using a server SDK, you must authenticate 
 a `Service Account <https://developers.google.com/identity/protocols/OAuth2ServiceAccount>`_.
 
 Follow the steps described in the official Firebase documentation to create a Service Account for your Firebase
-application (see
-`Add the Firebase Admin SDK to your Server <https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app>`_)
-and make sure the Service Account has the `Project -> Editor` or `Project -> Owner` role.
+application:
+`Add the Firebase Admin SDK to your Server <https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app>`_.
+
+You can then configure the SDK to use this Service Account:
+
+**With the SDK**
+
+.. code-block:: php
+
+    use Kreait\Firebase\Factory;
+
+    $factory = (new Factory)->withServiceAccount('/path/to/firebase_credentials.json');
+
+**With the** `Symfony Bundle <https://github.com/kreait/firebase-bundle>`_
+
+Please see `https://github.com/kreait/firebase-bundle#configuration <https://github.com/kreait/firebase-bundle#configuration>`_
+
+**With the** `Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_
+
+Please see `https://github.com/kreait/laravel-firebase#configuration <https://github.com/kreait/laravel-firebase#configuration>`_
 
 With autodiscovery
 ==================
 
-By default, the SDK is able to autodiscover the Service Account for your project in the following conditions:
+The SDK is able to autodiscover the Service Account for your project in the following conditions:
 
 #. Your application runs on Google Cloud Engine.
 
@@ -33,66 +50,15 @@ By default, the SDK is able to autodiscover the Service Account for your project
    * on Linux/MacOS: ``$HOME/.config/gcloud/application_default_credentials.json``
    * on Windows: ``$APPDATA/gcloud/application_default_credentials.json``
 
-If one of the conditions above is met, you can create a new Firebase factory instance without further configuration:
+If you want to use autodiscovery, a Service Account must not be explicitly configured.
 
-.. code-block:: php
-
-    use Kreait\Firebase\Factory;
-
-    $factory = new Factory();
-
-
-Manually
-========
-
-You can also pass the path to the Service Account JSON file explicitly:
-
-.. code-block:: php
-
-    use Kreait\Firebase\Factory;
-
-    $factory = (new Factory())
-        ->withServiceAccount('/path/to/firebase_credentials.json');
-
-
-Use your own autodiscovery
-==========================
-
-You can use your own, custom autodiscovery methods as well:
-
-.. code-block:: php
-
-    use Kreait\Firebase\Factory;
-    use Kreait\Firebase\ServiceAccount\Discoverer
-
-    $discoverer = new Discoverer([
-        function () {
-            $serviceAccount = ...; // Instance of Kreait\Firebase\ServiceAccount
-
-            return $serviceAccount;
-        }
-    ]);
-
-    $factory = (new Factory())
-        ->withServiceAccountDiscoverer($myDiscoverer);
-
-Disabling the autodiscovery
-===========================
-
-You can also disable the autodiscovery. This can be useful to ensure that it will not be
-triggered in case an explicitely given service account is invalid.
-
-.. code-block:: php
-
-    use Kreait\Firebase\Factory;
-
-    $factory = (new Factory())
-        ->withServiceAccount($serviceAccount)
-        ->withDisabledAutoDiscovery();
 
 *******************
 Custom Database URI
 *******************
+
+.. note::
+    It is not necessary to define a custom database URI in most cases.
 
 If the project ID in the JSON file does not match the URL of your Firebase application, or if you want to
 be explicit, you can configure the Factory like this:

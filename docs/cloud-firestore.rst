@@ -41,16 +41,41 @@ Before you start, please read about Firestore in the official documentation:
 - `PHP API Documentation <https://googleapis.github.io/google-cloud-php/#/docs/cloud-firestore>`_
 - `PHP Usage Examples <https://github.com/GoogleCloudPlatform/php-docs-samples/tree/master/firestore>`_
 
+************************************
+Initializing the Firestore component
+************************************
+
+**With the SDK**
+
+.. code-block:: php
+
+    $firestore = $factory->createFirestore();
+
+**With Dependency Injection** (`Symfony Bundle <https://github.com/kreait/firebase-bundle>`_/`Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_)
+
+.. code-block:: php
+
+    use Kreait\Firebase\Firestore;
+
+    class MyService
+    {
+        public function __construct(Firestore $firestore)
+        {
+            $this->firestore = $firestore;
+        }
+    }
+
+**With the Laravel** ``app()`` **helper** (`Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_)
+
+.. code-block:: php
+
+    $firestore = app('firebase.firestore');
+
 ***************
 Getting started
 ***************
 
 .. code-block:: php
-
-    use Kreait\Firebase;
-
-    $factory = new Firebase\Factory();
-    $firestore = $factory->createFirestore();
 
     $database = $firestore->database();
 

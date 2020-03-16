@@ -37,16 +37,40 @@ Getting started
 - If you already have a Dynamic Links domain, take note of it. You need to provide a Dynamic Links Domain when you
   programmatically create Dynamic Links.
 
-After having initialized your Firebase project instance, you can access the Dynamic Links component like this:
+****************************************
+Initializing the Dynamic Links component
+****************************************
+
+**With the SDK**
 
 .. code-block:: php
 
-    use Kreait\Firebase;
-
-    $factory = new Firebase\Factory();
-
     $dynamicLinksDomain = 'https://example.page.link';
     $dynamicLinks = $factory->createDynamicLinksService($dynamicLinksDomain);
+
+**With Dependency Injection** (`Symfony Bundle <https://github.com/kreait/firebase-bundle>`_/`Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_)
+
+To define the default Dynamic Links Domain for **Laravel**, configure the ``FIREBASE_DYNAMIC_LINKS_DEFAULT_DOMAIN`` environment variable.
+
+.. code-block:: php
+
+    use Kreait\Firebase\DynamicLinks;
+
+    class MyService
+    {
+        public function __construct(DynamicLinks $dynamicLinks)
+        {
+            $this->dynamicLinks = $dynamicLinks;
+        }
+    }
+
+**With the Laravel** ``app()`` **helper** (`Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_)
+
+To define the default Dynamic Links Domain, configure the ``FIREBASE_DYNAMIC_LINKS_DEFAULT_DOMAIN`` environment variable.
+
+.. code-block:: php
+
+    $dynamicLinks = app('firebase.dynamic_links');
 
 
 *********************

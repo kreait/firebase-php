@@ -23,6 +23,11 @@ The recommended way to install the Firebase Admin SDK is with
 for PHP that allows you to declare the dependencies your project needs and
 installs them into your project.
 
+If you want to use the SDK within a Framework, please follow the installation instructions here:
+
+- **Laravel**: `kreait/laravel-firebase <https://github.com/kreait/laravel-firebase>`_
+- **Symfony**: `kreait/firebase-bundle <https://github.com/kreait/firebase-bundle>`_
+
 .. code-block:: bash
 
     composer require kreait/firebase-php ^4.41
@@ -53,45 +58,15 @@ other best-practices for defining dependencies at
 
 Please continue to the :ref:`Setup section <setup>` to learn more about connecting your application to Firebase.
 
-*************
-Usage example
-*************
+**************
+Usage examples
+**************
 
-You can find more usage examples at
+You can find usage examples at
 `https://github.com/jeromegamez/firebase-php-examples <https://github.com/jeromegamez/firebase-php-examples>`_
 and in the `tests directory <https://github.com/kreait/firebase-php/tree/master/tests>`_
 of this project's `GitHub repository <https://github.com/kreait/firebase-php/>`_.
 
-.. code-block:: php
-
-    <?php
-
-    require __DIR__.'/vendor/autoload.php';
-
-    use Kreait\Firebase\Factory;
-
-    $factory = (new Factory)
-        ->withServiceAccount('/path/to/google-service-account.json')
-        // The following line is optional if the project id in your credentials file
-        // is identical to the subdomain of your Firebase project. If you need it,
-        // make sure to replace the URL with the URL of your project.
-        ->withDatabaseUri('https://my-project.firebaseio.com');
-
-    $database = $factory->createDatabase();
-
-    $newPost = $database
-        ->getReference('blog/posts')
-        ->push([
-            'title' => 'Post title',
-            'body' => 'This should probably be longer.'
-        ]);
-
-    $newPost->getKey(); // => -KVr5eu8gcTv7_AHb-3-
-    $newPost->getUri(); // => https://my-project.firebaseio.com/blog/posts/-KVr5eu8gcTv7_AHb-3-
-
-    $newPost->getChild('title')->set('Changed post title');
-    $newPost->getValue(); // Fetches the data from the realtime database
-    $newPost->remove();
 
 **************
 Issues/Support

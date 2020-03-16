@@ -7,14 +7,6 @@ The admin user management API gives you the ability to programmatically retrieve
 delete users without requiring a user's existing credentials and without worrying about client-side
 rate limiting.
 
-.. code-block:: php
-
-    use Kreait\Firebase\Factory;
-
-    $auth = (new Factory)
-        ->withServiceAccount('/path/to/google-service-account.json')
-        ->createAuth();
-
 ************
 User Records
 ************

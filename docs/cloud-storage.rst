@@ -15,15 +15,42 @@ Before you start, please read about Firebase Cloud Storage in the official docum
 - `PHP API Documentation <https://googleapis.github.io/google-cloud-php/#/docs/cloud-storage>`_
 - `PHP Usage examples <https://github.com/GoogleCloudPlatform/php-docs-samples/blob/master/storage>`_
 
+**********************************
+Initializing the Storage component
+**********************************
+
+**With the SDK**
+
+.. code-block:: php
+
+    $storage = $factory->createStorage();
+
+**With Dependency Injection** (`Symfony Bundle <https://github.com/kreait/firebase-bundle>`_/`Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_)
+
+.. code-block:: php
+
+    use Kreait\Firebase\Storage;
+
+    class MyService
+    {
+        public function __construct(Storage $storage)
+        {
+            $this->storage = $storage;
+        }
+    }
+
+**With the Laravel** ``app()`` **helper** (`Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_)
+
+.. code-block:: php
+
+    $storage = app('firebase.storage');
+
+
 ***************
 Getting started
 ***************
 
 .. code-block:: php
-
-    use Kreait\Firebase\Factory;
-
-    $storage = (new Factory())->createStorage();
 
     $storageClient = $storage->getStorageClient();
     $defaultBucket = $storage->getBucket();
@@ -32,6 +59,9 @@ Getting started
 **********************
 Default Storage bucket
 **********************
+
+.. note::
+    It is not necessary to change the default storage bucket in most cases.
 
 The SDK assumes that your project's default storage bucket name has the format ``<project-id>.appspot.com``
 and will configure the storage instance accordingly.

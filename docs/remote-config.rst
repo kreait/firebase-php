@@ -26,15 +26,35 @@ For Firebase projects created before the March 7, 2018 release of the Remote Con
 2. When prompted, select your Firebase project. (Every Firebase project has a corresponding project in the Google APIs console.)
 3. Click Enable on the Firebase Remote Config API page.
 
-You can work with your Firebase application's Remote Config by invoking the ``getRemoteConfig()``
-method of your Firebase instance:
+********************************************
+Initializing the Realtime Database component
+********************************************
+
+**With the SDK**
 
 .. code-block:: php
 
-    use Kreait\Firebase;
-
-    $factory = new Firebase\Factory();
     $remoteConfig = $factory->createRemoteConfig();
+
+**With Dependency Injection** (`Symfony Bundle <https://github.com/kreait/firebase-bundle>`_/`Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_)
+
+.. code-block:: php
+
+    use Kreait\Firebase\RemoteConfig;
+
+    class MyService
+    {
+        public function __construct(Database $remoteConfig)
+        {
+            $this->remoteConfig = $remoteConfig;
+        }
+    }
+
+**With the Laravel** ``app()`` **helper** (`Laravel/Lumen Package <https://github.com/kreait/laravel-firebase>`_)
+
+.. code-block:: php
+
+    $remoteConfig = app('firebase.remote_config');
 
 *********************
 Get the Remote Config
@@ -225,8 +245,6 @@ You can filter the results of ``RemoteConfig::listVersions()``:
         'pageSize' => 5,
         'limit' => 10,
     ];
-
-    $remoteConfig = $factory->createRemoteConfig();
 
     foreach ($remoteConfig->listVersions($query) as $version) {
         echo "Version number: {$version->versionNumber()}\n";
