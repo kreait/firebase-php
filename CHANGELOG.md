@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Dropped support for PHP <7.3
+
 ## 4.41.0 - 2020-03-16  
 
 ### Auth
