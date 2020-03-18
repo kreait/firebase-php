@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* User records now include the password salt, if available
+
 ## 4.41.0 - 2020-03-16  
 
 ### Auth
