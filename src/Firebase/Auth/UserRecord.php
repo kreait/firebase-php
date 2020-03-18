@@ -59,6 +59,11 @@ class UserRecord implements \JsonSerializable
      * @var string|null
      */
     public $passwordHash;
+    
+     /**
+     * @var string|null
+     */
+    public $salt;
 
     /**
      * @var array
@@ -87,6 +92,7 @@ class UserRecord implements \JsonSerializable
         $record->metadata = self::userMetaDataFromResponseData($data);
         $record->providerData = self::userInfoFromResponseData($data);
         $record->passwordHash = $data['passwordHash'] ?? null;
+        $record->salt = $data['salt'] ?? null;
 
         if ($data['validSince'] ?? null) {
             $record->tokensValidAfterTime = DT::toUTCDateTimeImmutable($data['validSince']);
