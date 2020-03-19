@@ -33,18 +33,18 @@ class FromEnvironmentVariable
     {
         $msg = \sprintf('%s: The environment variable "%s"', static::class, $this->name);
 
-        if (!($path = $this->getValueFromEnvironment($this->name))) {
+        if (!($value = $this->getValueFromEnvironment($this->name))) {
             throw new ServiceAccountDiscoveryFailed(\sprintf('%s is not set.', $msg));
         }
 
-        if (\mb_strpos($path, '{') === 0) {
+        if (\mb_strpos($value, '{') === 0) {
             $msg .= 'is a JSON string';
         } else {
-            $msg .= \sprintf(' points to "%s"', $path);
+            $msg .= \sprintf(' points to "%s"', $value);
         }
 
         try {
-            return ServiceAccount::fromValue($path);
+            return ServiceAccount::fromValue($value);
         } catch (Throwable $e) {
             throw new ServiceAccountDiscoveryFailed(
                 \sprintf('%s, but has errors: %s', $msg, $e->getMessage())
