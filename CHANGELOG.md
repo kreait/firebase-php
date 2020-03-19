@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* User records now include the password salt, if available
+* User records now include the password salt and tenant ID, if available
 
 ## 4.41.0 - 2020-03-16  
 
