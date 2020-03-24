@@ -422,6 +422,25 @@ You can find the full FCM Options configuration reference in the official docume
 
     $message = $message->withFcmOptions($fcmOptions);
 
+************
+Using Emojis
+************
+
+Firebase Messaging supports Emojis in Messages.
+
+.. note::
+    You can find a full list of all currently available Emojis at
+    https://www.unicode.org/emoji/charts/full-emoji-list.html
+
+.. code-block:: php
+
+    // You can copy and paste an emoji directly into you source code
+    $text = "This is an emoji 😀";
+
+    // This only works in PHP ^7.0, double quotes are required
+    $text = "This is an emoji \u{1F600}";
+
+
 **************************************
 Sending a fully configured raw message
 **************************************
