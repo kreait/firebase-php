@@ -7,97 +7,57 @@ namespace Kreait\Firebase\Tests\Unit;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Tests\UnitTestCase;
+use stdClass;
 
 /**
  * @internal
  */
 class ServiceAccountTest extends UnitTestCase
 {
-    private $validJsonFile;
-    private $realpathedValidJsonFile;
-    private $invalidJsonFile;
-    private $malformedJsonFile;
-    private $symlinkedJsonFile;
-    private $unreadableJsonFile;
+    /** @var string */
+    private $pathToUnreadableJson;
 
-    /**
-     * @var ServiceAccount
-     */
-    private $serviceAccount;
+    /** @var string */
+    private $pathToValidJson;
+
+    /** @var string */
+    private $validJson;
+
+    /** @var array */
+    private $validData;
 
     protected function setUp()
     {
-        $this->validJsonFile = self::$fixturesDir.'/ServiceAccount/valid.json';
-        $this->realpathedValidJsonFile = \realpath($this->validJsonFile);
-        $this->malformedJsonFile = self::$fixturesDir.'/ServiceAccount/malformed.json';
-        $this->invalidJsonFile = self::$fixturesDir.'/ServiceAccount/invalid.json';
-        $this->symlinkedJsonFile = self::$fixturesDir.'/ServiceAccount/symlinked.json';
-        $this->unreadableJsonFile = self::$fixturesDir.'/ServiceAccount/unreadable.json';
+        $this->pathToUnreadableJson = self::$fixturesDir.'/ServiceAccount/unreadable.json';
+        @\chmod($this->pathToUnreadableJson, 0000);
 
-        @\chmod($this->unreadableJsonFile, 0000);
+        $this->pathToValidJson = self::$fixturesDir.'/ServiceAccount/valid.json';
+        $this->validJson = (string) \file_get_contents($this->pathToValidJson);
+        $this->validData = \json_decode($this->validJson, true);
     }
 
     protected function tearDown()
     {
-        @\chmod($this->unreadableJsonFile, 0644);
-    }
-
-    public function testGetters()
-    {
-        $serviceAccount = ServiceAccount::fromValue($this->validJsonFile);
-        $data = \json_decode((string) \file_get_contents($this->validJsonFile), true);
-
-        $this->assertSame($data['project_id'], $serviceAccount->getProjectId());
-        $this->assertSame($data['client_id'], $serviceAccount->getClientId());
-        $this->assertSame($data['client_email'], $serviceAccount->getClientEmail());
-        $this->assertSame($data['private_key'], $serviceAccount->getPrivateKey());
-        $this->assertSame($this->validJsonFile, $serviceAccount->getFilePath());
+        @\chmod($this->pathToUnreadableJson, 0644);
     }
 
     public function testCreateFromJsonText()
     {
-        $serviceAccount = ServiceAccount::fromValue(\file_get_contents($this->validJsonFile));
-        $this->assertNull($serviceAccount->getFilePath());
+        $serviceAccount = ServiceAccount::fromValue($this->validJson);
+        $this->assertSame($this->validData, $serviceAccount->asArray());
     }
 
     public function testCreateFromJsonFile()
     {
-        $serviceAccount = ServiceAccount::fromValue($this->validJsonFile);
-        $this->assertSame($this->validJsonFile, $serviceAccount->getFilePath());
-    }
-
-    public function testCreateFromRealpathedJsonFile()
-    {
-        $serviceAccount = ServiceAccount::fromValue($this->realpathedValidJsonFile);
-        $this->assertSame($this->realpathedValidJsonFile, $serviceAccount->getFilePath());
-    }
-
-    public function testCreateFromSymlinkedJsonFile()
-    {
-        if ($this->onWindows()) {
-            $this->markTestSkipped('Windows only support absolute symlinks');
-        }
-
-        $serviceAccount = ServiceAccount::fromValue($this->symlinkedJsonFile);
-        $this->assertSame($this->symlinkedJsonFile, $serviceAccount->getFilePath());
+        $serviceAccount = ServiceAccount::fromValue($this->pathToValidJson);
+        $this->assertSame($this->validData, $serviceAccount->asArray());
+        $this->assertSame($this->pathToValidJson, $serviceAccount->getFilePath());
     }
 
     public function testCreateFromMissingFile()
     {
         $this->expectException(InvalidArgumentException::class);
         ServiceAccount::fromValue('missing.json');
-    }
-
-    public function testCreateFromMalformedJsonFile()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        ServiceAccount::fromValue($this->malformedJsonFile);
-    }
-
-    public function testCreateFromInvalidJsonFile()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        ServiceAccount::fromValue($this->invalidJsonFile);
     }
 
     public function testCreateFromDirectory()
@@ -109,16 +69,23 @@ class ServiceAccountTest extends UnitTestCase
     public function testCreateFromUnreadableFile()
     {
         $this->expectException(InvalidArgumentException::class);
-        ServiceAccount::fromValue($this->unreadableJsonFile);
+        ServiceAccount::fromValue($this->pathToUnreadableJson);
     }
 
     public function testCreateFromArray()
     {
-        $data = \json_decode((string) \file_get_contents($this->validJsonFile), true);
-
-        $serviceAccount = ServiceAccount::fromValue($data);
-        $this->addToAssertionCount(1);
+        $serviceAccount = ServiceAccount::fromValue($this->validData);
         $this->assertNull($serviceAccount->getFilePath());
+        $this->assertSame($this->validData, $serviceAccount->asArray());
+    }
+
+    public function testCreateFromArrayWithMissingTypeField()
+    {
+        $data = $this->validData;
+        unset($data['type']);
+
+        $this->expectException(InvalidArgumentException::class);
+        ServiceAccount::fromValue($data);
     }
 
     public function testCreateFromServiceAccount()
@@ -128,53 +95,38 @@ class ServiceAccountTest extends UnitTestCase
         $this->assertSame($serviceAccount, ServiceAccount::fromValue($serviceAccount));
     }
 
-    public function testCreateFromInvalidValue()
+    /**
+     * @see https://github.com/kreait/firebase-php/issues/228
+     */
+    public function testGetSanitizedProjectId()
     {
-        $this->expectException(InvalidArgumentException::class);
-        ServiceAccount::fromValue(false);
-    }
+        $data = $this->validData;
+        $data['project_id'] = 'example.com:api-project-xxxxxx';
 
-    public function testCreateWithInvalidClientEmail()
-    {
-        $this->expectException(InvalidArgumentException::class);
+        $serviceAccount = ServiceAccount::fromValue($data);
 
-        (new ServiceAccount())->withClientEmail('foo');
-    }
-
-    public function testWithCustomDiscoverer()
-    {
-        $expected = $this->createMock(ServiceAccount::class);
-
-        $discoverer = $this->createMock(ServiceAccount\Discoverer::class);
-        $discoverer
-            ->method('discover')
-            ->willReturn($expected);
-
-        $this->assertSame($expected, ServiceAccount::discover($discoverer));
+        $this->assertSame('example-com-api-project-xxxxxx', $serviceAccount->getSanitizedProjectId());
     }
 
     /**
-     * @see https://github.com/kreait/firebase-php/issues/228
-     *
-     * @dataProvider sanitizableProjectIdProvider
+     * @dataProvider invalidValues
      */
-    public function testGetSanitizedProjectId($expected, $given)
+    public function testCreateFromInvalidValue($value)
     {
-        $serviceAccount = ServiceAccount::fromJsonFile($this->validJsonFile)->withProjectId($given);
-
-        $this->assertSame($given, $serviceAccount->getProjectId());
-        $this->assertSame($expected, $serviceAccount->getSanitizedProjectId());
+        $this->expectException(InvalidArgumentException::class);
+        ServiceAccount::fromValue($value);
     }
 
-    public function sanitizableProjectIdProvider()
+    public function invalidValues()
     {
         return [
-            ['example-com-api-project-xxxxxx', 'example.com:api-project-xxxxxx'],
+            'true' => [true],
+            'false' => [false],
+            'malformed_json' => ['{'],
+            'empty_json' => ['{}'],
+            'empty_array' => [[]],
+            'invalid_type' => [['type' => 'invalid']],
+            'unsupported' => [new stdClass()],
         ];
-    }
-
-    private function onWindows()
-    {
-        return \mb_stripos(\PHP_OS, 'win') === 0;
     }
 }
