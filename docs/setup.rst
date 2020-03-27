@@ -70,6 +70,27 @@ be explicit, you can configure the Factory like this:
     $factory = (new Factory())
         ->withDatabaseUri('https://my-project.firebaseio.com');
 
+********************
+Multi Project Access
+********************
+
+If you're using authentication credentials with access to multiple Firebase Projects, you can configure
+multiple instances with different project IDs:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Factory;
+
+    // This will use the project defined in the Service Account
+    // credentials files by default
+    $base = (new Factory())->withServiceAccount('path/to/service-account.json');
+
+    // Although not needed, you could also be specific
+    $main = $base->withProjectId('main-firebase-project-id');
+
+    $other = $main->withProjectId('other-firebase-project-id');
+
+
 ***********************************
 HTTP Client Options and middlewares
 ***********************************
@@ -116,3 +137,4 @@ by using
 
     $factory = (new Factory)
         ->withHttpClientConfig(['handler' => $handler]);
+

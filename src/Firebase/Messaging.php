@@ -25,6 +25,7 @@ use Kreait\Firebase\Messaging\MulticastSendReport;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Messaging\RegistrationTokens;
 use Kreait\Firebase\Messaging\Topic;
+use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Util\JSON;
 
 class Messaging
@@ -41,11 +42,16 @@ class Messaging
     /**
      * @internal
      */
-    public function __construct(ApiClient $messagingApiClient, AppInstanceApiClient $appInstanceApiClient, string $projectId = null)
+    public function __construct(ApiClient $messagingApiClient, AppInstanceApiClient $appInstanceApiClient, ProjectId $projectId = null)
     {
         $this->messagingApi = $messagingApiClient;
         $this->appInstanceApi = $appInstanceApiClient;
-        $this->projectId = $projectId ?: $this->determineProjectIdFromMessagingApiClient($messagingApiClient);
+
+        if ($projectId) {
+            $this->projectId = $projectId->value();
+        } else {
+            $this->projectId = $this->determineProjectIdFromMessagingApiClient($messagingApiClient);
+        }
     }
 
     private function determineProjectIdFromMessagingApiClient(ApiClient $client): string

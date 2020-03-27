@@ -65,6 +65,10 @@ class Factory
     protected $serviceAccountDiscoverer;
 
     /**
+     * @var ProjectId|null
+     */
+    protected $projectId;
+
      * @var string|null
      */
     protected $uid;
@@ -110,6 +114,14 @@ class Factory
         $factory->serviceAccount = $serviceAccount;
 
         return $factory->withDisabledAutoDiscovery();
+
+    public function withProjectId(string $projectId): self
+    {
+        $factory = clone $this;
+        $factory->projectId = ProjectId::fromString($projectId);
+
+        return $factory;
+    }
     }
 
     public function withServiceAccountDiscoverer(Discoverer $discoverer): self

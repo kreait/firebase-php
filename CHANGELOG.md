@@ -3,6 +3,13 @@
 ## Unreleased
 
 * User records now include the password salt and tenant ID, if available
+* It is now possible to override/specifically set a Project ID when configuring the 
+  Firebase Factory. This enables multi-project access with the same set of credentials. 
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#multi-project-access))
+  
+### Added
+
+* `Kreait\Firebase\Factory::withProjectId(string $projectId): self`
 
 ## 4.41.0 - 2020-03-16  
 
