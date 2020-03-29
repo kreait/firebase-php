@@ -6,11 +6,24 @@
 * It is now possible to override/specifically set a Project ID when configuring the 
   Firebase Factory. This enables multi-project access with the same set of credentials. 
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#multi-project-access))
+* Passing custom HTTP Client options and middlewares has been deprecated. The SDK
+  already reacts to errors and customizations might lead to unexpected behavior.
+  * If you want to debug HTTP requests, add `->withEnabledDebug()` to the Factory
+    configuration chain. 
+    ([Documentation](https://firebase-php.readthedocs.io/en/latest/troubleshooting.html#debugging-api-requests))
+  * If you need to configure a proxy, use `->withHttpProxy($proxy)`.
+    ([Documentation](https://firebase-php.readthedocs.io/en/latest/troubleshooting.html#proxy-configuration))
   
 ### Added
 
 * `Kreait\Firebase\Factory::withProjectId(string $projectId): self`
+* `Kreait\Firebase\Factory::withEnabledDebug(): self`
+* `Kreait\Firebase\Factory::withHttpProxy(string $proxy): self`
 
+### Deprecations
+
+* `Kreait\Firebase\Factory::withHttpClientConfig()`
+* `Kreait\Firebase\Factory::withHttpClientMiddlewares()`
 ## 4.41.0 - 2020-03-16  
 
 ### Auth

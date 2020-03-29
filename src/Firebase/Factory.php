@@ -93,6 +93,16 @@ class Factory
      */
     protected $httpClientMiddlewares = [];
 
+    /**
+     * @var bool
+     */
+    protected $debug = false;
+
+    /**
+     * @var string|null
+     */
+    protected $httpProxy;
+
     protected static $databaseUriPattern = 'https://%s.firebaseio.com';
 
     protected static $storageBucketNamePattern = '%s.appspot.com';
@@ -164,6 +174,25 @@ class Factory
         return $factory;
     }
 
+    public function withEnabledDebug(): self
+    {
+        $factory = clone $this;
+        $factory->debug = true;
+
+        return $factory;
+    }
+
+    public function withHttpProxy(string $proxy): self
+    {
+        $factory = clone $this;
+        $factory->httpProxy = $proxy;
+
+        return $factory;
+    }
+
+    /**
+     * @deprecated 4.42.0
+     */
     public function withHttpClientConfig(array $config = null): self
     {
         $factory = clone $this;
@@ -173,6 +202,8 @@ class Factory
     }
 
     /**
+     * @deprecated 4.42.0
+     *
      * @param callable[]|null $middlewares
      */
     public function withHttpClientMiddlewares(array $middlewares = null): self

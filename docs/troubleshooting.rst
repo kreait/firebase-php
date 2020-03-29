@@ -142,12 +142,7 @@ If you need to access the Firebase/Google APIs through a proxy, you can configur
 
 .. code-block:: php
 
-    use Kreait\Firebase\Factory;
-
-    $factory = (new Factory())
-        ->withHttpClientConfig([
-            'proxy' => 'tcp://<host>:<port>'
-        ]);
+    $factory = $factory->withHttpProxy('tcp://<host>:<port>');
 
 **********************
 Debugging API requests
@@ -159,9 +154,4 @@ HTTP client config:
 
 .. code-block:: php
 
-    use Kreait\Firebase\Factory;
-
-    $factory = (new Factory())
-        ->withHttpClientConfig([
-            'debug' => true
-        ]);
+    $factory = $factory->withEnabledDebug();
