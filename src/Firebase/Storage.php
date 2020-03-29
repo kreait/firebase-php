@@ -6,6 +6,7 @@ namespace Kreait\Firebase;
 
 use Google\Cloud\Storage\Bucket;
 use Google\Cloud\Storage\StorageClient;
+use Kreait\Firebase\Exception\RuntimeException;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use Superbalist\Flysystem\GoogleStorage\GoogleStorageAdapter;
@@ -18,7 +19,7 @@ class Storage
     private $storageClient;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $defaultBucket;
 
@@ -35,7 +36,7 @@ class Storage
     /**
      * @internal
      */
-    public function __construct(StorageClient $storageClient, string $defaultBucket)
+    public function __construct(StorageClient $storageClient, string $defaultBucket = null)
     {
         $this->storageClient = $storageClient;
         $this->defaultBucket = $defaultBucket;
@@ -49,6 +50,12 @@ class Storage
     public function getBucket(string $name = null): Bucket
     {
         $name = $name ?: $this->defaultBucket;
+
+        if ($name === null) {
+            throw new RuntimeException(
+                'No bucket name was given and no default bucked was configured.'
+            );
+        }
 
         if (!\array_key_exists($name, $this->buckets)) {
             $this->buckets[$name] = $this->storageClient->bucket($name);

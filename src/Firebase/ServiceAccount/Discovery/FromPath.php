@@ -10,6 +10,8 @@ use Throwable;
 
 /**
  * @internal
+ *
+ * @deprecated 4.42
  */
 class FromPath
 {
@@ -32,7 +34,7 @@ class FromPath
     public function __invoke(): ServiceAccount
     {
         try {
-            return ServiceAccount::fromJsonFile($this->path);
+            return ServiceAccount::fromValue($this->path);
         } catch (Throwable $e) {
             throw new ServiceAccountDiscoveryFailed($e->getMessage());
         }

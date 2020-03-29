@@ -10,6 +10,8 @@ use Kreait\Firebase\ServiceAccount;
 
 /**
  * @internal
+ *
+ * @deprecated 4.42
  */
 class FromGoogleWellKnownFile
 {

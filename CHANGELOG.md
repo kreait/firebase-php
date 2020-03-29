@@ -3,9 +3,9 @@
 ## Unreleased
 
 * User records now include the password salt and tenant ID, if available
-* It is now possible to override/specifically set a Project ID when configuring the 
-  Firebase Factory. This enables multi-project access with the same set of credentials. 
-  ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#multi-project-access))
+* Reworked credentials auto-discovery to use the discovery already provided by
+  Google's libraries, deprecating the previous auto-discovery methods. It is still
+  possible to disable auto-discovery. 
 * Passing custom HTTP Client options and middlewares has been deprecated. The SDK
   already reacts to errors and customizations might lead to unexpected behavior.
   * If you want to debug HTTP requests, add `->withEnabledDebug()` to the Factory
@@ -17,6 +17,7 @@
 ### Added
 
 * `Kreait\Firebase\Factory::withProjectId(string $projectId): self`
+* `Kreait\Firebase\Factory::withClientEmail(string $clientEmail): self`
 * `Kreait\Firebase\Factory::withEnabledDebug(): self`
 * `Kreait\Firebase\Factory::withHttpProxy(string $proxy): self`
 
@@ -24,6 +25,27 @@
 
 * `Kreait\Firebase\Factory::withHttpClientConfig()`
 * `Kreait\Firebase\Factory::withHttpClientMiddlewares()`
+* `Kreait\Firebase\ServiceAccount::discover()`
+* `Kreait\Firebase\ServiceAccount::fromArray()`
+* `Kreait\Firebase\ServiceAccount::fromJson()`
+* `Kreait\Firebase\ServiceAccount::fromJsonFile()`
+* `Kreait\Firebase\ServiceAccount::getClientId()`
+* `Kreait\Firebase\ServiceAccount::getFilePath()`
+* `Kreait\Firebase\ServiceAccount::getSanitizedProjectId()`
+* `Kreait\Firebase\ServiceAccount::hasClientId()`
+* `Kreait\Firebase\ServiceAccount::hasPrivateKey()`
+* `Kreait\Firebase\ServiceAccount::withClientEmail()`
+* `Kreait\Firebase\ServiceAccount::withClientId()`
+* `Kreait\Firebase\ServiceAccount::withPrivateKey()`
+* `Kreait\Firebase\ServiceAccount::withProjectId()`
+* `Kreait\Firebase\ServiceAccount::withProjectIdAndServiceAccountId()`
+* `Kreait\Firebase\ServiceAccount\Discoverer`
+* `Kreait\Firebase\ServiceAccount\Discovery\FromEnvironmentVariable`
+* `Kreait\Firebase\ServiceAccount\Discovery\FromGoogleWellKnownFile`
+* `Kreait\Firebase\ServiceAccount\Discovery\FromPath`
+* `Kreait\Firebase\ServiceAccount\Discovery\OnGoogleCloudPlatform` 
+
+
 ## 4.41.0 - 2020-03-16  
 
 ### Auth

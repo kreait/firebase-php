@@ -10,6 +10,8 @@ use Throwable;
 
 /**
  * @internal
+ *
+ * @deprecated 4.42
  */
 class FromEnvironmentVariable
 {

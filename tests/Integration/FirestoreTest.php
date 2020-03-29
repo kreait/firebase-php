@@ -23,8 +23,6 @@ final class FirestoreTest extends IntegrationTestCase
 
     protected function setUp()
     {
-        self::onlyIfFirestoreIsAvailable();
-
         $this->firestore = self::$factory->createFirestore();
         $this->collectionName = \str_replace('\\', '_', __CLASS__);
     }

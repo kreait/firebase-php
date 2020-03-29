@@ -51,7 +51,6 @@ class ServiceAccountTest extends UnitTestCase
     {
         $serviceAccount = ServiceAccount::fromValue($this->pathToValidJson);
         $this->assertSame($this->validData, $serviceAccount->asArray());
-        $this->assertSame($this->pathToValidJson, $serviceAccount->getFilePath());
     }
 
     public function testCreateFromMissingFile()
@@ -75,7 +74,6 @@ class ServiceAccountTest extends UnitTestCase
     public function testCreateFromArray()
     {
         $serviceAccount = ServiceAccount::fromValue($this->validData);
-        $this->assertNull($serviceAccount->getFilePath());
         $this->assertSame($this->validData, $serviceAccount->asArray());
     }
 

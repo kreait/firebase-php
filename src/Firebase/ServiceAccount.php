@@ -21,6 +21,8 @@ class ServiceAccount
     private $filePath;
 
     /**
+     * @deprecated 4.42.0
+     *
      * @return string|null
      */
     public function getFilePath()
@@ -170,6 +172,8 @@ class ServiceAccount
     }
 
     /**
+     * @internal
+     *
      * @deprecated 4.42.0 Use {@see \Kreait\Firebase\ServiceAccount::fromValue()} instead.
      * @see fromValue()
      */
@@ -193,6 +197,8 @@ class ServiceAccount
     }
 
     /**
+     * @internal
+     *
      * @deprecated 4.42.0 Use {@see \Kreait\Firebase\ServiceAccount::fromValue()} instead.
      * @see fromValue()
      */
@@ -204,6 +210,8 @@ class ServiceAccount
     }
 
     /**
+     * @internal
+     *
      * @deprecated 4.42.0 Use {@see \Kreait\Firebase\ServiceAccount::fromValue()} instead.
      * @see fromValue()
      */

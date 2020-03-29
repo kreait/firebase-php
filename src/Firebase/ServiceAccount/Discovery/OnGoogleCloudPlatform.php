@@ -10,6 +10,8 @@ use Kreait\GcpMetadata;
 
 /**
  * @internal
+ *
+ * @deprecated 4.42
  */
 class OnGoogleCloudPlatform
 {
@@ -32,10 +34,11 @@ class OnGoogleCloudPlatform
     public function __invoke(): ServiceAccount
     {
         try {
-            return ServiceAccount::withProjectIdAndServiceAccountId(
-                $this->metadata->project('project-id'),
-                $this->metadata->instance('service-accounts/default/email')
-            );
+            return ServiceAccount::fromValue([
+                'type' => 'service_account',
+                'project_id' => $this->metadata->project('project-id'),
+                'client_email' => $this->metadata->instance('service-accounts/default/email'),
+            ]);
         } catch (GcpMetadata\Error $e) {
             throw new ServiceAccountDiscoveryFailed($e->getMessage());
         }

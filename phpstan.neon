@@ -4,3 +4,7 @@ includes:
 
 parameters:
 	inferPrivatePropertyTypeFromConstructor: true
+	ignoreErrors:
+		-
+			message: '#If condition is always true#'
+			path: src/Firebase/Factory.php

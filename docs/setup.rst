@@ -71,22 +71,23 @@ be explicit, you can configure the Factory like this:
         ->withDatabaseUri('https://my-project.firebaseio.com');
 
 ********************
-Multi Project Access
+End User Credentials
 ********************
 
-If you're using authentication credentials with access to multiple Firebase Projects, you can configure
-multiple instances with different project IDs:
+.. note::
+    While theoretically possible, it's not recommended to use end user credentials in the context
+    of a Server-to-Server backend application.
+
+When using End User Credentials (for example if you set you application default credentials locally
+with ``gcloud auth application-default login``), you need to provide the ID of the project you
+want to access directly and suppress warnings triggered by the Google Auth Component:
 
 .. code-block:: php
 
     use Kreait\Firebase\Factory;
 
+    putenv('SUPPRESS_GCLOUD_CREDS_WARNING=true');
+
     // This will use the project defined in the Service Account
     // credentials files by default
-    $base = (new Factory())->withServiceAccount('path/to/service-account.json');
-
-    // Although not needed, you could also be specific
-    $main = $base->withProjectId('main-firebase-project-id');
-
-    $other = $main->withProjectId('other-firebase-project-id');
-
+    $base = (new Factory())->withProjectId('firebase-project-id');
