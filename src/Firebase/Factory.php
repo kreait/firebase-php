@@ -33,7 +33,6 @@ use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\Project\ProjectId;
-use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\Url;
 use Psr\Http\Message\UriInterface;
@@ -72,11 +71,6 @@ class Factory
      * @var ServiceAccountCredentials|UserRefreshCredentials|AppIdentityCredentials|GCECredentials|CredentialsLoader|null
      */
     protected $googleAuthTokenCredentials;
-
-    /**
-     * @var Discoverer|null
-     */
-    protected $serviceAccountDiscoverer;
 
     /**
      * @var ProjectId|null
@@ -168,22 +162,6 @@ class Factory
         return $factory;
     }
 
-    /**
-     * @deprecated 4.42.0
-     */
-    public function withServiceAccountDiscoverer(Discoverer $discoverer): self
-    {
-        \trigger_error(
-            __METHOD__.' is deprecated. The auto-discovery provided by Google\'s libraries is used instead',
-            \E_USER_DEPRECATED
-        );
-
-        $factory = clone $this;
-        $factory->serviceAccountDiscoverer = $discoverer;
-
-        return $factory;
-    }
-
     public function withDisabledAutoDiscovery(): self
     {
         $factory = clone $this;
@@ -232,30 +210,6 @@ class Factory
         return $factory;
     }
 
-    /**
-     * @deprecated 4.42.0
-     */
-    public function withHttpClientConfig(array $config = null): self
-    {
-        $factory = clone $this;
-        $factory->httpClientConfig = $config ?? [];
-
-        return $factory;
-    }
-
-    /**
-     * @deprecated 4.42.0
-     *
-     * @param callable[]|null $middlewares
-     */
-    public function withHttpClientMiddlewares(array $middlewares = null): self
-    {
-        $factory = clone $this;
-        $factory->httpClientMiddlewares = $middlewares ?? [];
-
-        return $factory;
-    }
-
     public function withClock(Clock $clock): self
     {
         $factory = clone $this;
@@ -264,38 +218,7 @@ class Factory
         return $factory;
     }
 
-    /**
-     * @deprecated 4.41
-     * @codeCoverageIgnore
-     */
-    public function asUser(string $uid, array $claims = null): self
-    {
-        $factory = clone $this;
-        $factory->uid = $uid;
-        $factory->claims = $claims ?? [];
-
-        return $factory;
-    }
-
-    /**
-     * @deprecated 4.33 Use the component-specific create*() methods instead.
-     * @see createAuth()
-     * @see createDatabase()
-     * @see createFirestore()
-     * @see createMessaging()
-     * @see createRemoteConfig()
-     * @see createStorage()
-     */
-    public function create(): Firebase
-    {
-        /* @noinspection PhpInternalEntityUsedInspection */
-        return new Firebase($this);
-    }
-
-    /**
-     * @return ServiceAccount|null
-     */
-    protected function getServiceAccount()
+    protected function getServiceAccount(): ?ServiceAccount
     {
         if ($this->serviceAccount) {
             return $this->serviceAccount;
@@ -303,10 +226,6 @@ class Factory
 
         if ($credentials = \getenv('FIREBASE_CREDENTIALS')) {
             return $this->serviceAccount = ServiceAccount::fromValue($credentials);
-        }
-
-        if ($discoverer = $this->serviceAccountDiscoverer) {
-            return $this->serviceAccount = $discoverer->discover();
         }
 
         return null;
@@ -510,12 +429,9 @@ class Factory
         return DynamicLinks::withApiClient($apiClient);
     }
 
-    /**
-     * @param array|null $firestoreClientConfig Deprecated since 4.42.0
-     */
-    public function createFirestore(/* @deprecated */ array $firestoreClientConfig = null): Firestore
+    public function createFirestore(): Firestore
     {
-        $config = $firestoreClientConfig ?: [];
+        $config = [];
 
         if ($serviceAccount = $this->getServiceAccount()) {
             $config['keyFile'] = $serviceAccount->asArray();
@@ -541,12 +457,9 @@ class Factory
         return Firestore::withFirestoreClient($firestoreClient);
     }
 
-    /**
-     * @param array|null $storageClientConfig Deprecated since 4.42.0
-     */
-    public function createStorage(/* @deprecated */ array $storageClientConfig = null): Storage
+    public function createStorage(): Storage
     {
-        $config = $storageClientConfig ?: [];
+        $config = [];
 
         if ($serviceAccount = $this->getServiceAccount()) {
             $config['keyFile'] = $serviceAccount->asArray();

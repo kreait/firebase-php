@@ -83,22 +83,13 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
     {
         $e = new ClientException(
             'Foo',
-            $request = $this->createMock(RequestInterface::class),
-            $response = new Response(401, [], JSON::encode(['error' => 'Permission denied']))
+            $this->createMock(RequestInterface::class),
+            new Response(401, [], JSON::encode(['error' => 'Permission denied']))
         );
 
         $result = $this->converter->convertException($e);
 
         $this->assertInstanceOf(PermissionDenied::class, $result);
-
-        if (!($result instanceof PermissionDenied)) {
-            $this->fail('A '.PermissionDenied::class.' should have been thrown');
-        } else {
-            $this->assertSame($request, $result->getRequest());
-            $this->assertSame($response, $result->getResponse());
-        }
-
-        $this->assertInstanceOf(\Kreait\Firebase\Exception\PermissionDenied::class, $result);
     }
 
     /** @test */
@@ -106,22 +97,13 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
     {
         $e = new ClientException(
             'Foo',
-            $request = $this->createMock(RequestInterface::class),
-            $response = new Response(403, [], JSON::encode(['error' => 'Permission denied']))
+            $this->createMock(RequestInterface::class),
+            new Response(403, [], JSON::encode(['error' => 'Permission denied']))
         );
 
         $result = $this->converter->convertException($e);
 
         $this->assertInstanceOf(PermissionDenied::class, $result);
-
-        if (!($result instanceof PermissionDenied)) {
-            $this->fail('A '.PermissionDenied::class.' should have been thrown');
-        } else {
-            $this->assertSame($request, $result->getRequest());
-            $this->assertSame($response, $result->getResponse());
-        }
-
-        $this->assertInstanceOf(\Kreait\Firebase\Exception\PermissionDenied::class, $result);
     }
 
     /** @test */

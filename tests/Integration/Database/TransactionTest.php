@@ -8,9 +8,6 @@ use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\Transaction;
 use Kreait\Firebase\Exception\Database\TransactionFailed;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Throwable;
 
 /**
  * @internal
@@ -123,30 +120,5 @@ class TransactionTest extends DatabaseTestCase
             // This should fail
             $transaction->remove($ref);
         });
-    }
-
-    public function testATransactionErrorContainsTheRequestAndResponse()
-    {
-        $ref = $this->ref->getChild(__FUNCTION__);
-        $ref->set(['key' => 'value']);
-
-        try {
-            self::$db->runTransaction(static function (Transaction $transaction) use ($ref) {
-                // Register a transaction for the given reference
-                $transaction->snapshot($ref);
-
-                // Set the value without a transaction
-                $ref->set('new value');
-
-                // This should fail
-                $transaction->remove($ref);
-            });
-            $this->fail('An exception should have been thrown');
-        } catch (TransactionFailed $e) {
-            $this->assertInstanceOf(RequestInterface::class, $e->getRequest());
-            $this->assertInstanceOf(ResponseInterface::class, $e->getResponse());
-        } catch (Throwable $e) {
-            $this->fail('A '.TransactionFailed::class.' should have been thrown');
-        }
     }
 }

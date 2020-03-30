@@ -11,10 +11,8 @@ use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
-use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
-use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Psr\Http\Message\UriInterface;
 use Throwable;
@@ -346,39 +344,6 @@ class AuthTest extends IntegrationTestCase
         $this->auth->updateUser($user->uid, []);
         $this->auth->deleteUser($user->uid);
         $this->addToAssertionCount(1);
-    }
-
-    public function testVerifyCorrectPassword()
-    {
-        $user = $this->auth->createUser(CreateUser::new()
-            ->withUid($uid = \bin2hex(\random_bytes(5)))
-            ->withEmail($email = $uid.'@domain.tld')
-            ->withClearTextPassword($password = 'secret')
-        );
-
-        $check = $this->auth->verifyPassword($email, $password);
-
-        $this->assertSame($user->uid, $check->uid);
-
-        $this->auth->deleteUser($user->uid);
-    }
-
-    public function testVerifyIncorrectPassword()
-    {
-        $user = $this->auth->createUser(CreateUser::new()
-            ->withUid($uid = \bin2hex(\random_bytes(5)))
-            ->withEmail($email = $uid.'@domain.tld')
-            ->withClearTextPassword('correct')
-        );
-
-        try {
-            $this->auth->verifyPassword($email, 'incorrect');
-            $this->fail(InvalidPassword::class.' should have been thrown');
-        } catch (Throwable $e) {
-            $this->assertInstanceOf(InvalidPassword::class, $e);
-        } finally {
-            $this->auth->deleteUser($user->uid);
-        }
     }
 
     public function testDeleteNonExistingUser()

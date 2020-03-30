@@ -31,14 +31,6 @@ class UserMetaData implements \JsonSerializable
         return $metadata;
     }
 
-    /**
-     * @deprecated 4.33
-     */
-    public function toArray(): array
-    {
-        return \get_object_vars($this);
-    }
-
     public function jsonSerialize()
     {
         $data = \get_object_vars($this);

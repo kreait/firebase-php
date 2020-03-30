@@ -13,7 +13,6 @@ use InvalidArgumentException;
 use Kreait\Clock\FrozenClock;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
-use Kreait\Firebase\ServiceAccount\Discoverer;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\SimpleCache\CacheInterface;
 use RuntimeException;
@@ -51,12 +50,7 @@ class FactoryTest extends UnitTestCase
         \putenv('SUPPRESS_GCLOUD_CREDS_WARNING=true');
         $this->userRefreshCredentials = new UserRefreshCredentials(Factory::API_CLIENT_SCOPES, self::$fixturesDir.'/user_refresh_credentials.json');
 
-        $discoverer = $this->createMock(Discoverer::class);
-        $discoverer
-            ->method('discover')
-            ->willReturn($this->validServiceAccount);
-
-        $this->factory = (new Factory())->withServiceAccountDiscoverer($discoverer);
+        $this->factory = (new Factory());
     }
 
     protected function tearDown()
@@ -70,7 +64,7 @@ class FactoryTest extends UnitTestCase
     {
         $uri = new Uri('http://domain.tld/');
 
-        $database = $this->factory
+        $database = (new Factory())
             ->withServiceAccount($this->validServiceAccount)
             ->withDatabaseUri($uri)
             ->createDatabase();
@@ -83,7 +77,7 @@ class FactoryTest extends UnitTestCase
 
     public function testItAcceptsACustomDefaultStorageBucket()
     {
-        $storage = $this->factory
+        $storage = (new Factory())
             ->withServiceAccount($this->validServiceAccount)
             ->withDefaultStorageBucket('foo')
             ->createStorage();
@@ -123,36 +117,19 @@ class FactoryTest extends UnitTestCase
 
     public function testItAcceptsAServiceAccount()
     {
-        $this->factory->withServiceAccount($this->validServiceAccount);
+        (new Factory())->withServiceAccount($this->validServiceAccount);
         $this->addToAssertionCount(1);
     }
 
     public function testItAcceptsAClock()
     {
-        $this->factory->withClock(new FrozenClock(new DateTimeImmutable()));
+        (new Factory())->withClock(new FrozenClock(new DateTimeImmutable()));
         $this->addToAssertionCount(1);
     }
 
     public function testItAcceptsAVerifierCache()
     {
-        $this->factory->withVerifierCache($this->createMock(CacheInterface::class));
-        $this->addToAssertionCount(1);
-    }
-
-    public function testItAcceptsACustomHttpClientConfig()
-    {
-        $apiClient = $this->factory->withHttpClientConfig(['key' => 'value'])->createApiClient();
-
-        $this->assertSame('value', $apiClient->getConfig('key'));
-    }
-
-    public function testItAcceptsAdditionalHttpClientMiddlewares()
-    {
-        $this->factory->withHttpClientMiddlewares([
-            static function () {},
-            'name' => static function () {},
-        ])->createApiClient();
-
+        (new Factory())->withVerifierCache($this->createMock(CacheInterface::class));
         $this->addToAssertionCount(1);
     }
 

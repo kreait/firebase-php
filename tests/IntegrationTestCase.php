@@ -76,7 +76,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         }
 
         try {
-            return ServiceAccount::fromJsonFile($credentialsPath);
+            return ServiceAccount::fromValue($credentialsPath);
         } catch (Throwable $e) {
             return null;
         }

@@ -141,14 +141,8 @@ class Messaging
         try {
             $response = $this->messagingApi->send($request);
         } catch (NotFound $e) {
-            $error = new InvalidMessage($e->getMessage(), $e->getCode(), $e->getPrevious());
-            $error = $error->withErrors($e->errors());
-
-            if ($response = $e->response()) {
-                $error = $error->withResponse($response);
-            }
-
-            throw $error;
+            throw (new InvalidMessage($e->getMessage(), $e->getCode()))
+                ->withErrors($e->errors());
         }
 
         return JSON::decode((string) $response->getBody(), true);

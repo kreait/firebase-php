@@ -6,15 +6,11 @@ namespace Kreait\Firebase\Exception\Database;
 
 use Kreait\Firebase\Database\Query;
 use Kreait\Firebase\Exception\DatabaseException;
-use Kreait\Firebase\Exception\HasRequestAndResponse;
-use Kreait\Firebase\Exception\IndexNotDefined;
 use RuntimeException;
 use Throwable;
 
-final class UnsupportedQuery extends RuntimeException implements DatabaseException, IndexNotDefined
+final class UnsupportedQuery extends RuntimeException implements DatabaseException
 {
-    use HasRequestAndResponse;
-
     /** @var Query */
     private $query;
 

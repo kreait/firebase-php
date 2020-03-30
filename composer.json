@@ -28,12 +28,10 @@
         "guzzlehttp/guzzle": "^6.2.1|^7.0@beta",
         "kreait/clock": "^1.0.1",
         "kreait/firebase-tokens": "^1.10",
-        "kreait/gcp-metadata": "^1.1.0",
         "lcobucci/jwt": "^3.3.1",
         "mtdowling/jmespath.php": "^2.3",
         "psr/simple-cache": "^1.0",
-        "riverline/multipart-parser": "^2.0",
-        "superbalist/flysystem-google-storage": "^7.0"
+        "riverline/multipart-parser": "^2.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
@@ -49,10 +47,7 @@
     "autoload": {
         "psr-4": {
             "Kreait\\Firebase\\": "src/Firebase"
-        },
-        "files": [
-            "src/Firebase.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {

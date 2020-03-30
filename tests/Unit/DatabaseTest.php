@@ -62,18 +62,6 @@ class DatabaseTest extends UnitTestCase
         $this->database->getReferenceFromUrl('http://non-matching.tld');
     }
 
-    public function testGetRules()
-    {
-        $this->apiClient
-            ->method('get')
-            ->with($this->uri->withPath('.settings/rules'))
-            ->willReturn($expected = RuleSet::default()->getRules());
-
-        $ruleSet = $this->database->getRules();
-
-        $this->assertEquals($expected, $ruleSet->getRules());
-    }
-
     public function testGetRuleSet()
     {
         $this->apiClient

@@ -7,9 +7,6 @@ namespace Kreait\Firebase;
 use Google\Cloud\Storage\Bucket;
 use Google\Cloud\Storage\StorageClient;
 use Kreait\Firebase\Exception\RuntimeException;
-use League\Flysystem\Filesystem;
-use League\Flysystem\FilesystemInterface;
-use Superbalist\Flysystem\GoogleStorage\GoogleStorageAdapter;
 
 class Storage
 {
@@ -27,11 +24,6 @@ class Storage
      * @var Bucket[]
      */
     private $buckets = [];
-
-    /**
-     * @var FilesystemInterface[]
-     */
-    private $filesystems = [];
 
     /**
      * @internal
@@ -62,22 +54,5 @@ class Storage
         }
 
         return $this->buckets[$name];
-    }
-
-    /**
-     * @deprecated 4.33
-     */
-    public function getFilesystem(string $bucketName = null): FilesystemInterface
-    {
-        \trigger_error(__METHOD__.' is deprecated.', \E_USER_DEPRECATED);
-
-        $bucket = $this->getBucket($bucketName);
-
-        if (!\array_key_exists($name = $bucket->name(), $this->filesystems)) {
-            $adapter = new GoogleStorageAdapter($this->storageClient, $bucket);
-            $this->filesystems[$name] = new Filesystem($adapter);
-        }
-
-        return $this->filesystems[$name];
     }
 }

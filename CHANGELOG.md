@@ -2,7 +2,10 @@
 
 ## Unreleased
 
+**If you are not using any classes or methods marked as `@deprecated` or `@internal` you should be able to upgrade from a 4.x release to 5.0 without changes to your code.**
+
 * Dropped support for unsupported PHP versions. Supported PHP versions are `7.2`, `7.3` and `7.4`.
+* Removed deprecated methods and classes.
 
 ## 4.43.0 - 2020-03-31
 

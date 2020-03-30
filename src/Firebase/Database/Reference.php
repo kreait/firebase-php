@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Database;
 
 use Kreait\Firebase\Database\Reference\Validator;
-use Kreait\Firebase\Exception\ApiException;
+use Kreait\Firebase\Exception\DatabaseException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
 use Psr\Http\Message\UriInterface;
@@ -228,7 +228,7 @@ class Reference
      * Returns the keys of a reference's children.
      *
      * @throws OutOfRangeException if the reference has no children with keys
-     * @throws ApiException if the API reported an error
+     * @throws DatabaseException if the API reported an error
      */
     public function getChildKeys(): array
     {
@@ -244,7 +244,7 @@ class Reference
     /**
      * Convenience method for {@see getSnapshot()}->getValue().
      *
-     * @throws ApiException if the API reported an error
+     * @throws DatabaseException if the API reported an error
      *
      * @return mixed
      */
@@ -263,7 +263,7 @@ class Reference
      *
      * @param mixed $value
      *
-     * @throws ApiException if the API reported an error
+     * @throws DatabaseException if the API reported an error
      *
      * @return Reference
      */
@@ -281,7 +281,7 @@ class Reference
     /**
      * Returns a data snapshot of the current location.
      *
-     * @throws ApiException if the API reported an error
+     * @throws DatabaseException if the API reported an error
      */
     public function getSnapshot(): Snapshot
     {
@@ -307,7 +307,7 @@ class Reference
      *
      * @param mixed $value
      *
-     * @throws ApiException if the API reported an error
+     * @throws DatabaseException if the API reported an error
      *
      * @return Reference A new reference for the added child
      */
@@ -328,7 +328,7 @@ class Reference
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove
      *
-     * @throws ApiException if the API reported an error
+     * @throws DatabaseException if the API reported an error
      *
      * @return Reference A new instance for the now empty Reference
      */
@@ -353,7 +353,7 @@ class Reference
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Reference#update
      *
-     * @throws ApiException if the API reported an error
+     * @throws DatabaseException if the API reported an error
      *
      * @return Reference
      */

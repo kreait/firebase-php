@@ -94,19 +94,6 @@ class ServiceAccountTest extends UnitTestCase
     }
 
     /**
-     * @see https://github.com/kreait/firebase-php/issues/228
-     */
-    public function testGetSanitizedProjectId()
-    {
-        $data = $this->validData;
-        $data['project_id'] = 'example.com:api-project-xxxxxx';
-
-        $serviceAccount = ServiceAccount::fromValue($data);
-
-        $this->assertSame('example-com-api-project-xxxxxx', $serviceAccount->getSanitizedProjectId());
-    }
-
-    /**
      * @dataProvider invalidValues
      */
     public function testCreateFromInvalidValue($value)

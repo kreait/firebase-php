@@ -123,14 +123,6 @@ class UserRecord implements \JsonSerializable
         }, $data['providerUserInfo'] ?? []);
     }
 
-    /**
-     * @deprecated 4.33
-     */
-    public function toArray(): array
-    {
-        return \get_object_vars($this);
-    }
-
     public function jsonSerialize()
     {
         $data = \get_object_vars($this);

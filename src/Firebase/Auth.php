@@ -19,7 +19,6 @@ use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\CreateActionLink;
 use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
 use Kreait\Firebase\Auth\IdTokenVerifier;
-use Kreait\Firebase\Auth\LinkedProviderData;
 use Kreait\Firebase\Auth\SendActionLink;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
@@ -32,10 +31,8 @@ use Kreait\Firebase\Auth\SignInWithEmailAndPassword;
 use Kreait\Firebase\Auth\SignInWithIdpCredentials;
 use Kreait\Firebase\Auth\SignInWithRefreshToken;
 use Kreait\Firebase\Auth\UserRecord;
-use Kreait\Firebase\Exception\Auth\AuthError;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
-use Kreait\Firebase\Exception\Auth\InvalidPassword;
 use Kreait\Firebase\Exception\Auth\OperationNotAllowed;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserDisabled;
@@ -86,18 +83,6 @@ class Auth
                 $this->signInHandler = $arg;
             }
         }
-    }
-
-    /**
-     * @internal
-     *
-     * @deprecated 4.41
-     * @noinspection ExposingInternalClassesInspection
-     * @codeCoverageIgnore
-     */
-    public function getApiClient(): ApiClient
-    {
-        return $this->client;
     }
 
     /**
@@ -322,53 +307,6 @@ class Auth
     }
 
     /**
-     * @deprecated 4.37.0 Use {@see \Kreait\Firebase\Auth::sendEmailVerificationLink()} instead.
-     * @see sendEmailVerificationLink()
-     * @codeCoverageIgnore
-     *
-     * @param Uid|string $uid
-     * @param UriInterface|string|null $continueUrl
-     *
-     * @throws UserNotFound
-     * @throws Exception\AuthException
-     * @throws Exception\FirebaseException
-     */
-    public function sendEmailVerification($uid, $continueUrl = null, string $locale = null)
-    {
-        $email = $this->getUser($uid)->email;
-
-        if (!$email) {
-            throw new AuthError("The user with the ID {$uid} has no assigned email address");
-        }
-
-        try {
-            $this->sendEmailVerificationLink($email, ['continueUrl' => $continueUrl], $locale);
-        } catch (FailedToSendActionLink $e) {
-            throw new AuthError($e->getMessage(), $e->getCode(), $e);
-        }
-    }
-
-    /**
-     * @deprecated 4.37.0 Use {@see \Kreait\Firebase\Auth::sendPasswordResetLink()} instead.
-     * @see sendPasswordResetLink()
-     * @codeCoverageIgnore
-     *
-     * @param Email|mixed $email
-     * @param UriInterface|string|null $continueUrl
-     *
-     * @throws Exception\AuthException
-     * @throws Exception\FirebaseException
-     */
-    public function sendPasswordResetEmail($email, $continueUrl = null, string $locale = null)
-    {
-        try {
-            $this->sendPasswordResetLink($email, ['continueUrl' => $continueUrl], $locale);
-        } catch (FailedToSendActionLink $e) {
-            throw new AuthError($e->getMessage(), $e->getCode(), $e);
-        }
-    }
-
-    /**
      * @param Email|string $email
      * @param ActionCodeSettings|array|null $actionCodeSettings
      *
@@ -562,7 +500,6 @@ class Auth
      *
      * @param Token|string $idToken the JWT to verify
      * @param bool $checkIfRevoked whether to check if the ID token is revoked
-     * @param bool $allowTimeInconsistencies Deprecated since 4.31
      *
      * @throws \InvalidArgumentException if the token could not be parsed
      * @throws InvalidToken if the token could be parsed, but is invalid for any reason (invalid signature, expired, time errors)
@@ -571,18 +508,8 @@ class Auth
      * @throws IssuedInTheFuture if the token is issued in the future
      * @throws UnknownKey if the token's kid header doesnt' contain a known key
      */
-    public function verifyIdToken($idToken, bool $checkIfRevoked = false, /* @deprecated */ bool $allowTimeInconsistencies = null): Token
+    public function verifyIdToken($idToken, bool $checkIfRevoked = false): Token
     {
-        // @codeCoverageIgnoreStart
-        if (\is_bool($allowTimeInconsistencies)) {
-            // @see https://github.com/firebase/firebase-admin-dotnet/pull/29
-            \trigger_error(
-                'The parameter $allowTimeInconsistencies is deprecated and was replaced with a default leeway of 300 seconds.',
-                \E_USER_DEPRECATED
-            );
-        }
-        // @codeCoverageIgnoreEnd
-
         $leewayInSeconds = 300;
         $verifier = $this->idTokenVerifier;
 
@@ -615,42 +542,6 @@ class Auth
         }
 
         return $verifiedToken;
-    }
-
-    /**
-     * @deprecated 4.41 Use {@see \Kreait\Firebase\Auth::signInWithEmailAndPassword()} instead.
-     * @see signInWithEmailAndPassword()
-     *
-     * Verifies wether the given email/password combination is correct and returns
-     * a UserRecord when it is, an Exception otherwise.
-     *
-     * This method has the side effect of changing the last login timestamp of the
-     * given user. The recommended way to authenticate users in a client/server
-     * environment is to use a Firebase Client SDK to authenticate the user
-     * and to send an ID Token generated by the client back to the server.
-     *
-     * @param Email|string $email
-     * @param ClearTextPassword|string $password
-     *
-     * @throws InvalidPassword if the given password does not match the given email address
-     * @throws Exception\AuthException
-     * @throws Exception\FirebaseException
-     *
-     * @return UserRecord if the combination of email and password is correct
-     */
-    public function verifyPassword($email, $password): UserRecord
-    {
-        try {
-            $data = $this->signInWithEmailAndPassword($email, $password)->data();
-        } catch (FailedToSignIn $e) {
-            if (\mb_stripos($e->getMessage(), 'invalid_password') !== false) {
-                throw new InvalidPassword('The password is invalid or the user does not have a password.', $e->getCode(), $e);
-            }
-
-            throw $e;
-        }
-
-        return $this->getUser($data['localId']);
     }
 
     /**
@@ -737,52 +628,6 @@ class Auth
         $response = $this->client->unlinkProvider((string) $uid, $provider);
 
         return $this->getUserRecordFromResponse($response);
-    }
-
-    /**
-     * @deprecated 4.41 Use {@see \Kreait\Firebase\Auth::signInWithIdpAccessToken()} instead.
-     * @see signInWithIdpAccessToken()
-     * @codeCoverageIgnore
-     *
-     * Logs in the user to Firebase by a provider's access token (like Google, Facebook, Twitter, etc),
-     * if the authentication provider is enabled for the project.
-     *
-     * First, you have to get a valid access token for your provider manually.
-     *
-     * @param Provider|string $provider
-     *
-     * @throws Exception\AuthException
-     * @throws Exception\FirebaseException
-     */
-    public function linkProviderThroughAccessToken($provider, string $accessToken): LinkedProviderData
-    {
-        $data = $this->signInWithIdpAccessToken($provider, $accessToken)->data();
-
-        /* @noinspection PhpDeprecationInspection */
-        return LinkedProviderData::fromResponseData($this->getUser($data['localId']), $data);
-    }
-
-    /**
-     * @deprecated 4.41 Use {@see \Kreait\Firebase\Auth::signInWithIdpIdToken()} instead.
-     * @see signInWithIdpIdToken()
-     * @codeCoverageIgnore
-     *
-     * Logs in the user to Firebase by a provider's ID token (like Google, Facebook, Twitter, etc),
-     * if the authentication provider is enabled for the project.
-     *
-     * First, you have to get a valid ID token for your provider manually.
-     *
-     * @param Provider|string $provider
-     *
-     * @throws Exception\AuthException
-     * @throws Exception\FirebaseException
-     */
-    public function linkProviderThroughIdToken($provider, string $idToken): LinkedProviderData
-    {
-        $data = $this->signInWithIdpIdToken($provider, $idToken)->data();
-
-        /* @noinspection PhpDeprecationInspection */
-        return LinkedProviderData::fromResponseData($this->getUser($data['localId']), $data);
     }
 
     /**
