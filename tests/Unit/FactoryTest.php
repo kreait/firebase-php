@@ -22,24 +22,16 @@ use RuntimeException;
  */
 class FactoryTest extends UnitTestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $validServiceAccountFile;
 
-    /**
-     * @var ServiceAccount
-     */
+    /** @var ServiceAccount */
     private $validServiceAccount;
 
-    /**
-     * @var UserRefreshCredentials
-     */
+    /** @var UserRefreshCredentials */
     private $userRefreshCredentials;
 
-    /**
-     * @var Factory
-     */
+    /** @var Factory */
     private $factory;
 
     protected function setUp(): void
@@ -60,7 +52,7 @@ class FactoryTest extends UnitTestCase
         \putenv('SUPPRESS_GCLOUD_CREDS_WARNING');
     }
 
-    public function testItAcceptsACustomDatabaseUri()
+    public function testItAcceptsACustomDatabaseUri(): void
     {
         $uri = new Uri('http://domain.tld/');
 
@@ -75,7 +67,7 @@ class FactoryTest extends UnitTestCase
         $this->assertSame($uri->getHost(), $databaseUri->getHost());
     }
 
-    public function testItAcceptsACustomDefaultStorageBucket()
+    public function testItAcceptsACustomDefaultStorageBucket(): void
     {
         $storage = (new Factory())
             ->withServiceAccount($this->validServiceAccount)
@@ -85,7 +77,7 @@ class FactoryTest extends UnitTestCase
         $this->assertSame('foo', $storage->getBucket()->name());
     }
 
-    public function testCreateStorageWithApplicationDefaultCredentials()
+    public function testCreateStorageWithApplicationDefaultCredentials(): void
     {
         \putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->validServiceAccountFile);
 
@@ -96,7 +88,7 @@ class FactoryTest extends UnitTestCase
         \putenv('GOOGLE_APPLICATION_CREDENTIALS');
     }
 
-    public function testCreateStorageWithFirebaseCredentials()
+    public function testCreateStorageWithFirebaseCredentials(): void
     {
         \putenv('FIREBASE_CREDENTIALS='.$this->validServiceAccountFile);
 
@@ -107,7 +99,7 @@ class FactoryTest extends UnitTestCase
         \putenv('FIREBASE_CREDENTIALS');
     }
 
-    public function testItCannotCreateAStorageWithoutCredentials()
+    public function testItCannotCreateAStorageWithoutCredentials(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/Unable to/');
@@ -115,31 +107,31 @@ class FactoryTest extends UnitTestCase
         (new Factory())->withDisabledAutoDiscovery()->createStorage();
     }
 
-    public function testItAcceptsAServiceAccount()
+    public function testItAcceptsAServiceAccount(): void
     {
         (new Factory())->withServiceAccount($this->validServiceAccount);
         $this->addToAssertionCount(1);
     }
 
-    public function testItAcceptsAClock()
+    public function testItAcceptsAClock(): void
     {
         (new Factory())->withClock(new FrozenClock(new DateTimeImmutable()));
         $this->addToAssertionCount(1);
     }
 
-    public function testItAcceptsAVerifierCache()
+    public function testItAcceptsAVerifierCache(): void
     {
         (new Factory())->withVerifierCache($this->createMock(CacheInterface::class));
         $this->addToAssertionCount(1);
     }
 
-    public function testDynamicLinksCanBeCreatedWithoutADefaultDomain()
+    public function testDynamicLinksCanBeCreatedWithoutADefaultDomain(): void
     {
         $this->factory->createDynamicLinksService();
         $this->addToAssertionCount(1);
     }
 
-    public function testCreateApiClientWithCustomHandlerStack()
+    public function testCreateApiClientWithCustomHandlerStack(): void
     {
         $stack = HandlerStack::create();
 
@@ -148,14 +140,14 @@ class FactoryTest extends UnitTestCase
         $this->assertSame($stack, $apiClient->getConfig('handler'));
     }
 
-    public function testCustomTokenGenerationIsDisabledWithMissingRequirements()
+    public function testCustomTokenGenerationIsDisabledWithMissingRequirements(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/disabled/');
         (new Factory())->withDisabledAutoDiscovery()->createAuth()->createCustomToken('uid');
     }
 
-    public function testIdTokenVerificationIsDisabledWithMissingRequirements()
+    public function testIdTokenVerificationIsDisabledWithMissingRequirements(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/disabled/');
@@ -163,7 +155,7 @@ class FactoryTest extends UnitTestCase
         (new Factory())->withDisabledAutoDiscovery()->createAuth()->verifyIdToken('idtoken');
     }
 
-    public function testIdTokenVerificationIsPossibleWithoutCredentialsButAProjectId()
+    public function testIdTokenVerificationIsPossibleWithoutCredentialsButAProjectId(): void
     {
         // Invalid argument means that the ID Token Verifier tried to verify but couldn't,
         // meaning it works :)
@@ -176,21 +168,21 @@ class FactoryTest extends UnitTestCase
             ->verifyIdToken('idtoken');
     }
 
-    public function testAProjectIdCanBeProvidedDirectly()
+    public function testAProjectIdCanBeProvidedDirectly(): void
     {
         // The database component requires a project ID
         (new Factory())->withDisabledAutoDiscovery()->withProjectId('project-id')->createDatabase();
         $this->addToAssertionCount(1);
     }
 
-    public function testAProjectIdCanBeProvidedViaAServiceAccount()
+    public function testAProjectIdCanBeProvidedViaAServiceAccount(): void
     {
         // The database component requires a project ID
         (new Factory())->withServiceAccount($this->validServiceAccount)->createDatabase();
         $this->addToAssertionCount(1);
     }
 
-    public function testAProjectIdCanBeProvidedViaCredentials()
+    public function testAProjectIdCanBeProvidedViaCredentials(): void
     {
         // The database component requires a project ID
         (new Factory())
@@ -200,7 +192,7 @@ class FactoryTest extends UnitTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function testAProjectIdCanBeProvidedAsAGoogleCloudProjectEnvironmentVariable()
+    public function testAProjectIdCanBeProvidedAsAGoogleCloudProjectEnvironmentVariable(): void
     {
         // The database component requires a project ID
         \putenv('GOOGLE_CLOUD_PROJECT=project-id');
@@ -214,7 +206,7 @@ class FactoryTest extends UnitTestCase
         \putenv('GOOGLE_CLOUD_PROJECT');
     }
 
-    public function testAProjectIdCanBeProvidedAsAGCloudProjectEnvironmentVariable()
+    public function testAProjectIdCanBeProvidedAsAGCloudProjectEnvironmentVariable(): void
     {
         // The database component requires a project ID
         \putenv('GCLOUD_PROJECT=project-id');
@@ -228,7 +220,7 @@ class FactoryTest extends UnitTestCase
         \putenv('GCLOUD_PROJECT');
     }
 
-    public function testItFailsWhenNoProjectIdCouldBeDetermined()
+    public function testItFailsWhenNoProjectIdCouldBeDetermined(): void
     {
         // User Refresh Credentials don't provide a project ID
         // The database component requires a project ID
@@ -240,7 +232,7 @@ class FactoryTest extends UnitTestCase
             ->createDatabase();
     }
 
-    public function testWithoutAProjectIdTheStorageComponentNeedsABucketName()
+    public function testWithoutAProjectIdTheStorageComponentNeedsABucketName(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/no default/');
@@ -251,7 +243,7 @@ class FactoryTest extends UnitTestCase
             ->getBucket();
     }
 
-    public function testNoRemoteConfigWithoutAProjectId()
+    public function testNoRemoteConfigWithoutAProjectId(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/Unable to/');
@@ -259,7 +251,7 @@ class FactoryTest extends UnitTestCase
         (new Factory())->withDisabledAutoDiscovery()->createRemoteConfig();
     }
 
-    public function testNoMessagingWithoutAProjectId()
+    public function testNoMessagingWithoutAProjectId(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/Unable to/');
@@ -267,7 +259,7 @@ class FactoryTest extends UnitTestCase
         (new Factory())->withDisabledAutoDiscovery()->createMessaging();
     }
 
-    public function testNoFirestoreWithoutCredentials()
+    public function testNoFirestoreWithoutCredentials(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/Unable to/');

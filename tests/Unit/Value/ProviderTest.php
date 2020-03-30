@@ -15,7 +15,7 @@ class ProviderTest extends TestCase
     /**
      * @dataProvider validValues
      */
-    public function testWithValidValue($value)
+    public function testWithValidValue($value): void
     {
         $provider = new Provider($value);
 

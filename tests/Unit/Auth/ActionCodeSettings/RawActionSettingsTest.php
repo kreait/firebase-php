@@ -12,8 +12,10 @@ use PHPUnit\Framework\TestCase;
  */
 final class RawActionSettingsTest extends TestCase
 {
-    /** @test */
-    public function it_returns_what_it_receives()
+    /**
+     * @test
+     */
+    public function it_returns_what_it_receives(): void
     {
         $data = ['foo' => 'bar'];
 

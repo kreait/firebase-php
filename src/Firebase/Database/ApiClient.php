@@ -115,7 +115,7 @@ class ApiClient implements ClientInterface
      *
      * @throws DatabaseException
      */
-    public function removeWithEtag($uri, string $etag)
+    public function removeWithEtag($uri, string $etag): void
     {
         $this->requestApi('DELETE', $uri, [
             'headers' => [
@@ -158,7 +158,7 @@ class ApiClient implements ClientInterface
      *
      * @throws DatabaseException
      */
-    public function remove($uri)
+    public function remove($uri): void
     {
         $this->requestApi('DELETE', $uri);
     }
@@ -168,7 +168,7 @@ class ApiClient implements ClientInterface
      *
      * @throws DatabaseException
      */
-    public function update($uri, array $values)
+    public function update($uri, array $values): void
     {
         $this->requestApi('PATCH', $uri, ['json' => $values]);
     }

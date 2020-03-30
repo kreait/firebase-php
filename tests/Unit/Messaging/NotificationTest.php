@@ -13,7 +13,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class NotificationTest extends UnitTestCase
 {
-    public function testCreateWithEmptyStrings()
+    public function testCreateWithEmptyStrings(): void
     {
         $notification = Notification::create('', '', '');
         $this->assertSame('', $notification->title());
@@ -22,7 +22,7 @@ class NotificationTest extends UnitTestCase
         $this->assertEquals(['title' => '', 'body' => '', 'image' => ''], $notification->jsonSerialize());
     }
 
-    public function testCreateWithValidFields()
+    public function testCreateWithValidFields(): void
     {
         $notification = Notification::create('title', 'body')
             ->withTitle($title = 'My Title')
@@ -34,7 +34,7 @@ class NotificationTest extends UnitTestCase
         $this->assertSame($imageUrl, $notification->imageUrl());
     }
 
-    public function testCreateFromValidArray()
+    public function testCreateFromValidArray(): void
     {
         $notification = Notification::fromArray($array = [
             'title' => $title = 'My Title',
@@ -51,7 +51,7 @@ class NotificationTest extends UnitTestCase
     /**
      * @dataProvider invalidDataProvider
      */
-    public function testCreateWithInvalidData(array $data)
+    public function testCreateWithInvalidData(array $data): void
     {
         $this->expectException(InvalidArgumentException::class);
         Notification::fromArray($data);

@@ -12,9 +12,7 @@ use Psr\Http\Message\RequestInterface;
 
 final class CustomToken implements Auth
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $token;
 
     public function __construct(string $uid, array $claims = null)

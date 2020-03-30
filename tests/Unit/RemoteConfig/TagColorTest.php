@@ -13,7 +13,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class TagColorTest extends UnitTestCase
 {
-    public function testCreateWithInvalidValue()
+    public function testCreateWithInvalidValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         new TagColor('foo');

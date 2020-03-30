@@ -10,8 +10,6 @@ interface Handler
 {
     /**
      * @throws FailedToSendActionLink
-     *
-     * @return void
      */
-    public function handle(SendActionLink $action);
+    public function handle(SendActionLink $action): void;
 }

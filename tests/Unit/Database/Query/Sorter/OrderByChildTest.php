@@ -20,7 +20,7 @@ class OrderByChildTest extends UnitTestCase
      *
      * @dataProvider valueProvider
      */
-    public function testOrderByChild($childKey, $expected, $given)
+    public function testOrderByChild($childKey, $expected, $given): void
     {
         $sut = new OrderByChild($childKey);
 

@@ -31,7 +31,7 @@ class TransactionTest extends TestCase
         $this->transaction = new Transaction($this->apiClient);
     }
 
-    public function testAReferenceCanNotBeChangedIfItHasNotBeenSnapshotted()
+    public function testAReferenceCanNotBeChangedIfItHasNotBeenSnapshotted(): void
     {
         $reference = $this->createMock(Reference::class);
 
@@ -44,7 +44,7 @@ class TransactionTest extends TestCase
         }
     }
 
-    public function testATransactionCanFail()
+    public function testATransactionCanFail(): void
     {
         $reference = $this->createMock(Reference::class);
         $reference->method('getUri')->willReturn($uri = new Uri('https://domain.tld'));

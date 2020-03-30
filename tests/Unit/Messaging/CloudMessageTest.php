@@ -18,13 +18,13 @@ use PHPUnit\Framework\TestCase;
  */
 class CloudMessageTest extends TestCase
 {
-    public function testInvalidTargetCausesError()
+    public function testInvalidTargetCausesError(): void
     {
         $this->expectException(InvalidArgumentException::class);
         CloudMessage::withTarget('invalid_target', 'foo');
     }
 
-    public function testWithChangedTarget()
+    public function testWithChangedTarget(): void
     {
         $original = CloudMessage::withTarget(MessageTarget::TOKEN, 'bar')
             ->withData(['foo' => 'bar'])
@@ -40,12 +40,12 @@ class CloudMessageTest extends TestCase
         $this->assertSame($encodedOriginal, $encodedChanged);
     }
 
-    public function testAnEmptyMessageHasNotTarget()
+    public function testAnEmptyMessageHasNotTarget(): void
     {
         $this->assertFalse(CloudMessage::new()->hasTarget());
     }
 
-    public function testWithChangedFcmOptions()
+    public function testWithChangedFcmOptions(): void
     {
         $options = FcmOptions::create()->withAnalyticsLabel($label = 'my-label');
         $message = CloudMessage::new()->withFcmOptions($options);
@@ -60,7 +60,7 @@ class CloudMessageTest extends TestCase
     /**
      * @dataProvider multipleTargets
      */
-    public function testAMessageCanOnlyHaveOneTarget($data)
+    public function testAMessageCanOnlyHaveOneTarget($data): void
     {
         $this->expectException(InvalidArgument::class);
         CloudMessage::fromArray($data);

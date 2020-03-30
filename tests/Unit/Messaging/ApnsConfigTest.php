@@ -15,7 +15,7 @@ class ApnsConfigTest extends UnitTestCase
     /**
      * @dataProvider validDataProvider
      */
-    public function testCreateFromArray(array $data)
+    public function testCreateFromArray(array $data): void
     {
         $config = ApnsConfig::fromArray($data);
 

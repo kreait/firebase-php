@@ -38,7 +38,7 @@ class MessagingTest extends UnitTestCase
         $this->messaging = new Messaging($this->messagingApi, $this->appInstanceApi, ProjectId::fromString('project-id'));
     }
 
-    public function testDetermineProjectIdFromClientConfig()
+    public function testDetermineProjectIdFromClientConfig(): void
     {
         $httpClient = new Client(['base_uri' => 'https://fcm.googleapis.com/v1/projects/project-id']);
         $apiClient = new ApiClient($httpClient);
@@ -47,19 +47,19 @@ class MessagingTest extends UnitTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function testWithUndeterminableProjectId()
+    public function testWithUndeterminableProjectId(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         new Messaging($this->messagingApi, $this->appInstanceApi);
     }
 
-    public function testSendInvalidObject()
+    public function testSendInvalidObject(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->send(new \stdClass());
     }
 
-    public function testSendInvalidArray()
+    public function testSendInvalidArray(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->send([]);
@@ -68,7 +68,7 @@ class MessagingTest extends UnitTestCase
     /**
      * @dataProvider validTokenProvider
      */
-    public function testSubscribeToTopicWithValidTokens($tokens)
+    public function testSubscribeToTopicWithValidTokens($tokens): void
     {
         $this->appInstanceApi->expects($this->once())
             ->method($this->anything())
@@ -78,13 +78,13 @@ class MessagingTest extends UnitTestCase
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
 
-    public function testSubscribeToTopicWithInvalidTokens()
+    public function testSubscribeToTopicWithInvalidTokens(): void
     {
         $this->expectException(InvalidArgument::class);
         $this->messaging->subscribeToTopic('topic', new stdClass());
     }
 
-    public function testSubscribeToTopicWithEmptyTokenList()
+    public function testSubscribeToTopicWithEmptyTokenList(): void
     {
         $this->expectException(InvalidArgument::class);
         $this->messaging->subscribeToTopic('topic', []);
@@ -93,7 +93,7 @@ class MessagingTest extends UnitTestCase
     /**
      * @dataProvider validTokenProvider
      */
-    public function testUnsubscribeFromTopicWithValidTokens($tokens)
+    public function testUnsubscribeFromTopicWithValidTokens($tokens): void
     {
         $this->appInstanceApi->expects($this->once())
             ->method($this->anything())
@@ -103,19 +103,19 @@ class MessagingTest extends UnitTestCase
         $this->assertTrue($noExceptionHasBeenThrown = true);
     }
 
-    public function testUnsubscribeFromTopicWithEmptyTokenList()
+    public function testUnsubscribeFromTopicWithEmptyTokenList(): void
     {
         $this->expectException(InvalidArgument::class);
         $this->messaging->unsubscribeFromTopic('topic', []);
     }
 
-    public function testValidateMessageGivenAnInvalidArgument()
+    public function testValidateMessageGivenAnInvalidArgument(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->validate('string');
     }
 
-    public function testValidateMessageGivenAnUnknownDeviceToken()
+    public function testValidateMessageGivenAnUnknownDeviceToken(): void
     {
         $message = CloudMessage::withTarget(Messaging\MessageTarget::TOKEN, 'foo');
 
@@ -127,7 +127,7 @@ class MessagingTest extends UnitTestCase
         $this->messaging->validate($message);
     }
 
-    public function testItWillNotSendAMessageWithoutATarget()
+    public function testItWillNotSendAMessageWithoutATarget(): void
     {
         $message = CloudMessage::new();
 
@@ -137,13 +137,13 @@ class MessagingTest extends UnitTestCase
         $this->messaging->send($message);
     }
 
-    public function testItDoesNotAcceptInvalidMessagesWhenMulticasting()
+    public function testItDoesNotAcceptInvalidMessagesWhenMulticasting(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->sendMulticast(new \stdClass(), []);
     }
 
-    public function testAMulticastMessageCannotBeTooLarge()
+    public function testAMulticastMessageCannotBeTooLarge(): void
     {
         $tokens = \array_fill(0, 501, 'token');
 
@@ -151,7 +151,7 @@ class MessagingTest extends UnitTestCase
         $this->messaging->sendMulticast(CloudMessage::new(), $tokens);
     }
 
-    public function testSendAllCannotBeTooLarge()
+    public function testSendAllCannotBeTooLarge(): void
     {
         $messages = \array_fill(0, 501, CloudMessage::new());
 

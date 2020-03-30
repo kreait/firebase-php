@@ -10,14 +10,10 @@ use Kreait\Firebase\Exception\DatabaseException;
 
 class Transaction
 {
-    /**
-     * @var ApiClient
-     */
+    /** @var ApiClient */
     private $apiClient;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private $etags;
 
     /**
@@ -46,7 +42,7 @@ class Transaction
      * @throws ReferenceHasNotBeenSnapshotted
      * @throws TransactionFailed
      */
-    public function set(Reference $reference, $value)
+    public function set(Reference $reference, $value): void
     {
         $etag = $this->getEtagForReference($reference);
 
@@ -61,7 +57,7 @@ class Transaction
      * @throws ReferenceHasNotBeenSnapshotted
      * @throws TransactionFailed
      */
-    public function remove(Reference $reference)
+    public function remove(Reference $reference): void
     {
         $etag = $this->getEtagForReference($reference);
 

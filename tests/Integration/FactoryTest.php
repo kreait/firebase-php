@@ -17,7 +17,7 @@ final class FactoryTest extends IntegrationTestCase
     /**
      * @test
      */
-    public function it_accepts_a_custom_guzzle_http_handler()
+    public function it_accepts_a_custom_guzzle_http_handler(): void
     {
         $inputHandler = new MockHandler([$response = new Response()]);
 

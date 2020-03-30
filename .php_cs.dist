@@ -31,6 +31,10 @@ return PhpCsFixer\Config::create()
         'no_useless_else' => true,
         'ordered_imports' => true,
         'ordered_interfaces' => true,
+        'phpdoc_line_span' => [
+            'property' => 'single',
+        ],
+        'phpdoc_no_empty_return' => true,
         'php_unit_expectation' => true,
         'php_unit_internal_class' => true,
         'php_unit_mock' => true,
@@ -47,6 +51,7 @@ return PhpCsFixer\Config::create()
         'simple_to_complex_string_variable' => true,
         'single_line_throw' => false,
         'static_lambda' => true,
+        'void_return' => true,
         'yoda_style' => false,
     ])
     ->setFinder($finder);

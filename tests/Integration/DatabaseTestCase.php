@@ -9,14 +9,10 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
 
 abstract class DatabaseTestCase extends IntegrationTestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected static $refPrefix;
 
-    /**
-     * @var Database
-     */
+    /** @var Database */
     protected static $db;
 
     public static function setUpBeforeClass(): void

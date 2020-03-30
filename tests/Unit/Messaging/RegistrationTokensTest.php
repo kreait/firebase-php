@@ -22,7 +22,7 @@ final class RegistrationTokensTest extends TestCase
      * @test
      * @dataProvider validValuesWithExpectedCounts
      */
-    public function it_can_be_created_from_values($expectedCount, $value)
+    public function it_can_be_created_from_values($expectedCount, $value): void
     {
         $tokens = RegistrationTokens::fromValue($value);
 
@@ -34,14 +34,16 @@ final class RegistrationTokensTest extends TestCase
      * @test
      * @dataProvider invalidValues
      */
-    public function it_rejects_invalid_values($value)
+    public function it_rejects_invalid_values($value): void
     {
         $this->expectException(InvalidArgumentException::class);
         RegistrationTokens::fromValue($value);
     }
 
-    /** @test */
-    public function it_returns_strings()
+    /**
+     * @test
+     */
+    public function it_returns_strings(): void
     {
         $token = RegistrationToken::fromValue('foo');
 

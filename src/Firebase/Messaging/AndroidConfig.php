@@ -6,9 +6,7 @@ namespace Kreait\Firebase\Messaging;
 
 class AndroidConfig implements Config
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $rawConfig;
 
     private function __construct()

@@ -12,7 +12,7 @@ use Kreait\Firebase\ServiceAccount;
  */
 class DatabaseTest extends DatabaseTestCase
 {
-    public function testWithSanitizableProjectId()
+    public function testWithSanitizableProjectId(): void
     {
         if (!self::$serviceAccount) {
             $this->markTestSkipped('The integration tests require credentials');

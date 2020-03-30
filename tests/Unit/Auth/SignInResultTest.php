@@ -16,7 +16,7 @@ final class SignInResultTest extends UnitTestCase
      * @test
      * @dataProvider fullResponse
      */
-    public function it_can_be_created(array $input)
+    public function it_can_be_created(array $input): void
     {
         $result = SignInResult::fromData($input);
 

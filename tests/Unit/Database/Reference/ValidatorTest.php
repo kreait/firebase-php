@@ -15,14 +15,10 @@ use Psr\Http\Message\UriInterface;
  */
 class ValidatorTest extends UnitTestCase
 {
-    /**
-     * @var UriInterface
-     */
+    /** @var UriInterface */
     private $uri;
 
-    /**
-     * @var Validator
-     */
+    /** @var Validator */
     private $validator;
 
     protected function setUp(): void
@@ -33,7 +29,7 @@ class ValidatorTest extends UnitTestCase
         $this->validator = new Validator();
     }
 
-    public function testValidateDepth()
+    public function testValidateDepth(): void
     {
         $uri = $this->uri->withPath(\str_pad('', (Validator::MAX_DEPTH + 1) * 2, 'x/'));
 
@@ -41,7 +37,7 @@ class ValidatorTest extends UnitTestCase
         $this->validator->validateUri($uri);
     }
 
-    public function testValidateKeySize()
+    public function testValidateKeySize(): void
     {
         $uri = $this->uri->withPath(\str_pad('', Validator::MAX_KEY_SIZE + 1, 'x'));
 
@@ -49,7 +45,7 @@ class ValidatorTest extends UnitTestCase
         $this->validator->validateUri($uri);
     }
 
-    public function testValidateChars()
+    public function testValidateChars(): void
     {
         $invalid = \str_shuffle(Validator::INVALID_KEY_CHARS)[0];
         $uri = $this->uri->withPath($invalid);

@@ -79,7 +79,7 @@ final class RequestWithSubRequests implements HasSubRequests, RequestInterface
         return $this->subRequests;
     }
 
-    private function appendPartForSubRequest(RequestInterface $subRequest)
+    private function appendPartForSubRequest(RequestInterface $subRequest): void
     {
         $this->appendStream("--{$this->boundary}\r\n");
         $this->appendStream($this->subRequestHeadersAsString($subRequest)."\r\n\r\n");
@@ -87,7 +87,7 @@ final class RequestWithSubRequests implements HasSubRequests, RequestInterface
         $this->appendStream($subRequest->getBody()."\r\n");
     }
 
-    private function appendStream($value)
+    private function appendStream($value): void
     {
         // Objects are passed by reference, we want to ensure that they are not changed
         if ($value instanceof StreamInterface) {

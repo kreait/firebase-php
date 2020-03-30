@@ -14,7 +14,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class EqualToTest extends UnitTestCase
 {
-    public function testCreateWithInvalidValue()
+    public function testCreateWithInvalidValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -24,7 +24,7 @@ class EqualToTest extends UnitTestCase
     /**
      * @dataProvider valueProvider
      */
-    public function testModifyUri($given, $expected)
+    public function testModifyUri($given, $expected): void
     {
         $filter = new EqualTo($given);
 

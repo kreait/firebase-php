@@ -13,9 +13,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
  */
 class CreateUserTest extends IntegrationTestCase
 {
-    /**
-     * @var Auth
-     */
+    /** @var Auth */
     private $auth;
 
     protected function setUp(): void
@@ -23,7 +21,7 @@ class CreateUserTest extends IntegrationTestCase
         $this->auth = self::$factory->createAuth();
     }
 
-    public function testCreateUser()
+    public function testCreateUser(): void
     {
         $request = CreateUser::new()
             ->withUid($uid = \bin2hex(\random_bytes(5)))
@@ -47,7 +45,7 @@ class CreateUserTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testCreateUserWithoutEmailButMarkTheEmailAsVerified()
+    public function testCreateUserWithoutEmailButMarkTheEmailAsVerified(): void
     {
         $request = CreateUser::new()
             ->withUid($uid = \bin2hex(\random_bytes(5)))
@@ -62,7 +60,7 @@ class CreateUserTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testCreateUserWithoutEmailButMarkTheEmailAsUnverified()
+    public function testCreateUserWithoutEmailButMarkTheEmailAsUnverified(): void
     {
         $request = CreateUser::new()
             ->withUid($uid = \bin2hex(\random_bytes(5)))

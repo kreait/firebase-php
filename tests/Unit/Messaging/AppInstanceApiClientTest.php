@@ -37,7 +37,7 @@ class AppInstanceApiClientTest extends TestCase
         $this->client = new AppInstanceApiClient($client);
     }
 
-    public function testRequestExceptionIsConvertedToMessagingException()
+    public function testRequestExceptionIsConvertedToMessagingException(): void
     {
         $this->mock->append(new RequestException('Foo', new Request('POST', 'https://fake.org')));
 
@@ -45,7 +45,7 @@ class AppInstanceApiClientTest extends TestCase
         $this->client->subscribeToTopic('foo', ['bar']);
     }
 
-    public function testAnyThrowableIsConvertedToMessagingException()
+    public function testAnyThrowableIsConvertedToMessagingException(): void
     {
         $this->mock->append(new \Exception('Foo', 999));
 

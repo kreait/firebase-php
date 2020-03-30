@@ -37,16 +37,20 @@ final class GuzzleHandlerTest extends UnitTestCase
         $this->handler = new GuzzleHandler(new Client(['handler' => $this->httpResponses]));
     }
 
-    /** @test */
-    public function it_fails_on_an_unsupported_action()
+    /**
+     * @test
+     */
+    public function it_fails_on_an_unsupported_action(): void
     {
         $this->expectException(FailedToSignIn::class);
         $this->handler->handle(new class() implements SignIn {
         });
     }
 
-    /** @test */
-    public function it_fails_when_guzzle_fails()
+    /**
+     * @test
+     */
+    public function it_fails_when_guzzle_fails(): void
     {
         $client = $this->createMock(ClientInterface::class);
         $client->method('send')->willThrowException($this->createMock(ConnectException::class));
@@ -57,8 +61,10 @@ final class GuzzleHandlerTest extends UnitTestCase
         $handler->handle($this->action);
     }
 
-    /** @test */
-    public function it_fails_on_an_unsuccessful_response()
+    /**
+     * @test
+     */
+    public function it_fails_on_an_unsuccessful_response(): void
     {
         $this->httpResponses->append($response = new Response(400));
 
@@ -70,8 +76,10 @@ final class GuzzleHandlerTest extends UnitTestCase
         }
     }
 
-    /** @test */
-    public function it_fails_on_a_successful_response_with_invalid_json()
+    /**
+     * @test
+     */
+    public function it_fails_on_a_successful_response_with_invalid_json(): void
     {
         $this->httpResponses->append(new Response(200, [], '{'));
 
@@ -79,8 +87,10 @@ final class GuzzleHandlerTest extends UnitTestCase
         $this->handler->handle($this->action);
     }
 
-    /** @test */
-    public function it_works()
+    /**
+     * @test
+     */
+    public function it_works(): void
     {
         $this->httpResponses->append(new Response(200, [], (string) \json_encode([
             'id_token' => 'id_token',

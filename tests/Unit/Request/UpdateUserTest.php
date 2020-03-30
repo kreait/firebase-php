@@ -17,14 +17,14 @@ class UpdateUserTest extends TestCase
     /**
      * @dataProvider propertiesProvider
      */
-    public function testWithProperties(array $properties, array $expected)
+    public function testWithProperties(array $properties, array $expected): void
     {
         $request = UpdateUser::withProperties($properties);
 
         $this->assertEquals($expected, $request->jsonSerialize());
     }
 
-    public function testWithMissingUid()
+    public function testWithMissingUid(): void
     {
         $this->expectException(InvalidArgumentException::class);
         UpdateUser::withProperties([])->jsonSerialize();

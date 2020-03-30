@@ -52,74 +52,46 @@ class Factory
         'https://www.googleapis.com/auth/securetoken',
     ];
 
-    /**
-     * @var UriInterface|null
-     */
+    /** @var UriInterface|null */
     protected $databaseUri;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $defaultStorageBucket;
 
-    /**
-     * @var ServiceAccount|null
-     */
+    /** @var ServiceAccount|null */
     protected $serviceAccount;
 
-    /**
-     * @var ServiceAccountCredentials|UserRefreshCredentials|AppIdentityCredentials|GCECredentials|CredentialsLoader|null
-     */
+    /** @var ServiceAccountCredentials|UserRefreshCredentials|AppIdentityCredentials|GCECredentials|CredentialsLoader|null */
     protected $googleAuthTokenCredentials;
 
-    /**
-     * @var ProjectId|null
-     */
+    /** @var ProjectId|null */
     protected $projectId;
 
-    /**
-     * @var Email|null
-     */
+    /** @var Email|null */
     protected $clientEmail;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $uid;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $claims = [];
 
-    /**
-     * @var CacheInterface|null
-     */
+    /** @var CacheInterface|null */
     protected $verifierCache;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $httpClientConfig = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $httpClientMiddlewares = [];
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $discoveryIsDisabled = false;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $debug = false;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $httpProxy;
 
     protected static $databaseUriPattern = 'https://%s.firebaseio.com';

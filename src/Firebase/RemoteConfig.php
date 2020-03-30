@@ -22,9 +22,7 @@ use Kreait\Firebase\Util\JSON;
  */
 class RemoteConfig
 {
-    /**
-     * @var ApiClient
-     */
+    /** @var ApiClient */
     private $client;
 
     /**
@@ -47,7 +45,7 @@ class RemoteConfig
      *
      * @throws ValidationFailed if the validation failed
      */
-    public function validate($template)
+    public function validate($template): void
     {
         $template = $template instanceof Template ? $template : Template::fromArray($template);
 

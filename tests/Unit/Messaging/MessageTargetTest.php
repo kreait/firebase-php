@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MessageTargetTest extends TestCase
 {
-    public function testInvalidTargetCausesError()
+    public function testInvalidTargetCausesError(): void
     {
         $this->expectException(InvalidArgumentException::class);
         MessageTarget::with('foo', 'bar');

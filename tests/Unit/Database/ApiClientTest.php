@@ -18,19 +18,13 @@ use Psr\Http\Message\ResponseInterface;
  */
 class ApiClientTest extends UnitTestCase
 {
-    /**
-     * @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $http;
 
-    /**
-     * @var ApiClient
-     */
+    /** @var ApiClient */
     private $client;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $targetUrl;
 
     protected function setUp(): void
@@ -40,42 +34,42 @@ class ApiClientTest extends UnitTestCase
         $this->targetUrl = 'http://domain.tld/some/path';
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $client = $this->createApiClient();
 
         $this->assertNotNull($client->get($this->targetUrl));
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $client = $this->createApiClient();
 
         $this->assertNotNull($client->set($this->targetUrl, 'any'));
     }
 
-    public function testPush()
+    public function testPush(): void
     {
         $client = $this->createApiClient();
 
         $this->assertNotNull($client->push($this->targetUrl, 'any'));
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $client = $this->createApiClient();
 
         $this->assertNull($client->update($this->targetUrl, ['any', 'values'])); // => no return value, no exception
     }
 
-    public function testRemove()
+    public function testRemove(): void
     {
         $client = $this->createApiClient();
 
         $this->assertNull($client->remove($this->targetUrl)); // => no return value, no exception
     }
 
-    public function testCatchRequestException()
+    public function testCatchRequestException(): void
     {
         $request = new Request('GET', 'foo');
 
@@ -88,7 +82,7 @@ class ApiClientTest extends UnitTestCase
         $this->client->get($this->targetUrl);
     }
 
-    public function testCatchAnyException()
+    public function testCatchAnyException(): void
     {
         $this->http->expects($this->any())
             ->method($this->anything())

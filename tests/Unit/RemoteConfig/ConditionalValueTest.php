@@ -13,7 +13,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class ConditionalValueTest extends UnitTestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $condition = Condition::named('my_condition');
 
@@ -25,7 +25,7 @@ class ConditionalValueTest extends UnitTestCase
         $this->assertEquals(['value' => 'foo'], $conditionalValue->jsonSerialize());
     }
 
-    public function testCreateWithString()
+    public function testCreateWithString(): void
     {
         $value = ConditionalValue::basedOn('foo');
 

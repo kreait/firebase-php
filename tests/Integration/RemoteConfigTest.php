@@ -55,9 +55,7 @@ class RemoteConfigTest extends IntegrationTestCase
 }
 CONFIG;
 
-    /**
-     * @var RemoteConfig
-     */
+    /** @var RemoteConfig */
     private $remoteConfig;
 
     protected function setUp(): void
@@ -65,7 +63,7 @@ CONFIG;
         $this->remoteConfig = self::$factory->createRemoteConfig();
     }
 
-    public function testForcePublishAndGet()
+    public function testForcePublishAndGet(): void
     {
         $template = RemoteConfig\Template::fromArray(\json_decode($this->template, true));
 
@@ -80,7 +78,7 @@ CONFIG;
         $this->assertTrue($version->updateType()->equalsTo(UpdateType::FORCED_UPDATE));
     }
 
-    public function testPublishOutdatedConfig()
+    public function testPublishOutdatedConfig(): void
     {
         $initial = RemoteConfig\Template::fromArray(\json_decode($this->template, true));
 
@@ -96,7 +94,7 @@ CONFIG;
         $this->remoteConfig->publish($published);
     }
 
-    public function testWithFluidConfiguration()
+    public function testWithFluidConfiguration(): void
     {
         $germanLanguageCondition = Condition::named('lang_german')
             ->withExpression("device.language in ['de', 'de_AT', 'de_CH']")
@@ -126,7 +124,7 @@ CONFIG;
         $this->addToAssertionCount(1);
     }
 
-    public function testValidateValidTemplate()
+    public function testValidateValidTemplate(): void
     {
         $template = Template::fromArray(\json_decode($this->template, true));
 
@@ -134,7 +132,7 @@ CONFIG;
         $this->addToAssertionCount(1);
     }
 
-    public function testValidateInvalidTemplate()
+    public function testValidateInvalidTemplate(): void
     {
         $template = $this->templateWithTooManyParameters();
 
@@ -142,7 +140,7 @@ CONFIG;
         $this->remoteConfig->validate($template);
     }
 
-    public function testPublishInvalidTemplate()
+    public function testPublishInvalidTemplate(): void
     {
         $version = $this->remoteConfig->get()->version();
 
@@ -170,7 +168,7 @@ CONFIG;
         $this->assertTrue($currentVersionNumber->equalsTo($refetchedVersion->versionNumber()));
     }
 
-    public function testRollback()
+    public function testRollback(): void
     {
         $initialVersion = $this->remoteConfig->get()->version();
 
@@ -216,7 +214,7 @@ CONFIG;
         $this->assertTrue($rollbackSource->equalsTo($targetVersionNumber));
     }
 
-    public function testListVersionsWithoutFilters()
+    public function testListVersionsWithoutFilters(): void
     {
         if ($this->remoteConfig->listVersions()->valid()) {
             // We don't need to do something with it, just check that it returns results
@@ -224,7 +222,7 @@ CONFIG;
         }
     }
 
-    public function testFindVersionsWithFilters()
+    public function testFindVersionsWithFilters(): void
     {
         $currentVersion = $this->remoteConfig->get()->version();
 
@@ -259,7 +257,7 @@ CONFIG;
         $this->assertLessThanOrEqual($limit, $counter);
     }
 
-    public function testGetVersion()
+    public function testGetVersion(): void
     {
         $currentVersion = $this->remoteConfig->get()->version();
 
@@ -274,7 +272,7 @@ CONFIG;
         $this->assertTrue($check->versionNumber()->equalsTo($currentVersionNumber));
     }
 
-    public function testGetNonExistingVersion()
+    public function testGetNonExistingVersion(): void
     {
         $currentVersion = $this->remoteConfig->get()->version();
 

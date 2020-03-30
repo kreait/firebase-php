@@ -32,37 +32,37 @@ class DatabaseTest extends UnitTestCase
         $this->database = new Database($this->uri, $this->apiClient);
     }
 
-    public function testGetReference()
+    public function testGetReference(): void
     {
         $this->assertSame('any', \trim($this->database->getReference('any')->getUri()->getPath(), '/'));
     }
 
-    public function testGetRootReference()
+    public function testGetRootReference(): void
     {
         $this->assertSame('/', $this->database->getReference()->getUri()->getPath());
     }
 
-    public function testGetReferenceWithInvalidPath()
+    public function testGetReferenceWithInvalidPath(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->database->getReference('#');
     }
 
-    public function testGetReferenceFromUrl()
+    public function testGetReferenceFromUrl(): void
     {
         $url = 'https://database-uri.tld/foo/bar';
 
         $this->assertSame($url, (string) $this->database->getReferenceFromUrl($url)->getUri());
     }
 
-    public function testGetReferenceFromNonMatchingUrl()
+    public function testGetReferenceFromNonMatchingUrl(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         $this->database->getReferenceFromUrl('http://non-matching.tld');
     }
 
-    public function testGetRuleSet()
+    public function testGetRuleSet(): void
     {
         $this->apiClient
             ->method('get')

@@ -20,24 +20,16 @@ use Throwable;
  */
 class QueryTest extends UnitTestCase
 {
-    /**
-     * @var Uri
-     */
+    /** @var Uri */
     protected $uri;
 
-    /**
-     * @var Reference|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var Reference|\PHPUnit\Framework\MockObject\MockObject */
     protected $reference;
 
-    /**
-     * @var ApiClient|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var ApiClient|\PHPUnit\Framework\MockObject\MockObject */
     protected $apiClient;
 
-    /**
-     * @var Query
-     */
+    /** @var Query */
     protected $query;
 
     protected function setUp(): void
@@ -55,12 +47,12 @@ class QueryTest extends UnitTestCase
         $this->query = new Query($this->reference, $this->apiClient);
     }
 
-    public function testGetReference()
+    public function testGetReference(): void
     {
         $this->assertSame($this->reference, $this->query->getReference());
     }
 
-    public function testGetSnapshot()
+    public function testGetSnapshot(): void
     {
         $this->apiClient->expects($this->any())->method('get')->with($this->anything())->willReturn('value');
 
@@ -69,14 +61,14 @@ class QueryTest extends UnitTestCase
         $this->assertInstanceOf(Snapshot::class, $snapshot);
     }
 
-    public function testGetValue()
+    public function testGetValue(): void
     {
         $this->apiClient->expects($this->any())->method('get')->with($this->anything())->willReturn('value');
 
         $this->assertSame('value', $this->query->getValue());
     }
 
-    public function testGetUri()
+    public function testGetUri(): void
     {
         $uri = $this->query->getUri();
 
@@ -84,7 +76,7 @@ class QueryTest extends UnitTestCase
         $this->assertSame((string) $uri, (string) $this->query);
     }
 
-    public function testModifiersReturnQueries()
+    public function testModifiersReturnQueries(): void
     {
         $this->assertInstanceOf(Query::class, $this->query->equalTo('x'));
         $this->assertInstanceOf(Query::class, $this->query->endAt('x'));
@@ -97,7 +89,7 @@ class QueryTest extends UnitTestCase
         $this->assertInstanceOf(Query::class, $this->query->startAt('x'));
     }
 
-    public function testOnlyOneSorterIsAllowed()
+    public function testOnlyOneSorterIsAllowed(): void
     {
         try {
             $this->query->orderByKey()->orderByValue();
@@ -106,7 +98,7 @@ class QueryTest extends UnitTestCase
         }
     }
 
-    public function testWrapsApiExceptions()
+    public function testWrapsApiExceptions(): void
     {
         $exception = new DatabaseError();
 
@@ -119,7 +111,7 @@ class QueryTest extends UnitTestCase
         $this->query->getSnapshot();
     }
 
-    public function testIndexNotDefined()
+    public function testIndexNotDefined(): void
     {
         $this->apiClient
             ->method('get')->with($this->anything())

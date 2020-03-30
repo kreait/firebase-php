@@ -15,7 +15,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class TemplateTest extends UnitTestCase
 {
-    public function testCreateWithInvalidConditionalValue()
+    public function testCreateWithInvalidConditionalValue(): void
     {
         $parameter = Parameter::named('foo')->withConditionalValue(new ConditionalValue('non_existing_condition', 'false'));
 
@@ -26,7 +26,7 @@ class TemplateTest extends UnitTestCase
     /**
      * @see https://github.com/kreait/firebase-php/issues/218
      */
-    public function testConditionNamesAreImportedCorrectlyWhenUsingFromArray()
+    public function testConditionNamesAreImportedCorrectlyWhenUsingFromArray(): void
     {
         $given = ['conditions' => [['name' => 'foo', 'expression' => '"true"']]];
 

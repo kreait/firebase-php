@@ -48,7 +48,7 @@ class ApiClientTest extends TestCase
     /**
      * @dataProvider requestExceptions
      */
-    public function testCatchRequestException($requestException, $expectedClass)
+    public function testCatchRequestException($requestException, $expectedClass): void
     {
         $this->mock->append($requestException);
 
@@ -56,7 +56,7 @@ class ApiClientTest extends TestCase
         $this->client->send(new Request('GET', 'http://example.com'));
     }
 
-    public function testCatchAnyException()
+    public function testCatchAnyException(): void
     {
         $this->mock->append(new Exception());
 

@@ -8,9 +8,7 @@ class DefaultValue implements \JsonSerializable
 {
     const IN_APP_DEFAULT_VALUE = true;
 
-    /**
-     * @var string|bool
-     */
+    /** @var string|bool */
     private $value;
 
     private function __construct($value)

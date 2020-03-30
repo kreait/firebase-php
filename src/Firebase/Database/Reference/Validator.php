@@ -18,7 +18,7 @@ class Validator
      *
      * @throws InvalidArgumentException on
      */
-    public function validateUri(UriInterface $uri)
+    public function validateUri(UriInterface $uri): void
     {
         $path = \trim($uri->getPath(), '/');
 
@@ -30,7 +30,7 @@ class Validator
         }
     }
 
-    private function validateDepth(string $path)
+    private function validateDepth(string $path): void
     {
         $depth = \mb_substr_count($path, '/') + 1;
 
@@ -42,7 +42,7 @@ class Validator
         }
     }
 
-    private function validateKeySize(string $key)
+    private function validateKeySize(string $key): void
     {
         if (($length = \mb_strlen($key, '8bit')) > self::MAX_KEY_SIZE) {
             throw new InvalidArgumentException(\sprintf(
@@ -52,7 +52,7 @@ class Validator
         }
     }
 
-    private function validateChars($key)
+    private function validateChars($key): void
     {
         $key = \rawurldecode($key);
 

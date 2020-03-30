@@ -41,43 +41,43 @@ class ServiceAccountTest extends UnitTestCase
         @\chmod($this->pathToUnreadableJson, 0644);
     }
 
-    public function testCreateFromJsonText()
+    public function testCreateFromJsonText(): void
     {
         $serviceAccount = ServiceAccount::fromValue($this->validJson);
         $this->assertSame($this->validData, $serviceAccount->asArray());
     }
 
-    public function testCreateFromJsonFile()
+    public function testCreateFromJsonFile(): void
     {
         $serviceAccount = ServiceAccount::fromValue($this->pathToValidJson);
         $this->assertSame($this->validData, $serviceAccount->asArray());
     }
 
-    public function testCreateFromMissingFile()
+    public function testCreateFromMissingFile(): void
     {
         $this->expectException(InvalidArgumentException::class);
         ServiceAccount::fromValue('missing.json');
     }
 
-    public function testCreateFromDirectory()
+    public function testCreateFromDirectory(): void
     {
         $this->expectException(InvalidArgumentException::class);
         ServiceAccount::fromValue(__DIR__);
     }
 
-    public function testCreateFromUnreadableFile()
+    public function testCreateFromUnreadableFile(): void
     {
         $this->expectException(InvalidArgumentException::class);
         ServiceAccount::fromValue($this->pathToUnreadableJson);
     }
 
-    public function testCreateFromArray()
+    public function testCreateFromArray(): void
     {
         $serviceAccount = ServiceAccount::fromValue($this->validData);
         $this->assertSame($this->validData, $serviceAccount->asArray());
     }
 
-    public function testCreateFromArrayWithMissingTypeField()
+    public function testCreateFromArrayWithMissingTypeField(): void
     {
         $data = $this->validData;
         unset($data['type']);
@@ -86,7 +86,7 @@ class ServiceAccountTest extends UnitTestCase
         ServiceAccount::fromValue($data);
     }
 
-    public function testCreateFromServiceAccount()
+    public function testCreateFromServiceAccount(): void
     {
         $serviceAccount = $this->createMock(ServiceAccount::class);
 
@@ -96,7 +96,7 @@ class ServiceAccountTest extends UnitTestCase
     /**
      * @dataProvider invalidValues
      */
-    public function testCreateFromInvalidValue($value)
+    public function testCreateFromInvalidValue($value): void
     {
         $this->expectException(InvalidArgumentException::class);
         ServiceAccount::fromValue($value);

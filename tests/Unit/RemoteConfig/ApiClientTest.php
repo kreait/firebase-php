@@ -35,7 +35,7 @@ class ApiClientTest extends UnitTestCase
     /**
      * @dataProvider requestExceptions
      */
-    public function testCatchRequestException($requestException, $expectedClass)
+    public function testCatchRequestException($requestException, $expectedClass): void
     {
         $this->http->expects($this->once())
             ->method('request')
@@ -49,7 +49,7 @@ class ApiClientTest extends UnitTestCase
         }
     }
 
-    public function testCatchThrowable()
+    public function testCatchThrowable(): void
     {
         $this->http->expects($this->once())
             ->method('request')

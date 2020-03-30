@@ -12,7 +12,7 @@ use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
  */
 class RuleSetTest extends DatabaseTestCase
 {
-    public function testDefault()
+    public function testDefault(): void
     {
         $ruleSet = RuleSet::default();
 
@@ -21,7 +21,7 @@ class RuleSetTest extends DatabaseTestCase
         $this->assertEquals($ruleSet, self::$db->getRuleSet());
     }
 
-    public function testPublic()
+    public function testPublic(): void
     {
         $ruleSet = RuleSet::public();
 
@@ -30,7 +30,7 @@ class RuleSetTest extends DatabaseTestCase
         $this->assertEquals($ruleSet, self::$db->getRuleSet());
     }
 
-    public function testPrivate()
+    public function testPrivate(): void
     {
         $ruleSet = RuleSet::private();
 

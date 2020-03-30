@@ -25,9 +25,7 @@ class TagColor
         self::ORANGE, self::PINK, self::PURPLE, self::TEAL,
     ];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $value;
 
     public function __construct(string $value)

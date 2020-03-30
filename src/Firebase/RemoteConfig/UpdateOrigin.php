@@ -12,9 +12,7 @@ final class UpdateOrigin implements \JsonSerializable, Value
     const CONSOLE = 'CONSOLE';
     const REST_API = 'REST_API';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $value;
 
     private function __construct()

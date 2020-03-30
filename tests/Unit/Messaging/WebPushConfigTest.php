@@ -15,7 +15,7 @@ class WebPushConfigTest extends UnitTestCase
     /**
      * @dataProvider validDataProvider
      */
-    public function testCreateFromArray(array $data)
+    public function testCreateFromArray(array $data): void
     {
         $config = WebPushConfig::fromArray($data);
 

@@ -49,7 +49,7 @@ class ApiClient implements ClientInterface
     public function sendAsync(RequestInterface $request, array $options = []): PromiseInterface
     {
         return $this->client->sendAsync($request, $options)
-            ->then(null, function (Throwable $e) {
+            ->then(null, function (Throwable $e): void {
                 throw $this->errorHandler->convertException($e);
             });
     }

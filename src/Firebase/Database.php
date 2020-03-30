@@ -22,14 +22,10 @@ class Database
 {
     const SERVER_TIMESTAMP = ['.sv' => 'timestamp'];
 
-    /**
-     * @var ApiClient
-     */
+    /** @var ApiClient */
     private $client;
 
-    /**
-     * @var UriInterface
-     */
+    /** @var UriInterface */
     private $uri;
 
     /**
@@ -102,7 +98,7 @@ class Database
      *
      * @see https://firebase.google.com/docs/database/rest/app-management#updating-firebase-realtime-database-rules
      */
-    public function updateRules(RuleSet $ruleSet)
+    public function updateRules(RuleSet $ruleSet): void
     {
         $this->client->updateRules($this->uri->withPath('.settings/rules'), $ruleSet);
     }

@@ -6,19 +6,13 @@ namespace Kreait\Firebase\RemoteConfig;
 
 class Condition implements \JsonSerializable
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $expression;
 
-    /**
-     * @var TagColor|null
-     */
+    /** @var TagColor|null */
     private $tagColor;
 
     private function __construct(string $name, string $expression, TagColor $tagColor = null)

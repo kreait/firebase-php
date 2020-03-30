@@ -13,7 +13,7 @@ use Kreait\Firebase\Util\JSON;
  */
 class UserInfoTest extends UnitTestCase
 {
-    public function testJsonEncode()
+    public function testJsonEncode(): void
     {
         $info = UserInfo::fromResponseData([
             'rawId' => 'some-uid',

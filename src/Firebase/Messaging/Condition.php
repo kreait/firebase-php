@@ -8,9 +8,7 @@ use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 
 class Condition implements \JsonSerializable
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $value;
 
     private function __construct(string $value)

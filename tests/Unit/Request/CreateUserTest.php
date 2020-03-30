@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CreateUserTest extends TestCase
 {
-    public function testCreateNew()
+    public function testCreateNew(): void
     {
         $request = CreateUser::new();
         $this->assertEmpty($request->jsonSerialize());
@@ -23,7 +23,7 @@ class CreateUserTest extends TestCase
     /**
      * @dataProvider propertiesProvider
      */
-    public function testWithProperties(array $properties, array $expected)
+    public function testWithProperties(array $properties, array $expected): void
     {
         $request = CreateUser::withProperties($properties);
 

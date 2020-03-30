@@ -13,8 +13,10 @@ use PHPUnit\Framework\TestCase;
  */
 class AppInstanceTest extends TestCase
 {
-    /** @test */
-    public function it_can_be_created_from_raw_data()
+    /**
+     * @test
+     */
+    public function it_can_be_created_from_raw_data(): void
     {
         $token = RegistrationToken::fromValue('token');
         $data = [
@@ -44,8 +46,10 @@ class AppInstanceTest extends TestCase
         $this->assertCount(2, $instance->topicSubscriptions());
     }
 
-    /** @test */
-    public function it_accepts_numeric_topic_names()
+    /**
+     * @test
+     */
+    public function it_accepts_numeric_topic_names(): void
     {
         $token = RegistrationToken::fromValue('token');
         $data = [

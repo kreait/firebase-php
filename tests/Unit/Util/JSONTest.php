@@ -13,38 +13,38 @@ use Kreait\Firebase\Util\JSON;
  */
 class JSONTest extends UnitTestCase
 {
-    public function testEncodeJson()
+    public function testEncodeJson(): void
     {
         $this->assertSame(\json_encode(true), JSON::encode(true));
     }
 
-    public function testEncodeInvalidJson()
+    public function testEncodeInvalidJson(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         JSON::encode(\INF);
     }
 
-    public function testDecodeJson()
+    public function testDecodeJson(): void
     {
         $this->assertSame(\json_decode('true', false), JSON::decode('true', false));
         $this->assertSame(\json_decode('true', true), JSON::decode('true', true));
     }
 
-    public function testDecodeInvalidJson()
+    public function testDecodeInvalidJson(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         JSON::decode('{');
     }
 
-    public function testIsValid()
+    public function testIsValid(): void
     {
         $this->assertTrue(JSON::isValid(\json_encode([])));
         $this->assertFalse(JSON::isValid('<html></html>'));
     }
 
-    public function testPrettyPrint()
+    public function testPrettyPrint(): void
     {
         $data = ['foo' => 'bar'];
 

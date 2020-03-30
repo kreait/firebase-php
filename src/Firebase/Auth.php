@@ -295,7 +295,7 @@ class Auth
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      */
-    public function deleteUser($uid)
+    public function deleteUser($uid): void
     {
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
 
@@ -335,7 +335,7 @@ class Auth
      * @throws UserNotFound
      * @throws FailedToSendActionLink
      */
-    public function sendEmailActionLink(string $type, $email, $actionCodeSettings = null, string $locale = null)
+    public function sendEmailActionLink(string $type, $email, $actionCodeSettings = null, string $locale = null): void
     {
         $email = $email instanceof Email ? $email : new Email((string) $email);
 
@@ -396,7 +396,7 @@ class Auth
      *
      * @throws FailedToSendActionLink
      */
-    public function sendEmailVerificationLink($email, $actionCodeSettings = null, string $locale = null)
+    public function sendEmailVerificationLink($email, $actionCodeSettings = null, string $locale = null): void
     {
         $this->sendEmailActionLink('VERIFY_EMAIL', $email, $actionCodeSettings, $locale);
     }
@@ -418,7 +418,7 @@ class Auth
      *
      * @throws FailedToSendActionLink
      */
-    public function sendPasswordResetLink($email, $actionCodeSettings = null, string $locale = null)
+    public function sendPasswordResetLink($email, $actionCodeSettings = null, string $locale = null): void
     {
         $this->sendEmailActionLink('PASSWORD_RESET', $email, $actionCodeSettings, $locale);
     }
@@ -440,7 +440,7 @@ class Auth
      *
      * @throws FailedToSendActionLink
      */
-    public function sendSignInWithEmailLink($email, $actionCodeSettings = null, string $locale = null)
+    public function sendSignInWithEmailLink($email, $actionCodeSettings = null, string $locale = null): void
     {
         $this->sendEmailActionLink('EMAIL_SIGNIN', $email, $actionCodeSettings, $locale);
     }
@@ -554,10 +554,8 @@ class Auth
      * @throws OperationNotAllowed
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
-     *
-     * @return void
      */
-    public function verifyPasswordResetCode(string $oobCode)
+    public function verifyPasswordResetCode(string $oobCode): void
     {
         $this->client->verifyPasswordResetCode($oobCode);
     }
@@ -577,10 +575,8 @@ class Auth
      * @throws UserDisabled
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
-     *
-     * @return void
      */
-    public function confirmPasswordReset(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true)
+    public function confirmPasswordReset(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): void
     {
         $newPassword = $newPassword instanceof ClearTextPassword ? $newPassword : new ClearTextPassword($newPassword);
 
@@ -604,7 +600,7 @@ class Auth
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      */
-    public function revokeRefreshTokens($uid)
+    public function revokeRefreshTokens($uid): void
     {
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
 

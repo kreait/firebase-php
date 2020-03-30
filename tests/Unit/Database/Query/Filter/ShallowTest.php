@@ -13,7 +13,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class ShallowTest extends UnitTestCase
 {
-    public function testModifyUri()
+    public function testModifyUri(): void
     {
         $filter = new Shallow();
 

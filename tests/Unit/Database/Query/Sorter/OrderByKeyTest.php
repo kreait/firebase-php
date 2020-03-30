@@ -13,9 +13,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class OrderByKeyTest extends UnitTestCase
 {
-    /**
-     * @var OrderByKey
-     */
+    /** @var OrderByKey */
     protected $sorter;
 
     protected function setUp(): void
@@ -23,7 +21,7 @@ class OrderByKeyTest extends UnitTestCase
         $this->sorter = new OrderByKey();
     }
 
-    public function testModifyUri()
+    public function testModifyUri(): void
     {
         $this->assertStringContainsString(
             'orderBy='.\rawurlencode('"$key"'),
@@ -34,7 +32,7 @@ class OrderByKeyTest extends UnitTestCase
     /**
      * @dataProvider valueProvider
      */
-    public function testModifyValue($expected, $value)
+    public function testModifyValue($expected, $value): void
     {
         $this->assertSame($expected, $this->sorter->modifyValue($value));
     }

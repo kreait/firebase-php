@@ -19,9 +19,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
  */
 class MessagingTest extends IntegrationTestCase
 {
-    /**
-     * @var Messaging
-     */
+    /** @var Messaging */
     public $messaging;
 
     protected function setUp(): void
@@ -95,7 +93,7 @@ class MessagingTest extends IntegrationTestCase
         ];
     }
 
-    public function testSendMessage()
+    public function testSendMessage(): void
     {
         $message = self::createFullMessageData();
         $message['condition'] = "'dogs' in topics || 'cats' in topics";
@@ -105,7 +103,7 @@ class MessagingTest extends IntegrationTestCase
         $this->assertArrayHasKey('name', $result);
     }
 
-    public function testSendRawMessage()
+    public function testSendRawMessage(): void
     {
         $data = self::createFullMessageData();
         $data['condition'] = "'dogs' in topics || 'cats' in topics";
@@ -115,7 +113,7 @@ class MessagingTest extends IntegrationTestCase
         $this->assertArrayHasKey('name', $result);
     }
 
-    public function testValidateValidMessage()
+    public function testValidateValidMessage(): void
     {
         $message = self::createFullMessageData();
         $message['condition'] = "'dogs' in topics || 'cats' in topics";
@@ -125,7 +123,7 @@ class MessagingTest extends IntegrationTestCase
         $this->assertArrayHasKey('name', $result);
     }
 
-    public function testValidateInvalidMessage()
+    public function testValidateInvalidMessage(): void
     {
         $message = self::createFullMessageData();
         $message['token'] = 'invalid-and-non-existing-device-token';
@@ -134,7 +132,7 @@ class MessagingTest extends IntegrationTestCase
         $this->messaging->validate($message);
     }
 
-    public function testSendMulticastWithValidAndInvalidTarget()
+    public function testSendMulticastWithValidAndInvalidTarget(): void
     {
         \reset(self::$registrationTokens);
         if (!($token = \current(self::$registrationTokens))) {
@@ -169,7 +167,7 @@ class MessagingTest extends IntegrationTestCase
     /**
      * @see https://github.com/kreait/firebase-php/issues/317
      */
-    public function testSendMulticastMessageToOneRecipientOnly()
+    public function testSendMulticastMessageToOneRecipientOnly(): void
     {
         \reset(self::$registrationTokens);
         if (!($token = \current(self::$registrationTokens))) {
@@ -181,7 +179,7 @@ class MessagingTest extends IntegrationTestCase
         $this->assertCount(1, $report->successes());
     }
 
-    public function testSendMessageToDifferentTargets()
+    public function testSendMessageToDifferentTargets(): void
     {
         \reset(self::$registrationTokens);
         if (!($token = \current(self::$registrationTokens))) {
@@ -210,7 +208,7 @@ class MessagingTest extends IntegrationTestCase
         $this->assertCount(2, $report->failures());
     }
 
-    public function testManageTopicSubscriptions()
+    public function testManageTopicSubscriptions(): void
     {
         \reset(self::$registrationTokens);
         if (!($token = \current(self::$registrationTokens))) {
@@ -239,7 +237,7 @@ class MessagingTest extends IntegrationTestCase
         $this->assertFalse($this->messaging->getAppInstance($token)->isSubscribedToTopic($topicName));
     }
 
-    public function testGetAppInstance()
+    public function testGetAppInstance(): void
     {
         \reset(self::$registrationTokens);
         if (!($token = \current(self::$registrationTokens))) {
@@ -251,7 +249,7 @@ class MessagingTest extends IntegrationTestCase
         $this->assertSame($token, $appInstance->registrationToken()->value());
     }
 
-    public function testGetAppInstanceWithInvalidToken()
+    public function testGetAppInstanceWithInvalidToken(): void
     {
         $this->expectException(InvalidArgument::class);
         $this->messaging->getAppInstance('foo');

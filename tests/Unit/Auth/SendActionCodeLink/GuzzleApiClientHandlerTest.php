@@ -40,8 +40,10 @@ final class GuzzleApiClientHandlerTest extends TestCase
         $this->handler = new GuzzleApiClientHandler($this->client->reveal());
     }
 
-    /** @test */
-    public function it_handles_an_unknown_guzzle_error()
+    /**
+     * @test
+     */
+    public function it_handles_an_unknown_guzzle_error(): void
     {
         $this->client->send(Argument::cetera())->willThrow(new TransferException('Something happened'));
 
@@ -49,8 +51,10 @@ final class GuzzleApiClientHandlerTest extends TestCase
         $this->handler->handle($this->sendAction);
     }
 
-    /** @test */
-    public function it_fails_on_unsuccessful_responses()
+    /**
+     * @test
+     */
+    public function it_fails_on_unsuccessful_responses(): void
     {
         $this->client->send(Argument::cetera())->willReturn(new Response(400));
 
@@ -58,8 +62,10 @@ final class GuzzleApiClientHandlerTest extends TestCase
         $this->handler->handle($this->sendAction);
     }
 
-    /** @test */
-    public function exceptions_contain_the_action_and_a_response()
+    /**
+     * @test
+     */
+    public function exceptions_contain_the_action_and_a_response(): void
     {
         $this->client->send(Argument::cetera())->willReturn($response = new Response(400));
 

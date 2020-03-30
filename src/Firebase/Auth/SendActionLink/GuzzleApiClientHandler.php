@@ -18,7 +18,7 @@ final class GuzzleApiClientHandler implements Handler
         $this->client = $client;
     }
 
-    public function handle(SendActionLink $action)
+    public function handle(SendActionLink $action): void
     {
         $request = new ApiRequest($action);
 

@@ -9,9 +9,7 @@ use Kreait\Firebase\Value;
 
 final class VersionNumber implements \JsonSerializable, Value
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $value;
 
     private function __construct()

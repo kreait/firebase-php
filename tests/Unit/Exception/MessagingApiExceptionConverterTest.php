@@ -35,8 +35,10 @@ class MessagingApiExceptionConverterTest extends TestCase
         $this->converter = new MessagingApiExceptionConverter();
     }
 
-    /** @test */
-    public function it_converts_a_connect_exception()
+    /**
+     * @test
+     */
+    public function it_converts_a_connect_exception(): void
     {
         $connectException = new ConnectException(
             'curl error xx',
@@ -50,7 +52,7 @@ class MessagingApiExceptionConverterTest extends TestCase
      * @test
      * @dataProvider exceptions
      */
-    public function it_converts_exceptions(Throwable $e, string $expectedClass)
+    public function it_converts_exceptions(Throwable $e, string $expectedClass): void
     {
         $this->assertInstanceOf($expectedClass, $this->converter->convertException($e));
     }

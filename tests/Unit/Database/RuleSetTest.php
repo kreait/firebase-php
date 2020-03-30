@@ -12,7 +12,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class RuleSetTest extends UnitTestCase
 {
-    public function testCustomWithMissingRulesKey()
+    public function testCustomWithMissingRulesKey(): void
     {
         $data = ['rules' => [
             '.read' => 'auth != null',

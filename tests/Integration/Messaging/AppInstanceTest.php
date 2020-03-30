@@ -20,8 +20,10 @@ final class AppInstanceTest extends IntegrationTestCase
         $this->messaging = self::$factory->createMessaging();
     }
 
-    /** @test */
-    public function it_is_subscribed_to_topics()
+    /**
+     * @test
+     */
+    public function it_is_subscribed_to_topics(): void
     {
         \reset(self::$registrationTokens);
         if (!($token = \current(self::$registrationTokens))) {

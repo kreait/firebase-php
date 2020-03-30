@@ -18,19 +18,13 @@ use Psr\Http\Message\UriInterface;
  */
 class Reference
 {
-    /**
-     * @var UriInterface
-     */
+    /** @var UriInterface */
     private $uri;
 
-    /**
-     * @var ApiClient
-     */
+    /** @var ApiClient */
     private $apiClient;
 
-    /**
-     * @var Validator
-     */
+    /** @var Validator */
     private $validator;
 
     /**

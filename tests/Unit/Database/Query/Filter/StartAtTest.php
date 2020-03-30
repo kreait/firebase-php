@@ -14,7 +14,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class StartAtTest extends UnitTestCase
 {
-    public function testCreateWithInvalidValue()
+    public function testCreateWithInvalidValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -24,7 +24,7 @@ class StartAtTest extends UnitTestCase
     /**
      * @dataProvider valueProvider
      */
-    public function testModifyUri($given, $expected)
+    public function testModifyUri($given, $expected): void
     {
         $filter = new StartAt($given);
 

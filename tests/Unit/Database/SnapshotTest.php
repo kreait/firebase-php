@@ -13,24 +13,16 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class SnapshotTest extends UnitTestCase
 {
-    /**
-     * @var Reference|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var Reference|\PHPUnit\Framework\MockObject\MockObject */
     private $reference;
 
-    /**
-     * @var Snapshot
-     */
+    /** @var Snapshot */
     private $snapshotWithArrayValue;
 
-    /**
-     * @var Snapshot
-     */
+    /** @var Snapshot */
     private $snapshotWithScalarValue;
 
-    /**
-     * @var Snapshot
-     */
+    /** @var Snapshot */
     private $snapshotWithEmptyValue;
 
     protected function setUp(): void
@@ -42,19 +34,19 @@ class SnapshotTest extends UnitTestCase
         $this->snapshotWithEmptyValue = new Snapshot($this->reference, null);
     }
 
-    public function testGetReference()
+    public function testGetReference(): void
     {
         $this->assertSame($this->reference, $this->snapshotWithArrayValue->getReference());
     }
 
-    public function testGetKey()
+    public function testGetKey(): void
     {
         $this->reference->expects($this->any())->method('getKey')->willReturn('key');
 
         $this->assertSame('key', $this->snapshotWithArrayValue->getKey());
     }
 
-    public function testGetChildOnANonArrayValueReturnsAnEmptySnapshot()
+    public function testGetChildOnANonArrayValueReturnsAnEmptySnapshot(): void
     {
         $this->reference->expects($this->once())
             ->method('getChild')->with('path/to/child')
@@ -66,7 +58,7 @@ class SnapshotTest extends UnitTestCase
         $this->assertNull($childSnapshot->getValue());
     }
 
-    public function testGetChildOnANonExistingChildReturnsAnEmptySnapshot()
+    public function testGetChildOnANonExistingChildReturnsAnEmptySnapshot(): void
     {
         $this->reference->expects($this->once())
             ->method('getChild')->with('nonexisting/child')
@@ -76,7 +68,7 @@ class SnapshotTest extends UnitTestCase
         $this->assertNull($this->snapshotWithArrayValue->getChild('nonexisting/child')->getValue());
     }
 
-    public function testGetChild()
+    public function testGetChild(): void
     {
         $this->reference->expects($this->once())
             ->method('getChild')->with('key/subkey')
@@ -86,21 +78,21 @@ class SnapshotTest extends UnitTestCase
         $this->assertSame('value', $this->snapshotWithArrayValue->getChild('key/subkey')->getValue());
     }
 
-    public function testExists()
+    public function testExists(): void
     {
         $this->assertTrue($this->snapshotWithArrayValue->exists());
         $this->assertTrue($this->snapshotWithScalarValue->exists());
         $this->assertFalse($this->snapshotWithEmptyValue->exists());
     }
 
-    public function testHasChildren()
+    public function testHasChildren(): void
     {
         $this->assertTrue($this->snapshotWithArrayValue->hasChildren());
         $this->assertFalse($this->snapshotWithScalarValue->hasChildren());
         $this->assertFalse($this->snapshotWithEmptyValue->hasChildren());
     }
 
-    public function testNumChildren()
+    public function testNumChildren(): void
     {
         $this->assertSame(1, $this->snapshotWithArrayValue->numChildren());
         $this->assertSame(0, $this->snapshotWithScalarValue->numChildren());
@@ -110,7 +102,7 @@ class SnapshotTest extends UnitTestCase
     /**
      * @see https://github.com/kreait/firebase-php/issues/212
      */
-    public function testGetChildWithKeyStartingWithANonAlphabeticalCharacter()
+    public function testGetChildWithKeyStartingWithANonAlphabeticalCharacter(): void
     {
         $snapshot = new Snapshot($this->reference, [
             '123' => 'value',

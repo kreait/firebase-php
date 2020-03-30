@@ -28,7 +28,7 @@ class ApiClientTest extends UnitTestCase
         $this->client = new ApiClient($this->http);
     }
 
-    public function testCatchRequestException()
+    public function testCatchRequestException(): void
     {
         $request = $this->prophesize(RequestInterface::class);
 
@@ -41,7 +41,7 @@ class ApiClientTest extends UnitTestCase
         $this->client->createUser(CreateUser::new());
     }
 
-    public function testCatchThrowable()
+    public function testCatchThrowable(): void
     {
         $this->http
             ->expects($this->once())

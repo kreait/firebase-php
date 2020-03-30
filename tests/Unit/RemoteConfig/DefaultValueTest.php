@@ -12,14 +12,14 @@ use PHPUnit\Framework\TestCase;
  */
 class DefaultValueTest extends TestCase
 {
-    public function testCreateInAppDefaultValue()
+    public function testCreateInAppDefaultValue(): void
     {
         $defaultValue = DefaultValue::none();
 
         $this->assertEquals(['useInAppDefault' => true], $defaultValue->jsonSerialize());
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $defaultValue = DefaultValue::with('foo');
 
