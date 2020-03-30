@@ -1,10 +1,11 @@
-includes:
-	- vendor/phpstan/phpstan-phpunit/extension.neon
-	- vendor/jangregor/phpstan-prophecy/src/extension.neon
-
 parameters:
+	level: max
+	paths:
+		- src/
+		- tests/
 	inferPrivatePropertyTypeFromConstructor: true
 	ignoreErrors:
 		-
 			message: '#If condition is always true#'
 			path: src/Firebase/Factory.php
+	tmpDir: %currentWorkingDirectory%/build/phpstan/

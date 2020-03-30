@@ -18,5 +18,5 @@ indent_style = tab
 [**.yml]
 indent_size = 2
 
-[*.neon]
+[{phpstan.neon,phpstan.neon.dist}]
 indent_style = tab

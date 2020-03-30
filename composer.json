@@ -36,9 +36,11 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
         "google/cloud-firestore": "^1.11",
-        "jangregor/phpstan-prophecy": "^0.1.2|^0.2|^0.3|^0.4.2",
-        "phpstan/phpstan-phpunit": "^0.9.4|^0.11.2",
-        "phpunit/phpunit": "^6.5.14|^7.5.17",
+        "jangregor/phpstan-prophecy": "^0.6.2",
+        "phpstan/extension-installer": "^1.0",
+        "phpstan/phpstan": "^0.12.15",
+        "phpstan/phpstan-phpunit": "^0.12.6",
+        "phpunit/phpunit": "^7.5.17",
         "symfony/var-dumper": "^3.4|^4.4|^5.0"
     },
     "suggest": {

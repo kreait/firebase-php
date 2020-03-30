@@ -8,5 +8,6 @@
 /.php_cs.cache
 /cc-test-reporter
 /composer.lock
+/phpstan.neon
 /phpunit.xml
 /google-service-account.json

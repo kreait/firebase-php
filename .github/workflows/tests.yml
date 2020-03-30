@@ -65,7 +65,7 @@ jobs:
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Run PHPStan
-        run: vendor/bin/phpstan analyse src tests -c phpstan.neon --level=max --no-progress
+        run: vendor/bin/phpstan analyse --no-progress
 
       - name: Run PHP CS Fixer
         run: vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no

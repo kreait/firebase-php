@@ -5,7 +5,7 @@ tests: phpstan unit-tests integration-tests
 
 .PHONY: phpstan
 phpstan: ## Performs static code analysis
-	@vendor/bin/phpstan analyse src tests -c phpstan.neon --level=max
+	@vendor/bin/phpstan analyse
 
 .PHONY: unit-tests
 unit-tests: ## Executes the unit test suite
