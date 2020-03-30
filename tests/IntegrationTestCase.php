@@ -87,7 +87,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
      */
     private static function credentialsFromEnvironment()
     {
-        if ($credentials = getenv('FIREBASE_CREDENTIALS')) {
+        if ($credentials = getenv('TEST_FIREBASE_CREDENTIALS')) {
             return ServiceAccount::fromValue($credentials);
         }
 

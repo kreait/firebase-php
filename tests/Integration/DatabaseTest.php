@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
-use Kreait\Firebase\Util\JSON;
 
 /**
  * @internal
@@ -15,16 +14,14 @@ class DatabaseTest extends DatabaseTestCase
 {
     public function testWithSanitizableProjectId()
     {
-        $credentialsPath = self::$fixturesDir.'/test_credentials.json';
-
-        if (!\file_exists($credentialsPath)) {
-            $this->markTestSkipped();
+        if (!self::$serviceAccount) {
+            $this->markTestSkipped('The integration tests require credentials');
         }
 
-        $credentials = JSON::decode((string) \file_get_contents($credentialsPath), true);
+        $credentials = self::$serviceAccount->asArray();
         $credentials['project_id'] = \str_replace('-&+§', ':', $credentials['project_id']);
 
-        $serviceAccount = ServiceAccount::fromArray($credentials);
+        $serviceAccount = ServiceAccount::fromValue($credentials);
         (new Factory())
             ->withServiceAccount($serviceAccount)
             ->createDatabase()
