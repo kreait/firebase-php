@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.42.0 - 2020-03-30
 
 * User records now include the password salt and tenant ID, if available
 * Reworked credentials auto-discovery to use the discovery already provided by
