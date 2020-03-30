@@ -9,15 +9,15 @@ phpstan: ## Performs static code analysis
 
 .PHONY: unit-tests
 unit-tests: ## Executes the unit test suite
-	@vendor/bin/phpunit --testsuite unit
+	@vendor/bin/phpunit -v --testsuite unit
 
 .PHONY: integration-tests
 integration-tests: ## Executes the integration test suite
-	@vendor/bin/phpunit --testsuite integration
+	@vendor/bin/phpunit -v --testsuite integration
 
 .PHONY: coverage
 coverage: ## Executes the test suite and generates code coverage reports
-	@vendor/bin/phpunit --coverage-html=build/coverage
+	@vendor/bin/phpunit -v --coverage-html=build/coverage
 
 .PHONY: view-coverage
 view-coverage: ## Shows the code coverage report

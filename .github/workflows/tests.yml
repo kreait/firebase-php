@@ -78,7 +78,7 @@ jobs:
         run: vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no
 
       - name: Run PHPUnit
-        run: vendor/bin/phpunit --testsuite=unit
+        run: vendor/bin/phpunit -v --testsuite=unit
 
   integration-tests:
     name: Integration Tests with Code Coverage
@@ -141,7 +141,7 @@ jobs:
         env:
           FIREBASE_CREDENTIALS: ${{secrets.FIREBASE_CREDENTIALS}}
           TEST_REGISTRATION_TOKENS: ${{secrets.TEST_REGISTRATION_TOKENS}}
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml --log-junit=test-report.xml
+        run: vendor/bin/phpunit -v --coverage-clover=coverage.xml --log-junit=test-report.xml
 
       # The current sonarcloud github action doesn't process the coverage report correctly
       # - name: Upload reports to sonarcloud
