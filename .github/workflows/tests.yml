@@ -139,7 +139,7 @@ jobs:
 
       - name: Run Integration Tests with Code Coverage
         env:
-          FIREBASE_CREDENTIALS: ${{secrets.FIREBASE_CREDENTIALS}}
+          TEST_FIREBASE_CREDENTIALS: ${{secrets.TEST_FIREBASE_CREDENTIALS}}
           TEST_REGISTRATION_TOKENS: ${{secrets.TEST_REGISTRATION_TOKENS}}
         run: vendor/bin/phpunit -v --coverage-clover=coverage.xml --log-junit=test-report.xml
 
