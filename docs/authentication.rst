@@ -246,6 +246,14 @@ Sign In with Email and Password
     $signInResult = $auth->signInWithEmailAndPassword($email, $clearTextPassword);
 
 
+Sign In with Email and Oob Code
+-------------------------------
+
+.. code-block:: php
+
+    $signInResult = $auth->signInWithEmailAndOobCode($email, $oobCode);
+
+
 Sign In with a Custom Token
 ---------------------------
 

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased
+
+### Added
+
+* `Kreait\Firebase\Auth::parseToken(string $tokenString): Lcobucci\JWT\Token`
+* `Kreait\Firebase\Auth::signInWithEmailAndOobCode($email, $oobCode): Kreait\Firebase\Auth\SignInResult` 
+
 ## 4.42.1 - 2020-03-31
 
 * Fixed the `FIREBASE_CREDENTIALS` environment variable not being picked up when determining the authentication credentials.

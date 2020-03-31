@@ -14,6 +14,7 @@ use Kreait\Firebase\Auth\SignIn;
 use Kreait\Firebase\Auth\SignInAnonymously;
 use Kreait\Firebase\Auth\SignInResult;
 use Kreait\Firebase\Auth\SignInWithCustomToken;
+use Kreait\Firebase\Auth\SignInWithEmailAndOobCode;
 use Kreait\Firebase\Auth\SignInWithEmailAndPassword;
 use Kreait\Firebase\Auth\SignInWithIdpCredentials;
 use Kreait\Firebase\Auth\SignInWithRefreshToken;
@@ -73,6 +74,8 @@ final class GuzzleHandler implements Handler
                 return $this->customToken($action);
             case $action instanceof SignInWithEmailAndPassword:
                 return $this->emailAndPassword($action);
+            case $action instanceof SignInWithEmailAndOobCode:
+                return $this->emailAndOobCode($action);
             case $action instanceof SignInWithIdpCredentials:
                 return $this->idpCredentials($action);
             case $action instanceof SignInWithRefreshToken:
@@ -112,6 +115,21 @@ final class GuzzleHandler implements Handler
         $body = stream_for(\json_encode(\array_merge(self::$defaultBody, [
             'email' => $action->email(),
             'password' => $action->clearTextPassword(),
+            'returnSecureToken' => true,
+        ])));
+
+        $headers = self::$defaultHeaders;
+
+        return new Request('POST', $uri, $headers, $body);
+    }
+
+    private function emailAndOobCode(SignInWithEmailAndOobCode $action): Request
+    {
+        $uri = uri_for('https://www.googleapis.com/identitytoolkit/v3/relyingparty/emailLinkSignin');
+
+        $body = stream_for(\json_encode(\array_merge(self::$defaultBody, [
+            'email' => $action->email(),
+            'oobCode' => $action->oobCode(),
             'returnSecureToken' => true,
         ])));
 

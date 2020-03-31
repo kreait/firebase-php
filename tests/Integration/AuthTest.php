@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use function GuzzleHttp\Psr7\parse_query;
 use function GuzzleHttp\Psr7\uri_for;
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
@@ -498,6 +499,26 @@ class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
+    public function testSignInWithEmailAndOobCode()
+    {
+        $email = \uniqid('', false).'@domain.tld';
+        $password = 'my-perfect-password';
+
+        $user = $this->createUserWithEmailAndPassword($email, $password);
+
+        $signInLink = $this->auth->getSignInWithEmailLink($email);
+        $query = (string) \parse_url($signInLink, \PHP_URL_QUERY);
+        $oobCode = parse_query($query)['oobCode'] ?? '';
+
+        $result = $this->auth->signInWithEmailAndOobCode($email, $oobCode);
+
+        $this->assertIsString($result->idToken());
+        $this->assertNull($result->accessToken());
+        $this->assertIsString($result->refreshToken());
+
+        $this->auth->deleteUser($user->uid);
+    }
+
     public function testSignInAnonymously()
     {
         $result = $this->auth->signInAnonymously();
@@ -508,7 +529,7 @@ class AuthTest extends IntegrationTestCase
         $this->assertNull($result->accessToken());
         $this->assertIsString($result->refreshToken());
 
-        $token = $this->auth->verifyIdToken($idToken);
+        $token = $this->auth->parseToken($idToken);
         $this->assertIsString($uid = $token->getClaim('sub', false));
         $user = $this->auth->getUser($uid);
         $this->addToAssertionCount(1);

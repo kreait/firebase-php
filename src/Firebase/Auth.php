@@ -27,6 +27,7 @@ use Kreait\Firebase\Auth\SignIn\Handler as SignInHandler;
 use Kreait\Firebase\Auth\SignInAnonymously;
 use Kreait\Firebase\Auth\SignInResult;
 use Kreait\Firebase\Auth\SignInWithCustomToken;
+use Kreait\Firebase\Auth\SignInWithEmailAndOobCode;
 use Kreait\Firebase\Auth\SignInWithEmailAndPassword;
 use Kreait\Firebase\Auth\SignInWithIdpCredentials;
 use Kreait\Firebase\Auth\SignInWithRefreshToken;
@@ -39,6 +40,7 @@ use Kreait\Firebase\Exception\Auth\OperationNotAllowed;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
+use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\ClearTextPassword;
@@ -46,6 +48,7 @@ use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\PhoneNumber;
 use Kreait\Firebase\Value\Provider;
 use Kreait\Firebase\Value\Uid;
+use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
@@ -537,8 +540,13 @@ class Auth
         return $this->tokenGenerator->createCustomToken($uid, $claims);
     }
 
-    public function parseJWT(string $token)
+    public function parseToken(string $tokenString): Token
     {
+        try {
+            return (new Parser())->parse($tokenString);
+        } catch (Throwable $e) {
+            throw new InvalidArgumentException('The given token could not be parsed: '.$e->getMessage());
+        }
     }
 
     /**
@@ -827,6 +835,21 @@ class Auth
 
         return $this->signInHandler->handle(
             SignInWithEmailAndPassword::fromValues($email, $clearTextPassword)
+        );
+    }
+
+    /**
+     * @param string|Email $email
+     * @param string $oobCode
+     *
+     * @throws FailedToSignIn
+     */
+    public function signInWithEmailAndOobCode($email, $oobCode): SignInResult
+    {
+        $email = $email instanceof Email ? (string) $email : $email;
+
+        return $this->signInHandler->handle(
+            SignInWithEmailAndOobCode::fromValues($email, $oobCode)
         );
     }
 
