@@ -95,7 +95,8 @@ class FactoryTest extends UnitTestCase
     {
         \putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->validServiceAccountFile);
 
-        (new Factory())->createStorage();
+        // Only with a valid service account is the default bucket available
+        (new Factory())->createStorage()->getBucket();
         $this->addToAssertionCount(1);
 
         \putenv('GOOGLE_APPLICATION_CREDENTIALS');
@@ -105,7 +106,8 @@ class FactoryTest extends UnitTestCase
     {
         \putenv('FIREBASE_CREDENTIALS='.$this->validServiceAccountFile);
 
-        (new Factory())->createStorage();
+        // Only with a valid service account is the default bucket available
+        (new Factory())->createStorage()->getBucket();
         $this->addToAssertionCount(1);
 
         \putenv('FIREBASE_CREDENTIALS');

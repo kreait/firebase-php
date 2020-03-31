@@ -301,7 +301,7 @@ class Factory
             return $this->serviceAccount;
         }
 
-        if ($credentials = getenv('FIREBASE_CREDENTIALS')) {
+        if ($credentials = \getenv('FIREBASE_CREDENTIALS')) {
             return $this->serviceAccount = ServiceAccount::fromValue($credentials);
         }
 
