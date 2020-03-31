@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Fixed the `FIREBASE_CREDENTIALS` environment variable not being picked up when determining the authentication credentials.
+
 ## 4.42.0 - 2020-03-30
 
 * User records now include the password salt and tenant ID, if available
