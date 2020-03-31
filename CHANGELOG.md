@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 4.42.1 - 2020-03-31
 
 * Fixed the `FIREBASE_CREDENTIALS` environment variable not being picked up when determining the authentication credentials.
 
