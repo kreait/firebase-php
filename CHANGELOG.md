@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* Dropped support for unsupported PHP versions. Supported PHP versions are `7.2`, `7.3` and `7.4`.
+
 ## 4.43.0 - 2020-03-31
 
 ### Added

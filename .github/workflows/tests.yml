@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        php: ["7.0", "7.1", "7.2", "7.3", "7.4"]
+        php: ["7.2", "7.3", "7.4"]
 
     env:
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
@@ -59,22 +59,15 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies (stable)
-        if: "matrix.php != '7.0'"
         run: composer update --prefer-stable --prefer-dist --no-interaction --no-suggest --no-progress
-
-      - name: Install dependencies (lowest)
-        if: "matrix.php == '7.0'"
-        run: composer update --prefer-lowest --prefer-dist --no-interaction --no-suggest --no-progress
 
       - name: Setup Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Run PHPStan
-        if: "matrix.php == '7.4'"
         run: vendor/bin/phpstan analyse src tests -c phpstan.neon --level=max --no-progress
 
       - name: Run PHP CS Fixer
-        if: "matrix.php == '7.4'"
         run: vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no
 
       - name: Run PHPUnit
@@ -94,8 +87,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0 # A truncated git history might mess with sonarcloud's blame data
 
       - name: Setup cache environment
         id: cache-env
@@ -142,13 +133,6 @@ jobs:
           TEST_FIREBASE_CREDENTIALS: ${{secrets.TEST_FIREBASE_CREDENTIALS}}
           TEST_REGISTRATION_TOKENS: ${{secrets.TEST_REGISTRATION_TOKENS}}
         run: vendor/bin/phpunit -v --coverage-clover=coverage.xml --log-junit=test-report.xml
-
-      # The current sonarcloud github action doesn't process the coverage report correctly
-      # - name: Upload reports to sonarcloud
-      #   uses: sonarsource/sonarcloud-github-action@master
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Upload coverage to CodeCov
         uses: codecov/codecov-action@v1
