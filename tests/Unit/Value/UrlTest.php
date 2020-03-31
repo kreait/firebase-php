@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Value;
 
+use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\Url;
 use PHPUnit\Framework\TestCase;
@@ -41,12 +42,8 @@ class UrlTest extends TestCase
     {
         return [
             ['http://domain.tld'],
-            [new class() {
-                public function __toString()
-                {
-                    return 'https://domain.tld';
-                }
-            }],
+            [new Uri('http://domain.tld')],
+            [new Url(new Uri('http://domain.tld'))],
         ];
     }
 

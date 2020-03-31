@@ -14,8 +14,12 @@ final class EndAt implements Filter
 {
     use ModifierTrait;
 
+    /** @var bool|float|int|string */
     private $value;
 
+    /**
+     * @param int|float|string|bool $value
+     */
     public function __construct($value)
     {
         if (!\is_scalar($value)) {

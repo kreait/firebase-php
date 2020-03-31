@@ -11,18 +11,18 @@ use Kreait\Firebase\Value\Provider;
 
 final class UpdateUser implements Request
 {
-    const DISPLAY_NAME = 'DISPLAY_NAME';
-    const PHOTO_URL = 'PHOTO_URL';
+    public const DISPLAY_NAME = 'DISPLAY_NAME';
+    public const PHOTO_URL = 'PHOTO_URL';
 
     use EditUserTrait;
 
-    /** @var array */
+    /** @var array<string> */
     private $attributesToDelete = [];
 
     /** @var Provider[] */
     private $providersToDelete = [];
 
-    /** @var array|null */
+    /** @var array<string, mixed>|null */
     private $customAttributes;
 
     private function __construct()
@@ -35,6 +35,8 @@ final class UpdateUser implements Request
     }
 
     /**
+     * @param array<string, mixed> $properties
+     *
      * @throws InvalidArgumentException when invalid properties have been provided
      */
     public static function withProperties(array $properties): self
@@ -106,6 +108,9 @@ final class UpdateUser implements Request
         return $request->withRemovedProvider('phone');
     }
 
+    /**
+     * @param Provider|string $provider
+     */
     public function withRemovedProvider($provider): self
     {
         $provider = $provider instanceof Provider ? $provider : new Provider($provider);
@@ -134,6 +139,9 @@ final class UpdateUser implements Request
         return $request;
     }
 
+    /**
+     * @param array<string, mixed> $customAttributes
+     */
     public function withCustomAttributes(array $customAttributes): self
     {
         $request = clone $this;
@@ -142,7 +150,10 @@ final class UpdateUser implements Request
         return $request;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
         if (!$this->hasUid()) {
             throw new InvalidArgumentException('A uid is required to update an existing user.');

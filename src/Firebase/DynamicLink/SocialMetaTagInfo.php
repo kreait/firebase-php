@@ -8,13 +8,16 @@ use JsonSerializable;
 
 final class SocialMetaTagInfo implements JsonSerializable
 {
-    /** @var array */
+    /** @var array<string, mixed> */
     private $data = [];
 
     private function __construct()
     {
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function fromArray(array $data): self
     {
         $info = new self();
@@ -61,7 +64,10 @@ final class SocialMetaTagInfo implements JsonSerializable
         return $info;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
         return $this->data;
     }

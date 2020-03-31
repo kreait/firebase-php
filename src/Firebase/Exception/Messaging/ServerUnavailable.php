@@ -16,10 +16,8 @@ final class ServerUnavailable extends RuntimeException implements MessagingExcep
      * @internal
      *
      * @param string[] $errors
-     *
-     * @return static
      */
-    public function withErrors(array $errors)
+    public function withErrors(array $errors): self
     {
         $new = new self($this->getMessage(), $this->getCode(), $this->getPrevious());
         $new->errors = $errors;

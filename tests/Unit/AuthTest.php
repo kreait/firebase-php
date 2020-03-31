@@ -23,6 +23,7 @@ use Kreait\Firebase\Tests\Unit\Util\AuthError;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Kreait\Firebase\Util\JSON;
 use Lcobucci\JWT\Token;
+use PHPUnit\Framework\MockObject\MockObject;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use RuntimeException;
@@ -41,7 +42,10 @@ final class AuthTest extends UnitTestCase
     /** @var ApiClient */
     private $apiClient;
 
+    /** @var Generator&MockObject */
     private $tokenGenerator;
+
+    /** @var Verifier&MockObject */
     private $idTokenVerifier;
 
     /** @var Auth */
@@ -232,7 +236,7 @@ final class AuthTest extends UnitTestCase
         return new ClientException('Client Exception', $this->createMock(RequestInterface::class), $response);
     }
 
-    private function passwordResetSuccess(string $email = null)
+    private function passwordResetSuccess(?string $email = null)
     {
         return new Response(200, [], JSON::encode(\array_filter([
             'email' => $email,

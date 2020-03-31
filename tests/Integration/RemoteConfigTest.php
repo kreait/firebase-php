@@ -22,6 +22,7 @@ use Throwable;
  */
 class RemoteConfigTest extends IntegrationTestCase
 {
+    /** @var string */
     private $template = <<<CONFIG
 {
     "conditions": [
@@ -216,10 +217,15 @@ CONFIG;
 
     public function testListVersionsWithoutFilters(): void
     {
-        if ($this->remoteConfig->listVersions()->valid()) {
-            // We don't need to do something with it, just check that it returns results
-            $this->addToAssertionCount(1);
+        // We only need to know that the first returned value is a version,
+        // no need to iterate through all of them
+        foreach ($this->remoteConfig->listVersions() as $version) {
+            $this->assertInstanceOf(RemoteConfig\Version::class, $version);
+
+            return;
         }
+
+        $this->fail('Expected a version to be returned, but got none');
     }
 
     public function testFindVersionsWithFilters(): void
@@ -243,15 +249,13 @@ CONFIG;
         $counter = 0;
 
         $versions = $this->remoteConfig->listVersions($query);
-        while ($versions->valid()) {
+        foreach ($versions as $version) {
             ++$counter;
 
             // Protect us from an infinite loop
             if ($counter > $limit) {
                 $this->fail('The query returned more values than expected');
             }
-
-            $versions->next();
         }
 
         $this->assertLessThanOrEqual($limit, $counter);

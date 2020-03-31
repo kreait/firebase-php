@@ -35,6 +35,6 @@ class TemplateTest extends UnitTestCase
         $parameter = Parameter::named('param')->withConditionalValue(ConditionalValue::basedOn('foo'));
 
         $template->withParameter($parameter);
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->addToAssertionCount(1);
     }
 }

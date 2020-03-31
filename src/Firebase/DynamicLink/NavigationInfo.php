@@ -8,13 +8,16 @@ use JsonSerializable;
 
 final class NavigationInfo implements JsonSerializable
 {
-    /** @var array */
+    /** @var array<string, mixed> */
     private $data = [];
 
     private function __construct()
     {
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function fromArray(array $data): self
     {
         $info = new self();
@@ -40,7 +43,7 @@ final class NavigationInfo implements JsonSerializable
     public function withForcedRedirect(): self
     {
         $info = clone $this;
-        $info->data['enableForcedRedirect'] = '1';
+        $info->data['enableForcedRedirect'] = true;
 
         return $info;
     }
@@ -56,7 +59,10 @@ final class NavigationInfo implements JsonSerializable
         return $info;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
         return $this->data;
     }

@@ -41,6 +41,9 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
         return new self();
     }
 
+    /**
+     * @param array<string, mixed> $settings
+     */
     public static function fromArray(array $settings): self
     {
         $instance = new self();
@@ -81,6 +84,9 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
         return $instance;
     }
 
+    /**
+     * @return array<string, string|bool>
+     */
     public function toArray(): array
     {
         return \array_filter([

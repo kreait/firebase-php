@@ -135,6 +135,9 @@ final class MulticastSendReport implements Countable
         return self::withItems(\array_filter($this->items, $callback));
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function map(callable $callback): array
     {
         return \array_map($callback, $this->items);

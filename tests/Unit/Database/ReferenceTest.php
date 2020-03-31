@@ -83,7 +83,6 @@ class ReferenceTest extends UnitTestCase
     public function testGetChildKeys(): void
     {
         $this->apiClient
-            ->expects($this->any())
             ->method('get')
             ->with($this->anything())
             ->willReturn(['a' => true, 'b' => true, 'c' => true]);
@@ -94,7 +93,6 @@ class ReferenceTest extends UnitTestCase
     public function testGetChildKeysWhenNoChildrenAreSet(): void
     {
         $this->apiClient
-            ->expects($this->any())
             ->method('get')
             ->with($this->anything())
             ->willReturn('scalar value');
@@ -119,14 +117,14 @@ class ReferenceTest extends UnitTestCase
 
     public function testGetSnapshot(): void
     {
-        $this->apiClient->expects($this->any())->method('get')->with($this->anything())->willReturn('value');
+        $this->apiClient->method('get')->with($this->anything())->willReturn('value');
 
         $this->assertInstanceOf(Snapshot::class, $this->reference->getSnapshot());
     }
 
     public function testGetValue(): void
     {
-        $this->apiClient->expects($this->any())->method('get')->with($this->anything())->willReturn('value');
+        $this->apiClient->method('get')->with($this->anything())->willReturn('value');
 
         $this->assertSame('value', $this->reference->getValue());
     }

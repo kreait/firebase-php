@@ -49,10 +49,8 @@ class Snapshot
      * will return null.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#key
-     *
-     * @return string|null
      */
-    public function getKey()
+    public function getKey(): ?string
     {
         return $this->reference->getKey();
     }

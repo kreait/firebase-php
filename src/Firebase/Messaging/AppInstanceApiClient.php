@@ -75,10 +75,12 @@ class AppInstanceApiClient
     }
 
     /**
+     * @param array<string, mixed> $options
+     *
      * @throws FirebaseException
      * @throws MessagingException
      */
-    private function requestApi(string $method, string $endpoint, array $options = null): ResponseInterface
+    private function requestApi(string $method, string $endpoint, ?array $options = null): ResponseInterface
     {
         try {
             return $this->client->request($method, $endpoint, $options ?? []);

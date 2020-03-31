@@ -13,6 +13,9 @@ use Psr\Http\Message\UriInterface;
  */
 trait ModifierTrait
 {
+    /**
+     * @param mixed $value
+     */
     protected function appendQueryParam(UriInterface $uri, string $key, $value): UriInterface
     {
         $queryParams = \array_merge(parse_query($uri->getQuery()), [$key => $value]);

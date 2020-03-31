@@ -98,7 +98,7 @@ class TransactionTest extends DatabaseTestCase
             $transaction->remove($ref);
         });
 
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->addToAssertionCount(1);
     }
 
     public function testATransactionPreventsADeletionWhenTheRemoteHasChanged(): void

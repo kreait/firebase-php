@@ -15,6 +15,7 @@ use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Http\WrappedGuzzleClient;
 use Kreait\Firebase\Request;
+use Kreait\Firebase\Value\Provider;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -84,7 +85,7 @@ class ApiClient implements ClientInterface
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function downloadAccount(int $batchSize = null, string $nextPageToken = null): ResponseInterface
+    public function downloadAccount(?int $batchSize = null, ?string $nextPageToken = null): ResponseInterface
     {
         $batchSize = $batchSize ?? 1000;
 
@@ -155,6 +156,8 @@ class ApiClient implements ClientInterface
     }
 
     /**
+     * @param array<int, string|Provider> $providers
+     *
      * @throws AuthException
      * @throws FirebaseException
      */
@@ -168,12 +171,12 @@ class ApiClient implements ClientInterface
 
     /**
      * @param mixed $data
-     * @param array $headers
+     * @param array<string, mixed> $headers
      *
      * @throws AuthException
      * @throws FirebaseException
      */
-    private function requestApi(string $uri, $data, array $headers = null): ResponseInterface
+    private function requestApi(string $uri, $data, ?array $headers = null): ResponseInterface
     {
         if ($data instanceof \JsonSerializable && empty($data->jsonSerialize())) {
             $data = (object) []; // Will be '{}' instead of '[]' when JSON encoded

@@ -24,7 +24,7 @@ class JSON
      *
      * @throws InvalidArgumentException if the JSON cannot be encoded
      */
-    public static function encode($value, int $options = null, int $depth = null): string
+    public static function encode($value, ?int $options = null, ?int $depth = null): string
     {
         $options = $options ?? 0;
         $depth = $depth ?? 512;

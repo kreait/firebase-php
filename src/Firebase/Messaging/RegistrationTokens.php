@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Messaging;
 
 use Countable;
-use Generator;
 use IteratorAggregate;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Traversable;
 
+/**
+ * @implements IteratorAggregate<RegistrationToken>
+ */
 final class RegistrationTokens implements Countable, IteratorAggregate
 {
     /** @var RegistrationToken[] */
@@ -52,7 +55,7 @@ final class RegistrationTokens implements Countable, IteratorAggregate
     /**
      * @codeCoverageIgnore
      *
-     * @return Generator|RegistrationToken[]
+     * @return Traversable<RegistrationToken>|RegistrationToken[]
      */
     public function getIterator()
     {
@@ -80,7 +83,7 @@ final class RegistrationTokens implements Countable, IteratorAggregate
         return \array_map('strval', $this->tokens);
     }
 
-    public function count()
+    public function count(): int
     {
         return \count($this->tokens);
     }

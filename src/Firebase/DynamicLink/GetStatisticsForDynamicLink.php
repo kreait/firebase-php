@@ -10,7 +10,7 @@ use Psr\Http\Message\UriInterface;
 
 final class GetStatisticsForDynamicLink
 {
-    const DEFAULT_DURATION_IN_DAYS = 7;
+    public const DEFAULT_DURATION_IN_DAYS = 7;
 
     /** @var string */
     private $dynamicLink;

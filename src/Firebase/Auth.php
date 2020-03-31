@@ -11,7 +11,6 @@ use Firebase\Auth\Token\Exception\InvalidSignature;
 use Firebase\Auth\Token\Exception\InvalidToken;
 use Firebase\Auth\Token\Exception\IssuedInTheFuture;
 use Firebase\Auth\Token\Exception\UnknownKey;
-use Generator;
 use Kreait\Clock;
 use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
@@ -50,6 +49,7 @@ use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Throwable;
+use Traversable;
 
 class Auth
 {
@@ -111,9 +111,9 @@ class Auth
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      *
-     * @return Generator|UserRecord[]
+     * @return Traversable<UserRecord>|UserRecord[]
      */
-    public function listUsers(int $maxResults = 1000, int $batchSize = 1000): Generator
+    public function listUsers(int $maxResults = 1000, int $batchSize = 1000): Traversable
     {
         $pageToken = null;
         $count = 0;
@@ -137,7 +137,7 @@ class Auth
     /**
      * Creates a new user with the provided properties.
      *
-     * @param array|Request\CreateUser $properties
+     * @param array<string, mixed>|Request\CreateUser $properties
      *
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
@@ -157,7 +157,7 @@ class Auth
      * Updates the given user with the given properties.
      *
      * @param Uid|string $uid
-     * @param array|Request\UpdateUser $properties
+     * @param array<string, mixed>|Request\UpdateUser $properties
      *
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
@@ -308,7 +308,7 @@ class Auth
 
     /**
      * @param Email|string $email
-     * @param ActionCodeSettings|array|null $actionCodeSettings
+     * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws FailedToCreateActionLink
      */
@@ -330,12 +330,12 @@ class Auth
 
     /**
      * @param Email|string $email
-     * @param ActionCodeSettings|array|null $actionCodeSettings
+     * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws UserNotFound
      * @throws FailedToSendActionLink
      */
-    public function sendEmailActionLink(string $type, $email, $actionCodeSettings = null, string $locale = null): void
+    public function sendEmailActionLink(string $type, $email, $actionCodeSettings = null, ?string $locale = null): void
     {
         $email = $email instanceof Email ? $email : new Email((string) $email);
 
@@ -381,7 +381,7 @@ class Auth
 
     /**
      * @param Email|string $email
-     * @param ActionCodeSettings|array|null $actionCodeSettings
+     * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws FailedToCreateActionLink
      */
@@ -392,18 +392,18 @@ class Auth
 
     /**
      * @param Email|string $email
-     * @param ActionCodeSettings|array|null $actionCodeSettings
+     * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws FailedToSendActionLink
      */
-    public function sendEmailVerificationLink($email, $actionCodeSettings = null, string $locale = null): void
+    public function sendEmailVerificationLink($email, $actionCodeSettings = null, ?string $locale = null): void
     {
         $this->sendEmailActionLink('VERIFY_EMAIL', $email, $actionCodeSettings, $locale);
     }
 
     /**
      * @param Email|string $email
-     * @param ActionCodeSettings|array|null $actionCodeSettings
+     * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws FailedToCreateActionLink
      */
@@ -414,18 +414,18 @@ class Auth
 
     /**
      * @param Email|string $email
-     * @param ActionCodeSettings|array|null $actionCodeSettings
+     * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws FailedToSendActionLink
      */
-    public function sendPasswordResetLink($email, $actionCodeSettings = null, string $locale = null): void
+    public function sendPasswordResetLink($email, $actionCodeSettings = null, ?string $locale = null): void
     {
         $this->sendEmailActionLink('PASSWORD_RESET', $email, $actionCodeSettings, $locale);
     }
 
     /**
      * @param Email|string $email
-     * @param ActionCodeSettings|array|null $actionCodeSettings
+     * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws FailedToCreateActionLink
      */
@@ -436,11 +436,11 @@ class Auth
 
     /**
      * @param Email|string $email
-     * @param ActionCodeSettings|array|null $actionCodeSettings
+     * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws FailedToSendActionLink
      */
-    public function sendSignInWithEmailLink($email, $actionCodeSettings = null, string $locale = null): void
+    public function sendSignInWithEmailLink($email, $actionCodeSettings = null, ?string $locale = null): void
     {
         $this->sendEmailActionLink('EMAIL_SIGNIN', $email, $actionCodeSettings, $locale);
     }
@@ -470,6 +470,7 @@ class Auth
 
     /**
      * @param Uid|string $uid
+     * @param array<string, mixed> $claims
      */
     public function createCustomToken($uid, array $claims = []): Token
     {
@@ -628,10 +629,11 @@ class Auth
 
     /**
      * @param UserRecord|Uid|string $user
+     * @param array<string, mixed> $claims
      *
      * @throws FailedToSignIn
      */
-    public function signInAsUser($user, array $claims = null): SignInResult
+    public function signInAsUser($user, ?array $claims = null): SignInResult
     {
         $claims = $claims ?? [];
         $uid = $user instanceof UserRecord ? $user->uid : (string) $user;

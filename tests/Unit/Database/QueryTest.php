@@ -37,7 +37,7 @@ class QueryTest extends UnitTestCase
         $this->uri = new Uri('http://domain.tld/some/path');
 
         $reference = $this->createMock(Reference::class);
-        $reference->expects($this->any())->method('getURI')->willReturn($this->uri);
+        $reference->method('getURI')->willReturn($this->uri);
 
         $this->reference = $reference;
 
@@ -54,7 +54,7 @@ class QueryTest extends UnitTestCase
 
     public function testGetSnapshot(): void
     {
-        $this->apiClient->expects($this->any())->method('get')->with($this->anything())->willReturn('value');
+        $this->apiClient->method('get')->with($this->anything())->willReturn('value');
 
         $snapshot = $this->query->orderByKey()->equalTo(2)->getSnapshot();
 
@@ -63,7 +63,7 @@ class QueryTest extends UnitTestCase
 
     public function testGetValue(): void
     {
-        $this->apiClient->expects($this->any())->method('get')->with($this->anything())->willReturn('value');
+        $this->apiClient->method('get')->with($this->anything())->willReturn('value');
 
         $this->assertSame('value', $this->query->getValue());
     }

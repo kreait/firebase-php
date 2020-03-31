@@ -462,7 +462,7 @@ class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testSignInWithEmailAndOobCode()
+    public function testSignInWithEmailAndOobCode(): void
     {
         $email = \uniqid('', false).'@domain.tld';
         $password = 'my-perfect-password';

@@ -7,7 +7,7 @@ namespace Kreait\Firebase\Http;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class Middleware
+final class Middleware
 {
     /**
      * Ensures that the ".json" suffix is added to URIs and that the content type is set correctly.
@@ -15,7 +15,7 @@ class Middleware
     public static function ensureJsonSuffix(): callable
     {
         return static function (callable $handler) {
-            return static function (RequestInterface $request, array $options = null) use ($handler) {
+            return static function (RequestInterface $request, ?array $options = null) use ($handler) {
                 $uri = $request->getUri();
                 $path = $uri->getPath();
 
@@ -30,24 +30,12 @@ class Middleware
     }
 
     /**
-     * Adds custom authentication to a request.
-     */
-    public static function overrideAuth(Auth $override): callable
-    {
-        return static function (callable $handler) use ($override) {
-            return static function (RequestInterface $request, array $options = null) use ($handler, $override) {
-                return $handler($override->authenticateRequest($request), $options ?: []);
-            };
-        };
-    }
-
-    /**
      * Parses multi-requests and multi-responses.
      */
     public static function responseWithSubResponses(): callable
     {
         return static function (callable $handler) {
-            return static function (RequestInterface $request, array $options = null) use ($handler) {
+            return static function (RequestInterface $request, ?array $options = null) use ($handler) {
                 return $handler($request, $options ?: [])
                     ->then(static function (ResponseInterface $response) {
                         $isMultiPart = \mb_stristr($response->getHeaderLine('Content-Type'), 'multipart') !== false;

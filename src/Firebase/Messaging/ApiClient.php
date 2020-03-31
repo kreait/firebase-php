@@ -34,6 +34,8 @@ class ApiClient implements ClientInterface
     }
 
     /**
+     * @param array<string, mixed> $options
+     *
      * @throws MessagingException
      * @throws FirebaseException
      */
@@ -46,6 +48,9 @@ class ApiClient implements ClientInterface
         }
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function sendAsync(RequestInterface $request, array $options = []): PromiseInterface
     {
         return $this->client->sendAsync($request, $options)

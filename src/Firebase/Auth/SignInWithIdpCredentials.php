@@ -53,18 +53,12 @@ final class SignInWithIdpCredentials implements SignIn
         return $this->provider;
     }
 
-    /**
-     * @return string|null
-     */
-    public function accessToken()
+    public function accessToken(): ?string
     {
         return $this->accessToken;
     }
 
-    /**
-     * @return string|null
-     */
-    public function idToken()
+    public function idToken(): ?string
     {
         return $this->idToken;
     }

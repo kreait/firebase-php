@@ -15,12 +15,12 @@ trait WrappedPsr7Response
     /** @var ResponseInterface */
     protected $wrappedResponse;
 
-    public function getProtocolVersion()
+    public function getProtocolVersion(): string
     {
         return $this->wrappedResponse->getProtocolVersion();
     }
 
-    public function withProtocolVersion($version)
+    public function withProtocolVersion($version): self
     {
         $response = clone $this;
         $response->wrappedResponse = $this->wrappedResponse->withProtocolVersion($version);
@@ -28,27 +28,27 @@ trait WrappedPsr7Response
         return $response;
     }
 
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->wrappedResponse->getHeaders();
     }
 
-    public function hasHeader($name)
+    public function hasHeader($name): bool
     {
         return $this->wrappedResponse->hasHeader($name);
     }
 
-    public function getHeader($name)
+    public function getHeader($name): array
     {
         return $this->wrappedResponse->getHeader($name);
     }
 
-    public function getHeaderLine($name)
+    public function getHeaderLine($name): string
     {
         return $this->wrappedResponse->getHeaderLine($name);
     }
 
-    public function withHeader($name, $value): void
+    public function withHeader($name, $value): self
     {
         $response = clone $this;
         $response->wrappedResponse = $this->wrappedResponse->withHeader($name, $value);
@@ -56,7 +56,7 @@ trait WrappedPsr7Response
         return $response;
     }
 
-    public function withAddedHeader($name, $value)
+    public function withAddedHeader($name, $value): self
     {
         $response = clone $this;
         $response->wrappedResponse = $this->wrappedResponse->withAddedHeader($name, $value);
@@ -64,7 +64,7 @@ trait WrappedPsr7Response
         return $response;
     }
 
-    public function withoutHeader($name)
+    public function withoutHeader($name): self
     {
         $response = clone $this;
         $response->wrappedResponse = $this->wrappedResponse->withoutHeader($name);
@@ -72,12 +72,12 @@ trait WrappedPsr7Response
         return $response;
     }
 
-    public function getBody()
+    public function getBody(): StreamInterface
     {
         return $this->wrappedResponse->getBody();
     }
 
-    public function withBody(StreamInterface $body)
+    public function withBody(StreamInterface $body): self
     {
         $response = clone $this;
         $response->wrappedResponse = $this->wrappedResponse->withBody($body);
@@ -85,12 +85,12 @@ trait WrappedPsr7Response
         return $response;
     }
 
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->wrappedResponse->getStatusCode();
     }
 
-    public function withStatus($code, $reasonPhrase = '')
+    public function withStatus($code, $reasonPhrase = ''): self
     {
         $response = clone $this;
         $response->wrappedResponse = $this->wrappedResponse->withStatus($code, $reasonPhrase);
@@ -98,7 +98,7 @@ trait WrappedPsr7Response
         return $response;
     }
 
-    public function getReasonPhrase()
+    public function getReasonPhrase(): string
     {
         return $this->wrappedResponse->getReasonPhrase();
     }

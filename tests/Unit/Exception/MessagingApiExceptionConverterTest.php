@@ -51,6 +51,8 @@ class MessagingApiExceptionConverterTest extends TestCase
     /**
      * @test
      * @dataProvider exceptions
+     *
+     * @param class-string<object> $expectedClass
      */
     public function it_converts_exceptions(Throwable $e, string $expectedClass): void
     {

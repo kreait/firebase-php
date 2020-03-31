@@ -32,7 +32,7 @@ class Reference
      *
      * @throws InvalidArgumentException if the reference URI is invalid
      */
-    public function __construct(UriInterface $uri, ApiClient $apiClient, Validator $validator = null)
+    public function __construct(UriInterface $uri, ApiClient $apiClient, ?Validator $validator = null)
     {
         $this->validator = $validator ?? new Validator();
         $this->validator->validateUri($uri);
@@ -49,10 +49,8 @@ class Reference
      * The key of the root Reference is null.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Reference#key
-     *
-     * @return string|null
      */
-    public function getKey()
+    public function getKey(): ?string
     {
         $key = \basename($this->getPath());
 
@@ -223,13 +221,15 @@ class Reference
      *
      * @throws OutOfRangeException if the reference has no children with keys
      * @throws DatabaseException if the API reported an error
+     *
+     * @return string[]
      */
     public function getChildKeys(): array
     {
         $snapshot = $this->shallow()->getSnapshot();
 
         if (\is_array($value = $snapshot->getValue())) {
-            return \array_keys($value);
+            return \array_map('strval', \array_keys($value));
         }
 
         throw new OutOfRangeException(\sprintf('%s has no children with keys', $this));
@@ -346,6 +346,8 @@ class Reference
      * Passing null to {see update()} will remove the data at this location.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Reference#update
+     *
+     * @param array<mixed> $values
      *
      * @throws DatabaseException if the API reported an error
      *

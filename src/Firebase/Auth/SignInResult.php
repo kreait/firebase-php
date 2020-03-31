@@ -18,13 +18,16 @@ final class SignInResult
     /** @var int|null */
     private $ttl;
 
-    /** @var array */
+    /** @var array<string, mixed> */
     private $data = [];
 
     private function __construct()
     {
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function fromData(array $data): self
     {
         $instance = new self();
@@ -41,43 +44,37 @@ final class SignInResult
         return $instance;
     }
 
-    /**
-     * @return string|null
-     */
-    public function idToken()
+    public function idToken(): ?string
     {
         return $this->idToken;
     }
 
-    /**
-     * @return string|null
-     */
-    public function accessToken()
+    public function accessToken(): ?string
     {
         return $this->accessToken;
     }
 
-    /**
-     * @return string|null
-     */
-    public function refreshToken()
+    public function refreshToken(): ?string
     {
         return $this->refreshToken;
     }
 
-    /**
-     * @return int|null
-     */
-    public function ttl()
+    public function ttl(): ?int
     {
         return $this->ttl;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function data(): array
     {
         return $this->data;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function asTokenResponse(): array
     {
         return [

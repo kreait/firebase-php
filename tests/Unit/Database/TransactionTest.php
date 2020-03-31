@@ -11,6 +11,7 @@ use Kreait\Firebase\Database\Transaction;
 use Kreait\Firebase\Exception\Database\DatabaseError;
 use Kreait\Firebase\Exception\Database\ReferenceHasNotBeenSnapshotted;
 use Kreait\Firebase\Exception\Database\TransactionFailed;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 
@@ -19,6 +20,7 @@ use Throwable;
  */
 class TransactionTest extends TestCase
 {
+    /** @var ApiClient&MockObject */
     private $apiClient;
 
     /** @var Transaction */

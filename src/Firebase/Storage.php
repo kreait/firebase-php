@@ -22,7 +22,7 @@ class Storage
     /**
      * @internal
      */
-    public function __construct(StorageClient $storageClient, string $defaultBucket = null)
+    public function __construct(StorageClient $storageClient, ?string $defaultBucket = null)
     {
         $this->storageClient = $storageClient;
         $this->defaultBucket = $defaultBucket;
@@ -33,7 +33,7 @@ class Storage
         return $this->storageClient;
     }
 
-    public function getBucket(string $name = null): Bucket
+    public function getBucket(?string $name = null): Bucket
     {
         $name = $name ?: $this->defaultBucket;
 

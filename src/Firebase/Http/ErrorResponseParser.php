@@ -31,11 +31,14 @@ final class ErrorResponseParser
         return $responseBody;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getErrorsFromResponse(ResponseInterface $response): array
     {
         try {
             return JSON::decode((string) $response->getBody(), true);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             return [];
         }
     }

@@ -23,7 +23,7 @@ class ServiceAccountTest extends UnitTestCase
     /** @var string */
     private $validJson;
 
-    /** @var array */
+    /** @var array<string, string> */
     private $validData;
 
     protected function setUp(): void

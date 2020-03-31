@@ -48,17 +48,20 @@ class Template implements \JsonSerializable
         return self::fromArray($data, $etag);
     }
 
-    public static function fromArray(array $data, string $etag = null): self
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data, ?string $etag = null): self
     {
         $template = new self();
         $template->etag = $etag ?? '*';
 
         foreach ((array) ($data['conditions'] ?? []) as $conditionData) {
-            $template->conditions[$conditionData['name']] = Condition::fromArray($conditionData);
+            $template->conditions[(string) $conditionData['name']] = Condition::fromArray($conditionData);
         }
 
         foreach ((array) ($data['parameters'] ?? []) as $name => $parameterData) {
-            $template->parameters[$name] = Parameter::fromArray([$name => $parameterData]);
+            $template->parameters[(string) $name] = Parameter::fromArray([(string) $name => $parameterData]);
         }
 
         if (\is_array($data['version'] ?? null)) {
@@ -88,10 +91,7 @@ class Template implements \JsonSerializable
         return $this->parameters;
     }
 
-    /**
-     * @return Version|null
-     */
-    public function version()
+    public function version(): ?Version
     {
         return $this->version;
     }
@@ -125,7 +125,10 @@ class Template implements \JsonSerializable
         }
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
         $result = [
             'conditions' => \array_values($this->conditions),

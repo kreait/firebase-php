@@ -13,7 +13,7 @@ use Throwable;
  */
 class ServiceAccount
 {
-    /** @var array */
+    /** @var array<string, string> */
     private $data = [];
 
     public function getProjectId(): string
@@ -31,6 +31,9 @@ class ServiceAccount
         return $this->data['private_key'] ?? '';
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function asArray(): array
     {
         $array = $this->data;
@@ -40,7 +43,7 @@ class ServiceAccount
     }
 
     /**
-     * @param mixed $value
+     * @param self|string|array<string, string> $value
      *
      * @throws InvalidArgumentException
      *
@@ -75,6 +78,9 @@ class ServiceAccount
         throw new InvalidArgumentException('Invalid service account specification.');
     }
 
+    /**
+     * @param array<string, string> $data
+     */
     private static function fromArray(array $data): self
     {
         $type = $data['type'] ?? '';

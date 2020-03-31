@@ -17,6 +17,7 @@ use Kreait\Firebase\Auth\IdTokenVerifier;
 use Lcobucci\JWT\Token;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use RuntimeException;
 use stdClass;
 use Throwable;
@@ -26,8 +27,10 @@ use Throwable;
  */
 final class IdTokenVerifierTest extends TestCase
 {
-    // Mocks
+    /** @var Verifier|ObjectProphecy */
     private $baseVerifier;
+
+    /** @var Token|ObjectProphecy */
     private $token;
 
     /** @var FrozenClock */

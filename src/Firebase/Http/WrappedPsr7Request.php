@@ -16,12 +16,12 @@ trait WrappedPsr7Request
     /** @var RequestInterface */
     protected $wrappedRequest;
 
-    public function getProtocolVersion()
+    public function getProtocolVersion(): string
     {
         return $this->wrappedRequest->getProtocolVersion();
     }
 
-    public function withProtocolVersion($version)
+    public function withProtocolVersion($version): self
     {
         $request = clone $this;
         $request->wrappedRequest = $this->wrappedRequest->withProtocolVersion($version);
@@ -29,27 +29,27 @@ trait WrappedPsr7Request
         return $request;
     }
 
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->wrappedRequest->getHeaders();
     }
 
-    public function hasHeader($name)
+    public function hasHeader($name): bool
     {
         return $this->wrappedRequest->hasHeader($name);
     }
 
-    public function getHeader($name)
+    public function getHeader($name): array
     {
         return $this->wrappedRequest->getHeader($name);
     }
 
-    public function getHeaderLine($name)
+    public function getHeaderLine($name): string
     {
         return $this->wrappedRequest->getHeaderLine($name);
     }
 
-    public function withHeader($name, $value)
+    public function withHeader($name, $value): self
     {
         $request = clone $this;
         $request->wrappedRequest = $this->wrappedRequest->withHeader($name, $value);
@@ -57,7 +57,7 @@ trait WrappedPsr7Request
         return $request;
     }
 
-    public function withAddedHeader($name, $value)
+    public function withAddedHeader($name, $value): self
     {
         $request = clone $this;
         $request->wrappedRequest = $this->wrappedRequest->withAddedHeader($name, $value);
@@ -65,7 +65,7 @@ trait WrappedPsr7Request
         return $request;
     }
 
-    public function withoutHeader($name)
+    public function withoutHeader($name): self
     {
         $request = clone $this;
         $request->wrappedRequest = $this->wrappedRequest->withoutHeader($name);
@@ -73,12 +73,12 @@ trait WrappedPsr7Request
         return $request;
     }
 
-    public function getBody()
+    public function getBody(): StreamInterface
     {
         return $this->wrappedRequest->getBody();
     }
 
-    public function withBody(StreamInterface $body)
+    public function withBody(StreamInterface $body): self
     {
         $request = clone $this;
         $request->wrappedRequest = $this->wrappedRequest->withBody($body);
@@ -86,12 +86,12 @@ trait WrappedPsr7Request
         return $request;
     }
 
-    public function getRequestTarget()
+    public function getRequestTarget(): string
     {
         return $this->wrappedRequest->getRequestTarget();
     }
 
-    public function withRequestTarget($requestTarget)
+    public function withRequestTarget($requestTarget): self
     {
         $request = clone $this;
         $request->wrappedRequest = $this->wrappedRequest->withRequestTarget($requestTarget);
@@ -99,12 +99,12 @@ trait WrappedPsr7Request
         return $request;
     }
 
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->wrappedRequest->getMethod();
     }
 
-    public function withMethod($method)
+    public function withMethod($method): self
     {
         $request = clone $this;
         $request->wrappedRequest = $this->wrappedRequest->withMethod($method);
@@ -112,12 +112,12 @@ trait WrappedPsr7Request
         return $request;
     }
 
-    public function getUri()
+    public function getUri(): UriInterface
     {
         return $this->wrappedRequest->getUri();
     }
 
-    public function withUri(UriInterface $uri, $preserveHost = false)
+    public function withUri(UriInterface $uri, $preserveHost = false): self
     {
         $request = clone $this;
         $request->wrappedRequest->withUri($uri, $preserveHost);

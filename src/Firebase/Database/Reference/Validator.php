@@ -9,9 +9,9 @@ use Psr\Http\Message\UriInterface;
 
 class Validator
 {
-    const MAX_DEPTH = 32;
-    const MAX_KEY_SIZE = 768;
-    const INVALID_KEY_CHARS = '.$#[]';
+    public const MAX_DEPTH = 32;
+    public const MAX_KEY_SIZE = 768;
+    public const INVALID_KEY_CHARS = '.$#[]';
 
     /**
      * Checks the reference URI for invalid properties.
@@ -52,7 +52,7 @@ class Validator
         }
     }
 
-    private function validateChars($key): void
+    private function validateChars(string $key): void
     {
         $key = \rawurldecode($key);
 

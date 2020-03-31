@@ -10,12 +10,14 @@ use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @internal
  */
 class DatabaseTest extends UnitTestCase
 {
+    /** @var ApiClient&MockObject */
     private $apiClient;
 
     /** @var Uri */

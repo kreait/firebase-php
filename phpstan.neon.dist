@@ -6,6 +6,19 @@ parameters:
 	inferPrivatePropertyTypeFromConstructor: true
 	ignoreErrors:
 		-
-			message: '#If condition is always true#'
-			path: src/Firebase/Factory.php
+			message: '#Method .+ has parameter .+ with no typehint specified#'
+			path: tests
+		-
+			message: '#Method .+ return type has no value type specified in iterable#'
+			path: tests
+		-
+			message: '#Method .+ has no return typehint specified#'
+			path: tests
+		-
+			message: '#Method .+ has parameter .+ with no value type specified in iterable type array#'
+			path: tests
+		-
+			message: '#Parameter .+ expects .+, .+ given#'
+			path: tests
+
 	tmpDir: %currentWorkingDirectory%/build/phpstan/

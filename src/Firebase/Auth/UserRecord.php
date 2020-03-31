@@ -43,7 +43,7 @@ class UserRecord implements \JsonSerializable
     /** @var string|null */
     public $passwordSalt;
 
-    /** @var array */
+    /** @var array<mixed> */
     public $customAttributes;
 
     /** @var DateTimeImmutable|null */
@@ -56,6 +56,9 @@ class UserRecord implements \JsonSerializable
     {
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function fromResponseData(array $data): self
     {
         $record = new self();
@@ -83,11 +86,19 @@ class UserRecord implements \JsonSerializable
         return $record;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     private static function userMetaDataFromResponseData(array $data): UserMetaData
     {
         return UserMetaData::fromResponseData($data);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<int, UserInfo>
+     */
     private static function userInfoFromResponseData(array $data): array
     {
         return \array_map(static function (array $userInfoData) {
@@ -95,7 +106,10 @@ class UserRecord implements \JsonSerializable
         }, $data['providerUserInfo'] ?? []);
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
         $data = \get_object_vars($this);
 

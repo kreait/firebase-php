@@ -36,18 +36,12 @@ final class FailedToShortenLongDynamicLink extends RuntimeException implements F
         return $error;
     }
 
-    /**
-     * @return ShortenLongDynamicLink|null
-     */
-    public function action()
+    public function action(): ?ShortenLongDynamicLink
     {
         return $this->action;
     }
 
-    /**
-     * @return ResponseInterface|null
-     */
-    public function response()
+    public function response(): ?ResponseInterface
     {
         return $this->response;
     }

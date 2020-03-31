@@ -17,6 +17,7 @@ use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 
 /**
@@ -24,7 +25,10 @@ use stdClass;
  */
 class MessagingTest extends UnitTestCase
 {
+    /** @var ApiClient&MockObject */
     private $messagingApi;
+
+    /** @var AppInstanceApiClient&MockObject */
     private $appInstanceApi;
 
     /** @var Messaging */
@@ -75,7 +79,7 @@ class MessagingTest extends UnitTestCase
             ->willReturn(new Response(200, [], '[]'));
 
         $this->messaging->subscribeToTopic('topic', $tokens);
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->addToAssertionCount(1);
     }
 
     public function testSubscribeToTopicWithInvalidTokens(): void
@@ -100,7 +104,7 @@ class MessagingTest extends UnitTestCase
             ->willReturn(new Response(200, [], '[]'));
 
         $this->messaging->unsubscribeFromTopic('topic', $tokens);
-        $this->assertTrue($noExceptionHasBeenThrown = true);
+        $this->addToAssertionCount(1);
     }
 
     public function testUnsubscribeFromTopicWithEmptyTokenList(): void

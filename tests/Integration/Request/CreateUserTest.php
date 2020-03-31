@@ -39,7 +39,7 @@ class CreateUserTest extends IntegrationTestCase
         $this->assertNotNull($user->passwordHash);
         $this->assertSame($phoneNumber, $user->phoneNumber);
         $this->assertSame($email, $user->email);
-        $this->assertSame(true, $user->emailVerified);
+        $this->assertTrue($user->emailVerified);
         $this->assertFalse($user->disabled);
 
         $this->auth->deleteUser($user->uid);

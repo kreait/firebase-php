@@ -12,7 +12,7 @@ use Psr\Http\Message\UriInterface;
 
 final class DynamicLink implements JsonSerializable
 {
-    /** @var array */
+    /** @var array<string, mixed> */
     private $data = [];
 
     private function __construct()
@@ -50,6 +50,9 @@ final class DynamicLink implements JsonSerializable
         return \trim($this->uri()->getPath(), '/');
     }
 
+    /**
+     * @return string[]
+     */
     public function warnings(): array
     {
         return $this->data['warning'] ?? [];
@@ -60,12 +63,15 @@ final class DynamicLink implements JsonSerializable
         return !empty($this->warnings());
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
         return $this->data;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->uri();
     }

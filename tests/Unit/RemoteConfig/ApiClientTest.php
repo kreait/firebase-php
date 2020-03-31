@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\RemoteConfig;
 
-use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\Exception\RemoteConfig\OperationAborted;
@@ -21,25 +22,26 @@ use Throwable;
  */
 class ApiClientTest extends UnitTestCase
 {
-    private $http;
+    /** @var MockHandler */
+    private $mockHandler;
 
     /** @var ApiClient */
     private $client;
 
     protected function setUp(): void
     {
-        $this->http = $this->createMock(ClientInterface::class);
-        $this->client = new ApiClient($this->http);
+        $this->mockHandler = new MockHandler();
+        $this->client = new ApiClient(new Client(['handler' => $this->mockHandler]));
     }
 
     /**
      * @dataProvider requestExceptions
+     *
+     * @param class-string<object> $expectedClass
      */
-    public function testCatchRequestException($requestException, $expectedClass): void
+    public function testCatchRequestException(RequestException $requestException, string $expectedClass): void
     {
-        $this->http->expects($this->once())
-            ->method('request')
-            ->willThrowException($requestException);
+        $this->mockHandler->append($requestException);
 
         try {
             $this->client->getTemplate();
@@ -51,9 +53,7 @@ class ApiClientTest extends UnitTestCase
 
     public function testCatchThrowable(): void
     {
-        $this->http->expects($this->once())
-            ->method('request')
-            ->willThrowException(new \Exception());
+        $this->mockHandler->append(new \Exception());
 
         $this->expectException(RemoteConfigException::class);
 

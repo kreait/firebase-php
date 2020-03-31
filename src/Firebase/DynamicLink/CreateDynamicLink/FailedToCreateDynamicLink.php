@@ -36,18 +36,12 @@ final class FailedToCreateDynamicLink extends RuntimeException implements Fireba
         return $error;
     }
 
-    /**
-     * @return CreateDynamicLink|null
-     */
-    public function action()
+    public function action(): ?CreateDynamicLink
     {
         return $this->action;
     }
 
-    /**
-     * @return ResponseInterface|null
-     */
-    public function response()
+    public function response(): ?ResponseInterface
     {
         return $this->response;
     }

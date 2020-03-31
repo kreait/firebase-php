@@ -10,9 +10,10 @@ use Psr\Http\Message\UriInterface;
 
 final class ShortenLongDynamicLink implements JsonSerializable
 {
-    const WITH_UNGUESSABLE_SUFFIX = 'UNGUESSABLE';
-    const WITH_SHORT_SUFFIX = 'SHORT';
+    public const WITH_UNGUESSABLE_SUFFIX = 'UNGUESSABLE';
+    public const WITH_SHORT_SUFFIX = 'SHORT';
 
+    /** @var array<string, mixed> */
     private $data = [
         'suffix' => ['option' => self::WITH_UNGUESSABLE_SUFFIX],
     ];
@@ -36,6 +37,9 @@ final class ShortenLongDynamicLink implements JsonSerializable
         return $action;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function fromArray(array $data): self
     {
         $action = new self();
@@ -60,7 +64,10 @@ final class ShortenLongDynamicLink implements JsonSerializable
         return $action;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
         return $this->data;
     }

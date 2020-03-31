@@ -15,6 +15,9 @@ class UserMetaData implements \JsonSerializable
     /** @var DateTimeImmutable|null */
     public $lastLoginAt;
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function fromResponseData(array $data): self
     {
         $metadata = new self();
@@ -27,7 +30,10 @@ class UserMetaData implements \JsonSerializable
         return $metadata;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
         $data = \get_object_vars($this);
 

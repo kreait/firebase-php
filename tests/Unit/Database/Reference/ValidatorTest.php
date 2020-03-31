@@ -45,12 +45,25 @@ class ValidatorTest extends UnitTestCase
         $this->validator->validateUri($uri);
     }
 
-    public function testValidateChars(): void
+    /**
+     * @dataProvider invalidChars
+     */
+    public function testValidateChars(string $value): void
     {
-        $invalid = \str_shuffle(Validator::INVALID_KEY_CHARS)[0];
-        $uri = $this->uri->withPath($invalid);
+        $uri = $this->uri->withPath($value);
 
         $this->expectException(InvalidArgumentException::class);
         $this->validator->validateUri($uri);
+    }
+
+    public function invalidChars()
+    {
+        return [
+            ['.'],
+            ['$'],
+            ['#'],
+            ['['],
+            [']'],
+        ];
     }
 }

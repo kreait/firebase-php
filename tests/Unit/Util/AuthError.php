@@ -20,7 +20,7 @@ final class AuthError implements JsonSerializable
     /** @var string */
     private $domain;
 
-    public function __construct(string $message, int $code = null, string $reason = null, string $domain = null)
+    public function __construct(string $message, ?int $code = null, ?string $reason = null, ?string $domain = null)
     {
         $this->message = $message;
         $this->code = $code ?? 400;

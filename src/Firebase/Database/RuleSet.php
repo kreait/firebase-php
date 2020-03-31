@@ -8,9 +8,12 @@ use JsonSerializable;
 
 class RuleSet implements JsonSerializable
 {
-    /** @var array */
+    /** @var array<string, array<mixed>> */
     private $rules;
 
+    /**
+     * @param array<string, array<mixed>> $rules
+     */
     private function __construct(array $rules)
     {
         if (!\array_key_exists('rules', $rules)) {
@@ -73,17 +76,26 @@ class RuleSet implements JsonSerializable
         ]);
     }
 
+    /**
+     * @param array<string, array<mixed>> $rules
+     */
     public static function fromArray(array $rules): self
     {
         return new self($rules);
     }
 
+    /**
+     * @return array<string, array<mixed>>
+     */
     public function getRules(): array
     {
         return $this->rules;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, array<mixed>>
+     */
+    public function jsonSerialize(): array
     {
         return $this->rules;
     }

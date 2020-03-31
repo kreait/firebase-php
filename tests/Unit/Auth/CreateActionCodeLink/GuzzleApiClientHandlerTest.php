@@ -14,12 +14,14 @@ use Kreait\Firebase\Auth\CreateActionLink\GuzzleApiClientHandler;
 use Kreait\Firebase\Value\Email;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @internal
  */
 final class GuzzleApiClientHandlerTest extends TestCase
 {
+    /** @var ClientInterface|ObjectProphecy<ClientInterface> */
     private $client;
 
     /** @var CreateActionLink */

@@ -53,6 +53,8 @@ class ApiClient implements ClientInterface
      * @param UriInterface|string $uri
      *
      * @throws DatabaseException
+     *
+     * @return array<string, mixed>
      */
     public function getWithETag($uri): array
     {
@@ -165,6 +167,7 @@ class ApiClient implements ClientInterface
 
     /**
      * @param UriInterface|string $uri
+     * @param array<mixed> $values
      *
      * @throws DatabaseException
      */
@@ -175,10 +178,11 @@ class ApiClient implements ClientInterface
 
     /**
      * @param UriInterface|string $uri
+     * @param array<string, mixed>|null $options
      *
      * @throws DatabaseException
      */
-    private function requestApi(string $method, $uri, array $options = null): ResponseInterface
+    private function requestApi(string $method, $uri, ?array $options = null): ResponseInterface
     {
         $options = $options ?? [];
 

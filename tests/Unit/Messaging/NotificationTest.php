@@ -61,9 +61,6 @@ class NotificationTest extends UnitTestCase
     {
         return [
             'empty_title_and_body' => [['title' => null, 'body' => null]],
-            'non_string_title' => [['title' => 1]],
-            'non_string_body' => [['body' => 1]],
-            'non_string_image_url' => [['image' => 1]],
         ];
     }
 }

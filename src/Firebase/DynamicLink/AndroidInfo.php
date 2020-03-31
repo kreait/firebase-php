@@ -8,13 +8,16 @@ use JsonSerializable;
 
 final class AndroidInfo implements JsonSerializable
 {
-    /** @var array */
+    /** @var array<string, string> */
     private $data = [];
 
     private function __construct()
     {
     }
 
+    /**
+     * @param array<string, string> $data
+     */
     public static function fromArray(array $data): self
     {
         $info = new self();
@@ -67,7 +70,10 @@ final class AndroidInfo implements JsonSerializable
         return $info;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, string>
+     */
+    public function jsonSerialize(): array
     {
         return $this->data;
     }

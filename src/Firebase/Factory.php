@@ -41,7 +41,7 @@ use Throwable;
 
 class Factory
 {
-    const API_CLIENT_SCOPES = [
+    public const API_CLIENT_SCOPES = [
         'https://www.googleapis.com/auth/iam',
         'https://www.googleapis.com/auth/cloud-platform',
         'https://www.googleapis.com/auth/firebase',
@@ -70,20 +70,8 @@ class Factory
     /** @var Email|null */
     protected $clientEmail;
 
-    /** @var string|null */
-    protected $uid;
-
-    /** @var array */
-    protected $claims = [];
-
     /** @var CacheInterface|null */
     protected $verifierCache;
-
-    /** @var array */
-    protected $httpClientConfig = [];
-
-    /** @var array */
-    protected $httpClientMiddlewares = [];
 
     /** @var bool */
     protected $discoveryIsDisabled = false;
@@ -94,8 +82,10 @@ class Factory
     /** @var string|null */
     protected $httpProxy;
 
+    /** @var string */
     protected static $databaseUriPattern = 'https://%s.firebaseio.com';
 
+    /** @var string */
     protected static $storageBucketNamePattern = '%s.appspot.com';
 
     /** @var Clock */
@@ -106,9 +96,12 @@ class Factory
         $this->clock = new SystemClock();
     }
 
-    public function withServiceAccount($serviceAccount): self
+    /**
+     * @param string|array<string, string> $value
+     */
+    public function withServiceAccount($value): self
     {
-        $serviceAccount = ServiceAccount::fromValue($serviceAccount);
+        $serviceAccount = ServiceAccount::fromValue($value);
 
         $factory = clone $this;
         $factory->serviceAccount = $serviceAccount;
@@ -142,6 +135,9 @@ class Factory
         return $factory;
     }
 
+    /**
+     * @param UriInterface|string $uri
+     */
     public function withDatabaseUri($uri): self
     {
         $factory = clone $this;
@@ -150,7 +146,7 @@ class Factory
         return $factory;
     }
 
-    public function withDefaultStorageBucket($name): self
+    public function withDefaultStorageBucket(string $name): self
     {
         $factory = clone $this;
         $factory->defaultStorageBucket = $name;
@@ -203,12 +199,9 @@ class Factory
         return null;
     }
 
-    /**
-     * @return ProjectId|null
-     */
-    protected function getProjectId()
+    protected function getProjectId(): ?ProjectId
     {
-        if ($this->projectId !== null) {
+        if ($this->projectId) {
             return $this->projectId;
         }
 
@@ -240,10 +233,7 @@ class Factory
         // @codeCoverageIgnoreEnd
     }
 
-    /**
-     * @return Email|null
-     */
-    protected function getClientEmail()
+    protected function getClientEmail(): ?Email
     {
         return $this->clientEmail;
     }
@@ -261,10 +251,7 @@ class Factory
         throw new RuntimeException('Unable to build a database URI without a project ID');
     }
 
-    /**
-     * @return string|null
-     */
-    protected function getStorageBucketName()
+    protected function getStorageBucketName(): ?string
     {
         if ($this->defaultStorageBucket) {
             return $this->defaultStorageBucket;
@@ -330,22 +317,9 @@ class Factory
     {
         $http = $this->createApiClient();
 
-        $middlewares = [
-            'json_suffix' => Firebase\Http\Middleware::ensureJsonSuffix(),
-        ];
-
-        if ($this->uid) {
-            $authOverride = new Http\Auth\CustomToken($this->uid, $this->claims);
-
-            $middlewares['auth_override'] = Middleware::overrideAuth($authOverride);
-        }
-
         /** @var HandlerStack $handler */
         $handler = $http->getConfig('handler');
-
-        foreach ($middlewares as $name => $middleware) {
-            $handler->push($middleware, $name);
-        }
+        $handler->push(Firebase\Http\Middleware::ensureJsonSuffix(), 'realtime_database_json_suffix');
 
         return new Database($this->getDatabaseUri(), new Database\ApiClient($http));
     }
@@ -459,12 +433,12 @@ class Factory
 
     /**
      * @internal
+     *
+     * @param array<string, mixed>|null $config
      */
-    public function createApiClient(array $config = null): Client
+    public function createApiClient(?array $config = null): Client
     {
         $config = $config ?? [];
-        // If present, the config given to this method override fields passed to withHttpClientConfig()
-        $config = \array_merge($this->httpClientConfig, $config);
 
         if ($this->debug) {
             $config['debug'] = true;
@@ -478,10 +452,6 @@ class Factory
 
         if (!($handler instanceof HandlerStack)) {
             $handler = HandlerStack::create($handler);
-        }
-
-        foreach ($this->httpClientMiddlewares as $middleware) {
-            $handler->push($middleware);
         }
 
         if ($credentials = $this->getGoogleAuthTokenCredentials()) {
@@ -527,13 +497,9 @@ class Factory
         }
 
         try {
-            if ($credentials = ApplicationDefaultCredentials::getCredentials(self::API_CLIENT_SCOPES)) {
-                return $this->googleAuthTokenCredentials = $credentials;
-            }
+            return $this->googleAuthTokenCredentials = ApplicationDefaultCredentials::getCredentials(self::API_CLIENT_SCOPES);
         } catch (Throwable $e) {
             return null;
         }
-
-        return null;
     }
 }

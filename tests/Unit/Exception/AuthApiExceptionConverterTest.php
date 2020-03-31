@@ -84,6 +84,8 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
     /**
      * @test
      * @dataProvider requestErrors
+     *
+     * @param class-string<object> $expectedClass
      */
     public function it_converts_request_exceptions_because(string $identifier, string $expectedClass): void
     {

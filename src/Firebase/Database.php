@@ -20,7 +20,7 @@ use Psr\Http\Message\UriInterface;
  */
 class Database
 {
-    const SERVER_TIMESTAMP = ['.sv' => 'timestamp'];
+    public const SERVER_TIMESTAMP = ['.sv' => 'timestamp'];
 
     /** @var ApiClient */
     private $client;
@@ -44,7 +44,7 @@ class Database
      *
      * @throws InvalidArgumentException
      */
-    public function getReference(string $path = null): Reference
+    public function getReference(?string $path = null): Reference
     {
         if ($path === null || \trim($path) === '') {
             $path = '/';
@@ -103,6 +103,9 @@ class Database
         $this->client->updateRules($this->uri->withPath('.settings/rules'), $ruleSet);
     }
 
+    /**
+     * @return mixed
+     */
     public function runTransaction(callable $callable)
     {
         $transaction = new Transaction($this->client);

@@ -41,7 +41,7 @@ class SnapshotTest extends UnitTestCase
 
     public function testGetKey(): void
     {
-        $this->reference->expects($this->any())->method('getKey')->willReturn('key');
+        $this->reference->method('getKey')->willReturn('key');
 
         $this->assertSame('key', $this->snapshotWithArrayValue->getKey());
     }

@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Value;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\Value;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 
-class PhoneNumber implements \JsonSerializable, Value
+class PhoneNumber implements \JsonSerializable
 {
     /** @var string */
     private $value;
@@ -31,16 +30,19 @@ class PhoneNumber implements \JsonSerializable, Value
         $this->value = $util->format($parsed, PhoneNumberFormat::E164);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->value;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): string
     {
         return $this->value;
     }
 
+    /**
+     * @param self|string $other
+     */
     public function equalsTo($other): bool
     {
         return $this->value === (string) $other;

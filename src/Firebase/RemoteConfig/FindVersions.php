@@ -33,6 +33,9 @@ class FindVersions
         return new self();
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     public static function fromArray(array $params): self
     {
         $query = self::all();
@@ -69,10 +72,7 @@ class FindVersions
         return $query;
     }
 
-    /**
-     * @return \DateTimeImmutable|null
-     */
-    public function since()
+    public function since(): ?\DateTimeImmutable
     {
         return $this->since;
     }
@@ -85,10 +85,7 @@ class FindVersions
         return $query;
     }
 
-    /**
-     * @return \DateTimeImmutable|null
-     */
-    public function until()
+    public function until(): ?\DateTimeImmutable
     {
         return $this->until;
     }
@@ -101,10 +98,7 @@ class FindVersions
         return $query;
     }
 
-    /**
-     * @return VersionNumber|null
-     */
-    public function lastVersionNumber()
+    public function lastVersionNumber(): ?VersionNumber
     {
         return $this->upToVersion;
     }
@@ -117,10 +111,7 @@ class FindVersions
         return $query;
     }
 
-    /**
-     * @return int|null
-     */
-    public function pageSize()
+    public function pageSize(): ?int
     {
         return $this->pageSize;
     }
@@ -133,10 +124,7 @@ class FindVersions
         return $query;
     }
 
-    /**
-     * @return int|null
-     */
-    public function limit()
+    public function limit(): ?int
     {
         return $this->limit;
     }

@@ -45,7 +45,7 @@ class MessagingApiExceptionConverter
         return new MessagingError($exception->getMessage(), $exception->getCode(), $exception);
     }
 
-    public function convertResponse(ResponseInterface $response, Throwable $previous = null): MessagingException
+    public function convertResponse(ResponseInterface $response, ?Throwable $previous = null): MessagingException
     {
         $code = $response->getStatusCode();
 

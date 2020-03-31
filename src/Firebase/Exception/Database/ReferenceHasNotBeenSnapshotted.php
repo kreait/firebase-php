@@ -14,7 +14,7 @@ final class ReferenceHasNotBeenSnapshotted extends RuntimeException implements D
     /** @var Reference */
     private $reference;
 
-    public function __construct(Reference $query, string $message = '', int $code = 0, Throwable $previous = null)
+    public function __construct(Reference $query, string $message = '', int $code = 0, ?Throwable $previous = null)
     {
         if (!$message) {
             $message = "The reference {$query->getPath()} has not been snapshotted.";

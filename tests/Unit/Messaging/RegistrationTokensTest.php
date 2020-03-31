@@ -15,8 +15,8 @@ use stdClass;
  */
 final class RegistrationTokensTest extends TestCase
 {
-    const IS_EMPTY = true;
-    const IS_NOT_EMPTY = false;
+    public const IS_EMPTY = true;
+    public const IS_NOT_EMPTY = false;
 
     /**
      * @test

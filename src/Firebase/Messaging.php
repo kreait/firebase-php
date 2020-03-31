@@ -42,7 +42,7 @@ class Messaging
     /**
      * @internal
      */
-    public function __construct(ApiClient $messagingApiClient, AppInstanceApiClient $appInstanceApiClient, ProjectId $projectId = null)
+    public function __construct(ApiClient $messagingApiClient, AppInstanceApiClient $appInstanceApiClient, ?ProjectId $projectId = null)
     {
         $this->messagingApi = $messagingApiClient;
         $this->appInstanceApi = $appInstanceApiClient;
@@ -72,6 +72,8 @@ class Messaging
      * @throws InvalidArgumentException
      * @throws MessagingException
      * @throws FirebaseException
+     *
+     * @return array<mixed>
      */
     public function send($message): array
     {
@@ -132,6 +134,8 @@ class Messaging
      * @throws InvalidMessage
      * @throws MessagingException
      * @throws FirebaseException
+     *
+     * @return array<mixed>
      */
     public function validate($message): array
     {
@@ -154,6 +158,8 @@ class Messaging
      *
      * @throws MessagingException
      * @throws FirebaseException
+     *
+     * @return array<mixed>
      */
     public function subscribeToTopic($topic, $registrationTokenOrTokens): array
     {
@@ -171,6 +177,8 @@ class Messaging
      *
      * @throws MessagingException
      * @throws FirebaseException
+     *
+     * @return array<mixed>
      */
     public function unsubscribeFromTopic($topic, $registrationTokenOrTokens): array
     {

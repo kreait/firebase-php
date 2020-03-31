@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging;
 
-class AndroidConfig implements Config
+use JsonSerializable;
+
+final class AndroidConfig implements JsonSerializable
 {
-    /** @var array */
+    /** @var array<string, mixed> */
     private $rawConfig;
 
     private function __construct()
     {
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function fromArray(array $data): self
     {
         $config = new self();
@@ -21,7 +26,10 @@ class AndroidConfig implements Config
         return $config;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
     {
         return \array_filter($this->rawConfig, static function ($value) {
             return $value !== null;

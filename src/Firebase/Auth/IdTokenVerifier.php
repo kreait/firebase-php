@@ -121,6 +121,9 @@ final class IdTokenVerifier implements Verifier
         return $authenticatedAt < $check;
     }
 
+    /**
+     * @param Token|object|string $token
+     */
     private function ensureToken($token): Token
     {
         if ($token instanceof Token) {

@@ -24,10 +24,11 @@ class DT
         $tz = new DateTimeZone('UTC');
         $now = \time();
 
-        if ($value instanceof \DateTimeInterface) {
-            if ($result = DateTimeImmutable::createFromFormat('U.u', $value->format('U.u'))) {
-                return $result->setTimezone($tz);
-            }
+        if (
+            ($value instanceof \DateTimeInterface)
+            && $result = DateTimeImmutable::createFromFormat('U.u', $value->format('U.u'))
+        ) {
+            return $result->setTimezone($tz);
         }
 
         if ($value === null || $value === 0 || \is_bool($value)) {
@@ -50,10 +51,11 @@ class DT
             }
 
             // Milliseconds
-            if (\mb_strlen($value) === \mb_strlen((string) ($now * 1000))) {
-                if ($result = DateTimeImmutable::createFromFormat('U.u', \sprintf('%F', (float) ($value / 1000)))) {
-                    return $result->setTimezone($tz);
-                }
+            if (
+                (\mb_strlen($value) === \mb_strlen((string) ($now * 1000)))
+                && $result = DateTimeImmutable::createFromFormat('U.u', \sprintf('%F', (float) ($value / 1000)))
+            ) {
+                return $result->setTimezone($tz);
             }
         }
 

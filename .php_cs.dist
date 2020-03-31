@@ -29,6 +29,9 @@ return PhpCsFixer\Config::create()
             'allow_mixed' => true,
         ],
         'no_useless_else' => true,
+        'nullable_type_declaration_for_default_null_value' => [
+            'use_nullable_type_declaration' => true,
+        ],
         'ordered_imports' => true,
         'ordered_interfaces' => true,
         'phpdoc_line_span' => [

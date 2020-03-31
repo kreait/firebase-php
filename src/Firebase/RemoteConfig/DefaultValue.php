@@ -6,11 +6,14 @@ namespace Kreait\Firebase\RemoteConfig;
 
 class DefaultValue implements \JsonSerializable
 {
-    const IN_APP_DEFAULT_VALUE = true;
+    public const IN_APP_DEFAULT_VALUE = true;
 
     /** @var string|bool */
     private $value;
 
+    /**
+     * @param string|bool $value
+     */
     private function __construct($value)
     {
         $this->value = \is_string($value) ? $value : true;
@@ -26,12 +29,18 @@ class DefaultValue implements \JsonSerializable
         return new self($value);
     }
 
+    /**
+     * @param array<string, string|null> $data
+     */
     public static function fromArray(array $data): self
     {
-        return new self($data['value'] ?? $data['useInAppDefault'] ?? null);
+        return new self($data['value'] ?? $data['useInAppDefault'] ?? true);
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array<string, string|bool>
+     */
+    public function jsonSerialize(): array
     {
         $key = $this->value === true ? 'useInAppDefault' : 'value';
 

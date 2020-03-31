@@ -10,6 +10,7 @@ use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -17,6 +18,7 @@ use Psr\Http\Message\RequestInterface;
  */
 class ApiClientTest extends UnitTestCase
 {
+    /** @var ClientInterface&MockObject */
     private $http;
 
     /** @var ApiClient */

@@ -73,7 +73,7 @@ class ApiClientTest extends UnitTestCase
     {
         $request = new Request('GET', 'foo');
 
-        $this->http->expects($this->any())
+        $this->http
             ->method($this->anything())
             ->willThrowException(new RequestException('foo', $request));
 
@@ -84,7 +84,7 @@ class ApiClientTest extends UnitTestCase
 
     public function testCatchAnyException(): void
     {
-        $this->http->expects($this->any())
+        $this->http
             ->method($this->anything())
             ->willThrowException(new \Exception());
 
@@ -93,13 +93,13 @@ class ApiClientTest extends UnitTestCase
         $this->client->get($this->targetUrl);
     }
 
-    private function createApiClient(ResponseInterface $response = null)
+    private function createApiClient(?ResponseInterface $response = null)
     {
         $client = $this->createMock(ClientInterface::class);
 
         $response = $response ?? new Response(200, [], '{"name":"value"}');
 
-        $client->expects($this->any())
+        $client
             ->method($this->anything())
             ->willReturn($response);
 

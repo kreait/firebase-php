@@ -13,6 +13,7 @@ use Kreait\Firebase\RemoteConfig\Template;
 use Kreait\Firebase\RemoteConfig\Version;
 use Kreait\Firebase\RemoteConfig\VersionNumber;
 use Kreait\Firebase\Util\JSON;
+use Traversable;
 
 /**
  * The Firebase Remote Config.
@@ -33,6 +34,9 @@ class RemoteConfig
         $this->client = $client;
     }
 
+    /**
+     * @throws RemoteConfigException if something went wrong
+     */
     public function get(): Template
     {
         return Template::fromResponse($this->client->getTemplate());
@@ -41,9 +45,10 @@ class RemoteConfig
     /**
      * Validates the given template without publishing it.
      *
-     * @param Template|array $template
+     * @param Template|array<string, mixed> $template
      *
      * @throws ValidationFailed if the validation failed
+     * @throws RemoteConfigException
      */
     public function validate($template): void
     {
@@ -53,7 +58,7 @@ class RemoteConfig
     }
 
     /**
-     * @param Template|array $template
+     * @param Template|array<string, mixed> $template
      *
      * @throws RemoteConfigException
      *
@@ -74,6 +79,7 @@ class RemoteConfig
      * @param VersionNumber|mixed $versionNumber
      *
      * @throws VersionNotFound
+     * @throws RemoteConfigException if something went wrong
      */
     public function getVersion($versionNumber): Version
     {
@@ -96,6 +102,7 @@ class RemoteConfig
      * @param VersionNumber|mixed $versionNumber
      *
      * @throws VersionNotFound
+     * @throws RemoteConfigException if something went wrong
      */
     public function rollbackToVersion($versionNumber): Template
     {
@@ -109,11 +116,13 @@ class RemoteConfig
     }
 
     /**
-     * @param FindVersions|array $query
+     * @param FindVersions|array<string, mixed> $query
      *
-     * @return \Generator|Version[]
+     * @throws RemoteConfigException if something went wrong
+     *
+     * @return Traversable<Version>|Version[]
      */
-    public function listVersions($query = null): \Generator
+    public function listVersions($query = null): Traversable
     {
         $query = $query instanceof FindVersions ? $query : FindVersions::fromArray((array) $query);
         $pageToken = null;

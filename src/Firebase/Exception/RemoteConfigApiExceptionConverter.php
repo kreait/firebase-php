@@ -48,12 +48,9 @@ class RemoteConfigApiExceptionConverter
             return new ApiConnectionFailed('Unable to connect to the API: '.$message, $code, $e);
         }
 
-        $errors = [];
-
         if ($response = $e->getResponse()) {
             $message = $this->responseParser->getErrorReasonFromResponse($response);
             $code = $response->getStatusCode();
-            $errors = $this->responseParser->getErrorsFromResponse($response);
         }
 
         if (\mb_stripos($message, 'permission_denied') !== false) {
