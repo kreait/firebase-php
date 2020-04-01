@@ -251,10 +251,6 @@ Delete a user
 Using Email Action Codes
 ************************
 
-.. image:: https://img.shields.io/badge/available_since-v4.37-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.37.0
-   :alt: Available since v4.37
-
 The Firebase Admin SDK provides the ability to send users emails containing links they can use for password resets,
 email address verification, and email-based sign-in. These emails are sent by Google and have limited
 customizability.

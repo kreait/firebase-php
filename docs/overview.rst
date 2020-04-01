@@ -30,7 +30,7 @@ If you want to use the SDK within a Framework, please follow the installation in
 
 .. code-block:: bash
 
-    composer require kreait/firebase-php ^4.41
+    composer require kreait/firebase-php ^5.0
 
 
 Alternatively, you can specify the Firebase Admin SDK as a dependency in your
@@ -40,7 +40,7 @@ project's existing composer.json file:
 
     {
       "require": {
-        "kreait/firebase-php": "^4.41"
+        "kreait/firebase-php": "^5.0"
       }
    }
 

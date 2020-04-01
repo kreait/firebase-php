@@ -2,10 +2,6 @@
 Cloud Messaging
 ###############
 
-.. image:: https://img.shields.io/badge/available_since-v4.5-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.5.0
-   :alt: Available since v4.5
-
 You can use the Firebase Admin SDK for PHP to send Firebase Cloud Messaging messages to end-user devices. Specifically, you can send messages to individual devices, named topics, or condition statements that match one or more topics.
 
 .. note::
@@ -182,10 +178,6 @@ Each of the Firebase client SDKs are able to generate these registration tokens:
 Send messages to multiple devices (Multicast)
 *********************************************
 
-.. image:: https://img.shields.io/badge/available_since-v4.24-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.24.0
-   :alt: Available since v4.24
-
 You can send send one message to up to 500 devices:
 
 .. code-block:: php
@@ -217,10 +209,6 @@ methods to determine the successes and failures of the multicasted message:
 ******************************
 Send multiple messages at once
 ******************************
-
-.. image:: https://img.shields.io/badge/available_since-v4.29-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.29.0
-   :alt: Available since v4.29
 
 You can send send up to 500 prepared messages (each message has a token, topic or condition as a target) in one go:
 
@@ -402,10 +390,6 @@ You can find the full WebPush configuration reference in the official documentat
 Adding platform independent FCM options
 ***************************************
 
-.. image:: https://img.shields.io/badge/available_since-v4.27-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.27.0
-   :alt: Available since v4.27
-
 You can find the full FCM Options configuration reference in the official documentation:
 `REST Resource: projects.messages.fcm_options <https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#fcmoptions>`_
 
@@ -444,10 +428,6 @@ Firebase Messaging supports Emojis in Messages.
 **************************************
 Sending a fully configured raw message
 **************************************
-
-.. image:: https://img.shields.io/badge/available_since-v4.27-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.27.0
-   :alt: Available since v4.27
 
 .. note::
     The message will be parsed and validated by the SDK.
@@ -513,10 +493,6 @@ Sending a fully configured raw message
 Validating messages
 *******************
 
-.. image:: https://img.shields.io/badge/available_since-v4.12-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.12.0
-   :alt: Available since v4.12
-
 You can validate a message by sending a validation-only request to the Firebase REST API. If the message is invalid,
 a `Kreait\Firebase\Exception\Messaging\InvalidMessage` exception is thrown, which you can catch to evaluate the raw
 error message(s) that the API returned.
@@ -535,10 +511,6 @@ error message(s) that the API returned.
 ****************
 Topic management
 ****************
-
-.. image:: https://img.shields.io/badge/available_since-v4.8-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.8.0
-   :alt: Available since v4.8
 
 Subscribe to a topic
 --------------------
@@ -582,10 +554,6 @@ You can unsubscribe one or multiple devices from a topic by passing registration
 ***********************
 App instance management
 ***********************
-
-.. image:: https://img.shields.io/badge/available_since-v4.28-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.28.0
-   :alt: Available since v4.28
 
 A registration token is related to an application that generated it. You can retrieve current information
 about an app instance by passing a registration token to the ``getAppInstance()`` method.

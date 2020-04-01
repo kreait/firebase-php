@@ -2,10 +2,6 @@
 Dynamic Links
 #############
 
-.. image:: https://img.shields.io/badge/available_since-v4.32-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.32.0
-   :alt: Available since v4.32
-
 You can create short Dynamic Links with the Firebase Admin SDK for PHP. Dynamic Links can be
 
 - a long Dynamic Link

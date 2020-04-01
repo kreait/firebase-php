@@ -183,10 +183,6 @@ Here is an example using the `Symfony Cache Component <https://symfony.com/doc/c
 Custom Authentication Flows
 ***************************
 
-.. image:: https://img.shields.io/badge/available_since-v4.41-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.41.0
-   :alt: Available since v4.41
-
 .. warning::
     It is recommended that you use the Firebase Client SDKs to perform user authentication. Once
     signed in via a client SDK, you should pass the logged-in user's current ID token to your

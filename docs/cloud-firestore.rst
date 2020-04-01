@@ -2,10 +2,6 @@
 Cloud Firestore
 ###############
 
-.. image:: https://img.shields.io/badge/available_since-v4.33-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.33.0
-   :alt: Available since v4.33
-
 This SDK provides a bridge to the `google/cloud-firestore <https://packagist.org/packages/google/cloud-firestore>`_
 package. You can enable the component in the SDK by adding the package to your project dependencies:
 

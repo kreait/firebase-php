@@ -2,10 +2,6 @@
 Remote Config
 #############
 
-.. image:: https://img.shields.io/badge/available_since-v4.3-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.3.0
-   :alt: Available since v4.3
-
 Change the behavior and appearance of your app without publishing an app update.
 
 Firebase Remote Config is a cloud service that lets you change the behavior and appearance of your app without
@@ -132,10 +128,6 @@ Conditional values
 Validation
 **********
 
-.. image:: https://img.shields.io/badge/available_since-v4.16-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.16.0
-   :alt: Available since v4.16
-
 Usually, the SDK will protect you from creating an invalid Remote Config template in the first
 place. If you want to be sure, you can validate the template with a call to the Firebase API:
 
@@ -170,10 +162,6 @@ Publish the Remote Config
 *********************
 Remote Config history
 *********************
-
-.. image:: https://img.shields.io/badge/available_since-v4.16-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.16.0
-   :alt: Available since v4.16
 
 Since August 23, 2018, Firebase provides a change history for your published Remote configs.
 
@@ -211,10 +199,6 @@ this methods returns a `Generator <http://php.net/manual/en/language.generators.
 
 Filtering
 ---------
-
-.. image:: https://img.shields.io/badge/available_since-v4.29-yellowgreen
-   :target: https://github.com/kreait/firebase-php/releases/tag/4.29.0
-   :alt: Available since v4.29
 
 You can filter the results of ``RemoteConfig::listVersions()``:
 
