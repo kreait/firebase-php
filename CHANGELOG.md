@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 5.0.0 - 2020-04-01
 
 **If you are not using any classes or methods marked as `@deprecated` or `@internal` you should be able to upgrade from a 4.x release to 5.0 without changes to your code.**
 
