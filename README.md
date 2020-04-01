@@ -38,13 +38,13 @@ Integrations for Laravel, Lumen and Symfony are available:
 
 ## Documentation
 
-- [Authentication Guide](https://firebase-php.readthedocs.io/en/stable/authentication.html)
-- [Cloud Messaging Guide](https://firebase-php.readthedocs.io/en/stable/cloud-messaging.html)
-- [Cloud Storage Guide](https://firebase-php.readthedocs.io/en/stable/cloud-storage.html)
-- [Dynamic Links Guide](https://firebase-php.readthedocs.io/en/stable/dynamic-links.html)
-- [Firestore Guide](https://firebase-php.readthedocs.io/en/stable/cloud-firestore.html)
-- [Realtime Database Guide](https://firebase-php.readthedocs.io/en/stable/realtime-database.html)
-- [Remote Config Guide](https://firebase-php.readthedocs.io/en/stable/remote-config.html)
+- [Authentication Guide](https://firebase-php.readthedocs.io/en/stable/authentication.htm://firebase-php.readthedocs.io/en/5.0.0/authentication.html)
+- [Cloud Messaging Guide](https://firebase-php.readthedocs.io/en/stable/cloud-messaging.htm://firebase-php.readthedocs.io/en/5.0.0/cloud-messaging.html)
+- [Cloud Storage Guide](https://firebase-php.readthedocs.io/en/stable/cloud-storage.htm://firebase-php.readthedocs.io/en/5.0.0/cloud-storage.html)
+- [Dynamic Links Guide](https://firebase-php.readthedocs.io/en/stable/dynamic-links.htm://firebase-php.readthedocs.io/en/5.0.0/dynamic-links.html)
+- [Firestore Guide](https://firebase-php.readthedocs.io/en/stable/cloud-firestore.htm://firebase-php.readthedocs.io/en/5.0.0/cloud-firestore.html)
+- [Realtime Database Guide](https://firebase-php.readthedocs.io/en/stable/realtime-database.htm://firebase-php.readthedocs.io/en/5.0.0/realtime-database.html)
+- [Remote Config Guide](https://firebase-php.readthedocs.io/en/stable/remote-config.htm://firebase-php.readthedocs.io/en/5.0.0/remote-config.html)
 
 ## Support
 
