@@ -52,6 +52,8 @@ trait WrappedPsr7Response
     {
         $response = clone $this;
         $response->wrappedResponse = $this->wrappedResponse->withHeader($name, $value);
+
+        return $response;
     }
 
     public function withAddedHeader($name, $value)
