@@ -28,7 +28,7 @@ final class GuzzleApiClientHandlerTest extends TestCase
     /** @var GuzzleApiClientHandler */
     private $handler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = $this->prophesize(ClientInterface::class);
         $this->action = CreateActionLink::new('SOME_TYPE', new Email('user@domain.tld'), ValidatedActionCodeSettings::empty());

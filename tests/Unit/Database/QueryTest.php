@@ -26,12 +26,12 @@ class QueryTest extends UnitTestCase
     protected $uri;
 
     /**
-     * @var Reference|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reference|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reference;
 
     /**
-     * @var ApiClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var ApiClient|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $apiClient;
 
@@ -40,7 +40,7 @@ class QueryTest extends UnitTestCase
      */
     protected $query;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->uri = new Uri('http://domain.tld/some/path');
 

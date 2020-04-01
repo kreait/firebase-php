@@ -19,7 +19,7 @@ final class DynamicLinksTest extends IntegrationTestCase
     /** @var string */
     private $domain = 'https://nvpd4.app.goo.gl';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->service = self::$factory->createDynamicLinksService($this->domain);
     }

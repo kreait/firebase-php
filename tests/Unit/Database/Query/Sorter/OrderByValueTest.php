@@ -18,14 +18,14 @@ class OrderByValueTest extends UnitTestCase
      */
     protected $sorter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sorter = new OrderByValue();
     }
 
     public function testModifyUri()
     {
-        $this->assertContains(
+        $this->assertStringContainsString(
             'orderBy='.\rawurlencode('"$value"'),
             (string) $this->sorter->modifyUri(new Uri('http://domain.tld'))
         );

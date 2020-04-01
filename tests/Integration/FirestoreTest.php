@@ -21,7 +21,7 @@ final class FirestoreTest extends IntegrationTestCase
     /** @var mixed string */
     private $collectionName;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->firestore = self::$factory->createFirestore();
         $this->collectionName = \str_replace('\\', '_', __CLASS__);

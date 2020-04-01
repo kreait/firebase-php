@@ -19,7 +19,7 @@ class TransactionTest extends DatabaseTestCase
      */
     private $ref;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ref = self::$db->getReference(self::$refPrefix);
     }

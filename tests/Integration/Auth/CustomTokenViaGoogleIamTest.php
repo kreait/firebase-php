@@ -20,7 +20,7 @@ class CustomTokenViaGoogleIamTest extends IntegrationTestCase
      */
     private $generator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!self::$serviceAccount) {
             $this->markTestSkipped('The integration tests require credentials');

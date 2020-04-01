@@ -30,7 +30,7 @@ class MessagingApiExceptionConverterTest extends TestCase
     /** @var MessagingApiExceptionConverter */
     private $converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->converter = new MessagingApiExceptionConverter();
     }

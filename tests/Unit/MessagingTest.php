@@ -30,7 +30,7 @@ class MessagingTest extends UnitTestCase
     /** @var Messaging */
     private $messaging;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messagingApi = $this->createMock(ApiClient::class);
         $this->appInstanceApi = $this->createMock(AppInstanceApiClient::class);

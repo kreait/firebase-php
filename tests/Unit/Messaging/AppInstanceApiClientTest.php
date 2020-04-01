@@ -24,7 +24,7 @@ class AppInstanceApiClientTest extends TestCase
     /** @var AppInstanceApiClient */
     private $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mock = new MockHandler();
 

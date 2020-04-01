@@ -29,7 +29,7 @@ final class GuzzleHandlerTest extends UnitTestCase
     /** @var GuzzleHandler */
     private $handler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->httpResponses = new MockHandler();
         $this->action = SignInAnonymously::new();

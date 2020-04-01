@@ -36,7 +36,7 @@ final class IdTokenVerifierTest extends TestCase
     /** @var IdTokenVerifier */
     private $verifier;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->token = $this->prophesize(Token::class);
         $this->token->getClaim('sub', Argument::any())->willReturn('sub');

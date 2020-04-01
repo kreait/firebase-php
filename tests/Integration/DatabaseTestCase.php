@@ -19,7 +19,7 @@ abstract class DatabaseTestCase extends IntegrationTestCase
      */
     protected static $db;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 

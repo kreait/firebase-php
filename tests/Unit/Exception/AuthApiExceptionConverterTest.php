@@ -38,7 +38,7 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
     /** @var AuthApiExceptionConverter */
     private $converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->converter = new AuthApiExceptionConverter();
     }

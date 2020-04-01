@@ -47,7 +47,7 @@ final class AuthTest extends UnitTestCase
     /** @var Auth */
     private $auth;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockHandler = new MockHandler();
         $this->clock = new FrozenClock(new DateTimeImmutable());
@@ -124,7 +124,7 @@ final class AuthTest extends UnitTestCase
         $this->idTokenVerifier->method('verifyIdToken')->with($token)->willReturn($token);
 
         $this->expectException(InvalidToken::class);
-        $this->expectExceptionMessageRegExp('/found/i');
+        $this->expectExceptionMessageMatches('/found/i');
         $this->auth->verifyIdToken($token, true);
     }
 

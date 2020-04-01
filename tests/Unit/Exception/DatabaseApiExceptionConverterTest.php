@@ -26,7 +26,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
     /** @var DatabaseApiExceptionConverter */
     private $converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->converter = new DatabaseApiExceptionConverter();
     }
@@ -74,7 +74,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $result = $this->converter->convertException($e);
 
         $this->assertInstanceOf(DatabaseException::class, $result);
-        $this->assertContains('Foo', $result->getMessage());
+        $this->assertStringContainsString('Foo', $result->getMessage());
         $this->assertSame($e, $result->getPrevious());
     }
 

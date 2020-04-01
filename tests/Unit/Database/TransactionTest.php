@@ -24,7 +24,7 @@ class TransactionTest extends TestCase
     /** @var Transaction */
     private $transaction;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->apiClient = $this->createMock(ApiClient::class);
 

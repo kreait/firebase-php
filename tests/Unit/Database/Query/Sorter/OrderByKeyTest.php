@@ -18,14 +18,14 @@ class OrderByKeyTest extends UnitTestCase
      */
     protected $sorter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sorter = new OrderByKey();
     }
 
     public function testModifyUri()
     {
-        $this->assertContains(
+        $this->assertStringContainsString(
             'orderBy='.\rawurlencode('"$key"'),
             (string) $this->sorter->modifyUri(new Uri('http://domain.tld'))
         );

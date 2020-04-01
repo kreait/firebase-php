@@ -25,7 +25,7 @@ class ValidatorTest extends UnitTestCase
      */
     private $validator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

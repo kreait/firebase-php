@@ -26,7 +26,7 @@ class ServiceAccountTest extends UnitTestCase
     /** @var array */
     private $validData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pathToUnreadableJson = self::$fixturesDir.'/ServiceAccount/unreadable.json';
         @\chmod($this->pathToUnreadableJson, 0000);
@@ -36,7 +36,7 @@ class ServiceAccountTest extends UnitTestCase
         $this->validData = \json_decode($this->validJson, true);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         @\chmod($this->pathToUnreadableJson, 0644);
     }

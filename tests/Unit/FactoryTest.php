@@ -42,7 +42,7 @@ class FactoryTest extends UnitTestCase
      */
     private $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validServiceAccountFile = self::$fixturesDir.'/ServiceAccount/valid.json';
         $this->validServiceAccount = ServiceAccount::fromValue($this->validServiceAccountFile);
@@ -53,7 +53,7 @@ class FactoryTest extends UnitTestCase
         $this->factory = (new Factory());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -110,7 +110,7 @@ class FactoryTest extends UnitTestCase
     public function testItCannotCreateAStorageWithoutCredentials()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/Unable to/');
+        $this->expectExceptionMessageMatches('/Unable to/');
 
         (new Factory())->withDisabledAutoDiscovery()->createStorage();
     }
@@ -151,14 +151,14 @@ class FactoryTest extends UnitTestCase
     public function testCustomTokenGenerationIsDisabledWithMissingRequirements()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/disabled/');
+        $this->expectExceptionMessageMatches('/disabled/');
         (new Factory())->withDisabledAutoDiscovery()->createAuth()->createCustomToken('uid');
     }
 
     public function testIdTokenVerificationIsDisabledWithMissingRequirements()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/disabled/');
+        $this->expectExceptionMessageMatches('/disabled/');
 
         (new Factory())->withDisabledAutoDiscovery()->createAuth()->verifyIdToken('idtoken');
     }
@@ -233,7 +233,7 @@ class FactoryTest extends UnitTestCase
         // User Refresh Credentials don't provide a project ID
         // The database component requires a project ID
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/Unable to/');
+        $this->expectExceptionMessageMatches('/Unable to/');
 
         (new Factory())
             ->withGoogleAuthTokenCredentials($this->userRefreshCredentials)
@@ -243,7 +243,7 @@ class FactoryTest extends UnitTestCase
     public function testWithoutAProjectIdTheStorageComponentNeedsABucketName()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/no default/');
+        $this->expectExceptionMessageMatches('/no default/');
 
         (new Factory())
             ->withGoogleAuthTokenCredentials($this->userRefreshCredentials)
@@ -254,7 +254,7 @@ class FactoryTest extends UnitTestCase
     public function testNoRemoteConfigWithoutAProjectId()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/Unable to/');
+        $this->expectExceptionMessageMatches('/Unable to/');
 
         (new Factory())->withDisabledAutoDiscovery()->createRemoteConfig();
     }
@@ -262,7 +262,7 @@ class FactoryTest extends UnitTestCase
     public function testNoMessagingWithoutAProjectId()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/Unable to/');
+        $this->expectExceptionMessageMatches('/Unable to/');
 
         (new Factory())->withDisabledAutoDiscovery()->createMessaging();
     }
@@ -270,7 +270,7 @@ class FactoryTest extends UnitTestCase
     public function testNoFirestoreWithoutCredentials()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/Unable to/');
+        $this->expectExceptionMessageMatches('/Unable to/');
 
         (new Factory())->withDisabledAutoDiscovery()->createFirestore();
     }

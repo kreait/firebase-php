@@ -18,7 +18,7 @@ class CustomTokenTest extends UnitTestCase
      */
     private $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = new Psr7\Request('GET', 'http://domain.tld');
     }

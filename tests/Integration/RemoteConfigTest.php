@@ -60,7 +60,7 @@ CONFIG;
      */
     private $remoteConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->remoteConfig = self::$factory->createRemoteConfig();
     }

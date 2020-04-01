@@ -27,7 +27,7 @@ class AuthTest extends IntegrationTestCase
      */
     private $auth;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->auth = self::$factory->createAuth();
     }

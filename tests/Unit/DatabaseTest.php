@@ -24,7 +24,7 @@ class DatabaseTest extends UnitTestCase
     /** @var Database */
     private $database;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->uri = new Uri('https://database-uri.tld');
         $this->apiClient = $this->createMock(ApiClient::class);

@@ -33,7 +33,7 @@ class ApiClientTest extends TestCase
     /** @var ApiClient */
     private $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mock = new MockHandler();
         $handler = HandlerStack::create($this->mock);

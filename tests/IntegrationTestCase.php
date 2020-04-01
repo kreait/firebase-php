@@ -28,7 +28,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
      */
     protected static $registrationTokens = [];
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$serviceAccount = self::credentialsFromEnvironment() ?? self::credentialsFromFile();
 

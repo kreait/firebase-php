@@ -25,7 +25,7 @@ class ReferenceTest extends UnitTestCase
     private $uri;
 
     /**
-     * @var ApiClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var ApiClient|\PHPUnit\Framework\MockObject\MockObject
      */
     private $apiClient;
 
@@ -34,7 +34,7 @@ class ReferenceTest extends UnitTestCase
      */
     private $reference;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

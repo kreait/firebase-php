@@ -42,7 +42,7 @@ final class DynamicLinksTest extends TestCase
     /** @var DynamicLinks */
     private $service;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->httpHandler = new MockHandler();
         $httpClient = new Client(['handler' => HandlerStack::create($this->httpHandler)]);

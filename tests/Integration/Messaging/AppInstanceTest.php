@@ -15,7 +15,7 @@ final class AppInstanceTest extends IntegrationTestCase
     /** @var Messaging */
     public $messaging;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messaging = self::$factory->createMessaging();
     }

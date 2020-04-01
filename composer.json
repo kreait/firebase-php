@@ -40,8 +40,8 @@
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12.15",
         "phpstan/phpstan-phpunit": "^0.12.6",
-        "phpunit/phpunit": "^7.5.17",
-        "symfony/var-dumper": "^3.4|^4.4|^5.0"
+        "phpunit/phpunit": "^8.5",
+        "symfony/var-dumper": "^5.0"
     },
     "suggest": {
         "google/cloud-firestore": "^1.0 to use the Firestore component"

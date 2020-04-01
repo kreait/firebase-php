@@ -14,7 +14,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 class SnapshotTest extends UnitTestCase
 {
     /**
-     * @var Reference|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reference|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reference;
 
@@ -33,7 +33,7 @@ class SnapshotTest extends UnitTestCase
      */
     private $snapshotWithEmptyValue;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->reference = $this->createMock(Reference::class);
 
