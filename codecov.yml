@@ -1,2 +1,5 @@
+codecov:
+  branch: "4.x"
+
 comment:
   layout: "reach,diff"
