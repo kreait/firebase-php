@@ -31,6 +31,7 @@
         "kreait/gcp-metadata": "^1.1.0",
         "lcobucci/jwt": "^3.3.1",
         "mtdowling/jmespath.php": "^2.3",
+        "psr/cache": "^1.0",
         "psr/simple-cache": "^1.0",
         "riverline/multipart-parser": "^2.0",
         "superbalist/flysystem-google-storage": "^7.0"
