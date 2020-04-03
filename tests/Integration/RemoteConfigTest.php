@@ -55,9 +55,7 @@ class RemoteConfigTest extends IntegrationTestCase
 }
 CONFIG;
 
-    /**
-     * @var RemoteConfig
-     */
+    /** @var RemoteConfig */
     private $remoteConfig;
 
     protected function setUp()

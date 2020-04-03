@@ -663,8 +663,6 @@ class Auth
      * @throws OperationNotAllowed
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
-     *
-     * @return void
      */
     public function verifyPasswordResetCode(string $oobCode)
     {
@@ -686,8 +684,6 @@ class Auth
      * @throws UserDisabled
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
-     *
-     * @return void
      */
     public function confirmPasswordReset(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true)
     {

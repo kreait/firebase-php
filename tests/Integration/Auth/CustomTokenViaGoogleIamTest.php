@@ -15,9 +15,7 @@ use Throwable;
  */
 class CustomTokenViaGoogleIamTest extends IntegrationTestCase
 {
-    /**
-     * @var CustomTokenViaGoogleIam
-     */
+    /** @var CustomTokenViaGoogleIam */
     private $generator;
 
     protected function setUp()

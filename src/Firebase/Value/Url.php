@@ -12,9 +12,7 @@ use Throwable;
 
 class Url implements \JsonSerializable, Value
 {
-    /**
-     * @var UriInterface
-     */
+    /** @var UriInterface */
     private $value;
 
     /**

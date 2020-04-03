@@ -22,9 +22,7 @@ use Kreait\Firebase\Util\JSON;
  */
 class RemoteConfig
 {
-    /**
-     * @var ApiClient
-     */
+    /** @var ApiClient */
     private $client;
 
     /**

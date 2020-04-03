@@ -13,9 +13,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class FromEnvironmentVariableTest extends UnitTestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $envVarName;
 
     protected function setUp()

@@ -40,7 +40,9 @@ final class RegistrationTokensTest extends TestCase
         RegistrationTokens::fromValue($value);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_strings()
     {
         $token = RegistrationToken::fromValue('foo');

@@ -16,19 +16,13 @@ final class UpdateUser implements Request
 
     use EditUserTrait;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $attributesToDelete = [];
 
-    /**
-     * @var Provider[]
-     */
+    /** @var Provider[] */
     private $providersToDelete = [];
 
-    /**
-     * @var array|null
-     */
+    /** @var array|null */
     private $customAttributes;
 
     private function __construct()

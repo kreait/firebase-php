@@ -16,49 +16,31 @@ use Kreait\Firebase\Value\Url;
  */
 trait EditUserTrait
 {
-    /**
-     * @var Uid|null
-     */
+    /** @var Uid|null */
     protected $uid;
 
-    /**
-     * @var Email|null
-     */
+    /** @var Email|null */
     protected $email;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     protected $displayName;
 
-    /**
-     * @var bool|null
-     */
+    /** @var bool|null */
     protected $emailIsVerified;
 
-    /**
-     * @var PhoneNumber|null
-     */
+    /** @var PhoneNumber|null */
     protected $phoneNumber;
 
-    /**
-     * @var Url|null
-     */
+    /** @var Url|null */
     protected $photoUrl;
 
-    /**
-     * @var bool|null
-     */
+    /** @var bool|null */
     protected $markAsEnabled;
 
-    /**
-     * @var bool|null
-     */
+    /** @var bool|null */
     protected $markAsDisabled;
 
-    /**
-     * @var ClearTextPassword|null
-     */
+    /** @var ClearTextPassword|null */
     protected $clearTextPassword;
 
     /**

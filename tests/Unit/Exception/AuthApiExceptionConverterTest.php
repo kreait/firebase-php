@@ -43,7 +43,9 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $this->converter = new AuthApiExceptionConverter();
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_converts_a_request_exception_that_does_not_include_valid_json()
     {
         $requestExcpeption = new RequestException(
@@ -58,7 +60,9 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $this->assertSame($responseBody, $convertedError->getMessage());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_converts_a_connect_exception()
     {
         $connectException = new ConnectException(
@@ -69,7 +73,9 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf(ApiConnectionFailed::class, $this->converter->convertException($connectException));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_can_handle_unknown_exceptions()
     {
         $this->assertInstanceOf(AuthError::class, $this->converter->convertException($e = new RuntimeException()));

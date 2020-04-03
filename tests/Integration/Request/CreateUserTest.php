@@ -13,9 +13,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
  */
 class CreateUserTest extends IntegrationTestCase
 {
-    /**
-     * @var Auth
-     */
+    /** @var Auth */
     private $auth;
 
     protected function setUp()

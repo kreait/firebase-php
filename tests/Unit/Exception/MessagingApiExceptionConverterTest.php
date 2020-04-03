@@ -35,7 +35,9 @@ class MessagingApiExceptionConverterTest extends TestCase
         $this->converter = new MessagingApiExceptionConverter();
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_converts_a_connect_exception()
     {
         $connectException = new ConnectException(

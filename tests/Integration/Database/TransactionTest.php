@@ -17,9 +17,7 @@ use Throwable;
  */
 class TransactionTest extends DatabaseTestCase
 {
-    /**
-     * @var Reference
-     */
+    /** @var Reference */
     private $ref;
 
     protected function setUp()

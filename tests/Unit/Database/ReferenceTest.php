@@ -19,19 +19,13 @@ use Psr\Http\Message\UriInterface;
  */
 class ReferenceTest extends UnitTestCase
 {
-    /**
-     * @var Uri
-     */
+    /** @var Uri */
     private $uri;
 
-    /**
-     * @var ApiClient|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var ApiClient|\PHPUnit_Framework_MockObject_MockObject */
     private $apiClient;
 
-    /**
-     * @var Reference
-     */
+    /** @var Reference */
     private $reference;
 
     protected function setUp()

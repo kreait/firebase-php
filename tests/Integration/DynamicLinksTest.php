@@ -24,7 +24,9 @@ final class DynamicLinksTest extends IntegrationTestCase
         $this->service = self::$factory->createDynamicLinksService($this->domain);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_creates_an_unguessable_link()
     {
         $link = $this->service->createUnguessableLink('https://domain.tld');
@@ -33,7 +35,9 @@ final class DynamicLinksTest extends IntegrationTestCase
         $this->assertSame(17, \mb_strlen($link->suffix()));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_creates_a_short_link()
     {
         $link = $this->service->createShortLink('https://domain.tld');
@@ -42,7 +46,9 @@ final class DynamicLinksTest extends IntegrationTestCase
         $this->assertSame(4, \mb_strlen($link->suffix()));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_creates_an_unguessable_link_by_default()
     {
         $link = $this->service->createUnguessableLink('https://domain.tld');
@@ -51,7 +57,9 @@ final class DynamicLinksTest extends IntegrationTestCase
         $this->assertSame(17, \mb_strlen($link->suffix()));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_shortens_a_long_dynamic_link_to_an_unguessable_link_by_default()
     {
         $link = $this->service->shortenLongDynamicLink($this->domain.'/?link=https://domain.tld');
@@ -60,7 +68,9 @@ final class DynamicLinksTest extends IntegrationTestCase
         $this->assertSame(17, \mb_strlen($link->suffix()));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_shortens_a_long_dynamic_link_to_a_short_link()
     {
         $link = $this->service->shortenLongDynamicLink(
@@ -72,7 +82,9 @@ final class DynamicLinksTest extends IntegrationTestCase
         $this->assertSame(4, \mb_strlen($link->suffix()));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_shortens_a_long_dynamic_link_to_an_unguessable_short_link()
     {
         $link = $this->service->shortenLongDynamicLink(
@@ -84,7 +96,9 @@ final class DynamicLinksTest extends IntegrationTestCase
         $this->assertSame(17, \mb_strlen($link->suffix()));
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_gets_link_statistics()
     {
         // It always returns at least an empty result. Unfortunately, we don't have "real" dynamic links

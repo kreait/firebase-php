@@ -22,24 +22,16 @@ use Throwable;
  */
 class QueryTest extends UnitTestCase
 {
-    /**
-     * @var Uri
-     */
+    /** @var Uri */
     protected $uri;
 
-    /**
-     * @var Reference|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var Reference|\PHPUnit_Framework_MockObject_MockObject */
     protected $reference;
 
-    /**
-     * @var ApiClient|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var ApiClient|\PHPUnit_Framework_MockObject_MockObject */
     protected $apiClient;
 
-    /**
-     * @var Query
-     */
+    /** @var Query */
     protected $query;
 
     protected function setUp()

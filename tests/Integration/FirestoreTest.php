@@ -27,7 +27,9 @@ final class FirestoreTest extends IntegrationTestCase
         $this->collectionName = \str_replace('\\', '_', __CLASS__);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_returns_a_working_firestore_client()
     {
         $client = $this->firestore->database();

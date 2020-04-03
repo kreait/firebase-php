@@ -13,9 +13,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class CustomTokenTest extends UnitTestCase
 {
-    /**
-     * @var Psr7\Request
-     */
+    /** @var Psr7\Request */
     private $request;
 
     protected function setUp()

@@ -15,9 +15,7 @@ use Throwable;
  */
 class FromPath
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $path;
 
     /**

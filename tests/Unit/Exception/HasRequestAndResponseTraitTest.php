@@ -16,7 +16,9 @@ use Psr\Http\Message\ResponseInterface;
  */
 final class HasRequestAndResponseTraitTest extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     */
     public function it_has_nothing()
     {
         $sut = new class() extends Exception {
@@ -29,7 +31,9 @@ final class HasRequestAndResponseTraitTest extends TestCase
         $this->assertNull($sut->getResponse());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_has_a_previous_which_is_not_a_request_exception()
     {
         $previous = new Exception();
@@ -44,7 +48,9 @@ final class HasRequestAndResponseTraitTest extends TestCase
         $this->assertNull($sut->getResponse());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_has_a_previous_request_exception()
     {
         $previous = new RequestException(
@@ -63,7 +69,9 @@ final class HasRequestAndResponseTraitTest extends TestCase
         $this->assertSame($response, $sut->getResponse());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_has_a_pre_previous_request_exception()
     {
         $prePrevious = new RequestException(

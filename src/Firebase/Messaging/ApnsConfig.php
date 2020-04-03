@@ -6,9 +6,7 @@ namespace Kreait\Firebase\Messaging;
 
 class ApnsConfig implements Config
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $rawConfig;
 
     private function __construct()

@@ -15,14 +15,10 @@ use Psr\Http\Message\UriInterface;
  */
 class ValidatorTest extends UnitTestCase
 {
-    /**
-     * @var UriInterface
-     */
+    /** @var UriInterface */
     private $uri;
 
-    /**
-     * @var Validator
-     */
+    /** @var Validator */
     private $validator;
 
     protected function setUp()

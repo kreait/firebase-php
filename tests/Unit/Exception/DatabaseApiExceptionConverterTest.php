@@ -31,7 +31,9 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->converter = new DatabaseApiExceptionConverter();
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_converts_a_request_exception_that_does_not_include_valid_json()
     {
         $requestExcpeption = new RequestException(
@@ -46,7 +48,9 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->assertSame($responseBody, $convertedError->getMessage());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_converts_a_connect_exception()
     {
         $connectException = new ConnectException(
@@ -78,7 +82,9 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->assertSame($e, $result->getPrevious());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_converts_a_401_response_to_a_permission_denied_error()
     {
         $e = new ClientException(
@@ -101,7 +107,9 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf(\Kreait\Firebase\Exception\PermissionDenied::class, $result);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_converts_a_403_response_to_a_permission_denied_error()
     {
         $e = new ClientException(
@@ -124,7 +132,9 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf(\Kreait\Firebase\Exception\PermissionDenied::class, $result);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_uses_the_response_body_as_message_when_no_json_is_present()
     {
         $e = new ClientException(

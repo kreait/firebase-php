@@ -15,9 +15,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
  */
 final class ApiClientTest extends IntegrationTestCase
 {
-    /**
-     * @var ApiClient
-     */
+    /** @var ApiClient */
     private $client;
 
     /** @var Message */

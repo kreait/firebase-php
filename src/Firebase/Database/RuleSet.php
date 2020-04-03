@@ -8,9 +8,7 @@ use JsonSerializable;
 
 class RuleSet implements JsonSerializable
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $rules;
 
     private function __construct(array $rules)

@@ -14,9 +14,7 @@ use League\Flysystem\FilesystemInterface;
  */
 class StorageTest extends IntegrationTestCase
 {
-    /**
-     * @var Storage
-     */
+    /** @var Storage */
     private $storage;
 
     protected function setUp()

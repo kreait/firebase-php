@@ -18,9 +18,7 @@ class Provider implements \JsonSerializable, Value
     const PHONE = 'phone';
     const TWITTER = 'twitter.com';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $value;
 
     /**

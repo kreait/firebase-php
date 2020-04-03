@@ -13,9 +13,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class OrderByKeyTest extends UnitTestCase
 {
-    /**
-     * @var OrderByKey
-     */
+    /** @var OrderByKey */
     protected $sorter;
 
     protected function setUp()

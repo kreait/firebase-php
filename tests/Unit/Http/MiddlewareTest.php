@@ -15,14 +15,10 @@ use Psr\Http\Message\RequestInterface;
  */
 class MiddlewareTest extends UnitTestCase
 {
-    /**
-     * @var Psr7\Request
-     */
+    /** @var Psr7\Request */
     private $request;
 
-    /**
-     * @var \Closure
-     */
+    /** @var \Closure */
     private $handler;
 
     protected function setUp()

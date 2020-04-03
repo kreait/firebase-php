@@ -11,19 +11,13 @@ use Throwable;
 
 class Template implements \JsonSerializable
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $etag = '*';
 
-    /**
-     * @var Parameter[]
-     */
+    /** @var Parameter[] */
     private $parameters = [];
 
-    /**
-     * @var Condition[]
-     */
+    /** @var Condition[] */
     private $conditions = [];
 
     /** @var Version|null */

@@ -13,24 +13,16 @@ use Superbalist\Flysystem\GoogleStorage\GoogleStorageAdapter;
 
 class Storage
 {
-    /**
-     * @var StorageClient
-     */
+    /** @var StorageClient */
     private $storageClient;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $defaultBucket;
 
-    /**
-     * @var Bucket[]
-     */
+    /** @var Bucket[] */
     private $buckets = [];
 
-    /**
-     * @var FilesystemInterface[]
-     */
+    /** @var FilesystemInterface[] */
     private $filesystems = [];
 
     /**

@@ -24,9 +24,7 @@ use Throwable;
  */
 class AuthTest extends IntegrationTestCase
 {
-    /**
-     * @var Auth
-     */
+    /** @var Auth */
     private $auth;
 
     protected function setUp()

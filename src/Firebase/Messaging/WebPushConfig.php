@@ -6,9 +6,7 @@ namespace Kreait\Firebase\Messaging;
 
 class WebPushConfig implements Config
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $rawConfig;
 
     private function __construct()

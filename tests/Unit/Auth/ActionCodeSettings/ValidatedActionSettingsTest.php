@@ -22,14 +22,18 @@ final class ValidatedActionSettingsTest extends TestCase
         $this->assertEquals($expected, ValidatedActionCodeSettings::fromArray($input)->toArray());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_rejects_invalid_settings()
     {
         $this->expectException(InvalidArgumentException::class);
         ValidatedActionCodeSettings::fromArray(['foo' => 'bar']);
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function it_can_be_empty()
     {
         $this->assertEmpty(ValidatedActionCodeSettings::empty()->toArray());

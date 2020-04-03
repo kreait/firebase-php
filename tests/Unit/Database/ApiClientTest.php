@@ -18,19 +18,13 @@ use Psr\Http\Message\ResponseInterface;
  */
 class ApiClientTest extends UnitTestCase
 {
-    /**
-     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $http;
 
-    /**
-     * @var ApiClient
-     */
+    /** @var ApiClient */
     private $client;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $targetUrl;
 
     protected function setUp()

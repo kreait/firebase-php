@@ -9,9 +9,7 @@ use Kreait\Firebase\Value;
 
 class ClearTextPassword implements \JsonSerializable, Value
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $value;
 
     /**

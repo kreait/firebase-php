@@ -23,24 +23,16 @@ use RuntimeException;
  */
 class FactoryTest extends UnitTestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $validServiceAccountFile;
 
-    /**
-     * @var ServiceAccount
-     */
+    /** @var ServiceAccount */
     private $validServiceAccount;
 
-    /**
-     * @var UserRefreshCredentials
-     */
+    /** @var UserRefreshCredentials */
     private $userRefreshCredentials;
 
-    /**
-     * @var Factory
-     */
+    /** @var Factory */
     private $factory;
 
     protected function setUp()

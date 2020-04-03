@@ -13,19 +13,13 @@ use Kreait\Firebase\Value\Provider;
  */
 class LinkedProviderData implements \JsonSerializable
 {
-    /**
-     * @var UserRecord
-     */
+    /** @var UserRecord */
     public $userRecord;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $federatedId;
 
-    /**
-     * @var Provider
-     */
+    /** @var Provider */
     public $provider;
 
     /**
@@ -35,9 +29,7 @@ class LinkedProviderData implements \JsonSerializable
      */
     public $idToken;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     public $refreshToken;
 
     /**
@@ -54,9 +46,7 @@ class LinkedProviderData implements \JsonSerializable
      */
     public $oauthAccessToken;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $rawUserInfo;
 
     public function __construct(UserRecord $userRecord)

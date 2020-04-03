@@ -8,9 +8,7 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 
 final class MessageData implements \JsonSerializable
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $data = [];
 
     private function __construct()

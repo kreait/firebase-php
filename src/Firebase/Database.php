@@ -22,14 +22,10 @@ class Database
 {
     const SERVER_TIMESTAMP = ['.sv' => 'timestamp'];
 
-    /**
-     * @var ApiClient
-     */
+    /** @var ApiClient */
     private $client;
 
-    /**
-     * @var UriInterface
-     */
+    /** @var UriInterface */
     private $uri;
 
     /**

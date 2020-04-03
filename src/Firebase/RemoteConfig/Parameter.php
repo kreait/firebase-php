@@ -8,24 +8,16 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 
 class Parameter implements \JsonSerializable
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $description = '';
 
-    /**
-     * @var DefaultValue
-     */
+    /** @var DefaultValue */
     private $defaultValue;
 
-    /**
-     * @var ConditionalValue[]
-     */
+    /** @var ConditionalValue[] */
     private $conditionalValues = [];
 
     private function __construct()

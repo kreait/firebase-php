@@ -9,9 +9,7 @@ use Kreait\Firebase\Value;
 
 class Uid implements \JsonSerializable, Value
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $value;
 
     /**

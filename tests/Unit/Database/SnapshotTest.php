@@ -13,24 +13,16 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class SnapshotTest extends UnitTestCase
 {
-    /**
-     * @var Reference|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var Reference|\PHPUnit_Framework_MockObject_MockObject */
     private $reference;
 
-    /**
-     * @var Snapshot
-     */
+    /** @var Snapshot */
     private $snapshotWithArrayValue;
 
-    /**
-     * @var Snapshot
-     */
+    /** @var Snapshot */
     private $snapshotWithScalarValue;
 
-    /**
-     * @var Snapshot
-     */
+    /** @var Snapshot */
     private $snapshotWithEmptyValue;
 
     protected function setUp()

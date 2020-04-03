@@ -19,9 +19,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
  */
 class MessagingTest extends IntegrationTestCase
 {
-    /**
-     * @var Messaging
-     */
+    /** @var Messaging */
     public $messaging;
 
     protected function setUp()
