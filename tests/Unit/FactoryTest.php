@@ -7,6 +7,7 @@ namespace Kreait\Firebase\Tests\Unit;
 use DateTimeImmutable;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\Credentials\UserRefreshCredentials;
+use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Uri;
 use InvalidArgumentException;
@@ -265,5 +266,11 @@ class FactoryTest extends UnitTestCase
         $this->expectExceptionMessageMatches('/Unable to/');
 
         (new Factory())->withDisabledAutoDiscovery()->createFirestore();
+    }
+
+    public function testItAcceptsACustomGuzzleHttpHandler(): void
+    {
+        $this->factory->createApiClient(['handler' => new MockHandler()]);
+        $this->addToAssertionCount(1);
     }
 }
