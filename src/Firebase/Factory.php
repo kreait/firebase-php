@@ -11,11 +11,14 @@ use Firebase\Auth\Token\Generator as CustomTokenGenerator;
 use Firebase\Auth\Token\HttpKeyStore;
 use Firebase\Auth\Token\Verifier as LegacyIdTokenVerifier;
 use Google\Auth\ApplicationDefaultCredentials;
+use Google\Auth\Cache\MemoryCacheItemPool;
 use Google\Auth\Credentials\AppIdentityCredentials;
 use Google\Auth\Credentials\GCECredentials;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\Credentials\UserRefreshCredentials;
 use Google\Auth\CredentialsLoader;
+use Google\Auth\FetchAuthTokenCache;
+use Google\Auth\HttpHandler\HttpHandlerFactory;
 use Google\Auth\Middleware\AuthTokenMiddleware;
 use Google\Auth\ProjectIdProviderInterface;
 use Google\Cloud\Firestore\FirestoreClient;
@@ -35,6 +38,7 @@ use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\Url;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\SimpleCache\CacheInterface;
 use Throwable;
@@ -70,8 +74,11 @@ class Factory
     /** @var Email|null */
     protected $clientEmail;
 
-    /** @var CacheInterface|null */
+    /** @var CacheInterface */
     protected $verifierCache;
+
+    /** @var CacheItemPoolInterface */
+    protected $authTokenCache;
 
     /** @var bool */
     protected $discoveryIsDisabled = false;
@@ -94,6 +101,8 @@ class Factory
     public function __construct()
     {
         $this->clock = new SystemClock();
+        $this->verifierCache = new InMemoryCache();
+        $this->authTokenCache = new MemoryCacheItemPool();
     }
 
     /**
@@ -158,6 +167,14 @@ class Factory
     {
         $factory = clone $this;
         $factory->verifierCache = $cache;
+
+        return $factory;
+    }
+
+    public function withAuthTokenCache(CacheItemPoolInterface $cache): self
+    {
+        $factory = clone $this;
+        $factory->authTokenCache = $cache;
 
         return $factory;
     }
@@ -306,7 +323,7 @@ class Factory
             );
         }
 
-        $keyStore = new HttpKeyStore(new Client(), $this->verifierCache ?: new InMemoryCache());
+        $keyStore = new HttpKeyStore(new Client(), $this->verifierCache);
 
         $baseVerifier = new LegacyIdTokenVerifier($projectId->sanitizedValue(), $keyStore);
 
@@ -455,7 +472,13 @@ class Factory
         }
 
         if ($credentials = $this->getGoogleAuthTokenCredentials()) {
-            $handler->push(new AuthTokenMiddleware($credentials));
+            $credentials = new FetchAuthTokenCache($credentials, null, $this->authTokenCache);
+            $authTokenHandlerConfig = $config;
+            $authTokenHandlerConfig['handler'] = clone $handler;
+
+            $authTokenHandler = HttpHandlerFactory::build(new Client($authTokenHandlerConfig));
+
+            $handler->push(new AuthTokenMiddleware($credentials, $authTokenHandler));
         }
 
         $handler->push(Middleware::responseWithSubResponses());
