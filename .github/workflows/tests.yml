@@ -18,7 +18,7 @@ jobs:
 
     env:
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
-      key: cache-v2 # can be any string, change to clear the extension cache.
+      key: cache-v5 # can be any string, change to clear the extension cache.
 
     steps:
       - name: Checkout code
@@ -55,7 +55,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-v5-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies (stable)
@@ -119,7 +119,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-v5-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
