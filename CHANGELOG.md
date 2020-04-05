@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 5.1.0 - 2020-04-06
 
 * Fetched authentication tokens (to authenticate requests to the Firebase API) are now cached in-memory
   by default ([#404](https://github.com/kreait/firebase-php/issues/404))
