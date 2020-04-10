@@ -41,7 +41,7 @@ html_context = {
   "display_github": True,
   "github_user": "kreait",
   "github_repo": "firebase-php",
-  "github_version": "",
+  "github_version": "master",
   "conf_py_path": "/docs/",
   "source_suffix": ".rst",
 }
