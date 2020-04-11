@@ -75,7 +75,7 @@ Caching
 *******
 
 Authentication tokens
----------------------
+=====================
 
 Before connecting to the Firebase APIs, the SDK fetches an authentication token for your credentials.
 This authentication token is cached in-memory so that it can be re-used during the same process.
@@ -100,7 +100,7 @@ Here is an example using the `Symfony Cache Component <https://symfony.com/doc/c
 
 
 ID Token Verification
----------------------
+=====================
 
 In order to verify ID tokens, the verifier makes a call to fetch Firebase's currently available public keys.
 The keys are cached in memory by default.
