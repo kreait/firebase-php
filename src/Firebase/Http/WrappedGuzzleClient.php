@@ -1,8 +1,5 @@
 <?php
 
-/** @noinspection PhpUnhandledExceptionInspection */
-/** @noinspection ReturnTypeCanBeDeclaredInspection */
-
 declare(strict_types=1);
 
 namespace Kreait\Firebase\Http;
