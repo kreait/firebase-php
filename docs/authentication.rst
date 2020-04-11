@@ -241,6 +241,25 @@ Sign In with a Refresh Token
     $signInResult = $auth->signInWithRefreshToken($refreshToken);
 
 
+Sign In with IdP credentials
+----------------------------
+
+IdP (Identitiy Provider) credentials are credentials provided by authentication providers other than Firebase,
+for example Facebook, Github, Google or Twitter. You can find the currently supported authentication providers
+in the constants of `https://github.com/kreait/firebase-php/blob/master/src/Firebase/Value/Provider.php <https://github.com/kreait/firebase-php/blob/master/src/Firebase/Value/Provider.php>`_
+
+This could be useful if you already have "Sign in with Twitter" implemented in your application, and want to
+authenticate the same user with Firebase.
+
+Once you have received those credentials, you can use them to sign a user in with them, for example with Twitter:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Value\Provider;
+
+    $signInResult = $auth->signInWithIdpAccessToken(Provider::TWITTER, $accessToken);
+
+
 Sign In without a token
 -----------------------
 
