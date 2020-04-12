@@ -16,7 +16,6 @@ use Kreait\Firebase\Messaging\AppInstance;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Http\Request\SendMessage;
-use Kreait\Firebase\Messaging\Http\Request\SendMessages;
 use Kreait\Firebase\Messaging\Http\Request\SendMessageToTokens;
 use Kreait\Firebase\Messaging\Http\Request\ValidateMessage;
 use Kreait\Firebase\Messaging\Message;
