@@ -65,9 +65,11 @@ jobs:
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Run PHPStan
+        if: "matrix.php == '7.4'"
         run: vendor/bin/phpstan analyse --no-progress
 
       - name: Run PHP CS Fixer
+        if: "matrix.php == '7.4'"
         run: vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no
 
       - name: Run PHPUnit
