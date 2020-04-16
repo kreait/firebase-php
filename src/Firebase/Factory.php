@@ -212,6 +212,10 @@ class Factory
         if ($credentials = \getenv('FIREBASE_CREDENTIALS')) {
             return $this->serviceAccount = ServiceAccount::fromValue($credentials);
         }
+        
+        if ($credentials = \getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
+            return $this->serviceAccount = ServiceAccount::fromValue($credentials);
+        }
 
         return null;
     }
