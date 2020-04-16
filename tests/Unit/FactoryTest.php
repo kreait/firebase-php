@@ -12,6 +12,8 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Uri;
 use InvalidArgumentException;
 use Kreait\Clock\FrozenClock;
+use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
+use Kreait\Firebase\Auth\DisabledLegacyCustomTokenGenerator;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Tests\UnitTestCase;
@@ -76,6 +78,26 @@ class FactoryTest extends UnitTestCase
             ->createStorage();
 
         $this->assertSame('foo', $storage->getBucket()->name());
+    }
+
+    public function testCreateCustomTokenGeneratorWithApplicationDefaultCredentials(): void
+    {
+        \putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->validServiceAccountFile);
+
+        $generator = (new Factory())->createCustomTokenGenerator();
+        $this->assertNotInstanceOf(DisabledLegacyCustomTokenGenerator::class, $generator);
+
+        \putenv('GOOGLE_APPLICATION_CREDENTIALS');
+    }
+
+    public function testCreateCustomTokenGeneratorWithClientEmailOnly(): void
+    {
+        $generator = (new Factory())
+            ->withDisabledAutoDiscovery()
+            ->withClientEmail('does@not.matter')
+            ->createCustomTokenGenerator();
+
+        $this->assertInstanceOf(CustomTokenViaGoogleIam::class, $generator);
     }
 
     public function testCreateStorageWithApplicationDefaultCredentials(): void

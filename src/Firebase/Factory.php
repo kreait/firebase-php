@@ -33,6 +33,7 @@ use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
 use Kreait\Firebase\Auth\DisabledLegacyCustomTokenGenerator;
 use Kreait\Firebase\Auth\DisabledLegacyIdTokenVerifier;
 use Kreait\Firebase\Auth\IdTokenVerifier;
+use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\Project\ProjectId;
@@ -213,6 +214,30 @@ class Factory
             return $this->serviceAccount = ServiceAccount::fromValue($credentials);
         }
 
+        if ($this->discoveryIsDisabled) {
+            return null;
+        }
+
+        if ($credentials = \getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
+            try {
+                return $this->serviceAccount = ServiceAccount::fromValue($credentials);
+            } catch (InvalidArgumentException $e) {
+                // Do nothing, continue trying
+            }
+        }
+
+        // @codeCoverageIgnoreStart
+        // We can't reliably test this without re-implementing it ourselves
+        if ($credentials = CredentialsLoader::fromWellKnownFile()) {
+            try {
+                return $this->serviceAccount = ServiceAccount::fromValue($credentials);
+            } catch (InvalidArgumentException $e) {
+                // Do nothing, continue trying
+            }
+        }
+        // @codeCoverageIgnoreEnd
+
+        // ... or don't
         return null;
     }
 
@@ -247,12 +272,19 @@ class Factory
         }
 
         return null;
-        // @codeCoverageIgnoreEnd
     }
 
     protected function getClientEmail(): ?Email
     {
-        return $this->clientEmail;
+        if ($this->clientEmail) {
+            return $this->clientEmail;
+        }
+
+        if ($serviceAccount = $this->getServiceAccount()) {
+            return new Email($serviceAccount->getClientEmail());
+        }
+
+        return null;
     }
 
     protected function getDatabaseUri(): UriInterface

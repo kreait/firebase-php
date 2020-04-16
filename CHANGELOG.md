@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* Custom Token Generation was not possible with an auto-discovered Service Account 
+  ([#412](https://github.com/kreait/firebase-php/issues/412))
+
 ## 5.1.0 - 2020-04-06
 
 * Fetched authentication tokens (to authenticate requests to the Firebase API) are now cached in-memory

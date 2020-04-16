@@ -43,7 +43,7 @@ class ServiceAccount
     }
 
     /**
-     * @param self|string|array<string, string> $value
+     * @param self|string|array<mixed> $value
      *
      * @throws InvalidArgumentException
      *
