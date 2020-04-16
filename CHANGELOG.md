@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 5.1.1 - 2020-04-16
 
 * Custom Token Generation was not possible with an auto-discovered Service Account 
   ([#412](https://github.com/kreait/firebase-php/issues/412))
