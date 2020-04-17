@@ -397,7 +397,7 @@ Replace data inside a transaction
 
     $counterRef = $db->getReference('counter');
 
-    $db->runTransaction(function (Transaction $transaction) use ($counterRef) {
+    $result = $db->runTransaction(function (Transaction $transaction) use ($counterRef) {
 
         // You have to snapshot the reference in order to change its value
         $counterSnapshot = $transaction->snapshot($counterRef);
@@ -409,6 +409,8 @@ Replace data inside a transaction
         // If the value hasn't changed in the Realtime Database while we are
         // incrementing it, the transaction will be a success.
         $transaction->set($counterRef, $newCounter);
+
+        return $newCounter;
     });
 
 Delete data inside a transaction
