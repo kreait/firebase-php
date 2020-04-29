@@ -2,6 +2,36 @@
 Troubleshooting
 ###############
 
+**************************
+Call to private method ...
+**************************
+
+If you receive an error like
+
+.. code-block:: bash
+
+    Fatal error: Uncaught Error: Call to private method Kreait\Firebase\ServiceAccount::fromJsonFile()
+
+you have most likely followed a tutorial that is targeted at Version 4.x of this release and have code
+that looks like this:
+
+.. code-block:: php
+
+    $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/google-service-account.json');
+    $firebase = (new Factory)
+        ->withServiceAccount($serviceAccount)
+        ->create();
+
+    $database = $firebase->getDatabase();
+
+Change it to the following:
+
+.. code-block:: php
+
+    $factory = (new Factory)->withServiceAccount(__DIR__.'/google-service-account.json');
+
+    $database = $factory->createDatabase();
+
 ********************************
 PHP Parse Error/PHP Syntax Error
 ********************************
