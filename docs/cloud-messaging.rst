@@ -252,7 +252,7 @@ are both optional.
 
     $changedNotification = $notification
         ->withTitle('Changed title')
-        ->withBody('Changed body)
+        ->withBody('Changed body')
         ->withImageUrl('http://lorempixel.com/200/400/');
 
 Once you have created a message with one of the methods described below,
