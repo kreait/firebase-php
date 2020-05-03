@@ -1,0 +1,75 @@
+name: Lint
+
+on:
+  push:
+    paths:
+      - '**.php'
+    tags-ignore:
+      - '*'
+  pull_request:
+    paths:
+      - '**.php'
+
+jobs:
+  php-cs-fixer:
+    name: PHP-CS-Fixer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: PHP-CS-Fixer
+        uses: docker://oskarstark/php-cs-fixer-ga
+        with:
+          args: --diff --dry-run
+
+  phpstan:
+    name: PHPStan
+    runs-on: ubuntu-latest
+
+    env:
+      extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
+      key: cache-v5 # can be any string, change to clear the extension cache.
+      php-version: '7.4'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup cache environment
+        id: cache-env
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ env.php-version }}
+          extensions: ${{ env.extensions }}
+          key: ${{ env.key }}
+
+      - name: Cache extensions
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.cache-env.outputs.dir }}
+          key: ${{ steps.cache-env.outputs.key }}
+          restore-keys: ${{ steps.cache-env.outputs.key }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.php-version }}
+          extensions: ${{ env.extensions }}
+          tools: composer, pecl
+          coverage: xdebug
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-v5-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies (stable)
+        run: composer update --prefer-stable --prefer-dist --no-interaction --no-suggest --no-progress
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --no-progress

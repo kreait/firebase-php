@@ -1,0 +1,83 @@
+name: Integration Tests
+
+on:
+  schedule:
+    # Every night a 4am (UTC)
+    - cron: '0 4 * * *'
+  push:
+    paths:
+      - 'src/**.php'
+      - 'tests/**.php'
+    tags-ignore:
+      - '*'
+  pull_request:
+    paths:
+      - 'src/**.php'
+      - 'tests/**.php'
+
+jobs:
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    if: github.repository == 'kreait/firebase-php'
+
+    env:
+      php-version: '7.4'
+      extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
+      key: cache-integration-v2 # can be any string, change to clear the extension cache.
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup cache environment
+        id: cache-env
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ env.php-version }}
+          extensions: ${{ env.extensions }}
+          key: ${{ env.key }}
+
+      - name: Cache extensions
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.cache-env.outputs.dir }}
+          key: ${{ steps.cache-env.outputs.key }}
+          restore-keys: ${{ steps.cache-env.outputs.key }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.php-version }}
+          extensions: ${{ env.extensions }}
+          tools: composer, pecl
+          coverage: xdebug
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-v5-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-suggest --no-progress
+
+      - name: Setup Problem Matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Run Integration Tests
+        env:
+          TEST_FIREBASE_CREDENTIALS: ${{secrets.TEST_FIREBASE_CREDENTIALS}}
+          TEST_REGISTRATION_TOKENS: ${{secrets.TEST_REGISTRATION_TOKENS}}
+        run: vendor/bin/phpunit --testsuite=integration --coverage-clover=coverage.xml --log-junit=test-report.xml
+
+      - name: Upload code coverage
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: integrationtests

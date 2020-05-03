@@ -13,19 +13,13 @@ use Throwable;
 
 abstract class IntegrationTestCase extends FirebaseTestCase
 {
-    /**
-     * @var Factory
-     */
+    /** @var Factory */
     protected static $factory;
 
-    /**
-     * @var ServiceAccount|null
-     */
+    /** @var ServiceAccount|null */
     protected static $serviceAccount;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     protected static $registrationTokens = [];
 
     public static function setUpBeforeClass(): void
@@ -41,7 +35,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         self::$registrationTokens = self::registrationTokensFromEnvironment() ?? self::registrationTokensFromFile() ?? [];
     }
 
-    protected function createUserWithEmailAndPassword(string $email = null, string $password = null): UserRecord
+    protected function createUserWithEmailAndPassword(?string $email = null, ?string $password = null): UserRecord
     {
         /** @noinspection NonSecureUniqidUsageInspection */
         $uniqid = \uniqid();
@@ -57,7 +51,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
             );
     }
 
-    protected function deleteUser($userOrUid)
+    protected function deleteUser($userOrUid): void
     {
         $uid = $userOrUid instanceof UserRecord ? $userOrUid->uid : $userOrUid;
 
@@ -87,7 +81,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
      */
     private static function credentialsFromEnvironment()
     {
-        if ($credentials = getenv('TEST_FIREBASE_CREDENTIALS')) {
+        if ($credentials = \getenv('TEST_FIREBASE_CREDENTIALS')) {
             return ServiceAccount::fromValue($credentials);
         }
 
@@ -106,7 +100,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         }
 
         try {
-            if ($contents = file_get_contents($path)) {
+            if ($contents = \file_get_contents($path)) {
                 return JSON::decode($contents, true);
             }
 
@@ -121,7 +115,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
      */
     private static function registrationTokensFromEnvironment()
     {
-        if (!($tokens = getenv('TEST_REGISTRATION_TOKENS'))) {
+        if (!($tokens = \getenv('TEST_REGISTRATION_TOKENS'))) {
             return null;
         }
 

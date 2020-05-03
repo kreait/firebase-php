@@ -3,7 +3,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     beStrictAboutOutputDuringTests="true"
-    bootstrap="tests/bootstrap.php"
     ignoreDeprecatedCodeUnitsFromCodeCoverage="true"
     colors="true">
     <testsuites>

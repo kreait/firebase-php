@@ -15,7 +15,7 @@ trim_trailing_whitespace = false
 [Makefile]
 indent_style = tab
 
-[**.yml]
+[**.{yml,yaml}]
 indent_size = 2
 
 [{phpstan.neon,phpstan.neon.dist}]

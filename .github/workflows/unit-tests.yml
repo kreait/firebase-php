@@ -1,0 +1,82 @@
+name: Unit Tests
+
+on:
+  push:
+    paths:
+      - 'src/**.php'
+      - 'tests/**.php'
+    tags-ignore:
+      - '*'
+  pull_request:
+    paths:
+      - 'src/**.php'
+      - 'tests/**.php'
+
+jobs:
+  tests:
+    name: PHP ${{matrix.php}}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: ["7.2", "7.3", "7.4"]
+
+    env:
+      extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
+      key: cache-v5 # can be any string, change to clear the extension cache.
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup cache environment
+        id: cache-env
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.extensions }}
+          key: ${{ env.key }}
+
+      - name: Cache extensions
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.cache-env.outputs.dir }}
+          key: ${{ steps.cache-env.outputs.key }}
+          restore-keys: ${{ steps.cache-env.outputs.key }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.extensions }}
+          tools: composer, pecl
+          coverage: xdebug
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-v5-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies (stable)
+        run: composer update --prefer-stable --prefer-dist --no-interaction --no-suggest --no-progress
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --no-progress
+
+      - name: Setup Problem Matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --testsuite=unit --coverage-clover=coverage.xml --log-junit=test-report.xml
+
+      - name: Upload code coverage
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests

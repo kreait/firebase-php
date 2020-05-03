@@ -107,7 +107,7 @@ class Factory
     }
 
     /**
-     * @param string|array<string, string> $value
+     * @param string|array<string, string>|ServiceAccount $value
      */
     public function withServiceAccount($value): self
     {

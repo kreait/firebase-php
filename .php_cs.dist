@@ -1,7 +1,7 @@
 <?php
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(['src', 'tests/Integration', 'tests/Unit']);
+    ->in(['src', 'tests']);
 
 return PhpCsFixer\Config::create()
     ->setUsingCache(true)
