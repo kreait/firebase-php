@@ -410,6 +410,7 @@ class AuthTest extends IntegrationTestCase
         $this->assertIsString($result->idToken());
         $this->assertNull($result->accessToken());
         $this->assertIsString($result->refreshToken());
+        $this->assertIsString($result->firebaseUserId());
 
         $this->auth->deleteUser($user->uid);
     }
@@ -425,6 +426,7 @@ class AuthTest extends IntegrationTestCase
         $this->assertIsString($result->idToken());
         $this->assertNull($result->accessToken());
         $this->assertIsString($result->refreshToken());
+        $this->assertIsString($result->firebaseUserId());
 
         $this->auth->deleteUser($user->uid);
     }
@@ -442,6 +444,7 @@ class AuthTest extends IntegrationTestCase
         $this->assertIsString($result->idToken());
         $this->assertIsString($result->accessToken());
         $this->assertIsString($result->refreshToken());
+        $this->assertIsString($result->firebaseUserId());
 
         $this->auth->deleteUser($user->uid);
     }
@@ -458,6 +461,7 @@ class AuthTest extends IntegrationTestCase
         $this->assertIsString($result->idToken());
         $this->assertNull($result->accessToken());
         $this->assertIsString($result->refreshToken());
+        $this->assertIsString($result->firebaseUserId());
 
         $this->auth->deleteUser($user->uid);
     }
@@ -478,6 +482,7 @@ class AuthTest extends IntegrationTestCase
         $this->assertIsString($result->idToken());
         $this->assertNull($result->accessToken());
         $this->assertIsString($result->refreshToken());
+        $this->assertIsString($result->firebaseUserId());
 
         $this->auth->deleteUser($user->uid);
     }
@@ -491,6 +496,7 @@ class AuthTest extends IntegrationTestCase
         $this->assertIsString($idToken);
         $this->assertNull($result->accessToken());
         $this->assertIsString($result->refreshToken());
+        $this->assertIsString($result->firebaseUserId());
 
         $token = $this->auth->parseToken($idToken);
         $this->assertIsString($uid = $token->getClaim('sub', false));

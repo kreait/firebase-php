@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* It is now possible to retrieve the Firebase User ID directly from a `SignInResult` after a successful user sign-in with `SignInResult::firebaseUserId()`
+
 ## 5.1.1 - 2020-04-16
 
 * Custom Token Generation was not possible with an auto-discovered Service Account 

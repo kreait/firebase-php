@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
+use Lcobucci\JWT\Parser;
+
 final class SignInResult
 {
     /** @var string|null */
@@ -20,6 +22,9 @@ final class SignInResult
 
     /** @var array<string, mixed> */
     private $data = [];
+
+    /** @var string|null */
+    private $firebaseUserId;
 
     private function __construct()
     {
@@ -47,6 +52,27 @@ final class SignInResult
     public function idToken(): ?string
     {
         return $this->idToken;
+    }
+
+    public function firebaseUserId(): ?string
+    {
+        // @codeCoverageIgnoreStart
+        if ($this->firebaseUserId) {
+            return $this->firebaseUserId;
+        }
+        // @codeCoverageIgnoreEnd
+
+        if ($this->idToken) {
+            $idToken = (new Parser())->parse($this->idToken);
+
+            foreach (['sub', 'localId', 'user_id'] as $claim) {
+                if ($uid = $idToken->getClaim($claim, false)) {
+                    return $this->firebaseUserId = $uid;
+                }
+            }
+        }
+
+        return null;
     }
 
     public function accessToken(): ?string

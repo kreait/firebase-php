@@ -174,6 +174,7 @@ with the following accessors:
     // $signInResult = $auth->signIn*()
 
     $signInResult->idToken(); // string|null
+    $signInResult->firebaseUserId(); // string|null
     $signInResult->accessToken(); // string|null
     $signInResult->refreshToken(); // string|null
     $signInResult->data(); // array
