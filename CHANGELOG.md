@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 5.2.0 - 2020-05-03
 
 * It is now possible to retrieve the Firebase User ID directly from a `SignInResult` after a successful user sign-in with `SignInResult::firebaseUserId()`
 
