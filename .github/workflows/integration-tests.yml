@@ -1,9 +1,9 @@
 name: Integration Tests
 
 on:
-  schedule:
-    # Every night a 4am (UTC)
-    - cron: '0 4 * * *'
+#  schedule:
+#    # Every night a 4am (UTC)
+#    - cron: '0 4 * * *'
   push:
     paths:
       - 'src/**.php'
