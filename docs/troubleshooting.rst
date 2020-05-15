@@ -2,6 +2,12 @@
 Troubleshooting
 ###############
 
+.. note::
+    This SDK works with immutable objects until noted otherwise. You can recognize these
+    objects when they have a ˚`with*``method. In that case, please keep in mind that in
+    order to get hold of the changes you made, you will have to use the result of
+    that method, e.g. ``$changedObject = $object->withChangedProperty();``.
+
 **************************
 Call to private method ...
 **************************
