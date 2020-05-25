@@ -8,6 +8,7 @@ use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\ServiceAccount;
+use Kreait\Firebase\Util;
 use Kreait\Firebase\Util\JSON;
 use Throwable;
 
@@ -81,7 +82,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
      */
     private static function credentialsFromEnvironment()
     {
-        if ($credentials = \getenv('TEST_FIREBASE_CREDENTIALS')) {
+        if ($credentials = Util::getenv('TEST_FIREBASE_CREDENTIALS')) {
             return ServiceAccount::fromValue($credentials);
         }
 
@@ -115,7 +116,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
      */
     private static function registrationTokensFromEnvironment()
     {
-        if (!($tokens = \getenv('TEST_REGISTRATION_TOKENS'))) {
+        if (!($tokens = Util::getenv('TEST_REGISTRATION_TOKENS'))) {
             return null;
         }
 

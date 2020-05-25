@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* In addition to with `getenv()`, the SDK now looks for environment variables in
+  `$_SERVER` and `$_ENV` as well. 
+
 ## 5.2.0 - 2020-05-03
 
 * It is now possible to retrieve the Firebase User ID directly from a `SignInResult` after a successful user sign-in with `SignInResult::firebaseUserId()`

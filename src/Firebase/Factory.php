@@ -210,7 +210,7 @@ class Factory
             return $this->serviceAccount;
         }
 
-        if ($credentials = \getenv('FIREBASE_CREDENTIALS')) {
+        if ($credentials = Util::getenv('FIREBASE_CREDENTIALS')) {
             return $this->serviceAccount = ServiceAccount::fromValue($credentials);
         }
 
@@ -218,7 +218,7 @@ class Factory
             return null;
         }
 
-        if ($credentials = \getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
+        if ($credentials = Util::getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
             try {
                 return $this->serviceAccount = ServiceAccount::fromValue($credentials);
             } catch (InvalidArgumentException $e) {
@@ -263,11 +263,11 @@ class Factory
             return $this->projectId = ProjectId::fromString($projectId);
         }
 
-        if ($projectId = \getenv('GOOGLE_CLOUD_PROJECT')) {
+        if ($projectId = Util::getenv('GOOGLE_CLOUD_PROJECT')) {
             return $this->projectId = ProjectId::fromString((string) $projectId);
         }
 
-        if ($projectId = \getenv('GCLOUD_PROJECT')) {
+        if ($projectId = Util::getenv('GCLOUD_PROJECT')) {
             return $this->projectId = ProjectId::fromString((string) $projectId);
         }
 
