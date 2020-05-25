@@ -2,15 +2,6 @@ name: Unit Tests
 
 on:
   push:
-    paths:
-      - 'src/**.php'
-      - 'tests/**.php'
-    tags-ignore:
-      - '*'
-  pull_request:
-    paths:
-      - 'src/**.php'
-      - 'tests/**.php'
 
 jobs:
   tests:
@@ -79,4 +70,4 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          flags: unittests
+          flags: unit

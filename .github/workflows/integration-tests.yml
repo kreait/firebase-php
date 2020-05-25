@@ -1,19 +1,7 @@
 name: Integration Tests
 
 on:
-#  schedule:
-#    # Every night a 4am (UTC)
-#    - cron: '0 4 * * *'
   push:
-    paths:
-      - 'src/**.php'
-      - 'tests/**.php'
-    tags-ignore:
-      - '*'
-  pull_request:
-    paths:
-      - 'src/**.php'
-      - 'tests/**.php'
 
 jobs:
   integration-tests:
@@ -80,4 +68,4 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          flags: integrationtests
+          flags: integration
