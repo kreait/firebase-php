@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 5.3.0 - 2020-05-27
 
 * In addition to with `getenv()`, the SDK now looks for environment variables in
   `$_SERVER` and `$_ENV` as well. 
