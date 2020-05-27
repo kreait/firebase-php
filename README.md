@@ -35,7 +35,7 @@ $ composer require kreait/firebase-php
 Integrations for Laravel, Lumen and Symfony are available:
 
 - [kreait/laravel-firebase](https://packagist.org/packages/kreait/laravel-firebase)
-- [kreait/symfony-bundle](https://packagist.org/packages/kreait/symfony-bundle)
+- [kreait/firebase-bundle](https://packagist.org/packages/kreait/firebase-bundle)
 
 ## Documentation
 
