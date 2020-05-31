@@ -21,10 +21,6 @@ abstract class UnitTestCase extends FirebaseTestCase
             ->willReturn('project');
 
         $mock
-            ->method('getClientId')
-            ->willReturn('client');
-
-        $mock
             ->method('getClientEmail')
             ->willReturn('client@email.tld');
 
