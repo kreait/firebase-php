@@ -48,7 +48,7 @@ class ApiClient implements ClientInterface
     }
 
     /**
-     * @internal This method should only be used in the context of Database transations
+     * @internal This method should only be used in the context of Database translations
      *
      * @param UriInterface|string $uri
      *
@@ -89,7 +89,7 @@ class ApiClient implements ClientInterface
     }
 
     /**
-     * @internal This method should only be used in the context of Database transations
+     * @internal This method should only be used in the context of Database translations
      *
      * @param UriInterface|string $uri
      * @param mixed $value
@@ -111,7 +111,7 @@ class ApiClient implements ClientInterface
     }
 
     /**
-     * @internal This method should only be used in the context of Database transations
+     * @internal This method should only be used in the context of Database translations
      *
      * @param UriInterface|string $uri
      *
