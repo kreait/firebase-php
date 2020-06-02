@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Auth;
 
 use DateTimeImmutable;
+use Kreait\Firebase\Util\Deprecation;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
 
+/**
+ * @property array<string, mixed> $customAttributes Deprecated, use {@see UserRecord::$customClaims} instead
+ */
 class UserRecord implements \JsonSerializable
 {
     /** @var string */
@@ -43,8 +47,8 @@ class UserRecord implements \JsonSerializable
     /** @var string|null */
     public $passwordSalt;
 
-    /** @var array<mixed> */
-    public $customAttributes;
+    /** @var array<string, mixed> */
+    public $customClaims;
 
     /** @var DateTimeImmutable|null */
     public $tokensValidAfterTime;
@@ -79,8 +83,8 @@ class UserRecord implements \JsonSerializable
             $record->tokensValidAfterTime = DT::toUTCDateTimeImmutable($data['validSince']);
         }
 
-        if ($customAttributes = $data['customAttributes'] ?? '{}') {
-            $record->customAttributes = JSON::decode($customAttributes, true);
+        if ($customClaims = $data['customClaims'] ?? $data['customAttributes'] ?? '{}') {
+            $record->customClaims = JSON::decode($customClaims, true);
         }
 
         return $record;
@@ -118,5 +122,21 @@ class UserRecord implements \JsonSerializable
             : null;
 
         return $data;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        if (\mb_strtolower($name) === 'customattributes') {
+            Deprecation::trigger(__CLASS__.'::customAttributes', __CLASS__.'::customClaims');
+
+            return $this->customClaims;
+        }
+
+        return $this->{$name};
     }
 }

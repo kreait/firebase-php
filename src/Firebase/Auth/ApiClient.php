@@ -57,6 +57,20 @@ class ApiClient implements ClientInterface
     }
 
     /**
+     * @param array<string, mixed> $claims
+     *
+     * @throws AuthException
+     * @throws FirebaseException
+     */
+    public function setCustomUserClaims(string $uid, array $claims): ResponseInterface
+    {
+        return $this->requestApi('https://identitytoolkit.googleapis.com/v1/accounts:update', [
+            'localId' => $uid,
+            'customAttributes' => \json_encode((object) $claims),
+        ]);
+    }
+
+    /**
      * Returns a user for the given email address.
      *
      * @throws EmailNotFound

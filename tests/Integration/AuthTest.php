@@ -354,30 +354,61 @@ class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
+    public function testGetCustomUserAttributes(): void
+    {
+        $user = $this->auth->createAnonymousUser();
+
+        try {
+            $this->auth->setCustomUserClaims($user->uid, $claims = ['foo' => 'bar']);
+
+            $this->expectDeprecation();
+            $this->assertEquals($claims, $this->auth->getUser($user->uid)->customAttributes);
+        } finally {
+            $this->auth->deleteUser($user->uid);
+        }
+    }
+
     public function testSetCustomUserAttributes(): void
     {
-        $user = $this->auth->createUser([]);
+        $user = $this->auth->createAnonymousUser();
 
-        $updatedUser = $this->auth->setCustomUserAttributes($user->uid, $claims = ['admin' => true, 'groupId' => '1234']);
+        try {
+            $this->expectDeprecation();
+            $updatedUser = $this->auth->setCustomUserAttributes($user->uid, $claims = ['admin' => true, 'groupId' => '1234']);
 
-        $this->assertEquals($claims, $updatedUser->customAttributes);
-
-        $this->auth->deleteUser($user->uid);
+            $this->assertEquals($claims, $updatedUser->customClaims);
+        } finally {
+            $this->auth->deleteUser($user->uid);
+        }
     }
 
     public function testDeleteCustomUserAttributes(): void
     {
-        $user = $this->auth->createUser([]);
-        $claims = ['foo' => 'bar'];
+        $user = $this->auth->createAnonymousUser();
 
-        $updatedUser = $this->auth->setCustomUserAttributes($user->uid, $claims);
-        // Make sure the claims are set, so that we can ensure that they are removed afterwards
-        $this->assertEquals($claims, $updatedUser->customAttributes);
+        try {
+            $this->expectDeprecation();
+            $this->auth->setCustomUserAttributes($user->uid, []);
+        } finally {
+            $this->auth->deleteUser($user->uid);
+        }
+    }
 
-        $userWithDeletedCustomAttributes = $this->auth->deleteCustomUserAttributes($user->uid);
-        $this->assertEmpty($userWithDeletedCustomAttributes->customAttributes);
+    public function testSetCustomUserClaims(): void
+    {
+        $user = $this->auth->createAnonymousUser();
 
-        $this->auth->deleteUser($user->uid);
+        try {
+            $this->auth->setCustomUserClaims($user->uid, $claims = ['a' => 'b']);
+
+            $this->assertEquals($claims, $this->auth->getUser($user->uid)->customClaims);
+
+            $this->auth->setCustomUserClaims($user->uid, null);
+
+            $this->assertSame([], $this->auth->getUser($user->uid)->customClaims);
+        } finally {
+            $this->auth->deleteUser($user->uid);
+        }
     }
 
     public function testUnlinkProvider(): void

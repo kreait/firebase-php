@@ -93,7 +93,7 @@ class UpdateUserTest extends IntegrationTestCase
         $user = $this->auth->createUser(
             CreateUser::new()
                 ->withUid($uid = \bin2hex(\random_bytes(5)))
-                ->withVerifiedEmail($email = $uid.'@example.org')
+                ->withVerifiedEmail($uid.'@example.org')
         );
 
         $this->assertTrue($user->emailVerified);
@@ -121,7 +121,7 @@ class UpdateUserTest extends IntegrationTestCase
             ]);
 
         $user = $this->auth->updateUser($uid, $request);
-        $this->assertEquals($claims, $user->customAttributes);
+        $this->assertEquals($claims, $user->customClaims);
 
         $idToken = $this->auth->signInAsUser($user)->idToken();
         $this->assertNotNull($idToken);

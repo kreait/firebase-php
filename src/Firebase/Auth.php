@@ -11,7 +11,6 @@ use Firebase\Auth\Token\Exception\InvalidSignature;
 use Firebase\Auth\Token\Exception\InvalidToken;
 use Firebase\Auth\Token\Exception\IssuedInTheFuture;
 use Firebase\Auth\Token\Exception\UnknownKey;
-use Kreait\Clock;
 use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Auth\ApiClient;
@@ -37,6 +36,7 @@ use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Util\Deprecation;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\ClearTextPassword;
@@ -66,7 +66,7 @@ class Auth
     private $signInHandler;
 
     /**
-     * @param array<int, ApiClient|TokenGenerator|Verifier|Clock|SignInHandler> $x
+     * @param array<int, ApiClient|TokenGenerator|Verifier|SignInHandler> $x
      *
      * @internal
      */
@@ -446,6 +446,9 @@ class Auth
     }
 
     /**
+     * @deprecated 5.4.0 use {@see setCustomUserClaims}($id, array $claims) instead
+     * @see setCustomUserClaims
+     *
      * @param Uid|string $uid
      * @param array<string, mixed> $attributes
      *
@@ -454,10 +457,17 @@ class Auth
      */
     public function setCustomUserAttributes($uid, array $attributes): UserRecord
     {
-        return $this->updateUser($uid, Request\UpdateUser::new()->withCustomAttributes($attributes));
+        Deprecation::trigger(__METHOD__, __CLASS__.'::setCustomUserClaims($uid, $claims)');
+
+        $this->setCustomUserClaims($uid, $attributes);
+
+        return $this->getUser($uid);
     }
 
     /**
+     * @deprecated 5.4.0 use {@see setCustomUserClaims}($uid) instead
+     * @see removeCustomUserClaims
+     *
      * @param Uid|string $uid
      *
      * @throws Exception\AuthException
@@ -465,7 +475,30 @@ class Auth
      */
     public function deleteCustomUserAttributes($uid): UserRecord
     {
-        return $this->updateUser($uid, Request\UpdateUser::new()->withCustomAttributes([]));
+        Deprecation::trigger(__METHOD__, __CLASS__.'::setCustomUserClaims($uid, null)');
+
+        $this->setCustomUserClaims($uid, null);
+
+        return $this->getUser($uid);
+    }
+
+    /**
+     * Sets additional developer claims on an existing user identified by the provided UID.
+     *
+     * @see https://firebase.google.com/docs/auth/admin/custom-claims
+     *
+     * @param Uid|string $uid
+     * @param array<string, mixed>|null $claims
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
+    public function setCustomUserClaims($uid, ?array $claims): void
+    {
+        $uid = $uid instanceof Uid ? (string) $uid : $uid;
+        $claims = $claims ?? [];
+
+        $this->client->setCustomUserClaims($uid, $claims);
     }
 
     /**

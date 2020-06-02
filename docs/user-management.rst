@@ -218,24 +218,29 @@ Enable a user
 
     $updatedUser = $auth->enableUser($uid);
 
-************************
-Update custom attributes
-************************
+******************
+Custom user claims
+******************
+
+.. note::
+
+    Learn more about custom attributes/claims in the official documentation:
+    `Control Access with Custom Claims and Security Rules <https://firebase.google.com/docs/auth/admin/custom-claims>`_
 
 .. code-block:: php
 
-    $uid = 'some-uid';
-    $customAttributes = [
-        'admin' => true,
-        'groupId' => '1234'
-    ];
+    // The new custom claims will propagate to the user's ID token the
+    // next time a new one is issued.
+    $auth->setCustomUserClaims($uid, ['admin' => true, 'key1' => 'value1']);
 
-    $updatedUser = $auth->setCustomUserAttributes($uid, $customAttributes);
-    $userWithDeletedCustomAttributes = $auth->deleteCustomUserAttributes($uid);
+    // Retrieve a user's current custom claims
+    $claims = $auth->getUser($uid)->customClaims;
 
-.. note::
-    Learn more about custom attributes/claims in the official documentation:
-    `Control Access with Custom Claims and Security Rules <https://firebase.google.com/docs/auth/admin/custom-claims>`_
+    // Remove a user's custom claims
+    $auth->setCustomUserClaims($uid, null);
+
+The custom claims object should not contain any `OIDC <http://openid.net/specs/openid-connect-core-1_0.html#IDToken>`_
+reserved key names or Firebase reserved names. Custom claims payload must not exceed 1000 bytes.
 
 *************
 Delete a user
