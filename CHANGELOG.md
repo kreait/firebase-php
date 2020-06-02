@@ -36,7 +36,7 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v5.3.0...HEAD
+[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/5.3.0...HEAD
 [5.3.0]: https://github.com/kreait/firebase-php/compare/5.2.0...5.3.0
 [5.2.0]: https://github.com/kreait/firebase-php/compare/5.1.1...5.2.0
 [5.1.1]: https://github.com/kreait/firebase-php/compare/5.1.0...5.1.1
