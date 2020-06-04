@@ -9,6 +9,9 @@
 ### Deprecated
 * `Kreait\Firebase\Auth::setCustomUserAttributes()`
 * `Kreait\Firebase\Auth\UserRecord::$customAttributes`
+### Fixed
+* Exceptions thrown by the Messaging component did not include the previous ``RequestException`` 
+  ([#428](https://github.com/kreait/firebase-php/issues/428))
 
 ## [5.3.0] - 2020-05-27
 ### Changed

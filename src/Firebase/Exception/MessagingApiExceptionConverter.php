@@ -88,7 +88,7 @@ class MessagingApiExceptionConverter
         }
 
         if ($response = $e->getResponse()) {
-            return $this->convertResponse($response);
+            return $this->convertResponse($response, $e);
         }
 
         return new MessagingError($e->getMessage(), $e->getCode(), $e);

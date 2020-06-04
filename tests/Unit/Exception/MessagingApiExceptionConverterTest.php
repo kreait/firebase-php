@@ -56,7 +56,10 @@ class MessagingApiExceptionConverterTest extends TestCase
      */
     public function it_converts_exceptions(Throwable $e, string $expectedClass): void
     {
-        $this->assertInstanceOf($expectedClass, $this->converter->convertException($e));
+        $converted = $this->converter->convertException($e);
+
+        $this->assertInstanceOf($expectedClass, $converted);
+        $this->assertSame($e, $converted->getPrevious());
     }
 
     public function exceptions()
@@ -87,7 +90,7 @@ class MessagingApiExceptionConverterTest extends TestCase
                         'message' => $identifier,
                     ],
                     'code' => $code,
-                    'message' => 'Some error that might include the idenfier "'.$identifier.'"',
+                    'message' => 'Some error that might include the identifier "'.$identifier.'"',
                 ],
             ])));
     }
