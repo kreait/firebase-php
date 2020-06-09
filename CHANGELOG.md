@@ -1,11 +1,14 @@
 # CHANGELOG
 
-## [Unreleased]
+## [5.4.0] - 2020-06-09
 ### Added
 * `Kreait\Firebase\Auth::setCustomUserClaims()` as a replacement for `Kreait\Firebase\Auth::setCustomUserAttributes()`
   and `Kreait\Firebase\Auth::deleteCustomUserAttributes()`
 * `Kreait\Firebase\Auth\UserRecord::$customClaims` as a replacement for 
   `Kreait\Firebase\Auth\UserRecord::$customAttributes`
+### Changed
+* The default branch of the GitHub repository has been renamed from `master` to `main` - if you're using `dev-master`
+  as a version constraint in your `composer.json`, please update it to `dev-main`.
 ### Deprecated
 * `Kreait\Firebase\Auth::setCustomUserAttributes()`
 * `Kreait\Firebase\Auth\UserRecord::$customAttributes`
@@ -39,7 +42,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/5.3.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.4.0...HEAD
+[5.4.0]: https://github.com/kreait/firebase-php/compare/5.3.0...5.4.0
 [5.3.0]: https://github.com/kreait/firebase-php/compare/5.2.0...5.3.0
 [5.2.0]: https://github.com/kreait/firebase-php/compare/5.1.1...5.2.0
 [5.1.1]: https://github.com/kreait/firebase-php/compare/5.1.0...5.1.1
