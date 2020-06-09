@@ -10,7 +10,7 @@ repository:
   has_projects: false
   has_wiki: false
   is_template: false
-  default_branch: master
+  default_branch: main
   allow_squash_merge: true
   allow_merge_commit: false
   allow_rebase_merge: true
