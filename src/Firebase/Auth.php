@@ -66,7 +66,7 @@ class Auth
     private $signInHandler;
 
     /**
-     * @param array<int, ApiClient|TokenGenerator|Verifier|SignInHandler> $x
+     * @param iterable<ApiClient|TokenGenerator|Verifier|SignInHandler>|ApiClient|TokenGenerator|Verifier|SignInHandler $x
      *
      * @internal
      */

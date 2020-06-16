@@ -36,7 +36,10 @@ final class EventStatistics implements Countable, IteratorAggregate
     /** @var array<int, array<string, string>> */
     private $events;
 
-    private function __construct(array ...$events)
+    /**
+     * @param array<int, array<string, string>> $events
+     */
+    private function __construct(array $events)
     {
         $this->events = $events;
     }
@@ -46,7 +49,7 @@ final class EventStatistics implements Countable, IteratorAggregate
      */
     public static function fromArray(array $events): self
     {
-        return new self(...$events);
+        return new self($events);
     }
 
     public function onAndroid(): self
@@ -105,7 +108,7 @@ final class EventStatistics implements Countable, IteratorAggregate
 
     public function filter(callable $filter): self
     {
-        return new self(...\array_filter($this->events, $filter));
+        return new self(\array_filter($this->events, $filter));
     }
 
     /**
