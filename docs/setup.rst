@@ -171,7 +171,7 @@ work with any `PSR-3 log implementation <https://packagist.org/providers/psr/log
     // You can configure the message format and log levels individually
     $messageFormatter = new MessageFormatter(MessageFormatter::SHORT);
     $factory = $factory->withHttpLogger(
-        $httpLogger, $successes = 'debug', $errors = 'warning'
+        $httpLogger, $messageFormatter, $successes = 'debug', $errors = 'warning'
     );
 
     // You can provide a separate logger for detailed HTTP message logs
