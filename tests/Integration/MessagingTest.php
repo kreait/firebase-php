@@ -181,7 +181,7 @@ class MessagingTest extends IntegrationTestCase
         $this->assertCount(2, $report->failures());
         $this->assertCount(0, $report->successes());
 
-        $items = $report->getItems();
+        $items = $report->failures()->getItems();
 
         $this->assertSame($first, $items[0]->target()->value());
         $this->assertSame($second, $items[1]->target()->value());
