@@ -165,6 +165,29 @@ class MessagingTest extends IntegrationTestCase
     }
 
     /**
+     * @see https://github.com/kreait/firebase-php/issues/436
+     */
+    public function testSendMulticastMessageToTwoInvalidRecipients(): void
+    {
+        $message = CloudMessage::fromArray([]);
+        $tokens = [
+            $first = 'first',
+            $second = 'second',
+        ];
+
+        $report = $this->messaging->sendMulticast($message, $tokens);
+
+        $this->assertTrue($report->hasFailures());
+        $this->assertCount(2, $report->failures());
+        $this->assertCount(0, $report->successes());
+
+        $items = $report->getItems();
+
+        $this->assertSame($first, $items[0]->target()->value());
+        $this->assertSame($second, $items[1]->target()->value());
+    }
+
+    /**
      * @see https://github.com/kreait/firebase-php/issues/317
      */
     public function testSendMulticastMessageToOneRecipientOnly(): void
