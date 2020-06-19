@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+
+## [5.5.0] - 2020-06-19
 ### Added
 * It is now possible to log outgoing HTTP requests and responses to the Firebase APIs. 
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#logging))
@@ -53,7 +55,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.4.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.5.0...HEAD
+[5.5.0]: https://github.com/kreait/firebase-php/compare/5.4.0...5.5.0
 [5.4.0]: https://github.com/kreait/firebase-php/compare/5.3.0...5.4.0
 [5.3.0]: https://github.com/kreait/firebase-php/compare/5.2.0...5.3.0
 [5.2.0]: https://github.com/kreait/firebase-php/compare/5.1.1...5.2.0
