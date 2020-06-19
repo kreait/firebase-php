@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Http;
 
+use GuzzleHttp;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 final class Middleware
 {
@@ -47,6 +49,32 @@ final class Middleware
 
                         return $response;
                     });
+            };
+        };
+    }
+
+    public static function log(LoggerInterface $logger, GuzzleHttp\MessageFormatter $formatter, string $logLevel, string $errorLogLevel): callable
+    {
+        return static function (callable $handler) use ($logger, $formatter, $logLevel, $errorLogLevel) {
+            return static function ($request, array $options) use ($handler, $logger, $formatter, $logLevel, $errorLogLevel) {
+                return $handler($request, $options)->then(
+                    static function (ResponseInterface $response) use ($logger, $request, $formatter, $logLevel, $errorLogLevel) {
+                        $message = $formatter->format($request, $response);
+                        $messageLogLevel = $response->getStatusCode() >= 400 ? $errorLogLevel : $logLevel;
+
+                        $logger->log($messageLogLevel, $message);
+
+                        return $response;
+                    },
+                    static function (\Exception $reason) use ($logger, $request, $formatter, $errorLogLevel) {
+                        $response = $reason instanceof GuzzleHttp\Exception\RequestException ? $reason->getResponse() : null;
+                        $message = $formatter->format($request, $response, $reason);
+
+                        $logger->log($errorLogLevel, $message, ['request' => $request, 'response' => $response]);
+
+                        return GuzzleHttp\Promise\rejection_for($reason);
+                    }
+                );
             };
         };
     }

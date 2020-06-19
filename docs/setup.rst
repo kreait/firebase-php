@@ -142,3 +142,45 @@ want to access directly and suppress warnings triggered by the Google Auth Compo
     // This will use the project defined in the Service Account
     // credentials files by default
     $base = (new Factory())->withProjectId('firebase-project-id');
+
+*******
+Logging
+*******
+
+In order to log API requests to the Firebase APIs, you can provide the factory with loggers
+implementing ``Psr\Log\LoggerInterface``.
+
+The following examples use the `Monolog <https://github.com/Seldaek/monolog>`_ logger, but
+work with any `PSR-3 log implementation <https://packagist.org/providers/psr/log-implementation>`_.
+
+.. code-block:: php
+
+    use GuzzleHttp\MessageFormatter;
+    use Kreait\Firebase\Factory;
+    use Monolog\Logger;
+    use Monolog\Handler\StreamHandler;
+
+    $httpLogger = new Logger('firebase_http_logs');
+    $httpLogger->pushHandler(new StreamHandler('path/to/firebase_api.log', Logger::INFO));
+
+    // Without further arguments, requests and responses will be logged with basic
+    // request and response information. Successful responses will be logged with
+    // the 'info' log level, failures (Status code >= 400) with 'notice'
+    $factory = $factory->withHttpLogger($httpLogger);
+
+    // You can configure the message format and log levels individually
+    $messageFormatter = new MessageFormatter(MessageFormatter::SHORT);
+    $factory = $factory->withHttpLogger(
+        $httpLogger, $successes = 'debug', $errors = 'warning'
+    );
+
+    // You can provide a separate logger for detailed HTTP message logs
+    $httpDebugLogger = new Logger('firebase_http_debug_logs');
+    $httpDebugLogger->pushHandler(
+        new StreamHandler('path/to/firebase_api_debug.log',
+        Logger::DEBUG)
+    );
+
+    // Logs will include the full request and response headers and bodies
+    $factory = $factory->withHttpDebugLogger($httpDebugLogger)
+

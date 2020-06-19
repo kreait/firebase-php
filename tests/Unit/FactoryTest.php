@@ -295,4 +295,10 @@ class FactoryTest extends UnitTestCase
         $this->factory->createApiClient(['handler' => new MockHandler()]);
         $this->addToAssertionCount(1);
     }
+
+    public function testEnablingDebugWithoutALoggerTriggersADeprecation(): void
+    {
+        $this->expectDeprecation();
+        $this->factory->withEnabledDebug();
+    }
 }

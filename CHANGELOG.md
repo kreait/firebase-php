@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## [Unreleased]
+### Added
+* It is now possible to log outgoing HTTP requests and responses to the Firebase APIs. 
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#logging))
+### Changed
+* `Kreait\Firebase\Factory::withEnabledDebug()` now accepts an instance of 
+  `Psr\Log\LoggerInterface` as parameter to log HTTP messages.
+### Deprecated
+* Calling `Kreait\Firebase\Factory::withEnabledDebug()` without a Logger continues to enable Guzzle's
+  default debug behaviour to print HTTP debug output to STDOUT, but will trigger a deprecation notice suggesting using a Logger instead.
+
 ## [5.4.0] - 2020-06-09
 ### Added
 * `Kreait\Firebase\Auth::setCustomUserClaims()` as a replacement for `Kreait\Firebase\Auth::setCustomUserAttributes()`

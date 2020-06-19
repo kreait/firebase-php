@@ -180,14 +180,14 @@ If you need to access the Firebase/Google APIs through a proxy, you can configur
 
     $factory = $factory->withHttpProxy('tcp://<host>:<port>');
 
-**********************
-Debugging API requests
-**********************
+*********
+Debugging
+*********
 
-In order to debug HTTP requests to the Firebase/Google APIs, you can set
-`Guzzle's debug option <http://docs.guzzlephp.org/en/stable/request-options.html#debug>`_ to ``true`` in the
-HTTP client config:
+In order to debug HTTP requests to the Firebase/Google APIs, you can enable the factory's
+debug mode and provide an instance of ``Psr\Log\LoggerInterface``. HTTP requests and
+responses will then be pushed to this logger with their full headers and bodies.
 
 .. code-block:: php
 
-    $factory = $factory->withEnabledDebug();
+    $factory = $factory->withEnabledDebug($logger);
