@@ -110,7 +110,7 @@ Detailed information can be found on
 
 .. code-block:: php
 
-    $db->getReference('currencies')
+    $database->getReference('currencies')
         // order the reference's children by their key in ascending order
         ->shallow()
         ->getSnapshot();
@@ -119,7 +119,7 @@ A convenience method is available to retrieve the key names of a reference's chi
 
 .. code-block:: php
 
-    $db->getReference('currencies')->getChildKeys(); // returns an array of key names
+    $database->getReference('currencies')->getChildKeys(); // returns an array of key names
 
 
 Ordering data
@@ -138,7 +138,7 @@ By key
 
 .. code-block:: php
 
-    $db->getReference('currencies')
+    $database->getReference('currencies')
         // order the reference's children by their key in ascending order
         ->orderByKey()
         ->getSnapshot();
@@ -160,7 +160,7 @@ By value
 
 .. code-block:: php
 
-    $db->getReference('currencies')
+    $database->getReference('currencies')
         // order the reference's children by their value in ascending order
         ->orderByValue()
         ->getSnapshot();
@@ -182,7 +182,7 @@ By child
 
 .. code-block:: php
 
-    $db->getReference('people')
+    $database->getReference('people')
         // order the reference's children by the values in the field 'height' in ascending order
         ->orderByChild('height')
         ->getSnapshot();
@@ -198,7 +198,7 @@ limitToFirst
 
 .. code-block:: php
 
-    $db->getReference('people')
+    $database->getReference('people')
         // order the reference's children by the values in the field 'height'
         ->orderByChild('height')
         // limits the result to the first 10 children (in this case: the 10 shortest persons)
@@ -212,7 +212,7 @@ limitToLast
 
 .. code-block:: php
 
-    $db->getReference('people')
+    $database->getReference('people')
         // order the reference's children by the values in the field 'height'
         ->orderByChild('height')
         // limits the result to the last 10 children (in this case: the 10 tallest persons)
@@ -224,7 +224,7 @@ startAt
 
 .. code-block:: php
 
-    $db->getReference('people')
+    $database->getReference('people')
         // order the reference's children by the values in the field 'height'
         ->orderByChild('height')
         // returns all persons taller than or exactly 1.68 (meters)
@@ -236,7 +236,7 @@ endAt
 
 .. code-block:: php
 
-    $db->getReference('people')
+    $database->getReference('people')
         // order the reference's children by the values in the field 'height'
         ->orderByChild('height')
         // returns all persons shorter than or exactly 1.98 (meters)
@@ -248,7 +248,7 @@ equalTo
 
 .. code-block:: php
 
-    $db->getReference('people')
+    $database->getReference('people')
         // order the reference's children by the values in the field 'height'
         ->orderByChild('height')
         // returns all persons being exactly 1.98 (meters) tall
@@ -268,7 +268,7 @@ a website might be set as follows:
 
 .. code-block:: php
 
-    $db->getReference('config/website')
+    $database->getReference('config/website')
        ->set([
            'name' => 'My Application',
            'emails' => [
@@ -278,7 +278,7 @@ a website might be set as follows:
            'website' => 'https://app.domain.tld',
           ]);
 
-    $db->getReference('config/website/name')->set('New name');
+    $database->getReference('config/website/name')->set('New name');
 
 .. note::
     Using ``set()`` overwrites data at the specified location, including any child nodes.
@@ -305,14 +305,14 @@ to the recent activity feed and the posting user's activity feed using code like
     ];
 
     // Create a key for a new post
-    $newPostKey = $db->getReference('posts')->push()->getKey();
+    $newPostKey = $database->getReference('posts')->push()->getKey();
 
     $updates = [
         'posts/'.$newPostKey => $postData,
         'user-posts/'.$uid.'/'.$newPostKey => $postData,
     ];
 
-    $db->getReference() // this is the root reference
+    $database->getReference() // this is the root reference
        ->update($updates);
 
 
@@ -333,7 +333,7 @@ child's auto-generated key or set data for the child. The ``getKey()`` method of
 .. code-block:: php
 
     $postData = [...];
-    $postRef = $db->getReference('posts')->push($postData);
+    $postRef = $database->getReference('posts')->push($postData);
 
     $postKey = $postRef->getKey(); // The key looks like this: -KVquJHezVLf-lSye6Qg
 
@@ -350,10 +350,10 @@ The following to usages are equivalent:
 
 .. code-block:: php
 
-    $ref = $db->getReference('posts/my-post')
+    $ref = $database->getReference('posts/my-post')
               ->set('created_at', ['.sv' => 'timestamp']);
 
-    $ref = $db->getReference('posts/my-post')
+    $ref = $database->getReference('posts/my-post')
               ->set('created_at', Database::SERVER_TIMESTAMP);
 
 
@@ -364,14 +364,14 @@ You can delete a reference, including all data it contains, with the ``remove()`
 
 .. code-block:: php
 
-    $db->getReference('posts')->remove();
+    $database->getReference('posts')->remove();
 
 You can also delete by specifying null as the value for another write operation such as
 ``set()`` or ``update()``.
 
 .. code-block:: php
 
-    $db->getReference('posts')->set(null);
+    $database->getReference('posts')->set(null);
 
 You can use this technique with ``update()`` to delete multiple children in a single API call.
 
@@ -395,9 +395,9 @@ Replace data inside a transaction
 
     use Kreait\Firebase\Database\Transaction;
 
-    $counterRef = $db->getReference('counter');
+    $counterRef = $database->getReference('counter');
 
-    $result = $db->runTransaction(function (Transaction $transaction) use ($counterRef) {
+    $result = $database->runTransaction(function (Transaction $transaction) use ($counterRef) {
 
         // You have to snapshot the reference in order to change its value
         $counterSnapshot = $transaction->snapshot($counterRef);
@@ -423,9 +423,9 @@ only if it hasn't changed in the meantime.
 
     use Kreait\Firebase\Database\Transaction;
 
-    $toBeDeleted = $db->getReference('to-be-deleted');
+    $toBeDeleted = $database->getReference('to-be-deleted');
 
-    $db->runTransaction(function (Transaction $transaction) use ($toBeDeleted) {
+    $database->runTransaction(function (Transaction $transaction) use ($toBeDeleted) {
 
         $transaction->snapshot($toBeDeleted);
 
@@ -448,10 +448,10 @@ error.
     use Kreait\Firebase\Exception\Database\ReferenceHasNotBeenSnapshotted;
     use Kreait\Firebase\Exception\Database\TransactionFailed;
 
-    $ref = $db->getReference('my-ref');
+    $ref = $database->getReference('my-ref');
 
     try {
-        $db->runTransaction(function (Transaction $transaction) use ($ref) {
+        $database->runTransaction(function (Transaction $transaction) use ($ref) {
 
             // $transaction->snapshot($ref);
 
@@ -487,7 +487,7 @@ includes the sent request and the received response object:
 .. code-block:: php
 
     try {
-        $db->getReference('forbidden')->getValue();
+        $database->getReference('forbidden')->getValue();
     } catch (ApiException $e) {
         /** @var \Psr\Http\Message\RequestInterface $request */
         $request = $e->getRequest();
@@ -538,7 +538,7 @@ Learn more about the usage of Firebase Realtime Database Rules in the
             ]
         ]]);
 
-        $db->updateRules($ruleSet);
+        $database->updateRules($ruleSet);
 
-        $freshRuleSet = $db->getRuleSet(); // Returns a new RuleSet instance
+        $freshRuleSet = $database->getRuleSet(); // Returns a new RuleSet instance
         $actualRules = $ruleSet->getRules(); // returns an array
