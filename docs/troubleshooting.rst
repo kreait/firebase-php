@@ -169,6 +169,30 @@ enabled for your project:
 Please also make sure that the Service Account you are using for your project has all necessary
 roles and permissions as described in the official documentation at `Manage project access with Firebase IAM <https://firebase.google.com/docs/projects/iam/overview>`_.
 
+*******************************
+MultiCast SendReports are empty
+*******************************
+
+This is an issue seen in XAMPP/WAMP environments and seems related to the cURL version shipped with
+the current PHP installation. Please ensure that cURL is installed with at least version **7.67**
+(preferably newer, version 7.70 is known to work).
+
+You can check the currently installed cURL version by adding the following line somewhere in your
+code:
+
+.. code-block:: php
+
+    echo curl_version()['version']; exit;
+
+To install a newer version of cURL, download the latest release from https://curl.haxx.se/ . From
+the unpacked archive in the ``bin`` folder, use the file ending with ``libcurl*.dll`` to overwrite
+the existing ``libcurl*.dll`` in the ``ext`` folder of your PHP installation and restart the
+environment.
+
+If this issue occurs in other environments (e.g. Linux or MacOS), please ensure that you have the
+latest (minor) versions of PHP and cURL installed. If the problem persists, please open an issue
+in the issue tracker.
+
 *******************
 Proxy configuration
 *******************
