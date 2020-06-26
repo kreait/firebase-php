@@ -405,3 +405,54 @@ Confirm a password reset
         // Another error has occurred
     }
 
+
+************
+Import users
+************
+
+You can also import users in a smilar fashion as the Firebase Admin SDK for Javascript. Replace all buffers
+with a base64-encoded representation of the buffer.
+
+For example, this:
+
+.. code-block:: js
+    admin.auth().importUsers([{
+    uid: 'some-uid',
+    email: 'user@example.com',
+    // Must be provided in a byte buffer.
+    passwordHash: Buffer.from('password-hash'),
+    // Must be provided in a byte buffer.
+    passwordSalt: Buffer.from('salt')
+    }], {
+    hash: {
+        algorithm: 'HMAC_SHA256',
+        // Must be provided in a byte buffer.
+        key: Buffer.from('secret')
+    }
+    })
+
+... becomes this:
+
+.. code-block:: php
+    $fac->createAuth()->importUsers([[
+        'uid'=> 'some-uid',
+        'email'=> 'user@example.com',
+        // Must be provided in a byte buffer.
+        'passwordHash'=> base64_encode('password-hash'),
+        // Must be provided in a byte buffer.
+        'passwordSalt'=> base64_encode('salt')
+    ]], [
+        'hash'=> [
+            'algorithm'=> 'HMAC_SHA256',
+            // Must be provided in a byte buffer.
+            'key' => base64_encode('secret')
+        ]
+    ])
+
+.. warning::
+    This function will overwrite any user data for the given UID and not verify against
+    e-mail address unicity if you have enabled it in your project. Use with caution.
+
+    For more information, please visit
+    `The official documentation <https://firebase.google.com/docs/auth/admin/import-users#usage>`_
+
