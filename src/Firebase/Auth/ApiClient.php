@@ -210,8 +210,12 @@ class ApiClient implements ClientInterface
             $res = array_merge([
                 'localId' => $userData['uid'],
             ], $userData);
+            unset($res['uid']);
             // Make sure to pass the hashes in a base64-encoded format
-            unset($userData['uid']);
+            if(isset($res['passwordSalt'])) {
+                $res['salt'] = $userData['passwordSalt'];
+                unset($res['passwordSalt']);
+            }
             return $res;
         }, $users);
 
