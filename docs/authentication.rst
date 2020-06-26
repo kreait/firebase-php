@@ -330,12 +330,12 @@ For example, this:
 
 .. code-block:: php
     $fac->createAuth()->importUsers([[
-        'uid'=> 'some-more-uid-ahid',
+        'uid'=> 'some-uid',
         'email'=> 'user@example.com',
         // Must be provided in a byte buffer.
         'passwordHash'=> base64_encode('password-hash'),
         // Must be provided in a byte buffer.
-        'passwordSalt'=> base64_encode('password-salt')
+        'passwordSalt'=> base64_encode('salt')
     ]], [
         'hash'=> [
             'algorithm'=> 'HMAC_SHA256',
