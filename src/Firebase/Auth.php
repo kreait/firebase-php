@@ -70,7 +70,7 @@ class Auth
     private $projectId;
 
     /**
-     * @param iterable<ApiClient|TokenGenerator|Verifier|SignInHandler>|ApiClient|TokenGenerator|Verifier|SignInHandler $x
+     * @param iterable<ApiClient|TokenGenerator|Verifier|SignInHandler|ProjectId|null>|ApiClient|TokenGenerator|Verifier|SignInHandler|ProjectId|null $x
      *
      * @internal
      */
@@ -820,6 +820,11 @@ class Auth
         return $this->getUser($uid);
     }
 
+    /**
+     * Batch import users. Can also be used to import users with a hashed password
+     * @param array<array<string|int>> $users The users to import
+     * @param array<array<string|int>> $options Import options. Used to specify how passwords are hashed for example
+     */
     public function importUsers(array $users, array $options): void
     {
         $this->client->importUsers($users, $options, $this->projectId);

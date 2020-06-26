@@ -184,6 +184,14 @@ class ApiClient implements ClientInterface
         ]);
     }
 
+    /**
+     * @param array<array<string|int>> $users The users to import
+     * @param array<array<string|int>> $options Import options. Used to specify how passwords are hashed for example
+     * @param ProjectId $projectId
+     * 
+     * @throws AuthException
+     * @throws FirebaseException
+     */
     public function importUsers(array $users, array $options, ProjectId $projectId): ResponseInterface
     {
         // Determine the request body
