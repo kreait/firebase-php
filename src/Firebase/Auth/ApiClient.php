@@ -14,6 +14,7 @@ use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Http\WrappedGuzzleClient;
+use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Request;
 use Kreait\Firebase\Value\Provider;
 use Psr\Http\Message\ResponseInterface;
@@ -180,6 +181,42 @@ class ApiClient implements ClientInterface
         return $this->requestApi('setAccountInfo', [
             'localId' => $uid,
             'deleteProvider' => $providers,
+        ]);
+    }
+
+    public function importUsers(array $users, array $options, ProjectId $projectId): ResponseInterface
+    {
+        // Determine the request body
+        $body = [];
+        if(isset($options['hash'])) {
+            if(isset($options['hash']['algorithm']))
+                $body['hashAlgorithm'] = $options['hash']['algorithm'];
+            if(isset($options['hash']['rounds']))
+                $body['rounds'] = $options['hash']['rounds'];
+            if(isset($options['hash']['key']))
+                $body['signerKey'] = $options['hash']['key']; // Base64-encoded
+            if(isset($options['hash']['memoryCost']))
+                $body['cpuMemCost'] = $options['hash']['memoryCost'];
+            if(isset($options['hash']['parallelization']))
+                $body['parallelization'] = $options['hash']['parallelization'];
+            if(isset($options['hash']['blockSize']))
+                $body['blockSize'] = $options['hash']['blockSize'];
+            if(isset($options['hash']['derivedKeyLength']))
+                $body['dkLen'] = $options['hash']['derivedKeyLength'];
+            if(isset($options['hash']['saltSeparator']))
+                $body['saltSeparator'] = $options['hash']['saltSeparator']; // Base64-encoded
+        }
+        $body['users'] = array_map(function(array $userData) {
+            $res = array_merge([
+                'localId' => $userData['uid'],
+            ], $userData);
+            // Make sure to pass the hashes in a base64-encoded format
+            unset($userData['uid']);
+            return $res;
+        }, $users);
+
+        return $this->requestApi("https://identitytoolkit.googleapis.com/v1/projects/{$projectId->value()}/accounts:batchCreate", $body, [
+            'access_token_auth' => 'true',
         ]);
     }
 

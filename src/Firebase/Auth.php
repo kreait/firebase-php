@@ -36,6 +36,7 @@ use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Util\Deprecation;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
@@ -65,6 +66,9 @@ class Auth
     /** @var SignInHandler */
     private $signInHandler;
 
+    /** @var ProjectId */
+    private $projectId;
+
     /**
      * @param iterable<ApiClient|TokenGenerator|Verifier|SignInHandler>|ApiClient|TokenGenerator|Verifier|SignInHandler $x
      *
@@ -81,6 +85,8 @@ class Auth
                 $this->idTokenVerifier = $arg;
             } elseif ($arg instanceof SignInHandler) {
                 $this->signInHandler = $arg;
+            } elseif ($arg instanceof ProjectId) {
+                $this->projectId = $arg;
             }
         }
     }
@@ -812,5 +818,10 @@ class Auth
         $uid = JSON::decode((string) $response->getBody(), true)['localId'];
 
         return $this->getUser($uid);
+    }
+
+    public function importUsers(array $users, array $options): void
+    {
+        $this->client->importUsers($users, $options, $this->projectId);
     }
 }
