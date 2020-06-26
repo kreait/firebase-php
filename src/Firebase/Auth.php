@@ -821,7 +821,8 @@ class Auth
     }
 
     /**
-     * Batch import users. Can also be used to import users with a hashed password
+     * Batch import users. Can also be used to import users with a hashed password.
+     *
      * @param array<array<string|int>> $users The users to import
      * @param array<array<string|int>> $options Import options. Used to specify how passwords are hashed for example
      */

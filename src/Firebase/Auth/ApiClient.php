@@ -187,8 +187,7 @@ class ApiClient implements ClientInterface
     /**
      * @param array<array<string|int>> $users The users to import
      * @param array<array<string|int>> $options Import options. Used to specify how passwords are hashed for example
-     * @param ProjectId $projectId
-     * 
+     *
      * @throws AuthException
      * @throws FirebaseException
      */
@@ -196,34 +195,43 @@ class ApiClient implements ClientInterface
     {
         // Determine the request body
         $body = [];
-        if(isset($options['hash'])) {
-            if(isset($options['hash']['algorithm']))
+        if (isset($options['hash'])) {
+            if (isset($options['hash']['algorithm'])) {
                 $body['hashAlgorithm'] = $options['hash']['algorithm'];
-            if(isset($options['hash']['rounds']))
+            }
+            if (isset($options['hash']['rounds'])) {
                 $body['rounds'] = $options['hash']['rounds'];
-            if(isset($options['hash']['key']))
-                $body['signerKey'] = $options['hash']['key']; // Base64-encoded
-            if(isset($options['hash']['memoryCost']))
+            }
+            if (isset($options['hash']['key'])) {
+                $body['signerKey'] = $options['hash']['key'];
+            } // Base64-encoded
+            if (isset($options['hash']['memoryCost'])) {
                 $body['cpuMemCost'] = $options['hash']['memoryCost'];
-            if(isset($options['hash']['parallelization']))
+            }
+            if (isset($options['hash']['parallelization'])) {
                 $body['parallelization'] = $options['hash']['parallelization'];
-            if(isset($options['hash']['blockSize']))
+            }
+            if (isset($options['hash']['blockSize'])) {
                 $body['blockSize'] = $options['hash']['blockSize'];
-            if(isset($options['hash']['derivedKeyLength']))
+            }
+            if (isset($options['hash']['derivedKeyLength'])) {
                 $body['dkLen'] = $options['hash']['derivedKeyLength'];
-            if(isset($options['hash']['saltSeparator']))
-                $body['saltSeparator'] = $options['hash']['saltSeparator']; // Base64-encoded
+            }
+            if (isset($options['hash']['saltSeparator'])) {
+                $body['saltSeparator'] = $options['hash']['saltSeparator'];
+            } // Base64-encoded
         }
-        $body['users'] = array_map(function(array $userData) {
-            $res = array_merge([
+        $body['users'] = \array_map(static function (array $userData) {
+            $res = \array_merge([
                 'localId' => $userData['uid'],
             ], $userData);
             unset($res['uid']);
             // Make sure to pass the hashes in a base64-encoded format
-            if(isset($res['passwordSalt'])) {
+            if (isset($res['passwordSalt'])) {
                 $res['salt'] = $userData['passwordSalt'];
                 unset($res['passwordSalt']);
             }
+
             return $res;
         }, $users);
 
