@@ -59,6 +59,9 @@ final class MessageDataTest extends TestCase
                     }
                 }],
             ],
+            'UTF-8 string' => [
+                ['key' => 'Jérôme'],
+            ],
         ];
     }
 
@@ -67,6 +70,10 @@ final class MessageDataTest extends TestCase
         return [
             'nested array' => [
                 ['key' => ['sub_key' => 'sub_value']],
+            ],
+            // @see https://github.com/kreait/firebase-php/issues/441
+            'binary data' => [
+                ['key' => hex2bin('81612bcffb')], // generated with \openssl_random_pseudo_bytes(5)
             ],
         ];
     }
