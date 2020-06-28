@@ -172,4 +172,18 @@ class UpdateUserTest extends IntegrationTestCase
 
         $this->auth->deleteUser($user->uid);
     }
+
+    public function testTimeOfLastPasswordUpdateIsIncluded(): void
+    {
+
+        $user = $this->auth->createAnonymousUser();
+
+        $this->assertNull($user->metadata->passwordUpdatedAt);
+
+        $updatedUser = $this->auth->updateUser($user->uid, ['password' => 'new-password']);
+
+        $this->assertInstanceOf(\DateTimeImmutable::class, $updatedUser->metadata->passwordUpdatedAt);
+
+        $this->deleteUser($user);
+    }
 }

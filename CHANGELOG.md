@@ -1,6 +1,9 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Added
+* User Records now contain the date and time when a user's password has last been updated.
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#user-records))
 ### Changed
 * Message data added to a with `CloudMessage::withData()` now rejects binary data to avoid broken
   messages being sent to the Firebase API.

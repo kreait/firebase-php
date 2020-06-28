@@ -26,7 +26,8 @@ following signature:
         "disabled": false,
         "metadata": {
             "createdAt": "2018-02-14T15:41:32+00:00",
-            "lastLoginAt": "2018-02-14T15:41:32+00:00"
+            "lastLoginAt": "2018-02-14T15:41:32+00:00",
+            "passwordUpdatedAt": "2018-02-14T15:42:19+00:00"
         },
         "providerData": [
             {

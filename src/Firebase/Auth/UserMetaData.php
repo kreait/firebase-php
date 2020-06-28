@@ -15,6 +15,9 @@ class UserMetaData implements \JsonSerializable
     /** @var DateTimeImmutable|null */
     public $lastLoginAt;
 
+    /** @var DateTimeImmutable|null */
+    public $passwordUpdatedAt;
+
     /**
      * @param array<string, mixed> $data
      */
@@ -25,6 +28,10 @@ class UserMetaData implements \JsonSerializable
 
         if ($data['lastLoginAt'] ?? null) {
             $metadata->lastLoginAt = DT::toUTCDateTimeImmutable($data['lastLoginAt']);
+        }
+
+        if ($data['passwordUpdatedAt'] ?? null) {
+            $metadata->passwordUpdatedAt = DT::toUTCDateTimeImmutable($data['passwordUpdatedAt']);
         }
 
         return $metadata;
