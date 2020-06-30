@@ -25,7 +25,7 @@
         "google/auth": "^1.8",
         "google/cloud-core": "^1.36",
         "google/cloud-storage": "^1.14",
-        "guzzlehttp/guzzle": "^6.2.1|^7.0@beta",
+        "guzzlehttp/guzzle": "^6.2.1|^7.0",
         "kreait/clock": "^1.0.1",
         "kreait/firebase-tokens": "^1.10",
         "lcobucci/jwt": "^3.3.1",
