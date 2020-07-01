@@ -21,6 +21,7 @@ use Google\Auth\FetchAuthTokenCache;
 use Google\Auth\HttpHandler\HttpHandlerFactory;
 use Google\Auth\Middleware\AuthTokenMiddleware;
 use Google\Auth\ProjectIdProviderInterface;
+use Google\Auth\SignBlobInterface;
 use Google\Cloud\Firestore\FirestoreClient;
 use Google\Cloud\Storage\StorageClient;
 use GuzzleHttp\Client;
@@ -322,7 +323,19 @@ class Factory
         }
 
         if ($serviceAccount = $this->getServiceAccount()) {
-            return new Email($serviceAccount->getClientEmail());
+            return $this->clientEmail = new Email($serviceAccount->getClientEmail());
+        }
+
+        if ($this->discoveryIsDisabled) {
+            return null;
+        }
+
+        if (
+            ($credentials = $this->getGoogleAuthTokenCredentials())
+            && ($credentials instanceof SignBlobInterface)
+            && ($clientEmail = $credentials->getClientName())
+        ) {
+            return $this->clientEmail = new Email($clientEmail);
         }
 
         return null;

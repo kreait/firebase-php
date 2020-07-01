@@ -8,6 +8,9 @@
 * Message data added to a with `CloudMessage::withData()` now rejects binary data to avoid broken
   messages being sent to the Firebase API.
   ([#441](https://github.com/kreait/firebase-php/issues/441))
+### Fixed
+* It was not possible to instantiate a Custom Token Generator on GCE credentials due to missing
+  auto discovery.
 
 ## [5.5.0] - 2020-06-19
 ### Added
