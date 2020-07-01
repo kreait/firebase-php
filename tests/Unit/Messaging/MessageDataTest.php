@@ -73,7 +73,7 @@ final class MessageDataTest extends TestCase
             ],
             // @see https://github.com/kreait/firebase-php/issues/441
             'binary data' => [
-                ['key' => hex2bin('81612bcffb')], // generated with \openssl_random_pseudo_bytes(5)
+                ['key' => \hex2bin('81612bcffb')], // generated with \openssl_random_pseudo_bytes(5)
             ],
         ];
     }

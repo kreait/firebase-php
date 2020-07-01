@@ -175,7 +175,6 @@ class UpdateUserTest extends IntegrationTestCase
 
     public function testTimeOfLastPasswordUpdateIsIncluded(): void
     {
-
         $user = $this->auth->createAnonymousUser();
 
         $this->assertNull($user->metadata->passwordUpdatedAt);
