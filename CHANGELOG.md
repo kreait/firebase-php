@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+
+## [5.6.0] - 2020-07-02
 ### Added
 * User Records now contain the date and time when a user's password has last been updated.
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#user-records))
@@ -9,7 +11,7 @@
   messages being sent to the Firebase API.
   ([#441](https://github.com/kreait/firebase-php/issues/441))
 ### Fixed
-* It was not possible to instantiate a Custom Token Generator on GCE credentials due to missing
+* It was not possible to instantiate a Custom Token Generator on GAE/GCE due to missing
   auto discovery.
 
 ## [5.5.0] - 2020-06-19
@@ -65,7 +67,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.5.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.6.0...HEAD
+[5.6.0]: https://github.com/kreait/firebase-php/compare/5.5.0...5.6.0
 [5.5.0]: https://github.com/kreait/firebase-php/compare/5.4.0...5.5.0
 [5.4.0]: https://github.com/kreait/firebase-php/compare/5.3.0...5.4.0
 [5.3.0]: https://github.com/kreait/firebase-php/compare/5.2.0...5.3.0
