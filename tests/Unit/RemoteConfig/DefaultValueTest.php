@@ -16,6 +16,7 @@ class DefaultValueTest extends TestCase
     {
         $defaultValue = DefaultValue::none();
 
+        $this->assertSame(DefaultValue::IN_APP_DEFAULT_VALUE, $defaultValue->value());
         $this->assertEquals(['useInAppDefault' => true], $defaultValue->jsonSerialize());
     }
 
@@ -23,6 +24,35 @@ class DefaultValueTest extends TestCase
     {
         $defaultValue = DefaultValue::with('foo');
 
+        $this->assertSame('foo', $defaultValue->value());
         $this->assertEquals(['value' => 'foo'], $defaultValue->jsonSerialize());
+    }
+
+    /**
+     * @dataProvider arrayValueProvider
+     */
+    public function testCreateFromArray($expected, array $array): void
+    {
+        $defaultValue = DefaultValue::fromArray($array);
+
+        $this->assertSame($expected, $defaultValue->value());
+    }
+
+    public function arrayValueProvider(): array
+    {
+        return [
+            'inAppDefault' => [
+                true,
+                ['useInAppDefault' => true],
+            ],
+            'bool' => [
+                true,
+                ['value' => true],
+            ],
+            'string' => [
+                'foo',
+                ['value' => 'foo'],
+            ],
+        ];
     }
 }

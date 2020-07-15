@@ -20,5 +20,8 @@ parameters:
 		-
 			message: '#Parameter .+ expects .+, .+ given#'
 			path: tests
+		-
+			message: '#You should use assertTrue#'
+			path: tests
 
 	tmpDir: %currentWorkingDirectory%/build/phpstan/
