@@ -16,7 +16,7 @@ class DefaultValueTest extends TestCase
     {
         $defaultValue = DefaultValue::none();
 
-        $this->assertSame(DefaultValue::IN_APP_DEFAULT_VALUE, $defaultValue->value());
+        $this->assertTrue($defaultValue->value());
         $this->assertEquals(['useInAppDefault' => true], $defaultValue->jsonSerialize());
     }
 
