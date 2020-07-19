@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+
+## [5.7.0]  2020-07-19
 ### Added
 * Added `Kreait\Firebase\RemoteConfig\DefaultValue` now has an added `value()` method to 
   retrieve a default value's value.
@@ -72,7 +74,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.6.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.7.0...HEAD
+[5.7.0]: https://github.com/kreait/firebase-php/compare/5.6.0...5.7.0
 [5.6.0]: https://github.com/kreait/firebase-php/compare/5.5.0...5.6.0
 [5.5.0]: https://github.com/kreait/firebase-php/compare/5.4.0...5.5.0
 [5.4.0]: https://github.com/kreait/firebase-php/compare/5.3.0...5.4.0
