@@ -4,7 +4,9 @@
 ### Added
 * Added `Kreait\Firebase\RemoteConfig\DefaultValue` now has an added `value()` method to 
   retrieve a default value's value.
-  
+* When a given service account could not be processed, the error message now includes 
+  more details.
+
 ## [5.6.0] - 2020-07-02
 ### Added
 * User Records now contain the date and time when a user's password has last been updated.
