@@ -1,6 +1,9 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Added
+* It is now possible to remove emails from users in the auth database.
+  ([#459](https://github.com/kreait/firebase-php/issues/459)).
 
 ## [5.7.0]  2020-07-19
 ### Added

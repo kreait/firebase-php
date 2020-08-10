@@ -171,12 +171,21 @@ In addition to the properties of a create request, the following properties can 
 ====================== ============ ===========
 Property               Type         Description
 ====================== ============ ===========
+``deleteEmail``        boolean      Whether or not to delete the user's email.
 ``deletePhotoUrl``     boolean      Whether or not to delete the user's photo.
 ``deleteDisplayName``  boolean      Whether or not to delete the user's display name.
 ``deletePhoneNumber``  boolean      Whether or not to delete the user's phone number.
 ``deleteProvider``     string|array One or more identity providers to delete.
 ``customAttributes``   array        A list of custom attributes which will be available in a User's ID token.
 ====================== ============ ===========
+
+.. note::
+
+    When deleting the email from an existing user, the password authentication provider
+    will be disabled (the user can't log in with an email and password combination
+    anymore). After adding a new email to the same user, the previously set password
+    might be restored. If you just want to change a user's email, consider updating
+    the email field directly.
 
 ************************
 Change a user's password
