@@ -552,4 +552,22 @@ class AuthTest extends IntegrationTestCase
         $this->expectException(FailedToSignIn::class);
         $this->auth->signInWithIdpIdToken('google.com', 'invalid', 'http://localhost');
     }
+
+    public function testRemoveEmailFromUser(): void
+    {
+        $user = $this->createUserWithEmailAndPassword();
+
+        try {
+            $this->assertNotNull($user->email);
+
+            $userWithoutEmail = $this->auth->updateUser($user->uid, [
+                'deleteEmail' => true,
+            ]);
+
+            $this->assertNull($userWithoutEmail->email);
+            $this->assertFalse($userWithoutEmail->emailVerified);
+        } finally {
+            $this->deleteUser($user);
+        }
+    }
 }
