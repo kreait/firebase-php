@@ -13,6 +13,7 @@ final class UpdateUser implements Request
 {
     public const DISPLAY_NAME = 'DISPLAY_NAME';
     public const PHOTO_URL = 'PHOTO_URL';
+    public const EMAIL = 'EMAIL';
 
     use EditUserTrait;
 
@@ -55,6 +56,10 @@ final class UpdateUser implements Request
                 case 'removedisplayname':
                     $request = $request->withRemovedDisplayName();
                     break;
+                case 'deleteemail':
+                case 'removeemail':
+                    $request = $request->withRemovedEmail();
+                    break;
 
                 case 'deleteattribute':
                 case 'deleteattributes':
@@ -66,6 +71,9 @@ final class UpdateUser implements Request
                             case 'photo':
                             case 'photourl':
                                 $request = $request->withRemovedPhotoUrl();
+                                break;
+                            case 'email':
+                                $request = $request->withRemovedEmail();
                                 break;
                         }
                     }
@@ -135,6 +143,15 @@ final class UpdateUser implements Request
         $request = clone $this;
         $request->photoUrl = null;
         $request->attributesToDelete[] = self::PHOTO_URL;
+
+        return $request;
+    }
+
+    public function withRemovedEmail(): self
+    {
+        $request = clone $this;
+        $request->email = null;
+        $request->attributesToDelete[] = self::EMAIL;
 
         return $request;
     }
