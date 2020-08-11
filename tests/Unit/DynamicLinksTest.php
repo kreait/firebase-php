@@ -119,7 +119,7 @@ final class DynamicLinksTest extends TestCase
      */
     public function creation_fails_if_no_connection_is_available(): void
     {
-        $connectionError = ConnectException::create($this->createMock(RequestInterface::class));
+        $connectionError = new ConnectException('Connection error', $this->createMock(RequestInterface::class));
         $this->httpHandler->append($connectionError);
 
         $this->expectException(FailedToCreateDynamicLink::class);
@@ -194,7 +194,7 @@ final class DynamicLinksTest extends TestCase
      */
     public function shortening_fails_if_no_connection_is_available(): void
     {
-        $connectionError = ConnectException::create($this->createMock(RequestInterface::class));
+        $connectionError = new ConnectException('Connection error', $this->createMock(RequestInterface::class));
         $this->httpHandler->append($connectionError);
 
         $this->expectException(FailedToShortenLongDynamicLink::class);
@@ -318,7 +318,7 @@ final class DynamicLinksTest extends TestCase
      */
     public function link_stats_fail_if_no_connection_is_available(): void
     {
-        $connectionError = ConnectException::create($this->createMock(RequestInterface::class));
+        $connectionError = new ConnectException('Connection error', $this->createMock(RequestInterface::class));
         $this->httpHandler->append($connectionError);
 
         $this->expectException(FailedToGetStatisticsForDynamicLink::class);

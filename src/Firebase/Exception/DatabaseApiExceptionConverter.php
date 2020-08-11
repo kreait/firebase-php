@@ -34,6 +34,10 @@ class DatabaseApiExceptionConverter
             return $this->convertGuzzleRequestException($exception);
         }
 
+        if ($exception instanceof ConnectException) {
+            return new ApiConnectionFailed('Unable to connect to the API: '.$exception->getMessage(), $exception->getCode(), $exception);
+        }
+
         return new DatabaseError($exception->getMessage(), $exception->getCode(), $exception);
     }
 
@@ -41,10 +45,6 @@ class DatabaseApiExceptionConverter
     {
         $message = $e->getMessage();
         $code = $e->getCode();
-
-        if ($e instanceof ConnectException) {
-            return new ApiConnectionFailed('Unable to connect to the API: '.$message, $code, $e);
-        }
 
         if ($response = $e->getResponse()) {
             $message = $this->responseParser->getErrorReasonFromResponse($response);
