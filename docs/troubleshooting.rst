@@ -197,12 +197,8 @@ in the issue tracker.
 Proxy configuration
 *******************
 
-If you need to access the Firebase/Google APIs through a proxy, you can configure the SDK to use one via
-`Guzzle's proxy configuration <http://docs.guzzlephp.org/en/stable/request-options.html#proxy>`_:
-
-.. code-block:: php
-
-    $factory = $factory->withHttpProxy('tcp://<host>:<port>');
+If you need to access the Firebase/Google APIs through a proxy, you can specify an according
+HTTP Client option while configuring the service factory: :ref:`http-client-options`
 
 *********
 Debugging

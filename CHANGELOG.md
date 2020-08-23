@@ -4,6 +4,10 @@
 ### Added
 * It is now possible to remove emails from users in the auth database.
   ([#459](https://github.com/kreait/firebase-php/issues/459)).
+* You can configure the behavior of the HTTP Client performing the API 
+  requests by passing an instance of `Kreait\Firebase\Http\HttpClientOptions` 
+  to the factory before creating a service.
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#http-client-options))
 
 ## [5.7.0]  2020-07-19
 ### Added

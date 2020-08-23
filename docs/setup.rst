@@ -153,6 +153,37 @@ want to access directly and suppress warnings triggered by the Google Auth Compo
     // credentials files by default
     $base = (new Factory())->withProjectId('firebase-project-id');
 
+.. _http-client-options:
+
+*******************
+HTTP Client Options
+*******************
+
+You can configure the behavior of the HTTP Client performing the API requests by passing an
+instance of `Kreait\Firebase\Http\HttpClientOptions` to the factory before creating a
+service.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Http\HttpClientOptions;
+
+    $options = HttpClientOptions::default();
+
+    // Set the maximum amount of seconds (float) that can pass before
+    // a request is considered timed out
+    // (default: indefinitely)
+    $options = $options->withTimeOut(3.5);
+
+    // Use a proxy that all API requests should be passed through.
+    // (default: none)
+    $options = $options->withProxy('tcp://<host>:<port>');
+
+    $factory = $factory->withHttpClientOptions($options);
+
+    // Newly created services will now use the new HTTP options
+    $realtimeDatabase = $factory->createDatabase();
+
+
 *******
 Logging
 *******

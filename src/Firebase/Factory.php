@@ -28,6 +28,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use function GuzzleHttp\Psr7\uri_for;
+use GuzzleHttp\RequestOptions;
 use Kreait\Clock;
 use Kreait\Clock\SystemClock;
 use Kreait\Firebase;
@@ -37,6 +38,7 @@ use Kreait\Firebase\Auth\DisabledLegacyIdTokenVerifier;
 use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\RuntimeException;
+use Kreait\Firebase\Http\HttpClientOptions;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Value\Email;
@@ -91,7 +93,11 @@ class Factory
     /** @var bool */
     protected $guzzleDebugModeIsEnabled = false;
 
-    /** @var string|null */
+    /**
+     * @var string|null
+     *
+     * @deprecated 5.7.0 Use {@see withClientOptions} instead.
+     */
     protected $httpProxy;
 
     /** @var string */
@@ -109,11 +115,15 @@ class Factory
     /** @var callable|null */
     protected $httpDebugLogMiddleware;
 
+    /** @var HttpClientOptions */
+    protected $httpClientOptions;
+
     public function __construct()
     {
         $this->clock = new SystemClock();
         $this->verifierCache = new InMemoryCache();
         $this->authTokenCache = new MemoryCacheItemPool();
+        $this->httpClientOptions = HttpClientOptions::default();
     }
 
     /**
@@ -206,6 +216,14 @@ class Factory
         return $factory;
     }
 
+    public function withHttpClientOptions(HttpClientOptions $options): self
+    {
+        $factory = clone $this;
+        $factory->httpClientOptions = $options;
+
+        return $factory;
+    }
+
     public function withHttpLogger(LoggerInterface $logger, ?MessageFormatter $formatter = null, ?string $logLevel = null, ?string $errorLogLevel = null): self
     {
         $formatter = $formatter ?: new MessageFormatter();
@@ -232,8 +250,11 @@ class Factory
 
     public function withHttpProxy(string $proxy): self
     {
-        $factory = clone $this;
-        $factory->httpProxy = $proxy;
+        $factory = $this->withHttpClientOptions(
+            $this->httpClientOptions->withProxy($proxy)
+        );
+
+        $factory->httpProxy = $factory->httpClientOptions->proxy();
 
         return $factory;
     }
@@ -545,13 +566,17 @@ class Factory
 
         // @codeCoverageIgnoreStart
         if ($this->guzzleDebugModeIsEnabled) {
-            $config['debug'] = true;
+            $config[RequestOptions::DEBUG] = true;
         }
         // @codeCoverageIgnoreEnd
 
-        if ($this->httpProxy) {
-            $config['proxy'] = $this->httpProxy;
+        if ($proxy = $this->httpClientOptions->proxy()) {
+            $config[RequestOptions::PROXY] = $proxy;
         }
+
+        $config[RequestOptions::CONNECT_TIMEOUT] = $this->httpClientOptions->connectTimeout();
+        $config[RequestOptions::READ_TIMEOUT] = $this->httpClientOptions->readTimeout();
+        $config[RequestOptions::TIMEOUT] = $this->httpClientOptions->timeout();
 
         $handler = $config['handler'] ?? null;
 

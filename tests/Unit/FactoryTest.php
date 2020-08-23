@@ -15,6 +15,7 @@ use Kreait\Clock\FrozenClock;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
 use Kreait\Firebase\Auth\DisabledLegacyCustomTokenGenerator;
 use Kreait\Firebase\Factory;
+use Kreait\Firebase\Http\HttpClientOptions;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\SimpleCache\CacheInterface;
@@ -300,5 +301,11 @@ class FactoryTest extends UnitTestCase
     {
         $this->expectDeprecation();
         $this->factory->withEnabledDebug();
+    }
+
+    public function testItAcceptsNewHttpClientOptions(): void
+    {
+        $this->factory->withHttpClientOptions(HttpClientOptions::default());
+        $this->addToAssertionCount(1);
     }
 }
