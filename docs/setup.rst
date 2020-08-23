@@ -9,11 +9,21 @@ Google Service Account
 **********************
 
 In order to access a Firebase project using a server SDK, you must authenticate your requests to Firebase with
-a `Service Account <https://developers.google.com/identity/protocols/OAuth2ServiceAccount>`_.
+`Service Account credentials <https://developers.google.com/identity/protocols/OAuth2ServiceAccount>`_.
 
-Follow the steps described in the official Firebase documentation to create a Service Account for your Firebase
-application:
-`Add the Firebase Admin SDK to your Server <https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app>`_.
+To authenticate a service account and authorize it to access Firebase services, you must generate a private
+key file in JSON format.
+
+To generate a private key file for your service account:
+
+1. Open https://console.firebase.google.com/project/_/settings/serviceaccounts/adminsdk and select
+   the project you want to generate a private key file for.
+2. Click **Generate New Private Key**, then confirm by clicking **Generate Key**
+3. Securely store the JSON file containing the key.
+
+.. note::
+    You should store the JSON file outside of your code repository to avoid accidentally exposing it
+    to the outside world.
 
 You can then configure the SDK to use this Service Account:
 
