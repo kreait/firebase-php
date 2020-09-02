@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### Fixed
+* The `HttpClientOptions` introduced in 5.8.0 caused a misconfiguration in the underlying
+  HTTP Client by trying to be too fancy (I'm sorry). 
+  ([#466](https://github.com/kreait/firebase-php/issues/466))
+  
+  _This is technically a breaking change because the return type of some public methods
+  of the `HttpClientOptions` has changed - but since they are meant to be used for service
+  creation, it is very unlikely that they have been used outside the SDK internals, so
+  the risk of breaking an existing application with this change is so low, that I'll
+  take the risk of getting shouted at for it._ 
+
 ## [5.8.0] - 2020-08-23
 ### Added
 * It is now possible to remove emails from users in the auth database.

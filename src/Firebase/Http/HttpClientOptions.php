@@ -13,16 +13,16 @@ final class HttpClientOptions
      *
      * Defaults to indefinitely.
      *
-     * @var float
+     * @var float|null
      */
-    private $connectTimeout = \INF;
+    private $connectTimeout;
 
     /**
      * The amount of seconds to wait while reading a streamed body.
      *
      * Defaults to the value of the default_socket_timeout PHP ini setting.
      *
-     * @var float
+     * @var float|null
      */
     private $readTimeout;
 
@@ -31,9 +31,9 @@ final class HttpClientOptions
      *
      * Defaults to indefinitely.
      *
-     * @var float
+     * @var float|null
      */
-    private $timeout = \INF;
+    private $timeout;
 
     /**
      * The proxy that all requests should be passed through.
@@ -44,7 +44,6 @@ final class HttpClientOptions
 
     private function __construct()
     {
-        $this->readTimeout = ((float) \ini_get('default_socket_timeout')) ?: \INF;
     }
 
     public static function default(): self
@@ -57,7 +56,7 @@ final class HttpClientOptions
      *
      * Defaults to indefinitely.
      */
-    public function connectTimeout(): float
+    public function connectTimeout(): ?float
     {
         return $this->connectTimeout;
     }
@@ -82,7 +81,7 @@ final class HttpClientOptions
      *
      * Defaults to the value of the default_socket_timeout PHP ini setting.
      */
-    public function readTimeout(): float
+    public function readTimeout(): ?float
     {
         return $this->readTimeout;
     }
@@ -107,7 +106,7 @@ final class HttpClientOptions
      *
      * Defaults to indefinitely.
      */
-    public function timeout(): float
+    public function timeout(): ?float
     {
         return $this->timeout;
     }

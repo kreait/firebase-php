@@ -574,9 +574,17 @@ class Factory
             $config[RequestOptions::PROXY] = $proxy;
         }
 
-        $config[RequestOptions::CONNECT_TIMEOUT] = $this->httpClientOptions->connectTimeout();
-        $config[RequestOptions::READ_TIMEOUT] = $this->httpClientOptions->readTimeout();
-        $config[RequestOptions::TIMEOUT] = $this->httpClientOptions->timeout();
+        if ($connectTimeout = $this->httpClientOptions->connectTimeout()) {
+            $config[RequestOptions::CONNECT_TIMEOUT] = $connectTimeout;
+        }
+
+        if ($readTimeout = $this->httpClientOptions->readTimeout()) {
+            $config[RequestOptions::READ_TIMEOUT] = $readTimeout;
+        }
+
+        if ($totalTimeout = $this->httpClientOptions->timeout()) {
+            $config[RequestOptions::TIMEOUT] = $totalTimeout;
+        }
 
         $handler = $config['handler'] ?? null;
 
