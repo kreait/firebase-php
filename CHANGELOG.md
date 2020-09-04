@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+## [5.8.1] - 2020-09-05
 ### Fixed
 * The `HttpClientOptions` introduced in 5.8.0 caused a misconfiguration in the underlying
   HTTP Client by trying to be too fancy (I'm sorry). 
@@ -94,7 +95,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.8.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.8.1...HEAD
+[5.8.1]: https://github.com/kreait/firebase-php/compare/5.8.0...5.8.1
 [5.8.0]: https://github.com/kreait/firebase-php/compare/5.7.0...5.8.0
 [5.7.0]: https://github.com/kreait/firebase-php/compare/5.6.0...5.7.0
 [5.6.0]: https://github.com/kreait/firebase-php/compare/5.5.0...5.6.0
