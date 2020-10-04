@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Added
+* PHP `^8.0` is now an allowed (but untested) PHP version
 
 ## [5.8.1] - 2020-09-05
 ### Fixed
