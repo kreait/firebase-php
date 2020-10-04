@@ -20,5 +20,3 @@ parameters:
 		-
 			message: '#Parameter .+ expects .+, .+ given#'
 			path: tests
-
-	tmpDir: %currentWorkingDirectory%/build/phpstan/
