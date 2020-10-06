@@ -106,6 +106,28 @@ class Auth
 
         return UserRecord::fromResponseData($data['users'][0]);
     }
+    
+     /**
+     * @param Uid|string $uid
+     *
+     * @throws UserNotFound
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
+    public function getUsers(array $uids): array
+    {
+        $response = $this->client->getAccountsInfo($uids);
+
+        $data = JSON::decode((string) $response->getBody(), true);
+
+        if (count($data['users']) === 0) {
+            throw new UserNotFound(sprintf("No users with these uids '%s' found.", implode(', ', $uids)));
+        }
+
+        return array_map(function($user) {
+            return UserRecord::fromResponseData($user);
+        }, $data['users']);
+    }
 
     /**
      * @throws Exception\AuthException
