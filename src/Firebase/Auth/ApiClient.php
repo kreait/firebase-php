@@ -121,13 +121,19 @@ class ApiClient implements ClientInterface
     }
 
     /**
+     * @param string|array<string> $uids
+     *
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function getAccountInfo(string $uid): ResponseInterface
+    public function getAccountInfo($uids): ResponseInterface
     {
+        if (!\is_array($uids)) {
+            $uids = [$uids];
+        }
+
         return $this->requestApi('getAccountInfo', [
-            'localId' => [$uid],
+            'localId' => $uids,
         ]);
     }
 

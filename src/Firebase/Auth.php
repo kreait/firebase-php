@@ -94,17 +94,43 @@ class Auth
      */
     public function getUser($uid): UserRecord
     {
-        $uid = $uid instanceof Uid ? $uid : new Uid($uid);
+        $userRecords = $this->getUsers([$uid]);
 
-        $response = $this->client->getAccountInfo((string) $uid);
+        if ($userRecord = $userRecords[(string) $uid] ?? null) {
+            return $userRecord;
+        }
+
+        throw new UserNotFound("No user with uid '{$uid}' found.");
+    }
+
+    /**
+     * @param array<Uid|string> $uids
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     *
+     * @return array<string, UserRecord|null>
+     */
+    public function getUsers(array $uids): array
+    {
+        $uids = \array_map(static function ($uid) {
+            $uid = $uid instanceof Uid ? $uid : new Uid($uid);
+
+            return (string) $uid;
+        }, $uids);
+
+        $users = \array_fill_keys($uids, null);
+
+        $response = $this->client->getAccountInfo($uids);
 
         $data = JSON::decode((string) $response->getBody(), true);
 
-        if (empty($data['users'][0])) {
-            throw new UserNotFound("No user with uid '{$uid}' found.");
+        foreach ($data['users'] ?? [] as $userData) {
+            $userRecord = UserRecord::fromResponseData($userData);
+            $users[$userRecord->uid] = $userRecord;
         }
 
-        return UserRecord::fromResponseData($data['users'][0]);
+        return $users;
     }
 
     /**

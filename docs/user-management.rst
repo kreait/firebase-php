@@ -71,9 +71,37 @@ Get information about a specific user
 
 .. code-block:: php
 
-    $user = $auth->getUser('some-uid');
-    $user = $auth->getUserByEmail('user@domain.tld');
-    $user = $auth->getUserByPhoneNumber('+49-123-456789');
+    try {
+        $user = $auth->getUser('some-uid');
+        $user = $auth->getUserByEmail('user@domain.tld');
+        $user = $auth->getUserByPhoneNumber('+49-123-456789');
+    } catch (\Kreait\Firebase\Exception\Auth\UserNotFound $e) {
+        echo $e->getMessage();
+    }
+
+************************************
+Get information about multiple users
+************************************
+
+You can retrieve multiple user records by using ``$auth->getUsers()``. When a user doesn't exist,
+no exception is thrown, but its entry in the result set is null:
+
+.. code-block:: php
+
+    $users = $auth->getUsers(['some-uid', 'another-uid', 'non-existing-uid']);
+
+Result:
+
+.. code-block:: text
+
+    [
+       'some-uid' => <UserRecord>,
+       'another-uid' => <UserRecord>,
+       'non-existing-uid' => null
+    ]
+
+
+
 
 *************
 Create a user

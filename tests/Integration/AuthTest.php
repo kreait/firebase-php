@@ -271,6 +271,23 @@ class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
+    public function testGetUsers(): void
+    {
+        $one = $this->auth->createAnonymousUser();
+        $two = $this->auth->createAnonymousUser();
+
+        $check = $this->auth->getUsers([$one->uid, $two->uid, 'non_existing']);
+
+        try {
+            $this->assertInstanceOf(Auth\UserRecord::class, $check[$one->uid]);
+            $this->assertInstanceOf(Auth\UserRecord::class, $check[$two->uid]);
+            $this->assertNull($check['non_existing']);
+        } finally {
+            $this->deleteUser($one);
+            $this->deleteUser($two);
+        }
+    }
+
     public function testGetNonExistingUser(): void
     {
         $user = $this->auth->createUser([]);
