@@ -130,6 +130,17 @@ class ApiClient implements ClientInterface
             'localId' => [$uid],
         ]);
     }
+    
+    /**
+     * @throws AuthException
+     * @throws FirebaseException
+     */
+    public function getAccountsInfo(array $uids): ResponseInterface
+    {
+        return $this->requestApi('getAccountInfo', [
+            'localId' => $uids,
+        ]);
+    }
 
     /**
      * @throws ExpiredOobCode
