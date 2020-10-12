@@ -779,7 +779,7 @@ class Auth
      *
      * @throws FailedToSignIn
      */
-    public function signInWithIdpAccessToken($provider, string $accessToken, $redirectUrl = null): SignInResult
+    public function signInWithIdpAccessToken($provider, string $accessToken, $redirectUrl = null, ?string $oauthTokenSecret = null): SignInResult
     {
         $provider = $provider instanceof Provider ? (string) $provider : $provider;
         $redirectUrl = $redirectUrl ?? 'http://localhost';
@@ -788,7 +788,11 @@ class Auth
             $redirectUrl = (string) $redirectUrl;
         }
 
-        $action = SignInWithIdpCredentials::withAccessToken($provider, $accessToken);
+        if ($oauthTokenSecret) {
+            $action = SignInWithIdpCredentials::withAccessTokenAndOauthTokenSecret($provider, $accessToken, $oauthTokenSecret);
+        } else {
+            $action = SignInWithIdpCredentials::withAccessToken($provider, $accessToken);
+        }
 
         if ($redirectUrl) {
             $action = $action->withRequestUri($redirectUrl);

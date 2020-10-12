@@ -144,12 +144,18 @@ final class GuzzleHandler implements Handler
     {
         $uri = uri_for('https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp');
 
+        $postBody = [
+            'access_token' => $action->accessToken(),
+            'id_token' => $action->idToken(),
+            'providerId' => $action->provider(),
+        ];
+
+        if ($action->oauthTokenSecret()) {
+            $postBody['oauth_token_secret'] = $action->oauthTokenSecret();
+        }
+
         $body = stream_for(\json_encode(\array_merge(self::$defaultBody, [
-            'postBody' => \http_build_query([
-                'access_token' => $action->accessToken(),
-                'id_token' => $action->idToken(),
-                'providerId' => $action->provider(),
-            ]),
+            'postBody' => \http_build_query($postBody),
             'returnIdpCredential' => true,
             'requestUri' => $action->requestUri(),
         ])));

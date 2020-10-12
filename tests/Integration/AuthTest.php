@@ -562,6 +562,14 @@ class AuthTest extends IntegrationTestCase
         $this->auth->signInWithIdpAccessToken('google.com', 'invalid', uri_for('http://localhost'));
     }
 
+    public function testSignInWithIdpAccessTokenAndOauthTokenSecret(): void
+    {
+        // I don't know how to retrieve a current user access token programatically, so we'll
+        // test the failure case only here
+        $this->expectException(FailedToSignIn::class);
+        $this->auth->signInWithIdpAccessToken('twitter.com', 'invalid', 'http://localhost', 'token_secret');
+    }
+
     public function testSignInWithIdpIdToken(): void
     {
         // I don't know how to retrieve a current user access token programatically, so we'll

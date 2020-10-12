@@ -5,6 +5,8 @@
 * Added `Kreait\Firebase\Auth::getUsers()` enables retrieving multiple users at once.
   ([#477](https://github.com/kreait/firebase-php/pull/477))
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#get-information-about-multiple-users))
+* Added support to sign in with Twitter OAuth credentials
+  ([#481](https://github.com/kreait/firebase-php/pull/481))
 
 ## [5.9.0] - 2020-10-04
 ### Added
