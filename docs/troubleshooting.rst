@@ -8,9 +8,9 @@ Troubleshooting
     order to get hold of the changes you made, you will have to use the result of
     that method, e.g. ``$changedObject = $object->withChangedProperty();``.
 
-**************************
-Call to private method ...
-**************************
+************************************
+Call to private/undefined method ...
+************************************
 
 If you receive an error like
 
@@ -61,13 +61,21 @@ somewhere in your script.
 Class 'Kreait\\Firebase\\ ...' not found
 ****************************************
 
-You are not using the latest release of the SDK, please update your composer dependencies.
+You are probably not using the latest release of the SDK, please update your composer dependencies.
 
 *********************************************
 Call to undefined function ``openssl_sign()``
 *********************************************
 
 You need to install the OpenSSL PHP Extension: http://php.net/openssl
+
+********************************************
+Default sound not played on message delivery
+********************************************
+
+If you specified ``'sound' => 'default'`` in the message payload, try chaning it
+to ``'sound' => "default"`` - although single or double quotes shouldn't™ make
+a difference, `it has been reported that this can solve the issue <https://github.com/kreait/firebase-php/issues/454#issuecomment-706771776>`_.
 
 ******************
 cURL error XX: ...
