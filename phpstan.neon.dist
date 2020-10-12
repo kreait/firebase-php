@@ -3,7 +3,6 @@ parameters:
 	paths:
 		- src/
 		- tests/
-	inferPrivatePropertyTypeFromConstructor: true
 	ignoreErrors:
 		-
 			message: '#Method .+ has parameter .+ with no typehint specified#'
