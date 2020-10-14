@@ -26,6 +26,7 @@ use Lcobucci\JWT\Token;
 use PHPUnit\Framework\MockObject\MockObject;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
+use Ramsey\Uuid\Uuid;
 use RuntimeException;
 
 /**
@@ -220,10 +221,12 @@ final class AuthTest extends UnitTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function testConfirmPasswordResetWithSessionInvalidationButWithoutEmailInTheResponse(): void
+    public function testConfirmPasswordResetWithSessionInvalidationWithEmailInTheResponse(): void
     {
-        $this->mockHandler->append($this->passwordResetSuccess());
-        $this->mockHandler->append(new RuntimeException('This should not have been handled'));
+        $this->mockHandler->append($this->passwordResetSuccess('email@domain.tld'));
+        $localId = Uuid::uuid4()->toString();
+        $this->mockHandler->append($this->usersResponse($localId, 'email@domain.tld'));
+        $this->mockHandler->append(new Response(200, [], JSON::encode(['localId' => $localId])));
 
         $this->auth->confirmPasswordReset('valid', 'new password', true);
         $this->addToAssertionCount(1);
@@ -234,6 +237,41 @@ final class AuthTest extends UnitTestCase
         $response = new Response($code, [], $body);
 
         return new ClientException('Client Exception', $this->createMock(RequestInterface::class), $response);
+    }
+
+    private function usersResponse(string $uuid, string $email): Response
+    {
+        return new Response(200, [], JSOn::encode(
+            [
+                'users' => [
+                    [
+                        'localId' => $uuid,
+                        'email' => $email,
+                        'emailVerified' => true,
+                        'displayName' => 'John Doe',
+                        'providerUserInfo' => [
+                            [
+                                'providerId' => 'password',
+                                'displayName' => 'John Doe',
+                                'photoUrl' => '',
+                                'federatedId' => $email,
+                                'email' => $email,
+                                'rawId' => $email,
+                                'screenName' => $email,
+                            ],
+                        ],
+                        'photoUrl' => '',
+                        'passwordHash' => 'randomstring',
+                        'passwordUpdatedAt' => 1.484124177E12,
+                        'validSince' => '1484124177',
+                        'disabled' => false,
+                        'lastLoginAt' => '1484628946000',
+                        'createdAt' => '1484124142000',
+                        'customAuth' => false,
+                    ],
+                ],
+            ]
+        ));
     }
 
     private function passwordResetSuccess(?string $email = null)

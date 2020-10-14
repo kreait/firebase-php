@@ -615,9 +615,13 @@ class Auth
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      */
-    public function verifyPasswordResetCode(string $oobCode): void
+    public function verifyPasswordResetCode(string $oobCode): Email
     {
-        $this->client->verifyPasswordResetCode($oobCode);
+        $response = $this->client->verifyPasswordResetCode($oobCode);
+
+        $email = JSON::decode((string) $response->getBody(), true)['email'] ?? null;
+
+        return new Email($email);
     }
 
     /**
@@ -636,7 +640,7 @@ class Auth
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      */
-    public function confirmPasswordReset(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): void
+    public function confirmPasswordReset(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): Email
     {
         $newPassword = $newPassword instanceof ClearTextPassword ? $newPassword : new ClearTextPassword($newPassword);
 
@@ -647,6 +651,8 @@ class Auth
         if ($invalidatePreviousSessions && $email) {
             $this->revokeRefreshTokens($this->getUserByEmail($email)->uid);
         }
+
+        return new Email($email);
     }
 
     /**
