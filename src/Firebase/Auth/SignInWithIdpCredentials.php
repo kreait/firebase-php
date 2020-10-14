@@ -36,9 +36,7 @@ final class SignInWithIdpCredentials implements SignIn
 
     public static function withAccessTokenAndOauthTokenSecret(string $provider, string $accessToken, string $oauthTokenSecret): self
     {
-        $instance = new self();
-        $instance->provider = $provider;
-        $instance->accessToken = $accessToken;
+        $instance = self::withAccessToken($provider, $accessToken);
         $instance->oauthTokenSecret = $oauthTokenSecret;
 
         return $instance;
