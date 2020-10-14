@@ -619,7 +619,7 @@ class Auth
     {
         $response = $this->client->verifyPasswordResetCode($oobCode);
 
-        $email = JSON::decode((string) $response->getBody(), true)['email'] ?? null;
+        $email = JSON::decode((string) $response->getBody(), true)['email'];
 
         return new Email($email);
     }
@@ -646,9 +646,9 @@ class Auth
 
         $response = $this->client->confirmPasswordReset($oobCode, (string) $newPassword);
 
-        $email = JSON::decode((string) $response->getBody(), true)['email'] ?? null;
+        $email = JSON::decode((string) $response->getBody(), true)['email'];
 
-        if ($invalidatePreviousSessions && $email) {
+        if ($invalidatePreviousSessions) {
             $this->revokeRefreshTokens($this->getUserByEmail($email)->uid);
         }
 
