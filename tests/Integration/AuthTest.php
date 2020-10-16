@@ -554,20 +554,33 @@ class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
+    public function testSignInWithTwitterOauthCredential(): void
+    {
+        // We can't retrieve a credential programmatically, so we'll test the failure case only
+        $this->expectException(FailedToSignIn::class);
+        $this->auth->signInWithTwitterOauthCredential('access_token', 'oauth_token_secret');
+    }
+
+    public function testSignInWithGoogleIdToken(): void
+    {
+        // We can't retrieve a credential programmatically, so we'll test the failure case only
+        $this->expectException(FailedToSignIn::class);
+        $this->auth->signInWithGoogleIdToken('id_token');
+    }
+
+    public function signInWithFacebookAccessToken(): void
+    {
+        // We can't retrieve a credential programmatically, so we'll test the failure case only
+        $this->expectException(FailedToSignIn::class);
+        $this->auth->signInWithFacebookAccessToken('access_token');
+    }
+
     public function testSignInWithIdpAccessToken(): void
     {
         // I don't know how to retrieve a current user access token programatically, so we'll
         // test the failure case only here
         $this->expectException(FailedToSignIn::class);
         $this->auth->signInWithIdpAccessToken('google.com', 'invalid', uri_for('http://localhost'));
-    }
-
-    public function testSignInWithIdpAccessTokenAndOauthTokenSecret(): void
-    {
-        // I don't know how to retrieve a current user access token programatically, so we'll
-        // test the failure case only here
-        $this->expectException(FailedToSignIn::class);
-        $this->auth->signInWithIdpAccessToken('twitter.com', 'invalid', 'http://localhost', 'token_secret');
     }
 
     public function testSignInWithIdpIdToken(): void

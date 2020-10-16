@@ -7,7 +7,11 @@
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#get-information-about-multiple-users))
 * Added support to sign in with Twitter OAuth credentials
   ([#481](https://github.com/kreait/firebase-php/pull/481))
-
+* Added convenience method to sign in with IDP credentials ([Documentation](https://firebase-php.readthedocs.io/en/latest/authentication.html#sign-in-with-idp-credentials)):
+  * `Kreait\Firebase\Auth::signInWithTwitterOauthCredential($accessToken, $oauthTokenSecret)`
+  * `Kreait\Firebase\Auth::signInWithGoogleIdToken($idToken)`
+  * `Kreait\Firebase\Auth::signInWithFacebookAccessToken($accessToken)`
+  
 ## [5.9.0] - 2020-10-04
 ### Added
 * PHP `^8.0` is now an allowed (but untested) PHP version

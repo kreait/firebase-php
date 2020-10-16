@@ -773,7 +773,24 @@ class Auth
         throw new FailedToSignIn('Failed to sign in anonymously: No ID token or UID available');
     }
 
+    public function signInWithTwitterOauthCredential(string $accessToken, string $oauthTokenSecret, ?string $redirectUrl = null): SignInResult
+    {
+        return $this->signInWithIdpAccessToken(Provider::TWITTER, $accessToken, $redirectUrl, $oauthTokenSecret);
+    }
+
+    public function signInWithGoogleIdToken(string $idToken, ?string $redirectUrl = null): SignInResult
+    {
+        return $this->signInWithIdpIdToken(Provider::GOOGLE, $idToken, $redirectUrl);
+    }
+
+    public function signInWithFacebookAccessToken(string $accessToken, ?string $redirectUrl = null): SignInResult
+    {
+        return $this->signInWithIdpAccessToken(Provider::FACEBOOK, $accessToken, $redirectUrl);
+    }
+
     /**
+     * @see https://cloud.google.com/identity-platform/docs/reference/rest/v1/accounts/signInWithIdp
+     *
      * @param Provider|string $provider
      * @param UriInterface|string|null $redirectUrl
      *

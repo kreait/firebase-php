@@ -252,13 +252,27 @@ in the constants of `https://github.com/kreait/firebase-php/blob/master/src/Fire
 This could be useful if you already have "Sign in with Twitter" implemented in your application, and want to
 authenticate the same user with Firebase.
 
-Once you have received those credentials, you can use them to sign a user in with them, for example with Twitter:
+Once you have received those credentials, you can use them to sign a user in with them:
 
 .. code-block:: php
 
-    use Kreait\Firebase\Value\Provider;
+    // with an access token from Facebook
+    $signInResult = $auth->signInWithFacebookAccessToken($accessToken);
 
-    $signInResult = $auth->signInWithIdpAccessToken(Provider::TWITTER, $accessToken);
+    // with an ID token from Google
+    $signInResult = $auth->signInWithGoogleIdToken($idToken);
+
+    // with a Twitter OAuth 1.0 credential
+    $signInResult = $auth->signInWithTwitterOauthCredential($accessToken, $oauthTokenSecret);
+
+
+If you're using a different identity provider, you can use:
+
+.. code-block:: php
+
+    $signInResult = $auth->signInWithIdpAccessToken($provider, $accessToken);
+
+    $signInResult = $auth->signInWithIdpIdToken($provider, $idToken);
 
 
 Sign In without a token
