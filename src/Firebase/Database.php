@@ -9,6 +9,7 @@ use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Database\Transaction;
+use Kreait\Firebase\Exception\DatabaseException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
 use Psr\Http\Message\UriInterface;
@@ -85,6 +86,8 @@ class Database
      * Retrieve Firebase Database Rules.
      *
      * @see https://firebase.google.com/docs/database/rest/app-management#retrieving-firebase-realtime-database-rules
+     *
+     * @throws DatabaseException
      */
     public function getRuleSet(): RuleSet
     {
@@ -97,6 +100,8 @@ class Database
      * Update Firebase Database Rules.
      *
      * @see https://firebase.google.com/docs/database/rest/app-management#updating-firebase-realtime-database-rules
+     *
+     * @throws DatabaseException
      */
     public function updateRules(RuleSet $ruleSet): void
     {

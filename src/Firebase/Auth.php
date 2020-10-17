@@ -66,7 +66,7 @@ class Auth
     private $signInHandler;
 
     /**
-     * @param iterable<ApiClient|TokenGenerator|Verifier|SignInHandler>|ApiClient|TokenGenerator|Verifier|SignInHandler $x
+     * @param iterable<ApiClient|TokenGenerator|Verifier|SignInHandler>|ApiClient|TokenGenerator|Verifier|SignInHandler ...$x
      *
      * @internal
      */
@@ -474,6 +474,7 @@ class Auth
     /**
      * @deprecated 5.4.0 use {@see setCustomUserClaims}($id, array $claims) instead
      * @see setCustomUserClaims
+     * @codeCoverageIgnore
      *
      * @param Uid|string $uid
      * @param array<string, mixed> $attributes
@@ -688,7 +689,7 @@ class Auth
 
     /**
      * @param UserRecord|Uid|string $user
-     * @param array<string, mixed> $claims
+     * @param array<string, mixed>|null $claims
      *
      * @throws FailedToSignIn
      */

@@ -72,7 +72,7 @@ final class Middleware
 
                         $logger->log($errorLogLevel, $message, ['request' => $request, 'response' => $response]);
 
-                        return GuzzleHttp\Promise\rejection_for($reason);
+                        return GuzzleHttp\Promise\Create::rejectionFor($reason);
                     }
                 );
             };

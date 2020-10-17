@@ -25,6 +25,9 @@ class Transaction
         $this->etags = [];
     }
 
+    /**
+     * @throws DatabaseException
+     */
     public function snapshot(Reference $reference): Snapshot
     {
         $uri = (string) $reference->getUri();

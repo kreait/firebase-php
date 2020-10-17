@@ -23,7 +23,7 @@ class MiddlewareTest extends UnitTestCase
     protected function setUp(): void
     {
         $this->request = new Psr7\Request('GET', 'http://domain.tld');
-        $this->handler = static function (RequestInterface $request, array $options = []) {
+        $this->handler = static function (RequestInterface $request) {
             return $request;
         };
     }

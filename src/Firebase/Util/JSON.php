@@ -19,8 +19,8 @@ class JSON
      * @see \GuzzleHttp\json_encode()
      *
      * @param mixed $value   The value being encoded
-     * @param int $options JSON encode option bitmask
-     * @param int $depth   Set the maximum depth. Must be greater than zero
+     * @param int|null $options JSON encode option bitmask
+     * @param int|null $depth   Set the maximum depth. Must be greater than zero
      *
      * @throws InvalidArgumentException if the JSON cannot be encoded
      */
@@ -48,9 +48,9 @@ class JSON
      * @see \GuzzleHttp\json_encode()
      *
      * @param string $json JSON data to parse
-     * @param bool $assoc  When true, returned objects will be converted into associative arrays
-     * @param int $depth User specified recursion depth
-     * @param int $options Bitmask of JSON decode options
+     * @param bool|null $assoc  When true, returned objects will be converted into associative arrays
+     * @param int|null $depth User specified recursion depth
+     * @param int|null $options Bitmask of JSON decode options
      *
      * @throws \InvalidArgumentException if the JSON cannot be decoded
      *

@@ -150,7 +150,7 @@ final class DynamicLinksTest extends TestCase
      */
     public function creation_fails_gracefully_if_an_unsuccessful_response_cannot_be_parsed(): void
     {
-        $this->httpHandler->append($response = new Response(400, [], 'probably html'));
+        $this->httpHandler->append(new Response(400, [], 'probably html'));
 
         $this->expectException(FailedToCreateDynamicLink::class);
         $this->service->createDynamicLink('https://domain.tld/irrelevant');
@@ -224,7 +224,7 @@ final class DynamicLinksTest extends TestCase
      */
     public function shortening_fails_gracefully_if_an_unsuccessful_response_cannot_be_parsed(): void
     {
-        $this->httpHandler->append($response = new Response(400, [], 'probably html'));
+        $this->httpHandler->append(new Response(400, [], 'probably html'));
 
         $this->expectException(FailedToShortenLongDynamicLink::class);
         $this->service->shortenLongDynamicLink('https://domain.tld/irrelevant');
@@ -348,7 +348,7 @@ final class DynamicLinksTest extends TestCase
      */
     public function link_stats_fail_gracefully_if_an_unsuccessful_response_cannot_be_parsed(): void
     {
-        $this->httpHandler->append($response = new Response(400, [], 'probably html'));
+        $this->httpHandler->append(new Response(400, [], 'probably html'));
 
         $this->expectException(FailedToGetStatisticsForDynamicLink::class);
         $this->service->getStatistics('https://domain.tld/irrelevant');

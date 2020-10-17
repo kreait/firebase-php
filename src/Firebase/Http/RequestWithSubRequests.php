@@ -6,7 +6,7 @@ namespace Kreait\Firebase\Http;
 
 use GuzzleHttp\Psr7\AppendStream;
 use GuzzleHttp\Psr7\Request;
-use function GuzzleHttp\Psr7\stream_for;
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 
@@ -88,7 +88,7 @@ final class RequestWithSubRequests implements HasSubRequests, RequestInterface
 
     private function appendStream(string $value): void
     {
-        $this->body->addStream(stream_for($value));
+        $this->body->addStream(Utils::streamFor($value));
     }
 
     private function subRequestHeadersAsString(RequestInterface $request): string

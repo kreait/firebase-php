@@ -19,9 +19,6 @@ use Psr\Http\Message\UriInterface;
  */
 class ReferenceTest extends UnitTestCase
 {
-    /** @var Uri */
-    private $uri;
-
     /** @var ApiClient|\PHPUnit\Framework\MockObject\MockObject */
     private $apiClient;
 
@@ -32,10 +29,9 @@ class ReferenceTest extends UnitTestCase
     {
         parent::setUp();
 
-        $this->uri = new Uri('http://domain.tld/parent/key');
         $this->apiClient = $this->createMock(ApiClient::class);
 
-        $this->reference = new Reference($this->uri, $this->apiClient);
+        $this->reference = new Reference(new Uri('http://domain.tld/parent/key'), $this->apiClient);
     }
 
     public function testGetKey(): void

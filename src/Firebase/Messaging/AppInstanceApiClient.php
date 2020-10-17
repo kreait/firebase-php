@@ -75,7 +75,7 @@ class AppInstanceApiClient
     }
 
     /**
-     * @param array<string, mixed> $options
+     * @param array<string, mixed>|null $options
      *
      * @throws FirebaseException
      * @throws MessagingException

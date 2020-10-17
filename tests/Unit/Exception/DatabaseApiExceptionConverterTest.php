@@ -13,7 +13,6 @@ use Kreait\Firebase\Exception\Database\ApiConnectionFailed;
 use Kreait\Firebase\Exception\Database\DatabaseError;
 use Kreait\Firebase\Exception\Database\PermissionDenied;
 use Kreait\Firebase\Exception\DatabaseApiExceptionConverter;
-use Kreait\Firebase\Exception\DatabaseException;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
@@ -77,7 +76,6 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
 
         $result = $this->converter->convertException($e);
 
-        $this->assertInstanceOf(DatabaseException::class, $result);
         $this->assertStringContainsString('Foo', $result->getMessage());
         $this->assertSame($e, $result->getPrevious());
     }

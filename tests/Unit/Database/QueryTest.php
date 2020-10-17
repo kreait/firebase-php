@@ -8,11 +8,9 @@ use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Query;
 use Kreait\Firebase\Database\Reference;
-use Kreait\Firebase\Database\Snapshot;
 use Kreait\Firebase\Exception\Database\DatabaseError;
 use Kreait\Firebase\Exception\Database\UnsupportedQuery;
 use Kreait\Firebase\Tests\UnitTestCase;
-use Psr\Http\Message\UriInterface;
 use Throwable;
 
 /**
@@ -41,8 +39,7 @@ class QueryTest extends UnitTestCase
 
         $this->reference = $reference;
 
-        $apiClient = $this->createMock(ApiClient::class);
-        $this->apiClient = $apiClient;
+        $this->apiClient = $this->createMock(ApiClient::class);
 
         $this->query = new Query($this->reference, $this->apiClient);
     }
@@ -56,9 +53,9 @@ class QueryTest extends UnitTestCase
     {
         $this->apiClient->method('get')->with($this->anything())->willReturn('value');
 
-        $snapshot = $this->query->orderByKey()->equalTo(2)->getSnapshot();
+        $this->query->orderByKey()->equalTo(2)->getSnapshot();
 
-        $this->assertInstanceOf(Snapshot::class, $snapshot);
+        $this->addToAssertionCount(1);
     }
 
     public function testGetValue(): void
@@ -72,7 +69,6 @@ class QueryTest extends UnitTestCase
     {
         $uri = $this->query->getUri();
 
-        $this->assertInstanceOf(UriInterface::class, $uri);
         $this->assertSame((string) $uri, (string) $this->query);
     }
 

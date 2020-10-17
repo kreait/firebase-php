@@ -78,7 +78,7 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
      */
     public function it_can_handle_unknown_exceptions(): void
     {
-        $this->assertInstanceOf(AuthError::class, $this->converter->convertException($e = new RuntimeException()));
+        $this->assertInstanceOf(AuthError::class, $this->converter->convertException(new RuntimeException()));
     }
 
     /**

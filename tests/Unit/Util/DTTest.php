@@ -33,7 +33,6 @@ class DTTest extends TestCase
     {
         $dt = DT::toUTCDateTimeImmutable($value);
 
-        $this->assertInstanceOf(DateTimeImmutable::class, $dt);
         $this->assertEquals('UTC', $dt->getTimezone()->getName());
     }
 

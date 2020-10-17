@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase;
 
-use function GuzzleHttp\Psr7\uri_for;
+use GuzzleHttp\Psr7\Utils;
 use JsonSerializable;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
@@ -32,12 +32,12 @@ final class DynamicLink implements JsonSerializable
 
     public function uri(): UriInterface
     {
-        return uri_for($this->data['shortLink']);
+        return Utils::uriFor($this->data['shortLink']);
     }
 
     public function previewUri(): UriInterface
     {
-        return uri_for($this->data['previewLink']);
+        return Utils::uriFor($this->data['previewLink']);
     }
 
     public function domain(): string

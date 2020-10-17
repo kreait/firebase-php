@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
-use function GuzzleHttp\Psr7\parse_query;
-use function GuzzleHttp\Psr7\uri_for;
+use GuzzleHttp\Psr7\Query;
+use GuzzleHttp\Psr7\Utils;
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
@@ -91,7 +91,7 @@ class AuthTest extends IntegrationTestCase
 
         $link = $this->auth->getEmailVerificationLink((string) $user->email);
 
-        $this->assertInstanceOf(UriInterface::class, uri_for($link));
+        $this->assertInstanceOf(UriInterface::class, Utils::uriFor($link));
 
         $this->deleteUser($user);
     }
@@ -130,7 +130,7 @@ class AuthTest extends IntegrationTestCase
 
         $link = $this->auth->getPasswordResetLink((string) $user->email);
 
-        $this->assertInstanceOf(UriInterface::class, uri_for($link));
+        $this->assertInstanceOf(UriInterface::class, Utils::uriFor($link));
 
         $this->deleteUser($user);
     }
@@ -152,7 +152,7 @@ class AuthTest extends IntegrationTestCase
 
         $link = $this->auth->getSignInWithEmailLink((string) $user->email);
 
-        $this->assertInstanceOf(UriInterface::class, uri_for($link));
+        $this->assertInstanceOf(UriInterface::class, Utils::uriFor($link));
 
         $this->deleteUser($user);
     }
@@ -523,7 +523,7 @@ class AuthTest extends IntegrationTestCase
 
         $signInLink = $this->auth->getSignInWithEmailLink($email);
         $query = (string) \parse_url($signInLink, \PHP_URL_QUERY);
-        $oobCode = parse_query($query)['oobCode'] ?? '';
+        $oobCode = Query::parse($query)['oobCode'] ?? '';
 
         $result = $this->auth->signInWithEmailAndOobCode($email, $oobCode);
 
@@ -580,7 +580,7 @@ class AuthTest extends IntegrationTestCase
         // I don't know how to retrieve a current user access token programatically, so we'll
         // test the failure case only here
         $this->expectException(FailedToSignIn::class);
-        $this->auth->signInWithIdpAccessToken('google.com', 'invalid', uri_for('http://localhost'));
+        $this->auth->signInWithIdpAccessToken('google.com', 'invalid', Utils::uriFor('http://localhost'));
     }
 
     public function testSignInWithIdpIdToken(): void

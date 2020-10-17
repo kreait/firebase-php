@@ -139,7 +139,7 @@ class UpdateUserTest extends IntegrationTestCase
         $user = $this->auth->createUser(
             CreateUser::new()
                 ->withUid($uid = \bin2hex(\random_bytes(5)))
-                ->withVerifiedEmail($email = $uid.'@example.org')
+                ->withVerifiedEmail($uid.'@example.org')
                 ->withPhoneNumber($phoneNumber = '+1234567'.\random_int(1000, 9999))
         );
 

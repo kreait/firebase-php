@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit;
 
-use DateTimeImmutable;
 use Firebase\Auth\Token\Domain\Generator;
 use Firebase\Auth\Token\Domain\Verifier;
 use Firebase\Auth\Token\Exception\InvalidToken;
@@ -14,7 +13,6 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use InvalidArgumentException;
-use Kreait\Clock\FrozenClock;
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
@@ -33,14 +31,8 @@ use RuntimeException;
  */
 final class AuthTest extends UnitTestCase
 {
-    /** @var FrozenClock */
-    private $clock;
-
     /** @var MockHandler */
     private $mockHandler;
-
-    /** @var ApiClient */
-    private $apiClient;
 
     /** @var Generator&MockObject */
     private $tokenGenerator;
@@ -54,12 +46,12 @@ final class AuthTest extends UnitTestCase
     protected function setUp(): void
     {
         $this->mockHandler = new MockHandler();
-        $this->clock = new FrozenClock(new DateTimeImmutable());
 
         $this->tokenGenerator = $this->createMock(Generator::class);
         $this->idTokenVerifier = $this->createMock(Verifier::class);
-        $this->apiClient = new ApiClient(new Client(['handler' => $this->mockHandler]));
-        $this->auth = new Auth($this->apiClient, $this->tokenGenerator, $this->idTokenVerifier);
+
+        $apiClient = new ApiClient(new Client(['handler' => $this->mockHandler]));
+        $this->auth = new Auth($apiClient, $this->tokenGenerator, $this->idTokenVerifier);
     }
 
     public function testCreateCustomToken(): void

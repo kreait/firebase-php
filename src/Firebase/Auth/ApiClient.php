@@ -141,6 +141,8 @@ class ApiClient implements ClientInterface
      * @throws ExpiredOobCode
      * @throws InvalidOobCode
      * @throws OperationNotAllowed
+     * @throws AuthException
+     * @throws FirebaseException
      */
     public function verifyPasswordResetCode(string $oobCode): ResponseInterface
     {
@@ -154,6 +156,8 @@ class ApiClient implements ClientInterface
      * @throws InvalidOobCode
      * @throws OperationNotAllowed
      * @throws UserDisabled
+     * @throws AuthException
+     * @throws FirebaseException
      */
     public function confirmPasswordReset(string $oobCode, string $newPassword): ResponseInterface
     {
@@ -191,7 +195,7 @@ class ApiClient implements ClientInterface
 
     /**
      * @param mixed $data
-     * @param array<string, mixed> $headers
+     * @param array<string, mixed>|null $headers
      *
      * @throws AuthException
      * @throws FirebaseException

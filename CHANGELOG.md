@@ -11,7 +11,9 @@
   * `Kreait\Firebase\Auth::signInWithTwitterOauthCredential($accessToken, $oauthTokenSecret)`
   * `Kreait\Firebase\Auth::signInWithGoogleIdToken($idToken)`
   * `Kreait\Firebase\Auth::signInWithFacebookAccessToken($accessToken)`
-  
+### Changed
+  * Replaced usage of deprecated Guzzle helpers
+
 ## [5.9.0] - 2020-10-04
 ### Added
 * PHP `^8.0` is now an allowed (but untested) PHP version

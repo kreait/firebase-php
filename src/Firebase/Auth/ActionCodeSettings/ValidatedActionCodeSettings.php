@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth\ActionCodeSettings;
 
-use function GuzzleHttp\Psr7\uri_for;
+use GuzzleHttp\Psr7\Utils;
 use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
@@ -56,13 +56,13 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
             switch (\mb_strtolower($key)) {
                 case 'continueurl':
                 case 'url':
-                    $instance->continueUrl = uri_for($value);
+                    $instance->continueUrl = Utils::uriFor($value);
                     break;
                 case 'handlecodeinapp':
                     $instance->canHandleCodeInApp = (bool) $value;
                     break;
                 case 'dynamiclinkdomain':
-                    $instance->dynamicLinkDomain = uri_for($value);
+                    $instance->dynamicLinkDomain = Utils::uriFor($value);
                     break;
                 case 'androidpackagename':
                     $instance->androidPackageName = (string) $value;

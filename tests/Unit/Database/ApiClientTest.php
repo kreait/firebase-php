@@ -57,16 +57,14 @@ class ApiClientTest extends UnitTestCase
 
     public function testUpdate(): void
     {
-        $client = $this->createApiClient();
-
-        $this->assertNull($client->update($this->targetUrl, ['any', 'values'])); // => no return value, no exception
+        $this->createApiClient()->update($this->targetUrl, ['any', 'values']);
+        $this->addToAssertionCount(1);
     }
 
     public function testRemove(): void
     {
-        $client = $this->createApiClient();
-
-        $this->assertNull($client->remove($this->targetUrl)); // => no return value, no exception
+        $this->createApiClient()->remove($this->targetUrl);
+        $this->addToAssertionCount(1);
     }
 
     public function testCatchRequestException(): void

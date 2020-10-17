@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Auth\CreateActionLink;
 
 use GuzzleHttp\Psr7\Request;
-use function GuzzleHttp\Psr7\stream_for;
-use function GuzzleHttp\Psr7\uri_for;
+use GuzzleHttp\Psr7\Utils;
 use Kreait\Firebase\Auth\CreateActionLink;
 use Kreait\Firebase\Http\WrappedPsr7Request;
 use Psr\Http\Message\RequestInterface;
@@ -17,7 +16,7 @@ final class ApiRequest implements RequestInterface
 
     public function __construct(CreateActionLink $action)
     {
-        $uri = uri_for('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode');
+        $uri = Utils::uriFor('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode');
 
         $data = [
             'requestType' => $action->type(),
@@ -25,7 +24,7 @@ final class ApiRequest implements RequestInterface
             'returnOobLink' => true,
         ] + $action->settings()->toArray();
 
-        $body = stream_for(\json_encode($data));
+        $body = Utils::streamFor(\json_encode($data));
 
         $headers = \array_filter([
             'Content-Type' => 'application/json; charset=UTF-8',

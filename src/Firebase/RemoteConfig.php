@@ -116,7 +116,7 @@ class RemoteConfig
     }
 
     /**
-     * @param FindVersions|array<string, mixed> $query
+     * @param FindVersions|array<string, mixed>|null $query
      *
      * @throws RemoteConfigException if something went wrong
      *

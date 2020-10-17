@@ -248,8 +248,7 @@ CONFIG;
 
         $counter = 0;
 
-        $versions = $this->remoteConfig->listVersions($query);
-        foreach ($versions as $version) {
+        foreach ($this->remoteConfig->listVersions($query) as $version) {
             ++$counter;
 
             // Protect us from an infinite loop
