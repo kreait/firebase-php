@@ -443,10 +443,71 @@ class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testInvalidPasswordResetCode(): void
+    public function testVerifyPasswordResetCode(): void
+    {
+        $user = $this->createUserWithEmailAndPassword();
+
+        $url = $this->auth->getPasswordResetLink($user->email);
+
+        \parse_str(\parse_url($url, \PHP_URL_QUERY), $query);
+
+        $email = $this->auth->verifyPasswordResetCodeAndReturnEmail($query['oobCode']);
+
+        try {
+            $this->assertTrue($email->equalsTo($user->email));
+        } finally {
+            $this->deleteUser($user);
+        }
+    }
+
+    public function testVerifyPasswordWithInvalidOobCode(): void
     {
         $this->expectException(InvalidOobCode::class);
         $this->auth->verifyPasswordResetCode('invalid');
+    }
+
+    public function testConfirmPasswordReset(): void
+    {
+        $user = $this->createUserWithEmailAndPassword();
+
+        $url = $this->auth->getPasswordResetLink($user->email);
+
+        \parse_str(\parse_url($url, \PHP_URL_QUERY), $query);
+
+        $email = $this->auth->confirmPasswordResetAndReturnEmail($query['oobCode'], 'newPassword123');
+
+        try {
+            $this->assertTrue($email->equalsTo($user->email));
+        } finally {
+            $this->deleteUser($user);
+        }
+    }
+
+    public function testConfirmPasswordResetAndInvalidateRefreshTokens(): void
+    {
+        $user = $this->createUserWithEmailAndPassword();
+
+        $url = $this->auth->getPasswordResetLink($user->email);
+
+        \parse_str(\parse_url($url, \PHP_URL_QUERY), $query);
+
+        $email = $this->auth->confirmPasswordResetAndReturnEmail($query['oobCode'], 'newPassword123', true);
+        \sleep(1); // wait for a second
+
+        try {
+            $this->assertTrue($email->equalsTo($user->email));
+            $check = $this->auth->getUser($user->uid);
+
+            $this->assertGreaterThan($user->tokensValidAfterTime, $check->tokensValidAfterTime);
+        } finally {
+            $this->deleteUser($user);
+        }
+    }
+
+    public function testConfirmPasswordResetWithInvalidOobCode(): void
+    {
+        $this->expectException(InvalidOobCode::class);
+        $this->auth->confirmPasswordReset('invalid', 'newPassword123');
     }
 
     public function testSignInAsUser(): void

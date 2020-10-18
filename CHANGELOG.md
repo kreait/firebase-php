@@ -19,6 +19,10 @@
   * `Kreait\Firebase\Messaging::unsubscribeFromAllTopics($registrationTokenOrTokens)`
 * The RemoteConfig component now support Parameter Groups.
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/remote-config.html#parameter-groups))
+* Added methods allowing to use the email address associated with OOB password resets.
+  ([#482](https://github.com/kreait/firebase-php/pull/482), [#485](https://github.com/kreait/firebase-php/pull/485))
+  * `Kreait\Firebase\Auth::verifyPasswordResetCodeAndReturnEmail(string $oobCode)`
+  * `Kreait\Firebase\Auth::confirmPasswordResetAndReturnEmail(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true)`
 ### Changed
   * Replaced usage of deprecated Guzzle helpers
 ### Deprecated

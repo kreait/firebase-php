@@ -618,7 +618,28 @@ class Auth
      */
     public function verifyPasswordResetCode(string $oobCode): void
     {
-        $this->client->verifyPasswordResetCode($oobCode);
+        // Not returning the email on purpose to not break BC
+        $this->verifyPasswordResetCodeAndReturnEmail($oobCode);
+    }
+
+    /**
+     * Verifies the given password reset code and returns the associated user's email address.
+     *
+     * @see https://firebase.google.com/docs/reference/rest/auth#section-verify-password-reset-code
+     *
+     * @throws ExpiredOobCode
+     * @throws InvalidOobCode
+     * @throws OperationNotAllowed
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
+    public function verifyPasswordResetCodeAndReturnEmail(string $oobCode): Email
+    {
+        $response = $this->client->verifyPasswordResetCode($oobCode);
+
+        $email = JSON::decode((string) $response->getBody(), true)['email'];
+
+        return new Email($email);
     }
 
     /**
@@ -639,15 +660,39 @@ class Auth
      */
     public function confirmPasswordReset(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): void
     {
+        // Not returning the email on purpose to not break BC
+        $this->confirmPasswordResetAndReturnEmail($oobCode, $newPassword, $invalidatePreviousSessions);
+    }
+
+    /**
+     * Applies the password reset requested via the given OOB code and returns the associated user's email address.
+     *
+     * @see https://firebase.google.com/docs/reference/rest/auth#section-confirm-reset-password
+     *
+     * @param string $oobCode the email action code sent to the user's email for resetting the password
+     * @param ClearTextPassword|string $newPassword
+     * @param bool $invalidatePreviousSessions Invalidate sessions initialized with the previous credentials
+     *
+     * @throws ExpiredOobCode
+     * @throws InvalidOobCode
+     * @throws OperationNotAllowed
+     * @throws UserDisabled
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
+    public function confirmPasswordResetAndReturnEmail(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): Email
+    {
         $newPassword = $newPassword instanceof ClearTextPassword ? $newPassword : new ClearTextPassword($newPassword);
 
         $response = $this->client->confirmPasswordReset($oobCode, (string) $newPassword);
 
-        $email = JSON::decode((string) $response->getBody(), true)['email'] ?? null;
+        $email = JSON::decode((string) $response->getBody(), true)['email'];
 
-        if ($invalidatePreviousSessions && $email) {
+        if ($invalidatePreviousSessions) {
             $this->revokeRefreshTokens($this->getUserByEmail($email)->uid);
         }
+
+        return new Email($email);
     }
 
     /**
