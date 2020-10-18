@@ -25,10 +25,7 @@ final class AppInstanceTest extends IntegrationTestCase
      */
     public function it_is_subscribed_to_topics(): void
     {
-        \reset(self::$registrationTokens);
-        if (!($token = \current(self::$registrationTokens))) {
-            $this->markTestSkipped('No registration token available');
-        }
+        $token = $this->getTestRegistrationToken();
 
         $firstTopic = __FUNCTION__;
         $secondTopic = __FUNCTION__.'2';

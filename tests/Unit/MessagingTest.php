@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
@@ -69,19 +68,6 @@ class MessagingTest extends UnitTestCase
         $this->messaging->send([]);
     }
 
-    /**
-     * @dataProvider validTokenProvider
-     */
-    public function testSubscribeToTopicWithValidTokens($tokens): void
-    {
-        $this->appInstanceApi->expects($this->once())
-            ->method($this->anything())
-            ->willReturn(new Response(200, [], '[]'));
-
-        $this->messaging->subscribeToTopic('topic', $tokens);
-        $this->addToAssertionCount(1);
-    }
-
     public function testSubscribeToTopicWithInvalidTokens(): void
     {
         $this->expectException(InvalidArgument::class);
@@ -92,19 +78,6 @@ class MessagingTest extends UnitTestCase
     {
         $this->expectException(InvalidArgument::class);
         $this->messaging->subscribeToTopic('topic', []);
-    }
-
-    /**
-     * @dataProvider validTokenProvider
-     */
-    public function testUnsubscribeFromTopicWithValidTokens($tokens): void
-    {
-        $this->appInstanceApi->expects($this->once())
-            ->method($this->anything())
-            ->willReturn(new Response(200, [], '[]'));
-
-        $this->messaging->unsubscribeFromTopic('topic', $tokens);
-        $this->addToAssertionCount(1);
     }
 
     public function testUnsubscribeFromTopicWithEmptyTokenList(): void

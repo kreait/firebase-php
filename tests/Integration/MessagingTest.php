@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
-use DateTimeImmutable;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\RawMessageFromArray;
-use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 /**
@@ -134,14 +132,9 @@ class MessagingTest extends IntegrationTestCase
 
     public function testSendMulticastWithValidAndInvalidTarget(): void
     {
-        \reset(self::$registrationTokens);
-        if (!($token = \current(self::$registrationTokens))) {
-            $this->markTestSkipped('No registration token available');
-        }
-
         $message = CloudMessage::fromArray([]);
         $tokens = [
-            $valid = $token,
+            $valid = $this->getTestRegistrationToken(),
             $invalid = 'invalid',
         ];
 
@@ -192,23 +185,14 @@ class MessagingTest extends IntegrationTestCase
      */
     public function testSendMulticastMessageToOneRecipientOnly(): void
     {
-        \reset(self::$registrationTokens);
-        if (!($token = \current(self::$registrationTokens))) {
-            $this->markTestSkipped('No registration token available');
-        }
-
-        $report = $this->messaging->sendMulticast(CloudMessage::new(), [$token]);
+        $report = $this->messaging->sendMulticast(CloudMessage::new(), [$this->getTestRegistrationToken()]);
 
         $this->assertCount(1, $report->successes());
     }
 
     public function testSendMessageToDifferentTargets(): void
     {
-        \reset(self::$registrationTokens);
-        if (!($token = \current(self::$registrationTokens))) {
-            $this->markTestSkipped('No registration token available');
-        }
-
+        $token = $this->getTestRegistrationToken();
         $topic = __FUNCTION__;
         $condition = "'{$topic}' in topics";
         $invalidToken = 'invalid_token';
@@ -231,42 +215,77 @@ class MessagingTest extends IntegrationTestCase
         $this->assertCount(2, $report->failures());
     }
 
-    public function testManageTopicSubscriptions(): void
+    public function testSubscribeToTopic(): void
     {
-        \reset(self::$registrationTokens);
-        if (!($token = \current(self::$registrationTokens))) {
-            $this->markTestSkipped('No registration token available');
-        }
+        $token = $this->getTestRegistrationToken();
+        $topicName = \uniqid(__FUNCTION__, false);
 
+        try {
+            $this->assertEquals([
+                $topicName => [$token => 'OK'],
+            ], $this->messaging->subscribeToTopic($topicName, $token));
+        } finally {
+            $this->messaging->unsubscribeFromTopic($topicName, $token);
+        }
+    }
+
+    public function testSubscribeToTopics(): void
+    {
+        $token = $this->getTestRegistrationToken();
+
+        $topics = [
+            $firstTopic = \uniqid(__FUNCTION__.'_1', false),
+            $secondTopic = \uniqid(__FUNCTION__.'_2', false),
+        ];
+
+        try {
+            $this->assertEquals([
+                $firstTopic => [$token => 'OK'],
+                $secondTopic => [$token => 'OK'],
+            ], $this->messaging->subscribeToTopics($topics, $token));
+        } finally {
+            $this->messaging->unsubscribeFromTopics($topics, $token);
+        }
+    }
+
+    public function testUnsubscribeFromTopic(): void
+    {
+        $token = $this->getTestRegistrationToken();
         $topicName = \uniqid('topic', false);
         $this->messaging->subscribeToTopic($topicName, $token);
 
-        $appInstance = $this->messaging->getAppInstance(RegistrationToken::fromValue($token));
-        $this->assertTrue($appInstance->isSubscribedToTopic($topicName));
+        $this->assertEquals([
+            $topicName => [$token => 'OK'],
+        ], $this->messaging->unsubscribeFromTopic($topicName, $token));
+    }
 
-        $subscriptions = $appInstance->topicSubscriptions();
-        $this->assertGreaterThan(0, $subscriptions->count());
+    public function testUnsubscribeFromTopics(): void
+    {
+        $token = $this->getTestRegistrationToken();
 
-        $topicNames = [];
+        $topics = [
+            $firstTopic = \uniqid(__FUNCTION__.'_1', false),
+            $secondTopic = \uniqid(__FUNCTION__.'_2', false),
+        ];
 
-        foreach ($subscriptions as $subscription) {
-            $topicNames[] = $subscription->topic()->value();
-            $this->assertLessThanOrEqual(new DateTimeImmutable(), $subscription->subscribedAt());
-        }
+        $this->assertEquals([
+            $firstTopic => [$token => 'OK'],
+            $secondTopic => [$token => 'OK'],
+        ], $this->messaging->unsubscribeFromTopics($topics, $token));
+    }
 
-        $this->assertContains($topicName, $topicNames);
+    public function testUnsubscribeFromAllTopics(): void
+    {
+        $token = $this->getTestRegistrationToken();
 
-        $this->messaging->unsubscribeFromTopic($topicName, $token);
-        $this->assertFalse($this->messaging->getAppInstance($token)->isSubscribedToTopic($topicName));
+        $this->messaging->unsubscribeFromAllTopics($token);
+
+        $this->assertCount(0, $this->messaging->getAppInstance($token)->topicSubscriptions());
     }
 
     public function testGetAppInstance(): void
     {
-        \reset(self::$registrationTokens);
-        if (!($token = \current(self::$registrationTokens))) {
-            $this->markTestSkipped('No registration token available');
-        }
-
+        $token = $this->getTestRegistrationToken();
         $appInstance = $this->messaging->getAppInstance($token);
 
         $this->assertSame($token, $appInstance->registrationToken()->value());
