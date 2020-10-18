@@ -52,6 +52,41 @@ class RemoteConfigTest extends IntegrationTestCase
             },
             "description": "This is a welcome message"
         }
+    },
+    "parameterGroups": {
+        "welcome_messages": {
+            "description": "A group of parameters",
+            "parameters": {
+                "welcome_message_new_users": {
+                    "defaultValue": {
+                        "value": "Welcome, new user!"
+                    },
+                    "conditionalValues": {
+                        "lang_german": {
+                            "value": "Willkommen, neuer Benutzer!"
+                        },
+                        "lang_french": {
+                            "value": "Bienvenu, nouvel utilisateur!"
+                        }
+                    },
+                    "description": "This is a welcome message for new users"
+                },
+                "welcome_message_existing_users": {
+                    "defaultValue": {
+                        "value": "Welcome, existing user!"
+                    },
+                    "conditionalValues": {
+                        "lang_german": {
+                            "value": "Willkommen, bestehender Benutzer!"
+                        },
+                        "lang_french": {
+                            "value": "Bienvenu, utilisant existant!"
+                        }
+                    },
+                    "description": "This is a welcome message for existing users"
+                }
+            }
+        }
     }
 }
 CONFIG;
@@ -70,7 +105,11 @@ CONFIG;
 
         $this->remoteConfig->publish($template);
 
-        $version = $this->remoteConfig->get()->version();
+        $check = $this->remoteConfig->get();
+
+        $this->assertEquals($template->jsonSerialize(), $check->jsonSerialize());
+
+        $version = $check->version();
 
         if (!$version) {
             $this->fail('The template has no version');
