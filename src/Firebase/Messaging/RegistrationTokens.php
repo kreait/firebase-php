@@ -23,7 +23,7 @@ final class RegistrationTokens implements Countable, IteratorAggregate
     }
 
     /**
-     * @param mixed $values
+     * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $values
      *
      * @throws InvalidArgumentException
      */
@@ -68,7 +68,7 @@ final class RegistrationTokens implements Countable, IteratorAggregate
     }
 
     /**
-     * @return RegistrationToken[]
+     * @return array<RegistrationToken>
      */
     public function values(): array
     {
@@ -86,5 +86,21 @@ final class RegistrationTokens implements Countable, IteratorAggregate
     public function count(): int
     {
         return \count($this->tokens);
+    }
+
+    /**
+     * @param RegistrationToken|string $token
+     */
+    public function has($token): bool
+    {
+        $token = $token instanceof RegistrationToken ? $token : RegistrationToken::fromValue($token);
+
+        foreach ($this->tokens as $existing) {
+            if ($existing->value() === $token->value()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

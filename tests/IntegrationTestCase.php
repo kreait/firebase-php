@@ -59,6 +59,16 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         self::$factory->createAuth()->deleteUser($uid);
     }
 
+    protected function getTestRegistrationToken(): string
+    {
+        if (empty(self::$registrationTokens)) {
+            $this->markTestSkipped('No registration token available');
+        }
+
+        /* @noinspection NonSecureArrayRandUsageInspection */
+        return self::$registrationTokens[\array_rand(self::$registrationTokens)];
+    }
+
     /**
      * @return ServiceAccount|null
      */

@@ -512,42 +512,23 @@ error message(s) that the API returned.
 Topic management
 ****************
 
-Subscribe to a topic
---------------------
-
-You can subscribe one or multiple devices to a topic by passing registration tokens to the
-``subscribeToTopic()`` method.
+You can subscribe one or multiple devices to one or multiple messaging topics with the following methods:
 
 .. code-block:: php
 
-    $topic = 'my-topic';
-    $registrationTokens = [
-        // ...
-    };
+    $result = $messaging->subscribeToTopic($topic, $registrationTokenOrTokens);
+    $result = $messaging->subscribeToTopics($topics, $registrationTokenOrTokens);
 
-    $messaging->subscribeToTopic($topic, $registrationTokens);
+    $result = $messaging->unsubscribeFromTopic($topic, $registrationTokenOrTokens);
+    $result = $messaging->unsubscribeFromTopics($topics, $registrationTokenOrTokens);
+
+    $result = $messaging->unsubscribeFromAllTopics($registrationTokenOrTokens);
+
+The result will return an array win which the keys are the topic names, and the values are the operation
+results for the individual tokens.
 
 .. note::
     You can subscribe up to 1,000 devices in a single request. If you provide an array with over 1,000
-    registration tokens, the operation will fail with an error.
-
-Unsubscribe from a topic
-------------------------
-
-You can unsubscribe one or multiple devices from a topic by passing registration tokens to the
-``unsubscribeFromTopic()`` method.
-
-.. code-block:: php
-
-    $topic = 'my-topic';
-    $registrationTokens = [
-        // ...
-    };
-
-    $messaging->unsubscribeFromTopic($topic, $registrationTokens);
-
-.. note::
-    You can unsubscribe up to 1,000 devices in a single request. If you provide an array with over 1,000
     registration tokens, the operation will fail with an error.
 
 

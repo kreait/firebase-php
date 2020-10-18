@@ -11,6 +11,12 @@
   * `Kreait\Firebase\Auth::signInWithTwitterOauthCredential($accessToken, $oauthTokenSecret)`
   * `Kreait\Firebase\Auth::signInWithGoogleIdToken($idToken)`
   * `Kreait\Firebase\Auth::signInWithFacebookAccessToken($accessToken)`
+* It is now possible to add/remove multiple topic subscriptions for multiple registration tokens.
+  (Previously, you could already work with multiple registration tokens, but only on single message topics).
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#topic-management))
+  * `Kreait\Firebase\Messaging::subscribeToTopics($topics, $registrationTokenOrTokens)` 
+  * `Kreait\Firebase\Messaging::unsubscribeFromTopics($topics, $registrationTokenOrTokens)` 
+  * `Kreait\Firebase\Messaging::unsubscribeFromAllTopics($registrationTokenOrTokens)` 
 ### Changed
   * Replaced usage of deprecated Guzzle helpers
 
