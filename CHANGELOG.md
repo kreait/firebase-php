@@ -16,7 +16,10 @@
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#topic-management))
   * `Kreait\Firebase\Messaging::subscribeToTopics($topics, $registrationTokenOrTokens)` 
   * `Kreait\Firebase\Messaging::unsubscribeFromTopics($topics, $registrationTokenOrTokens)` 
-  * `Kreait\Firebase\Messaging::unsubscribeFromAllTopics($registrationTokenOrTokens)` 
+  * `Kreait\Firebase\Messaging::unsubscribeFromAllTopics($registrationTokenOrTokens)`
+* The RemoteConfig component now support Parameter Groups.
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/remote-config.html#parameter-groups))
+   
 ### Changed
   * Replaced usage of deprecated Guzzle helpers
 

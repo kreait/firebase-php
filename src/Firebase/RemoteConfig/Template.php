@@ -17,6 +17,9 @@ class Template implements \JsonSerializable
     /** @var Parameter[] */
     private $parameters = [];
 
+    /** @var ParameterGroup[] */
+    private $parameterGroups = [];
+
     /** @var Condition[] */
     private $conditions = [];
 
@@ -29,11 +32,7 @@ class Template implements \JsonSerializable
 
     public static function new(): self
     {
-        $template = new self();
-        $template->etag = '*';
-        $template->parameters = [];
-
-        return $template;
+        return new self();
     }
 
     /**
@@ -64,6 +63,25 @@ class Template implements \JsonSerializable
             $template->parameters[(string) $name] = Parameter::fromArray([(string) $name => $parameterData]);
         }
 
+        foreach ((array) ($data['parameterGroups'] ?? []) as $name => $parameterGroupData) {
+            $group = ParameterGroup::named((string) $name)
+                ->withDescription((string) ($parameterGroupData['description'] ?? ''));
+
+            foreach ($parameterGroupData['parameters'] ?? [] as $parameterName => $parameterData) {
+                $parameter = Parameter::named($parameterName)
+                    ->withDescription((string) ($parameterData['description'] ?? ''))
+                    ->withDefaultValue(DefaultValue::fromArray($parameterData['defaultValue'] ?? []));
+
+                foreach ((array) ($parameterData['conditionalValues'] ?? []) as $key => $conditionalValueData) {
+                    $parameter = $parameter->withConditionalValue(new ConditionalValue($key, $conditionalValueData['value']));
+                }
+
+                $group = $group->withParameter($parameter);
+            }
+
+            $template->parameterGroups[$group->name()] = $group;
+        }
+
         if (\is_array($data['version'] ?? null)) {
             try {
                 $template->version = Version::fromArray($data['version']);
@@ -91,6 +109,14 @@ class Template implements \JsonSerializable
         return $this->parameters;
     }
 
+    /**
+     * @return ParameterGroup[]
+     */
+    public function parameterGroups(): array
+    {
+        return $this->parameterGroups;
+    }
+
     public function version(): ?Version
     {
         return $this->version;
@@ -102,6 +128,14 @@ class Template implements \JsonSerializable
 
         $template = clone $this;
         $template->parameters[$parameter->name()] = $parameter;
+
+        return $template;
+    }
+
+    public function withParameterGroup(ParameterGroup $parameterGroup): Template
+    {
+        $template = clone $this;
+        $template->parameterGroups[$parameterGroup->name()] = $parameterGroup;
 
         return $template;
     }
@@ -118,7 +152,7 @@ class Template implements \JsonSerializable
     {
         foreach ($parameter->conditionalValues() as $conditionalValue) {
             if (!\array_key_exists($conditionalValue->conditionName(), $this->conditions)) {
-                $message = 'The conditional value of the parameter named "%s" referes to a condition "%s" which does not exist.';
+                $message = 'The conditional value of the parameter named "%s" refers to a condition "%s" which does not exist.';
 
                 throw new InvalidArgumentException(\sprintf($message, $parameter->name(), $conditionalValue->conditionName()));
             }
@@ -130,11 +164,10 @@ class Template implements \JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        $result = [
+        return [
             'conditions' => \array_values($this->conditions),
-            'parameters' => $this->parameters,
+            'parameters' => !empty($this->parameters) ? $this->parameters : null,
+            'parameterGroups' => !empty($this->parameterGroups) ? $this->parameterGroups : null,
         ];
-
-        return \array_filter($result);
     }
 }

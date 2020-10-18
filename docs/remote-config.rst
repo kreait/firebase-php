@@ -59,8 +59,6 @@ Get the Remote Config
 .. code-block:: php
 
     $template = $remoteConfig->get(); // Returns a Kreait\Firebase\RemoteConfig\Template
-
-    // Added in 4.29.0
     $version = $template->version(); // Returns a Kreait\Firebase\RemoteConfig\Version
 
 **************************
@@ -95,7 +93,7 @@ Add a parameter
 
     use Kreait\Firebase\RemoteConfig;
 
-    $welcomeMessageParameter = Parameter::named('welcome_message')
+    $welcomeMessageParameter = RemoteConfig\Parameter::named('welcome_message')
             ->withDefaultValue('Welcome!')
             ->withDescription('This is a welcome message') // optional
     ;
@@ -113,7 +111,7 @@ Conditional values
 
     $germanWelcomeMessage = RemoteConfig\ConditionalValue::basedOn($germanLanguageCondition, 'Willkommen!');
 
-    $welcomeMessageParameter = Parameter::named('welcome_message')
+    $welcomeMessageParameter = RemoteConfig\Parameter::named('welcome_message')
             ->withDefaultValue('Welcome!')
             ->withConditionalValue($germanWelcomeMessage);
 
@@ -123,6 +121,23 @@ Conditional values
 
 .. note::
     When you use a conditional value, make sure to add the corresponding condition to the template first.
+
+****************
+Parameter Groups
+****************
+
+.. code-block:: php
+
+    use Kreait\Firebase\RemoteConfig;
+
+    $uiColors = RemoteConfig\ParameterGroup::named('UI Colors')
+        ->withDescription('Remote configurable UI colors')
+        ->withParameter(RemoteConfig\Parameter::named('Primary Color')->withDefaultValue('blue'))
+        ->withParameter(RemoteConfig\Parameter::named('Secondary Color')->withDefaultValue('red'))
+    ;
+
+    $template = $template->withParameterGroup($parameterGroup);
+
 
 **********
 Validation
