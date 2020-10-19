@@ -44,6 +44,11 @@ class Condition implements \JsonSerializable
         return $this->name;
     }
 
+    public function expression(): string
+    {
+        return $this->expression;
+    }
+
     public function withExpression(string $expression): self
     {
         $condition = clone $this;

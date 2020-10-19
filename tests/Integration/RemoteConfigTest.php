@@ -8,11 +8,9 @@ use Kreait\Firebase\Exception\RemoteConfig\ValidationFailed;
 use Kreait\Firebase\Exception\RemoteConfig\VersionMismatch;
 use Kreait\Firebase\Exception\RemoteConfig\VersionNotFound;
 use Kreait\Firebase\RemoteConfig;
-use Kreait\Firebase\RemoteConfig\Condition;
-use Kreait\Firebase\RemoteConfig\ConditionalValue;
 use Kreait\Firebase\RemoteConfig\Parameter;
-use Kreait\Firebase\RemoteConfig\TagColor;
 use Kreait\Firebase\RemoteConfig\Template;
+use Kreait\Firebase\RemoteConfig\UpdateOrigin;
 use Kreait\Firebase\RemoteConfig\UpdateType;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Throwable;
@@ -23,7 +21,7 @@ use Throwable;
 class RemoteConfigTest extends IntegrationTestCase
 {
     /** @var string */
-    private $template = <<<CONFIG
+    private const TEMPLATE_CONFIG = <<<CONFIG
 {
     "conditions": [
         {
@@ -91,23 +89,25 @@ class RemoteConfigTest extends IntegrationTestCase
 }
 CONFIG;
 
+    /** @var Template */
+    private $template;
+
     /** @var RemoteConfig */
     private $remoteConfig;
 
     protected function setUp(): void
     {
         $this->remoteConfig = self::$factory->createRemoteConfig();
+        $this->template = Template::fromArray(\json_decode(self::TEMPLATE_CONFIG, true));
     }
 
     public function testForcePublishAndGet(): void
     {
-        $template = RemoteConfig\Template::fromArray(\json_decode($this->template, true));
-
-        $this->remoteConfig->publish($template);
+        $this->remoteConfig->publish($this->template);
 
         $check = $this->remoteConfig->get();
 
-        $this->assertEquals($template->jsonSerialize(), $check->jsonSerialize());
+        $this->assertEquals($this->template->jsonSerialize(), $check->jsonSerialize());
 
         $version = $check->version();
 
@@ -116,13 +116,12 @@ CONFIG;
         }
 
         $this->assertTrue($version->updateType()->equalsTo(UpdateType::FORCED_UPDATE));
+        $this->assertTrue($version->updateOrigin()->equalsTo(UpdateOrigin::REST_API));
     }
 
     public function testPublishOutdatedConfig(): void
     {
-        $initial = RemoteConfig\Template::fromArray(\json_decode($this->template, true));
-
-        $this->remoteConfig->publish($initial);
+        $this->remoteConfig->publish($this->template);
 
         $published = $this->remoteConfig->get();
 
@@ -134,41 +133,9 @@ CONFIG;
         $this->remoteConfig->publish($published);
     }
 
-    public function testWithFluidConfiguration(): void
-    {
-        $germanLanguageCondition = Condition::named('lang_german')
-            ->withExpression("device.language in ['de', 'de_AT', 'de_CH']")
-            ->withTagColor(TagColor::ORANGE);
-
-        $frenchLanguageCondition = Condition::fromArray([
-            'name' => 'lang_french',
-            'expression' => "device.language in ['fr', 'fr_CA', 'fr_CH']",
-            'tagColor' => TagColor::GREEN,
-        ]);
-
-        $germanWelcomeMessage = ConditionalValue::basedOn($germanLanguageCondition)->withValue('Willkommen!');
-        $frenchWelcomeMessage = new ConditionalValue('lang_french', 'Bienvenu!');
-
-        $welcomeMessageParameter = Parameter::named('welcome_message')
-            ->withDefaultValue('Welcome!')
-            ->withDescription('This is a welcome message')
-            ->withConditionalValue($germanWelcomeMessage)
-            ->withConditionalValue($frenchWelcomeMessage);
-
-        $template = Template::new()
-            ->withCondition($germanLanguageCondition)
-            ->withCondition($frenchLanguageCondition)
-            ->withParameter($welcomeMessageParameter);
-
-        $this->remoteConfig->publish($template);
-        $this->addToAssertionCount(1);
-    }
-
     public function testValidateValidTemplate(): void
     {
-        $template = Template::fromArray(\json_decode($this->template, true));
-
-        $this->remoteConfig->validate($template);
+        $this->remoteConfig->validate($this->template);
         $this->addToAssertionCount(1);
     }
 
@@ -328,7 +295,13 @@ CONFIG;
         $this->remoteConfig->getVersion($nextButNonExisting);
     }
 
-    private function templateWithTooManyParameters()
+    public function testValidateEmptyTemplate(): void
+    {
+        $this->remoteConfig->validate(Template::new());
+        $this->addToAssertionCount(1);
+    }
+
+    private function templateWithTooManyParameters(): Template
     {
         $template = Template::new();
 

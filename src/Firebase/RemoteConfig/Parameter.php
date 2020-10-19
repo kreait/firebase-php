@@ -92,6 +92,9 @@ class Parameter implements \JsonSerializable
     }
 
     /**
+     * @deprecated 5.10.0
+     * @codeCoverageIgnore
+     *
      * @param array<string, mixed> $data
      */
     public static function fromArray(array $data): self
