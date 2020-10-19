@@ -12,9 +12,7 @@ final class MessageTarget
     public const TOKEN = 'token';
     public const TOPIC = 'topic';
 
-    /**
-     * @internal
-     */
+    /** @internal */
     public const UNKNOWN = 'unknown';
 
     public const TYPES = [

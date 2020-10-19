@@ -7,7 +7,6 @@ namespace Kreait\Firebase\RemoteConfig;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
-use Throwable;
 
 class Template implements \JsonSerializable
 {
@@ -37,6 +36,9 @@ class Template implements \JsonSerializable
 
     /**
      * @internal
+     *
+     * @deprecated 5.10.0
+     * @codeCoverageIgnore
      */
     public static function fromResponse(ResponseInterface $response): self
     {
@@ -56,41 +58,67 @@ class Template implements \JsonSerializable
         $template->etag = $etag ?? '*';
 
         foreach ((array) ($data['conditions'] ?? []) as $conditionData) {
-            $template->conditions[(string) $conditionData['name']] = Condition::fromArray($conditionData);
+            $template = $template->withCondition(self::buildCondition($conditionData['name'], $conditionData));
         }
 
         foreach ((array) ($data['parameters'] ?? []) as $name => $parameterData) {
-            $template->parameters[(string) $name] = Parameter::fromArray([(string) $name => $parameterData]);
+            $template = $template->withParameter(self::buildParameter($name, $parameterData));
         }
 
         foreach ((array) ($data['parameterGroups'] ?? []) as $name => $parameterGroupData) {
-            $group = ParameterGroup::named((string) $name)
-                ->withDescription((string) ($parameterGroupData['description'] ?? ''));
-
-            foreach ($parameterGroupData['parameters'] ?? [] as $parameterName => $parameterData) {
-                $parameter = Parameter::named($parameterName)
-                    ->withDescription((string) ($parameterData['description'] ?? ''))
-                    ->withDefaultValue(DefaultValue::fromArray($parameterData['defaultValue'] ?? []));
-
-                foreach ((array) ($parameterData['conditionalValues'] ?? []) as $key => $conditionalValueData) {
-                    $parameter = $parameter->withConditionalValue(new ConditionalValue($key, $conditionalValueData['value']));
-                }
-
-                $group = $group->withParameter($parameter);
-            }
-
-            $template->parameterGroups[$group->name()] = $group;
+            $template = $template->withParameterGroup(self::buildParameterGroup($name, $parameterGroupData));
         }
 
         if (\is_array($data['version'] ?? null)) {
-            try {
-                $template->version = Version::fromArray($data['version']);
-            } catch (Throwable $e) {
-                $template->version = null;
-            }
+            $template->version = Version::fromArray($data['version']);
         }
 
         return $template;
+    }
+
+    /**
+     * @param array<string, string> $data
+     */
+    private static function buildCondition(string $name, array $data): Condition
+    {
+        $condition = Condition::named($name)->withExpression($data['expression']);
+
+        if ($tagColor = $data['tagColor'] ?? null) {
+            $condition = $condition->withTagColor(new TagColor($tagColor));
+        }
+
+        return $condition;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private static function buildParameter(string $name, array $data): Parameter
+    {
+        $parameter = Parameter::named($name)
+            ->withDescription((string) ($data['description'] ?? ''))
+            ->withDefaultValue(DefaultValue::fromArray($data['defaultValue'] ?? []));
+
+        foreach ((array) ($data['conditionalValues'] ?? []) as $key => $conditionalValueData) {
+            $parameter = $parameter->withConditionalValue(new ConditionalValue($key, $conditionalValueData['value']));
+        }
+
+        return $parameter;
+    }
+
+    /**
+     * @param array<string, mixed> $parameterGroupData
+     */
+    private static function buildParameterGroup(string $name, array $parameterGroupData): ParameterGroup
+    {
+        $group = ParameterGroup::named($name)
+            ->withDescription((string) ($parameterGroupData['description'] ?? ''));
+
+        foreach ($parameterGroupData['parameters'] ?? [] as $parameterName => $parameterData) {
+            $group = $group->withParameter(self::buildParameter($parameterName, $parameterData));
+        }
+
+        return $group;
     }
 
     /**
@@ -99,6 +127,14 @@ class Template implements \JsonSerializable
     public function etag(): string
     {
         return $this->etag;
+    }
+
+    /**
+     * @return Condition[]
+     */
+    public function conditions(): array
+    {
+        return $this->conditions;
     }
 
     /**
@@ -165,7 +201,7 @@ class Template implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'conditions' => \array_values($this->conditions),
+            'conditions' => !empty($this->conditions) ? \array_values($this->conditions) : null,
             'parameters' => !empty($this->parameters) ? $this->parameters : null,
             'parameterGroups' => !empty($this->parameterGroups) ? $this->parameterGroups : null,
         ];

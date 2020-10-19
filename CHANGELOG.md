@@ -19,9 +19,11 @@
   * `Kreait\Firebase\Messaging::unsubscribeFromAllTopics($registrationTokenOrTokens)`
 * The RemoteConfig component now support Parameter Groups.
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/remote-config.html#parameter-groups))
-   
 ### Changed
   * Replaced usage of deprecated Guzzle helpers
+### Deprecated
+  * `Kreait\Firebase\RemoteConfig\Parameter::fromArray()`
+  * `Kreait\Firebase\RemoteConfig\Template::fromResponse()`
 
 ## [5.9.0] - 2020-10-04
 ### Added

@@ -13,6 +13,7 @@ use Kreait\Firebase\RemoteConfig\Template;
 use Kreait\Firebase\RemoteConfig\Version;
 use Kreait\Firebase\RemoteConfig\VersionNumber;
 use Kreait\Firebase\Util\JSON;
+use Psr\Http\Message\ResponseInterface;
 use Traversable;
 
 /**
@@ -39,7 +40,7 @@ class RemoteConfig
      */
     public function get(): Template
     {
-        return Template::fromResponse($this->client->getTemplate());
+        return $this->buildTemplateFromResponse($this->client->getTemplate());
     }
 
     /**
@@ -52,9 +53,7 @@ class RemoteConfig
      */
     public function validate($template): void
     {
-        $template = $template instanceof Template ? $template : Template::fromArray($template);
-
-        $this->client->validateTemplate($template);
+        $this->client->validateTemplate($this->ensureTemplate($template));
     }
 
     /**
@@ -66,9 +65,9 @@ class RemoteConfig
      */
     public function publish($template): string
     {
-        $template = $template instanceof Template ? $template : Template::fromArray($template);
-
-        $etag = $this->client->publishTemplate($template)->getHeader('ETag');
+        $etag = $this->client
+            ->publishTemplate($this->ensureTemplate($template))
+            ->getHeader('ETag');
 
         return \array_shift($etag) ?: '';
     }
@@ -76,16 +75,14 @@ class RemoteConfig
     /**
      * Returns a version with the given number.
      *
-     * @param VersionNumber|mixed $versionNumber
+     * @param VersionNumber|int|string $versionNumber
      *
      * @throws VersionNotFound
      * @throws RemoteConfigException if something went wrong
      */
     public function getVersion($versionNumber): Version
     {
-        $versionNumber = $versionNumber instanceof VersionNumber
-            ? $versionNumber
-            : VersionNumber::fromValue($versionNumber);
+        $versionNumber = $this->ensureVersionNumber($versionNumber);
 
         foreach ($this->listVersions() as $version) {
             if ($version->versionNumber()->equalsTo($versionNumber)) {
@@ -99,20 +96,16 @@ class RemoteConfig
     /**
      * Returns a version with the given number.
      *
-     * @param VersionNumber|mixed $versionNumber
+     * @param VersionNumber|int|string $versionNumber
      *
      * @throws VersionNotFound
      * @throws RemoteConfigException if something went wrong
      */
     public function rollbackToVersion($versionNumber): Template
     {
-        $versionNumber = $versionNumber instanceof VersionNumber
-            ? $versionNumber
-            : VersionNumber::fromValue($versionNumber);
+        $versionNumber = $this->ensureVersionNumber($versionNumber);
 
-        $response = $this->client->rollbackToVersion($versionNumber);
-
-        return Template::fromResponse($response);
+        return $this->buildTemplateFromResponse($this->client->rollbackToVersion($versionNumber));
     }
 
     /**
@@ -144,5 +137,31 @@ class RemoteConfig
 
             $pageToken = $result['nextPageToken'] ?? null;
         } while ($pageToken);
+    }
+
+    /**
+     * @param Template|array<string, mixed> $value
+     */
+    private function ensureTemplate($value): Template
+    {
+        return $value instanceof Template ? $value : Template::fromArray($value);
+    }
+
+    /**
+     * @param VersionNumber|int|string $value
+     */
+    private function ensureVersionNumber($value): VersionNumber
+    {
+        return $value instanceof VersionNumber ? $value : VersionNumber::fromValue($value);
+    }
+
+    private function buildTemplateFromResponse(ResponseInterface $response): Template
+    {
+        $etagHeader = $response->getHeader('ETag');
+        $etag = \array_shift($etagHeader) ?: '*';
+
+        $data = JSON::decode((string) $response->getBody(), true);
+
+        return Template::fromArray($data, $etag);
     }
 }
