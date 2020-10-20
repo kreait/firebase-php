@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+
+## [5.10.0] - 2020-10-20
 ### Added
 * Added `Kreait\Firebase\Auth::getUsers()` enables retrieving multiple users at once.
   ([#477](https://github.com/kreait/firebase-php/pull/477))
@@ -126,7 +128,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.0.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.10.0...HEAD
+[5.10.0]: https://github.com/kreait/firebase-php/compare/5.9.0...5.10.0
 [5.9.0]: https://github.com/kreait/firebase-php/compare/5.8.1...5.9.0
 [5.8.1]: https://github.com/kreait/firebase-php/compare/5.8.0...5.8.1
 [5.8.0]: https://github.com/kreait/firebase-php/compare/5.7.0...5.8.0
