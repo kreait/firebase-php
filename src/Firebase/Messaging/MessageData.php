@@ -23,8 +23,8 @@ final class MessageData implements \JsonSerializable
         $messageData = new self();
 
         foreach ($data as $key => $value) {
-            if (!self::isStringable($key) || !self::isStringable($value)) {
-                throw new InvalidArgumentException('Message data must be a one-dimensional array of string(able) keys and values.');
+            if (!self::isStringableAndNumeric($key) || !self::isStringableAndNumeric($value)) {
+                throw new InvalidArgumentException('Message data must be a one-dimensional array of string(able) or numeric keys and values.');
             }
 
             if (self::isBinary((string) $value)) {
@@ -34,7 +34,7 @@ final class MessageData implements \JsonSerializable
                 );
             }
 
-            $messageData->data[(string) $key] = (string) $value;
+            $messageData->data[$key] = $value;
         }
 
         return $messageData;
@@ -51,9 +51,9 @@ final class MessageData implements \JsonSerializable
     /**
      * @param mixed $value
      */
-    private static function isStringable($value): bool
+    private static function isStringableAndNumeric($value): bool
     {
-        return \is_null($value) || \is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'));
+        return \is_numeric($value) || \is_null($value) || \is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'));
     }
 
     private static function isBinary(string $value): bool
