@@ -328,6 +328,7 @@ You can find the full Android configuration reference in the official documentat
             'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
             'icon' => 'stock_ticker_update',
             'color' => '#f45342',
+            'sound' => 'default',
         ],
     ]);
 
@@ -355,6 +356,7 @@ You can find the full APNs configuration reference in the official documentation
                     'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
                 ],
                 'badge' => 42,
+                'sound' => 'default',
             ],
         ],
     ]);
@@ -405,6 +407,31 @@ You can find the full FCM Options configuration reference in the official docume
     ];
 
     $message = $message->withFcmOptions($fcmOptions);
+
+*******************
+Notification Sounds
+*******************
+
+The SDK provides helper methods to add sounds to messages:
+
+* ``CloudMessage::withDefaultSounds()``
+* ``AndroidConfig::withDefaultSound()``
+* ``AndroidConfig::withSound($sound)``
+* ``ApnsConfig::withDefaultSound()``
+* ``ApnsConfig::withSound($sound)``
+
+.. code-block:: php
+
+    $message = CloudMessage::withTarget('token', $token)
+        ->withNotification(['title' => 'Notification title', 'body' => 'Notification body'])
+        ->withDefaultSounds() // Enables default notifications sounds on iOS and Android devices.
+        ->withApnsConfig(
+            ApnsConfig::new()
+                ->withSound('bingbong.aiff')
+                ->withBadge(1)
+        )
+    ;
+
 
 ************
 Using Emojis

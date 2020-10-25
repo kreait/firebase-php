@@ -13,9 +13,56 @@ use Kreait\Firebase\Tests\UnitTestCase;
 class ApnsConfigTest extends UnitTestCase
 {
     /**
+     * @test
+     */
+    public function it_is_empty_when_it_is_empty(): void
+    {
+        $this->assertSame('[]', \json_encode(ApnsConfig::new()));
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_default_sound(): void
+    {
+        $expected = [
+            'payload' => [
+                'aps' => [
+                    'sound' => 'default',
+                ],
+            ],
+        ];
+
+        $this->assertJsonStringEqualsJsonString(
+            \json_encode($expected),
+            \json_encode(ApnsConfig::new()->withDefaultSound())
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_badge(): void
+    {
+        $expected = [
+            'payload' => [
+                'aps' => [
+                    'badge' => 123,
+                ],
+            ],
+        ];
+
+        $this->assertJsonStringEqualsJsonString(
+            \json_encode($expected),
+            \json_encode(ApnsConfig::new()->withBadge(123))
+        );
+    }
+
+    /**
+     * @test
      * @dataProvider validDataProvider
      */
-    public function testCreateFromArray(array $data): void
+    public function it_can_be_created_from_an_array(array $data): void
     {
         $config = ApnsConfig::fromArray($data);
 

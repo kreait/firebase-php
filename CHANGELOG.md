@@ -1,6 +1,14 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Added
+* Added helper methods to add default/specific notification sounds to messages
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#notification-sounds))
+  * `Kreait\Firebase\Messaging\ApnsConfig::withDefaultSound()`
+  * `Kreait\Firebase\Messaging\ApnsConfig::withSound($sound)`
+  * `Kreait\Firebase\Messaging\AndroidConfig::withDefaultSound()`
+  * `Kreait\Firebase\Messaging\AndroidConfig::withSound($sound)`
+  * `Kreait\Firebase\Messaging\CloudMessage::withDefaultSounds()`
 
 ## [5.10.0] - 2020-10-20
 ### Added

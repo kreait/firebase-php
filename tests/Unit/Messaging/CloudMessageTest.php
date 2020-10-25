@@ -18,6 +18,11 @@ use PHPUnit\Framework\TestCase;
  */
 class CloudMessageTest extends TestCase
 {
+    public function testEmptyMessage(): void
+    {
+        $this->assertSame('[]', \json_encode(CloudMessage::new()));
+    }
+
     public function testInvalidTargetCausesError(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -64,6 +69,29 @@ class CloudMessageTest extends TestCase
     {
         $this->expectException(InvalidArgument::class);
         CloudMessage::fromArray($data);
+    }
+
+    public function testWithDefaultSounds(): void
+    {
+        $expected = [
+            'android' => [
+                'notification' => [
+                    'sound' => 'default',
+                ],
+            ],
+            'apns' => [
+                'payload' => [
+                    'aps' => [
+                        'sound' => 'default',
+                    ],
+                ],
+            ],
+        ];
+
+        $this->assertJsonStringEqualsJsonString(
+            \json_encode($expected),
+            \json_encode(CloudMessage::new()->withDefaultSounds()->jsonSerialize())
+        );
     }
 
     public function multipleTargets()

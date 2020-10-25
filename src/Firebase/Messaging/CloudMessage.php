@@ -185,6 +185,18 @@ final class CloudMessage implements Message
         return $new;
     }
 
+    /**
+     * Enables default notifications sounds on iOS and Android devices.
+     */
+    public function withDefaultSounds(): self
+    {
+        $new = clone $this;
+        $new->apnsConfig = ($new->apnsConfig ?: ApnsConfig::new())->withDefaultSound();
+        $new->androidConfig = ($new->androidConfig ?: AndroidConfig::new())->withDefaultSound();
+
+        return $new;
+    }
+
     public function hasTarget(): bool
     {
         return (bool) $this->target;

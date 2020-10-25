@@ -47,6 +47,8 @@ class MessagingTest extends IntegrationTestCase
                     'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
                     'icon' => 'stock_ticker_update',
                     'color' => '#f45342',
+                    'sound' => 'default',
+                    'default_sound' => true,
                 ],
                 'fcm_options' => [
                     // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#fcmoptions
@@ -64,6 +66,7 @@ class MessagingTest extends IntegrationTestCase
                             'title' => '$GOOG up 1.43% on the day',
                             'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
                         ],
+                        'sound' => 'default',
                         'badge' => 42,
                     ],
                 ],
