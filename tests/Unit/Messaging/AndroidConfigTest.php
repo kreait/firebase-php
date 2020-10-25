@@ -13,9 +13,35 @@ use Kreait\Firebase\Tests\UnitTestCase;
 class AndroidConfigTest extends UnitTestCase
 {
     /**
+     * @test
+     */
+    public function it_is_empty_when_it_is_empty(): void
+    {
+        $this->assertSame('[]', \json_encode(AndroidConfig::new()));
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_default_sound(): void
+    {
+        $expected = [
+            'notification' => [
+                'sound' => 'default',
+            ],
+        ];
+
+        $this->assertJsonStringEqualsJsonString(
+            \json_encode($expected),
+            \json_encode(AndroidConfig::new()->withDefaultSound())
+        );
+    }
+
+    /**
+     * @test
      * @dataProvider validDataProvider
      */
-    public function testCreateFromArray(array $data): void
+    public function it_can_be_created_from_an_array(array $data): void
     {
         $config = AndroidConfig::fromArray($data);
 

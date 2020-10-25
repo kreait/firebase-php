@@ -6,13 +6,21 @@ namespace Kreait\Firebase\Messaging;
 
 use JsonSerializable;
 
+/**
+ * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidconfig
+ */
 final class AndroidConfig implements JsonSerializable
 {
     /** @var array<string, mixed> */
-    private $rawConfig;
+    private $config;
 
     private function __construct()
     {
+    }
+
+    public static function new(): self
+    {
+        return self::fromArray([]);
     }
 
     /**
@@ -21,7 +29,25 @@ final class AndroidConfig implements JsonSerializable
     public static function fromArray(array $data): self
     {
         $config = new self();
-        $config->rawConfig = $data;
+        $config->config = $data;
+
+        return $config;
+    }
+
+    public function withDefaultSound(): self
+    {
+        return $this->withSound('default');
+    }
+
+    /**
+     * The sound to play when the device receives the notification. Supports "default" or the filename
+     * of a sound resource bundled in the app. Sound files must reside in /res/raw/.
+     */
+    public function withSound(string $sound): self
+    {
+        $config = clone $this;
+        $config->config['notification'] = $config->config['notification'] ?? [];
+        $config->config['notification']['sound'] = $sound;
 
         return $config;
     }
@@ -31,7 +57,7 @@ final class AndroidConfig implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return \array_filter($this->rawConfig, static function ($value) {
+        return \array_filter($this->config, static function ($value) {
             return $value !== null;
         });
     }
