@@ -9,7 +9,9 @@
   * `Kreait\Firebase\Messaging\AndroidConfig::withDefaultSound()`
   * `Kreait\Firebase\Messaging\AndroidConfig::withSound($sound)`
   * `Kreait\Firebase\Messaging\CloudMessage::withDefaultSounds()`
-
+### Fixed
+  * `Kreait\Firebase\Messaging\CloudMessage::fromArray()` did not allow providing pre-configured message components
+    (objects instead of "pure" arrays)
 ## [5.10.0] - 2020-10-20
 ### Added
 * Added `Kreait\Firebase\Auth::getUsers()` enables retrieving multiple users at once.
