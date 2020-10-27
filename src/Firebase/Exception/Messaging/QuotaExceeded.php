@@ -9,7 +9,7 @@ use Kreait\Firebase\Exception\HasErrors;
 use Kreait\Firebase\Exception\MessagingException;
 use RuntimeException;
 
-final class ServerUnavailable extends RuntimeException implements MessagingException
+final class QuotaExceeded extends RuntimeException implements MessagingException
 {
     use HasErrors;
 

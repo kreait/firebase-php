@@ -37,6 +37,7 @@ use Kreait\Firebase\Auth\DisabledLegacyCustomTokenGenerator;
 use Kreait\Firebase\Auth\DisabledLegacyIdTokenVerifier;
 use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\Http\HttpClientOptions;
 use Kreait\Firebase\Http\Middleware;
@@ -467,10 +468,13 @@ class Factory
             throw new RuntimeException('Unable to create the messaging service without a project ID');
         }
 
+        $errorHandler = new MessagingApiExceptionConverter($this->clock);
+
         $messagingApiClient = new Messaging\ApiClient(
             $this->createApiClient([
                 'base_uri' => 'https://fcm.googleapis.com/v1/projects/'.$projectId->value(),
-            ])
+            ]),
+            $errorHandler
         );
 
         $appInstanceApiClient = new Messaging\AppInstanceApiClient(
@@ -479,7 +483,8 @@ class Factory
                 'headers' => [
                     'access_token_auth' => 'true',
                 ],
-            ])
+            ]),
+            $errorHandler
         );
 
         return new Messaging($messagingApiClient, $appInstanceApiClient, $projectId);

@@ -18,6 +18,7 @@ use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\Messaging\MessagingError;
 use Kreait\Firebase\Exception\Messaging\ServerError;
 use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
+use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\ApiClient;
 use PHPUnit\Framework\TestCase;
@@ -42,7 +43,7 @@ class ApiClientTest extends TestCase
             'base_uri' => 'http://example.com',
         ]);
 
-        $this->client = new ApiClient($client);
+        $this->client = new ApiClient($client, new MessagingApiExceptionConverter());
     }
 
     /**

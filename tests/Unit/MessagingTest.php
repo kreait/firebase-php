@@ -9,6 +9,7 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\Messaging\NotFound;
+use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
@@ -30,6 +31,9 @@ class MessagingTest extends UnitTestCase
     /** @var AppInstanceApiClient&MockObject */
     private $appInstanceApi;
 
+    /** @var MessagingApiExceptionConverter&MockObject */
+    private $errorHandler;
+
     /** @var Messaging */
     private $messaging;
 
@@ -37,6 +41,7 @@ class MessagingTest extends UnitTestCase
     {
         $this->messagingApi = $this->createMock(ApiClient::class);
         $this->appInstanceApi = $this->createMock(AppInstanceApiClient::class);
+        $this->errorHandler = $this->createMock(MessagingApiExceptionConverter::class);
 
         $this->messaging = new Messaging($this->messagingApi, $this->appInstanceApi, ProjectId::fromString('project-id'));
     }
@@ -44,7 +49,7 @@ class MessagingTest extends UnitTestCase
     public function testDetermineProjectIdFromClientConfig(): void
     {
         $httpClient = new Client(['base_uri' => 'https://fcm.googleapis.com/v1/projects/project-id']);
-        $apiClient = new ApiClient($httpClient);
+        $apiClient = new ApiClient($httpClient, $this->errorHandler);
 
         new Messaging($apiClient, $this->appInstanceApi);
         $this->addToAssertionCount(1);

@@ -9,6 +9,13 @@
   * `Kreait\Firebase\Messaging\AndroidConfig::withDefaultSound()`
   * `Kreait\Firebase\Messaging\AndroidConfig::withSound($sound)`
   * `Kreait\Firebase\Messaging\CloudMessage::withDefaultSounds()`
+* Added exception handler for FCM errors concerning quota/rate limits. When a quota is exceeded, a
+  `Kreait\Firebase\Exception\Messaging\QuotaExceeded` exception is thrown. You can get the
+  datetime after which to retry with `Kreait\Firebase\Exception\Messaging\QuotaExceeded::retryAfter()`
+* When the Firebase API is unavailable and/or overloaded, the response might return a `Retry-After`
+  header. When it does, you can get the datetime after which it is suggested to retry with
+  `Kreait\Firebase\Exception\Messaging\ServerUnavailable::retryAfter()`
+
 ### Fixed
   * `Kreait\Firebase\Messaging\CloudMessage::fromArray()` did not allow providing pre-configured message components
     (objects instead of "pure" arrays)
