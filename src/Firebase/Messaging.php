@@ -43,16 +43,11 @@ class Messaging
     /**
      * @internal
      */
-    public function __construct(ApiClient $messagingApiClient, AppInstanceApiClient $appInstanceApiClient, ?ProjectId $projectId = null)
+    public function __construct(ProjectId $projectId, ApiClient $messagingApiClient, AppInstanceApiClient $appInstanceApiClient)
     {
         $this->messagingApi = $messagingApiClient;
         $this->appInstanceApi = $appInstanceApiClient;
-
-        if ($projectId) {
-            $this->projectId = $projectId->value();
-        } else {
-            $this->projectId = $this->determineProjectIdFromMessagingApiClient($messagingApiClient);
-        }
+        $this->projectId = $projectId->value();
     }
 
     private function determineProjectIdFromMessagingApiClient(ApiClient $client): string

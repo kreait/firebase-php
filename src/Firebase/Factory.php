@@ -487,7 +487,7 @@ class Factory
             $errorHandler
         );
 
-        return new Messaging($messagingApiClient, $appInstanceApiClient, $projectId);
+        return new Messaging($projectId, $messagingApiClient, $appInstanceApiClient);
     }
 
     /**
