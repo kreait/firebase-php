@@ -29,6 +29,9 @@ class ApiClient implements ClientInterface
     /** @var AuthApiExceptionConverter */
     private $errorHandler;
 
+    /** @var String */
+    private $tenantId;
+
     /**
      * @internal
      */
@@ -206,6 +209,12 @@ class ApiClient implements ClientInterface
             $data = (object) []; // Will be '{}' instead of '[]' when JSON encoded
         }
 
+        if ($this->hasTenantId()) {
+            $data = array_merge($data, [
+                'tenantId' => $this->tenantId,
+            ]);
+        }
+
         $options = \array_filter([
             'json' => $data,
             'headers' => $headers,
@@ -216,5 +225,17 @@ class ApiClient implements ClientInterface
         } catch (Throwable $e) {
             throw $this->errorHandler->convertException($e);
         }
+    }
+
+    public function setTenantId($tenantId)
+    {
+        $this->tenantId = $tenantId;
+
+        return $this;
+    }
+
+    private function hasTenantId()
+    {
+        return ! empty($this->tenantId);
     }
 }
