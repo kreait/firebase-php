@@ -29,7 +29,7 @@ class ApiClient implements ClientInterface
     /** @var AuthApiExceptionConverter */
     private $errorHandler;
 
-    /** @var String */
+    /** @var string */
     private $tenantId;
 
     /**
