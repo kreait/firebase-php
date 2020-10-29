@@ -210,7 +210,7 @@ class ApiClient implements ClientInterface
         }
 
         if ($this->hasTenantId()) {
-            $data = array_merge($data, [
+            $data = \array_merge($data, [
                 'tenantId' => $this->tenantId,
             ]);
         }
@@ -236,6 +236,6 @@ class ApiClient implements ClientInterface
 
     private function hasTenantId(): bool
     {
-        return ! empty($this->tenantId);
+        return !empty($this->tenantId);
     }
 }
