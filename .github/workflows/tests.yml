@@ -76,12 +76,12 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: unit
 
-      - name: Roave BC Check
-        if: matrix.php == '7.4'
-        run: |
-          composer require --dev roave/backward-compatibility-check
-          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-          vendor/bin/roave-backward-compatibility-check
+#      - name: Roave BC Check
+#        if: matrix.php == '7.4'
+#        run: |
+#          composer require --dev roave/backward-compatibility-check
+#          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+#          vendor/bin/roave-backward-compatibility-check
 
   php-cs-fixer:
     name: PHP-CS-Fixer
