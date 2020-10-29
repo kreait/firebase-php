@@ -227,14 +227,14 @@ class ApiClient implements ClientInterface
         }
     }
 
-    public function setTenantId($tenantId)
+    public function setTenantId(string $tenantId): ApiClient
     {
         $this->tenantId = $tenantId;
 
         return $this;
     }
 
-    private function hasTenantId()
+    private function hasTenantId(): bool
     {
         return ! empty($this->tenantId);
     }

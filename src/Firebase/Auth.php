@@ -907,7 +907,7 @@ class Auth
         return $this->getUser($uid);
     }
 
-    public function setTenantId($tenantId)
+    public function setTenantId(string $tenantId): Auth
     {
         $this->client->setTenantId($tenantId);
 
