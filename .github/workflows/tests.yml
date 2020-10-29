@@ -3,8 +3,6 @@ name: Tests
 on:
   pull_request:
   push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
@@ -18,7 +16,7 @@ jobs:
 
     env:
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
-      key: cache-v5 # can be any string, change to clear the extension cache.
+      key: cache-v6 # can be any string, change to clear the extension cache.
 
     steps:
       - name: Checkout code
@@ -46,6 +44,9 @@ jobs:
           extensions: ${{ env.extensions }}
           tools: composer, pecl
           coverage: xdebug
+
+      - name: Setup problem matchers for PHP
+        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
       - name: Get Composer Cache Directory
         id: composer-cache
@@ -76,12 +77,12 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: unit
 
-#      - name: Roave BC Check
-#        if: matrix.php == '7.4'
-#        run: |
-#          composer require --dev roave/backward-compatibility-check
-#          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-#          vendor/bin/roave-backward-compatibility-check
+      - name: Roave BC Check
+        if: matrix.php == '7.4'
+        run: |
+          composer require --dev "roave/backward-compatibility-check:dev-master"
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          vendor/bin/roave-backward-compatibility-check
 
   php-cs-fixer:
     name: PHP-CS-Fixer

@@ -3,8 +3,6 @@ name: Integration Tests
 on:
   pull_request:
   push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
@@ -16,7 +14,7 @@ jobs:
     env:
       php-version: '7.4'
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
-      key: cache-integration-v2 # can be any string, change to clear the extension cache.
+      key: cache-integration-v3 # can be any string, change to clear the extension cache.
 
     steps:
       - name: Checkout code
@@ -44,6 +42,9 @@ jobs:
           extensions: ${{ env.extensions }}
           tools: composer, pecl
           coverage: xdebug
+
+      - name: Setup problem matchers for PHP
+        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
       - name: Get Composer Cache Directory
         id: composer-cache
