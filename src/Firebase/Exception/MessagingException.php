@@ -7,7 +7,7 @@ namespace Kreait\Firebase\Exception;
 interface MessagingException extends FirebaseException
 {
     /**
-     * @return string[]
+     * @return array<mixed>
      */
     public function errors(): array;
 }
