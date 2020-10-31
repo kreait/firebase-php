@@ -15,10 +15,11 @@
 * When the Firebase API is unavailable and/or overloaded, the response might return a `Retry-After`
   header. When it does, you can get the datetime after which it is suggested to retry with
   `Kreait\Firebase\Exception\Messaging\ServerUnavailable::retryAfter()`
-
+* Added support for the retrieval of user's last activity time with `Kreait\Firebase\Auth\UserMetadata::$lastRefreshedAt`
 ### Fixed
   * `Kreait\Firebase\Messaging\CloudMessage::fromArray()` did not allow providing pre-configured message components
     (objects instead of "pure" arrays)
+
 ## [5.10.0] - 2020-10-20
 ### Added
 * Added `Kreait\Firebase\Auth::getUsers()` enables retrieving multiple users at once.

@@ -19,6 +19,14 @@ class UserMetaData implements \JsonSerializable
     public $passwordUpdatedAt;
 
     /**
+     * The time at which the user was last active (ID token refreshed), or null
+     * if the user was never active.
+     *
+     * @var DateTimeImmutable|null
+     */
+    public $lastRefreshAt;
+
+    /**
      * @param array<string, mixed> $data
      */
     public static function fromResponseData(array $data): self
@@ -32,6 +40,10 @@ class UserMetaData implements \JsonSerializable
 
         if ($data['passwordUpdatedAt'] ?? null) {
             $metadata->passwordUpdatedAt = DT::toUTCDateTimeImmutable($data['passwordUpdatedAt']);
+        }
+
+        if ($data['lastRefreshAt'] ?? null) {
+            $metadata->lastRefreshAt = DT::toUTCDateTimeImmutable($data['lastRefreshAt']);
         }
 
         return $metadata;

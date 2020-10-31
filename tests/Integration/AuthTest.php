@@ -667,4 +667,21 @@ class AuthTest extends IntegrationTestCase
             $this->deleteUser($user);
         }
     }
+
+    public function testUserRecordLastRefreshAt(): void
+    {
+        $user = $this->auth->createAnonymousUser();
+
+        try {
+            $this->assertNull($user->metadata->lastRefreshAt);
+
+            $signInResult = $this->auth->signInAsUser($user);
+            $this->assertSame($user->uid, $signInResult->firebaseUserId());
+
+            $check = $this->auth->getUser($signInResult->firebaseUserId());
+            $this->assertNotNull($check->metadata->lastRefreshAt);
+        } finally {
+            $this->deleteUser($user);
+        }
+    }
 }
