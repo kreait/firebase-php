@@ -43,7 +43,7 @@
         "google/cloud-firestore": "^1.11",
         "jangregor/phpstan-prophecy": "^0.6.2",
         "phpstan/extension-installer": "^1.0",
-        "phpstan/phpstan": "^0.12.15",
+        "phpstan/phpstan": "^0.12.53",
         "phpstan/phpstan-phpunit": "^0.12.6",
         "phpunit/phpunit": "^8.5",
         "symfony/var-dumper": "^5.0"

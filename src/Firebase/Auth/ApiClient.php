@@ -44,7 +44,7 @@ class ApiClient implements ClientInterface
      */
     public function createUser(Request\CreateUser $request): ResponseInterface
     {
-        return $this->requestApi('signupNewUser', $request);
+        return $this->requestApi('signupNewUser', $request->jsonSerialize());
     }
 
     /**
@@ -53,7 +53,7 @@ class ApiClient implements ClientInterface
      */
     public function updateUser(Request\UpdateUser $request): ResponseInterface
     {
-        return $this->requestApi('setAccountInfo', $request);
+        return $this->requestApi('setAccountInfo', $request->jsonSerialize());
     }
 
     /**
@@ -194,22 +194,18 @@ class ApiClient implements ClientInterface
     }
 
     /**
-     * @param mixed $data
-     * @param array<string, mixed>|null $headers
+     * @param array<mixed> $data
      *
      * @throws AuthException
      * @throws FirebaseException
      */
-    private function requestApi(string $uri, $data, ?array $headers = null): ResponseInterface
+    private function requestApi(string $uri, array $data): ResponseInterface
     {
-        if ($data instanceof \JsonSerializable && empty($data->jsonSerialize())) {
-            $data = (object) []; // Will be '{}' instead of '[]' when JSON encoded
-        }
+        $options = [];
 
-        $options = \array_filter([
-            'json' => $data,
-            'headers' => $headers,
-        ]);
+        if (!empty($data)) {
+            $options['json'] = $data;
+        }
 
         try {
             return $this->request('POST', $uri, $options);
