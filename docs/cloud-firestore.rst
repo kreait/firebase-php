@@ -9,18 +9,6 @@ package. You can enable the component in the SDK by adding the package to your p
 
     composer require google/cloud-firestore
 
-Alternatively, you can specify the package as a dependency in your project's existing composer.json file:
-
-.. code-block:: js
-
-    {
-      "require": {
-        "google/cloud-firestore": "^1.8",
-        "kreait/firebase-php": "^4.33"
-      }
-   }
-
-
 .. note::
     The ``google/cloud-firestore`` package requires the gRPC PHP extension to be installed. You can find installation
     instructions for gRPC at `github.com/grpc/grpc <https://github.com/grpc/grpc/tree/master/src/php>`_. The following
