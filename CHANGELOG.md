@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+
+## [5.11.0] - 2020-11-01
 ### Added
 * Added helper methods to add default/specific notification sounds to messages
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#notification-sounds))
@@ -146,7 +148,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.10.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.11.0...HEAD
+[5.11.0]: https://github.com/kreait/firebase-php/compare/5.10.0...5.11.0
 [5.10.0]: https://github.com/kreait/firebase-php/compare/5.9.0...5.10.0
 [5.9.0]: https://github.com/kreait/firebase-php/compare/5.8.1...5.9.0
 [5.8.1]: https://github.com/kreait/firebase-php/compare/5.8.0...5.8.1
