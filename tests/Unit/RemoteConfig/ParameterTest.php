@@ -33,4 +33,11 @@ class ParameterTest extends UnitTestCase
         $this->expectException(InvalidArgumentException::class);
         Parameter::named('invalid', 1);
     }
+
+    public function testCreateWithDescription(): void
+    {
+        $parameter = Parameter::named('something')->withDescription('description');
+
+        $this->assertSame('description', $parameter->description());
+    }
 }

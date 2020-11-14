@@ -49,6 +49,11 @@ class Parameter implements \JsonSerializable
         return $this->name;
     }
 
+    public function description(): string
+    {
+        return $this->description;
+    }
+
     public function withDescription(string $description): self
     {
         $parameter = clone $this;

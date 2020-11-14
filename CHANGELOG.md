@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Added
+* `\Kreait\Firebase\RemoteConfig\Parameter::description()`
 
 ## [5.11.0] - 2020-11-01
 ### Added
