@@ -152,13 +152,11 @@ class Messaging
      * @param string|Topic $topic
      * @param mixed $registrationTokenOrTokens
      *
-     * @return array<string, RegistrationTokens|MessagingException>
+     * @return array<string, array<string, string>>
      */
     public function subscribeToTopic($topic, $registrationTokenOrTokens): array
     {
-        $result = $this->subscribeToTopics([$topic], $registrationTokenOrTokens);
-
-        return [(string) $topic => \current($result)];
+        return $this->subscribeToTopics([$topic], $registrationTokenOrTokens);
     }
 
     /**
@@ -188,9 +186,7 @@ class Messaging
      */
     public function unsubscribeFromTopic($topic, $registrationTokenOrTokens): array
     {
-        $result = $this->unsubscribeFromTopics([$topic], $registrationTokenOrTokens);
-
-        return [(string) $topic => \current($result)];
+        return $this->unsubscribeFromTopics([$topic], $registrationTokenOrTokens);
     }
 
     /**
