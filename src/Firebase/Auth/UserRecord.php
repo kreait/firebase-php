@@ -77,7 +77,7 @@ class UserRecord implements \JsonSerializable
         $record->providerData = self::userInfoFromResponseData($data);
         $record->passwordHash = $data['passwordHash'] ?? null;
         $record->passwordSalt = $data['salt'] ?? null;
-        $record->tenantId = $data['tenantId'] ?? null;
+        $record->tenantId = $data['tenantId'] ?? $data['tenant_id'] ?? null;
 
         if ($data['validSince'] ?? null) {
             $record->tokensValidAfterTime = DT::toUTCDateTimeImmutable($data['validSince']);

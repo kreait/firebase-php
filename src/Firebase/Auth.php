@@ -28,6 +28,7 @@ use Kreait\Firebase\Auth\SignInWithEmailAndOobCode;
 use Kreait\Firebase\Auth\SignInWithEmailAndPassword;
 use Kreait\Firebase\Auth\SignInWithIdpCredentials;
 use Kreait\Firebase\Auth\SignInWithRefreshToken;
+use Kreait\Firebase\Auth\TenantId;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
@@ -65,8 +66,11 @@ class Auth
     /** @var SignInHandler */
     private $signInHandler;
 
+    /** @var TenantId|null */
+    private $tenantId;
+
     /**
-     * @param iterable<ApiClient|TokenGenerator|Verifier|SignInHandler>|ApiClient|TokenGenerator|Verifier|SignInHandler ...$x
+     * @param iterable<ApiClient|TokenGenerator|Verifier|SignInHandler>|ApiClient|TokenGenerator|Verifier|SignInHandler|TenantId|null ...$x
      *
      * @internal
      */
@@ -81,6 +85,8 @@ class Auth
                 $this->idTokenVerifier = $arg;
             } elseif ($arg instanceof SignInHandler) {
                 $this->signInHandler = $arg;
+            } elseif ($arg instanceof TenantId) {
+                $this->tenantId = $arg;
             }
         }
     }
@@ -743,9 +749,15 @@ class Auth
         $claims = $claims ?? [];
         $uid = $user instanceof UserRecord ? $user->uid : (string) $user;
 
-        return $this->signInHandler->handle(
-            SignInWithCustomToken::fromValue((string) $this->createCustomToken($uid, $claims))
-        );
+        $customToken = $this->createCustomToken($uid, $claims);
+
+        $action = SignInWithCustomToken::fromValue((string) $customToken);
+
+        if ($this->tenantId) {
+            $action = $action->withTenantId($this->tenantId);
+        }
+
+        return $this->signInHandler->handle($action);
     }
 
     /**
@@ -755,9 +767,13 @@ class Auth
      */
     public function signInWithCustomToken($token): SignInResult
     {
-        return $this->signInHandler->handle(
-            SignInWithCustomToken::fromValue((string) $token)
-        );
+        $action = SignInWithCustomToken::fromValue((string) $token);
+
+        if ($this->tenantId) {
+            $action = $action->withTenantId($this->tenantId);
+        }
+
+        return $this->signInHandler->handle($action);
     }
 
     /**
@@ -765,9 +781,13 @@ class Auth
      */
     public function signInWithRefreshToken(string $refreshToken): SignInResult
     {
-        return $this->signInHandler->handle(
-            SignInWithRefreshToken::fromValue($refreshToken)
-        );
+        $action = SignInWithRefreshToken::fromValue($refreshToken);
+
+        if ($this->tenantId) {
+            $action = $action->withTenantId($this->tenantId);
+        }
+
+        return $this->signInHandler->handle($action);
     }
 
     /**
@@ -781,9 +801,13 @@ class Auth
         $email = $email instanceof Email ? (string) $email : $email;
         $clearTextPassword = $clearTextPassword instanceof ClearTextPassword ? (string) $clearTextPassword : $clearTextPassword;
 
-        return $this->signInHandler->handle(
-            SignInWithEmailAndPassword::fromValues($email, $clearTextPassword)
-        );
+        $action = SignInWithEmailAndPassword::fromValues($email, $clearTextPassword);
+
+        if ($this->tenantId) {
+            $action = $action->withTenantId($this->tenantId);
+        }
+
+        return $this->signInHandler->handle($action);
     }
 
     /**
@@ -796,9 +820,13 @@ class Auth
     {
         $email = $email instanceof Email ? (string) $email : $email;
 
-        return $this->signInHandler->handle(
-            SignInWithEmailAndOobCode::fromValues($email, $oobCode)
-        );
+        $action = SignInWithEmailAndOobCode::fromValues($email, $oobCode);
+
+        if ($this->tenantId) {
+            $action = $action->withTenantId($this->tenantId);
+        }
+
+        return $this->signInHandler->handle($action);
     }
 
     /**
@@ -806,7 +834,13 @@ class Auth
      */
     public function signInAnonymously(): SignInResult
     {
-        $result = $this->signInHandler->handle(SignInAnonymously::new());
+        $action = SignInAnonymously::new();
+
+        if ($this->tenantId) {
+            $action = $action->withTenantId($this->tenantId);
+        }
+
+        $result = $this->signInHandler->handle($action);
 
         if ($result->idToken()) {
             return $result;
@@ -861,6 +895,10 @@ class Auth
             $action = $action->withRequestUri($redirectUrl);
         }
 
+        if ($this->tenantId) {
+            $action = $action->withTenantId($this->tenantId);
+        }
+
         return $this->signInHandler->handle($action);
     }
 
@@ -889,6 +927,10 @@ class Auth
 
         if ($redirectUrl) {
             $action = $action->withRequestUri($redirectUrl);
+        }
+
+        if ($this->tenantId) {
+            $action = $action->withTenantId($this->tenantId);
         }
 
         return $this->signInHandler->handle($action);

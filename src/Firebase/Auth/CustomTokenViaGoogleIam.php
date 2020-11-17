@@ -30,11 +30,15 @@ class CustomTokenViaGoogleIam implements Generator
     /** @var Encoder */
     private $encoder;
 
-    public function __construct(string $clientEmail, ClientInterface $client)
+    /** @var TenantId|null */
+    private $tenantId;
+
+    public function __construct(string $clientEmail, ClientInterface $client, ?TenantId $tenantId = null)
     {
         $this->clientEmail = $clientEmail;
         $this->client = $client;
         $this->encoder = new Encoder();
+        $this->tenantId = $tenantId;
     }
 
     /**
@@ -60,6 +64,10 @@ class CustomTokenViaGoogleIam implements Generator
             'exp' => $expiresAt->getTimestamp(),
             'aud' => 'https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit',
         ];
+
+        if ($this->tenantId) {
+            $jwtClaims['tenantId'] = $this->tenantId->toString();
+        }
 
         if (!empty($claims)) {
             $jwtClaims['claims'] = $claims;

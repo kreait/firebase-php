@@ -2,7 +2,10 @@
 
 ## [Unreleased]
 ### Added
-* `\Kreait\Firebase\RemoteConfig\Parameter::description()`
+* The Auth component is now tenant-aware.
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/authentication.html#tenant-awareness))
+* Added methods
+  * `\Kreait\Firebase\RemoteConfig\Parameter::description()`
 ### Fixed
 * Fix usage of deprecated functionality from lcobucci/jwt
 
