@@ -9,6 +9,8 @@ use Firebase\Auth\Token\Domain\Generator;
 use Firebase\Auth\Token\Domain\Verifier;
 use Firebase\Auth\Token\Generator as CustomTokenGenerator;
 use Firebase\Auth\Token\HttpKeyStore;
+use Firebase\Auth\Token\TenantAwareGenerator;
+use Firebase\Auth\Token\TenantAwareVerifier;
 use Firebase\Auth\Token\Verifier as LegacyIdTokenVerifier;
 use Google\Auth\ApplicationDefaultCredentials;
 use Google\Auth\Cache\MemoryCacheItemPool;
@@ -36,6 +38,7 @@ use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
 use Kreait\Firebase\Auth\DisabledLegacyCustomTokenGenerator;
 use Kreait\Firebase\Auth\DisabledLegacyIdTokenVerifier;
 use Kreait\Firebase\Auth\IdTokenVerifier;
+use Kreait\Firebase\Auth\TenantId;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Exception\RuntimeException;
@@ -116,6 +119,9 @@ class Factory
     /** @var callable|null */
     protected $httpDebugLogMiddleware;
 
+    /** @var TenantId|null */
+    protected $tenantId;
+
     /** @var HttpClientOptions */
     protected $httpClientOptions;
 
@@ -154,6 +160,14 @@ class Factory
     {
         $factory = clone $this;
         $factory->clientEmail = new Email($clientEmail);
+
+        return $factory;
+    }
+
+    public function withTenantId(string $tenantId): self
+    {
+        $factory = clone $this;
+        $factory->tenantId = TenantId::fromString($tenantId);
 
         return $factory;
     }
@@ -394,14 +408,16 @@ class Factory
         $http = $this->createApiClient([
             'base_uri' => 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/',
         ]);
-        $apiClient = new Auth\ApiClient($http);
+
+        $apiClient = new Auth\ApiClient($http, $this->tenantId);
 
         $customTokenGenerator = $this->createCustomTokenGenerator();
+
         $idTokenVerifier = $this->createIdTokenVerifier();
 
         $signInHandler = new Firebase\Auth\SignIn\GuzzleHandler($http);
 
-        return new Auth($apiClient, $customTokenGenerator, $idTokenVerifier, $signInHandler);
+        return new Auth($apiClient, $customTokenGenerator, $idTokenVerifier, $signInHandler, $this->tenantId);
     }
 
     public function createCustomTokenGenerator(): Generator
@@ -411,11 +427,15 @@ class Factory
         $privateKey = $serviceAccount ? $serviceAccount->getPrivateKey() : '';
 
         if ($clientEmail && $privateKey !== '') {
+            if ($this->tenantId) {
+                return new TenantAwareGenerator($this->tenantId->toString(), (string) $clientEmail, $privateKey);
+            }
+
             return new CustomTokenGenerator((string) $clientEmail, $privateKey);
         }
 
         if ($clientEmail) {
-            return new CustomTokenViaGoogleIam((string) $clientEmail, $this->createApiClient());
+            return new CustomTokenViaGoogleIam((string) $clientEmail, $this->createApiClient(), $this->tenantId);
         }
 
         return new DisabledLegacyCustomTokenGenerator(
@@ -434,6 +454,10 @@ class Factory
         $keyStore = new HttpKeyStore(new Client(), $this->verifierCache);
 
         $baseVerifier = new LegacyIdTokenVerifier($projectId->sanitizedValue(), $keyStore);
+
+        if ($this->tenantId) {
+            $baseVerifier = new TenantAwareVerifier($this->tenantId->toString(), $baseVerifier);
+        }
 
         return new IdTokenVerifier($baseVerifier, $this->clock);
     }

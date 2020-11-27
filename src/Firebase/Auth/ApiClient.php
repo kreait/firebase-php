@@ -26,15 +26,19 @@ class ApiClient implements ClientInterface
 {
     use WrappedGuzzleClient;
 
+    /** @var TenantId|null */
+    private $tenantId;
+
     /** @var AuthApiExceptionConverter */
     private $errorHandler;
 
     /**
      * @internal
      */
-    public function __construct(ClientInterface $client)
+    public function __construct(ClientInterface $client, ?TenantId $tenantId = null)
     {
         $this->client = $client;
+        $this->tenantId = $tenantId;
         $this->errorHandler = new AuthApiExceptionConverter();
     }
 
@@ -202,6 +206,10 @@ class ApiClient implements ClientInterface
     private function requestApi(string $uri, array $data): ResponseInterface
     {
         $options = [];
+
+        if ($this->tenantId) {
+            $data['tenantId'] = $this->tenantId->toString();
+        }
 
         if (!empty($data)) {
             $options['json'] = $data;

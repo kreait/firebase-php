@@ -6,10 +6,10 @@ namespace Kreait\Firebase\Tests;
 
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Factory;
-use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Util;
 use Kreait\Firebase\Util\JSON;
+use Kreait\Firebase\Value\Uid;
 use Throwable;
 
 abstract class IntegrationTestCase extends FirebaseTestCase
@@ -38,25 +38,30 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
     protected function createUserWithEmailAndPassword(?string $email = null, ?string $password = null): UserRecord
     {
-        /** @noinspection NonSecureUniqidUsageInspection */
         $uniqid = \uniqid();
         $email = $email ?? "{$uniqid}@domain.tld";
         $password = $password ?? $uniqid;
 
         return self::$factory
             ->createAuth()
-            ->createUser(
-                CreateUser::new()
-                    ->withUnverifiedEmail($email)
-                    ->withClearTextPassword($password)
-            );
+            ->createUser([
+                'email' => $email,
+                'clear_text_password' => $password,
+            ]);
     }
 
+    /**
+     * @param UserRecord|Uid|string $userOrUid
+     */
     protected function deleteUser($userOrUid): void
     {
         $uid = $userOrUid instanceof UserRecord ? $userOrUid->uid : $userOrUid;
 
-        self::$factory->createAuth()->deleteUser($uid);
+        try {
+            self::$factory->createAuth()->deleteUser($uid);
+        } catch (Throwable $e) {
+            // Well, if that failed, *we're* failed
+        }
     }
 
     protected function getTestRegistrationToken(): string
@@ -69,10 +74,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         return self::$registrationTokens[\array_rand(self::$registrationTokens)];
     }
 
-    /**
-     * @return ServiceAccount|null
-     */
-    private static function credentialsFromFile()
+    private static function credentialsFromFile(): ?ServiceAccount
     {
         $credentialsPath = self::$fixturesDir.'/test_credentials.json';
 
@@ -87,10 +89,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         }
     }
 
-    /**
-     * @return ServiceAccount|null
-     */
-    private static function credentialsFromEnvironment()
+    private static function credentialsFromEnvironment(): ?ServiceAccount
     {
         if ($credentials = Util::getenv('TEST_FIREBASE_CREDENTIALS')) {
             return ServiceAccount::fromValue($credentials);
@@ -99,10 +98,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         return null;
     }
 
-    /**
-     * @return array|null
-     */
-    private static function registrationTokensFromFile()
+    private static function registrationTokensFromFile(): ?array
     {
         $path = self::$fixturesDir.'/test_devices.json';
 
@@ -121,10 +117,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         }
     }
 
-    /**
-     * @return array|null
-     */
-    private static function registrationTokensFromEnvironment()
+    private static function registrationTokensFromEnvironment(): ?array
     {
         if (!($tokens = Util::getenv('TEST_REGISTRATION_TOKENS'))) {
             return null;

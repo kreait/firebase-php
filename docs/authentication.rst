@@ -313,3 +313,25 @@ If the check fails, a ``RevokedIdToken`` exception will be thrown.
 
     For more information, please visit
     `Google: Detect ID token revocation in Database Rules <https://firebase.google.com/docs/auth/admin/manage-sessions#detect_id_token_revocation_in_database_rules>`_
+
+****************
+Tenant Awareness
+****************
+
+.. note::
+    Multi-tenancy support requires Google Cloud's Identity Platform (GCIP). To learn more about GCIP,
+    including pricing and features, see the `GCIP documentation <https://cloud.google.com/identity-platform?hl=zh-Cn>`_.
+
+    Before multi-tenancy can be used on a Google Cloud Identity Platform project, tenants must be allowed on that
+    project via the Cloud Console UI.
+
+In order to manage users, create custom tokens, verify ID tokens and sign in users in the scope of a tenant, you
+can configure the factory with a tenant ID:
+
+.. code-block:: php
+
+    $tenantUnawareAuth = $factory->createAuth();
+
+    $tenantAwareAuth = $factory
+        ->withTenantId('my-tenant-id)
+        ->createAuth();

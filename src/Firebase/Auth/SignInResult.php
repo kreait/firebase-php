@@ -26,6 +26,9 @@ final class SignInResult
     /** @var string|null */
     private $firebaseUserId;
 
+    /** @var string|null */
+    private $tenantId;
+
     private function __construct()
     {
     }
@@ -69,6 +72,25 @@ final class SignInResult
                 if ($uid = $idToken->getClaim($claim, false)) {
                     return $this->firebaseUserId = $uid;
                 }
+            }
+        }
+
+        return null;
+    }
+
+    public function firebaseTenantId(): ?string
+    {
+        // @codeCoverageIgnoreStart
+        if ($this->tenantId) {
+            return $this->tenantId;
+        }
+        // @codeCoverageIgnoreEnd
+
+        if ($this->idToken) {
+            $firebaseClaims = (new Parser())->parse($this->idToken)->getClaim('firebase', new \stdClass());
+
+            if ($tenantId = $firebaseClaims->tenant ?? null) {
+                return $this->tenantId = $tenantId;
             }
         }
 

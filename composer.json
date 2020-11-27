@@ -29,7 +29,7 @@
         "guzzlehttp/promises": "^1.4",
         "guzzlehttp/psr7": "^1.7",
         "kreait/clock": "^1.0.1",
-        "kreait/firebase-tokens": "^1.10",
+        "kreait/firebase-tokens": "^1.12.0",
         "lcobucci/jwt": "^3.4.1",
         "mtdowling/jmespath.php": "^2.3",
         "psr/cache": "^1.0",
