@@ -3,6 +3,8 @@
 ## [Unreleased]
 ### Added
 * `\Kreait\Firebase\RemoteConfig\Parameter::description()`
+### Fixed
+* Fix usage of deprecated functionality from lcobucci/jwt
 
 ## [5.11.0] - 2020-11-01
 ### Added
@@ -21,8 +23,8 @@
   `Kreait\Firebase\Exception\Messaging\ServerUnavailable::retryAfter()`
 * Added support for the retrieval of user's last activity time with `Kreait\Firebase\Auth\UserMetadata::$lastRefreshedAt`
 ### Fixed
-  * `Kreait\Firebase\Messaging\CloudMessage::fromArray()` did not allow providing pre-configured message components
-    (objects instead of "pure" arrays)
+* `Kreait\Firebase\Messaging\CloudMessage::fromArray()` did not allow providing pre-configured message components
+  (objects instead of "pure" arrays)
 
 ## [5.10.0] - 2020-10-20
 ### Added

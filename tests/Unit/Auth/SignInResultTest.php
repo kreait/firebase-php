@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Tests\Unit\Auth;
 
 use Kreait\Firebase\Auth\SignInResult;
 use Kreait\Firebase\Tests\UnitTestCase;
-use Lcobucci\JWT\Builder;
 
 /**
  * @internal
@@ -37,15 +36,6 @@ final class SignInResultTest extends UnitTestCase
         ], $result->asTokenResponse());
     }
 
-    /**
-     * @test
-     * @dataProvider fullResponseWithUserIdInIdToken
-     */
-    public function it_returns_a_user_id($uid, array $input): void
-    {
-        $this->assertSame($uid, SignInResult::fromData($input)->firebaseUserId());
-    }
-
     public function fullResponse()
     {
         return [
@@ -61,38 +51,6 @@ final class SignInResultTest extends UnitTestCase
                 'access_token' => 'accessToken',
                 'expires_in' => 3600,
             ]],
-        ];
-    }
-
-    public function fullResponseWithUserIdInIdToken()
-    {
-        $uid = 'firebase_user_id';
-
-        return [
-            'sub' => [
-                $uid,
-                [
-                    'idToken' => (string) (new Builder())->withClaim('sub', $uid)->getToken(),
-                ],
-            ],
-            'localId' => [
-                $uid,
-                [
-                    'idToken' => (string) (new Builder())->withClaim('localId', $uid)->getToken(),
-                ],
-            ],
-            'user_id' => [
-                $uid,
-                [
-                    'idToken' => (string) (new Builder())->withClaim('user_id', $uid)->getToken(),
-                ],
-            ],
-            'none' => [
-                null,
-                [
-                    'idToken' => (string) (new Builder())->getToken(),
-                ],
-            ],
         ];
     }
 }
