@@ -127,10 +127,10 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
 
     try {
         $verifiedIdToken = $auth->verifyIdToken($idTokenString);
-    } catch (\InvalidArgumentException $e) {
-        echo 'The token could not be parsed: '.$e->getMessage();
     } catch (InvalidToken $e) {
         echo 'The token is invalid: '.$e->getMessage();
+    } catch (\InvalidArgumentException $e) {
+        echo 'The token could not be parsed: '.$e->getMessage();
     }
 
     $uid = $verifiedIdToken->getClaim('sub');
