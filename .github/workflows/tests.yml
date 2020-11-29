@@ -3,6 +3,8 @@ name: Tests
 on:
   pull_request:
   push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -12,7 +14,8 @@ jobs:
 
     strategy:
       matrix:
-        php: ["7.2", "7.3", "7.4"]
+        php: ["7.2", "7.3", "7.4", "8.0"]
+        stability: ["prefer-stable"]
 
     env:
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
@@ -56,13 +59,14 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-v5-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-composer-
+          key: ${{ runner.os }}-${{ matrix.php }}-v6-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
 
       - name: Install dependencies (stable)
-        run: composer update --prefer-stable --prefer-dist --no-interaction --no-suggest --no-progress
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-suggest --no-progress
 
       - name: Run PHPStan
+        if: matrix.php == '7.4'
         run: vendor/bin/phpstan analyse --no-progress
 
       - name: Setup Problem Matchers for PHPUnit

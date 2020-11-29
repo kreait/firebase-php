@@ -45,7 +45,7 @@ use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\PhoneNumber;
 use Kreait\Firebase\Value\Provider;
 use Kreait\Firebase\Value\Uid;
-use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
@@ -548,7 +548,7 @@ class Auth
     public function parseToken(string $tokenString): Token
     {
         try {
-            return (new Parser())->parse($tokenString);
+            return Configuration::forUnsecuredSigner()->parser()->parse($tokenString);
         } catch (Throwable $e) {
             throw new InvalidArgumentException('The given token could not be parsed: '.$e->getMessage());
         }
@@ -587,8 +587,14 @@ class Auth
         $verifiedToken = $verifier->verifyIdToken($idToken);
 
         if ($checkIfRevoked) {
+            // @codeCoverageIgnoreStart
+            if (!($verifiedToken instanceof Token\Plain)) {
+                throw new InvalidToken($verifiedToken, 'The ID token could not be decrypted');
+            }
+            // @codeCoverageIgnoreEnd
+
             try {
-                $user = $this->getUser($verifiedToken->getClaim('sub'));
+                $user = $this->getUser($verifiedToken->claims()->get('sub'));
             } catch (Throwable $e) {
                 throw new InvalidToken($verifiedToken, "Error while getting the token's user: {$e->getMessage()}", $e->getCode(), $e);
             }
@@ -598,7 +604,7 @@ class Auth
                 return $verifiedToken;
             }
 
-            $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->getClaim('auth_time'));
+            $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->claims()->get('auth_time'));
             $tokenAuthenticatedAtWithLeeway = $tokenAuthenticatedAt->modify('-'.$leewayInSeconds.' seconds');
 
             $validSinceWithLeeway = DT::toUTCDateTimeImmutable($validSince)->modify('-'.$leewayInSeconds.' seconds');
@@ -751,7 +757,7 @@ class Auth
 
         $customToken = $this->createCustomToken($uid, $claims);
 
-        $action = SignInWithCustomToken::fromValue((string) $customToken);
+        $action = SignInWithCustomToken::fromValue($customToken->toString());
 
         if ($this->tenantId) {
             $action = $action->withTenantId($this->tenantId);
@@ -767,7 +773,9 @@ class Auth
      */
     public function signInWithCustomToken($token): SignInResult
     {
-        $action = SignInWithCustomToken::fromValue((string) $token);
+        $token = $token instanceof Token ? $token->toString() : $token;
+
+        $action = SignInWithCustomToken::fromValue($token);
 
         if ($this->tenantId) {
             $action = $action->withTenantId($this->tenantId);
@@ -914,7 +922,7 @@ class Auth
         $provider = $provider instanceof Provider ? (string) $provider : $provider;
 
         if ($idToken instanceof Token) {
-            $idToken = (string) $idToken;
+            $idToken = $idToken->toString();
         }
 
         $redirectUrl = $redirectUrl ?? 'http://localhost';

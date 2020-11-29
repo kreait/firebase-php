@@ -8,6 +8,7 @@ use Kreait\Firebase\Auth;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Request\UpdateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use Lcobucci\JWT\Token\Plain;
 
 /**
  * @internal
@@ -128,8 +129,9 @@ class UpdateUserTest extends IntegrationTestCase
 
         $verifiedToken = $this->auth->verifyIdToken($idToken);
 
-        $this->assertTrue($verifiedToken->getClaim('admin'));
-        $this->assertSame('1234', $verifiedToken->getClaim('groupId'));
+        $this->assertInstanceOf(Plain::class, $verifiedToken);
+        $this->assertTrue($verifiedToken->claims()->get('admin'));
+        $this->assertSame('1234', $verifiedToken->claims()->get('groupId'));
 
         $this->auth->deleteUser($uid);
     }

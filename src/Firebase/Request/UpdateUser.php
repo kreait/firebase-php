@@ -39,6 +39,8 @@ final class UpdateUser implements Request
      * @param array<string, mixed> $properties
      *
      * @throws InvalidArgumentException when invalid properties have been provided
+     *
+     * @return static
      */
     public static function withProperties(array $properties): self
     {

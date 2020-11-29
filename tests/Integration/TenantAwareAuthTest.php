@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Auth;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use Lcobucci\JWT\Token\Plain;
 
 /**
  * @internal
@@ -47,7 +48,8 @@ class TenantAwareAuthTest extends IntegrationTestCase
     {
         $token = $this->auth->createCustomToken('some-uid');
 
-        $this->assertSame($this->tenant, $token->getClaim('tenant_id'));
+        $this->assertInstanceOf(Plain::class, $token);
+        $this->assertSame($this->tenant, $token->claims()->get('tenant_id'));
     }
 
     public function it_can_sign_in_anonymously(): void

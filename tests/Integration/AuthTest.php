@@ -14,6 +14,7 @@ use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use Lcobucci\JWT\Token\Plain;
 use Psr\Http\Message\UriInterface;
 use Throwable;
 
@@ -210,9 +211,9 @@ class AuthTest extends IntegrationTestCase
         $this->assertIsString($idToken);
 
         $verifiedToken = $this->auth->verifyIdToken($idToken);
-        $this->addToAssertionCount(1);
+        $this->assertInstanceOf(Plain::class, $verifiedToken);
 
-        $this->auth->deleteUser($verifiedToken->getClaim('sub'));
+        $this->auth->deleteUser($verifiedToken->claims()->get('sub'));
     }
 
     public function testRevokeRefreshTokens(): void
@@ -220,7 +221,10 @@ class AuthTest extends IntegrationTestCase
         $idToken = $this->auth->signInAnonymously()->idToken();
         $this->assertIsString($idToken);
 
-        $uid = $this->auth->verifyIdToken($idToken, $checkIfRevoked = false)->getClaim('sub');
+        $token = $this->auth->verifyIdToken($idToken, $checkIfRevoked = false);
+        $this->assertInstanceOf(Plain::class, $token);
+
+        $uid = $token->claims()->get('sub');
 
         $this->auth->revokeRefreshTokens($uid);
         \sleep(1);
@@ -228,7 +232,9 @@ class AuthTest extends IntegrationTestCase
         try {
             $this->auth->verifyIdToken($idToken, $checkIfRevoked = true);
         } catch (RevokedIdToken $e) {
-            $this->assertSame($uid, $e->getToken()->getClaim('user_id'));
+            $token = $e->getToken();
+            $this->assertInstanceOf(Plain::class, $token);
+            $this->assertSame($uid, $token->claims()->get('user_id'));
         } catch (Throwable $e) {
             throw $e;
         } finally {
@@ -243,7 +249,9 @@ class AuthTest extends IntegrationTestCase
 
         $verifiedToken = $this->auth->verifyIdToken($idToken);
 
-        $this->auth->deleteUser($verifiedToken->getClaim('sub'));
+        $this->assertInstanceOf(Plain::class, $verifiedToken);
+
+        $this->auth->deleteUser($verifiedToken->claims()->get('sub'));
         $this->addToAssertionCount(1);
     }
 
@@ -606,7 +614,9 @@ class AuthTest extends IntegrationTestCase
         $this->assertIsString($result->firebaseUserId());
 
         $token = $this->auth->parseToken($idToken);
-        $this->assertIsString($uid = $token->getClaim('sub', false));
+
+        $this->assertInstanceOf(Plain::class, $token);
+        $this->assertIsString($uid = $token->claims()->get('sub', false));
         $user = $this->auth->getUser($uid);
         $this->addToAssertionCount(1);
 
