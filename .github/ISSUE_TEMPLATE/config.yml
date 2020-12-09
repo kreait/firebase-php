@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Feature Request
+    url: https://github.com/kreait/firebase-php/discussions?discussions_q=category%3AIdeas
+    about: Share ideas for new features
+  - name: Ask a Question
+    url: https://github.com/kreait/firebase-php/discussions?discussions_q=category%3AQ%26A
+    about: Ask the community for help
+  - name: Bug Report
+    url: https://github.com/kreait/firebase-php/issues/new?template=bug_report.md
+    about: Report a reproducable bug

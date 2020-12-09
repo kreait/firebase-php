@@ -1,31 +1,22 @@
----
-name: Bug report
-about: Create a report to help us improve
-title: ''
-assignees: ''
+<!--
+The issue tracker is for bugs only. If you have a question or an idea 
+for a new feature, please visit
 
----
+- this repo's discussions board at https://github.com/kreait/firebase-php/discussions
+- the Community Discord Server at https://discord.gg/nbgVfty
+- Stack Overflow at https://stackoverflow.com/questions/tagged/firebase+php
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+Your question or problem may have been answered already.
 
-**To Reproduce**
-A self-contained code example to reproduce the behavior
+If you found a bug, please include a clear and concise description of what
+the bug is and how it can be reproduced. A self-contained code example or
+a link to a repository that showcases the problem would be perfect.
 
-```php
-// Code to reproduce the behavior
-```
+When you report a problem, please include the following information:
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+- The Operating System, e.g. Windows 10, MacOS 11.0, Ubuntu 18.04, ...
+- The PHP version - you can get it by running `php -v`
+- The version of the Firebase SDK (not `latest`, please determine the exact version)
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
-
-**Environment (please complete the following information):**
- - OS: [e.g. Windows 10, MacOS 10.14, Ubuntu 18.04, ...]
- - PHP version: [e.g. 7.3.8]
- - Firebase SDK Version: [e.g. 4.28, **not** "latest"]
-
-**Additional context**
-Add any other context about the problem here.
+The output of `composer show | grep kreait` is always a good bet.
+-->
