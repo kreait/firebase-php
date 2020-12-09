@@ -3,6 +3,8 @@ name: Integration Tests
 on:
   pull_request:
   push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -54,8 +56,8 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-v5-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-composer-
+          key: ${{ runner.os }}-${{ matrix.php }}-v6-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-suggest --no-progress

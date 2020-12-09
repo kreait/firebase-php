@@ -16,7 +16,7 @@
         "source": "https://github.com/kreait/firebase-php"
     },
     "require": {
-        "php": "^7.2|^8.0",
+        "php": "^7.2|~8.0.0",
         "ext-ctype": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
@@ -29,8 +29,7 @@
         "guzzlehttp/promises": "^1.4",
         "guzzlehttp/psr7": "^1.7",
         "kreait/clock": "^1.0.1",
-        "kreait/firebase-tokens": "^1.12.0",
-        "lcobucci/jwt": "^3.4.1",
+        "kreait/firebase-tokens": "^1.14.0",
         "mtdowling/jmespath.php": "^2.3",
         "psr/cache": "^1.0",
         "psr/http-message": "^1.0",
@@ -39,13 +38,11 @@
         "riverline/multipart-parser": "^2.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.16",
         "google/cloud-firestore": "^1.11",
-        "jangregor/phpstan-prophecy": "^0.6.2",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12.53",
         "phpstan/phpstan-phpunit": "^0.12.6",
-        "phpunit/phpunit": "^8.5",
+        "phpunit/phpunit": "^8.5|^9.4.3",
         "symfony/var-dumper": "^5.0"
     },
     "suggest": {

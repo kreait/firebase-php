@@ -172,7 +172,10 @@ CONFIG;
             $this->fail('The template has no version');
         }
 
-        $this->assertTrue($currentVersionNumber->equalsTo($refetchedVersion->versionNumber()));
+        $this->assertTrue(
+            $currentVersionNumber->equalsTo($refetchedVersion->versionNumber()),
+            "Expected the template version to be {$currentVersionNumber}, got {$refetchedVersion->versionNumber()}"
+        );
     }
 
     public function testRollback(): void

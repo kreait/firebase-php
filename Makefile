@@ -23,10 +23,6 @@ coverage: ## Executes the test suite and generates code coverage reports
 view-coverage: ## Shows the code coverage report
 	open build/coverage/index.html
 
-.PHONY: cs
-cs: ## Fixes coding standard problems
-	@vendor/bin/php-cs-fixer fix
-
 .PHONY: docs
 docs: ## Builds the documentation
 	$(MAKE) -C docs html

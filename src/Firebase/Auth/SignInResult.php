@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
-use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Token\Plain;
 
 final class SignInResult
 {
@@ -29,8 +30,12 @@ final class SignInResult
     /** @var string|null */
     private $tenantId;
 
+    /** @var Configuration */
+    private $config;
+
     private function __construct()
     {
+        $this->config = Configuration::forUnsecuredSigner();
     }
 
     /**
@@ -66,10 +71,16 @@ final class SignInResult
         // @codeCoverageIgnoreEnd
 
         if ($this->idToken) {
-            $idToken = (new Parser())->parse($this->idToken);
+            $idToken = $this->config->parser()->parse($this->idToken);
+
+            // @codeCoverageIgnoreStart
+            if (!($idToken instanceof Plain)) {
+                return null;
+            }
+            // @codeCoverageIgnoreEnd
 
             foreach (['sub', 'localId', 'user_id'] as $claim) {
-                if ($uid = $idToken->getClaim($claim, false)) {
+                if ($uid = $idToken->claims()->get($claim, false)) {
                     return $this->firebaseUserId = $uid;
                 }
             }
@@ -80,17 +91,25 @@ final class SignInResult
 
     public function firebaseTenantId(): ?string
     {
-        // @codeCoverageIgnoreStart
         if ($this->tenantId) {
             return $this->tenantId;
         }
-        // @codeCoverageIgnoreEnd
 
         if ($this->idToken) {
-            $firebaseClaims = (new Parser())->parse($this->idToken)->getClaim('firebase', new \stdClass());
+            $idToken = $this->config->parser()->parse($this->idToken);
 
-            if ($tenantId = $firebaseClaims->tenant ?? null) {
-                return $this->tenantId = $tenantId;
+            if (!($idToken instanceof Plain)) {
+                return null;
+            }
+
+            $firebaseClaims = $idToken->claims()->get('firebase', new \stdClass());
+
+            if (\is_object($firebaseClaims) && \property_exists($firebaseClaims, 'tenant')) {
+                return $this->tenantId = $firebaseClaims->tenant;
+            }
+
+            if (\is_array($firebaseClaims) && \array_key_exists('tenant', $firebaseClaims)) {
+                return $this->tenantId = $firebaseClaims['tenant'];
             }
         }
 

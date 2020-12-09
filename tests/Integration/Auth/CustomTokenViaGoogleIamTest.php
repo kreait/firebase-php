@@ -8,6 +8,7 @@ use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
 use Kreait\Firebase\Auth\TenantId;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use Lcobucci\JWT\Token\Plain;
 use PHPUnit\Framework\AssertionFailedError;
 use Throwable;
 
@@ -67,6 +68,7 @@ class CustomTokenViaGoogleIamTest extends IntegrationTestCase
 
         $customToken = $generator->createCustomToken('some-uid');
 
-        $this->assertSame($tenantId, $customToken->getClaim('tenantId'));
+        $this->assertInstanceOf(Plain::class, $customToken);
+        $this->assertSame($tenantId, $customToken->claims()->get('tenantId'));
     }
 }
