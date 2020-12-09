@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [5.13.0] - 2020-12-10
+
+This release ensures compatibility with PHP 8.0
+
 ## [5.12.0] - 2020-11-27
 ### Added
 * The Auth component is now tenant-aware.
@@ -155,7 +159,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.12.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.13.0...HEAD
+[5.13.0]: https://github.com/kreait/firebase-php/compare/5.12.0...5.13.0
 [5.12.0]: https://github.com/kreait/firebase-php/compare/5.11.0...5.12.0
 [5.11.0]: https://github.com/kreait/firebase-php/compare/5.10.0...5.11.0
 [5.10.0]: https://github.com/kreait/firebase-php/compare/5.9.0...5.10.0
