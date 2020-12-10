@@ -2,12 +2,16 @@
 
 ## Unreleased
 ### Added
+* Single reports of a `MulticastSendReport` now include the sent message, in addition to the response.
 * It is now possible to validate multiple messages at once by adding a parameter to the `send*` Methods
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#validating-messages))
 * It is now possible to check a list of registration tokens whether they are valid and known, unknown, or invalid
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#validating-registration-tokens))
 * Added methods:
   * `Kreait\Firebase\Messaging::validateRegistrationTokens($registrationTokenOrTokens)`
+### Deprecated
+* `Kreait\Firebase\Http\Requests::findBy()`
+* `Kreait\Firebase\Messaging\MulticastSendReport::withAdded()`
 
 ## [5.13.0] - 2020-12-10
 

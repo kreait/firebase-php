@@ -216,6 +216,13 @@ class MessagingTest extends IntegrationTestCase
 
         $this->assertCount(3, $report->successes());
         $this->assertCount(2, $report->failures());
+
+        $allReports = $report->getItems();
+        $this->assertSame($tokenMessage, $allReports[0]->message());
+        $this->assertSame($topicMessage, $allReports[1]->message());
+        $this->assertSame($conditionMessage, $allReports[2]->message());
+        $this->assertSame($invalidToken, $allReports[3]->message());
+        $this->assertSame($invalidMessage, $allReports[4]->message());
     }
 
     public function testValidateRegistrationTokens(): void
