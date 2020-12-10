@@ -10,9 +10,12 @@ use Kreait\Firebase\Http\WrappedPsr7Request;
 use Kreait\Firebase\Messaging\Message;
 use Psr\Http\Message\RequestInterface;
 
-final class SendMessage implements RequestInterface
+final class SendMessage implements MessageRequest, RequestInterface
 {
     use WrappedPsr7Request;
+
+    /** @var Message */
+    private $message;
 
     public function __construct(string $projectId, Message $message, bool $validateOnly = false)
     {
@@ -24,5 +27,11 @@ final class SendMessage implements RequestInterface
         ];
 
         $this->wrappedRequest = new Request('POST', $uri, $headers, $body);
+        $this->message = $message;
+    }
+
+    public function message(): Message
+    {
+        return $this->message;
     }
 }

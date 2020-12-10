@@ -16,6 +16,9 @@ final class SendReport
     /** @var array<mixed>|null */
     private $result;
 
+    /** @var Message|null */
+    private $message;
+
     /** @var Throwable|null */
     private $error;
 
@@ -26,20 +29,22 @@ final class SendReport
     /**
      * @param array<mixed> $response
      */
-    public static function success(MessageTarget $target, array $response): self
+    public static function success(MessageTarget $target, array $response, ?Message $message = null): self
     {
         $report = new self();
         $report->target = $target;
         $report->result = $response;
+        $report->message = $message;
 
         return $report;
     }
 
-    public static function failure(MessageTarget $target, Throwable $error): self
+    public static function failure(MessageTarget $target, Throwable $error, ?Message $message = null): self
     {
         $report = new self();
         $report->target = $target;
         $report->error = $error;
+        $report->message = $message;
 
         return $report;
     }
@@ -87,5 +92,10 @@ final class SendReport
     public function error(): ?Throwable
     {
         return $this->error;
+    }
+
+    public function message(): ?Message
+    {
+        return $this->message;
     }
 }

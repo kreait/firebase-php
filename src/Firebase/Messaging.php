@@ -285,12 +285,6 @@ class Messaging
             return $message;
         }
 
-        if (!\is_array($message)) {
-            throw new InvalidArgumentException(
-                'Unsupported message type. Use an array or a class implementing %s'.Message::class
-            );
-        }
-
         return CloudMessage::fromArray($message);
     }
 
