@@ -530,9 +530,40 @@ error message(s) that the API returned.
 
     try {
         $messaging->validate($message);
+        // or
+        $messaging->send($message, $validateOnly = true);
     } catch (InvalidMessage $e) {
         print_r($e->errors());
     }
+
+You can also use the ``send*`` methods with an additional parameter:
+
+.. code-block:: php
+
+    $validateOnly = true;
+
+    $messaging->send($message, $validateOnly);
+    $messaging->sendMulticast($message, $tokens, $validateOnly);
+    $messaging->sendAll($messages, $validateOnly);
+
+******************************
+Validating Registration Tokens
+******************************
+
+If you have a set of registration tokens that you want to check for validity or if they are still registered
+to your project, you can use the `validateTokens()` method:
+
+.. code-block:: php
+
+    $tokens = [...];
+
+    $result = $messaging->validateRegistrationTokens($tokens);
+
+The result is an array with three keys containing the checked tokens:
+
+* ``valid`` contains all tokens that are valid and registered to the current Firebase project
+* ``unknown`` contains all tokens that are valid, but **not** registered to the current Firebase project
+* ``invalid`` contains all invalid (=malformed) tokens
 
 
 ****************

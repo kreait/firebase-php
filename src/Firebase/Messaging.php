@@ -9,7 +9,6 @@ use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
-use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Http\ResponseWithSubResponses;
 use Kreait\Firebase\Messaging\ApiClient;
@@ -19,7 +18,6 @@ use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Http\Request\SendMessage;
 use Kreait\Firebase\Messaging\Http\Request\SendMessages;
 use Kreait\Firebase\Messaging\Http\Request\SendMessageToTokens;
-use Kreait\Firebase\Messaging\Http\Request\ValidateMessage;
 use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\Messages;
 use Kreait\Firebase\Messaging\MulticastSendReport;
@@ -71,11 +69,11 @@ class Messaging
      *
      * @return array<mixed>
      */
-    public function send($message): array
+    public function send($message, bool $validateOnly = false): array
     {
         $message = $this->makeMessage($message);
 
-        $request = new SendMessage($this->projectId, $message);
+        $request = new SendMessage($this->projectId, $message, $validateOnly);
         $response = $this->messagingApi->send($request);
 
         return JSON::decode((string) $response->getBody(), true);
@@ -89,12 +87,12 @@ class Messaging
      * @throws MessagingException if the API request failed
      * @throws FirebaseException if something very unexpected happened (never :))
      */
-    public function sendMulticast($message, $registrationTokens): MulticastSendReport
+    public function sendMulticast($message, $registrationTokens, bool $validateOnly = false): MulticastSendReport
     {
         $message = $this->makeMessage($message);
         $registrationTokens = $this->ensureNonEmptyRegistrationTokens($registrationTokens);
 
-        $request = new SendMessageToTokens($this->projectId, $message, $registrationTokens);
+        $request = new SendMessageToTokens($this->projectId, $message, $registrationTokens, $validateOnly);
         /** @var ResponseWithSubResponses $response */
         $response = $this->messagingApi->send($request);
 
@@ -108,7 +106,7 @@ class Messaging
      * @throws MessagingException if the API request failed
      * @throws FirebaseException if something very unexpected happened (never :))
      */
-    public function sendAll($messages): MulticastSendReport
+    public function sendAll($messages, bool $validateOnly = false): MulticastSendReport
     {
         $ensuredMessages = [];
 
@@ -116,7 +114,7 @@ class Messaging
             $ensuredMessages[] = $this->makeMessage($message);
         }
 
-        $request = new SendMessages($this->projectId, new Messages(...$ensuredMessages));
+        $request = new SendMessages($this->projectId, new Messages(...$ensuredMessages), $validateOnly);
         /** @var ResponseWithSubResponses $response */
         $response = $this->messagingApi->send($request);
 
@@ -135,17 +133,28 @@ class Messaging
      */
     public function validate($message): array
     {
-        $message = $this->makeMessage($message);
+        return $this->send($message, true);
+    }
 
-        $request = new ValidateMessage($this->projectId, $message);
-        try {
-            $response = $this->messagingApi->send($request);
-        } catch (NotFound $e) {
-            throw (new InvalidMessage($e->getMessage(), $e->getCode()))
-                ->withErrors($e->errors());
-        }
+    /**
+     * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $registrationTokenOrTokens
+     *
+     * @throws FirebaseException
+     * @throws MessagingException
+     *
+     * @return array<string, array<int, string>>
+     */
+    public function validateRegistrationTokens($registrationTokenOrTokens): array
+    {
+        $registrationTokenOrTokens = $this->ensureNonEmptyRegistrationTokens($registrationTokenOrTokens);
 
-        return JSON::decode((string) $response->getBody(), true);
+        $report = $this->sendMulticast(CloudMessage::new(), $registrationTokenOrTokens, true);
+
+        return [
+            'valid' => $report->validTokens(),
+            'unknown' => $report->unknownTokens(),
+            'invalid' => $report->invalidTokens(),
+        ];
     }
 
     /**
