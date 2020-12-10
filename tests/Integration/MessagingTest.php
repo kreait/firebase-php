@@ -218,6 +218,20 @@ class MessagingTest extends IntegrationTestCase
         $this->assertCount(2, $report->failures());
     }
 
+    public function testValidateRegistrationTokens(): void
+    {
+        $tokens = [
+            $valid = $this->getTestRegistrationToken(),
+            // we don't have an unknown token
+            $invalid = 'invalid',
+        ];
+
+        $result = $this->messaging->validateRegistrationTokens($tokens);
+
+        $this->assertSame($valid, $result['valid'][0]);
+        $this->assertSame($invalid, $result['invalid'][0]);
+    }
+
     public function testSubscribeToTopic(): void
     {
         $token = $this->getTestRegistrationToken();

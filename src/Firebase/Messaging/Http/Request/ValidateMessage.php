@@ -10,6 +10,9 @@ use Kreait\Firebase\Http\WrappedPsr7Request;
 use Kreait\Firebase\Messaging\Message;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * @deprecated 5.14.0 use {@see SendMessage} instead
+ */
 final class ValidateMessage implements RequestInterface
 {
     use WrappedPsr7Request;

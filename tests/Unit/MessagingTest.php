@@ -6,8 +6,6 @@ namespace Kreait\Firebase\Tests\Unit;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
-use Kreait\Firebase\Exception\Messaging\InvalidMessage;
-use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\ApiClient;
@@ -45,12 +43,6 @@ class MessagingTest extends UnitTestCase
         $this->messaging = new Messaging(ProjectId::fromString('project-id'), $this->messagingApi, $this->appInstanceApi);
     }
 
-    public function testSendInvalidObject(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->messaging->send(new \stdClass());
-    }
-
     public function testSendInvalidArray(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -75,24 +67,6 @@ class MessagingTest extends UnitTestCase
         $this->messaging->unsubscribeFromTopic('topic', []);
     }
 
-    public function testValidateMessageGivenAnInvalidArgument(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->messaging->validate('string');
-    }
-
-    public function testValidateMessageGivenAnUnknownDeviceToken(): void
-    {
-        $message = CloudMessage::withTarget(Messaging\MessageTarget::TOKEN, 'foo');
-
-        $this->messagingApi
-            ->method('send')
-            ->willThrowException((new NotFound()));
-
-        $this->expectException(InvalidMessage::class);
-        $this->messaging->validate($message);
-    }
-
     public function testItWillNotSendAMessageWithoutATarget(): void
     {
         $message = CloudMessage::new();
@@ -101,12 +75,6 @@ class MessagingTest extends UnitTestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->send($message);
-    }
-
-    public function testItDoesNotAcceptInvalidMessagesWhenMulticasting(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->messaging->sendMulticast(new \stdClass(), []);
     }
 
     public function testAMulticastMessageCannotBeTooLarge(): void

@@ -14,10 +14,10 @@ final class SendMessage implements RequestInterface
 {
     use WrappedPsr7Request;
 
-    public function __construct(string $projectId, Message $message)
+    public function __construct(string $projectId, Message $message, bool $validateOnly = false)
     {
         $uri = Utils::uriFor('https://fcm.googleapis.com/v1/projects/'.$projectId.'/messages:send');
-        $body = Utils::streamFor(\json_encode(['message' => $message]));
+        $body = Utils::streamFor(\json_encode(['message' => $message, 'validate_only' => $validateOnly]));
         $headers = [
             'Content-Type' => 'application/json; charset=UTF-8',
             'Content-Length' => $body->getSize(),

@@ -144,6 +144,20 @@ final class MulticastSendReport implements Countable
     }
 
     /**
+     * @return string[]
+     */
+    public function validTokens(): array
+    {
+        return $this->successes()
+            ->filter(static function (SendReport $report) {
+                return $report->target()->type() === MessageTarget::TOKEN;
+            })
+            ->map(static function (SendReport $report) {
+                return $report->target()->value();
+            });
+    }
+
+    /**
      * Returns all provided registration tokens that were not reachable.
      *
      * @return string[]
