@@ -40,7 +40,7 @@ class CustomTokenViaGoogleIamTest extends IntegrationTestCase
 
     public function testCreateCustomTokenWithAnInvalidClientEmail(): void
     {
-        $generator = new CustomTokenViaGoogleIam('user@domain.tld', self::$factory->createApiClient());
+        $generator = new CustomTokenViaGoogleIam(self::randomEmail(__FUNCTION__), self::$factory->createApiClient());
 
         try {
             $generator->createCustomToken('some-uid', ['kid' => '$&§']);

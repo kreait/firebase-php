@@ -38,9 +38,8 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
     protected function createUserWithEmailAndPassword(?string $email = null, ?string $password = null): UserRecord
     {
-        $uniqid = \uniqid();
-        $email = $email ?? "{$uniqid}@domain.tld";
-        $password = $password ?? $uniqid;
+        $email = $email ?? self::randomEmail();
+        $password = $password ?? self::randomString();
 
         return self::$factory
             ->createAuth()
@@ -72,6 +71,16 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
         /* @noinspection NonSecureArrayRandUsageInspection */
         return self::$registrationTokens[\array_rand(self::$registrationTokens)];
+    }
+
+    protected static function randomString(string $suffix = ''): string
+    {
+        return \mb_strtolower(\bin2hex(\random_bytes(5)).$suffix);
+    }
+
+    protected static function randomEmail(string $suffix = ''): string
+    {
+        return self::randomString($suffix.'@domain.tld');
     }
 
     private static function credentialsFromFile(): ?ServiceAccount

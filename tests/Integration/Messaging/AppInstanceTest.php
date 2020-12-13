@@ -27,7 +27,8 @@ final class AppInstanceTest extends IntegrationTestCase
     {
         $token = $this->getTestRegistrationToken();
 
-        $firstTopic = __FUNCTION__;
+        $randomPrefix =
+        $firstTopic = \bin2hex(\random_bytes(5)).__FUNCTION__;
         $secondTopic = __FUNCTION__.'2';
 
         $this->messaging->subscribeToTopic($firstTopic, $token);

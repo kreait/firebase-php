@@ -242,7 +242,7 @@ class MessagingTest extends IntegrationTestCase
     public function testSubscribeToTopic(): void
     {
         $token = $this->getTestRegistrationToken();
-        $topicName = \uniqid(__FUNCTION__, false);
+        $topicName = self::randomString(__FUNCTION__);
 
         try {
             $this->assertEquals([
@@ -258,8 +258,8 @@ class MessagingTest extends IntegrationTestCase
         $token = $this->getTestRegistrationToken();
 
         $topics = [
-            $firstTopic = \uniqid(__FUNCTION__.'_1', false),
-            $secondTopic = \uniqid(__FUNCTION__.'_2', false),
+            $firstTopic = self::randomString(__FUNCTION__),
+            $secondTopic = self::randomString(__FUNCTION__),
         ];
 
         try {
@@ -275,7 +275,7 @@ class MessagingTest extends IntegrationTestCase
     public function testUnsubscribeFromTopic(): void
     {
         $token = $this->getTestRegistrationToken();
-        $topicName = \uniqid('topic', false);
+        $topicName = self::randomString(__FUNCTION__);
         $this->messaging->subscribeToTopic($topicName, $token);
 
         $this->assertEquals([
@@ -288,8 +288,8 @@ class MessagingTest extends IntegrationTestCase
         $token = $this->getTestRegistrationToken();
 
         $topics = [
-            $firstTopic = \uniqid(__FUNCTION__.'_1', false),
-            $secondTopic = \uniqid(__FUNCTION__.'_2', false),
+            $firstTopic = self::randomString(__FUNCTION__.'_1'),
+            $secondTopic = self::randomString(__FUNCTION__.'_2'),
         ];
 
         $this->assertEquals([

@@ -30,7 +30,7 @@ class TenantAwareAuthTest extends IntegrationTestCase
     public function new_users_are_scoped_to_a_tenant(): void
     {
         $user = $this->auth->createUserWithEmailAndPassword(
-            \uniqid(__FUNCTION__, false).'@domain.tld',
+            self::randomEmail(__FUNCTION__),
             'password123'
         );
 

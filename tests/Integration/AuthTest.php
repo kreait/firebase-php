@@ -42,8 +42,7 @@ class AuthTest extends IntegrationTestCase
 
     public function testCreateUserWithEmailAndPassword(): void
     {
-        /** @noinspection NonSecureUniqidUsageInspection */
-        $email = \uniqid('').'@domain.tld';
+        $email = self::randomEmail(__FUNCTION__);
         $password = 'foobar';
 
         $check = $this->auth->createUserWithEmailAndPassword($email, $password);
@@ -56,8 +55,7 @@ class AuthTest extends IntegrationTestCase
 
     public function testChangeUserPassword(): void
     {
-        /** @noinspection NonSecureUniqidUsageInspection */
-        $email = \uniqid('').'@domain.tld';
+        $email = self::randomEmail(__FUNCTION__);
 
         $user = $this->auth->createUserWithEmailAndPassword($email, 'old password');
 
@@ -69,10 +67,8 @@ class AuthTest extends IntegrationTestCase
 
     public function testChangeUserEmail(): void
     {
-        /** @noinspection NonSecureUniqidUsageInspection */
-        $uniqid = \uniqid('');
-        $email = "{$uniqid}@domain.tld";
-        $newEmail = "{$uniqid}-changed@domain.tld";
+        $email = self::randomEmail(__FUNCTION__.'_1');
+        $newEmail = self::randomEmail(__FUNCTION__.'_2');
         $password = 'my password';
 
         $user = $this->auth->createUserWithEmailAndPassword($email, $password);
@@ -111,7 +107,7 @@ class AuthTest extends IntegrationTestCase
     public function testSendEmailVerificationLinkToUnknownUser(): void
     {
         $this->expectException(FailedToSendActionLink::class);
-        $this->auth->sendEmailVerificationLink('unknown@domain.tld');
+        $this->auth->sendEmailVerificationLink(self::randomEmail(__FUNCTION__));
     }
 
     public function testSendEmailVerificationLinkToDisabledUser(): void
@@ -172,13 +168,13 @@ class AuthTest extends IntegrationTestCase
     public function testGetUnsupportedEmailActionLink(): void
     {
         $this->expectException(FailedToCreateActionLink::class);
-        $this->auth->getEmailActionLink('unsupported', 'user@domain.tld');
+        $this->auth->getEmailActionLink('unsupported', self::randomEmail(__FUNCTION__));
     }
 
     public function testSendUnsupportedEmailActionLink(): void
     {
         $this->expectException(FailedToSendActionLink::class);
-        $this->auth->sendEmailActionLink('unsupported', 'user@domain.tld');
+        $this->auth->sendEmailActionLink('unsupported', self::randomEmail(__FUNCTION__));
     }
 
     public function testListUsers(): void
@@ -308,7 +304,7 @@ class AuthTest extends IntegrationTestCase
     public function testGetUserByNonExistingEmail(): void
     {
         $user = $this->auth->createUser([
-            'email' => $email = \bin2hex(\random_bytes(5)).'@domain.tld',
+            'email' => $email = self::randomEmail(__FUNCTION__),
         ]);
         $this->auth->deleteUser($user->uid);
 
@@ -349,8 +345,8 @@ class AuthTest extends IntegrationTestCase
         $uid = \bin2hex(\random_bytes(5));
         $userRecord = $this->auth->createUser([
             'uid' => $uid,
-            'displayName' => $displayName = 'A display name',
-            'verifiedEmail' => $email = $uid.'@domain.tld',
+            'displayName' => $displayName = self::randomString(__FUNCTION__),
+            'verifiedEmail' => $email = self::randomEmail(__FUNCTION__),
         ]);
 
         $this->assertSame($uid, $userRecord->uid);
@@ -438,9 +434,11 @@ class AuthTest extends IntegrationTestCase
 
     public function testUnlinkProvider(): void
     {
+        $uid = self::randomString(__FUNCTION__);
+
         $user = $this->auth->createUser([
-            'uid' => $uid = \bin2hex(\random_bytes(5)),
-            'verifiedEmail' => $uid.'@domain.tld',
+            'uid' => $uid,
+            'verifiedEmail' => self::randomEmail($uid),
             'phone' => '+1234567'.\random_int(1000, 9999),
         ]);
 
@@ -566,7 +564,7 @@ class AuthTest extends IntegrationTestCase
 
     public function testSignInWithEmailAndPassword(): void
     {
-        $email = \uniqid('', false).'@domain.tld';
+        $email = self::randomEmail(__FUNCTION__);
         $password = 'my-perfect-password';
 
         $user = $this->createUserWithEmailAndPassword($email, $password);
@@ -583,7 +581,7 @@ class AuthTest extends IntegrationTestCase
 
     public function testSignInWithEmailAndOobCode(): void
     {
-        $email = \uniqid('', false).'@domain.tld';
+        $email = self::randomEmail(__FUNCTION__);
         $password = 'my-perfect-password';
 
         $user = $this->createUserWithEmailAndPassword($email, $password);
