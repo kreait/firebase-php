@@ -104,7 +104,7 @@ final class IdTokenVerifier implements Verifier
 
     private function isNotExpired(Token $token, DateTimeImmutable $now): bool
     {
-        return $token->isExpired($now->modify('-'.($this->leewayInSeconds + 1).' seconds'));
+        return !$token->isExpired($now->modify('-'.($this->leewayInSeconds + 1).' seconds'));
     }
 
     private function isIssuedInThePast(Token $token, DateTimeImmutable $now): bool

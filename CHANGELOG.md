@@ -12,6 +12,9 @@
 ### Deprecated
 * `Kreait\Firebase\Http\Requests::findBy()`
 * `Kreait\Firebase\Messaging\MulticastSendReport::withAdded()`
+### Fixed
+* 5.13 introduced a bug which caused expired ID tokens not to be rejected as invalid. 
+  [#526](https://github.com/kreait/firebase-php/issues/526)
 
 ## [5.13.0] - 2020-12-10
 
