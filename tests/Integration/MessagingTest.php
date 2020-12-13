@@ -298,15 +298,6 @@ class MessagingTest extends IntegrationTestCase
         ], $this->messaging->unsubscribeFromTopics($topics, $token));
     }
 
-    public function testUnsubscribeFromAllTopics(): void
-    {
-        $token = $this->getTestRegistrationToken();
-
-        $this->messaging->unsubscribeFromAllTopics($token);
-
-        $this->assertCount(0, $this->messaging->getAppInstance($token)->topicSubscriptions());
-    }
-
     public function testGetAppInstance(): void
     {
         $token = $this->getTestRegistrationToken();
