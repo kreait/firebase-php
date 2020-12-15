@@ -614,7 +614,7 @@ class AuthTest extends IntegrationTestCase
         $token = $this->auth->parseToken($idToken);
 
         $this->assertInstanceOf(Plain::class, $token);
-        $this->assertIsString($uid = $token->claims()->get('sub', false));
+        $this->assertIsString($uid = $token->claims()->get('sub'));
         $user = $this->auth->getUser($uid);
         $this->addToAssertionCount(1);
 

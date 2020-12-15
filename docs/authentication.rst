@@ -133,7 +133,11 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
         echo 'The token could not be parsed: '.$e->getMessage();
     }
 
+    // if you're using lcobucci/jwt ^4.0
+    $uid = $verifiedIdToken->claims()->get('sub');
+    // or, if you're using lcobucci/jwt ^3.0
     $uid = $verifiedIdToken->getClaim('sub');
+
     $user = $auth->getUser($uid);
 
 ``Auth::verifyIdToken()`` accepts the following parameters:

@@ -68,8 +68,7 @@ final class IdTokenVerifier implements Verifier
             }
             // @codeCoverageIgnoreEnd
 
-            // We're using getClaim() instead of hasClaim() to also check for an empty value
-            if (!($verifiedToken->claims()->get('sub', false))) {
+            if (!($verifiedToken->claims()->get('sub'))) {
                 throw new InvalidToken($token, 'The token has no "sub" claim');
             }
 
