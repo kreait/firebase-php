@@ -63,15 +63,20 @@ The SDK is able to autodiscover the Service Account for your project in the foll
 If you want to use autodiscovery, a Service Account must not be explicitly configured.
 
 
-*******************
-Custom Database URI
-*******************
+*********************
+Realtime Database URI
+*********************
 
 .. note::
-    It is not necessary to define a custom database URI in most cases.
+    You can find the URI for your Realtime Database at
+    `https://console.firebase.google.com/project/_/database <https://console.firebase.google.com/project/_/database>`_.
+    For recently created Firebase projects the default database URI usually has the format
+    ``https://<project-id>-default-rtdb.firebaseio.com``. Databases in projects created before September 2020 had the
+    default database URI ``https://<project-id>.firebaseio.com``.
 
-If the project ID in the JSON file does not match the URL of your Firebase application, or if you want to
-be explicit, you can configure the Factory like this:
+    For backward compatibility reasons, if you don't specify a database URI, the SDK will use the project ID defined
+    in the Service Account JSON file to automatically generate it.
+
 
 .. code-block:: php
 
