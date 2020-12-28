@@ -13,6 +13,7 @@ use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Request;
 use Kreait\Firebase\Value\Provider;
 use Psr\Http\Message\ResponseInterface;
@@ -191,6 +192,51 @@ class ApiClient
             'localId' => $uid,
             'deleteProvider' => $providers,
         ]);
+    }
+
+    /**
+     * @param array<ImportUserRecord> $users
+     * @param array<string, mixed> $options
+     *
+     * @throws AuthException
+     * @throws FirebaseException
+     */
+    public function importUsers(array $users, ProjectId $projectId, array $options = []): ResponseInterface
+    {
+        return $this->requestApi(
+            \sprintf(
+                'https://identitytoolkit.googleapis.com/v1/projects/%s/accounts:batchCreate',
+                $projectId->value()
+            ),
+            \array_merge(
+                ['users' => $users],
+                $options
+            )
+        );
+    }
+
+    /**
+     * @param array<string> $uids
+     * @param array<string, mixed> $options
+     *
+     * @throws AuthException
+     * @throws FirebaseException
+     */
+    public function deleteUsers(array $uids, ProjectId $projectId, array $options = []): ResponseInterface
+    {
+        return $this->requestApi(
+            \sprintf(
+                'https://identitytoolkit.googleapis.com/v1/projects/%s/accounts:batchDelete',
+                $projectId->value()
+            ),
+            \array_filter(
+                [
+                    'localIds' => $uids,
+                    'force' => $options['force'] ?? null,
+                    'tenantId' => $options['tenantId'] ?? null,
+                ]
+            )
+        );
     }
 
     /**

@@ -14,6 +14,10 @@ use InvalidArgumentException;
 use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
 use Kreait\Firebase\Auth\CreateSessionCookie\FailedToCreateSessionCookie;
+use Kreait\Firebase\Auth\DeleteUserError;
+use Kreait\Firebase\Auth\DeleteUsersResult;
+use Kreait\Firebase\Auth\ImportUserRecord;
+use Kreait\Firebase\Auth\ImportUsersResult;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
 use Kreait\Firebase\Auth\SignInResult;
@@ -26,6 +30,7 @@ use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Request;
+use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\ClearTextPassword;
 use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\PhoneNumber;
@@ -159,6 +164,28 @@ interface Auth
      * @throws Exception\FirebaseException
      */
     public function deleteUser($uid): void;
+
+    /**
+     * @see https://cloud.google.com/identity-platform/docs/reference/rest/v1/projects.accounts/batchDelete
+     *
+     * @param array<string> $uids
+     * @param array<string, mixed> $options
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
+    public function deleteUsers(array $uids, array $options = []): DeleteUsersResult;
+
+    /**
+     * @see https://cloud.google.com/identity-platform/docs/reference/rest/v1/projects.accounts/batchCreate
+     *
+     * @param array<ImportUserRecord> $users
+     * @param array<string, mixed> $options
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
+    public function importUsers(array $users, array $options = []): ImportUsersResult;
 
     /**
      * @param Email|string $email

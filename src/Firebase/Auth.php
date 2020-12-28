@@ -14,6 +14,11 @@ use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\CreateActionLink;
 use Kreait\Firebase\Auth\CreateSessionCookie;
 use Kreait\Firebase\Auth\IdTokenVerifier;
+use Kreait\Firebase\Auth\DeleteUserError;
+use Kreait\Firebase\Auth\DeleteUsersResult;
+use Kreait\Firebase\Auth\ImportUserError;
+use Kreait\Firebase\Auth\ImportUserRecord;
+use Kreait\Firebase\Auth\ImportUsersResult;
 use Kreait\Firebase\Auth\SendActionLink;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
@@ -30,6 +35,8 @@ use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\RuntimeException;
+use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Util\Deprecation;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
@@ -59,8 +66,11 @@ class Auth implements Contract\Auth
 
     private ?TenantId $tenantId = null;
 
+    /** @var ProjectId|null */
+    private $projectId;
+
     /**
-     * @param iterable<ApiClient|ClientInterface|TokenGenerator|Verifier|SignInHandler|TenantId|null>|ApiClient|ClientInterface|TokenGenerator|Verifier|SignInHandler|TenantId|null ...$x
+     * @param iterable<ApiClient|ClientInterface|TokenGenerator|Verifier|SignInHandler|TenantId|null>|ApiClient|ClientInterface|TokenGenerator|Verifier|SignInHandler|TenantId|ProjectId|null ...$x
      *
      * @internal
      */
@@ -77,6 +87,8 @@ class Auth implements Contract\Auth
                 $this->signInHandler = $arg;
             } elseif ($arg instanceof TenantId) {
                 $this->tenantId = $arg;
+            } elseif ($arg instanceof ProjectId) {
+                $this->projectId = $arg;
             } elseif ($arg instanceof ClientInterface) {
                 $this->httpClient = $arg;
             }
@@ -234,6 +246,61 @@ class Auth implements Contract\Auth
         } catch (UserNotFound $e) {
             throw new UserNotFound("No user with uid '{$uid}' found.");
         }
+    }
+
+    public function deleteUsers(array $uids, array $options = []): DeleteUsersResult
+    {
+        if ($this->projectId === null) {
+            throw new RuntimeException('Batch delete operation requires known projectId.');
+        }
+
+        $uids = \array_map(
+            static function (string $uid): string {
+                return (new Uid($uid))->__toString();
+            },
+            $uids
+        );
+
+        $response = $this->client->deleteUsers($uids, $this->projectId, $options);
+        $body = JSON::decode((string) $response->getBody(), true);
+
+        $errors = \array_map(
+            static function (array $error): DeleteUserError {
+                return DeleteUserError::fromResponseData($error);
+            },
+            $body['errors'] ?? []
+        );
+
+        return new DeleteUsersResult(\count($uids), $errors);
+    }
+
+    public function importUsers(array $users, array $options = []): ImportUsersResult
+    {
+        if ($this->projectId === null) {
+            throw new RuntimeException('Batch import operation requires known projectId.');
+        }
+
+        if (\count($users) === 0) {
+            throw new InvalidArgumentException('Users must not be empty.');
+        }
+
+        if (\count($users) > 1000) {
+            throw new InvalidArgumentException(
+                \sprintf('Users list must not contain more than %d records', 1000)
+            );
+        }
+
+        $response = $this->client->importUsers($users, $this->projectId, $options);
+        $body = JSON::decode((string) $response->getBody(), true);
+
+        $errors = \array_map(
+            static function (array $error): ImportUserError {
+                return ImportUserError::fromResponseData($error);
+            },
+            $body['error'] ?? []
+        );
+
+        return new ImportUsersResult(\count($users), $errors);
     }
 
     public function getEmailActionLink(string $type, $email, $actionCodeSettings = null): string
