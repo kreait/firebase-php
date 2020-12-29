@@ -66,7 +66,7 @@ final class AppInstance implements JsonSerializable
      */
     public function isSubscribedToTopic($topic): bool
     {
-        $topic = $topic instanceof Topic ? $topic : Topic::fromValue((string) $topic);
+        $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
 
         $filtered = $this->topicSubscriptions->filter(static function (TopicSubscription $subscription) use ($topic) {
             return $topic->value() === $subscription->topic()->value();

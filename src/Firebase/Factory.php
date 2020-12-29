@@ -342,11 +342,11 @@ class Factory
         }
 
         if ($projectId = Util::getenv('GOOGLE_CLOUD_PROJECT')) {
-            return $this->projectId = ProjectId::fromString((string) $projectId);
+            return $this->projectId = ProjectId::fromString($projectId);
         }
 
         if ($projectId = Util::getenv('GCLOUD_PROJECT')) {
-            return $this->projectId = ProjectId::fromString((string) $projectId);
+            return $this->projectId = ProjectId::fromString($projectId);
         }
 
         return null;

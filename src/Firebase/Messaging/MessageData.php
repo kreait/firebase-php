@@ -16,7 +16,7 @@ final class MessageData implements \JsonSerializable
     }
 
     /**
-     * @param array<string, string> $data
+     * @param array<mixed, mixed> $data
      */
     public static function fromArray(array $data): self
     {

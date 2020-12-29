@@ -346,7 +346,7 @@ class Auth
      */
     public function getEmailActionLink(string $type, $email, $actionCodeSettings = null): string
     {
-        $email = $email instanceof Email ? $email : new Email((string) $email);
+        $email = $email instanceof Email ? $email : new Email($email);
 
         if ($actionCodeSettings === null) {
             $actionCodeSettings = ValidatedActionCodeSettings::empty();
@@ -369,7 +369,7 @@ class Auth
      */
     public function sendEmailActionLink(string $type, $email, $actionCodeSettings = null, ?string $locale = null): void
     {
-        $email = $email instanceof Email ? $email : new Email((string) $email);
+        $email = $email instanceof Email ? $email : new Email($email);
 
         if ($actionCodeSettings === null) {
             $actionCodeSettings = ValidatedActionCodeSettings::empty();
