@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Tests\Unit;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
-use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
@@ -14,7 +13,6 @@ use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Tests\UnitTestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 
 /**
@@ -22,25 +20,15 @@ use stdClass;
  */
 class MessagingTest extends UnitTestCase
 {
-    /** @var ApiClient&MockObject */
-    private $messagingApi;
-
-    /** @var AppInstanceApiClient&MockObject */
-    private $appInstanceApi;
-
-    /** @var MessagingApiExceptionConverter&MockObject */
-    private $errorHandler;
-
     /** @var Messaging */
     private $messaging;
 
     protected function setUp(): void
     {
-        $this->messagingApi = $this->createMock(ApiClient::class);
-        $this->appInstanceApi = $this->createMock(AppInstanceApiClient::class);
-        $this->errorHandler = $this->createMock(MessagingApiExceptionConverter::class);
+        $messagingApi = $this->createMock(ApiClient::class);
+        $appInstanceApi = $this->createMock(AppInstanceApiClient::class);
 
-        $this->messaging = new Messaging(ProjectId::fromString('project-id'), $this->messagingApi, $this->appInstanceApi);
+        $this->messaging = new Messaging(ProjectId::fromString('project-id'), $messagingApi, $appInstanceApi);
     }
 
     public function testSendInvalidArray(): void

@@ -56,10 +56,6 @@ class UserRecord implements \JsonSerializable
     /** @var string|null */
     public $tenantId;
 
-    public function __construct()
-    {
-    }
-
     /**
      * @param array<string, mixed> $data
      */

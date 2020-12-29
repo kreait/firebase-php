@@ -15,9 +15,6 @@ use stdClass;
  */
 final class RegistrationTokensTest extends TestCase
 {
-    public const IS_EMPTY = true;
-    public const IS_NOT_EMPTY = false;
-
     /**
      * @test
      * @dataProvider validValuesWithExpectedCounts

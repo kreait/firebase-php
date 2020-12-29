@@ -48,18 +48,6 @@ class Messaging
         $this->projectId = $projectId->value();
     }
 
-    private function determineProjectIdFromMessagingApiClient(ApiClient $client): string
-    {
-        $baseUri = $client->getConfig('base_uri');
-        $uriParts = \explode('/', (string) $baseUri);
-
-        if (!($projectId = \array_pop($uriParts))) {
-            throw new InvalidArgumentException("Project ID could not be determined from {$baseUri}");
-        }
-
-        return $projectId;
-    }
-
     /**
      * @param Message|array<string, mixed> $message
      *

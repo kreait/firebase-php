@@ -31,9 +31,6 @@ final class RequestWithSubRequests implements HasSubRequests, RequestInterface
     /** @var string */
     private $boundary;
 
-    /** @var array<string, string|array> */
-    private $headers;
-
     /** @var AppendStream */
     private $body;
 
