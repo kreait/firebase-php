@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration\Database;
 
+use Kreait\Firebase\Database;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
+use Kreait\Firebase\Util\DT;
 
 /**
  * @internal
@@ -99,6 +101,23 @@ class ReferenceTest extends DatabaseTestCase
         $ref->getChild($key)->set(null);
 
         $this->assertSame(0, $ref->getSnapshot()->numChildren());
+    }
+
+    public function testSetServerTimestamp(): void
+    {
+        $now = new \DateTimeImmutable();
+
+        $value = $this->ref->getChild(__FUNCTION__)
+            ->push(['updatedAt' => Database::SERVER_TIMESTAMP])
+            ->getSnapshot()->getValue();
+
+        $this->assertIsArray($value);
+        $this->assertArrayHasKey('updatedAt', $value);
+        $this->assertIsInt($value['updatedAt']);
+
+        $check = DT::toUTCDateTimeImmutable($value['updatedAt']);
+
+        $this->assertTrue($check > $now);
     }
 
     public function validValues()
