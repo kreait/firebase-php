@@ -136,7 +136,7 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
     // if you're using lcobucci/jwt ^4.0
     $uid = $verifiedIdToken->claims()->get('sub');
     // or, if you're using lcobucci/jwt ^3.0
-    $uid = $verifiedIdToken->getClaim('sub');
+    $uid = $verifiedIdToken->claims()->get('sub');
 
     $user = $auth->getUser($uid);
 
