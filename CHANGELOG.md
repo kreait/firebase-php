@@ -1,6 +1,9 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Fixed
+* Fixed handling of rejected promises in the App Instance API Client
+  ([#536](https://github.com/kreait/firebase-php/issues/536))
 
 ## [5.14.0] - 2020-12-13
 ### Added
