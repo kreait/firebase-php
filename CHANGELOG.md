@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+
+## [5.14.1] - 2020-12-31
 ### Fixed
 * Fixed handling of rejected promises in the App Instance API Client
   ([#536](https://github.com/kreait/firebase-php/issues/536))
@@ -180,7 +182,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.14.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.14.1...HEAD
+[5.14.1]: https://github.com/kreait/firebase-php/compare/5.14.0...5.14.1
 [5.14.0]: https://github.com/kreait/firebase-php/compare/5.13.0...5.14.0
 [5.13.0]: https://github.com/kreait/firebase-php/compare/5.12.0...5.13.0
 [5.12.0]: https://github.com/kreait/firebase-php/compare/5.11.0...5.12.0
