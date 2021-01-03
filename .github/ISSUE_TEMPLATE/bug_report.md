@@ -1,10 +1,8 @@
 <!--
 The issue tracker is for bugs only. If you have a question or an idea 
-for a new feature, please visit
+for a new feature, please visit 
 
-- this repo's discussions board at https://github.com/kreait/firebase-php/discussions
-- the Community Discord Server at https://discord.gg/nbgVfty
-- Stack Overflow at https://stackoverflow.com/questions/tagged/firebase+php
+https://github.com/kreait/firebase-php/discussions
 
 Your question or problem may have been answered already.
 
