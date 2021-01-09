@@ -27,6 +27,25 @@ Interact with `Google Firebase <https://firebase.google.com>`_ from your PHP app
 
 The source code can be found at https://github.com/kreait/firebase-php/ .
 
+***********
+Quick Start
+***********
+
+.. code-block:: php
+
+    use Kreait\Firebase\Factory;
+
+    $factory = (new Factory)
+        ->withServiceAccount('/path/to/firebase_credentials.json')
+        ->withDatabaseUri('https://my-project.firebaseio.com');
+
+    $auth = $factory->createAuth();
+    $realtimeDatabase = $factory->createDatabase();
+    $cloudMessaging = $factory->createMessaging();
+    $remoteConfig = $factory->createRemoteConfig();
+    $cloudStorage = $factory->createStorage();
+    $firestore = $factory->createFirestore();
+
 **********
 User Guide
 **********
