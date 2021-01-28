@@ -15,9 +15,9 @@ use Psr\Http\Message\RequestInterface;
 
 final class SendMessageToTokens implements HasSubRequests, RequestInterface
 {
-    public const MAX_AMOUNT_OF_TOKENS = 500;
-
     use WrappedPsr7Request;
+
+    public const MAX_AMOUNT_OF_TOKENS = 500;
 
     public function __construct(string $projectId, Message $message, RegistrationTokens $registrationTokens, bool $validateOnly = false)
     {
