@@ -49,6 +49,9 @@
         "google/cloud-firestore": "^1.0 to use the Firestore component"
     },
     "autoload": {
+        "files": [
+            "src/Firebase.php"
+        ],
         "psr-4": {
             "Kreait\\Firebase\\": "src/Firebase"
         }
