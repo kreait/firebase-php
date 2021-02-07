@@ -28,7 +28,7 @@ possible errors by *catch* ing them):
     } catch (FirebaseException $e} {
         echo 'An error has occurred while working with the SDK: '.$e->getMessage;
     } catch (Throwable $e) {
-        echo 'An error has occurred while working with Firebase: '.$e->getMessage;
+        echo 'A not-Firebase specific error has occurred: '.$e->getMessage;
     }
 
 This is especially useful when you encounter ``Fatal error: Uncaught GuzzleHttp\Exception\ClientException``
