@@ -8,6 +8,35 @@ Troubleshooting
     order to get hold of the changes you made, you will have to use the result of
     that method, e.g. ``$changedObject = $object->withChangedProperty();``.
 
+**************
+Error handling
+**************
+
+In general, if executing a method from the SDK doesn't throw an error, it is safe to assume that the
+requested operation has worked according to the motto "no news is good news". If you do get an error,
+it is good practice to wrap the problematic code in a try/catch (*try* an operation and handle
+possible errors by *catch* ing them):
+
+.. code-block:: php
+
+    use Kreait\Firebase\Exception\FirebaseException;
+    use Throwable;
+
+    try {
+        // The operation you want to perform
+        echo 'OK';
+    } catch (FirebaseException $e} {
+        echo 'An error has occurred while working with the SDK: '.$e->getMessage;
+    } catch (Throwable $e) {
+        echo 'An error has occurred while working with Firebase: '.$e->getMessage;
+    }
+
+This is especially useful when you encounter ``Fatal error: Uncaught GuzzleHttp\Exception\ClientException``
+errors which are caused by the Google/Firebase APIs rejecting a request. Those errors are handled by the
+SDK and should be converted to instances of ``Kreait\Firebase\Exception\FirebaseException``.
+
+If you want to be sure to catch *any* error, catch ``Throwable``.
+
 ************************************
 Call to private/undefined method ...
 ************************************
