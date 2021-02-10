@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Contract;
 
-use Google\Cloud\Firestore\FirestoreClient;
+use Kreait\Firebase\Firestore\ApiClient;
 
 interface Firestore
 {
-    public function database(): FirestoreClient;
+    public function database(): ApiClient;
 }

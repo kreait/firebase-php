@@ -519,30 +519,17 @@ class Factory
 
     public function createFirestore(): Contract\Firestore
     {
-        $config = [];
-
-        if ($serviceAccount = $this->getServiceAccount()) {
-            $config['keyFile'] = $serviceAccount->asArray();
-        } elseif ($this->discoveryIsDisabled) {
-            throw new RuntimeException('Unable to create a Firestore Client without credentials');
+        if (!($projectId = $this->getProjectId())) {
+            throw new RuntimeException('Unable to create the Firestore service without a project ID');
         }
 
-        if ($projectId = $this->getProjectId()) {
-            $config['projectId'] = $projectId->value();
-        }
+        $apiClient = new Firestore\ApiClient(
+            $this->createApiClient([
+                'base_uri' => 'https://firestore.googleapis.com/v1/projects/'.$projectId->value().'/databases/(default)/',
+            ])
+        );
 
-        if (!$projectId) {
-            // This is the case with user refresh credentials
-            $config['suppressKeyFileNotice'] = true;
-        }
-
-        try {
-            $firestoreClient = new FirestoreClient($config);
-        } catch (Throwable $e) {
-            throw new RuntimeException('Unable to create a FirestoreClient: '.$e->getMessage(), $e->getCode(), $e);
-        }
-
-        return Firestore::withFirestoreClient($firestoreClient);
+        return Firestore::withApiClient($apiClient);
     }
 
     public function createStorage(): Contract\Storage
