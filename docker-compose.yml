@@ -1,0 +1,23 @@
+version: '3.6'
+services:
+  php:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+      args:
+        PHP_VERSION: 7.4
+    image: firebase/php
+    container_name: firebase_php
+    networks:
+      - firebase
+    volumes:
+      - .:/app
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+      - ${COMPOSER_HOST_CACHE_DIR:-./.composer/cache}:/root/.composer/cache
+    environment:
+      PHP_IDE_CONFIG: "serverName=Docker"
+    extra_hosts:
+      docker.host: ${IP:-127.0.0.1}
+networks:
+  firebase:
+    name: firebase

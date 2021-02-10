@@ -1,3 +1,4 @@
+/.xdebug
 /build
 /vendor
 /docs/_build
@@ -5,6 +6,7 @@
 /tests/_fixtures/test_*
 /tools
 
+/.env
 /.php-cs-fixer*
 !/.php-cs-fixer.dist.php
 /.phpunit.result.cache
