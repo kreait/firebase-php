@@ -4,6 +4,10 @@ for a new feature, please visit
 
 https://github.com/kreait/firebase-php/discussions
 
+or the Discord Community at
+
+https://discord.gg/Yacm7unBsr
+
 Your question or problem may have been answered already.
 
 If you found a bug, please include a clear and concise description of what

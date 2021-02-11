@@ -62,6 +62,7 @@ Issues/Support
 
 - For bugs and past issues: `Github issue tracker <https://github.com/kreait/firebase-php/issues/>`_
 - For questions and general discussions: `GitHub discussions <https://github.com/kreait/firebase-php/discussions>`_
+- For help with and discussion about the PHP SDK: `Discord Community <https://discord.gg/Yacm7unBsr>`_
 - For questions about Firebase in general: `Stack Overflow <https://stackoverflow.com/questions/tagged/firebase>`_ and the `Firebase Slack Community <https://firebase.community>`_.
 
 
