@@ -21,7 +21,7 @@ coverage: ## Executes the test suite and generates code coverage reports
 
 .PHONY: view-coverage
 view-coverage: ## Shows the code coverage report
-	open build/coverage/index.html
+	php -S localhost:1337 -t build/coverage
 
 .PHONY: docs
 docs: ## Builds the documentation
@@ -29,7 +29,7 @@ docs: ## Builds the documentation
 
 .PHONY: view-docs
 view-docs: ## Shows the documentation
-	open docs/_build/html/index.html
+	php -S localhost:1338 -t docs/_build/html
 
 .PHONY: help
 help:
