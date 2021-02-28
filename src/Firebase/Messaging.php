@@ -9,6 +9,7 @@ use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
+use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Http\ResponseWithSubResponses;
 use Kreait\Firebase\Messaging\ApiClient;
@@ -62,7 +63,17 @@ class Messaging
         $message = $this->makeMessage($message);
 
         $request = new SendMessage($this->projectId, $message, $validateOnly);
-        $response = $this->messagingApi->send($request);
+
+        try {
+            $response = $this->messagingApi->send($request);
+        } catch (NotFound $e) {
+            $token = $message->jsonSerialize()['token'] ?? null;
+            if ($token) {
+                throw NotFound::becauseTokenNotFound($token);
+            }
+
+            throw $e;
+        }
 
         return JSON::decode((string) $response->getBody(), true);
     }
@@ -256,6 +267,8 @@ class Messaging
 
         try {
             return $this->appInstanceApi->getAppInstanceAsync($token)->wait();
+        } catch (NotFound $e) {
+            throw NotFound::becauseTokenNotFound($token->value());
         } catch (MessagingException $e) {
             // The token is invalid
             throw new InvalidArgument("The registration token '{$token}' is invalid or not available", $e->getCode(), $e);

@@ -70,26 +70,26 @@ class MessagingApiExceptionConverter
 
         switch ($code) {
             case 400:
-                $convertedError = new InvalidMessage($message, $code, $previous);
+                $convertedError = new InvalidMessage($message);
                 break;
             case 401:
             case 403:
-                $convertedError = new AuthenticationError($message, $code, $previous);
+                $convertedError = new AuthenticationError($message);
                 break;
             case 404:
-                $convertedError = new NotFound($message, $code, $previous);
+                $convertedError = new NotFound($message);
                 break;
             case 429:
-                $convertedError = new QuotaExceeded($message, $code, $previous);
+                $convertedError = new QuotaExceeded($message);
                 if ($retryAfter = $this->getRetryAfter($response)) {
                     $convertedError = $convertedError->withRetryAfter($retryAfter);
                 }
                 break;
             case 500:
-                $convertedError = new ServerError($message, $code, $previous);
+                $convertedError = new ServerError($message);
                 break;
             case 503:
-                $convertedError = new ServerUnavailable($message, $code, $previous);
+                $convertedError = new ServerUnavailable($message);
                 if ($retryAfter = $this->getRetryAfter($response)) {
                     $convertedError = $convertedError->withRetryAfter($retryAfter);
                 }

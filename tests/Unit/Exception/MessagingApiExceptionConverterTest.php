@@ -66,7 +66,6 @@ class MessagingApiExceptionConverterTest extends TestCase
         $converted = $this->converter->convertException($e);
 
         $this->assertInstanceOf($expectedClass, $converted);
-        $this->assertSame($e, $converted->getPrevious());
     }
 
     public function exceptions(): array

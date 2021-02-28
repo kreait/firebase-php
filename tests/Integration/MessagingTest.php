@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
+use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\CloudMessage;
@@ -310,5 +311,17 @@ class MessagingTest extends IntegrationTestCase
     {
         $this->expectException(InvalidArgument::class);
         $this->messaging->getAppInstance('foo');
+    }
+
+    public function testSendMessageToUnknownToken(): void
+    {
+        $this->expectException(NotFound::class);
+        $this->messaging->send(['token' => self::$unknownToken]);
+    }
+
+    public function testGetAppInstanceForUnknownToken(): void
+    {
+        $this->expectException(NotFound::class);
+        $this->messaging->getAppInstance(self::$unknownToken);
     }
 }

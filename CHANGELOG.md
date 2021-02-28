@@ -1,6 +1,10 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Changed
+* More explanatory error messages when
+  * a requested Realtime Database instance could not be reached
+  * an FCM target device is not known to the current project
 
 ## [5.14.1] - 2020-12-31
 ### Fixed
