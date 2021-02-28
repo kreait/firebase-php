@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Integration;
 
 use Google\Cloud\Firestore\Transaction;
-use Kreait\Firebase\Firestore;
+use Kreait\Firebase\Contract\Firestore;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 /**

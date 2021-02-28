@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration\Messaging;
 
-use Kreait\Firebase\Messaging;
+use Kreait\Firebase\Contract\Messaging;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 /**

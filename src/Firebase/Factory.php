@@ -403,7 +403,7 @@ class Factory
         return null;
     }
 
-    public function createAuth(): Auth
+    public function createAuth(): Contract\Auth
     {
         $http = $this->createApiClient([
             'base_uri' => 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/',
@@ -462,7 +462,7 @@ class Factory
         return new IdTokenVerifier($baseVerifier, $this->clock);
     }
 
-    public function createDatabase(): Database
+    public function createDatabase(): Contract\Database
     {
         $http = $this->createApiClient();
 
@@ -473,7 +473,7 @@ class Factory
         return new Database($this->getDatabaseUri(), new Database\ApiClient($http));
     }
 
-    public function createRemoteConfig(): RemoteConfig
+    public function createRemoteConfig(): Contract\RemoteConfig
     {
         if (!($projectId = $this->getProjectId())) {
             throw new RuntimeException('Unable to create the messaging service without a project ID');
@@ -486,7 +486,7 @@ class Factory
         return new RemoteConfig(new RemoteConfig\ApiClient($http));
     }
 
-    public function createMessaging(): Messaging
+    public function createMessaging(): Contract\Messaging
     {
         if (!($projectId = $this->getProjectId())) {
             throw new RuntimeException('Unable to create the messaging service without a project ID');
@@ -517,7 +517,7 @@ class Factory
     /**
      * @param string|Url|UriInterface|mixed $defaultDynamicLinksDomain
      */
-    public function createDynamicLinksService($defaultDynamicLinksDomain = null): DynamicLinks
+    public function createDynamicLinksService($defaultDynamicLinksDomain = null): Contract\DynamicLinks
     {
         $apiClient = $this->createApiClient();
 
@@ -528,7 +528,7 @@ class Factory
         return DynamicLinks::withApiClient($apiClient);
     }
 
-    public function createFirestore(): Firestore
+    public function createFirestore(): Contract\Firestore
     {
         $config = [];
 
@@ -556,7 +556,7 @@ class Factory
         return Firestore::withFirestoreClient($firestoreClient);
     }
 
-    public function createStorage(): Storage
+    public function createStorage(): Contract\Storage
     {
         $config = [];
 

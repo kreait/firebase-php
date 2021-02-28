@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use Kreait\Firebase\Contract\DynamicLinks;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
-use Kreait\Firebase\DynamicLinks;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 /**

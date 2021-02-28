@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
-use Kreait\Firebase\Database;
+use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 abstract class DatabaseTestCase extends IntegrationTestCase

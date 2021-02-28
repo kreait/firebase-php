@@ -6,10 +6,11 @@ namespace Kreait\Firebase\Tests\Integration;
 
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Utils;
-use Kreait\Firebase\Auth;
 use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
+use Kreait\Firebase\Auth\UserRecord;
+use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
@@ -190,7 +191,7 @@ class AuthTest extends IntegrationTestCase
 
         $count = 0;
         foreach ($userRecords as $userData) {
-            $this->assertInstanceOf(Auth\UserRecord::class, $userData);
+            $this->assertInstanceOf(UserRecord::class, $userData);
             ++$count;
         }
 
@@ -283,8 +284,8 @@ class AuthTest extends IntegrationTestCase
         $check = $this->auth->getUsers([$one->uid, $two->uid, 'non_existing']);
 
         try {
-            $this->assertInstanceOf(Auth\UserRecord::class, $check[$one->uid]);
-            $this->assertInstanceOf(Auth\UserRecord::class, $check[$two->uid]);
+            $this->assertInstanceOf(UserRecord::class, $check[$one->uid]);
+            $this->assertInstanceOf(UserRecord::class, $check[$two->uid]);
             $this->assertNull($check['non_existing']);
         } finally {
             $this->deleteUser($one);

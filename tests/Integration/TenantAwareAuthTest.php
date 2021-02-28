@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
-use Kreait\Firebase\Auth;
+use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Lcobucci\JWT\Token\Plain;
 

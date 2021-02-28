@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Integration;
 
 use Google\Cloud\Storage\Bucket;
-use Kreait\Firebase\Storage;
+use Kreait\Firebase\Contract\Storage;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 /**

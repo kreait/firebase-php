@@ -1,6 +1,20 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Added
+* All main components of the SDK are now based on Interfaces in the `Kreait\Firebase\Contract` namespace. 
+  This should enable projects implementing the SDK to mock the components more easily (Note: the
+  `Kreait\Firebase\Factory` class is not provided as a contract, and you should not rely 
+  on it in your tests).
+  
+  The added contracts are:
+  * `\Kreait\Firebase\Contract\Auth`
+  * `\Kreait\Firebase\Contract\Database`
+  * `\Kreait\Firebase\Contract\DynamicLinks`
+  * `\Kreait\Firebase\Contract\Firestore`
+  * `\Kreait\Firebase\Contract\RemoteConfig`
+  * `\Kreait\Firebase\Contract\Storage`
+
 ### Changed
 * More explanatory error messages when
   * a requested Realtime Database instance could not be reached

@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use Kreait\Firebase\Contract\RemoteConfig;
 use Kreait\Firebase\Exception\RemoteConfig\ValidationFailed;
 use Kreait\Firebase\Exception\RemoteConfig\VersionMismatch;
 use Kreait\Firebase\Exception\RemoteConfig\VersionNotFound;
-use Kreait\Firebase\RemoteConfig;
+use Kreait\Firebase\RemoteConfig\FindVersions;
 use Kreait\Firebase\RemoteConfig\Parameter;
 use Kreait\Firebase\RemoteConfig\Template;
 use Kreait\Firebase\RemoteConfig\UpdateOrigin;
 use Kreait\Firebase\RemoteConfig\UpdateType;
+use Kreait\Firebase\RemoteConfig\Version;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Throwable;
 
@@ -188,7 +190,7 @@ CONFIG;
 
         $initialVersionNumber = $initialVersion->versionNumber();
 
-        $query = RemoteConfig\FindVersions::all()
+        $query = FindVersions::all()
             ->withLimit(2)
             ->upToVersion($initialVersionNumber);
 
@@ -229,7 +231,7 @@ CONFIG;
         // We only need to know that the first returned value is a version,
         // no need to iterate through all of them
         foreach ($this->remoteConfig->listVersions() as $version) {
-            $this->assertInstanceOf(RemoteConfig\Version::class, $version);
+            $this->assertInstanceOf(Version::class, $version);
 
             return;
         }
