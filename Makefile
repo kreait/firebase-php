@@ -5,19 +5,19 @@ tests: phpstan unit-tests integration-tests
 
 .PHONY: phpstan
 phpstan: ## Performs static code analysis
-	@vendor/bin/phpstan analyse
+	vendor/bin/phpstan analyse
 
 .PHONY: unit-tests
 unit-tests: ## Executes the unit test suite
-	@vendor/bin/phpunit -v --testsuite unit
+	vendor/bin/phpunit -v --testsuite unit
 
 .PHONY: integration-tests
 integration-tests: ## Executes the integration test suite
-	@vendor/bin/phpunit -v --testsuite integration
+	vendor/bin/phpunit -v --testsuite integration
 
 .PHONY: coverage
 coverage: ## Executes the test suite and generates code coverage reports
-	@vendor/bin/phpunit -v --coverage-html=build/coverage
+	php -dxdebug.mode=coverage vendor/bin/phpunit -v --coverage-html=build/coverage
 
 .PHONY: view-coverage
 view-coverage: ## Shows the code coverage report
@@ -30,6 +30,11 @@ docs: ## Builds the documentation
 .PHONY: view-docs
 view-docs: ## Shows the documentation
 	php -S localhost:1338 -t docs/_build/html
+
+.PHONY: clean
+clean:
+	rm -rf build/*
+	rm -rf docs/_build/*
 
 .PHONY: help
 help:

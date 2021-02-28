@@ -57,6 +57,8 @@ class DatabaseApiExceptionConverter
                 return new Database\PermissionDenied($message, $code, $e);
             case StatusCode::STATUS_PRECONDITION_FAILED:
                 return new Database\PreconditionFailed($message, $code, $e);
+            case StatusCode::STATUS_NOT_FOUND:
+                return Database\DatabaseNotFound::fromUri($e->getRequest()->getUri());
         }
 
         return new DatabaseError($message, $code, $e);

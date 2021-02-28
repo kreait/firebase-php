@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Database;
 
 use Kreait\Firebase\Database\Query\Filter;
 use Kreait\Firebase\Database\Query\Sorter;
+use Kreait\Firebase\Exception\Database\DatabaseNotFound;
 use Kreait\Firebase\Exception\Database\UnsupportedQuery;
 use Kreait\Firebase\Exception\DatabaseException;
 use Psr\Http\Message\UriInterface;
@@ -66,6 +67,8 @@ class Query
     {
         try {
             $value = $this->apiClient->get($this->getUri());
+        } catch (DatabaseNotFound $e) {
+            throw $e;
         } catch (DatabaseException $e) {
             throw new UnsupportedQuery($this, $e->getMessage(), $e->getCode(), $e->getPrevious());
         }

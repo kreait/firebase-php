@@ -18,9 +18,6 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">src/Firebase</directory>
-            <exclude>
-                <file>src/Firebase.php</file>
-            </exclude>
         </whitelist>
     </filter>
 

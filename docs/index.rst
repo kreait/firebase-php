@@ -40,7 +40,7 @@ Quick Start
 
     $factory = (new Factory)
         ->withServiceAccount('/path/to/firebase_credentials.json')
-        ->withDatabaseUri('https://my-project.firebaseio.com');
+        ->withDatabaseUri('https://my-project-default-rtdb.firebaseio.com');
 
     $auth = $factory->createAuth();
     $realtimeDatabase = $factory->createDatabase();

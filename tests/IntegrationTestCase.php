@@ -17,7 +17,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     /** @var Factory */
     protected static $factory;
 
-    /** @var ServiceAccount|null */
+    /** @var ServiceAccount */
     protected static $serviceAccount;
 
     /** @var string[] */
@@ -25,11 +25,13 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$serviceAccount = self::credentialsFromEnvironment() ?? self::credentialsFromFile();
+        $credentials = self::credentialsFromEnvironment() ?? self::credentialsFromFile();
 
-        if (!self::$serviceAccount) {
+        if (!$credentials) {
             self::markTestSkipped('The integration tests require credentials');
         }
+
+        self::$serviceAccount = $credentials;
 
         self::$factory = (new Factory())->withServiceAccount(self::$serviceAccount);
 

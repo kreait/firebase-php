@@ -11,11 +11,11 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\Exception\Database\ApiConnectionFailed;
 use Kreait\Firebase\Exception\Database\DatabaseError;
+use Kreait\Firebase\Exception\Database\DatabaseNotFound;
 use Kreait\Firebase\Exception\Database\PermissionDenied;
 use Kreait\Firebase\Exception\DatabaseApiExceptionConverter;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Kreait\Firebase\Util\JSON;
-use Psr\Http\Message\RequestInterface;
 
 /**
  * @internal
@@ -25,9 +25,13 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
     /** @var DatabaseApiExceptionConverter */
     private $converter;
 
+    /** @var Request */
+    private $request;
+
     protected function setUp(): void
     {
         $this->converter = new DatabaseApiExceptionConverter();
+        $this->request = new Request('GET', 'https://my-project.firebaseio.com');
     }
 
     /**
@@ -37,7 +41,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
     {
         $requestExcpeption = new RequestException(
             'Error without valid json',
-            new Request('GET', 'https://domain.tld'),
+            $this->request,
             new Response(400, [], $responseBody = '{"what is this"')
         );
 
@@ -54,7 +58,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
     {
         $connectException = new ConnectException(
             'curl error xx',
-            $this->createMock(RequestInterface::class)
+            $this->request
         );
 
         $this->assertInstanceOf(ApiConnectionFailed::class, $this->converter->convertException($connectException));
@@ -70,7 +74,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         // see https://firebase.google.com/docs/reference/rest/auth/#section-error-response
         $e = new ClientException(
             'Unused',
-            $this->createMock(RequestInterface::class),
+            $this->request,
             new Response(400, [], '{"error": {"message": "Foo"}}')
         );
 
@@ -87,7 +91,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
     {
         $e = new ClientException(
             'Foo',
-            $this->createMock(RequestInterface::class),
+            $this->request,
             new Response(401, [], JSON::encode(['error' => 'Permission denied']))
         );
 
@@ -103,7 +107,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
     {
         $e = new ClientException(
             'Foo',
-            $this->createMock(RequestInterface::class),
+            $this->request,
             new Response(403, [], JSON::encode(['error' => 'Permission denied']))
         );
 
@@ -115,11 +119,27 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
     /**
      * @test
      */
+    public function it_converts_a_404_response_to_a_database_not_found_error(): void
+    {
+        $e = new ClientException(
+            'Foo',
+            $this->request,
+            new Response(404, [], JSON::encode(['error' => 'Not found']))
+        );
+
+        $result = $this->converter->convertException($e);
+
+        $this->assertInstanceOf(DatabaseNotFound::class, $result);
+    }
+
+    /**
+     * @test
+     */
     public function it_uses_the_response_body_as_message_when_no_json_is_present(): void
     {
         $e = new ClientException(
             'Foo',
-            $this->createMock(RequestInterface::class),
+            $this->request,
             new Response(500, [], $body = '<html><body>Some server exception</body></html>')
         );
         $result = $this->converter->convertException($e);

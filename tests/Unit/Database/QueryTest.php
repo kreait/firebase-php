@@ -9,6 +9,7 @@ use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Query;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Exception\Database\DatabaseError;
+use Kreait\Firebase\Exception\Database\DatabaseNotFound;
 use Kreait\Firebase\Exception\Database\UnsupportedQuery;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Throwable;
@@ -113,11 +114,19 @@ class QueryTest extends UnitTestCase
             ->method('get')->with($this->anything())
             ->willThrowException(new DatabaseError('foo index not defined bar'));
 
-        try {
-            $this->query->getSnapshot();
-            $this->fail('An exception should have been thrown');
-        } catch (Throwable $e) {
-            $this->assertInstanceOf(UnsupportedQuery::class, $e);
-        }
+        $this->expectException(UnsupportedQuery::class);
+
+        $this->query->getSnapshot();
+    }
+
+    public function testWithNonExistingDatabase(): void
+    {
+        $this->apiClient
+            ->method('get')->with($this->anything())
+            ->willThrowException(DatabaseNotFound::fromUri(new Uri('https://database-name.firebaseio.com')));
+
+        $this->expectException(DatabaseNotFound::class);
+
+        $this->query->getSnapshot();
     }
 }
