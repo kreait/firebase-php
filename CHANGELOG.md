@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+
+## [5.15.0] - 2021-03-01
 ### Added
 * All main components of the SDK are now based on Interfaces in the `Kreait\Firebase\Contract` namespace. 
   This should enable projects implementing the SDK to mock the components more easily (Note: the
@@ -200,7 +202,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.14.1...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.15.0...HEAD
+[5.15.0]: https://github.com/kreait/firebase-php/compare/5.14.1...5.15.0
 [5.14.1]: https://github.com/kreait/firebase-php/compare/5.14.0...5.14.1
 [5.14.0]: https://github.com/kreait/firebase-php/compare/5.13.0...5.14.0
 [5.13.0]: https://github.com/kreait/firebase-php/compare/5.12.0...5.13.0
