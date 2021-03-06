@@ -15,7 +15,7 @@ final class CreateActionLink
     /** @var Email */
     private $email;
 
-    /** @var ActionCodeSettings */
+    /** @var ActionCodeSettings|null */
     private $settings;
 
     private function __construct()

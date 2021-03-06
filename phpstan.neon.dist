@@ -19,3 +19,8 @@ parameters:
 		-
 			message: '#Parameter .+ expects .+, .+ given#'
 			path: tests
+
+	checkUninitializedProperties: true
+
+includes:
+	- vendor/phpstan/phpstan/conf/bleedingEdge.neon
