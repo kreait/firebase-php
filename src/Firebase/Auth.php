@@ -246,8 +246,10 @@ class Auth implements Contract\Auth
                 : ValidatedActionCodeSettings::fromArray($actionCodeSettings);
         }
 
+        $tenantId = $this->tenantId ? $this->tenantId->toString() : null;
+
         return (new CreateActionLink\GuzzleApiClientHandler($this->client))
-            ->handle(CreateActionLink::new($type, $email, $actionCodeSettings));
+            ->handle(CreateActionLink::new($type, $email, $actionCodeSettings, $tenantId));
     }
 
     public function sendEmailActionLink(string $type, $email, $actionCodeSettings = null, ?string $locale = null): void
@@ -262,7 +264,9 @@ class Auth implements Contract\Auth
                 : ValidatedActionCodeSettings::fromArray($actionCodeSettings);
         }
 
-        $createAction = CreateActionLink::new($type, $email, $actionCodeSettings);
+        $tenantId = $this->tenantId ? $this->tenantId->toString() : null;
+
+        $createAction = CreateActionLink::new($type, $email, $actionCodeSettings, $tenantId);
         $sendAction = new SendActionLink($createAction, $locale);
 
         if (\mb_strtolower($type) === 'verify_email') {

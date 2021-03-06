@@ -38,6 +38,11 @@ final class SendActionLink
         return $this->action->settings();
     }
 
+    public function tenantId(): ?string
+    {
+        return $this->action->tenantId();
+    }
+
     public function locale(): ?string
     {
         return $this->locale;

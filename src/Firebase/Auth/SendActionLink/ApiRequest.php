@@ -18,10 +18,11 @@ final class ApiRequest implements RequestInterface
     {
         $uri = Utils::uriFor('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode');
 
-        $data = [
+        $data = \array_filter([
             'requestType' => $action->type(),
             'email' => $action->email(),
-        ] + $action->settings()->toArray();
+            'tenantId' => $action->tenantId(),
+        ]) + $action->settings()->toArray();
 
         if ($idTokenString = $action->idTokenString()) {
             $data['idToken'] = $idTokenString;

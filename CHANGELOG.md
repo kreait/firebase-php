@@ -1,12 +1,16 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Fixed
+* It was not possible to send password reset emails to users belonging to a tenant. 
+  ([#573](https://github.com/kreait/firebase-php/issues/573))
 ### Changed
 * FCM Data Payloads are now checked for reserved words and prefixes, according to the
   [FCM Data Messages Documentation](https://firebase.google.com/docs/cloud-messaging/concept-options#data_messages).
   Reserved words include "from", "notification," "message_type", or any word starting with "google" or "gcm."
   Instead of throwing an exception after the FCM API has rejected a message, the exception will no be thrown 
-  _before_ sending the message. ([#574](https://github.com/kreait/firebase-php/issues/574))
+  _before_ sending the message. 
+  ([#574](https://github.com/kreait/firebase-php/issues/574))
 
 ## [5.15.0] - 2021-03-01
 ### Added

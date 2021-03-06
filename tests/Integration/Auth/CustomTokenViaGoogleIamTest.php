@@ -55,7 +55,7 @@ class CustomTokenViaGoogleIamTest extends IntegrationTestCase
         $generator = new CustomTokenViaGoogleIam(
             self::$serviceAccount->getClientEmail(),
             self::$factory->createApiClient(),
-            TenantId::fromString($tenantId = 'FirstTenant-fqqqc')
+            TenantId::fromString($tenantId = IntegrationTestCase::TENANT_ID)
         );
 
         $customToken = $generator->createCustomToken('some-uid');

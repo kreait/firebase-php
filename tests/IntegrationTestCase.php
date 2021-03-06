@@ -14,6 +14,8 @@ use Throwable;
 
 abstract class IntegrationTestCase extends FirebaseTestCase
 {
+    public const TENANT_ID = 'FirstTenant-fqqqc';
+
     /** @var Factory */
     protected static $factory;
 
@@ -112,6 +114,9 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         return null;
     }
 
+    /**
+     * @return string[]|null
+     */
     private static function registrationTokensFromFile(): ?array
     {
         $path = self::$fixturesDir.'/test_devices.json';
@@ -131,6 +136,9 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         }
     }
 
+    /**
+     * @return string[]|null
+     */
     private static function registrationTokensFromEnvironment(): ?array
     {
         if (!($tokens = Util::getenv('TEST_REGISTRATION_TOKENS'))) {

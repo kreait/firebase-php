@@ -18,11 +18,12 @@ final class ApiRequest implements RequestInterface
     {
         $uri = Utils::uriFor('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode');
 
-        $data = [
+        $data = \array_filter([
             'requestType' => $action->type(),
             'email' => $action->email(),
             'returnOobLink' => true,
-        ] + $action->settings()->toArray();
+            'tenantId' => $action->tenantId(),
+        ]) + $action->settings()->toArray();
 
         $body = Utils::streamFor(\json_encode($data));
 

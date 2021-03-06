@@ -27,9 +27,13 @@ class AuthTest extends IntegrationTestCase
     /** @var Auth */
     private $auth;
 
+    /** @var Auth */
+    private $tenantAwareAuth;
+
     protected function setUp(): void
     {
         $this->auth = self::$factory->createAuth();
+        $this->tenantAwareAuth = self::$factory->withTenantId(self::TENANT_ID)->createAuth();
     }
 
     public function testCreateAnonymousUser(): void
@@ -120,6 +124,22 @@ class AuthTest extends IntegrationTestCase
         $this->auth->sendEmailVerificationLink((string) $user->email);
 
         $this->deleteUser($user);
+    }
+
+    public function testSendPasswordResetLinkToTenantUser(): void
+    {
+        $user = $this->tenantAwareAuth->createUser([
+            'email' => self::randomEmail(__FUNCTION__),
+            'password' => self::randomString(__FUNCTION__),
+        ]);
+
+        try {
+            $this->tenantAwareAuth->sendPasswordResetLink((string) $user->email);
+            // We can't test the reception, but if we don't get an error, we consider it working
+            $this->addToAssertionCount(1);
+        } finally {
+            $this->tenantAwareAuth->deleteUser($user->uid);
+        }
     }
 
     public function testGetPasswordResetLink(): void
