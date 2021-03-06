@@ -75,6 +75,21 @@ final class MessageDataTest extends TestCase
             'binary data' => [
                 ['key' => \hex2bin('81612bcffb')], // generated with \openssl_random_pseudo_bytes(5)
             ],
+            'reserved_key_from' => [
+                ['from' => 'any'],
+            ],
+            'reserved_key_notification' => [
+                ['notification' => 'any'],
+            ],
+            'reserved_key_message_type' => [
+                ['message_type' => 'any'],
+            ],
+            'reserved_key_prefix_google' => [
+                ['google_is_reserved' => 'any'],
+            ],
+            'reserved_key_prefix_gcm' => [
+                ['gcm_is_reserved' => 'any'],
+            ],
         ];
     }
 }
