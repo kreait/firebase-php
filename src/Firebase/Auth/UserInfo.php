@@ -36,6 +36,7 @@ class UserInfo implements \JsonSerializable
         $info->photoUrl = $data['photoUrl'] ?? null;
         $info->providerId = $data['providerId'] ?? null;
         $info->phoneNumber = $data['phoneNumber'] ?? null;
+        $info->screenName = $data['screenName'] ?? null;
 
         return $info;
     }
