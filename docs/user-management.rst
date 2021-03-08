@@ -34,6 +34,7 @@ following signature:
             {
                 "uid": "user@domain.tld",
                 "displayName": null,
+                "screenName": null,
                 "email": "user@domain.tld",
                 "photoUrl": null,
                 "providerId": "password",

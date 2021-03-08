@@ -1,6 +1,9 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Added
+* Added `screenName` property to the provider data of a user record
+  ([#575](https://github.com/kreait/firebase-php/pull/575))
 
 ## [5.22.0] - 2021-07-31
 ### Added
