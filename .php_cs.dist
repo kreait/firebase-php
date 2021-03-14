@@ -9,7 +9,6 @@ return PhpCsFixer\Config::create()
     ->setUsingCache(true)
     ->setRiskyAllowed(true)
     ->setRules([
-        '@Symfony' => true,
         'align_multiline_comment' => true,
         'array_indentation' => true,
         'array_syntax' => ['syntax' => 'short'],
@@ -43,7 +42,6 @@ return PhpCsFixer\Config::create()
         'phpdoc_no_empty_return' => true,
         'php_unit_expectation' => true,
         'php_unit_internal_class' => true,
-        'php_unit_method_casing' => null, // keep it as it is
         'php_unit_mock' => true,
         'php_unit_mock_short_will_return' => true,
         'php_unit_namespaced' => true,
