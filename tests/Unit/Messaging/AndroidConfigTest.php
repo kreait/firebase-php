@@ -39,6 +39,18 @@ class AndroidConfigTest extends UnitTestCase
 
     /**
      * @test
+     */
+    public function it_can_have_a_priority(): void
+    {
+        $config = AndroidConfig::new()->withNormalPriority();
+        $this->assertSame('normal', $config->jsonSerialize()['priority']);
+
+        $config = AndroidConfig::new()->withHighPriority();
+        $this->assertSame('high', $config->jsonSerialize()['priority']);
+    }
+
+    /**
+     * @test
      * @dataProvider validDataProvider
      */
     public function it_can_be_created_from_an_array(array $data): void
@@ -60,6 +72,7 @@ class AndroidConfigTest extends UnitTestCase
                     'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
                     'icon' => 'stock_ticker_update',
                     'color' => '#f45342',
+                    'sound' => 'default',
                 ],
             ]],
         ];

@@ -420,6 +420,9 @@ The SDK provides helper methods to add sounds to messages:
 * ``ApnsConfig::withDefaultSound()``
 * ``ApnsConfig::withSound($sound)``
 
+.. note::
+    WebPush notification don't support the inclusion of sounds.
+
 .. code-block:: php
 
     $message = CloudMessage::withTarget('token', $token)
@@ -429,6 +432,70 @@ The SDK provides helper methods to add sounds to messages:
             ApnsConfig::new()
                 ->withSound('bingbong.aiff')
                 ->withBadge(1)
+        )
+    ;
+
+****************
+Message Priority
+****************
+
+The SDK provides helper methods to define the priority of a message.
+
+.. note::
+    You can learn more about message priorities for the different target platforms at
+    `Setting the priority of a message <https://firebase.google.com/docs/cloud-messaging/concept-options#setting-the-priority-of-a-message>`_
+    in the official Firebase documentation.
+
+.. note::
+    Setting a message priority is optional. If you don't set a priority, the Firebase backend or the target
+    platform uses their defined defaults.
+
+Android
+-------
+
+* ``AndroidConfig::withNormalPriority()``
+* ``AndroidConfig::withHighPriority()``
+* ``AndroidConfig::withPriority(string $priority)``
+
+iOS (APNS)
+----------
+
+* ``ApnsConfig::withPowerConservingPriority()``
+* ``ApnsConfig::withImmediatePriority()``
+* ``ApnsConfig::withPriority(string $priority)``
+
+Web
+---
+* ``WebPushConfig::withVeryLowUrgency()``
+* ``WebPushConfig::withLowUrgency()``
+* ``WebPushConfig::withNormalUrgency()``
+* ``WebPushConfig::withHighUrgency()``
+* ``WebPushConfig::withUrgency(string $urgency)``
+
+Combined
+--------
+
+* ``CloudMessage::withLowestPossiblePriority()``
+* ``CloudMessage::withHighestPossiblePriority()``
+
+Example
+-------
+
+.. code-block:: php
+
+    $message = CloudMessage::withTarget('token', $token)
+        ->withNotification([
+            'title' => 'If you had an iOS device…',
+            'body' => '… you would have received a very important message'
+        ])
+        ->withLowestPossiblePriority()
+        ->withApnsConfig(
+            ApnsConfig::new()
+                ->withImmediatePriority()
+                ->withNotification([
+                    'title => 'A very important message…',
+                    'body' => '… that requires your immediate attention.'
+                ])
         )
     ;
 
@@ -502,6 +569,9 @@ Sending a fully configured raw message
             ],
             'webpush' => [
                 // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
+                'headers' => [
+                    'Urgency' => 'normal',
+                ],
                 'notification' => [
                     'title' => '$GOOG up 1.43% on the day',
                     'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',

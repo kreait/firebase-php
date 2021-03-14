@@ -69,6 +69,18 @@ class ApnsConfigTest extends UnitTestCase
         $this->assertEquals($data, $config->jsonSerialize());
     }
 
+    /**
+     * @test
+     */
+    public function it_can_have_a_priority(): void
+    {
+        $config = ApnsConfig::new()->withImmediatePriority();
+        $this->assertSame('10', $config->jsonSerialize()['headers']['apns-priority']);
+
+        $config = ApnsConfig::new()->withPowerConservingPriority();
+        $this->assertSame('5', $config->jsonSerialize()['headers']['apns-priority']);
+    }
+
     public function validDataProvider()
     {
         return [
@@ -84,6 +96,7 @@ class ApnsConfigTest extends UnitTestCase
                             'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
                         ],
                         'badge' => 42,
+                        'sound' => 'default',
                     ],
                 ],
             ]],
