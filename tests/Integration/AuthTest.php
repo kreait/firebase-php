@@ -713,4 +713,20 @@ class AuthTest extends IntegrationTestCase
             $this->deleteUser($user);
         }
     }
+
+    public function testVerifyIdTokenAcceptsResultFromParseToken(): void
+    {
+        $signInResult = $this->auth->signInAnonymously();
+
+        try {
+            $idToken = $signInResult->idToken();
+
+            $parsedToken = $this->auth->parseToken($idToken);
+            $this->auth->verifyIdToken($parsedToken);
+
+            $this->addToAssertionCount(1);
+        } finally {
+            $this->deleteUser($signInResult->firebaseUserId());
+        }
+    }
 }
