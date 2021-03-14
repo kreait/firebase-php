@@ -186,13 +186,33 @@ final class CloudMessage implements Message
     }
 
     /**
-     * Enables default notifications sounds on iOS and Android devices.
+     * Enables default notifications sounds on iOS and Android devices. WebPush doesn't support sounds.
      */
     public function withDefaultSounds(): self
     {
         $new = clone $this;
         $new->apnsConfig = ($new->apnsConfig ?: ApnsConfig::new())->withDefaultSound();
         $new->androidConfig = ($new->androidConfig ?: AndroidConfig::new())->withDefaultSound();
+
+        return $new;
+    }
+
+    public function withLowestPossiblePriority(): self
+    {
+        $new = clone $this;
+        $new->apnsConfig = ($new->apnsConfig ?: ApnsConfig::new())->withPowerConservingPriority();
+        $new->androidConfig = ($new->androidConfig ?: AndroidConfig::new())->withNormalPriority();
+        $new->webPushConfig = ($new->webPushConfig ?: WebPushConfig::new())->withVeryLowUrgency();
+
+        return $new;
+    }
+
+    public function withHighestPossiblePriority(): self
+    {
+        $new = clone $this;
+        $new->apnsConfig = ($new->apnsConfig ?: ApnsConfig::new())->withImmediatePriority();
+        $new->androidConfig = ($new->androidConfig ?: AndroidConfig::new())->withHighPriority();
+        $new->webPushConfig = ($new->webPushConfig ?: WebPushConfig::new())->withHighUrgency();
 
         return $new;
     }

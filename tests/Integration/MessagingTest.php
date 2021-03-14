@@ -78,6 +78,9 @@ class MessagingTest extends IntegrationTestCase
             ],
             'webpush' => [
                 // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
+                'headers' => [
+                    'Urgency' => 'normal',
+                ],
                 'notification' => [
                     'title' => '$GOOG up 1.43% on the day',
                     'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',

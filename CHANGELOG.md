@@ -1,6 +1,9 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Added
+* Helper methods to specify a message priority
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#message-priority))
 
 ## [5.16.0] - 2021-03-07
 ### Fixed

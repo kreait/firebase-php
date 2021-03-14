@@ -94,6 +94,48 @@ class CloudMessageTest extends TestCase
         );
     }
 
+    public function testWithLowestPossiblePriority(): void
+    {
+        $message = CloudMessage::new()->withLowestPossiblePriority();
+
+        $payload = \json_decode(\json_encode($message), true);
+
+        $this->assertArrayHasKey('android', $payload);
+        $this->assertArrayHasKey('priority', $payload['android']);
+        $this->assertSame('normal', $payload['android']['priority']);
+
+        $this->assertArrayHasKey('apns', $payload);
+        $this->assertArrayHasKey('headers', $payload['apns']);
+        $this->assertArrayHasKey('apns-priority', $payload['apns']['headers']);
+        $this->assertSame('5', $payload['apns']['headers']['apns-priority']);
+
+        $this->assertArrayHasKey('webpush', $payload);
+        $this->assertArrayHasKey('headers', $payload['webpush']);
+        $this->assertArrayHasKey('Urgency', $payload['webpush']['headers']);
+        $this->assertSame('very-low', $payload['webpush']['headers']['Urgency']);
+    }
+
+    public function testWithHighesPossiblePriority(): void
+    {
+        $message = CloudMessage::new()->withHighestPossiblePriority();
+
+        $payload = \json_decode(\json_encode($message), true);
+
+        $this->assertArrayHasKey('android', $payload);
+        $this->assertArrayHasKey('priority', $payload['android']);
+        $this->assertSame('high', $payload['android']['priority']);
+
+        $this->assertArrayHasKey('apns', $payload);
+        $this->assertArrayHasKey('headers', $payload['apns']);
+        $this->assertArrayHasKey('apns-priority', $payload['apns']['headers']);
+        $this->assertSame('10', $payload['apns']['headers']['apns-priority']);
+
+        $this->assertArrayHasKey('webpush', $payload);
+        $this->assertArrayHasKey('headers', $payload['webpush']);
+        $this->assertArrayHasKey('Urgency', $payload['webpush']['headers']);
+        $this->assertSame('high', $payload['webpush']['headers']['Urgency']);
+    }
+
     public function multipleTargets()
     {
         return [
