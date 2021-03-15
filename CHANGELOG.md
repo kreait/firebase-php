@@ -4,6 +4,12 @@
 ### Added
 * Helper methods to specify a message priority
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#message-priority))
+### Changed
+* `giggsey/libphonenumber-for-php` is now an _optional_ dependency instead of a required one. It can be used
+  to validate a phone number before sending it to the Firebase Servers, where an invalid phone number will
+  be rejected anyway. If you want to continue using the "pre"-validation, please add the library to your
+  project's direct dependencies, e.g. with `composer require "giggsey/libphonenumber-for-php:^8.9"`.
+  ([#577](https://github.com/kreait/firebase-php/discussions/577))
 
 ## [5.16.0] - 2021-03-07
 ### Fixed
