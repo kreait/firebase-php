@@ -19,15 +19,19 @@ class PhoneNumber implements \JsonSerializable
      */
     public function __construct(string $value)
     {
-        $util = PhoneNumberUtil::getInstance();
+        if (\class_exists(PhoneNumberUtil::class)) {
+            $util = PhoneNumberUtil::getInstance();
 
-        try {
-            $parsed = $util->parse($value);
-        } catch (NumberParseException $e) {
-            throw new InvalidArgumentException('Invalid phone number: '.$e->getMessage());
+            try {
+                $parsed = $util->parse($value);
+            } catch (NumberParseException $e) {
+                throw new InvalidArgumentException('Invalid phone number: '.$e->getMessage());
+            }
+
+            $value = $util->format($parsed, PhoneNumberFormat::E164);
         }
 
-        $this->value = $util->format($parsed, PhoneNumberFormat::E164);
+        $this->value = $value;
     }
 
     public function __toString(): string

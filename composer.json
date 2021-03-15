@@ -21,7 +21,6 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
-        "giggsey/libphonenumber-for-php": "^8.9",
         "google/auth": "^1.8",
         "google/cloud-core": "^1.36",
         "google/cloud-storage": "^1.14",
@@ -38,6 +37,7 @@
         "riverline/multipart-parser": "^2.0"
     },
     "require-dev": {
+        "giggsey/libphonenumber-for-php": "^8.9",
         "google/cloud-firestore": "^1.11",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12.53",
@@ -46,7 +46,8 @@
         "symfony/var-dumper": "^5.0"
     },
     "suggest": {
-        "google/cloud-firestore": "^1.0 to use the Firestore component"
+        "google/cloud-firestore": "^1.0 to use the Firestore component",
+        "giggsey/libphonenumber-for-php": "^8.9 to validate phone numbers before attempting to send them to Firebase"
     },
     "autoload": {
         "psr-4": {
