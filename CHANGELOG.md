@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+
+## [5.17.0] - 2021-03-21
 ### Added
 * Helper methods to specify a message priority
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#message-priority))
@@ -223,7 +225,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.16.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.17.0...HEAD
+[5.17.0]: https://github.com/kreait/firebase-php/compare/5.16.0...5.17.0
 [5.16.0]: https://github.com/kreait/firebase-php/compare/5.15.0...5.16.0
 [5.15.0]: https://github.com/kreait/firebase-php/compare/5.14.1...5.15.0
 [5.14.1]: https://github.com/kreait/firebase-php/compare/5.14.0...5.14.1
