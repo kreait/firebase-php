@@ -12,18 +12,6 @@ use Kreait\Firebase\Factory;
  */
 class DatabaseTest extends DatabaseTestCase
 {
-    public function testWithSanitizableProjectId(): void
-    {
-        $credentials = self::$serviceAccount->asArray();
-        $credentials['project_id'] = \str_replace('-&+§', ':', $credentials['project_id']);
-
-        (new Factory())
-            ->withServiceAccount($credentials)
-            ->createDatabase()
-            ->getRuleSet();
-        $this->addToAssertionCount(1);
-    }
-
     public function testWithNonExistingDatabase(): void
     {
         $credentials = self::$serviceAccount->asArray();

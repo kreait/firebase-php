@@ -16,12 +16,9 @@ class TenantAwareAuthTest extends IntegrationTestCase
     /** @var Auth */
     private $auth;
 
-    /** @var string */
-    private $tenant = 'FirstTenant-fqqqc';
-
     protected function setUp(): void
     {
-        $this->auth = self::$factory->withTenantId($this->tenant)->createAuth();
+        $this->auth = self::$factory->withTenantId(self::TENANT_ID)->createAuth();
     }
 
     /**
@@ -35,7 +32,7 @@ class TenantAwareAuthTest extends IntegrationTestCase
         );
 
         try {
-            $this->assertSame($this->tenant, $user->tenantId);
+            $this->assertSame(self::TENANT_ID, $user->tenantId);
         } finally {
             $this->auth->deleteUser($user->uid);
         }
@@ -49,7 +46,7 @@ class TenantAwareAuthTest extends IntegrationTestCase
         $token = $this->auth->createCustomToken('some-uid');
 
         $this->assertInstanceOf(Plain::class, $token);
-        $this->assertSame($this->tenant, $token->claims()->get('tenant_id'));
+        $this->assertSame(self::TENANT_ID, $token->claims()->get('tenant_id'));
     }
 
     public function it_can_sign_in_anonymously(): void
@@ -57,7 +54,7 @@ class TenantAwareAuthTest extends IntegrationTestCase
         $result = $this->auth->signInAnonymously();
 
         try {
-            $this->assertSame($this->tenant, $result->firebaseTenantId());
+            $this->assertSame(self::TENANT_ID, $result->firebaseTenantId());
             $this->auth->verifyIdToken($result->idToken());
         } finally {
             $this->auth->deleteUser($result->firebaseUserId());
@@ -73,7 +70,7 @@ class TenantAwareAuthTest extends IntegrationTestCase
         $result = $this->auth->signInAsUser($user);
 
         try {
-            $this->assertSame($this->tenant, $result->firebaseTenantId());
+            $this->assertSame(self::TENANT_ID, $result->firebaseTenantId());
             $this->auth->verifyIdToken($result->idToken());
         } finally {
             $this->auth->deleteUser($result->firebaseUserId());

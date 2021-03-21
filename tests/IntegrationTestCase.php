@@ -14,7 +14,7 @@ use Throwable;
 
 abstract class IntegrationTestCase extends FirebaseTestCase
 {
-    public const TENANT_ID = 'FirstTenant-fqqqc';
+    public const TENANT_ID = 'Beste-lgiu8';
 
     /** @var Factory */
     protected static $factory;

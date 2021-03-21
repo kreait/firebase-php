@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Contract\DynamicLinks;
+use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink\FailedToGetStatisticsForDynamicLink;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
@@ -17,7 +18,7 @@ final class DynamicLinksTest extends IntegrationTestCase
     private $service;
 
     /** @var string */
-    private $domain = 'https://nvpd4.app.goo.gl';
+    private $domain = 'https://beste.page.link';
 
     protected function setUp(): void
     {

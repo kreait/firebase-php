@@ -25,7 +25,7 @@ html_theme = 'sphinx_rtd_theme'
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_theme_options = {
     'canonical_url': 'https://firebase-php.readthedocs.io',
-    'analytics_id': 'UA-82654714-3'
+    'analytics_id': 'G-KPCRZZ3XW4'
 }
 
 ### Syntax Highlighting
