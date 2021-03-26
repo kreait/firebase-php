@@ -88,12 +88,11 @@ the auth / request.auth objects in your Security Rules:
 
     $customToken = $auth->createCustomToken($uid, $additionalClaims);
 
-    $customTokenString = (string) $customToken;
+    $customTokenString = $customToken->toString();
 
 .. note::
     This library uses `lcobucci/jwt <https://github.com/lcobucci/jwt>`_ to work with JSON Web Tokens (JWT).
-    You can find the usage instructions at
-    `https://github.com/lcobucci/jwt/blob/3.2/README.md <https://github.com/lcobucci/jwt/blob/3.2/README.md>`_.
+    You can find the usage instructions at `https://lcobucci-jwt.readthedocs.io/ <https://lcobucci-jwt.readthedocs.io/>`_.
 
 .. _verify-a-firebase-id-token:
 
