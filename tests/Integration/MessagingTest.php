@@ -11,7 +11,6 @@ use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\RawMessageFromArray;
-use Kreait\Firebase\Messaging\SendReport;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 /**
