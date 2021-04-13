@@ -118,6 +118,28 @@ class MessagingTest extends IntegrationTestCase
         $this->assertArrayHasKey('name', $result);
     }
 
+    /**
+     * @dataProvider reservedKeywordsThatStillAreAccepted
+     */
+    public function testSendMessageWithReservedKeywordInMessageDataThatIsStillAccepted(string $keyword): void
+    {
+        $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
+            ->withData([$keyword => 'value']);
+
+        $this->messaging->send($message);
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * @return array<string, string[]>
+     */
+    public function reservedKeywordsThatStillAreAccepted(): array
+    {
+        return [
+            'notification' => ['notification'],
+        ];
+    }
+
     public function testValidateValidMessage(): void
     {
         $message = self::createFullMessageData();

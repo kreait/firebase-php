@@ -78,9 +78,12 @@ final class MessageDataTest extends TestCase
             'reserved_key_from' => [
                 ['from' => 'any'],
             ],
+            // // According to the docs, "notification" is reserved, but it's still accepted ¯\_(ツ)_/¯
+            /*
             'reserved_key_notification' => [
                 ['notification' => 'any'],
             ],
+            */
             'reserved_key_message_type' => [
                 ['message_type' => 'any'],
             ],

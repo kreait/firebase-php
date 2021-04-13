@@ -1,6 +1,11 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Fixed
+* [5.16.0] introduced a check for reserved words and prefixes in FCM Data Payloads - although stated
+  otherwise in the official documentation, the keyword `notification` is _not_ be rejected by the
+  Firebase API, causing projects to break that used it and updated the SDK. This release removes
+  the check for this key.
 
 ## [5.17.0] - 2021-03-21
 ### Added
