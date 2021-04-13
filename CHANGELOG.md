@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [Unreleased]
+## [5.17.1] - 2021-04-13
 ### Fixed
 * [5.16.0] introduced a check for reserved words and prefixes in FCM Data Payloads - although stated
   otherwise in the official documentation, the keyword `notification` is _not_ be rejected by the
@@ -230,7 +230,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.17.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.17.1...HEAD
+[5.17.1]: https://github.com/kreait/firebase-php/compare/5.17.0...5.17.1
 [5.17.0]: https://github.com/kreait/firebase-php/compare/5.16.0...5.17.0
 [5.16.0]: https://github.com/kreait/firebase-php/compare/5.15.0...5.16.0
 [5.15.0]: https://github.com/kreait/firebase-php/compare/5.14.1...5.15.0
