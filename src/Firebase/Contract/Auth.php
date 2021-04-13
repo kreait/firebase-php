@@ -19,6 +19,7 @@ use Kreait\Firebase\Exception;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\OperationNotAllowed;
+use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Request;
@@ -286,6 +287,7 @@ interface Auth
      * @throws ExpiredToken if the token is expired
      * @throws IssuedInTheFuture if the token is issued in the future
      * @throws UnknownKey if the token's kid header doesnt' contain a known key
+     * @throws RevokedIdToken if the token has been revoked
      */
     public function verifyIdToken($idToken, bool $checkIfRevoked = false): Token;
 
