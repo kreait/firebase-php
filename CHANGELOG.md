@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [Unreleased]
+### Added
+* Added support for more public keys from Google that ID Tokens could have been signed with. 
+
 ## [5.17.1] - 2021-04-13
 ### Fixed
 * [5.16.0] introduced a check for reserved words and prefixes in FCM Data Payloads - although stated
