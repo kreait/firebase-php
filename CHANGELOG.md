@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+
+## [5.18.0] - 2021-04-19
 ### Added
 * Added support for more public keys from Google that ID Tokens could have been signed with. 
 
@@ -234,7 +236,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.17.1...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.18.0...HEAD
+[5.18.0]: https://github.com/kreait/firebase-php/compare/5.17.1...5.18.0
 [5.17.1]: https://github.com/kreait/firebase-php/compare/5.17.0...5.17.1
 [5.17.0]: https://github.com/kreait/firebase-php/compare/5.16.0...5.17.0
 [5.16.0]: https://github.com/kreait/firebase-php/compare/5.15.0...5.16.0
