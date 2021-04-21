@@ -1,6 +1,11 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Changed
+* `CloudMessage::withData()` allowed the message data to be empty, resulting in the Firebase
+  API rejecting the message. If the message data is empty, the field is now removed before
+  sending the message.
+  ([#591](https://github.com/kreait/firebase-php/issues/591))
 
 ## [5.18.0] - 2021-04-19
 ### Added
