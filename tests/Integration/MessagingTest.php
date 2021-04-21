@@ -119,6 +119,18 @@ class MessagingTest extends IntegrationTestCase
     }
 
     /**
+     * @see https://github.com/kreait/firebase-php/issues/591
+     */
+    public function testSendingAMessageWithEmptyMessageDataShouldNotFail(): void
+    {
+        $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
+            ->withData([]);
+
+        $this->messaging->send($message);
+        $this->addToAssertionCount(1);
+    }
+
+    /**
      * @dataProvider reservedKeywordsThatStillAreAccepted
      */
     public function testSendMessageWithReservedKeywordInMessageDataThatIsStillAccepted(string $keyword): void
