@@ -1,6 +1,11 @@
 # CHANGELOG
 
 ## [Unreleased]
+* Added the `startAfter` and `endBefore` filters for the Realtime Database. At the moment they
+  don't seem to have an effect on the returned results (just as if they didn't exist); it's
+  unclear if the implementation is incorrect or if the REST API doesn't support the new
+  filters yet. If you see why it's not working or if it _does_ work for you, please
+  let me know.
 ### Changed
 * `CloudMessage::withData()` allowed the message data to be empty, resulting in the Firebase
   API rejecting the message. If the message data is empty, the field is now removed before

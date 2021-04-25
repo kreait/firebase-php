@@ -171,11 +171,11 @@ class Reference
     }
 
     /**
-     * Creates a Query with the specified starting point.
+     * Creates a Query with the specified starting point (inclusive).
      *
      * @see Query::startAt()
      *
-     * @param int|float|string|bool $value $value
+     * @param int|float|string|bool $value
      */
     public function startAt($value): Query
     {
@@ -183,7 +183,19 @@ class Reference
     }
 
     /**
-     * Creates a Query with the specified ending point.
+     * Creates a Query with the specified starting point (exclusive).
+     *
+     * @see Query::startAfter()
+     *
+     * @param int|float|string|bool $value
+     */
+    public function startAfter($value): Query
+    {
+        return $this->query()->startAfter($value);
+    }
+
+    /**
+     * Creates a Query with the specified ending point (inclusive).
      *
      * @see Query::endAt()
      *
@@ -192,6 +204,18 @@ class Reference
     public function endAt($value): Query
     {
         return $this->query()->endAt($value);
+    }
+
+    /**
+     * Creates a Query with the specified ending point (exclusive).
+     *
+     * @see Query::endBefore()
+     *
+     * @param int|float|string|bool $value
+     */
+    public function endBefore($value): Query
+    {
+        return $this->query()->endBefore($value);
     }
 
     /**

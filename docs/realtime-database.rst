@@ -231,6 +231,26 @@ startAt
         ->startAt(1.68)
         ->getSnapshot();
 
+startAfter
+----------
+
+.. note::
+
+    The ``startAfter`` query filter has been added to the Firebase JS SDK on 2021-02-11. This PHP SDK
+    implements this in the same way as the other filters, but ``startAfter`` does not seem to have
+    an effect when used with the Firebase REST API. If you happen to know why or you tried it
+    and it does indeed work, please let me know via the SDK's git repo.
+
+.. code-block:: php
+
+    $database->getReference('people')
+        // order the reference's children by the values in the field 'height'
+        ->orderByChild('height')
+        // returns all persons taller than 1.68 (meters)
+        ->startAfter(1.68)
+        ->getSnapshot();
+
+
 endAt
 -----
 
@@ -241,6 +261,25 @@ endAt
         ->orderByChild('height')
         // returns all persons shorter than or exactly 1.98 (meters)
         ->endAt(1.98)
+        ->getSnapshot();
+
+endBefore
+---------
+
+.. note::
+
+    The ``endBefore`` query filter has been added to the Firebase JS SDK on 2021-02-11. This PHP SDK
+    implements this in the same way as the other filters, but ``endBefore`` does not seem to have
+    an effect when used with the Firebase REST API. If you happen to know why or you tried it
+    and it does indeed work, please let me know via the SDK's git repo.
+
+.. code-block:: php
+
+    $database->getReference('people')
+        // order the reference's children by the values in the field 'height'
+        ->orderByChild('height')
+        // returns all persons shorter than 1.98 (meters)
+        ->endBefore(1.98)
         ->getSnapshot();
 
 equalTo
