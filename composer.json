@@ -13,7 +13,8 @@
     "support": {
         "docs": "https://firebase-php.readthedocs.io",
         "issues": "https://github.com/kreait/firebase-php/issues",
-        "source": "https://github.com/kreait/firebase-php"
+        "source": "https://github.com/kreait/firebase-php",
+        "chat": "https://discord.gg/Yacm7unBsr"
     },
     "require": {
         "php": "^7.2|~8.0.0",
