@@ -514,8 +514,6 @@ Firebase Messaging supports Emojis in Messages.
 
     // You can copy and paste an emoji directly into you source code
     $text = "This is an emoji 😀";
-
-    // This only works in PHP ^7.0, double quotes are required
     $text = "This is an emoji \u{1F600}";
 
 

@@ -1,8 +1,11 @@
 # CHANGELOG
 
 ## [Unreleased]
+* Dropped support for unsupported PHP versions. Starting with this release, supported
+  PHP versions are >=7.4 and <8.1.
 
 ## [5.19.0] - 2021-05-09
+### Added
 * Added the `startAfter` and `endBefore` filters for the Realtime Database. At the moment they
   don't seem to have an effect on the returned results (just as if they didn't exist); it's
   unclear if the implementation is incorrect or if the REST API doesn't support the new

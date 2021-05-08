@@ -6,7 +6,7 @@ Overview
 Requirements
 ************
 
-* PHP >= 7.2
+* PHP >= 7.4
 * The `mbstring PHP extension <http://php.net/manual/en/book.mbstring.php>`_
 * A Firebase project - create a new project in the `Firebase console <https://firebase.google.com/console/>`_,
   if you don't already have one.
@@ -99,11 +99,9 @@ Contributing
 Guidelines
 ==========
 
-#. The SDK utilizes PSR-1, PSR-2, PSR-4, and PSR-7.
-#. This SDK has a minimum PHP version requirement of PHP 7.2. Pull requests must
-   not require a PHP version greater than PHP 7.2 unless the feature is only
-   utilized conditionally.
-#. All pull requests must include unit tests to ensure the change works as
+#. The SDK utilizes PSR-4, PSR-7 and PSR-12.
+#. This SDK has a minimum PHP version requirement of PHP 7.4.
+#. All pull requests should include unit tests to ensure the change works as
    expected and to prevent regressions.
 
 Running the tests
@@ -118,7 +116,7 @@ The SDK is unit tested with PHPUnit. Run the tests using the Makefile:
 Coding standards
 ================
 
-The SDK uses the `PHP Coding Standars Fixer <https://github.com/FriendsOfPHP/PHP-CS-Fixer>`_
+The SDK uses the `PHP Coding Standards Fixer <https://github.com/FriendsOfPHP/PHP-CS-Fixer>`_
 to ensure a uniform coding style. Apply coding standard fixed using the Makefile:
 
 .. code-block:: bash
