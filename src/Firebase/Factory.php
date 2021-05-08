@@ -29,7 +29,6 @@ use Google\Cloud\Storage\StorageClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
-use function GuzzleHttp\Psr7\uri_for;
 use GuzzleHttp\RequestOptions;
 use Kreait\Clock;
 use Kreait\Clock\SystemClock;
@@ -53,6 +52,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Psr\SimpleCache\CacheInterface;
 use Throwable;
+use function GuzzleHttp\Psr7\uri_for;
 
 class Factory
 {

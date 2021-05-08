@@ -162,9 +162,10 @@ class Auth implements Contract\Auth
 
     public function createUserWithEmailAndPassword($email, $password): UserRecord
     {
-        return $this->createUser(Request\CreateUser::new()
-            ->withUnverifiedEmail($email)
-            ->withClearTextPassword($password)
+        return $this->createUser(
+            Request\CreateUser::new()
+                ->withUnverifiedEmail($email)
+                ->withClearTextPassword($password)
         );
     }
 

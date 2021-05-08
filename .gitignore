@@ -3,9 +3,10 @@
 /docs/_build
 /docs/*.pyc
 /tests/_fixtures/test_*
+/tools
 
-/.php_cs
-/.php_cs.cache
+/.php-cs-fixer*
+!/.php-cs-fixer.dist.php
 /.phpunit.result.cache
 /cc-test-reporter
 /composer.lock

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Database;
 
-use function JmesPath\search;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use function JmesPath\search;
 
 /**
  * A Snapshot contains data from a database location.

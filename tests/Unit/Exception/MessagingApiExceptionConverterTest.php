@@ -99,7 +99,8 @@ class MessagingApiExceptionConverterTest extends TestCase
                     'code' => $code,
                     'message' => 'Some error that might include the identifier "'.$identifier.'"',
                 ],
-            ])));
+            ]))
+        );
     }
 
     /**

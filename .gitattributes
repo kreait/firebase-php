@@ -8,7 +8,7 @@
 /.github export-ignore
 /.gitignore export-ignore
 /.opensource export-ignore
-/.php_cs.dist export-ignore
+/.php-cs-fixer.dist.php export-ignore
 /codecov.yml export-ignore
 /Makefile export-ignore
 /phpstan.neon.dist export-ignore

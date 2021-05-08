@@ -31,6 +31,14 @@ docs: ## Builds the documentation
 view-docs: ## Shows the documentation
 	php -S localhost:1338 -t docs/_build/html
 
+tools/php-cs-fixer/vendor/bin/php-cs-fixer:
+	mkdir -p tools/php-cs-fixer
+	composer require --working-dir=tools/php-cs-fixer "friendsofphp/php-cs-fixer:^3.0"
+
+.PHONY: cs
+cs: tools/php-cs-fixer/vendor/bin/php-cs-fixer
+	tools/php-cs-fixer/vendor/bin/php-cs-fixer fix
+
 .PHONY: clean
 clean:
 	rm -rf build/*

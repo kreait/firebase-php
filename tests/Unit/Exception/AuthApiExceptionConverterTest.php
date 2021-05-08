@@ -102,7 +102,8 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
                     'code' => 400,
                     'message' => 'Some error that might include the idenfier "'.$identifier.'"',
                 ],
-            ])));
+            ]))
+        );
 
         $convertedError = $this->converter->convertException($requestException);
 
