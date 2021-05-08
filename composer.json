@@ -43,7 +43,7 @@
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12.53",
         "phpstan/phpstan-phpunit": "^0.12.6",
-        "phpunit/phpunit": "^8.5",
+        "phpunit/phpunit": "^9.5.4",
         "symfony/var-dumper": "^5.0"
     },
     "suggest": {
