@@ -10,8 +10,7 @@ use Kreait\Firebase\Auth\SendActionLink;
 
 final class GuzzleApiClientHandler implements Handler
 {
-    /** @var ClientInterface */
-    private $client;
+    private ClientInterface $client;
 
     public function __construct(ClientInterface $client)
     {

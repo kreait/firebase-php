@@ -8,6 +8,5 @@ use PHPUnit\Framework\TestCase;
 
 abstract class FirebaseTestCase extends TestCase
 {
-    /** @var string */
-    protected static $fixturesDir = __DIR__.'/_fixtures';
+    protected static string $fixturesDir = __DIR__.'/_fixtures';
 }

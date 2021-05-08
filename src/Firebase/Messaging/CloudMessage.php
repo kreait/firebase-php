@@ -9,26 +9,13 @@ use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 
 final class CloudMessage implements Message
 {
-    /** @var MessageTarget|null */
-    private $target;
-
-    /** @var MessageData|null */
-    private $data;
-
-    /** @var Notification|null */
-    private $notification;
-
-    /** @var AndroidConfig|null */
-    private $androidConfig;
-
-    /** @var ApnsConfig|null */
-    private $apnsConfig;
-
-    /** @var WebPushConfig|null */
-    private $webPushConfig;
-
-    /** @var FcmOptions|null */
-    private $fcmOptions;
+    private ?MessageTarget $target = null;
+    private ?MessageData $data = null;
+    private ?Notification $notification = null;
+    private ?AndroidConfig $androidConfig = null;
+    private ?ApnsConfig $apnsConfig = null;
+    private ?WebPushConfig $webPushConfig = null;
+    private ?FcmOptions $fcmOptions = null;
 
     private function __construct()
     {
@@ -125,7 +112,11 @@ final class CloudMessage implements Message
     }
 
     /**
-     * @param Notification|array<string, string> $notification
+     * @param Notification|array{
+     *     title: ?string,
+     *     body: ?string,
+     *     image: ?string
+     * } $notification
      *
      * @throws InvalidArgumentException
      */

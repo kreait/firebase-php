@@ -23,19 +23,24 @@ class EqualToTest extends UnitTestCase
 
     /**
      * @dataProvider valueProvider
+     *
+     * @param mixed $given
      */
-    public function testModifyUri($given, $expected): void
+    public function testModifyUri($given, string $expected): void
     {
         $filter = new EqualTo($given);
 
         $this->assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://domain.tld')));
     }
 
+    /**
+     * @return array<string, array<int, int|string>>
+     */
     public function valueProvider()
     {
         return [
-            [1, 'equalTo=1'],
-            ['value', 'equalTo=%22value%22'],
+            'int' => [1, 'equalTo=1'],
+            'string' => ['value', 'equalTo=%22value%22'],
         ];
     }
 }

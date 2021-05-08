@@ -30,8 +30,7 @@ use Throwable;
  */
 class AuthApiExceptionConverter
 {
-    /** @var ErrorResponseParser */
-    private $responseParser;
+    private ErrorResponseParser $responseParser;
 
     /**
      * @internal

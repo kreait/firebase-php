@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Database\Query\Sorter;
 
+use function JmesPath\search;
 use Kreait\Firebase\Database\Query\ModifierTrait;
 use Kreait\Firebase\Database\Query\Sorter;
 use Psr\Http\Message\UriInterface;
-use function JmesPath\search;
 
 final class OrderByChild implements Sorter
 {
     use ModifierTrait;
 
-    /** @var string */
-    private $childKey;
+    private string $childKey;
 
     public function __construct(string $childKey)
     {
@@ -34,9 +33,7 @@ final class OrderByChild implements Sorter
 
         $expression = \str_replace('/', '.', $this->childKey);
 
-        \uasort($value, static function ($a, $b) use ($expression) {
-            return search($expression, $a) <=> search($expression, $b);
-        });
+        \uasort($value, static fn ($a, $b) => search($expression, $a) <=> search($expression, $b));
 
         return $value;
     }

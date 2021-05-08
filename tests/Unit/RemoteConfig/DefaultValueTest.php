@@ -30,6 +30,12 @@ class DefaultValueTest extends TestCase
 
     /**
      * @dataProvider arrayValueProvider
+     *
+     * @param bool|string $expected
+     * @param array{
+     *     value?: string|bool,
+     *     useInAppDefault?: bool
+     * } $array
      */
     public function testCreateFromArray($expected, array $array): void
     {
@@ -38,6 +44,12 @@ class DefaultValueTest extends TestCase
         $this->assertSame($expected, $defaultValue->value());
     }
 
+    /**
+     * @return array<string, array{
+     *                       value?: string|bool,
+     *                       useInAppDefault?: bool
+     *                       }>
+     */
     public function arrayValueProvider(): array
     {
         return [

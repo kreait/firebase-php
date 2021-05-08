@@ -12,35 +12,27 @@ final class HttpClientOptions
      * The amount of seconds to wait while connecting to a server.
      *
      * Defaults to indefinitely.
-     *
-     * @var float|null
      */
-    private $connectTimeout;
+    private ?float $connectTimeout = null;
 
     /**
      * The amount of seconds to wait while reading a streamed body.
      *
      * Defaults to the value of the default_socket_timeout PHP ini setting.
-     *
-     * @var float|null
      */
-    private $readTimeout;
+    private ?float $readTimeout = null;
 
     /**
      * The amount of seconds to wait for a full request (connect + transfer + read) to complete.
      *
      * Defaults to indefinitely.
-     *
-     * @var float|null
      */
-    private $timeout;
+    private ?float $timeout = null;
 
     /**
      * The proxy that all requests should be passed through.
-     *
-     * @var string|null
      */
-    private $proxy;
+    private ?string $proxy = null;
 
     private function __construct()
     {

@@ -12,18 +12,12 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class ApnsConfigTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
-    public function it_is_empty_when_it_is_empty(): void
+    public function testItIsEmptyWhenItIsEmpty(): void
     {
         $this->assertSame('[]', \json_encode(ApnsConfig::new()));
     }
 
-    /**
-     * @test
-     */
-    public function it_has_a_default_sound(): void
+    public function testItHasADefaultSound(): void
     {
         $expected = [
             'payload' => [
@@ -39,10 +33,7 @@ class ApnsConfigTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function it_has_a_badge(): void
+    public function testItHasABadge(): void
     {
         $expected = [
             'payload' => [
@@ -59,20 +50,18 @@ class ApnsConfigTest extends UnitTestCase
     }
 
     /**
-     * @test
      * @dataProvider validDataProvider
+     *
+     * @param array<string, mixed> $data
      */
-    public function it_can_be_created_from_an_array(array $data): void
+    public function testItCanBeCreatedFromAnArray(array $data): void
     {
         $config = ApnsConfig::fromArray($data);
 
         $this->assertEquals($data, $config->jsonSerialize());
     }
 
-    /**
-     * @test
-     */
-    public function it_can_have_a_priority(): void
+    public function testItCanHaveAPriority(): void
     {
         $config = ApnsConfig::new()->withImmediatePriority();
         $this->assertSame('10', $config->jsonSerialize()['headers']['apns-priority']);
@@ -81,6 +70,9 @@ class ApnsConfigTest extends UnitTestCase
         $this->assertSame('5', $config->jsonSerialize()['headers']['apns-priority']);
     }
 
+    /**
+     * @return array<string, array<int, array<string, mixed>>>
+     */
     public function validDataProvider()
     {
         return [

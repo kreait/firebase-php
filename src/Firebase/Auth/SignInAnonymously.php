@@ -6,8 +6,7 @@ namespace Kreait\Firebase\Auth;
 
 final class SignInAnonymously implements SignIn
 {
-    /** @var TenantId|null */
-    private $tenantId;
+    private ?TenantId $tenantId = null;
 
     private function __construct()
     {

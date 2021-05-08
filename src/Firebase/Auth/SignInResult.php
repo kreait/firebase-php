@@ -9,29 +9,16 @@ use Lcobucci\JWT\Token\Plain;
 
 final class SignInResult
 {
-    /** @var string|null */
-    private $idToken;
-
-    /** @var string|null */
-    private $accessToken;
-
-    /** @var string|null */
-    private $refreshToken;
-
-    /** @var int|null */
-    private $ttl;
-
+    private ?string $idToken = null;
+    private ?string $accessToken = null;
+    private ?string $refreshToken = null;
+    private ?int $ttl = null;
     /** @var array<string, mixed> */
-    private $data = [];
+    private array $data = [];
+    private ?string $firebaseUserId = null;
+    private ?string $tenantId = null;
 
-    /** @var string|null */
-    private $firebaseUserId;
-
-    /** @var string|null */
-    private $tenantId;
-
-    /** @var Configuration */
-    private $config;
+    private Configuration $config;
 
     private function __construct()
     {

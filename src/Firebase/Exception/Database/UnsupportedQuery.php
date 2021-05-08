@@ -11,8 +11,7 @@ use Throwable;
 
 final class UnsupportedQuery extends RuntimeException implements DatabaseException
 {
-    /** @var Query */
-    private $query;
+    private Query $query;
 
     public function __construct(Query $query, string $message = '', int $code = 0, ?Throwable $previous = null)
     {

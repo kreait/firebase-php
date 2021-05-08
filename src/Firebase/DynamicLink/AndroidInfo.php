@@ -9,7 +9,7 @@ use JsonSerializable;
 final class AndroidInfo implements JsonSerializable
 {
     /** @var array<string, string> */
-    private $data = [];
+    private array $data = [];
 
     private function __construct()
     {
@@ -60,7 +60,7 @@ final class AndroidInfo implements JsonSerializable
      * The versionCode of the minimum version of your app that can open the link. If the installed app is an older
      * version, the user is taken to the Play Store to upgrade the app.
      *
-     * @see http://developer.android.com/tools/publishing/versioning.html#appversioning
+     * @see https://developer.android.com/studio/publish/versioning#appversioning
      */
     public function withMinPackageVersionCode(string $minPackageVersionCode): self
     {

@@ -18,14 +18,16 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
  */
 class MessagingTest extends IntegrationTestCase
 {
-    /** @var Messaging */
-    public $messaging;
+    public Messaging $messaging;
 
     protected function setUp(): void
     {
         $this->messaging = self::$factory->createMessaging();
     }
 
+    /**
+     * @return array<string, array<string, mixed>>
+     */
     public static function createFullMessageData(): array
     {
         return [
@@ -124,7 +126,8 @@ class MessagingTest extends IntegrationTestCase
     public function testSendingAMessageWithEmptyMessageDataShouldNotFail(): void
     {
         $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
-            ->withData([]);
+            ->withData([])
+        ;
 
         $this->messaging->send($message);
         $this->addToAssertionCount(1);
@@ -136,7 +139,8 @@ class MessagingTest extends IntegrationTestCase
     public function testSendMessageWithReservedKeywordInMessageDataThatIsStillAccepted(string $keyword): void
     {
         $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
-            ->withData([$keyword => 'value']);
+            ->withData([$keyword => 'value'])
+        ;
 
         $this->messaging->send($message);
         $this->addToAssertionCount(1);

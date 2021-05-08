@@ -14,26 +14,31 @@ use PHPUnit\Framework\TestCase;
 final class MessageDataTest extends TestCase
 {
     /**
-     * @test
      * @dataProvider validData
+     *
+     * @param array<string, mixed> $data
      */
-    public function it_accepts_valid_data(array $data): void
+    public function testItAcceptsValidData(array $data): void
     {
         MessageData::fromArray($data);
         $this->addToAssertionCount(1);
     }
 
     /**
-     * @test
      * @dataProvider invalidData
+     *
+     * @param array<string, mixed> $data
      */
-    public function it_rejects_invalid_data(array $data): void
+    public function testItRejectsInvalidData(array $data): void
     {
         $this->expectException(InvalidArgumentException::class);
         MessageData::fromArray($data);
     }
 
-    public function validData()
+    /**
+     * @return array<string, array<int, array<string, mixed>>>
+     */
+    public function validData(): array
     {
         return [
             'integer' => [
@@ -65,7 +70,10 @@ final class MessageDataTest extends TestCase
         ];
     }
 
-    public function invalidData()
+    /**
+     * @return array<string, array<int, array<string, mixed>>>
+     */
+    public function invalidData(): array
     {
         return [
             'nested array' => [

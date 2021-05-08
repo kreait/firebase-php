@@ -23,79 +23,77 @@ use Throwable;
 class RemoteConfigTest extends IntegrationTestCase
 {
     /** @var string */
-    private const TEMPLATE_CONFIG = <<<CONFIG
-{
-    "conditions": [
+    private const TEMPLATE_CONFIG = <<<'CONFIG'
         {
-            "name": "lang_german",
-            "expression": "device.language in ['de', 'de_AT', 'de_CH']",
-            "tagColor": "ORANGE"
-        },
-        {
-            "name": "lang_french",
-            "expression": "device.language in ['fr', 'fr_CA', 'fr_CH']",
-            "tagColor": "GREEN"
-        }
-    ],
-    "parameters": {
-        "welcome_message": {
-            "defaultValue": {
-                "value": "Welcome!"
-            },
-            "conditionalValues": {
-                "lang_german": {
-                    "value": "Willkommen!"
+            "conditions": [
+                {
+                    "name": "lang_german",
+                    "expression": "device.language in ['de', 'de_AT', 'de_CH']",
+                    "tagColor": "ORANGE"
                 },
-                "lang_french": {
-                    "value": "Bienvenu!"
+                {
+                    "name": "lang_french",
+                    "expression": "device.language in ['fr', 'fr_CA', 'fr_CH']",
+                    "tagColor": "GREEN"
+                }
+            ],
+            "parameters": {
+                "welcome_message": {
+                    "defaultValue": {
+                        "value": "Welcome!"
+                    },
+                    "conditionalValues": {
+                        "lang_german": {
+                            "value": "Willkommen!"
+                        },
+                        "lang_french": {
+                            "value": "Bienvenu!"
+                        }
+                    },
+                    "description": "This is a welcome message"
                 }
             },
-            "description": "This is a welcome message"
-        }
-    },
-    "parameterGroups": {
-        "welcome_messages": {
-            "description": "A group of parameters",
-            "parameters": {
-                "welcome_message_new_users": {
-                    "defaultValue": {
-                        "value": "Welcome, new user!"
-                    },
-                    "conditionalValues": {
-                        "lang_german": {
-                            "value": "Willkommen, neuer Benutzer!"
+            "parameterGroups": {
+                "welcome_messages": {
+                    "description": "A group of parameters",
+                    "parameters": {
+                        "welcome_message_new_users": {
+                            "defaultValue": {
+                                "value": "Welcome, new user!"
+                            },
+                            "conditionalValues": {
+                                "lang_german": {
+                                    "value": "Willkommen, neuer Benutzer!"
+                                },
+                                "lang_french": {
+                                    "value": "Bienvenu, nouvel utilisateur!"
+                                }
+                            },
+                            "description": "This is a welcome message for new users"
                         },
-                        "lang_french": {
-                            "value": "Bienvenu, nouvel utilisateur!"
+                        "welcome_message_existing_users": {
+                            "defaultValue": {
+                                "value": "Welcome, existing user!"
+                            },
+                            "conditionalValues": {
+                                "lang_german": {
+                                    "value": "Willkommen, bestehender Benutzer!"
+                                },
+                                "lang_french": {
+                                    "value": "Bienvenu, utilisant existant!"
+                                }
+                            },
+                            "description": "This is a welcome message for existing users"
                         }
-                    },
-                    "description": "This is a welcome message for new users"
-                },
-                "welcome_message_existing_users": {
-                    "defaultValue": {
-                        "value": "Welcome, existing user!"
-                    },
-                    "conditionalValues": {
-                        "lang_german": {
-                            "value": "Willkommen, bestehender Benutzer!"
-                        },
-                        "lang_french": {
-                            "value": "Bienvenu, utilisant existant!"
-                        }
-                    },
-                    "description": "This is a welcome message for existing users"
+                    }
                 }
             }
         }
-    }
-}
-CONFIG;
+        CONFIG;
 
-    /** @var Template */
-    private $template;
+    private Template $template;
 
-    /** @var RemoteConfig */
-    private $remoteConfig;
+    private RemoteConfig $remoteConfig;
 
     protected function setUp(): void
     {
@@ -192,7 +190,8 @@ CONFIG;
 
         $query = FindVersions::all()
             ->withLimit(2)
-            ->upToVersion($initialVersionNumber);
+            ->upToVersion($initialVersionNumber)
+        ;
 
         $targetVersionNumber = null;
         foreach ($this->remoteConfig->listVersions($query) as $version) {

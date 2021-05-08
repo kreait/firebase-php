@@ -16,7 +16,7 @@ class TopicTest extends TestCase
     /**
      * @dataProvider valueProvider
      */
-    public function testFromValue($expected, $value): void
+    public function testFromValue(string $expected, string $value): void
     {
         $this->assertSame($expected, Topic::fromValue($value)->value());
     }
@@ -24,28 +24,34 @@ class TopicTest extends TestCase
     /**
      * @dataProvider invalidValueProvider
      */
-    public function testFromInvalidValue($value): void
+    public function testFromInvalidValue(string $value): void
     {
         $this->expectException(InvalidArgument::class);
         Topic::fromValue($value);
     }
 
-    public function valueProvider()
+    /**
+     * @return array<string, array<int, string>>
+     */
+    public function valueProvider(): array
     {
         return [
-            ['foo', 'foo'],
-            ['foo', '/foo'],
-            ['foo', 'foo/'],
-            ['foo', '/topic/foo'],
+            'no slashes' => ['foo', 'foo'],
+            'leading slash' => ['foo', '/foo'],
+            'trailing slash' => ['foo', 'foo/'],
+            'with topic prefix' => ['foo', '/topic/foo'],
         ];
     }
 
-    public function invalidValueProvider()
+    /**
+     * @return array<string, array<int, string>>
+     */
+    public function invalidValueProvider(): array
     {
         return [
-            ['$'],
-            ['ä'],
-            ['é'],
+            '$' => ['$'],
+            'ä' => ['ä'],
+            'é' => ['é'],
         ];
     }
 }

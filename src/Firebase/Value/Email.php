@@ -8,8 +8,7 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 
 class Email implements \JsonSerializable
 {
-    /** @var string */
-    private $value;
+    private string $value;
 
     /**
      * @internal

@@ -6,19 +6,16 @@ namespace Kreait\Firebase\Auth;
 
 final class TenantId
 {
-    /** @var string */
-    private $value;
+    private string $value;
 
-    private function __construct()
+    private function __construct(string $value)
     {
+        $this->value = $value;
     }
 
     public static function fromString(string $value): self
     {
-        $id = new self();
-        $id->value = $value;
-
-        return $id;
+        return new self($value);
     }
 
     public function toString(): string

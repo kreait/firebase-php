@@ -12,8 +12,7 @@ use Psr\Http\Message\StreamInterface;
  */
 trait WrappedPsr7Response
 {
-    /** @var ResponseInterface */
-    protected $wrappedResponse;
+    protected ResponseInterface $wrappedResponse;
 
     public function getProtocolVersion(): string
     {

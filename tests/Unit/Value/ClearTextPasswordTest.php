@@ -15,6 +15,8 @@ class ClearTextPasswordTest extends TestCase
 {
     /**
      * @dataProvider validValues
+     *
+     * @param mixed $value
      */
     public function testWithValidValue($value): void
     {
@@ -27,6 +29,8 @@ class ClearTextPasswordTest extends TestCase
 
     /**
      * @dataProvider invalidValues
+     *
+     * @param mixed $value
      */
     public function testWithInvalidValue($value): void
     {
@@ -34,18 +38,24 @@ class ClearTextPasswordTest extends TestCase
         new ClearTextPassword($value);
     }
 
+    /**
+     * @return array<string, array<string>>
+     */
     public function validValues(): array
     {
         return [
-            ['longenough'],
+            'long enough' => ['long enough'],
         ];
     }
 
+    /**
+     * @return array<string, array<string>>
+     */
     public function invalidValues(): array
     {
         return [
-            [''],
-            ['short'],
+            'empty string' => [''],
+            'less than 6 chars' => ['short'],
         ];
     }
 }

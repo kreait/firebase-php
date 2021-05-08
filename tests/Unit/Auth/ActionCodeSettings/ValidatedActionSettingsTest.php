@@ -14,32 +14,31 @@ use PHPUnit\Framework\TestCase;
 final class ValidatedActionSettingsTest extends TestCase
 {
     /**
-     * @test
      * @dataProvider validInputs
+     *
+     * @param array<string, mixed> $input
+     * @param array<string, mixed> $expected
      */
-    public function it_works_valid_settings($input, $expected): void
+    public function testItWorksValidSettings(array $input, array $expected): void
     {
         $this->assertEquals($expected, ValidatedActionCodeSettings::fromArray($input)->toArray());
     }
 
-    /**
-     * @test
-     */
-    public function it_rejects_invalid_settings(): void
+    public function testItRejectsInvalidSettings(): void
     {
         $this->expectException(InvalidArgumentException::class);
         ValidatedActionCodeSettings::fromArray(['foo' => 'bar']);
     }
 
-    /**
-     * @test
-     */
-    public function it_can_be_empty(): void
+    public function testItCanBeEmpty(): void
     {
         $this->assertEmpty(ValidatedActionCodeSettings::empty()->toArray());
     }
 
-    public function validInputs()
+    /**
+     * @return array<string, array<int, array<string, mixed>>>
+     */
+    public function validInputs(): array
     {
         $continueUrl = 'https://domain.tld';
 

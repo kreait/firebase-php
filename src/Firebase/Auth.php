@@ -45,20 +45,15 @@ use Traversable;
 
 class Auth implements Contract\Auth
 {
-    /** @var ApiClient */
-    private $client;
+    private ApiClient $client;
 
-    /** @var TokenGenerator */
-    private $tokenGenerator;
+    private TokenGenerator $tokenGenerator;
 
-    /** @var Verifier */
-    private $idTokenVerifier;
+    private Verifier $idTokenVerifier;
 
-    /** @var SignInHandler */
-    private $signInHandler;
+    private SignInHandler $signInHandler;
 
-    /** @var TenantId|null */
-    private $tenantId;
+    private ?TenantId $tenantId = null;
 
     /**
      * @param iterable<ApiClient|TokenGenerator|Verifier|SignInHandler>|ApiClient|TokenGenerator|Verifier|SignInHandler|TenantId|null ...$x
@@ -250,7 +245,8 @@ class Auth implements Contract\Auth
         $tenantId = $this->tenantId ? $this->tenantId->toString() : null;
 
         return (new CreateActionLink\GuzzleApiClientHandler($this->client))
-            ->handle(CreateActionLink::new($type, $email, $actionCodeSettings, $tenantId));
+            ->handle(CreateActionLink::new($type, $email, $actionCodeSettings, $tenantId))
+        ;
     }
 
     public function sendEmailActionLink(string $type, $email, $actionCodeSettings = null, ?string $locale = null): void
@@ -469,9 +465,10 @@ class Auth implements Contract\Auth
     public function unlinkProvider($uid, $provider): UserRecord
     {
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
-        $provider = \array_map(static function ($provider) {
-            return $provider instanceof Provider ? $provider : new Provider($provider);
-        }, (array) $provider);
+        $provider = \array_map(
+            static fn ($provider) => $provider instanceof Provider ? $provider : new Provider($provider),
+            (array) $provider
+        );
 
         $response = $this->client->unlinkProvider((string) $uid, $provider);
 
@@ -532,7 +529,7 @@ class Auth implements Contract\Auth
         return $this->signInHandler->handle($action);
     }
 
-    public function signInWithEmailAndOobCode($email, $oobCode): SignInResult
+    public function signInWithEmailAndOobCode($email, string $oobCode): SignInResult
     {
         $email = $email instanceof Email ? (string) $email : $email;
 

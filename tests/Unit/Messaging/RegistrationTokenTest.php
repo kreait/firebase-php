@@ -16,7 +16,7 @@ class RegistrationTokenTest extends TestCase
     /**
      * @dataProvider valueProvider
      */
-    public function testFromValue($expected, $value): void
+    public function testFromValue(string $expected, string $value): void
     {
         $token = RegistrationToken::fromValue($value);
 
@@ -24,10 +24,13 @@ class RegistrationTokenTest extends TestCase
         $this->assertSame('"'.$token.'"', JSON::encode($token));
     }
 
-    public function valueProvider()
+    /**
+     * @return array<string, array<int, string>>
+     */
+    public function valueProvider(): array
     {
         return [
-            ['foo', 'foo'],
+            'foo' => ['foo', 'foo'],
         ];
     }
 }

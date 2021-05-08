@@ -13,18 +13,14 @@ use Lcobucci\JWT\Token\Plain;
  */
 class TenantAwareAuthTest extends IntegrationTestCase
 {
-    /** @var Auth */
-    private $auth;
+    private Auth $auth;
 
     protected function setUp(): void
     {
         $this->auth = self::$factory->withTenantId(self::TENANT_ID)->createAuth();
     }
 
-    /**
-     * @test
-     */
-    public function new_users_are_scoped_to_a_tenant(): void
+    public function testNewUsersAreScopedToATenant(): void
     {
         $user = $this->auth->createUserWithEmailAndPassword(
             self::randomEmail(__FUNCTION__),
@@ -38,10 +34,7 @@ class TenantAwareAuthTest extends IntegrationTestCase
         }
     }
 
-    /**
-     * @test
-     */
-    public function custom_tokens_include_the_tenant(): void
+    public function testCustomTokensIncludeTheTenant(): void
     {
         $token = $this->auth->createCustomToken('some-uid');
 
@@ -61,10 +54,7 @@ class TenantAwareAuthTest extends IntegrationTestCase
         }
     }
 
-    /**
-     * @test
-     */
-    public function it_can_sign_in_with_a_custom_token(): void
+    public function testItCanSignInWithACustomToken(): void
     {
         $user = $this->auth->createAnonymousUser();
         $result = $this->auth->signInAsUser($user);

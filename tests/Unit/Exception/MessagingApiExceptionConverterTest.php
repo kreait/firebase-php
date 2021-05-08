@@ -30,11 +30,9 @@ use Throwable;
  */
 class MessagingApiExceptionConverterTest extends TestCase
 {
-    /** @var MessagingApiExceptionConverter */
-    private $converter;
+    private MessagingApiExceptionConverter $converter;
 
-    /** @var FrozenClock */
-    private $clock;
+    private FrozenClock $clock;
 
     protected function setUp(): void
     {
@@ -42,10 +40,7 @@ class MessagingApiExceptionConverterTest extends TestCase
         $this->converter = new MessagingApiExceptionConverter($this->clock);
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_a_connect_exception(): void
+    public function testItConvertsAConnectException(): void
     {
         $connectException = new ConnectException(
             'curl error xx',
@@ -56,31 +51,33 @@ class MessagingApiExceptionConverterTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider exceptions
      *
      * @param class-string<object> $expectedClass
      */
-    public function it_converts_exceptions(Throwable $e, string $expectedClass): void
+    public function testItConvertsExceptions(Throwable $e, string $expectedClass): void
     {
         $converted = $this->converter->convertException($e);
 
         $this->assertInstanceOf($expectedClass, $converted);
     }
 
+    /**
+     * @return array<array<Throwable|class-string>>
+     */
     public function exceptions(): array
     {
         return [
-            [new ConnectException('Connection Failed', new Request('GET', 'https://domain.tld')), ApiConnectionFailed::class],
-            [$this->createRequestException(400, 'Bad request'), InvalidMessage::class],
-            [$this->createRequestException(401, 'Unauthenticated'), AuthenticationError::class],
-            [$this->createRequestException(403, 'Unauthorized'), AuthenticationError::class],
-            [$this->createRequestException(404, 'Not Found'), NotFound::class],
-            [$this->createRequestException(429, 'Too Many Requests'), QuotaExceeded::class],
-            [$this->createRequestException(500, 'Server broken'), ServerError::class],
-            [$this->createRequestException(503, 'Server unavailable'), ServerUnavailable::class],
-            [$this->createRequestException(418, 'Some tea'), MessagingError::class],
-            [new RuntimeException('Something else'), MessagingError::class],
+            'connection error' => [new ConnectException('Connection Failed', new Request('GET', 'https://domain.tld')), ApiConnectionFailed::class],
+            '400' => [$this->createRequestException(400, 'Bad request'), InvalidMessage::class],
+            '401' => [$this->createRequestException(401, 'Unauthenticated'), AuthenticationError::class],
+            '403' => [$this->createRequestException(403, 'Unauthorized'), AuthenticationError::class],
+            '404' => [$this->createRequestException(404, 'Not Found'), NotFound::class],
+            '429' => [$this->createRequestException(429, 'Too Many Requests'), QuotaExceeded::class],
+            '500' => [$this->createRequestException(500, 'Server broken'), ServerError::class],
+            '503' => [$this->createRequestException(503, 'Server unavailable'), ServerUnavailable::class],
+            '418' => [$this->createRequestException(418, 'Some tea'), MessagingError::class],
+            'runtime error' => [new RuntimeException('Something else'), MessagingError::class],
         ];
     }
 
@@ -103,10 +100,7 @@ class MessagingApiExceptionConverterTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function it_knows_when_to_retry_after_with_seconds(): void
+    public function testItKnowsWhenToRetryAfterWithSeconds(): void
     {
         $response = new Response(429, ['Retry-After' => 60]);
 
@@ -120,10 +114,7 @@ class MessagingApiExceptionConverterTest extends TestCase
         $this->assertSame($expected->getTimestamp(), $converted->retryAfter()->getTimestamp());
     }
 
-    /**
-     * @test
-     */
-    public function it_knows_when_to_retry_after_with_date_strings(): void
+    public function testItKnowsWhenToRetryAfterWithDateStrings(): void
     {
         $expected = $this->clock->now()->modify('+60 seconds');
 

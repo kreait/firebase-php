@@ -21,8 +21,7 @@ class ApiClient implements ClientInterface
 {
     use WrappedGuzzleClient;
 
-    /** @var DatabaseApiExceptionConverter */
-    protected $errorHandler;
+    protected DatabaseApiExceptionConverter $errorHandler;
 
     /**
      * @internal

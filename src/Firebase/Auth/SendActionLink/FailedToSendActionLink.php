@@ -13,11 +13,8 @@ use RuntimeException;
 
 final class FailedToSendActionLink extends RuntimeException implements FirebaseException
 {
-    /** @var SendActionLink|null */
-    private $action;
-
-    /** @var ResponseInterface|null */
-    private $response;
+    private ?SendActionLink $action = null;
+    private ?ResponseInterface $response = null;
 
     public static function withActionAndResponse(SendActionLink $action, ResponseInterface $response): self
     {

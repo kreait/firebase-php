@@ -16,10 +16,11 @@ use stdClass;
 final class RegistrationTokensTest extends TestCase
 {
     /**
-     * @test
      * @dataProvider validValuesWithExpectedCounts
+     *
+     * @param mixed $value
      */
-    public function it_can_be_created_from_values($expectedCount, $value): void
+    public function testItCanBeCreatedFromValues(int $expectedCount, $value): void
     {
         $tokens = RegistrationTokens::fromValue($value);
 
@@ -28,19 +29,17 @@ final class RegistrationTokensTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider invalidValues
+     *
+     * @param mixed $value
      */
-    public function it_rejects_invalid_values($value): void
+    public function testItRejectsInvalidValues($value): void
     {
         $this->expectException(InvalidArgumentException::class);
         RegistrationTokens::fromValue($value);
     }
 
-    /**
-     * @test
-     */
-    public function it_returns_strings(): void
+    public function testItReturnsStrings(): void
     {
         $token = RegistrationToken::fromValue('foo');
 
@@ -48,23 +47,29 @@ final class RegistrationTokensTest extends TestCase
         $this->assertEquals(['foo', 'foo'], $tokens->asStrings());
     }
 
-    public function validValuesWithExpectedCounts()
+    /**
+     * @return array<string, array<int, int|mixed>>
+     */
+    public function validValuesWithExpectedCounts(): array
     {
         $foo = RegistrationToken::fromValue('foo');
 
         return [
-            [1, 'foo'],
-            [1, $foo],
-            [2, new RegistrationTokens($foo, $foo)],
-            [2, [$foo, 'bar']],
-            [2, [$foo, new stdClass(), 'bar']],
+            'string' => [1, 'foo'],
+            'token object' => [1, $foo],
+            'collection' => [2, new RegistrationTokens($foo, $foo)],
+            'array with mixed values' => [2, [$foo, 'bar']],
+            'array with an invalid value' => [2, [$foo, new stdClass(), 'bar']],
         ];
     }
 
-    public function invalidValues()
+    /**
+     * @return array<string, array<int, mixed>>
+     */
+    public function invalidValues(): array
     {
         return [
-            [new stdClass()],
+            'invalid object' => [new stdClass()],
         ];
     }
 }

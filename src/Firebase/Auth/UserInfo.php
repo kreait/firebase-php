@@ -6,23 +6,12 @@ namespace Kreait\Firebase\Auth;
 
 class UserInfo implements \JsonSerializable
 {
-    /** @var string|null */
-    public $uid;
-
-    /** @var string|null */
-    public $displayName;
-
-    /** @var string|null */
-    public $email;
-
-    /** @var string|null */
-    public $photoUrl;
-
-    /** @var string|null */
-    public $providerId;
-
-    /** @var string|null */
-    public $phoneNumber;
+    public ?string $uid = null;
+    public ?string $displayName = null;
+    public ?string $email = null;
+    public ?string $photoUrl = null;
+    public ?string $providerId = null;
+    public ?string $phoneNumber = null;
 
     /**
      * @param array<string, string> $data

@@ -33,14 +33,11 @@ use Psr\Http\Message\RequestInterface;
  */
 final class DynamicLinksTest extends TestCase
 {
-    /** @var MockHandler */
-    private $httpHandler;
+    private MockHandler $httpHandler;
 
-    /** @var string */
-    private $dynamicLinksDomain = 'https://link.domain.tld';
+    private string $dynamicLinksDomain = 'https://link.domain.tld';
 
-    /** @var DynamicLinks */
-    private $service;
+    private DynamicLinks $service;
 
     protected function setUp(): void
     {
@@ -50,10 +47,7 @@ final class DynamicLinksTest extends TestCase
         $this->service = DynamicLinks::withApiClientAndDefaultDomain($httpClient, $this->dynamicLinksDomain);
     }
 
-    /**
-     * @test
-     */
-    public function it_creates_a_dynamic_link(): void
+    public function testItCreatesADynamicLink(): void
     {
         $this->httpHandler->append(
             new Response(200, [], JSON::encode($responseData = [
@@ -81,10 +75,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertEquals($responseData, \json_decode(JSON::encode($dynamicLink), true));
     }
 
-    /**
-     * @test
-     */
-    public function it_creates_a_dynamic_link_from_an_array_of_parameters(): void
+    public function testItCreatesADynamicLinkFromAnArrayOfParameters(): void
     {
         $this->httpHandler->append(
             new Response(200, [], JSON::encode($responseData = [
@@ -105,19 +96,13 @@ final class DynamicLinksTest extends TestCase
         $this->assertEquals($responseData, \json_decode(JSON::encode($dynamicLink), true));
     }
 
-    /**
-     * @test
-     */
-    public function it_rejects_an_invalid_creation_parameter(): void
+    public function testItRejectsAnInvalidCreationParameter(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->service->createShortLink(true);
     }
 
-    /**
-     * @test
-     */
-    public function creation_fails_if_no_connection_is_available(): void
+    public function testCreationFailsIfNoConnectionIsAvailable(): void
     {
         $connectionError = new ConnectException('Connection error', $this->createMock(RequestInterface::class));
         $this->httpHandler->append($connectionError);
@@ -126,15 +111,13 @@ final class DynamicLinksTest extends TestCase
         $this->service->createDynamicLink('https://domain.tld/irrelevant');
     }
 
-    /**
-     * @test
-     */
-    public function creation_fails_on_unsuccessful_response(): void
+    public function testCreationFailsOnUnsuccessfulResponse(): void
     {
         $this->httpHandler->append($response = new Response(400, [], '{}'));
 
         $action = $this->createDynamicLinkAction('https://domain.tld/irrelevant')
-            ->withDynamicLinkDomain('https://page.link.tld'); // preventing the action from being changed
+            ->withDynamicLinkDomain('https://page.link.tld') // preventing the action from being changed
+        ;
 
         try {
             $this->service->createDynamicLink($action);
@@ -145,10 +128,7 @@ final class DynamicLinksTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
-    public function creation_fails_gracefully_if_an_unsuccessful_response_cannot_be_parsed(): void
+    public function testCreationFailsGracefullyIfAnUnsuccessfulResponseCannotBeParsed(): void
     {
         $this->httpHandler->append(new Response(400, [], 'probably html'));
 
@@ -156,10 +136,7 @@ final class DynamicLinksTest extends TestCase
         $this->service->createDynamicLink('https://domain.tld/irrelevant');
     }
 
-    /**
-     * @test
-     */
-    public function it_shortens_a_lonk_link_from_an_array_of_parameters(): void
+    public function testItShortensALonkLinkFromAnArrayOfParameters(): void
     {
         $this->httpHandler->append(
             new Response(200, [], JSON::encode($responseData = [
@@ -180,19 +157,13 @@ final class DynamicLinksTest extends TestCase
         $this->assertEquals($responseData, \json_decode(JSON::encode($dynamicLink), true));
     }
 
-    /**
-     * @test
-     */
-    public function it_rejects_an_invalid_shortening_parameter(): void
+    public function testItRejectsAnInvalidShorteningParameter(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->service->shortenLongDynamicLink(true);
     }
 
-    /**
-     * @test
-     */
-    public function shortening_fails_if_no_connection_is_available(): void
+    public function testShorteningFailsIfNoConnectionIsAvailable(): void
     {
         $connectionError = new ConnectException('Connection error', $this->createMock(RequestInterface::class));
         $this->httpHandler->append($connectionError);
@@ -201,10 +172,7 @@ final class DynamicLinksTest extends TestCase
         $this->service->shortenLongDynamicLink('https://domain.tld/irrelevant');
     }
 
-    /**
-     * @test
-     */
-    public function shortening_fails_on_unsuccessful_response(): void
+    public function testShorteningFailsOnUnsuccessfulResponse(): void
     {
         $this->httpHandler->append($response = new Response(400, [], '{}'));
 
@@ -219,10 +187,7 @@ final class DynamicLinksTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
-    public function shortening_fails_gracefully_if_an_unsuccessful_response_cannot_be_parsed(): void
+    public function testShorteningFailsGracefullyIfAnUnsuccessfulResponseCannotBeParsed(): void
     {
         $this->httpHandler->append(new Response(400, [], 'probably html'));
 
@@ -230,10 +195,7 @@ final class DynamicLinksTest extends TestCase
         $this->service->shortenLongDynamicLink('https://domain.tld/irrelevant');
     }
 
-    /**
-     * @test
-     */
-    public function it_gets_link_statistics(): void
+    public function testItGetsLinkStatistics(): void
     {
         $this->httpHandler->append(
             new Response(200, [], JSON::encode($responseData = [
@@ -304,19 +266,13 @@ final class DynamicLinksTest extends TestCase
         $this->assertCount(20, $eventStats->onIOS()->appReOpens());
     }
 
-    /**
-     * @test
-     */
-    public function it_rejects_an_invalid_link_stats_parameter(): void
+    public function testItRejectsAnInvalidLinkStatsParameter(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->service->getStatistics(true);
     }
 
-    /**
-     * @test
-     */
-    public function link_stats_fail_if_no_connection_is_available(): void
+    public function testLinkStatsFailIfNoConnectionIsAvailable(): void
     {
         $connectionError = new ConnectException('Connection error', $this->createMock(RequestInterface::class));
         $this->httpHandler->append($connectionError);
@@ -325,10 +281,7 @@ final class DynamicLinksTest extends TestCase
         $this->service->getStatistics('anything');
     }
 
-    /**
-     * @test
-     */
-    public function link_stats_fail_on_unsuccessful_response(): void
+    public function testLinkStatsFailOnUnsuccessfulResponse(): void
     {
         $this->httpHandler->append($response = new Response(400, [], '{}'));
 
@@ -343,10 +296,7 @@ final class DynamicLinksTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
-    public function link_stats_fail_gracefully_if_an_unsuccessful_response_cannot_be_parsed(): void
+    public function testLinkStatsFailGracefullyIfAnUnsuccessfulResponseCannotBeParsed(): void
     {
         $this->httpHandler->append(new Response(400, [], 'probably html'));
 
@@ -354,10 +304,7 @@ final class DynamicLinksTest extends TestCase
         $this->service->getStatistics('https://domain.tld/irrelevant');
     }
 
-    /**
-     * @test
-     */
-    public function dynamic_link_components_can_be_created_new_or_from_arrays(): void
+    public function testDynamicLinkComponentsCanBeCreatedNewOrFromArrays(): void
     {
         $this->assertNotEmpty(CreateDynamicLink::new()->jsonSerialize()); // has defaults
         $this->assertEmpty(CreateDynamicLink::fromArray([])->jsonSerialize());
@@ -434,6 +381,7 @@ final class DynamicLinksTest extends TestCase
                     ->withDescription('Social Meta Tag description')
                     ->withTitle('Social Meta Tag title')
                     ->withImageLink('https://domain.tld/image.jpg')
-            );
+            )
+        ;
     }
 }

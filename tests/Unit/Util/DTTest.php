@@ -17,8 +17,10 @@ class DTTest extends TestCase
 {
     /**
      * @dataProvider validFixedValues
+     *
+     * @param mixed $value
      */
-    public function testConvertWithFixedValues($expected, $value): void
+    public function testConvertWithFixedValues(string $expected, $value): void
     {
         $dt = DT::toUTCDateTimeImmutable($value);
 
@@ -28,6 +30,8 @@ class DTTest extends TestCase
 
     /**
      * @dataProvider validVariableValues
+     *
+     * @param mixed $value
      */
     public function testConvertWithVariableValues($value): void
     {
@@ -38,6 +42,8 @@ class DTTest extends TestCase
 
     /**
      * @dataProvider invalidValues
+     *
+     * @param mixed $value
      */
     public function testConvertInvalid($value): void
     {
@@ -46,7 +52,10 @@ class DTTest extends TestCase
         DT::toUTCDateTimeImmutable($value);
     }
 
-    public function validFixedValues()
+    /**
+     * @return array<string, array<int, mixed>>
+     */
+    public function validFixedValues(): array
     {
         return [
             'seconds' => ['1234567890.000000', 1234567890],
@@ -58,7 +67,10 @@ class DTTest extends TestCase
         ];
     }
 
-    public function validVariableValues()
+    /**
+     * @return array<string, array<int, mixed>>
+     */
+    public function validVariableValues(): array
     {
         return [
             'null' => [null],
@@ -73,11 +85,14 @@ class DTTest extends TestCase
         ];
     }
 
-    public function invalidValues()
+    /**
+     * @return array<string, array<int, mixed>>
+     */
+    public function invalidValues(): array
     {
         return [
-            ['foo'],
-            [new stdClass()],
+            'string' => ['foo'],
+            'object' => [new stdClass()],
         ];
     }
 }

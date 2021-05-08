@@ -8,17 +8,13 @@ use JsonSerializable;
 
 final class AuthError implements JsonSerializable
 {
-    /** @var string */
-    private $message;
+    private string $message;
 
-    /** @var int */
-    private $code;
+    private int $code;
 
-    /** @var string */
-    private $reason;
+    private string $reason;
 
-    /** @var string */
-    private $domain;
+    private string $domain;
 
     public function __construct(string $message, ?int $code = null, ?string $reason = null, ?string $domain = null)
     {

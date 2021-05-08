@@ -12,8 +12,7 @@ use Kreait\Firebase\Util\JSON;
 
 final class GuzzleApiClientHandler implements Handler
 {
-    /** @var ClientInterface */
-    private $client;
+    private ClientInterface $client;
 
     public function __construct(ClientInterface $client)
     {

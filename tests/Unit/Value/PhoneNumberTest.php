@@ -16,7 +16,7 @@ class PhoneNumberTest extends TestCase
     /**
      * @dataProvider validValues
      */
-    public function testWithValidValue($value): void
+    public function testWithValidValue(string $value): void
     {
         $phoneNumber = new PhoneNumber($value);
 
@@ -28,25 +28,31 @@ class PhoneNumberTest extends TestCase
     /**
      * @dataProvider invalidValues
      */
-    public function testWithInvalidValue($value): void
+    public function testWithInvalidValue(string $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         new PhoneNumber($value);
     }
 
+    /**
+     * @return array<string, array<string>>
+     */
     public function validValues(): array
     {
         return [
-            ['+123456789'],
+            'valid' => ['+123456789'],
         ];
     }
 
+    /**
+     * @return array<string, array<string>>
+     */
     public function invalidValues(): array
     {
         return [
-            [''],
-            ['nonumber'],
-            'no_region_code' => ['12345678'],
+            'empty string' => [''],
+            'not a phone number' => ['notaphonenumber'],
+            'no region code' => ['12345678'],
         ];
     }
 }

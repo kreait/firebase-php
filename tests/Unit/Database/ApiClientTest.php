@@ -11,7 +11,6 @@ use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Exception\DatabaseException;
 use Kreait\Firebase\Tests\UnitTestCase;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * @internal
@@ -21,11 +20,9 @@ class ApiClientTest extends UnitTestCase
     /** @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $http;
 
-    /** @var ApiClient */
-    private $client;
+    private ApiClient $client;
 
-    /** @var string */
-    private $targetUrl;
+    private string $targetUrl;
 
     protected function setUp(): void
     {
@@ -73,7 +70,8 @@ class ApiClientTest extends UnitTestCase
 
         $this->http
             ->method($this->anything())
-            ->willThrowException(new RequestException('foo', $request));
+            ->willThrowException(new RequestException('foo', $request))
+        ;
 
         $this->expectException(DatabaseException::class);
 
@@ -84,22 +82,22 @@ class ApiClientTest extends UnitTestCase
     {
         $this->http
             ->method($this->anything())
-            ->willThrowException(new \Exception());
+            ->willThrowException(new \Exception())
+        ;
 
         $this->expectException(DatabaseException::class);
 
         $this->client->get($this->targetUrl);
     }
 
-    private function createApiClient(?ResponseInterface $response = null)
+    private function createApiClient(): ApiClient
     {
         $client = $this->createMock(ClientInterface::class);
 
-        $response = $response ?? new Response(200, [], '{"name":"value"}');
-
         $client
             ->method($this->anything())
-            ->willReturn($response);
+            ->willReturn(new Response(200, [], '{"name":"value"}'))
+        ;
 
         return new ApiClient($client);
     }

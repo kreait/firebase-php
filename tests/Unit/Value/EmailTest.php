@@ -16,7 +16,7 @@ class EmailTest extends TestCase
     /**
      * @dataProvider validValues
      */
-    public function testWithValidValue($value): void
+    public function testWithValidValue(string $value): void
     {
         $email = new Email($value);
 
@@ -28,24 +28,30 @@ class EmailTest extends TestCase
     /**
      * @dataProvider invalidValues
      */
-    public function testWithInvalidValue($value): void
+    public function testWithInvalidValue(string $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         new EMail($value);
     }
 
+    /**
+     * @return array<string, array<string>>
+     */
     public function validValues(): array
     {
         return [
-            ['user@domain.tld'],
+            'user@domain.tld' => ['user@domain.tld'],
         ];
     }
 
+    /**
+     * @return array<string, array<string>>
+     */
     public function invalidValues(): array
     {
         return [
-            [''],
-            ['invalid'],
+            'empty string' => [''],
+            'invalid' => ['invalid'],
         ];
     }
 }

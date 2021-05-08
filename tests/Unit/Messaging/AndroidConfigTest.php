@@ -12,18 +12,12 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class AndroidConfigTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
-    public function it_is_empty_when_it_is_empty(): void
+    public function testItIsEmptyWhenItIsEmpty(): void
     {
         $this->assertSame('[]', \json_encode(AndroidConfig::new()));
     }
 
-    /**
-     * @test
-     */
-    public function it_has_a_default_sound(): void
+    public function testItHasADefaultSound(): void
     {
         $expected = [
             'notification' => [
@@ -37,10 +31,7 @@ class AndroidConfigTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function it_can_have_a_priority(): void
+    public function testItCanHaveAPriority(): void
     {
         $config = AndroidConfig::new()->withNormalPriority();
         $this->assertSame('normal', $config->jsonSerialize()['priority']);
@@ -50,17 +41,21 @@ class AndroidConfigTest extends UnitTestCase
     }
 
     /**
-     * @test
      * @dataProvider validDataProvider
+     *
+     * @param array<string, array<string, mixed>> $data
      */
-    public function it_can_be_created_from_an_array(array $data): void
+    public function testItCanBeCreatedFromAnArray(array $data): void
     {
         $config = AndroidConfig::fromArray($data);
 
         $this->assertEquals($data, $config->jsonSerialize());
     }
 
-    public function validDataProvider()
+    /**
+     * @return array<string, array<int, array<string, mixed>>>
+     */
+    public function validDataProvider(): array
     {
         return [
             'full_config' => [[

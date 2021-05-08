@@ -23,8 +23,7 @@ class TransactionTest extends TestCase
     /** @var ApiClient&MockObject */
     private $apiClient;
 
-    /** @var Transaction */
-    private $transaction;
+    private Transaction $transaction;
 
     protected function setUp(): void
     {
@@ -54,12 +53,14 @@ class TransactionTest extends TestCase
         $this->apiClient
             ->method('getWithETag')
             ->with($uri)
-            ->willReturn(['etag' => 'etag', 'value' => 'old value']);
+            ->willReturn(['etag' => 'etag', 'value' => 'old value'])
+        ;
 
         $this->apiClient
             ->method('setWithEtag')
             ->with($uri)
-            ->willThrowException(new DatabaseError());
+            ->willThrowException(new DatabaseError())
+        ;
 
         $this->transaction->snapshot($reference);
 

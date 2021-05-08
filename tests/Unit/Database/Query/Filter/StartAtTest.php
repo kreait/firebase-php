@@ -23,19 +23,24 @@ class StartAtTest extends UnitTestCase
 
     /**
      * @dataProvider valueProvider
+     *
+     * @param mixed $given
      */
-    public function testModifyUri($given, $expected): void
+    public function testModifyUri($given, string $expected): void
     {
         $filter = new StartAt($given);
 
         $this->assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://domain.tld')));
     }
 
-    public function valueProvider()
+    /**
+     * @return array<string, array<int, int|string>>
+     */
+    public function valueProvider(): array
     {
         return [
-            [1, 'startAt=1'],
-            ['value', 'startAt=%22value%22'],
+            'int' => [1, 'startAt=1'],
+            'string' => ['value', 'startAt=%22value%22'],
         ];
     }
 }

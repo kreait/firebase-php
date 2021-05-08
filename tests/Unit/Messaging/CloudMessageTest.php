@@ -33,7 +33,8 @@ class CloudMessageTest extends TestCase
     {
         $original = CloudMessage::withTarget(MessageTarget::TOKEN, 'bar')
             ->withData(['foo' => 'bar'])
-            ->withNotification(Notification::create('title', 'body'));
+            ->withNotification(Notification::create('title', 'body'))
+        ;
 
         $changed = $original->withChangedTarget(MessageTarget::TOKEN, 'baz');
 
@@ -64,8 +65,10 @@ class CloudMessageTest extends TestCase
 
     /**
      * @dataProvider multipleTargets
+     *
+     * @param array<string, string> $data
      */
-    public function testAMessageCanOnlyHaveOneTarget($data): void
+    public function testAMessageCanOnlyHaveOneTarget(array $data): void
     {
         $this->expectException(InvalidArgument::class);
         CloudMessage::fromArray($data);
@@ -136,7 +139,10 @@ class CloudMessageTest extends TestCase
         $this->assertSame('high', $payload['webpush']['headers']['Urgency']);
     }
 
-    public function multipleTargets()
+    /**
+     * @return array<string, array<int, array<string, string>>>
+     */
+    public function multipleTargets(): array
     {
         return [
             'condition and token' => [[

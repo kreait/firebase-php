@@ -5,18 +5,6 @@ parameters:
 		- tests/
 	ignoreErrors:
 		-
-			message: '#Method .+ has parameter .+ with no typehint specified#'
-			path: tests
-		-
-			message: '#Method .+ return type has no value type specified in iterable#'
-			path: tests
-		-
-			message: '#Method .+ has no return typehint specified#'
-			path: tests
-		-
-			message: '#Method .+ has parameter .+ with no value type specified in iterable type array#'
-			path: tests
-		-
 			message: '#Parameter .+ expects .+, .+ given#'
 			path: tests
 

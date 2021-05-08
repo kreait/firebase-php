@@ -26,17 +26,13 @@ use RuntimeException;
  */
 class FactoryTest extends UnitTestCase
 {
-    /** @var string */
-    private $validServiceAccountFile;
+    private string $validServiceAccountFile;
 
-    /** @var ServiceAccount */
-    private $validServiceAccount;
+    private ServiceAccount $validServiceAccount;
 
-    /** @var UserRefreshCredentials */
-    private $userRefreshCredentials;
+    private UserRefreshCredentials $userRefreshCredentials;
 
-    /** @var Factory */
-    private $factory;
+    private Factory $factory;
 
     protected function setUp(): void
     {
@@ -63,7 +59,8 @@ class FactoryTest extends UnitTestCase
         $database = (new Factory())
             ->withServiceAccount($this->validServiceAccount)
             ->withDatabaseUri($uri)
-            ->createDatabase();
+            ->createDatabase()
+        ;
 
         $databaseUri = $database->getReference()->getUri();
 
@@ -76,7 +73,8 @@ class FactoryTest extends UnitTestCase
         $storage = (new Factory())
             ->withServiceAccount($this->validServiceAccount)
             ->withDefaultStorageBucket('foo')
-            ->createStorage();
+            ->createStorage()
+        ;
 
         $this->assertSame('foo', $storage->getBucket()->name());
     }
@@ -96,7 +94,8 @@ class FactoryTest extends UnitTestCase
         $generator = (new Factory())
             ->withDisabledAutoDiscovery()
             ->withClientEmail('does@not.matter')
-            ->createCustomTokenGenerator();
+            ->createCustomTokenGenerator()
+        ;
 
         $this->assertInstanceOf(CustomTokenViaGoogleIam::class, $generator);
     }
@@ -189,7 +188,8 @@ class FactoryTest extends UnitTestCase
             ->withDisabledAutoDiscovery()
             ->withProjectId('project-id')
             ->createAuth()
-            ->verifyIdToken('idtoken');
+            ->verifyIdToken('idtoken')
+        ;
     }
 
     public function testAProjectIdCanBeProvidedDirectly(): void
@@ -211,7 +211,8 @@ class FactoryTest extends UnitTestCase
         // The database component requires a project ID
         (new Factory())
             ->withGoogleAuthTokenCredentials(new ServiceAccountCredentials(Factory::API_CLIENT_SCOPES, $this->validServiceAccountFile))
-            ->createDatabase();
+            ->createDatabase()
+        ;
 
         $this->addToAssertionCount(1);
     }
@@ -223,7 +224,8 @@ class FactoryTest extends UnitTestCase
 
         (new Factory())
             ->withGoogleAuthTokenCredentials($this->userRefreshCredentials)
-            ->createDatabase();
+            ->createDatabase()
+        ;
 
         $this->addToAssertionCount(1);
 
@@ -237,7 +239,8 @@ class FactoryTest extends UnitTestCase
 
         (new Factory())
             ->withGoogleAuthTokenCredentials($this->userRefreshCredentials)
-            ->createDatabase();
+            ->createDatabase()
+        ;
 
         $this->addToAssertionCount(1);
 
@@ -253,7 +256,8 @@ class FactoryTest extends UnitTestCase
 
         (new Factory())
             ->withGoogleAuthTokenCredentials($this->userRefreshCredentials)
-            ->createDatabase();
+            ->createDatabase()
+        ;
     }
 
     public function testWithoutAProjectIdTheStorageComponentNeedsABucketName(): void
@@ -264,7 +268,8 @@ class FactoryTest extends UnitTestCase
         (new Factory())
             ->withGoogleAuthTokenCredentials($this->userRefreshCredentials)
             ->createStorage()
-            ->getBucket();
+            ->getBucket()
+        ;
     }
 
     public function testNoRemoteConfigWithoutAProjectId(): void

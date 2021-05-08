@@ -10,7 +10,6 @@ use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Tests\UnitTestCase;
 use stdClass;
@@ -20,8 +19,7 @@ use stdClass;
  */
 class MessagingTest extends UnitTestCase
 {
-    /** @var Messaging */
-    private $messaging;
+    private Messaging $messaging;
 
     protected function setUp(): void
     {
@@ -79,15 +77,5 @@ class MessagingTest extends UnitTestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->sendAll($messages);
-    }
-
-    public function validTokenProvider()
-    {
-        return [
-            ['foo'],
-            [['foo']],
-            [RegistrationToken::fromValue('foo')],
-            [[RegistrationToken::fromValue('foo')]],
-        ];
     }
 }

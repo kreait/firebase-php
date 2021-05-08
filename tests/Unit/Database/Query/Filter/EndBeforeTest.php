@@ -23,19 +23,24 @@ class EndBeforeTest extends UnitTestCase
 
     /**
      * @dataProvider valueProvider
+     *
+     * @param mixed $given
      */
-    public function testModifyUri($given, $expected): void
+    public function testModifyUri($given, string $expected): void
     {
         $filter = new EndBefore($given);
 
         $this->assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://domain.tld')));
     }
 
-    public function valueProvider()
+    /**
+     * @return array<string, array<int, int|string>>
+     */
+    public function valueProvider(): array
     {
         return [
-            [1, 'endBefore=1'],
-            ['value', 'endBefore=%22value%22'],
+            'int' => [1, 'endBefore=1'],
+            'string' => ['value', 'endBefore=%22value%22'],
         ];
     }
 }

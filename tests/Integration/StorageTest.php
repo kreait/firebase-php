@@ -13,8 +13,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
  */
 class StorageTest extends IntegrationTestCase
 {
-    /** @var Storage */
-    private $storage;
+    private Storage $storage;
 
     protected function setUp(): void
     {

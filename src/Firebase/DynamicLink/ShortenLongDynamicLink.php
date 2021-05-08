@@ -14,7 +14,7 @@ final class ShortenLongDynamicLink implements JsonSerializable
     public const WITH_SHORT_SUFFIX = 'SHORT';
 
     /** @var array<string, mixed> */
-    private $data = [
+    private array $data = [
         'suffix' => ['option' => self::WITH_UNGUESSABLE_SUFFIX],
     ];
 

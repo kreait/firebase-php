@@ -23,6 +23,9 @@ class StartAfterTest extends UnitTestCase
 
     /**
      * @dataProvider valueProvider
+     *
+     * @param mixed $given
+     * @param mixed $expected
      */
     public function testModifyUri($given, $expected): void
     {
@@ -31,11 +34,14 @@ class StartAfterTest extends UnitTestCase
         $this->assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://domain.tld')));
     }
 
+    /**
+     * @return array<string, array<int, int|string>>
+     */
     public function valueProvider()
     {
         return [
-            [1, 'startAfter=1'],
-            ['value', 'startAfter=%22value%22'],
+            'int' => [1, 'startAfter=1'],
+            'string' => ['value', 'startAfter=%22value%22'],
         ];
     }
 }

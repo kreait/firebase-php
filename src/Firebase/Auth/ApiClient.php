@@ -26,11 +26,9 @@ class ApiClient implements ClientInterface
 {
     use WrappedGuzzleClient;
 
-    /** @var TenantId|null */
-    private $tenantId;
+    private ?TenantId $tenantId;
 
-    /** @var AuthApiExceptionConverter */
-    private $errorHandler;
+    private AuthApiExceptionConverter $errorHandler;
 
     /**
      * @internal

@@ -16,74 +16,74 @@ use Kreait\Firebase\Value\Url;
  */
 trait EditUserTrait
 {
-    /** @var Uid|null */
-    protected $uid;
-
-    /** @var Email|null */
-    protected $email;
-
-    /** @var string|null */
-    protected $displayName;
-
-    /** @var bool|null */
-    protected $emailIsVerified;
-
-    /** @var PhoneNumber|null */
-    protected $phoneNumber;
-
-    /** @var Url|null */
-    protected $photoUrl;
-
-    /** @var bool|null */
-    protected $markAsEnabled;
-
-    /** @var bool|null */
-    protected $markAsDisabled;
-
-    /** @var ClearTextPassword|null */
-    protected $clearTextPassword;
+    protected ?Uid $uid = null;
+    protected ?Email $email = null;
+    protected ?string $displayName = null;
+    protected ?bool $emailIsVerified = null;
+    protected ?PhoneNumber $phoneNumber = null;
+    protected ?Url $photoUrl = null;
+    protected ?bool $markAsEnabled = null;
+    protected ?bool $markAsDisabled = null;
+    protected ?ClearTextPassword $clearTextPassword = null;
 
     /**
-     * @param self $request
      * @param array<string, mixed> $properties
      *
      * @throws InvalidArgumentException when invalid properties have been provided
+     *
+     * @return static
      */
-    protected static function withEditableProperties($request, array $properties): self
+    protected static function withEditableProperties(self $request, array $properties)
     {
         foreach ($properties as $key => $value) {
-            switch (\mb_strtolower((string) \preg_replace('/[^a-z]/i', '', (string) $key))) {
+            switch (\mb_strtolower((string) \preg_replace('/[^a-z]/i', '', $key))) {
                 case 'uid':
                 case 'localid':
                     $request = $request->withUid($value);
+
                     break;
+
                 case 'email':
                     $request = $request->withEmail($value);
+
                     break;
+
                 case 'unverifiedemail':
                     $request = $request->withUnverifiedEmail($value);
+
                     break;
+
                 case 'verifiedemail':
                     $request = $request->withVerifiedEmail($value);
+
                     break;
+
                 case 'emailverified':
                     if ($value === true) {
                         $request = $request->markEmailAsVerified();
                     } elseif ($value === false) {
                         $request = $request->markEmailAsUnverified();
                     }
+
                     break;
+
                 case 'displayname':
                     $request = $request->withDisplayName($value);
+
                     break;
+
                 case 'phone':
                 case 'phonenumber':
                     $request = $request->withPhoneNumber($value);
+
                     break;
+
                 case 'photo':
                 case 'photourl':
                     $request = $request->withPhotoUrl($value);
+
                     break;
+
                 case 'disableuser':
                 case 'disabled':
                 case 'isdisabled':
@@ -92,7 +92,9 @@ trait EditUserTrait
                     } elseif ($value === false) {
                         $request = $request->markAsEnabled();
                     }
+
                     break;
+
                 case 'enableuser':
                 case 'enabled':
                 case 'isenabled':
@@ -101,10 +103,13 @@ trait EditUserTrait
                     } elseif ($value === false) {
                         $request = $request->markAsDisabled();
                     }
+
                     break;
+
                 case 'password':
                 case 'cleartextpassword':
                     $request = $request->withClearTextPassword($value);
+
                     break;
             }
         }
@@ -283,9 +288,7 @@ trait EditUserTrait
             'phoneNumber' => $this->phoneNumber,
             'photoUrl' => $this->photoUrl,
             'password' => $this->clearTextPassword,
-        ], static function ($value) {
-            return $value !== null;
-        });
+        ], static fn ($value) => $value !== null);
     }
 
     public function hasUid(): bool

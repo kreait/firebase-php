@@ -18,11 +18,13 @@ abstract class UnitTestCase extends FirebaseTestCase
 
         $mock
             ->method('getProjectId')
-            ->willReturn('project');
+            ->willReturn('project')
+        ;
 
         $mock
             ->method('getClientEmail')
-            ->willReturn('client@email.tld');
+            ->willReturn('client@email.tld')
+        ;
 
         $mock
             ->method('getPrivateKey')
@@ -40,7 +42,8 @@ rAKJsbrz+8c537BaCPu1QvzgCkztpU7aFP5PH8kd3l3mJnLPdB793bP85qECQQCp
 sk5xCTIh3FZUqvv22s7JiBV6NJ5MGs1cPJPON4Xyjog2Pn7IlAeuhQ9Pa35L6Hc2
 HT4VkdSnheH8iahRVEmZAkBRGoQz5HSLMfyb/zsxpCrUZv886exZ/tGEhuY3s1j6
 npI3CJzFaivN28EWmBJI4/pJtTATlNsKfLxCKUvCJ55k
------END RSA PRIVATE KEY-----');
+-----END RSA PRIVATE KEY-----')
+        ;
 
         return $mock;
     }

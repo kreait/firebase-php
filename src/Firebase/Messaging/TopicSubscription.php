@@ -9,14 +9,11 @@ use JsonSerializable;
 
 final class TopicSubscription implements JsonSerializable
 {
-    /** @var Topic */
-    private $topic;
+    private Topic $topic;
 
-    /** @var RegistrationToken */
-    private $registrationToken;
+    private RegistrationToken $registrationToken;
 
-    /** @var DateTimeImmutable */
-    private $subscribedAt;
+    private DateTimeImmutable $subscribedAt;
 
     public function __construct(Topic $topic, RegistrationToken $registrationToken, DateTimeImmutable $subscribedAt)
     {

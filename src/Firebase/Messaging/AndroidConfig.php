@@ -16,7 +16,7 @@ final class AndroidConfig implements JsonSerializable
     private const PRIORITY_HIGH = 'high';
 
     /** @var array<string, mixed> */
-    private $config;
+    private array $config = [];
 
     private function __construct()
     {
@@ -79,8 +79,6 @@ final class AndroidConfig implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return \array_filter($this->config, static function ($value) {
-            return $value !== null;
-        });
+        return \array_filter($this->config, static fn ($value) => $value !== null);
     }
 }

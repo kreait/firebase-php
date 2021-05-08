@@ -8,11 +8,11 @@ use Kreait\Firebase\Auth\ActionCodeSettings;
 
 final class RawActionCodeSettings implements ActionCodeSettings
 {
-    /** @var array<mixed> */
-    private $settings;
+    /** @var array<bool|string> */
+    private array $settings;
 
     /**
-     * @param array<mixed> $settings
+     * @param array<string, bool|string> $settings
      */
     public function __construct(array $settings)
     {
@@ -20,7 +20,7 @@ final class RawActionCodeSettings implements ActionCodeSettings
     }
 
     /**
-     * @return array<mixed>
+     * @return array<string, bool|string>
      */
     public function toArray(): array
     {

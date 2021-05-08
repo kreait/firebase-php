@@ -12,14 +12,11 @@ use Throwable;
 
 abstract class DatabaseTestCase extends IntegrationTestCase
 {
-    /** @var string */
-    protected static $refPrefix;
+    protected static string $refPrefix;
 
-    /** @var string|null */
-    protected static $rtdbUrl;
+    protected static ?string $rtdbUrl;
 
-    /** @var Database */
-    protected static $db;
+    protected static Database $db;
 
     public static function setUpBeforeClass(): void
     {

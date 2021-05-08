@@ -15,8 +15,7 @@ use Lcobucci\JWT\Token\Plain;
  */
 class UpdateUserTest extends IntegrationTestCase
 {
-    /** @var Auth */
-    private $auth;
+    private Auth $auth;
 
     protected function setUp(): void
     {
@@ -111,7 +110,8 @@ class UpdateUserTest extends IntegrationTestCase
     public function testUpdateUserWithCustomAttributes(): void
     {
         $request = CreateUser::new()
-            ->withUid($uid = \bin2hex(\random_bytes(5)));
+            ->withUid($uid = \bin2hex(\random_bytes(5)))
+        ;
 
         $this->auth->createUser($request);
 
@@ -119,7 +119,8 @@ class UpdateUserTest extends IntegrationTestCase
             ->withCustomAttributes($claims = [
                 'admin' => true,
                 'groupId' => '1234',
-            ]);
+            ])
+        ;
 
         $user = $this->auth->updateUser($uid, $request);
         $this->assertEquals($claims, $user->customClaims);

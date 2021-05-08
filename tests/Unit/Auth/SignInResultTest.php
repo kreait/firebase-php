@@ -13,10 +13,11 @@ use Kreait\Firebase\Tests\UnitTestCase;
 final class SignInResultTest extends UnitTestCase
 {
     /**
-     * @test
      * @dataProvider fullResponse
+     *
+     * @param array<string, mixed> $input
      */
-    public function it_can_be_created(array $input): void
+    public function testItCanBeCreated(array $input): void
     {
         $result = SignInResult::fromData($input);
 
@@ -36,7 +37,10 @@ final class SignInResultTest extends UnitTestCase
         ], $result->asTokenResponse());
     }
 
-    public function fullResponse()
+    /**
+     * @return array<string, array<int, array<string, mixed>>>
+     */
+    public function fullResponse(): array
     {
         return [
             'snake_cased' => [[

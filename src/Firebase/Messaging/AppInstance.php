@@ -12,18 +12,21 @@ use Kreait\Firebase\Util\DT;
  */
 final class AppInstance implements JsonSerializable
 {
-    /** @var RegistrationToken */
-    private $registrationToken;
+    private RegistrationToken $registrationToken;
 
     /** @var array<string, mixed> */
-    private $rawData = [];
+    private array $rawData;
 
-    /** @var TopicSubscriptions */
-    private $topicSubscriptions;
+    private TopicSubscriptions $topicSubscriptions;
 
-    private function __construct()
+    /**
+     * @param array<string, mixed> $rawData
+     */
+    private function __construct(RegistrationToken $registrationToken, TopicSubscriptions $topicSubscriptions, array $rawData)
     {
-        $this->topicSubscriptions = new TopicSubscriptions();
+        $this->registrationToken = $registrationToken;
+        $this->topicSubscriptions = $topicSubscriptions;
+        $this->rawData = $rawData;
     }
 
     /**
@@ -33,11 +36,6 @@ final class AppInstance implements JsonSerializable
      */
     public static function fromRawData(RegistrationToken $registrationToken, array $rawData): self
     {
-        $info = new self();
-
-        $info->registrationToken = $registrationToken;
-        $info->rawData = $rawData;
-
         $subscriptions = [];
 
         foreach ($rawData['rel']['topics'] ?? [] as $topicName => $subscriptionInfo) {
@@ -46,9 +44,7 @@ final class AppInstance implements JsonSerializable
             $subscriptions[] = new TopicSubscription($topic, $registrationToken, $addedAt);
         }
 
-        $info->topicSubscriptions = new TopicSubscriptions(...$subscriptions);
-
-        return $info;
+        return new self($registrationToken, new TopicSubscriptions(...$subscriptions), $rawData);
     }
 
     public function registrationToken(): RegistrationToken
@@ -68,11 +64,9 @@ final class AppInstance implements JsonSerializable
     {
         $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
 
-        $filtered = $this->topicSubscriptions->filter(static function (TopicSubscription $subscription) use ($topic) {
-            return $topic->value() === $subscription->topic()->value();
-        });
-
-        return $filtered->count() > 0;
+        return $this->topicSubscriptions
+            ->filter(static fn (TopicSubscription $subscription) => $topic->value() === $subscription->topic()->value())
+            ->count() > 0;
     }
 
     /**

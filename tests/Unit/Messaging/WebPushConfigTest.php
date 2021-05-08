@@ -14,6 +14,8 @@ class WebPushConfigTest extends UnitTestCase
 {
     /**
      * @dataProvider validDataProvider
+     *
+     * @param array<string, mixed> $data
      */
     public function testCreateFromArray(array $data): void
     {
@@ -22,10 +24,7 @@ class WebPushConfigTest extends UnitTestCase
         $this->assertEquals($data, $config->jsonSerialize());
     }
 
-    /**
-     * @test
-     */
-    public function it_can_have_a_priority(): void
+    public function testItCanHaveAPriority(): void
     {
         $config = WebPushConfig::new()->withVeryLowUrgency();
         $this->assertSame('very-low', $config->jsonSerialize()['headers']['Urgency']);
@@ -40,7 +39,10 @@ class WebPushConfigTest extends UnitTestCase
         $this->assertSame('high', $config->jsonSerialize()['headers']['Urgency']);
     }
 
-    public function validDataProvider()
+    /**
+     * @return array<string, array<string, array<string, mixed>>>
+     */
+    public function validDataProvider(): array
     {
         return [
             'full_config' => [

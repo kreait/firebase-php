@@ -14,7 +14,7 @@ use Traversable;
 final class Requests implements IteratorAggregate
 {
     /** @var RequestInterface[] */
-    private $requests;
+    private array $requests;
 
     public function __construct(RequestInterface ...$requests)
     {
@@ -51,7 +51,7 @@ final class Requests implements IteratorAggregate
      *
      * @return Traversable<RequestInterface>|RequestInterface[]
      */
-    public function getIterator()
+    public function getIterator(): iterable
     {
         yield from $this->requests;
     }

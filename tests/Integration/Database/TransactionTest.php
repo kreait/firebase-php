@@ -14,8 +14,7 @@ use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
  */
 class TransactionTest extends DatabaseTestCase
 {
-    /** @var Reference */
-    private $ref;
+    private Reference $ref;
 
     protected function setUp(): void
     {

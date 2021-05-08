@@ -13,8 +13,7 @@ final class LimitToFirst implements Filter
 {
     use ModifierTrait;
 
-    /** @var int */
-    private $limit;
+    private int $limit;
 
     public function __construct(int $limit)
     {

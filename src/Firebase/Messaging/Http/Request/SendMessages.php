@@ -33,7 +33,8 @@ final class SendMessages implements HasSubRequests, RequestInterface
                 // see https://github.com/firebase/firebase-admin-node/blob/master/src/messaging/batch-request.ts#L104
                 ->withHeader('Content-ID', (string) ++$index)
                 ->withHeader('Content-Transfer-Encoding', 'binary')
-                ->withHeader('Content-Type', 'application/http');
+                ->withHeader('Content-Type', 'application/http')
+            ;
         }
 
         $this->wrappedRequest = new RequestWithSubRequests(

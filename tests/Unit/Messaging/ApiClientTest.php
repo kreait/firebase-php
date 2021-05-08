@@ -22,17 +22,16 @@ use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\ApiClient;
 use PHPUnit\Framework\TestCase;
+use Throwable;
 
 /**
  * @internal
  */
 class ApiClientTest extends TestCase
 {
-    /** @var MockHandler */
-    private $mock;
+    private MockHandler $mock;
 
-    /** @var ApiClient */
-    private $client;
+    private ApiClient $client;
 
     protected function setUp(): void
     {
@@ -48,6 +47,9 @@ class ApiClientTest extends TestCase
 
     /**
      * @dataProvider requestExceptions
+     *
+     * @param mixed $requestException
+     * @param mixed $expectedClass
      */
     public function testCatchRequestException($requestException, $expectedClass): void
     {
@@ -63,12 +65,15 @@ class ApiClientTest extends TestCase
 
         $this->expectException(MessagingException::class);
 
-        $this->client->send(new Request('GET', 'http://example.com'));
+        $this->client->send(new Request('GET', 'https://example.com'));
     }
 
+    /**
+     * @return array<array<Throwable|class-string>>
+     */
     public function requestExceptions(): array
     {
-        $request = new Request('GET', 'http://example.com');
+        $request = new Request('GET', 'https://example.com');
         $responseBody = '{}';
 
         return [

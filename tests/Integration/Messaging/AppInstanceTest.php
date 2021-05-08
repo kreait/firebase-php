@@ -12,18 +12,14 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
  */
 final class AppInstanceTest extends IntegrationTestCase
 {
-    /** @var Messaging */
-    public $messaging;
+    public Messaging $messaging;
 
     protected function setUp(): void
     {
         $this->messaging = self::$factory->createMessaging();
     }
 
-    /**
-     * @test
-     */
-    public function it_is_subscribed_to_topics(): void
+    public function testItIsSubscribedToTopics(): void
     {
         $token = $this->getTestRegistrationToken();
 

@@ -35,18 +35,14 @@ use RuntimeException;
  */
 final class AuthApiExceptionConverterTest extends UnitTestCase
 {
-    /** @var AuthApiExceptionConverter */
-    private $converter;
+    private AuthApiExceptionConverter $converter;
 
     protected function setUp(): void
     {
         $this->converter = new AuthApiExceptionConverter();
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_a_request_exception_that_does_not_include_valid_json(): void
+    public function testItConvertsARequestExceptionThatDoesNotIncludeValidJson(): void
     {
         $requestExcpeption = new RequestException(
             'Error without valid json',
@@ -60,10 +56,7 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $this->assertSame($responseBody, $convertedError->getMessage());
     }
 
-    /**
-     * @test
-     */
-    public function it_converts_a_connect_exception(): void
+    public function testItConvertsAConnectException(): void
     {
         $connectException = new ConnectException(
             'curl error xx',
@@ -73,21 +66,17 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf(ApiConnectionFailed::class, $this->converter->convertException($connectException));
     }
 
-    /**
-     * @test
-     */
-    public function it_can_handle_unknown_exceptions(): void
+    public function testItCanHandleUnknownExceptions(): void
     {
         $this->assertInstanceOf(AuthError::class, $this->converter->convertException(new RuntimeException()));
     }
 
     /**
-     * @test
      * @dataProvider requestErrors
      *
      * @param class-string<object> $expectedClass
      */
-    public function it_converts_request_exceptions_because(string $identifier, string $expectedClass): void
+    public function testItConvertsRequestExceptionsBecause(string $identifier, string $expectedClass): void
     {
         $requestException = new RequestException(
             'Firebase Error Test',
@@ -110,7 +99,10 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf($expectedClass, $convertedError);
     }
 
-    public function requestErrors()
+    /**
+     * @return array<string, array<int, string>>
+     */
+    public function requestErrors(): array
     {
         return [
             'credentials mismatch' => ['CREDENTIALS_MISMATCH', CredentialsMismatch::class],

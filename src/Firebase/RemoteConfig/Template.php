@@ -10,20 +10,18 @@ use Psr\Http\Message\ResponseInterface;
 
 class Template implements \JsonSerializable
 {
-    /** @var string */
-    private $etag = '*';
+    private string $etag = '*';
 
     /** @var Parameter[] */
-    private $parameters = [];
+    private array $parameters = [];
 
     /** @var ParameterGroup[] */
-    private $parameterGroups = [];
+    private array $parameterGroups = [];
 
     /** @var Condition[] */
-    private $conditions = [];
+    private array $conditions = [];
 
-    /** @var Version|null */
-    private $version;
+    private ?Version $version = null;
 
     private function __construct()
     {
@@ -97,7 +95,8 @@ class Template implements \JsonSerializable
     {
         $parameter = Parameter::named($name)
             ->withDescription((string) ($data['description'] ?? ''))
-            ->withDefaultValue(DefaultValue::fromArray($data['defaultValue'] ?? []));
+            ->withDefaultValue(DefaultValue::fromArray($data['defaultValue'] ?? []))
+        ;
 
         foreach ((array) ($data['conditionalValues'] ?? []) as $key => $conditionalValueData) {
             $parameter = $parameter->withConditionalValue(new ConditionalValue($key, $conditionalValueData['value']));
@@ -112,7 +111,8 @@ class Template implements \JsonSerializable
     private static function buildParameterGroup(string $name, array $parameterGroupData): ParameterGroup
     {
         $group = ParameterGroup::named($name)
-            ->withDescription((string) ($parameterGroupData['description'] ?? ''));
+            ->withDescription((string) ($parameterGroupData['description'] ?? ''))
+        ;
 
         foreach ($parameterGroupData['parameters'] ?? [] as $parameterName => $parameterData) {
             $group = $group->withParameter(self::buildParameter($parameterName, $parameterData));

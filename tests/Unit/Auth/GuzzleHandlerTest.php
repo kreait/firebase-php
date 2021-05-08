@@ -20,14 +20,11 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 final class GuzzleHandlerTest extends UnitTestCase
 {
-    /** @var MockHandler */
-    private $httpResponses;
+    private MockHandler $httpResponses;
 
-    /** @var SignIn */
-    private $action;
+    private SignIn $action;
 
-    /** @var GuzzleHandler */
-    private $handler;
+    private GuzzleHandler $handler;
 
     protected function setUp(): void
     {
@@ -37,20 +34,14 @@ final class GuzzleHandlerTest extends UnitTestCase
         $this->handler = new GuzzleHandler(new Client(['handler' => $this->httpResponses]));
     }
 
-    /**
-     * @test
-     */
-    public function it_fails_on_an_unsupported_action(): void
+    public function testItFailsOnAnUnsupportedAction(): void
     {
         $this->expectException(FailedToSignIn::class);
         $this->handler->handle(new class() implements SignIn {
         });
     }
 
-    /**
-     * @test
-     */
-    public function it_fails_when_guzzle_fails(): void
+    public function testItFailsWhenGuzzleFails(): void
     {
         $client = $this->createMock(ClientInterface::class);
         $client->method('send')->willThrowException($this->createMock(ConnectException::class));
@@ -61,10 +52,7 @@ final class GuzzleHandlerTest extends UnitTestCase
         $handler->handle($this->action);
     }
 
-    /**
-     * @test
-     */
-    public function it_fails_on_an_unsuccessful_response(): void
+    public function testItFailsOnAnUnsuccessfulResponse(): void
     {
         $this->httpResponses->append($response = new Response(400));
 
@@ -76,10 +64,7 @@ final class GuzzleHandlerTest extends UnitTestCase
         }
     }
 
-    /**
-     * @test
-     */
-    public function it_fails_on_a_successful_response_with_invalid_json(): void
+    public function testItFailsOnASuccessfulResponseWithInvalidJson(): void
     {
         $this->httpResponses->append(new Response(200, [], '{'));
 
@@ -87,10 +72,7 @@ final class GuzzleHandlerTest extends UnitTestCase
         $this->handler->handle($this->action);
     }
 
-    /**
-     * @test
-     */
-    public function it_works(): void
+    public function testItWorks(): void
     {
         $this->httpResponses->append(new Response(200, [], (string) \json_encode([
             'id_token' => 'id_token',

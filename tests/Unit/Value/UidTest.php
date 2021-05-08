@@ -15,6 +15,8 @@ class UidTest extends TestCase
 {
     /**
      * @dataProvider validValues
+     *
+     * @param mixed $value
      */
     public function testWithValidValue($value): void
     {
@@ -27,6 +29,8 @@ class UidTest extends TestCase
 
     /**
      * @dataProvider invalidValues
+     *
+     * @param mixed $value
      */
     public function testWithInvalidValue($value): void
     {
@@ -34,18 +38,24 @@ class UidTest extends TestCase
         new Uid($value);
     }
 
+    /**
+     * @return array<string, array<string>>
+     */
     public function validValues(): array
     {
         return [
-            ['uid'],
+            'uid' => ['uid'],
         ];
     }
 
+    /**
+     * @return array<string, array<string>>
+     */
     public function invalidValues(): array
     {
         return [
-            [''],
-            [\str_repeat('x', 129)],
+            'empty string' => [''],
+            'too long' => [\str_repeat('x', 129)],
         ];
     }
 }

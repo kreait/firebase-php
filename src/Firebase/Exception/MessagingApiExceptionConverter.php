@@ -26,11 +26,9 @@ use Throwable;
  */
 class MessagingApiExceptionConverter
 {
-    /** @var ErrorResponseParser */
-    private $responseParser;
+    private ErrorResponseParser $responseParser;
 
-    /** @var Clock */
-    private $clock;
+    private Clock $clock;
 
     /**
      * @internal
@@ -71,31 +69,44 @@ class MessagingApiExceptionConverter
         switch ($code) {
             case 400:
                 $convertedError = new InvalidMessage($message);
+
                 break;
+
             case 401:
             case 403:
                 $convertedError = new AuthenticationError($message);
+
                 break;
+
             case 404:
                 $convertedError = new NotFound($message);
+
                 break;
+
             case 429:
                 $convertedError = new QuotaExceeded($message);
                 if ($retryAfter = $this->getRetryAfter($response)) {
                     $convertedError = $convertedError->withRetryAfter($retryAfter);
                 }
+
                 break;
+
             case 500:
                 $convertedError = new ServerError($message);
+
                 break;
+
             case 503:
                 $convertedError = new ServerUnavailable($message);
                 if ($retryAfter = $this->getRetryAfter($response)) {
                     $convertedError = $convertedError->withRetryAfter($retryAfter);
                 }
+
                 break;
+
             default:
                 $convertedError = new MessagingError($message, $code, $previous);
+
                 break;
         }
 

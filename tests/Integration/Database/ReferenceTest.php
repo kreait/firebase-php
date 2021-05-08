@@ -14,8 +14,7 @@ use Kreait\Firebase\Util\DT;
  */
 class ReferenceTest extends DatabaseTestCase
 {
-    /** @var Reference */
-    private $ref;
+    private Reference $ref;
 
     protected function setUp(): void
     {
@@ -24,8 +23,10 @@ class ReferenceTest extends DatabaseTestCase
 
     /**
      * @dataProvider validValues
+     *
+     * @param mixed $value
      */
-    public function testSetAndGet($key, $value): void
+    public function testSetAndGet(string $key, $value): void
     {
         $ref = $this->ref->getChild(__FUNCTION__.'/'.$key);
         $ref->set($value);
@@ -120,6 +121,9 @@ class ReferenceTest extends DatabaseTestCase
         $this->assertTrue($check > $now);
     }
 
+    /**
+     * @return array<string, array<int, mixed>>
+     */
     public function validValues()
     {
         return [

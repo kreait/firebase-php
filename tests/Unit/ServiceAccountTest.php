@@ -14,17 +14,14 @@ use stdClass;
  */
 class ServiceAccountTest extends UnitTestCase
 {
-    /** @var string */
-    private $pathToUnreadableJson;
+    private string $pathToUnreadableJson;
 
-    /** @var string */
-    private $pathToValidJson;
+    private string $pathToValidJson;
 
-    /** @var string */
-    private $validJson;
+    private string $validJson;
 
     /** @var array<string, string> */
-    private $validData;
+    private array $validData;
 
     protected function setUp(): void
     {
@@ -95,6 +92,8 @@ class ServiceAccountTest extends UnitTestCase
 
     /**
      * @dataProvider invalidValues
+     *
+     * @param mixed $value
      */
     public function testCreateFromInvalidValue($value): void
     {
@@ -102,7 +101,10 @@ class ServiceAccountTest extends UnitTestCase
         ServiceAccount::fromValue($value);
     }
 
-    public function invalidValues()
+    /**
+     * @return array<string, array<int, mixed>>
+     */
+    public function invalidValues(): array
     {
         return [
             'true' => [true],

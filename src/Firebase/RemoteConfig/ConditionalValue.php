@@ -6,11 +6,9 @@ namespace Kreait\Firebase\RemoteConfig;
 
 class ConditionalValue implements \JsonSerializable
 {
-    /** @var string */
-    private $conditionName;
+    private string $conditionName;
 
-    /** @var string */
-    private $value;
+    private string $value;
 
     /**
      * @internal

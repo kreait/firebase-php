@@ -8,11 +8,11 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 
 final class VersionNumber implements \JsonSerializable
 {
-    /** @var string */
-    private $value;
+    private string $value;
 
-    private function __construct()
+    private function __construct(string $value)
     {
+        $this->value = $value;
     }
 
     /**
@@ -26,10 +26,7 @@ final class VersionNumber implements \JsonSerializable
             throw new InvalidArgumentException('A version number should only consist of digits');
         }
 
-        $new = new self();
-        $new->value = $valueString;
-
-        return $new;
+        return new self($valueString);
     }
 
     public function __toString()

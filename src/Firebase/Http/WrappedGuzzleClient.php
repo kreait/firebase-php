@@ -17,8 +17,7 @@ use Psr\Http\Message\UriInterface;
  */
 trait WrappedGuzzleClient
 {
-    /** @var ClientInterface */
-    protected $client;
+    protected ClientInterface $client;
 
     /**
      * @param array<string, mixed> $options
@@ -39,23 +38,21 @@ trait WrappedGuzzleClient
     }
 
     /**
-     * @param string $method
      * @param UriInterface|string $uri
      * @param array<string, mixed> $options
      *
      * @throws GuzzleException
      */
-    public function request($method, $uri, array $options = []): ResponseInterface
+    public function request(string $method, $uri, array $options = []): ResponseInterface
     {
         return $this->client->request($method, $uri, $options);
     }
 
     /**
-     * @param string $method
      * @param UriInterface|string $uri
      * @param array<string, mixed> $options
      */
-    public function requestAsync($method, $uri, array $options = []): PromiseInterface
+    public function requestAsync(string $method, $uri, array $options = []): PromiseInterface
     {
         return $this->client->requestAsync($method, $uri, $options);
     }

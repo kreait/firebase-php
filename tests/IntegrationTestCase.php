@@ -16,17 +16,14 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 {
     public const TENANT_ID = 'Beste-lgiu8';
 
-    /** @var Factory */
-    protected static $factory;
+    protected static Factory $factory;
 
-    /** @var ServiceAccount */
-    protected static $serviceAccount;
+    protected static ServiceAccount $serviceAccount;
 
     /** @var string[] */
-    protected static $registrationTokens = [];
+    protected static array $registrationTokens = [];
 
-    /** @var string */
-    protected static $unknownToken = 'd_RTtLHR_JgI4r4tbYM9CA:APA91bEzb2Tb3WlKwddpEPYY2ZAx7AOmjOhiw-jVq6J9ekJGpBAefAgMb1muDJcKBMsrMq7zSCfBzl0Ll7JCZ0o8QI9zLVG1F18nqW9AOFKDXi8-MyT3R5Stt6GGKnq9rd9l5kopGEbO';
+    protected static string $unknownToken = 'd_RTtLHR_JgI4r4tbYM9CA:APA91bEzb2Tb3WlKwddpEPYY2ZAx7AOmjOhiw-jVq6J9ekJGpBAefAgMb1muDJcKBMsrMq7zSCfBzl0Ll7JCZ0o8QI9zLVG1F18nqW9AOFKDXi8-MyT3R5Stt6GGKnq9rd9l5kopGEbO';
 
     public static function setUpBeforeClass(): void
     {
@@ -53,7 +50,8 @@ abstract class IntegrationTestCase extends FirebaseTestCase
             ->createUser([
                 'email' => $email,
                 'clear_text_password' => $password,
-            ]);
+            ])
+        ;
     }
 
     /**
@@ -76,7 +74,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
             $this->markTestSkipped('No registration token available');
         }
 
-        /* @noinspection NonSecureArrayRandUsageInspection */
+        // @noinspection NonSecureArrayRandUsageInspection
         return self::$registrationTokens[\array_rand(self::$registrationTokens)];
     }
 

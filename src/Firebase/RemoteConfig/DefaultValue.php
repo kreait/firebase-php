@@ -38,7 +38,10 @@ class DefaultValue implements \JsonSerializable
     }
 
     /**
-     * @param array<string, string|null> $data
+     * @param array{
+     *     value?: string|bool,
+     *     useInAppDefault?: bool
+     * } $data
      */
     public static function fromArray(array $data): self
     {

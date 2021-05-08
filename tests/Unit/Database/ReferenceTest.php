@@ -22,8 +22,7 @@ class ReferenceTest extends UnitTestCase
     /** @var ApiClient|\PHPUnit\Framework\MockObject\MockObject */
     private $apiClient;
 
-    /** @var Reference */
-    private $reference;
+    private Reference $reference;
 
     protected function setUp(): void
     {
@@ -81,7 +80,8 @@ class ReferenceTest extends UnitTestCase
         $this->apiClient
             ->method('get')
             ->with($this->anything())
-            ->willReturn(['a' => true, 'b' => true, 'c' => true]);
+            ->willReturn(['a' => true, 'b' => true, 'c' => true])
+        ;
 
         $this->assertSame(['a', 'b', 'c'], $this->reference->getChildKeys());
     }
@@ -91,7 +91,8 @@ class ReferenceTest extends UnitTestCase
         $this->apiClient
             ->method('get')
             ->with($this->anything())
-            ->willReturn('scalar value');
+            ->willReturn('scalar value')
+        ;
 
         $this->expectException(OutOfRangeException::class);
 

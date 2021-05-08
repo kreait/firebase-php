@@ -19,48 +19,50 @@ final class MessageTarget
         self::CONDITION, self::TOKEN, self::TOPIC, self::UNKNOWN,
     ];
 
-    /** @var string */
-    private $type;
+    private string $type;
+    private string $value;
 
-    /** @var string */
-    private $value;
-
-    private function __construct()
+    private function __construct(string $type, string $value)
     {
+        $this->type = $type;
+        $this->value = $value;
     }
 
     /**
      * Create a new message target with the given type and value.
      *
      * @throws InvalidArgumentException
-     *
-     * @return MessageTarget
      */
     public static function with(string $type, string $value): self
     {
         $targetType = \mb_strtolower($type);
 
-        $new = new self();
-        $new->type = $targetType;
-
         switch ($targetType) {
             case self::CONDITION:
-                $new->value = (string) Condition::fromValue($value);
+                $targetValue = (string) Condition::fromValue($value);
+
                 break;
+
             case self::TOKEN:
-                $new->value = (string) RegistrationToken::fromValue($value);
+                $targetValue = (string) RegistrationToken::fromValue($value);
+
                 break;
+
             case self::TOPIC:
-                $new->value = (string) Topic::fromValue($value);
+                $targetValue = (string) Topic::fromValue($value);
+
                 break;
+
             case self::UNKNOWN:
-                $new->value = $value;
+                $targetValue = $value;
+
                 break;
+
             default:
                 throw new InvalidArgumentException("Invalid target type '{$type}', valid types: ".\implode(', ', self::TYPES));
         }
 
-        return $new;
+        return new self($targetType, $targetValue);
     }
 
     public function type(): string

@@ -17,7 +17,7 @@ final class WebPushConfig implements JsonSerializable
     private const URGENCY_HIGH = 'high';
 
     /** @var array<string, mixed> */
-    private $rawConfig;
+    private array $rawConfig = [];
 
     private function __construct()
     {
@@ -73,8 +73,6 @@ final class WebPushConfig implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return \array_filter($this->rawConfig, static function ($value) {
-            return $value !== null;
-        });
+        return \array_filter($this->rawConfig, static fn ($value) => $value !== null);
     }
 }

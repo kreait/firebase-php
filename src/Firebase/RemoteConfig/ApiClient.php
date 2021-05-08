@@ -20,8 +20,7 @@ class ApiClient implements ClientInterface
 {
     use WrappedGuzzleClient;
 
-    /** @var RemoteConfigApiExceptionConverter */
-    private $errorHandler;
+    private RemoteConfigApiExceptionConverter $errorHandler;
 
     /**
      * @internal
@@ -115,22 +114,16 @@ class ApiClient implements ClientInterface
         ]);
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
-
     /**
-     * @param string $method
      * @param string|UriInterface $uri
      * @param array<string, mixed>|null $options
      *
      * @throws RemoteConfigException
      */
-    private function requestApi($method, $uri, ?array $options = null): ResponseInterface
+    private function requestApi(string $method, $uri, ?array $options = null): ResponseInterface
     {
         $options = $options ?? [];
-
-        $options = \array_merge($options, [
-            'decode_content' => 'gzip', // sets content-type and deflates response body
-        ]);
+        $options['decode_content'] = 'gzip';
 
         try {
             return $this->client->request($method, $uri, $options);

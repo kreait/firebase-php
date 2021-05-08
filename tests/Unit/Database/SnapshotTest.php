@@ -16,14 +16,11 @@ class SnapshotTest extends UnitTestCase
     /** @var Reference|\PHPUnit\Framework\MockObject\MockObject */
     private $reference;
 
-    /** @var Snapshot */
-    private $snapshotWithArrayValue;
+    private Snapshot $snapshotWithArrayValue;
 
-    /** @var Snapshot */
-    private $snapshotWithScalarValue;
+    private Snapshot $snapshotWithScalarValue;
 
-    /** @var Snapshot */
-    private $snapshotWithEmptyValue;
+    private Snapshot $snapshotWithEmptyValue;
 
     protected function setUp(): void
     {
@@ -50,7 +47,8 @@ class SnapshotTest extends UnitTestCase
     {
         $this->reference->expects($this->once())
             ->method('getChild')->with('path/to/child')
-            ->willReturn($this->createMock(Reference::class));
+            ->willReturn($this->createMock(Reference::class))
+        ;
 
         $this->assertFalse($this->snapshotWithScalarValue->hasChild('path/to/child'));
         $childSnapshot = $this->snapshotWithScalarValue->getChild('path/to/child');
@@ -62,7 +60,8 @@ class SnapshotTest extends UnitTestCase
     {
         $this->reference->expects($this->once())
             ->method('getChild')->with('nonexisting/child')
-            ->willReturn($this->createMock(Reference::class));
+            ->willReturn($this->createMock(Reference::class))
+        ;
 
         $this->assertFalse($this->snapshotWithArrayValue->hasChild('nonexisting/child'));
         $this->assertNull($this->snapshotWithArrayValue->getChild('nonexisting/child')->getValue());
@@ -72,7 +71,8 @@ class SnapshotTest extends UnitTestCase
     {
         $this->reference->expects($this->once())
             ->method('getChild')->with('key/subkey')
-            ->willReturn($this->createMock(Reference::class));
+            ->willReturn($this->createMock(Reference::class))
+        ;
 
         $this->assertTrue($this->snapshotWithArrayValue->hasChild('key/subkey'));
         $this->assertSame('value', $this->snapshotWithArrayValue->getChild('key/subkey')->getValue());

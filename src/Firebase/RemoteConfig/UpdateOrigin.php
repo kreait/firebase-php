@@ -10,19 +10,16 @@ final class UpdateOrigin implements \JsonSerializable
     public const CONSOLE = 'CONSOLE';
     public const REST_API = 'REST_API';
 
-    /** @var string */
-    private $value;
+    private string $value;
 
-    private function __construct()
+    private function __construct(string $value)
     {
+        $this->value = $value;
     }
 
     public static function fromValue(string $value): self
     {
-        $new = new self();
-        $new->value = $value;
-
-        return $new;
+        return new self($value);
     }
 
     public function __toString(): string

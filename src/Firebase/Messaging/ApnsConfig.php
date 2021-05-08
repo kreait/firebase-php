@@ -16,7 +16,7 @@ final class ApnsConfig implements JsonSerializable
     private const PRIORITY_IMMEDIATE = '10';
 
     /** @var array<string, mixed> */
-    private $config;
+    private array $config = [];
 
     private function __construct()
     {
@@ -95,8 +95,6 @@ final class ApnsConfig implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return \array_filter($this->config, static function ($value) {
-            return $value !== null;
-        });
+        return \array_filter($this->config, static fn ($value) => $value !== null);
     }
 }

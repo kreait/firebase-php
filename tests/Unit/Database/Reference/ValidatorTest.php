@@ -15,11 +15,9 @@ use Psr\Http\Message\UriInterface;
  */
 class ValidatorTest extends UnitTestCase
 {
-    /** @var UriInterface */
-    private $uri;
+    private UriInterface $uri;
 
-    /** @var Validator */
-    private $validator;
+    private Validator $validator;
 
     protected function setUp(): void
     {
@@ -56,14 +54,17 @@ class ValidatorTest extends UnitTestCase
         $this->validator->validateUri($uri);
     }
 
-    public function invalidChars()
+    /**
+     * @return array<string, array<int, string>>
+     */
+    public function invalidChars(): array
     {
         return [
-            ['.'],
-            ['$'],
-            ['#'],
-            ['['],
-            [']'],
+            '.' => ['.'],
+            '$' => ['$'],
+            '#' => ['#'],
+            '[' => ['['],
+            ']' => [']'],
         ];
     }
 }

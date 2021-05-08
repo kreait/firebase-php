@@ -8,14 +8,9 @@ use Kreait\Firebase\Value\Email;
 
 final class SendActionLink
 {
-    /** @var CreateActionLink */
-    private $action;
-
-    /** @var string|null */
-    private $locale;
-
-    /** @var string|null */
-    private $idTokenString;
+    private CreateActionLink $action;
+    private ?string $locale;
+    private ?string $idTokenString = null;
 
     public function __construct(CreateActionLink $action, ?string $locale = null)
     {

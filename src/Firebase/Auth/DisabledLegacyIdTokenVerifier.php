@@ -10,8 +10,7 @@ use Lcobucci\JWT\Token;
 
 final class DisabledLegacyIdTokenVerifier implements Verifier
 {
-    /** @var string */
-    private $reason;
+    private string $reason;
 
     public function __construct(string $reason)
     {

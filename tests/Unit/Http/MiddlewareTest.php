@@ -14,18 +14,14 @@ use Psr\Http\Message\RequestInterface;
  */
 class MiddlewareTest extends UnitTestCase
 {
-    /** @var Psr7\Request */
-    private $request;
+    private Psr7\Request $request;
 
-    /** @var \Closure */
-    private $handler;
+    private \Closure $handler;
 
     protected function setUp(): void
     {
         $this->request = new Psr7\Request('GET', 'http://domain.tld');
-        $this->handler = static function (RequestInterface $request) {
-            return $request;
-        };
+        $this->handler = static fn (RequestInterface $request) => $request;
     }
 
     public function testEnsureJsonSuffix(): void

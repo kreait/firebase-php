@@ -20,22 +20,22 @@ final class NotFound extends RuntimeException implements MessagingException
         $message = <<<MESSAGE
 
 
-The message could not be delivered to the device identified by '$token'.
+            The message could not be delivered to the device identified by '{$token}'.
 
-Although the token is syntactically correct, it is not known to the Firebase
-project you are using. This could have the following reasons:
+            Although the token is syntactically correct, it is not known to the Firebase
+            project you are using. This could have the following reasons:
 
-- The token has been unregistered from the project. This can happen when a user
-  has logged out from the application on the given client, or if they have
-  uninstalled or re-installed the application.
+            - The token has been unregistered from the project. This can happen when a user
+              has logged out from the application on the given client, or if they have
+              uninstalled or re-installed the application.
 
-- The token has been registered to a different Firebase project than the project
-  you are using to send the message. A common reason for this is when you work
-  with different application environments and are sending a message from one
-  environment to a device in another environment.
+            - The token has been registered to a different Firebase project than the project
+              you are using to send the message. A common reason for this is when you work
+              with different application environments and are sending a message from one
+              environment to a device in another environment.
 
 
-MESSAGE;
+            MESSAGE;
 
         $notFound = new self($message);
         $notFound->errors = $errors;

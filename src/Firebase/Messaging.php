@@ -28,14 +28,11 @@ use Kreait\Firebase\Util\JSON;
 
 class Messaging implements Contract\Messaging
 {
-    /** @var string */
-    private $projectId;
+    private string $projectId;
 
-    /** @var ApiClient */
-    private $messagingApi;
+    private ApiClient $messagingApi;
 
-    /** @var AppInstanceApiClient */
-    private $appInstanceApi;
+    private AppInstanceApiClient $appInstanceApi;
 
     /**
      * @internal
@@ -137,9 +134,10 @@ class Messaging implements Contract\Messaging
 
     public function unsubscribeFromTopics(array $topics, $registrationTokenOrTokens): array
     {
-        $topics = \array_map(static function ($topic) {
-            return $topic instanceof Topic ? $topic : Topic::fromValue($topic);
-        }, $topics);
+        $topics = \array_map(
+            static fn ($topic) => $topic instanceof Topic ? $topic : Topic::fromValue($topic),
+            $topics
+        );
 
         $tokens = $this->ensureNonEmptyRegistrationTokens($registrationTokenOrTokens);
 
@@ -153,7 +151,8 @@ class Messaging implements Contract\Messaging
         $promises = [];
 
         foreach ($tokens as $token) {
-            $promises[$token->value()] = $this->appInstanceApi->getAppInstanceAsync($token)
+            $promises[$token->value()] = $this->appInstanceApi
+                ->getAppInstanceAsync($token)
                 ->then(function (AppInstance $appInstance) use ($token) {
                     $topics = [];
                     foreach ($appInstance->topicSubscriptions() as $subscription) {
@@ -162,9 +161,8 @@ class Messaging implements Contract\Messaging
 
                     return \array_keys($this->unsubscribeFromTopics($topics, $token));
                 })
-                ->otherwise(static function (\Throwable $e) {
-                    return $e->getMessage();
-                });
+                ->otherwise(static fn (\Throwable $e) => $e->getMessage())
+            ;
         }
 
         $responses = Utils::settle($promises)->wait();

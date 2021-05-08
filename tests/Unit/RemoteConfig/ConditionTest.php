@@ -15,6 +15,8 @@ class ConditionTest extends UnitTestCase
 {
     /**
      * @dataProvider valueProvider
+     *
+     * @param string|TagColor|null $tagColor
      */
     public function testCreateCondition(string $name, ?string $expression = null, $tagColor = null): void
     {
@@ -39,13 +41,16 @@ class ConditionTest extends UnitTestCase
         $this->assertEquals($condition, Condition::fromArray($expected));
     }
 
-    public function valueProvider()
+    /**
+     * @return array<string, array<int, mixed>>
+     */
+    public function valueProvider(): array
     {
         return [
-            ['name', 'expression', TagColor::GREEN],
-            ['name', 'expression', new TagColor(TagColor::ORANGE)],
-            ['name', 'expression', null],
-            ['name', null, null],
+            'color as string' => ['name', 'expression', TagColor::GREEN],
+            'color as object' => ['name', 'expression', new TagColor(TagColor::ORANGE)],
+            'no color' => ['name', 'expression', null],
+            'no expression, no color' => ['name', null, null],
         ];
     }
 }

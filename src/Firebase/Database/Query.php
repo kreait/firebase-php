@@ -26,17 +26,11 @@ use Psr\Http\Message\UriInterface;
  */
 class Query
 {
-    /** @var Reference */
-    private $reference;
-
-    /** @var ApiClient */
-    private $apiClient;
-
+    private Reference $reference;
+    private ApiClient $apiClient;
     /** @var Filter[] */
-    private $filters;
-
-    /** @var Sorter|null */
-    private $sorter;
+    private array $filters;
+    private ?Sorter $sorter = null;
 
     /**
      * @internal
@@ -295,10 +289,8 @@ class Query
      * Returns the absolute URL for this location.
      *
      * @see getUri()
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getUri();
     }

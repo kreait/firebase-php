@@ -14,7 +14,7 @@ use Traversable;
 final class Responses implements IteratorAggregate
 {
     /** @var ResponseInterface[] */
-    private $responses;
+    private array $responses;
 
     public function __construct(ResponseInterface ...$responses)
     {
@@ -26,7 +26,7 @@ final class Responses implements IteratorAggregate
      *
      * @return Traversable<ResponseInterface>|ResponseInterface[]
      */
-    public function getIterator()
+    public function getIterator(): iterable
     {
         yield from $this->responses;
     }

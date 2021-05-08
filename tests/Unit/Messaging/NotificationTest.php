@@ -27,7 +27,8 @@ class NotificationTest extends UnitTestCase
         $notification = Notification::create('title', 'body')
             ->withTitle($title = 'My Title')
             ->withBody($body = 'My Body')
-            ->withImageUrl($imageUrl = 'https://domain.tld/image.ext');
+            ->withImageUrl($imageUrl = 'https://domain.tld/image.ext')
+        ;
 
         $this->assertSame($title, $notification->title());
         $this->assertSame($body, $notification->body());
@@ -50,6 +51,8 @@ class NotificationTest extends UnitTestCase
 
     /**
      * @dataProvider invalidDataProvider
+     *
+     * @param array<string, mixed> $data
      */
     public function testCreateWithInvalidData(array $data): void
     {
@@ -57,6 +60,9 @@ class NotificationTest extends UnitTestCase
         Notification::fromArray($data);
     }
 
+    /**
+     * @return array<string, array<int, array<string, mixed>>>
+     */
     public function invalidDataProvider(): array
     {
         return [

@@ -13,8 +13,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
  */
 class CreateUserTest extends IntegrationTestCase
 {
-    /** @var Auth */
-    private $auth;
+    private Auth $auth;
 
     protected function setUp(): void
     {
@@ -29,7 +28,8 @@ class CreateUserTest extends IntegrationTestCase
             ->withPhotoUrl($photoUrl = 'https://example.org/photo.jpg')
             ->withClearTextPassword('secret')
             ->withPhoneNumber($phoneNumber = '+1234567'.\random_int(1000, 9999))
-            ->withVerifiedEmail($email = $uid.'@example.org');
+            ->withVerifiedEmail($email = $uid.'@example.org')
+        ;
 
         $user = $this->auth->createUser($request);
 
@@ -49,7 +49,8 @@ class CreateUserTest extends IntegrationTestCase
     {
         $request = CreateUser::new()
             ->withUid($uid = \bin2hex(\random_bytes(5)))
-            ->markEmailAsVerified();
+            ->markEmailAsVerified()
+        ;
 
         $user = $this->auth->createUser($request);
 
@@ -64,7 +65,8 @@ class CreateUserTest extends IntegrationTestCase
     {
         $request = CreateUser::new()
             ->withUid($uid = \bin2hex(\random_bytes(5)))
-            ->markEmailAsUnverified();
+            ->markEmailAsUnverified()
+        ;
 
         $user = $this->auth->createUser($request);
 

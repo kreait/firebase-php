@@ -9,7 +9,7 @@ use JsonSerializable;
 final class FcmOptions implements JsonSerializable
 {
     /** @var array<string, mixed> */
-    private $data;
+    private array $data;
 
     /**
      * @param array<string, mixed> $data

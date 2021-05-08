@@ -11,7 +11,7 @@ use Kreait\Firebase\DynamicLink\AnalyticsInfo\ITunesConnectAnalytics;
 final class AnalyticsInfo implements JsonSerializable
 {
     /** @var array<string, mixed> */
-    private $data = [];
+    private array $data = [];
 
     private function __construct()
     {

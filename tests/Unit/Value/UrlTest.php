@@ -16,6 +16,8 @@ class UrlTest extends TestCase
 {
     /**
      * @dataProvider validValues
+     *
+     * @param Uri|Url|string $value
      */
     public function testWithValidValue($value): void
     {
@@ -32,26 +34,32 @@ class UrlTest extends TestCase
     /**
      * @dataProvider invalidValues
      */
-    public function testWithInvalidValue($value): void
+    public function testWithInvalidValue(string $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         Url::fromValue($value);
     }
 
+    /**
+     * @return array<string, array<string|Uri|Url>>
+     */
     public function validValues(): array
     {
         return [
-            ['http://domain.tld'],
-            [new Uri('http://domain.tld')],
-            [new Url(new Uri('http://domain.tld'))],
+            'string' => ['https://domain.tld'],
+            'Uri object' => [new Uri('https://domain.tld')],
+            'Url object' => [new Url(new Uri('https://domain.tld'))],
         ];
     }
 
+    /**
+     * @return array<string, array<string>>
+     */
     public function invalidValues(): array
     {
         return [
-            ['http:///domain.tld'],
-            ['http://:80'],
+            'https:///domain.tld' => ['https:///domain.tld'],
+            'http://:80' => ['http://:80'],
         ];
     }
 }

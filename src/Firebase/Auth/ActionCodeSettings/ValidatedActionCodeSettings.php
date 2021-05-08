@@ -11,26 +11,13 @@ use Psr\Http\Message\UriInterface;
 
 final class ValidatedActionCodeSettings implements ActionCodeSettings
 {
-    /** @var UriInterface|null */
-    private $continueUrl;
-
-    /** @var bool|null */
-    private $canHandleCodeInApp;
-
-    /** @var UriInterface|null */
-    private $dynamicLinkDomain;
-
-    /** @var string|null */
-    private $androidPackageName;
-
-    /** @var string|null */
-    private $androidMinimumVersion;
-
-    /** @var bool|null */
-    private $androidInstallApp;
-
-    /** @var string|null */
-    private $iOSBundleId;
+    private ?UriInterface $continueUrl = null;
+    private ?bool $canHandleCodeInApp = null;
+    private ?UriInterface $dynamicLinkDomain = null;
+    private ?string $androidPackageName = null;
+    private ?string $androidMinimumVersion = null;
+    private ?bool $androidInstallApp = null;
+    private ?string $iOSBundleId = null;
 
     private function __construct()
     {
@@ -48,34 +35,46 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
     {
         $instance = new self();
 
-        $settings = \array_filter($settings, static function ($value) {
-            return $value !== null;
-        });
+        $settings = \array_filter($settings, static fn ($value) => $value !== null);
 
         foreach ($settings as $key => $value) {
             switch (\mb_strtolower($key)) {
                 case 'continueurl':
                 case 'url':
                     $instance->continueUrl = Utils::uriFor($value);
+
                     break;
+
                 case 'handlecodeinapp':
                     $instance->canHandleCodeInApp = (bool) $value;
+
                     break;
+
                 case 'dynamiclinkdomain':
                     $instance->dynamicLinkDomain = Utils::uriFor($value);
+
                     break;
+
                 case 'androidpackagename':
                     $instance->androidPackageName = (string) $value;
+
                     break;
+
                 case 'androidminimumversion':
                     $instance->androidMinimumVersion = (string) $value;
+
                     break;
+
                 case 'androidinstallapp':
                     $instance->androidInstallApp = (bool) $value;
+
                     break;
+
                 case 'iosbundleid':
                     $instance->iOSBundleId = (string) $value;
+
                     break;
+
                 default:
                     throw new InvalidArgumentException("Unsupported action code setting '{$key}'");
             }
@@ -85,7 +84,7 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
     }
 
     /**
-     * @return array<string, string|bool>
+     * @return array<string, bool|string>
      */
     public function toArray(): array
     {
@@ -97,8 +96,6 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
             'androidMinimumVersion' => $this->androidMinimumVersion,
             'androidInstallApp' => $this->androidInstallApp,
             'iOSBundleId' => $this->iOSBundleId,
-        ], static function ($value) {
-            return $value !== null;
-        });
+        ], static fn ($value) => $value !== null);
     }
 }

@@ -11,8 +11,7 @@ use Throwable;
 
 final class ReferenceHasNotBeenSnapshotted extends RuntimeException implements DatabaseException
 {
-    /** @var Reference */
-    private $reference;
+    private Reference $reference;
 
     public function __construct(Reference $query, string $message = '', int $code = 0, ?Throwable $previous = null)
     {

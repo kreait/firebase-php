@@ -16,11 +16,9 @@ class Database implements Contract\Database
 {
     public const SERVER_TIMESTAMP = ['.sv' => 'timestamp'];
 
-    /** @var ApiClient */
-    private $client;
+    private ApiClient $client;
 
-    /** @var UriInterface */
-    private $uri;
+    private UriInterface $uri;
 
     /**
      * @internal

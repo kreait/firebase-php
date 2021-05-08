@@ -38,7 +38,8 @@ class DT
         if (\is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'))) {
             $value = (string) $value;
         } else {
-            $type = \is_object($value) ? \get_class($value) : \gettype($value);
+            $type = \get_debug_type($value);
+
             throw new InvalidArgumentException("This {$type} cannot be parsed to a DateTime value");
         }
 

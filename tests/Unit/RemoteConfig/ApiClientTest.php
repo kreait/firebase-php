@@ -22,11 +22,9 @@ use Throwable;
  */
 class ApiClientTest extends UnitTestCase
 {
-    /** @var MockHandler */
-    private $mockHandler;
+    private MockHandler $mockHandler;
 
-    /** @var ApiClient */
-    private $client;
+    private ApiClient $client;
 
     protected function setUp(): void
     {
@@ -60,9 +58,12 @@ class ApiClientTest extends UnitTestCase
         $this->client->getTemplate();
     }
 
+    /**
+     * @return array<array<Throwable|class-string>>
+     */
     public function requestExceptions(): array
     {
-        $request = new Request('GET', 'http://example.com');
+        $request = new Request('GET', 'https://example.com');
 
         return [
             [

@@ -1,12 +1,8 @@
 name: Tests
 
 on:
-  pull_request:
-  push:
-    branches:
-      - 'main'
-      - '5.x'
-  workflow_dispatch:
+  - pull_request
+  - push
 
 jobs:
   tests:
@@ -67,7 +63,6 @@ jobs:
         run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-suggest --no-progress
 
       - name: Run PHPStan
-        if: matrix.php == '7.4'
         run: vendor/bin/phpstan analyse --no-progress
 
       - name: Setup Problem Matchers for PHPUnit
@@ -81,10 +76,3 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: unit
-
-#      - name: Roave BC Check
-#        if: matrix.php == '7.4'
-#        run: |
-#          composer require --dev "roave/backward-compatibility-check:dev-master"
-#          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-#          vendor/bin/roave-backward-compatibility-check

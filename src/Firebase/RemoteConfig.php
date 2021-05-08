@@ -16,8 +16,7 @@ use Traversable;
 
 class RemoteConfig implements Contract\RemoteConfig
 {
-    /** @var ApiClient */
-    private $client;
+    private ApiClient $client;
 
     /**
      * @internal
@@ -41,7 +40,8 @@ class RemoteConfig implements Contract\RemoteConfig
     {
         $etag = $this->client
             ->publishTemplate($this->ensureTemplate($template))
-            ->getHeader('ETag');
+            ->getHeader('ETag')
+        ;
 
         return \array_shift($etag) ?: '';
     }

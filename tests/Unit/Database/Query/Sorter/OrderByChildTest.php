@@ -14,13 +14,12 @@ use Kreait\Firebase\Tests\UnitTestCase;
 class OrderByChildTest extends UnitTestCase
 {
     /**
-     * @param string $childKey
+     * @dataProvider valueProvider
+     *
      * @param mixed $expected
      * @param mixed $given
-     *
-     * @dataProvider valueProvider
      */
-    public function testOrderByChild($childKey, $expected, $given): void
+    public function testOrderByChild(string $childKey, $expected, $given): void
     {
         $sut = new OrderByChild($childKey);
 
@@ -32,7 +31,10 @@ class OrderByChildTest extends UnitTestCase
         $this->assertSame($expected, $sut->modifyValue($given));
     }
 
-    public function valueProvider()
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    public function valueProvider(): array
     {
         return [
             'scalar' => [

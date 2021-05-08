@@ -15,8 +15,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
  */
 final class FirestoreTest extends IntegrationTestCase
 {
-    /** @var Firestore */
-    private $firestore;
+    private Firestore $firestore;
 
     /** @var mixed string */
     private $collectionName;
@@ -27,10 +26,7 @@ final class FirestoreTest extends IntegrationTestCase
         $this->collectionName = \str_replace('\\', '_', __CLASS__);
     }
 
-    /**
-     * @test
-     */
-    public function it_returns_a_working_firestore_client(): void
+    public function testItReturnsAWorkingFirestoreClient(): void
     {
         $client = $this->firestore->database();
 

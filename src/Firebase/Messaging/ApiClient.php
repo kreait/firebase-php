@@ -21,8 +21,7 @@ class ApiClient implements ClientInterface
 {
     use WrappedGuzzleClient;
 
-    /** @var MessagingApiExceptionConverter */
-    private $errorHandler;
+    private MessagingApiExceptionConverter $errorHandler;
 
     /**
      * @internal
@@ -56,6 +55,7 @@ class ApiClient implements ClientInterface
         return $this->client->sendAsync($request, $options)
             ->then(null, function (Throwable $e): void {
                 throw $this->errorHandler->convertException($e);
-            });
+            })
+        ;
     }
 }

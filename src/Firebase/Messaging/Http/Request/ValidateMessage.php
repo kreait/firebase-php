@@ -17,8 +17,7 @@ final class ValidateMessage implements MessageRequest, RequestInterface
 {
     use WrappedPsr7Request;
 
-    /** @var Message */
-    private $message;
+    private Message $message;
 
     public function __construct(string $projectId, Message $message)
     {

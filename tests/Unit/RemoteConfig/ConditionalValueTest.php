@@ -18,7 +18,8 @@ class ConditionalValueTest extends UnitTestCase
         $condition = Condition::named('my_condition');
 
         $conditionalValue = ConditionalValue::basedOn($condition)
-            ->withValue('foo');
+            ->withValue('foo')
+        ;
 
         $this->assertSame($condition->name(), $conditionalValue->conditionName());
         $this->assertSame('foo', $conditionalValue->value());

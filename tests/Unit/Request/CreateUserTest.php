@@ -22,6 +22,9 @@ class CreateUserTest extends TestCase
 
     /**
      * @dataProvider propertiesProvider
+     *
+     * @param array<array<string|mixed>> $properties
+     * @param array<array<string|mixed>> $expected
      */
     public function testWithProperties(array $properties, array $expected): void
     {
@@ -30,6 +33,9 @@ class CreateUserTest extends TestCase
         $this->assertEquals($expected, $request->jsonSerialize());
     }
 
+    /**
+     * @return array<string, array<array<string|mixed>>>
+     */
     public function propertiesProvider(): array
     {
         $given = ['uid' => 'some-uid'];

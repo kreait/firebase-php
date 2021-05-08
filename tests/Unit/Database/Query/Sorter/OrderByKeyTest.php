@@ -13,8 +13,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 class OrderByKeyTest extends UnitTestCase
 {
-    /** @var OrderByKey */
-    protected $sorter;
+    protected OrderByKey $sorter;
 
     protected function setUp(): void
     {
@@ -31,13 +30,19 @@ class OrderByKeyTest extends UnitTestCase
 
     /**
      * @dataProvider valueProvider
+     *
+     * @param mixed $expected
+     * @param mixed $value
      */
     public function testModifyValue($expected, $value): void
     {
         $this->assertSame($expected, $this->sorter->modifyValue($value));
     }
 
-    public function valueProvider()
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    public function valueProvider(): array
     {
         return [
             'scalar' => [

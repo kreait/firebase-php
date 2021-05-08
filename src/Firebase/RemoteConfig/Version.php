@@ -8,29 +8,30 @@ use Kreait\Firebase\Util\DT;
 
 final class Version
 {
-    /** @var VersionNumber */
-    private $versionNumber;
+    private VersionNumber $versionNumber;
+    private User $user;
+    private \DateTimeImmutable $updatedAt;
+    private string $description;
+    private UpdateOrigin $updateOrigin;
+    private UpdateType $updateType;
+    private ?VersionNumber $rollbackSource;
 
-    /** @var User */
-    private $user;
-
-    /** @var \DateTimeImmutable */
-    private $updatedAt;
-
-    /** @var string */
-    private $description;
-
-    /** @var UpdateOrigin */
-    private $updateOrigin;
-
-    /** @var UpdateType */
-    private $updateType;
-
-    /** @var VersionNumber|null */
-    private $rollbackSource;
-
-    private function __construct()
-    {
+    private function __construct(
+        VersionNumber $versionNumber,
+        User $user,
+        string $description,
+        \DateTimeImmutable $updatedAt,
+        UpdateOrigin $updateOrigin,
+        UpdateType $updateType,
+        ?VersionNumber $rollbackSource
+    ) {
+        $this->versionNumber = $versionNumber;
+        $this->user = $user;
+        $this->description = $description;
+        $this->updatedAt = $updatedAt;
+        $this->updateOrigin = $updateOrigin;
+        $this->updateType = $updateType;
+        $this->rollbackSource = $rollbackSource;
     }
 
     /**
@@ -40,25 +41,32 @@ final class Version
      */
     public static function fromArray(array $data): self
     {
-        $new = new self();
-        $new->versionNumber = VersionNumber::fromValue($data['versionNumber']);
-        $new->user = User::fromArray($data['updateUser']);
-        $new->updatedAt = DT::toUTCDateTimeImmutable($data['updateTime']);
-        $new->description = $data['description'] ?? '';
+        $versionNumber = VersionNumber::fromValue($data['versionNumber']);
+        $user = User::fromArray($data['updateUser']);
+        $updatedAt = DT::toUTCDateTimeImmutable($data['updateTime']);
+        $description = $data['description'] ?? '';
 
-        $new->updateOrigin = ($data['updateOrigin'] ?? null)
+        $updateOrigin = ($data['updateOrigin'] ?? null)
             ? UpdateOrigin::fromValue($data['updateOrigin'])
             : UpdateOrigin::fromValue(UpdateOrigin::UNSPECIFIED);
 
-        $new->updateType = ($data['updateType'] ?? null)
+        $updateType = ($data['updateType'] ?? null)
             ? UpdateType::fromValue($data['updateType'])
             : UpdateType::fromValue(UpdateType::UNSPECIFIED);
 
-        $new->rollbackSource = ($data['rollbackSource'] ?? null)
+        $rollbackSource = ($data['rollbackSource'] ?? null)
             ? VersionNumber::fromValue($data['rollbackSource'])
             : null;
 
-        return $new;
+        return new self(
+            $versionNumber,
+            $user,
+            $description,
+            $updatedAt,
+            $updateOrigin,
+            $updateType,
+            $rollbackSource
+        );
     }
 
     public function versionNumber(): VersionNumber

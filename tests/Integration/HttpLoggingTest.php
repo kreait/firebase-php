@@ -13,20 +13,15 @@ use Psr\Log\Test\TestLogger;
  */
 class HttpLoggingTest extends IntegrationTestCase
 {
-    /** @var TestLogger */
-    private $logger;
+    private TestLogger $logger;
 
-    /** @var TestLogger */
-    private $debugLogger;
+    private TestLogger $debugLogger;
 
-    /** @var Auth */
-    private $auth;
+    private Auth $auth;
 
-    /** @var Auth */
-    private $authWithLogger;
+    private Auth $authWithLogger;
 
-    /** @var Auth */
-    private $authWithDebugLogger;
+    private Auth $authWithDebugLogger;
 
     protected function setUp(): void
     {
