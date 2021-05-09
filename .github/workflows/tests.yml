@@ -3,6 +3,7 @@ name: Tests
 on:
   - pull_request
   - push
+  - workflow_dispatch
 
 jobs:
   tests:
