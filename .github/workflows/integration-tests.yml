@@ -66,7 +66,7 @@ jobs:
         env:
           TEST_FIREBASE_CREDENTIALS: ${{secrets.TEST_FIREBASE_CREDENTIALS}}
           TEST_REGISTRATION_TOKENS: ${{secrets.TEST_REGISTRATION_TOKENS}}
-        run: vendor/bin/phpunit --testsuite=integration --coverage-clover=coverage.xml --log-junit=test-report.xml
+        run: vendor/bin/phpunit --testsuite=integration --coverage-clover=coverage.xml --log-junit=test-report.xml --verbose
 
       - name: Upload code coverage
         uses: codecov/codecov-action@v1
