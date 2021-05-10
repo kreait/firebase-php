@@ -8,6 +8,7 @@ use JsonSerializable;
 
 /**
  * @see https://tools.ietf.org/html/rfc8030#section-5.3 Web Push Message Urgency
+ * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
  */
 final class WebPushConfig implements JsonSerializable
 {
@@ -16,27 +17,53 @@ final class WebPushConfig implements JsonSerializable
     private const URGENCY_NORMAL = 'normal';
     private const URGENCY_HIGH = 'high';
 
-    /** @var array<string, mixed> */
-    private array $rawConfig = [];
+    /** @var array{
+     *      headers?: array<string, string>,
+     *      data?: array<string, string>,
+     *      notification?: array<string, mixed>,
+     *      fcm_options?: array{
+     *          link?: string,
+     *          analytics_label?: string
+     *      }
+     * }
+     */
+    private array $config;
 
-    private function __construct()
+    /**
+     * @param array{
+     *     headers?: array<string, string>,
+     *     data?: array<string, string>,
+     *     notification?: array<string, mixed>,
+     *     fcm_options?: array{
+     *         link?: string,
+     *         analytics_label?: string
+     *     }
+     * } $config
+     */
+    private function __construct(array $config)
     {
+        $this->config = $config;
     }
 
     public static function new(): self
     {
-        return self::fromArray([]);
+        return new self([]);
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param array{
+     *     headers?: array<string, string>,
+     *     data?: array<string, string>,
+     *     notification?: array<string, mixed>,
+     *     fcm_options?: array{
+     *         link?: string,
+     *         analytics_label?: string
+     *     }
+     * } $config
      */
-    public static function fromArray(array $data): self
+    public static function fromArray(array $config): self
     {
-        $config = new self();
-        $config->rawConfig = $data;
-
-        return $config;
+        return new self($config);
     }
 
     public function withHighUrgency(): self
@@ -62,8 +89,8 @@ final class WebPushConfig implements JsonSerializable
     public function withUrgency(string $urgency): self
     {
         $config = clone $this;
-        $config->rawConfig['headers'] = $config->rawConfig['headers'] ?? [];
-        $config->rawConfig['headers']['Urgency'] = $urgency;
+        $config->config['headers'] = $config->config['headers'] ?? [];
+        $config->config['headers']['Urgency'] = $urgency;
 
         return $config;
     }
@@ -73,6 +100,6 @@ final class WebPushConfig implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return \array_filter($this->rawConfig, static fn ($value) => $value !== null);
+        return \array_filter($this->config, static fn ($value) => $value !== null);
     }
 }

@@ -6,13 +6,21 @@ namespace Kreait\Firebase\Messaging;
 
 use JsonSerializable;
 
+/**
+ * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#fcmoptions
+ */
 final class FcmOptions implements JsonSerializable
 {
-    /** @var array<string, mixed> */
+    /** @var array{
+     *      analytics_label?: string
+     *  }
+     */
     private array $data;
 
     /**
-     * @param array<string, mixed> $data
+     * @param array{
+     *     analytics_label?: string
+     * } $data
      */
     private function __construct(array $data)
     {
@@ -25,7 +33,9 @@ final class FcmOptions implements JsonSerializable
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param array{
+     *     analytics_label?: string
+     * } $data
      */
     public static function fromArray(array $data): self
     {

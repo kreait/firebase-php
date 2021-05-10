@@ -33,38 +33,25 @@ class DefaultValueTest extends TestCase
      *
      * @param bool|string $expected
      * @param array{
-     *     value?: string|bool,
-     *     useInAppDefault?: bool
-     * } $array
+     *     value: string|bool
+     * }|array{
+     *     useInAppDefault: bool
+     * } $data
      */
-    public function testCreateFromArray($expected, array $array): void
+    public function testCreateFromArray($expected, array $data): void
     {
-        $defaultValue = DefaultValue::fromArray($array);
+        $defaultValue = DefaultValue::fromArray($data);
 
         $this->assertSame($expected, $defaultValue->value());
     }
 
     /**
-     * @return array<string, array{
-     *                       value?: string|bool,
-     *                       useInAppDefault?: bool
-     *                       }>
+     * @return iterable<array{value?: string|bool, useInAppDefault?: bool}>
      */
-    public function arrayValueProvider(): array
+    public function arrayValueProvider()
     {
-        return [
-            'inAppDefault' => [
-                true,
-                ['useInAppDefault' => true],
-            ],
-            'bool' => [
-                true,
-                ['value' => true],
-            ],
-            'string' => [
-                'foo',
-                ['value' => 'foo'],
-            ],
-        ];
+        yield 'inAppDefault' => [true, ['useInAppDefault' => true]];
+        yield 'bool' => [true, ['value' => true]];
+        yield 'string' => ['foo', ['value' => 'foo']];
     }
 }

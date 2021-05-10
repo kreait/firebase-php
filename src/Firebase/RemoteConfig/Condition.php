@@ -23,7 +23,7 @@ class Condition implements \JsonSerializable
      * @param array{
      *     name: string,
      *     expression: string,
-     *     tagColor: string|null
+     *     tagColor?: ?string
      * } $data
      */
     public static function fromArray(array $data): self

@@ -15,27 +15,56 @@ final class AndroidConfig implements JsonSerializable
     private const PRIORITY_NORMAL = 'normal';
     private const PRIORITY_HIGH = 'high';
 
-    /** @var array<string, mixed> */
-    private array $config = [];
+    /** @var array{
+     *      collapse_key?: string,
+     *      priority?: 'normal'|'high',
+     *      ttl?: int|double,
+     *      restricted_package_name?: string,
+     *      data?: array<string, string>,
+     *      notification?: array,
+     *      fcm_options?: array,
+     *      direct_boot_ok?: bool
+     * }
+     */
+    private array $config;
 
-    private function __construct()
+    /**
+     * @param array{
+     *     collapse_key?: string,
+     *     priority?: 'normal'|'high',
+     *     ttl?: int|double,
+     *     restricted_package_name?: string,
+     *     data?: array<string, string>,
+     *     notification?: array,
+     *     fcm_options?: array,
+     *     direct_boot_ok?: bool
+     * } $config
+     */
+    private function __construct(array $config)
     {
+        $this->config = $config;
     }
 
     public static function new(): self
     {
-        return self::fromArray([]);
+        return new self([]);
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param array{
+     *     collapse_key?: string,
+     *     priority?: 'normal'|'high',
+     *     ttl?: int|double,
+     *     restricted_package_name?: string,
+     *     data?: array<string, string>,
+     *     notification?: array,
+     *     fcm_options?: array,
+     *     direct_boot_ok?: bool
+     * } $config
      */
-    public static function fromArray(array $data): self
+    public static function fromArray(array $config): self
     {
-        $config = new self();
-        $config->config = $data;
-
-        return $config;
+        return new self($config);
     }
 
     public function withDefaultSound(): self
@@ -79,6 +108,6 @@ final class AndroidConfig implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return \array_filter($this->config, static fn ($value) => $value !== null);
+        return \array_filter($this->config, static fn ($value) => $value !== null && $value !== []);
     }
 }

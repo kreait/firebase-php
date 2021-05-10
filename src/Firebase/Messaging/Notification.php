@@ -9,9 +9,7 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 final class Notification implements \JsonSerializable
 {
     private ?string $title;
-
     private ?string $body;
-
     private ?string $imageUrl;
 
     /**
@@ -38,9 +36,9 @@ final class Notification implements \JsonSerializable
 
     /**
      * @param array{
-     *     title: ?string,
-     *     body: ?string,
-     *     image: ?string
+     *     title?: string,
+     *     body?: string,
+     *     image?: string
      * } $data
      *
      * @throws InvalidArgumentException if both title and body are null
