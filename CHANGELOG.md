@@ -1,8 +1,8 @@
 # CHANGELOG
 
 ## [5.20.0] - 2021-05-11
-* Dropped support for unsupported PHP versions. Starting with this release, supported
-  PHP versions are >=7.4 and <8.1.
+* Dropped support for unsupported PHP versions. Dropped support for unsupported PHP versions. Starting with this 
+  release, supported are PHP versions >=7.4.
 
 ## [5.19.0] - 2021-05-09
 ### Added
