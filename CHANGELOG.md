@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [Unreleased]
+## [5.20.0] - 2021-05-11
 * Dropped support for unsupported PHP versions. Starting with this release, supported
   PHP versions are >=7.4 and <8.1.
 
@@ -251,7 +251,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.19.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.20.0...HEAD
+[5.20.0]: https://github.com/kreait/firebase-php/compare/5.19.0...5.20.0
 [5.19.0]: https://github.com/kreait/firebase-php/compare/5.18.0...5.19.0
 [5.18.0]: https://github.com/kreait/firebase-php/compare/5.17.1...5.18.0
 [5.17.1]: https://github.com/kreait/firebase-php/compare/5.17.0...5.17.1
