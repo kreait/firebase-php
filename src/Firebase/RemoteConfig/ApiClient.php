@@ -7,7 +7,6 @@ namespace Kreait\Firebase\RemoteConfig;
 use GuzzleHttp\ClientInterface;
 use Kreait\Firebase\Exception\RemoteConfigApiExceptionConverter;
 use Kreait\Firebase\Exception\RemoteConfigException;
-use Kreait\Firebase\Http\WrappedGuzzleClient;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
@@ -16,10 +15,9 @@ use Throwable;
 /**
  * @internal
  */
-class ApiClient implements ClientInterface
+class ApiClient
 {
-    use WrappedGuzzleClient;
-
+    private ClientInterface $client;
     private RemoteConfigApiExceptionConverter $errorHandler;
 
     /**

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Exception;
 
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Exception\Auth\ApiConnectionFailed;
 use Kreait\Firebase\Exception\Auth\AuthError;
@@ -40,12 +41,10 @@ class AuthApiExceptionConverter
         $this->responseParser = new ErrorResponseParser();
     }
 
-    /**
-     * @return AuthException
-     */
-    public function convertException(Throwable $exception): FirebaseException
+    public function convertException(Throwable $exception): AuthException
     {
-        if ($exception instanceof RequestException) {
+        /* @phpstan-ignore-next-line */
+        if ($exception instanceof RequestException && !($exception instanceof ConnectException)) {
             return $this->convertGuzzleRequestException($exception);
         }
 

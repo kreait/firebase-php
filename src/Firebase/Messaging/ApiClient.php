@@ -9,7 +9,6 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Exception\MessagingException;
-use Kreait\Firebase\Http\WrappedGuzzleClient;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
@@ -17,10 +16,9 @@ use Throwable;
 /**
  * @internal
  */
-class ApiClient implements ClientInterface
+class ApiClient
 {
-    use WrappedGuzzleClient;
-
+    private ClientInterface $client;
     private MessagingApiExceptionConverter $errorHandler;
 
     /**
