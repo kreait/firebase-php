@@ -7,13 +7,13 @@ on:
 
 jobs:
   tests:
-    name: PHP ${{ matrix.php }}
+    name: PHP ${{ matrix.php }} (${{ matrix.stability }})
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         php: ["7.4", "8.0"]
-        stability: ["prefer-stable"]
+        stability: ["prefer-stable", "prefer-lowest"]
 
     env:
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
@@ -64,6 +64,7 @@ jobs:
         run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-suggest --no-progress
 
       - name: Run PHPStan
+        if: matrix.stability == 'prefer-stable'
         run: vendor/bin/phpstan analyse --no-progress
 
       - name: Setup Problem Matchers for PHPUnit
