@@ -394,19 +394,19 @@ class Factory
 
     public function createAuth(): Contract\Auth
     {
-        $http = $this->createApiClient([
+        $httpClient = $this->createApiClient([
             'base_uri' => 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/',
         ]);
 
-        $apiClient = new Auth\ApiClient($http, $this->tenantId);
+        $authApiClient = new Auth\ApiClient($httpClient, $this->tenantId);
 
         $customTokenGenerator = $this->createCustomTokenGenerator();
 
         $idTokenVerifier = $this->createIdTokenVerifier();
 
-        $signInHandler = new Firebase\Auth\SignIn\GuzzleHandler($http);
+        $signInHandler = new Firebase\Auth\SignIn\GuzzleHandler($httpClient);
 
-        return new Auth($apiClient, $customTokenGenerator, $idTokenVerifier, $signInHandler, $this->tenantId);
+        return new Auth($authApiClient, $httpClient, $customTokenGenerator, $idTokenVerifier, $signInHandler, $this->tenantId);
     }
 
     public function createCustomTokenGenerator(): Generator
