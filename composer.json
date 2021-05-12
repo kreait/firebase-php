@@ -39,13 +39,13 @@
         "symfony/polyfill-php80": "^1.22"
     },
     "require-dev": {
-        "giggsey/libphonenumber-for-php": "^8.9",
-        "google/cloud-firestore": "^1.11",
-        "phpstan/extension-installer": "^1.0",
-        "phpstan/phpstan": "^0.12.53",
-        "phpstan/phpstan-phpunit": "^0.12.6",
+        "giggsey/libphonenumber-for-php": "^8.12.23",
+        "google/cloud-firestore": "^1.19.2",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^0.12.86",
+        "phpstan/phpstan-phpunit": "^0.12.19",
         "phpunit/phpunit": "^9.5.4",
-        "symfony/var-dumper": "^5.0"
+        "symfony/var-dumper": "^5.2.7"
     },
     "suggest": {
         "google/cloud-firestore": "^1.0 to use the Firestore component",
