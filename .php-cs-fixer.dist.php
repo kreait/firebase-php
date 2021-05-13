@@ -8,6 +8,7 @@ $finder = PhpCsFixer\Finder::create()
 // https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/master/doc/rules/index.rst
 return (new PhpCsFixer\Config())
     ->setUsingCache(true)
+    ->setCacheFile(__DIR__.'/tools/php-cs-fixer/.php-cs-fixer.cache')
     ->setRiskyAllowed(true)
     ->setRules([
         '@PhpCsFixer' => true,

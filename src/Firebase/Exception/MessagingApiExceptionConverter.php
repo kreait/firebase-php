@@ -44,7 +44,7 @@ class MessagingApiExceptionConverter
      */
     public function convertException(Throwable $exception): FirebaseException
     {
-        /* @phpstan-ignore-next-line */
+        // @phpstan-ignore-next-line
         if ($exception instanceof RequestException && !($exception instanceof ConnectException)) {
             return $this->convertGuzzleRequestException($exception);
         }
