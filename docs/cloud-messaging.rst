@@ -227,7 +227,7 @@ You can send send up to 500 prepared messages (each message has a token, topic o
 
 .. code-block:: php
 
-    use ;
+    use Kreait\Firebase\Messaging\CloudMessage;
 
     $messages = [
         // Up to 500 items, either objects implementing Kreait\Firebase\Messaging\Message
