@@ -206,6 +206,19 @@ methods to determine the successes and failures of the multicasted message:
         }
     }
 
+    // The following methods return arrays with registration token strings
+    $successfulTargets = $report->validTokens(); // string[]
+
+    // Unknown tokens are tokens that are valid but not know to the currently
+    // used Firebase project. This can, for example, happen when you are
+    // sending from a project on a staging environment to tokens in a
+    // production environment
+    $unknownTargets = $report->unknownTokens(); // string[]
+
+    // Invalid (=malformed) tokens
+    $invalidTargets = $report->invalidTokens(); // string[]
+
+
 ******************************
 Send multiple messages at once
 ******************************
