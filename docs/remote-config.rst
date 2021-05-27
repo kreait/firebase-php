@@ -40,7 +40,7 @@ Initializing the Realtime Database component
 
     class MyService
     {
-        public function __construct(Database $remoteConfig)
+        public function __construct(RemoteConfig $remoteConfig)
         {
             $this->remoteConfig = $remoteConfig;
         }
