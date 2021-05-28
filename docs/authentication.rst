@@ -336,5 +336,5 @@ can configure the factory with a tenant ID:
     $tenantUnawareAuth = $factory->createAuth();
 
     $tenantAwareAuth = $factory
-        ->withTenantId('my-tenant-id)
+        ->withTenantId('my-tenant-id')
         ->createAuth();
