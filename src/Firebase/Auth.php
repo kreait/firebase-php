@@ -15,6 +15,7 @@ use Kreait\Firebase\Auth\CreateActionLink;
 use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Auth\SendActionLink;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
+use Kreait\Firebase\Auth\SessionCookieVerifier;
 use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
 use Kreait\Firebase\Auth\SignIn\Handler as SignInHandler;
 use Kreait\Firebase\Auth\SignInAnonymously;
@@ -54,6 +55,8 @@ class Auth implements Contract\Auth
 
     private Verifier $idTokenVerifier;
 
+    private Verifier $sessionCookieVerifier;
+
     private SignInHandler $signInHandler;
 
     private ?TenantId $tenantId = null;
@@ -71,7 +74,11 @@ class Auth implements Contract\Auth
             } elseif ($arg instanceof TokenGenerator) {
                 $this->tokenGenerator = $arg;
             } elseif ($arg instanceof Verifier) {
-                $this->idTokenVerifier = $arg;
+                if ($arg instanceof SessionCookieVerifier) {
+                    $this->sessionCookieVerifier = $arg;
+                } else {
+                    $this->idTokenVerifier = $arg;
+                }
             } elseif ($arg instanceof SignInHandler) {
                 $this->signInHandler = $arg;
             } elseif ($arg instanceof TenantId) {
@@ -634,6 +641,54 @@ class Auth implements Contract\Auth
         }
 
         return $this->signInHandler->handle($action);
+    }
+
+    public function createSessionCookie($idToken, $expiresIn = null)
+    {
+        $response = $this->client->createSessionCookie($idToken, $expiresIn);
+        $data = JSON::decode((string) $response->getBody(), true)['sessionCookie'];
+        return $data;
+    }
+
+    public function verifySessionCookie($sessionCookie, $checkIfRevoked = false): Token
+    {
+        $leewayInSeconds = 300;
+        $verifier = $this->sessionCookieVerifier;
+
+        if ($verifier instanceof SessionCookieVerifier) {
+            $verifier = $verifier->withLeewayInSeconds($leewayInSeconds);
+        }
+        $verifiedToken = $verifier->verifyIdToken($sessionCookie);
+
+        if ($checkIfRevoked) {
+            // @codeCoverageIgnoreStart
+            if (!($verifiedToken instanceof Token\Plain)) {
+                throw new InvalidToken($verifiedToken, 'The ID token could not be decrypted');
+            }
+            // @codeCoverageIgnoreEnd
+
+            try {
+                $user = $this->getUser($verifiedToken->claims()->get('sub'));
+            } catch (Throwable $e) {
+                throw new InvalidToken($verifiedToken, "Error while getting the token's user: {$e->getMessage()}", $e->getCode(), $e);
+            }
+
+            // The timestamp, in seconds, which marks a boundary, before which Firebase ID token are considered revoked.
+            if (!($validSince = $user->tokensValidAfterTime ?? null)) {
+                return $verifiedToken;
+            }
+
+            $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->claims()->get('auth_time'));
+            $tokenAuthenticatedAtWithLeeway = $tokenAuthenticatedAt->modify('-'.$leewayInSeconds.' seconds');
+
+            $validSinceWithLeeway = DT::toUTCDateTimeImmutable($validSince)->modify('-'.$leewayInSeconds.' seconds');
+
+            if ($tokenAuthenticatedAtWithLeeway < $validSinceWithLeeway) {
+                throw new RevokedIdToken($verifiedToken);
+            }
+        }
+
+        return $verifiedToken;
     }
 
     /**

@@ -38,6 +38,7 @@ use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
 use Kreait\Firebase\Auth\DisabledLegacyCustomTokenGenerator;
 use Kreait\Firebase\Auth\DisabledLegacyIdTokenVerifier;
 use Kreait\Firebase\Auth\IdTokenVerifier;
+use Kreait\Firebase\Auth\SessionCookieVerifier;
 use Kreait\Firebase\Auth\TenantId;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
@@ -404,9 +405,11 @@ class Factory
 
         $idTokenVerifier = $this->createIdTokenVerifier();
 
+        $sessionCookieVerifier = $this->createSessionCookieVerifier();
+
         $signInHandler = new Firebase\Auth\SignIn\GuzzleHandler($httpClient);
 
-        return new Auth($authApiClient, $httpClient, $customTokenGenerator, $idTokenVerifier, $signInHandler, $this->tenantId);
+        return new Auth($authApiClient, $httpClient, $customTokenGenerator, $idTokenVerifier, $sessionCookieVerifier, $signInHandler, $this->tenantId);
     }
 
     public function createCustomTokenGenerator(): Generator
@@ -449,6 +452,25 @@ class Factory
         }
 
         return new IdTokenVerifier($baseVerifier, $this->clock);
+    }
+
+    public function createSessionCookieVerifier(): Verifier
+    {
+        if (!($projectId = $this->getProjectId())) {
+            return new DisabledLegacyIdTokenVerifier(
+                'ID Token Verification is disabled because no project ID was provided'
+            );
+        }
+
+        $keyStore = new HttpKeyStore(new Client(), $this->verifierCache);
+
+        $baseVerifier = new LegacyIdTokenVerifier($projectId->sanitizedValue(), $keyStore);
+
+        if ($this->tenantId) {
+            $baseVerifier = new TenantAwareVerifier($this->tenantId->toString(), $baseVerifier);
+        }
+
+        return new SessionCookieVerifier($baseVerifier, $this->clock);
     }
 
     public function createDatabase(): Contract\Database

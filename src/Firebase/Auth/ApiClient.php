@@ -194,6 +194,18 @@ class ApiClient
     }
 
     /**
+     * @throws AuthException
+     * @throws FirebaseException
+     */
+    public function createSessionCookie(string $idToken, int $expiresIn): ResponseInterface
+    {
+        return $this->requestApi('createSessionCookie', [
+            'idToken' => $idToken,
+            'validDuration' => $expiresIn,
+        ]);
+    }
+
+    /**
      * @param array<mixed> $data
      *
      * @throws AuthException
