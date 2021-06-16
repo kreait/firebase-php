@@ -20,14 +20,16 @@ class ApiClient
 {
     private ClientInterface $client;
     protected DatabaseApiExceptionConverter $errorHandler;
+    private ?string $authVariableOverride;
 
     /**
      * @internal
      */
-    public function __construct(ClientInterface $httpClient)
+    public function __construct(ClientInterface $httpClient, ?array $authVariableOverride)
     {
         $this->client = $httpClient;
         $this->errorHandler = new DatabaseApiExceptionConverter();
+        $this->authVariableOverride = $authVariableOverride ? json_encode($authVariableOverride) : null;
     }
 
     /**
@@ -184,6 +186,12 @@ class ApiClient
         $options = $options ?? [];
 
         $request = new Request($method, $uri);
+
+        if ($this->authVariableOverride) {
+            $options['query'] = [
+                'auth_variable_override' => $this->authVariableOverride,
+            ];
+        }
 
         try {
             return $this->client->send($request, $options);
