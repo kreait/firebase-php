@@ -25,7 +25,7 @@ class ApiClient
     /**
      * @internal
      */
-    public function __construct(ClientInterface $httpClient, ?array $authVariableOverride)
+    public function __construct(ClientInterface $httpClient, ?array $authVariableOverride = null)
     {
         $this->client = $httpClient;
         $this->errorHandler = new DatabaseApiExceptionConverter();
