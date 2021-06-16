@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Database;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Exception\DatabaseApiExceptionConverter;
 use Kreait\Firebase\Exception\DatabaseException;
 use Kreait\Firebase\Util\JSON;
@@ -183,15 +185,18 @@ class ApiClient
      */
     private function requestApi(string $method, $uri, ?array $options = null): ResponseInterface
     {
+        if ($this->authVariableOverride) {
+            if (is_string($uri)) {
+                $uri = new Uri($uri);
+            }
+            $queryParams = \array_merge(Query::parse($uri->getQuery()), ['auth_variable_override' => $this->authVariableOverride]);
+            $queryString = Query::build($queryParams);
+            $uri = $uri->withQuery($queryString);
+        }
+
         $options = $options ?? [];
 
         $request = new Request($method, $uri);
-
-        if ($this->authVariableOverride) {
-            $options['query'] = [
-                'auth_variable_override' => $this->authVariableOverride,
-            ];
-        }
 
         try {
             return $this->client->send($request, $options);
