@@ -170,7 +170,7 @@ class Factory
     /**
      * @param UriInterface|string $uri
      */
-    public function withDatabaseUri($uri, ?array $authVariableOverride): self
+    public function withDatabaseUri($uri, ?array $authVariableOverride = null): self
     {
         $factory = clone $this;
         $factory->databaseUri = GuzzleUtils::uriFor($uri);
