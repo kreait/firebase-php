@@ -105,6 +105,9 @@ class Factory
     /** @var callable|null */
     protected $httpDebugLogMiddleware;
 
+    /** @var callable|null */
+    protected $databaseAuthVariableOverrideMiddleware;
+
     protected ?TenantId $tenantId = null;
 
     protected HttpClientOptions $httpClientOptions;
@@ -172,6 +175,25 @@ class Factory
     {
         $factory = clone $this;
         $factory->databaseUri = GuzzleUtils::uriFor($uri);
+
+        return $factory;
+    }
+
+    /**
+     * The object to use as the `auth` variable in your Realtime Database Rules
+     * when the Admin SDK reads from or writes to the Realtime Database.
+     *
+     * This allows you to downscope the Admin SDK from its default full read and
+     * write privileges. You can pass `null` to act as an unauthenticated client.
+     *
+     * @see https://firebase.google.com/docs/database/admin/start#authenticate-with-limited-privileges
+     *
+     * @param array<string, mixed>|null $override
+     */
+    public function withDatabaseAuthVariableOverride(?array $override): self
+    {
+        $factory = clone $this;
+        $factory->databaseAuthVariableOverrideMiddleware = Middleware::addDatabaseAuthVariableOverride($override);
 
         return $factory;
     }
@@ -458,6 +480,10 @@ class Factory
         /** @var HandlerStack $handler */
         $handler = $http->getConfig('handler');
         $handler->push(Firebase\Http\Middleware::ensureJsonSuffix(), 'realtime_database_json_suffix');
+
+        if ($this->databaseAuthVariableOverrideMiddleware) {
+            $handler->push($this->databaseAuthVariableOverrideMiddleware, 'database_auth_variable_override');
+        }
 
         return new Database($this->getDatabaseUri(), new Database\ApiClient($http));
     }
