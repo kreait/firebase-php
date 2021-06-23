@@ -31,6 +31,7 @@
         "kreait/clock": "^1.0.1",
         "kreait/firebase-tokens": "^1.15.0",
         "mtdowling/jmespath.php": "^2.3",
+        "nesbot/carbon": "^2.49",
         "psr/cache": "^1.0",
         "psr/http-message": "^1.0",
         "psr/log": "^1.1",
