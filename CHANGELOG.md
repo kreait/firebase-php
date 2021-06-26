@@ -1,6 +1,9 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Added
+* Added support for Session Cookie Generation
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/authentication.html#session-cookies))
 
 ## [5.20.1] - 2021-05-12
 ### Fixed

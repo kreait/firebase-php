@@ -7,6 +7,7 @@ namespace Kreait\Firebase\Tests\Integration;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Utils;
 use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
+use Kreait\Firebase\Auth\CreateSessionCookie\FailedToCreateSessionCookie;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
 use Kreait\Firebase\Auth\UserRecord;
@@ -268,6 +269,51 @@ class AuthTest extends IntegrationTestCase
 
         $this->auth->deleteUser($verifiedToken->claims()->get('sub'));
         $this->addToAssertionCount(1);
+    }
+
+    public function testCreateSessionCookie(): void
+    {
+        $signInResult = $this->auth->signInAnonymously();
+        /** @var string $uid */
+        $uid = $signInResult->firebaseUserId();
+
+        try {
+            $idToken = $signInResult->idToken();
+            $this->assertIsString($idToken);
+
+            $sessionCookie = $this->auth->createSessionCookie($idToken, 3600);
+            $this->assertIsString($sessionCookie);
+
+            $parsed = $this->auth->parseToken($sessionCookie);
+            $this->assertInstanceOf(Plain::class, $parsed);
+
+            $this->assertSame($uid, $parsed->claims()->get('sub'));
+        } finally {
+            $this->deleteUser($uid);
+        }
+    }
+
+    public function testCreateSessionCookieWithInvalidTTL(): void
+    {
+        $signInResult = $this->auth->signInAnonymously();
+        /** @var string $uid */
+        $uid = $signInResult->firebaseUserId();
+
+        try {
+            $idToken = $signInResult->idToken();
+            $this->assertIsString($idToken);
+
+            $this->expectException(\InvalidArgumentException::class);
+            $this->auth->createSessionCookie($idToken, 5);
+        } finally {
+            $this->deleteUser($uid);
+        }
+    }
+
+    public function testCreateSessionCookieWithInvalidIdToken(): void
+    {
+        $this->expectException(FailedToCreateSessionCookie::class);
+        $this->auth->createSessionCookie('invalid', 3600);
     }
 
     public function testDisableAndEnableUser(): void

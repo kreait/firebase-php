@@ -7,6 +7,7 @@ Before you start, please read about Firebase Authentication in the official docu
 * `Introduction to the Admin Database API <https://firebase.google.com/docs/database/admin/start>`_
 * `Create custom tokens <https://firebase.google.com/docs/auth/admin/create-custom-tokens>`_
 * `Verify ID Tokens <https://firebase.google.com/docs/auth/admin/verify-id-tokens>`_
+* `Manage Session Cookies <https://firebase.google.com/docs/auth/admin/manage-cookies>`_
 * `Revoke refresh tokens <https://firebase.google.com/docs/reference/admin/node/admin.auth.Auth#revokeRefreshTokens>`_
 
 Before you can access the Firebase Realtime Database from a server using the Firebase Admin SDK,
@@ -316,6 +317,37 @@ If the check fails, a ``RevokedIdToken`` exception will be thrown.
 
     For more information, please visit
     `Google: Detect ID token revocation in Database Rules <https://firebase.google.com/docs/auth/admin/manage-sessions#detect_id_token_revocation_in_database_rules>`_
+
+***************
+Session Cookies
+***************
+
+Before you start, please read about Firebase Session Cookies in the official documentation:
+
+* `Manage Session Cookies <https://firebase.google.com/docs/auth/admin/manage-cookies>`_
+
+Create session cookie
+---------------------
+
+Given an ID token sent to your server application from a client application, you can convert it to a session cookie:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Auth\CreateSessionCookie\FailedToCreateSessionCookie;
+
+    $idToken = '...';
+
+    // The TTL must be between 5 minutes and 2 weeks and can be provided as
+    // an integer value in seconds or a DateInterval
+
+    $fiveMinutes = 300;
+    $oneWeek = new \DateInterval('P7D');
+
+    try {
+        $sessionCookieString = $auth->createSessionCookie($idToken, $oneWeek);
+    } catch (FailedToCreateSessionCookie $e) {
+        echo $e->getMessage();
+    }
 
 ****************
 Tenant Awareness

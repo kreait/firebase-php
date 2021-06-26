@@ -12,6 +12,7 @@ use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\CreateActionLink;
+use Kreait\Firebase\Auth\CreateSessionCookie;
 use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Auth\SendActionLink;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
@@ -634,6 +635,13 @@ class Auth implements Contract\Auth
         }
 
         return $this->signInHandler->handle($action);
+    }
+
+    public function createSessionCookie($idToken, $ttl): string
+    {
+        return (new CreateSessionCookie\GuzzleApiClientHandler($this->httpClient))
+            ->handle(CreateSessionCookie::forIdToken($idToken, $ttl))
+        ;
     }
 
     /**
