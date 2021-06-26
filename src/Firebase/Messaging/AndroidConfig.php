@@ -21,8 +21,8 @@ final class AndroidConfig implements JsonSerializable
      *      ttl?: int|double,
      *      restricted_package_name?: string,
      *      data?: array<string, string>,
-     *      notification?: array,
-     *      fcm_options?: array,
+     *      notification?: array<string, string>,
+     *      fcm_options?: array<string, mixed>,
      *      direct_boot_ok?: bool
      * }
      */
@@ -35,8 +35,8 @@ final class AndroidConfig implements JsonSerializable
      *     ttl?: int|double,
      *     restricted_package_name?: string,
      *     data?: array<string, string>,
-     *     notification?: array,
-     *     fcm_options?: array,
+     *     notification?: array<string, string>,
+     *     fcm_options?: array<string, mixed>,
      *     direct_boot_ok?: bool
      * } $config
      */
@@ -57,8 +57,8 @@ final class AndroidConfig implements JsonSerializable
      *     ttl?: int|double,
      *     restricted_package_name?: string,
      *     data?: array<string, string>,
-     *     notification?: array,
-     *     fcm_options?: array,
+     *     notification?: array<string, string>,
+     *     fcm_options?: array<string, mixed>,
      *     direct_boot_ok?: bool
      * } $config
      */

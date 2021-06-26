@@ -41,7 +41,7 @@ interface Messaging
     public function sendMulticast($message, $registrationTokens, bool $validateOnly = false): MulticastSendReport;
 
     /**
-     * @param array[]|Message[]|Messages $messages
+     * @param Message[]|Messages $messages
      *
      * @throws InvalidArgumentException if the message is invalid
      * @throws MessagingException if the API request failed
