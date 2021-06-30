@@ -10,10 +10,13 @@ use Kreait\Firebase\IdentityPlatform\ParsesName;
 class DefaultSupportedIdpConfig
 {
     use ParsesName;
-
+    // @phpstan-ignore-next-line
     private string $name;
+    // @phpstan-ignore-next-line
     private ?bool $enabled;
+    // @phpstan-ignore-next-line
     private ?string $clientId;
+    // @phpstan-ignore-next-line
     private ?string $clientSecret;
 
     public const FIELDS = ['name', 'enabled', 'clientId', 'clientSecret'];
@@ -65,7 +68,7 @@ class DefaultSupportedIdpConfig
     /**
      * To Array
      *
-     * @return array
+     * @return array<String, bool|string|null>
      */
     public function toArray(): array
     {

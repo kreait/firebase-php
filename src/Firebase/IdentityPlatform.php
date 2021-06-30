@@ -47,6 +47,9 @@ class IdentityPlatform implements Contract\IdentityPlatform
     public function listDefaultSupportedIdpConfigs() : array
     {
         $response = $this->client->listDefaultSupportedIdpConfigs();
+        /**
+         * @var array<String>
+         */
         $array = $this->getResponseAsArray($response)['defaultSupportedIdpConfigs'] ?? [];
 
         return array_map(fn ($defaultIdpConfig) => DefaultSupportedIdpConfig::withProperties($defaultIdpConfig), $array);
@@ -175,6 +178,7 @@ class IdentityPlatform implements Contract\IdentityPlatform
 
     /**
      * @internal
+     * @return String[]
      */
     private function getResponseAsArray(ResponseInterface $response) : array
     {

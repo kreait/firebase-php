@@ -5,13 +5,20 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 
 trait ParsesName
 {
-    public static function parseName(string $name)
+    /**
+     * Parses name with possibke Project/Tenant
+     *
+     * @param string $name
+     * @return string
+     */
+    public static function parseName(string $name) : string
     {
         $parts = explode('/', $name);
         $name = end($parts);
         static::validateName($name);
         return $name;
     }
+
     /**
      * Returns Name
      *
@@ -21,6 +28,7 @@ trait ParsesName
     {
         return $this->name;
     }
+
     /**
      * @internal
      *

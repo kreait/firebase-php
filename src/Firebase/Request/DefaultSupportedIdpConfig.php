@@ -10,7 +10,7 @@ use Kreait\Firebase\IdentityPlatform\DefaultSupportedIdpConfig as BaseConfig;
 final class DefaultSupportedIdpConfig extends BaseConfig implements Request
 {
     /**
-     * @return array<string, mixed>
+     * @return array<String, bool|string>
      */
     public function jsonSerialize(): array
     {

@@ -6,7 +6,9 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 
 class OAuthResponseType implements \JsonSerializable
 {
+    // @phpstan-ignore-next-line
     private ?bool $idToken;
+    // @phpstan-ignore-next-line
     private ?bool $code;
 
     final private function __construct()
@@ -18,6 +20,10 @@ class OAuthResponseType implements \JsonSerializable
         return new static();
     }
 
+    /**
+     * @param array<String, mixed> $properties
+     * @return static
+     */
     public static function fromProperties(array $properties) : static
     {
         $instance = new static();
@@ -44,8 +50,11 @@ class OAuthResponseType implements \JsonSerializable
 
         return $instance;
     }
+    /**
+     * @return array<String, mixed>
+     */
 
-    public function toArray()
+    public function toArray() : array
     {
         return [
             'idToken' => $this->idToken ?? null,
@@ -53,8 +62,11 @@ class OAuthResponseType implements \JsonSerializable
         ];
     }
 
+    /**
+     * @return array<String, bool|String>
+     */
     public function jsonSerialize()
     {
-        return $this->toArray();
+        return \array_filter($this->toArray(), static fn ($value) => $value !== null);
     }
 }

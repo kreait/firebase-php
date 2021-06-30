@@ -2,11 +2,14 @@
 
 namespace Kreait\Firebase\Request;
 
-use Kreait\Firebase\IdentityPlatform\InboundSamlConfig as IdentityPlatformInboundSamlConfig;
+use Kreait\Firebase\IdentityPlatform\InboundSamlConfig as BaseConfig;
 
-final class InboundSamlConfig extends IdentityPlatformInboundSamlConfig implements \JsonSerializable
+final class InboundSamlConfig extends BaseConfig implements \JsonSerializable
 {
-    public function jsonSerialize()
+    /**
+     * @return array<String,String>
+     */
+    public function jsonSerialize() :array
     {
         return \array_filter($this->toArray(), static fn ($value) => $value !== null);
     }

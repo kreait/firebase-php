@@ -6,31 +6,28 @@ namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Contract\IdentityPlatform;
 use Kreait\Firebase\Exception\IdentityPlatform\ConfigurationNotFound;
-use Kreait\Firebase\Exception\IdentityPlatform\IdentityPlatformError;
 use Kreait\Firebase\Exception\IdentityPlatformException;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Kreait\Firebase\IdentityPlatform\DefaultSupportedIdpConfig;
 use Kreait\Firebase\IdentityPlatform\InboundSamlConfig;
 use Kreait\Firebase\IdentityPlatform\OAuthIdpConfig;
 use Ramsey\Uuid\Nonstandard\Uuid;
-use Throwable;
 
 /**
  * @internal
  */
 class IdentityPlatformTest extends IntegrationTestCase
 {
-    private IdentityPlatform $identityPlatform;
+    protected string $testClientSecret;
+    protected string $testClientId;
+    protected IdentityPlatform $identityPlatform;
 
-    private IdentityPlatform $tenantAwareIdentityPlatform;
 
     protected function setUp(): void
     {
         $this->testClientSecret = Uuid::getFactory()->fromDateTime(\Carbon\Carbon::now())->toString();
         $this->testClientId = Uuid::getFactory()->fromDateTime(\Carbon\Carbon::now())->toString();
-
-        $this->identityPlatform = self::$factory->createIdentityPlatform();
-        $this->tenantAwareIdentityPlatform = self::$factory->withTenantId(self::TENANT_ID)->createIdentityPlatform();
+        $this->identityPlatform = $this->setupIdentityPlatform();
         $this->cleanup();
     }
 
@@ -41,14 +38,14 @@ class IdentityPlatformTest extends IntegrationTestCase
         $this->assertContains('google.com', $idps, 'Should contain google.com in the default list');
     }
 
-    public function testListDefaultSupportedIdpConfigs()
+    public function testListDefaultSupportedIdpConfigs(): void
     {
         $defaultIdpsConfigs = $this->identityPlatform->listDefaultSupportedIdpConfigs();
 
         $this->assertContainsOnly(DefaultSupportedIdpConfig::class, $defaultIdpsConfigs, false, 'Should only contain valid Default Supported Idp Configs');
     }
 
-    public function testCreateDefaultSupportedIdpConfigs()
+    public function testCreateDefaultSupportedIdpConfigs(): void
     {
         $idpName = 'google.com';
 
@@ -63,7 +60,7 @@ class IdentityPlatformTest extends IntegrationTestCase
     }
 
 
-    public function testDeleteDefaultSupportedIdpConfigs()
+    public function testDeleteDefaultSupportedIdpConfigs(): void
     {
         $idpName = 'google.com';
 
@@ -75,7 +72,7 @@ class IdentityPlatformTest extends IntegrationTestCase
         $idp = $this->identityPlatform->getDefaultSupportedIdpConfigs($idpName);
     }
 
-    public function testGetDefaultSupportedIdpConfigs()
+    public function testGetDefaultSupportedIdpConfigs(): void
     {
         $idpName = 'google.com';
         $idpConfig = $this->sampleDefaultIdpConfig($idpName);
@@ -88,7 +85,7 @@ class IdentityPlatformTest extends IntegrationTestCase
     }
 
 
-    public function testUpdateDefaultSupportedIdpConfigs()
+    public function testUpdateDefaultSupportedIdpConfigs(): void
     {
         $idpName = 'google.com';
         $idpConfig = $this->sampleDefaultIdpConfig();
@@ -107,7 +104,7 @@ class IdentityPlatformTest extends IntegrationTestCase
     }
 
 
-    public function testCreateInboundSamlConfigs()
+    public function testCreateInboundSamlConfigs(): void
     {
         $idpName = 'saml.create';
         $idpConfig = $this->sampleInboundSamlConfig($idpName);
@@ -122,7 +119,7 @@ class IdentityPlatformTest extends IntegrationTestCase
         $this->identityPlatform->deleteInboundSamlConfigs($idpName);
     }
 
-    public function testDeleteInboundSamlConfigs()
+    public function testDeleteInboundSamlConfigs(): void
     {
         $idpName = 'saml.delete';
         $idpConfig = $this->sampleInboundSamlConfig($idpName);
@@ -137,7 +134,7 @@ class IdentityPlatformTest extends IntegrationTestCase
         $this->identityPlatform->getInboundSamlConfigs($idpName);
     }
 
-    public function testGetInboundSamlConfigs()
+    public function testGetInboundSamlConfigs(): void
     {
         $idpName = 'saml.get';
         $idpConfig = $this->sampleInboundSamlConfig($idpName);
@@ -150,7 +147,7 @@ class IdentityPlatformTest extends IntegrationTestCase
         $this->identityPlatform->deleteInboundSamlConfigs($idpName);
     }
 
-    public function testUpdateInboundSamlConfigs()
+    public function testUpdateInboundSamlConfigs(): void
     {
         $idpName = 'saml.update';
         $idpConfig = $this->sampleInboundSamlConfig($idpName);
@@ -171,7 +168,7 @@ class IdentityPlatformTest extends IntegrationTestCase
     }
 
 
-    public function testCreateOauthIdpConfigs()
+    public function testCreateOauthIdpConfigs(): void
     {
         $idpName = 'oidc.create';
         $idpConfig = $this->sampleOauthIdpConfig($idpName);
@@ -182,7 +179,7 @@ class IdentityPlatformTest extends IntegrationTestCase
         $this->identityPlatform->deleteOauthIdpConfigs($idpName);
     }
 
-    public function testDeleteOauthIdpConfigs()
+    public function testDeleteOauthIdpConfigs(): void
     {
         $idpName = 'oidc.delete';
         $idpConfig = $this->sampleOauthIdpConfig($idpName);
@@ -198,7 +195,7 @@ class IdentityPlatformTest extends IntegrationTestCase
     }
 
 
-    public function testGetOauthIdpConfigs()
+    public function testGetOauthIdpConfigs(): void
     {
         $idpName = 'oidc.get';
         $idpConfig = $this->sampleOauthIdpConfig($idpName);
@@ -213,7 +210,7 @@ class IdentityPlatformTest extends IntegrationTestCase
     }
 
 
-    public function testUpdateOauthIdpConfigs()
+    public function testUpdateOauthIdpConfigs() : void
     {
         $idpName = 'oidc.update';
         $idpConfig = $this->sampleOauthIdpConfig($idpName);
@@ -233,8 +230,12 @@ class IdentityPlatformTest extends IntegrationTestCase
         $this->identityPlatform->deleteOauthIdpConfigs($idpName);
     }
 
-
-    private function sampleDefaultIdpConfig(string $name = 'google.com')
+    /**
+     *
+     * @param string $name
+     * @return array<String, mixed>
+     */
+    protected function sampleDefaultIdpConfig(string $name = 'google.com') : array
     {
         return [
             'name'         => $name,
@@ -243,7 +244,13 @@ class IdentityPlatformTest extends IntegrationTestCase
             'clientSecret' => $this->testClientSecret
         ];
     }
-    private function sampleInboundSamlConfig(string $name = 'saml.test')
+    /**
+     * Undocumented function
+     *
+     * @param string $name
+     * @return array<String, mixed>
+     */
+    protected function sampleInboundSamlConfig(string $name = 'saml.test') : array
     {
         return  [
             'name' => $name,
@@ -289,7 +296,12 @@ c7tL1QjbfAUHAQYwmHkWgPP+T2wAv0pOt36GgMCM
             'displayName' => 'Saml Test',
         ];
     }
-    private function sampleOauthIdpConfig(string $name = 'oidc.test')
+    /**
+     * @internal
+     * @param string $name
+     * @return array<String, mixed>
+     */
+    protected function sampleOauthIdpConfig(string $name = 'oidc.test') : array
     {
         return [
             'name'         => $name,
@@ -302,7 +314,7 @@ c7tL1QjbfAUHAQYwmHkWgPP+T2wAv0pOt36GgMCM
         ];
     }
 
-    private function cleanup()
+    protected function cleanup() : void
     {
         try {
             $this->identityPlatform->deleteDefaultSupportedIdpConfigs('google.com');
@@ -344,5 +356,10 @@ c7tL1QjbfAUHAQYwmHkWgPP+T2wAv0pOt36GgMCM
             $this->identityPlatform->deleteOauthIdpConfigs('oidc.update');
         } catch (IdentityPlatformException $e) {
         }
+    }
+
+    protected function setupIdentityPlatform() : IdentityPlatform
+    {
+        return self::$factory->createIdentityPlatform();
     }
 }

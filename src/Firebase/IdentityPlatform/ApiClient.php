@@ -11,6 +11,8 @@ use GuzzleHttp\ClientInterface;
 use Kreait\Firebase\Exception\IdentityPlatformApiExceptionConverter;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Exception\IdentityPlatform\IdentityPlatformError;
+use Kreait\Firebase\IdentityPlatform;
 use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Request\DefaultSupportedIdpConfig as DefaultSupportedIdpConfigRequest;
 use Kreait\Firebase\Request\InboundSamlConfig as InboundSamlConfigRequest;
@@ -179,7 +181,8 @@ class ApiClient
      * @param  string $name
      * @throws AuthException
      * @throws FirebaseException
-     */    public function getOauthIdpConfigs(string $name) : ResponseInterface
+     */
+    public function getOauthIdpConfigs(string $name) : ResponseInterface
     {
         $uri = sprintf('oauthIdpConfigs/%s', $name);
         return $this->requestApiWithProjectId($uri, [], 'GET');
@@ -191,7 +194,7 @@ class ApiClient
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function updateOauthIdpConfigs(string $name, $request) : ResponseInterface
+    public function updateOauthIdpConfigs(string $name, OAuthIdpConfigRequest $request) : ResponseInterface
     {
         $uri = sprintf('oauthIdpConfigs/%s', $name);
         return $this->requestApiWithProjectId($uri, $request->jsonSerialize(), 'PATCH');
@@ -199,11 +202,16 @@ class ApiClient
 
     /**
      * @internal
+     * @param array<String, bool|string> $data
+     * @param array<String, String> $query
      * @throws AuthException
      * @throws FirebaseException
      */
     private function requestApiWithProjectId(string $uri, array $data, string $method = 'POST', array $query = []): ResponseInterface
     {
+        if (!$this->projectId) {
+            throw new IdentityPlatformError('ProjectId must be specified for this api call');
+        }
         $uri = $this->injectTenantId($uri);
         $uri = sprintf('projects/%s/%s', $this->projectId->value(), $uri);
 
@@ -227,8 +235,8 @@ class ApiClient
     /**
      * @param string $method
      * @param string $uri
-     * @param array<string> $data
-     * @param array<string> $query
+     * @param array<String, bool|string> $data
+     * @param array<String, String> $query
      *
      * @throws AuthException
      * @throws FirebaseException
@@ -236,10 +244,6 @@ class ApiClient
     private function requestApi(string $method, string $uri, array $data, array $query = []): ResponseInterface
     {
         $options = [];
-
-        if ($this->tenantId) {
-            $data['tenantId'] = $this->tenantId->toString();
-        }
 
         if (!empty($data)) {
             $options['json'] = $data;

@@ -7,11 +7,15 @@ use Kreait\Firebase\IdentityPlatform\ParsesName;
 class InboundSamlConfig
 {
     use ParsesName;
-
+    // @phpstan-ignore-next-line
     private string $name;
+    // @phpstan-ignore-next-line
     private ?IdpConfig $idpConfig;
+    // @phpstan-ignore-next-line
     private ?SpConfig $spConfig;
+    // @phpstan-ignore-next-line
     private ?string $displayName;
+    // @phpstan-ignore-next-line
     private ?bool $enabled;
 
     public const FIELDS = ['name', 'idpConfig', 'spConfig', 'displayName', 'enabled'];
@@ -66,7 +70,11 @@ class InboundSamlConfig
 
         return $instance;
     }
-
+    /**
+     * To Array
+     *
+     * @return array<String, mixed>
+     */
     public function toArray() : array
     {
         return [

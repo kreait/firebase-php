@@ -3,7 +3,14 @@ namespace Kreait\Firebase\Util;
 
 class ArrayHelper
 {
-    public static function flatten($arr, $out=[])
+    /**
+     * Flattens Array
+     *
+     * @param array<mixed,mixed> $arr
+     * @param array<mixed,mixed> $out
+     * @return array<mixed,mixed>
+     */
+    public static function flatten(array $arr, array $out=[]) : array
     {
         foreach ($arr as $item) {
             if (is_array($item)) {

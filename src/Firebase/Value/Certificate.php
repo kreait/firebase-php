@@ -9,7 +9,9 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 class Certificate implements \JsonSerializable
 {
     private string $value;
-
+    /**
+     * @var array<string, mixed>
+     */
     private ?array $certificate;
 
     public function __construct(string $certificate)
@@ -32,8 +34,11 @@ class Certificate implements \JsonSerializable
     {
         return $this->value;
     }
-
-    public function details() : array
+    /**
+     * OpenSSL parse results for certificate
+     * @return array<string,mixed>|null
+     */
+    public function details() : ?array
     {
         return $this->certificate;
     }

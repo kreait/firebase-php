@@ -7,12 +7,16 @@ use Kreait\Firebase\Value\Certificate;
 
 class IdpConfig implements \JsonSerializable
 {
+    // @phpstan-ignore-next-line
     private string $idpEntityId;
+    // @phpstan-ignore-next-line
     private Url $ssoUrl;
     /**
-     * @var array<Certificate>
+     * @var array<int, array<String,Certificate>> $idpCertificates
+     *  @phpstan-ignore-next-line
      */
     private array $idpCertificates;
+    // @phpstan-ignore-next-line
     private bool $signRequest;
 
     public const FIELDS = ['idpEntityId', 'ssoUrl', 'idpCertificates', 'signRequest'];
@@ -27,7 +31,7 @@ class IdpConfig implements \JsonSerializable
     }
 
     /**
-     * @param array<string, mixed> $properties
+     * @param array<String, mixed> $properties
      *
      * @throws InvalidArgumentException when invalid properties have been provided
      */
@@ -47,7 +51,18 @@ class IdpConfig implements \JsonSerializable
                     if (!is_array($value)) {
                         throw new InvalidArgumentException(sprintf('%s must be an array', $key));
                     }
-                    $instance->idpCertificates = array_map(fn ($certificate) => $certificate instanceof Certificate ? $certificate : ['x509Certificate' => new Certificate($certificate['x509Certificate'])], $value);
+
+                    $instance->idpCertificates = array_map(
+                        /**
+                         * @param Certificate|array<String,String> $certificate
+                         * @return array<Certificate>
+                         */
+                        function ($certificate) {
+                            $certificateObject = $certificate instanceof Certificate ? $certificate : new Certificate($certificate['x509Certificate']);
+                            return ['x509Certificate' => $certificateObject];
+                        },
+                        $value
+                    );
                     break;
                 case 'signRequest':
                     if (!is_bool($value)) {
@@ -62,7 +77,11 @@ class IdpConfig implements \JsonSerializable
 
         return $instance;
     }
-
+    /**
+     * Undocumented function
+     *
+     * @return array<String, mixed>
+     */
     public function toArray() : array
     {
         return [
@@ -72,9 +91,13 @@ class IdpConfig implements \JsonSerializable
             'signRequest' => $this->signRequest,
         ];
     }
-
+    /**
+     *
+     *
+     * @return array<String,String>
+     */
     public function jsonSerialize() : array
     {
-        return $this->toArray();
+        return \array_filter($this->toArray(), static fn ($value) => $value !== null);
     }
 }

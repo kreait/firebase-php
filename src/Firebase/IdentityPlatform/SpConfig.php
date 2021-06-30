@@ -6,7 +6,9 @@ use Kreait\Firebase\Value\Url;
 
 class SpConfig implements \JsonSerializable
 {
+    // @phpstan-ignore-next-line
     private string $spEntityId;
+    // @phpstan-ignore-next-line
     private Url $callbackUri;
     /**
      * @var array<SpCertificate>
@@ -17,6 +19,7 @@ class SpConfig implements \JsonSerializable
 
     private function __construct()
     {
+        $this->spCertificates = [];
     }
 
     public static function new(): self
@@ -43,7 +46,7 @@ class SpConfig implements \JsonSerializable
                     break;
                 case 'spCertificates':
                     if (!is_array($value)) {
-                        throw new InvalidArgumentException(sprintf('%s must be an array'));
+                        throw new InvalidArgumentException(sprintf('%s must be an array', $key));
                     }
                     $instance->spCertificates = array_map(fn ($certificate) => $certificate instanceof SpCertificate ? $certificate : SpCertificate::withProperties($certificate), $value);
                     break;
@@ -54,7 +57,10 @@ class SpConfig implements \JsonSerializable
 
         return $instance;
     }
-
+    /**
+     *
+     * @return array<String, mixed>
+     */
     public function toArray() : array
     {
         return [
@@ -63,9 +69,12 @@ class SpConfig implements \JsonSerializable
             'spCertificates' => $this->spCertificates ?? null,
         ];
     }
-
+    /**
+     *
+     * @return array<string, mixed>
+     */
     public function jsonSerialize() : array
     {
-        return $this->toArray();
+        return \array_filter($this->toArray(), static fn ($value) => $value !== null);
     }
 }

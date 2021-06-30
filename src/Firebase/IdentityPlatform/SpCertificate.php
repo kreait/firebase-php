@@ -9,7 +9,9 @@ use Kreait\Firebase\Value\Certificate;
 
 class SpCertificate implements JsonSerializable
 {
+    // @phpstan-ignore-next-line
     private Certificate $x509Certificate;
+    // @phpstan-ignore-next-line
     private Carbon $expiresAt;
 
     public const FIELDS = ['x509Certificate', 'expiresAt', ];
@@ -47,17 +49,24 @@ class SpCertificate implements JsonSerializable
 
         return $instance;
     }
-
-    public function toArray()
+    /**
+     * To Array
+     *
+     * @return array<String, mixed>
+     */
+    public function toArray() : array
     {
         return [
             'x509Certificate' => $this->x509Certificate,
-            'expiresAt' => $this->expiresAt,
+            'expiresAt' => $this->expiresAt ?? null,
         ];
     }
-
-    public function jsonSerialize()
+    /**
+     *
+     * @return array<String, mixed>
+     */
+    public function jsonSerialize() : array
     {
-        return $this->toArray();
+        return \array_filter($this->toArray(), static fn ($value) => $value !== null);
     }
 }
