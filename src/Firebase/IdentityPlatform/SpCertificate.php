@@ -14,13 +14,13 @@ class SpCertificate implements JsonSerializable
 
     public const FIELDS = ['x509Certificate', 'expiresAt', ];
 
-    private function __construct()
+    final private function __construct()
     {
     }
 
-    public static function new(): self
+    public static function new(): static
     {
-        return new self();
+        return new static();
     }
 
     /**
@@ -28,9 +28,9 @@ class SpCertificate implements JsonSerializable
      *
      * @throws InvalidArgumentException when invalid properties have been provided
      */
-    public static function withProperties(array $properties): self
+    public static function withProperties(array $properties): static
     {
-        $instance = new self();
+        $instance = new static();
 
         foreach ($properties as $key => $value) {
             switch ($key) {

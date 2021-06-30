@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Kreait\Firebase\IdentityPlatform;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\IdentityPlatform\ParsesName;
 
 class DefaultSupportedIdpConfig
 {
     use ParsesName;
+
     private string $name;
     private ?bool $enabled;
     private ?string $clientId;
@@ -16,7 +18,7 @@ class DefaultSupportedIdpConfig
 
     public const FIELDS = ['name', 'enabled', 'clientId', 'clientSecret'];
 
-    private function __construct()
+    final private function __construct()
     {
     }
 
@@ -30,7 +32,7 @@ class DefaultSupportedIdpConfig
      *
      * @throws InvalidArgumentException when invalid properties have been provided
      */
-    public static function withProperties(array $properties): self
+    public static function withProperties(array $properties): static
     {
         $instance = new static();
 

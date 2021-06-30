@@ -4,21 +4,21 @@ namespace Kreait\Firebase\IdentityPlatform;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
-class OauthResponseType implements \JsonSerializable
+class OAuthResponseType implements \JsonSerializable
 {
     private ?bool $idToken;
     private ?bool $code;
 
-    private function __construct()
+    final private function __construct()
     {
     }
 
-    public static function new(): self
+    public static function new(): static
     {
         return new static();
     }
 
-    public static function fromProperties(array $properties)
+    public static function fromProperties(array $properties) : static
     {
         $instance = new static();
 
@@ -41,6 +41,8 @@ class OauthResponseType implements \JsonSerializable
         if ($idTokenEnabled && $codeEnabled) {
             throw new InvalidArgumentException('{code: true, idToken: true} is not yet supported');
         }
+
+        return $instance;
     }
 
     public function toArray()

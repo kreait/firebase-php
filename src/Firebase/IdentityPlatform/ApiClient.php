@@ -14,7 +14,7 @@ use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Request\DefaultSupportedIdpConfig as DefaultSupportedIdpConfigRequest;
 use Kreait\Firebase\Request\InboundSamlConfig as InboundSamlConfigRequest;
-use Kreait\Firebase\Request\OauthIdpConfig as OauthIdpConfigRequest;
+use Kreait\Firebase\Request\OAuthIdpConfig as OAuthIdpConfigRequest;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -25,13 +25,13 @@ class ApiClient
 {
     private ClientInterface $client;
     private ?TenantId $tenantId;
-    private ProjectId $projectId;
+    private ?ProjectId $projectId;
     private IdentityPlatformApiExceptionConverter $errorHandler;
 
     /**
      * @internal
      */
-    public function __construct(ClientInterface $client, ProjectId $projectId, ?TenantId $tenantId = null)
+    public function __construct(ClientInterface $client, ?ProjectId $projectId, ?TenantId $tenantId = null)
     {
         $this->client = $client;
         $this->projectId = $projectId;
@@ -151,11 +151,11 @@ class ApiClient
     }
 
     /**
-     * @param OauthIdpConfigRequest $request
+     * @param OAuthIdpConfigRequest $request
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function createOauthIdpConfigs(OauthIdpConfigRequest $request) : ResponseInterface
+    public function createOauthIdpConfigs(OAuthIdpConfigRequest $request) : ResponseInterface
     {
         $uri = 'oauthIdpConfigs';
 
@@ -187,7 +187,7 @@ class ApiClient
 
     /**
      * @param  string $name
-     * @param OauthIdpConfigRequest $request
+     * @param OAuthIdpConfigRequest $request
      * @throws AuthException
      * @throws FirebaseException
      */
@@ -226,8 +226,9 @@ class ApiClient
 
     /**
      * @param string $method
-     * @param string $url
-     * @param array<mixed> $data
+     * @param string $uri
+     * @param array<string> $data
+     * @param array<string> $query
      *
      * @throws AuthException
      * @throws FirebaseException

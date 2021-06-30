@@ -6,7 +6,8 @@ namespace Kreait\Firebase\Contract;
 
 use Kreait\Firebase\IdentityPlatform\DefaultSupportedIdpConfig;
 use Kreait\Firebase\IdentityPlatform\InboundSamlConfig;
-use Kreait\Firebase\IdentityPlatform\OauthIdpConfig;
+use Kreait\Firebase\IdentityPlatform\OAuthIdpConfig;
+use Kreait\Firebase\Exception;
 use Psr\Http\Message\ResponseInterface;
 
 use Kreait\Firebase\Request;
@@ -16,7 +17,7 @@ interface IdentityPlatform
     /**
      * List all default supported Idps.
      *
-     * @return array
+     * @return array<String>
      *
      * @throws Exception\FirebaseException
      * @throws Exception\IdentityPlatformException
@@ -26,7 +27,7 @@ interface IdentityPlatform
     /**
      * List Default Supported Idps
      *
-     * @return array
+     * @return array<DefaultSupportedIdpConfig>
      *
      * @throws Exception\FirebaseException
      * @throws Exception\IdentityPlatformException
@@ -120,14 +121,14 @@ interface IdentityPlatform
     /**
      * Create an Oidc Idp configuration for an Identity Toolkit project.
      *
-     * @param array<string, mixed>|Request\OauthIdpConfig $properties
-     * @return OauthIdpConfig
+     * @param array<string, mixed>|Request\OAuthIdpConfig $properties
+     * @return OAuthIdpConfig
      *
      * @throws Exception\IdentityPlatformException
      * @throws Exception\FirebaseException
      */
 
-    public function createOauthIdpConfigs($properties) : OauthIdpConfig;
+    public function createOauthIdpConfigs($properties) : OAuthIdpConfig;
     /**
      * Delete an Oidc Idp configuration for an Identity Toolkit project.
      *
@@ -143,24 +144,24 @@ interface IdentityPlatform
      * Get an Oidc Idp configuration for an Identity Toolkit project.
      *
      * @param string $name
-     * @return OauthIdpConfig
+     * @return OAuthIdpConfig
      *
      * @throws Exception\IdentityPlatformException
      * @throws Exception\FirebaseException
      */
-    public function getOauthIdpConfigs(string $name) : OauthIdpConfig;
+    public function getOauthIdpConfigs(string $name) : OAuthIdpConfig;
 
     /**
      * Update Oidc Idp configuration for an Identity Toolkit project.
      *
      * @param string $name
-     * @param array<string, mixed>|Request\OauthIdpConfig $properties
-     * @return OauthIdpConfig
+     * @param array<string, mixed>|Request\OAuthIdpConfig $properties
+     * @return OAuthIdpConfig
      *
      * @throws Exception\IdentityPlatformException
      * @throws Exception\FirebaseException
      */
-    public function updateOauthIdpConfigs(string $name, $properties) : OauthIdpConfig;
+    public function updateOauthIdpConfigs(string $name, $properties) : OAuthIdpConfig;
 
 
 

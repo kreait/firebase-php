@@ -173,6 +173,9 @@ class IdentityPlatform implements Contract\IdentityPlatform
         return OAuthIdpConfig::withProperties($this->getResponseAsArray($response));
     }
 
+    /**
+     * @internal
+     */
     private function getResponseAsArray(ResponseInterface $response) : array
     {
         return JSON::decode((string) $response->getBody(), true);

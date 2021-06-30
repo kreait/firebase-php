@@ -17,11 +17,11 @@ class IdpConfig implements \JsonSerializable
 
     public const FIELDS = ['idpEntityId', 'ssoUrl', 'idpCertificates', 'signRequest'];
 
-    private function __construct()
+    final private function __construct()
     {
     }
 
-    public static function new(): self
+    public static function new(): static
     {
         return new static();
     }
@@ -31,7 +31,7 @@ class IdpConfig implements \JsonSerializable
      *
      * @throws InvalidArgumentException when invalid properties have been provided
      */
-    public static function withProperties(array $properties): self
+    public static function withProperties(array $properties): static
     {
         $instance = new static();
 
