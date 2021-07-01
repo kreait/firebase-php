@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kreait\Firebase\IdentityPlatform;
 
 use InvalidArgumentException;
@@ -40,28 +43,34 @@ class SpConfig implements \JsonSerializable
             switch ($key) {
                 case 'spEntityId':
                     $instance->spEntityId = $value;
+
                     break;
+
                 case 'callbackUri':
                     $instance->callbackUri = $value instanceof Url ? $value : Url::fromValue($value);
+
                     break;
+
                 case 'spCertificates':
-                    if (!is_array($value)) {
-                        throw new InvalidArgumentException(sprintf('%s must be an array', $key));
+                    if (!\is_array($value)) {
+                        throw new InvalidArgumentException(\sprintf('%s must be an array', $key));
                     }
-                    $instance->spCertificates = array_map(fn ($certificate) => $certificate instanceof SpCertificate ? $certificate : SpCertificate::withProperties($certificate), $value);
+                    $instance->spCertificates = \array_map(fn ($certificate) => $certificate instanceof SpCertificate ? $certificate : SpCertificate::withProperties($certificate), $value);
+
                     break;
+
                 default:
-                 throw new InvalidArgumentException(sprintf('%s is not a valid property', $key));
+                 throw new InvalidArgumentException(\sprintf('%s is not a valid property', $key));
             }
         }
 
         return $instance;
     }
+
     /**
-     *
      * @return array<String, mixed>
      */
-    public function toArray() : array
+    public function toArray(): array
     {
         return [
             'spEntityId' => $this->spEntityId,
@@ -69,11 +78,11 @@ class SpConfig implements \JsonSerializable
             'spCertificates' => $this->spCertificates ?? null,
         ];
     }
+
     /**
-     *
      * @return array<string, mixed>
      */
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         return \array_filter($this->toArray(), static fn ($value) => $value !== null);
     }

@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\IdentityPlatform;
 
-use Kreait\Firebase\Auth\TenantId;
-
 use GuzzleHttp\ClientInterface;
-
-use Kreait\Firebase\Exception\IdentityPlatformApiExceptionConverter;
+use Kreait\Firebase\Auth\TenantId;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Exception\IdentityPlatform\IdentityPlatformError;
-use Kreait\Firebase\IdentityPlatform;
+use Kreait\Firebase\Exception\IdentityPlatformApiExceptionConverter;
 use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Request\DefaultSupportedIdpConfig as DefaultSupportedIdpConfigRequest;
 use Kreait\Firebase\Request\InboundSamlConfig as InboundSamlConfigRequest;
@@ -45,7 +42,7 @@ class ApiClient
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function listAllDefaultSupportedIdpConfigs() : ResponseInterface
+    public function listAllDefaultSupportedIdpConfigs(): ResponseInterface
     {
         return $this->requestApi('GET', 'defaultSupportedIdps', []);
     }
@@ -54,110 +51,108 @@ class ApiClient
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function listDefaultSupportedIdpConfigs() : ResponseInterface
+    public function listDefaultSupportedIdpConfigs(): ResponseInterface
     {
         $uri = 'defaultSupportedIdpConfigs';
+
         return $this->requestApiWithProjectId($uri, [], 'GET');
     }
 
     /**
-     * @param DefaultSupportedIdpConfigRequest $request
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function createDefaultSupportedIdpConfigs(DefaultSupportedIdpConfigRequest $request) : ResponseInterface
+    public function createDefaultSupportedIdpConfigs(DefaultSupportedIdpConfigRequest $request): ResponseInterface
     {
         $uri = 'defaultSupportedIdpConfigs';
         $query = ['idpId' => $request->getName()];
+
         return $this->requestApiWithProjectId($uri, $request->jsonSerialize(), 'POST', $query);
     }
 
     /**
-     * @param string $name
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function deleteDefaultSupportedIdpConfigs(string $name) : ResponseInterface
+    public function deleteDefaultSupportedIdpConfigs(string $name): ResponseInterface
     {
-        $uri = sprintf('defaultSupportedIdpConfigs/%s', $name);
+        $uri = \sprintf('defaultSupportedIdpConfigs/%s', $name);
+
         return $this->requestApiWithProjectId($uri, [], 'DELETE');
     }
 
     /**
-     * @param string $name
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function getDefaultSupportedIdpConfigs(string $name) : ResponseInterface
+    public function getDefaultSupportedIdpConfigs(string $name): ResponseInterface
     {
-        $uri = sprintf('defaultSupportedIdpConfigs/%s', $name);
+        $uri = \sprintf('defaultSupportedIdpConfigs/%s', $name);
+
         return $this->requestApiWithProjectId($uri, [], 'GET');
     }
 
     /**
-     * @param string $name
-     * @param DefaultSupportedIdpConfigRequest $request
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function updateDefaultSupportedIdpConfigs(string $name, DefaultSupportedIdpConfigRequest $request) : ResponseInterface
+    public function updateDefaultSupportedIdpConfigs(string $name, DefaultSupportedIdpConfigRequest $request): ResponseInterface
     {
-        $uri = sprintf('defaultSupportedIdpConfigs/%s', $name);
+        $uri = \sprintf('defaultSupportedIdpConfigs/%s', $name);
+
         return $this->requestApiWithProjectId($uri, $request->jsonSerialize(), 'PATCH');
     }
 
     /**
-     * @param InboundSamlConfigRequest $request
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function createInboundSamlConfigs(InboundSamlConfigRequest $request) : ResponseInterface
+    public function createInboundSamlConfigs(InboundSamlConfigRequest $request): ResponseInterface
     {
         $uri = 'inboundSamlConfigs';
         $query = ['inboundSamlConfigId' => $request->getName()];
+
         return $this->requestApiWithProjectId($uri, $request->jsonSerialize(), 'POST', $query);
     }
 
     /**
-     * @param string $name
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function deleteInboundSamlConfigs(string $name) : ResponseInterface
+    public function deleteInboundSamlConfigs(string $name): ResponseInterface
     {
-        $uri = sprintf('inboundSamlConfigs/%s', $name);
+        $uri = \sprintf('inboundSamlConfigs/%s', $name);
+
         return $this->requestApiWithProjectId($uri, [], 'DELETE');
     }
 
     /**
-     * @param string $name
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function getInboundSamlConfigs(string $name) : ResponseInterface
+    public function getInboundSamlConfigs(string $name): ResponseInterface
     {
-        $uri = sprintf('inboundSamlConfigs/%s', $name);
+        $uri = \sprintf('inboundSamlConfigs/%s', $name);
+
         return $this->requestApiWithProjectId($uri, [], 'GET');
     }
 
     /**
-     * @param string $name
-     * @param InboundSamlConfigRequest $request
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function updateInboundSamlConfigs(string $name, InboundSamlConfigRequest $request) : ResponseInterface
+    public function updateInboundSamlConfigs(string $name, InboundSamlConfigRequest $request): ResponseInterface
     {
-        $uri = sprintf('inboundSamlConfigs/%s', $name);
+        $uri = \sprintf('inboundSamlConfigs/%s', $name);
+
         return $this->requestApiWithProjectId($uri, $request->jsonSerialize(), 'PATCH');
     }
 
     /**
-     * @param OAuthIdpConfigRequest $request
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function createOauthIdpConfigs(OAuthIdpConfigRequest $request) : ResponseInterface
+    public function createOauthIdpConfigs(OAuthIdpConfigRequest $request): ResponseInterface
     {
         $uri = 'oauthIdpConfigs';
 
@@ -167,43 +162,44 @@ class ApiClient
     }
 
     /**
-     * @param  string $name
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function deleteOauthIdpConfigs(string $name) : ResponseInterface
+    public function deleteOauthIdpConfigs(string $name): ResponseInterface
     {
-        $uri = sprintf('oauthIdpConfigs/%s', $name);
+        $uri = \sprintf('oauthIdpConfigs/%s', $name);
+
         return $this->requestApiWithProjectId($uri, [], 'DELETE');
     }
 
     /**
-     * @param  string $name
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function getOauthIdpConfigs(string $name) : ResponseInterface
+    public function getOauthIdpConfigs(string $name): ResponseInterface
     {
-        $uri = sprintf('oauthIdpConfigs/%s', $name);
+        $uri = \sprintf('oauthIdpConfigs/%s', $name);
+
         return $this->requestApiWithProjectId($uri, [], 'GET');
     }
 
     /**
-     * @param  string $name
-     * @param OAuthIdpConfigRequest $request
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function updateOauthIdpConfigs(string $name, OAuthIdpConfigRequest $request) : ResponseInterface
+    public function updateOauthIdpConfigs(string $name, OAuthIdpConfigRequest $request): ResponseInterface
     {
-        $uri = sprintf('oauthIdpConfigs/%s', $name);
+        $uri = \sprintf('oauthIdpConfigs/%s', $name);
+
         return $this->requestApiWithProjectId($uri, $request->jsonSerialize(), 'PATCH');
     }
 
     /**
      * @internal
+     *
      * @param array<String, bool|string> $data
      * @param array<String, String> $query
+     *
      * @throws AuthException
      * @throws FirebaseException
      */
@@ -213,28 +209,24 @@ class ApiClient
             throw new IdentityPlatformError('ProjectId must be specified for this api call');
         }
         $uri = $this->injectTenantId($uri);
-        $uri = sprintf('projects/%s/%s', $this->projectId->value(), $uri);
+        $uri = \sprintf('projects/%s/%s', $this->projectId->value(), $uri);
 
         return $this->requestApi($method, $uri, $data, $query);
     }
+
     /**
      * @internal
-     *
-     * @param string $uri
-     * @return string
      */
-    private function injectTenantId(string $uri) : string
+    private function injectTenantId(string $uri): string
     {
         if ($this->tenantId) {
-            $uri = sprintf('tenants/%s/%s', $this->tenantId->toString(), $uri);
+            $uri = \sprintf('tenants/%s/%s', $this->tenantId->toString(), $uri);
         }
 
         return $uri;
     }
 
     /**
-     * @param string $method
-     * @param string $uri
      * @param array<String, bool|string> $data
      * @param array<String, String> $query
      *

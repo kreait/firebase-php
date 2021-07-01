@@ -683,7 +683,6 @@ class Factory
 
         $identityApiClient = new IdentityPlatform\ApiClient($httpClient, $this->projectId, $this->tenantId);
 
-
         return new IdentityPlatform($identityApiClient);
     }
 }

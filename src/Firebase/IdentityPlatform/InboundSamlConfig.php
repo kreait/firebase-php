@@ -1,8 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kreait\Firebase\IdentityPlatform;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\IdentityPlatform\ParsesName;
 
 class InboundSamlConfig
 {
@@ -47,50 +49,62 @@ class InboundSamlConfig
                 case 'name':
                     $name = static::parseName($value);
                     $instance->name = $name;
+
                     break;
+
                 case 'idpConfig':
                     $instance->idpConfig = $value instanceof IdpConfig ? $value : IdpConfig::withProperties($value);
+
                     break;
+
                 case 'spConfig':
                     $instance->spConfig = $value instanceof SpConfig ? $value : SpConfig::withProperties($value);
+
                      break;
+
                 case 'displayName':
                     $instance->displayName = $value;
+
                     break;
+
                 case 'enabled':
-                    if (!is_bool($value)) {
-                        throw new InvalidArgumentException(sprintf('%s must be a boolean', $key));
+                    if (!\is_bool($value)) {
+                        throw new InvalidArgumentException(\sprintf('%s must be a boolean', $key));
                     }
                     $instance->enabled = $value;
+
                     break;
+
                 default:
-                    throw new InvalidArgumentException(sprintf('%s is not a valid property', $key));
+                    throw new InvalidArgumentException(\sprintf('%s is not a valid property', $key));
             }
         }
 
         return $instance;
     }
+
     /**
-     * To Array
+     * To Array.
      *
      * @return array<String, mixed>
      */
-    public function toArray() : array
+    public function toArray(): array
     {
         return [
-            'name'        => $this->name,
-            'idpConfig'   => $this->idpConfig,
-            'spConfig'    => $this->spConfig,
+            'name' => $this->name,
+            'idpConfig' => $this->idpConfig,
+            'spConfig' => $this->spConfig,
             'displayName' => $this->displayName,
-            'enabled'     => $this->enabled ?? null,
+            'enabled' => $this->enabled ?? null,
         ];
     }
 
-    public static function validateName(string $name) : bool
+    public static function validateName(string $name): bool
     {
-        if (stripos($name, 'saml.') !== 0) {
+        if (\stripos($name, 'saml.') !== 0) {
             throw new InvalidArgumentException('name property is must start with "saml."');
         }
+
         return true;
     }
 }

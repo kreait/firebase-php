@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kreait\Firebase\IdentityPlatform;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
@@ -6,25 +9,21 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 trait ParsesName
 {
     /**
-     * Parses name with possibke Project/Tenant
-     *
-     * @param string $name
-     * @return string
+     * Parses name with possibke Project/Tenant.
      */
-    public static function parseName(string $name) : string
+    public static function parseName(string $name): string
     {
-        $parts = explode('/', $name);
-        $name = end($parts);
+        $parts = \explode('/', $name);
+        $name = \end($parts);
         static::validateName($name);
+
         return $name;
     }
 
     /**
-     * Returns Name
-     *
-     * @return string
+     * Returns Name.
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -33,8 +32,6 @@ trait ParsesName
      * @internal
      *
      * @throws InvalidArgumentException
-     * @param string $name
-     * @return boolean
      */
-    abstract public static function validateName(string $name) : bool ;
+    abstract public static function validateName(string $name): bool;
 }

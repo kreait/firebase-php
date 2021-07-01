@@ -1,9 +1,12 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kreait\Firebase\IdentityPlatform;
 
 use InvalidArgumentException;
-use Kreait\Firebase\Value\Url;
 use Kreait\Firebase\Value\Certificate;
+use Kreait\Firebase\Value\Url;
 
 class IdpConfig implements \JsonSerializable
 {
@@ -12,8 +15,8 @@ class IdpConfig implements \JsonSerializable
     // @phpstan-ignore-next-line
     private Url $ssoUrl;
     /**
-     * @var array<int, array<String,Certificate>> $idpCertificates
-     *  @phpstan-ignore-next-line
+     * @var array<int, array<String,Certificate>>
+     * @phpstan-ignore-next-line
      */
     private array $idpCertificates;
     // @phpstan-ignore-next-line
@@ -43,46 +46,57 @@ class IdpConfig implements \JsonSerializable
             switch ($key) {
                 case 'idpEntityId':
                     $instance->idpEntityId = $value;
+
                     break;
+
                 case 'ssoUrl':
                     $instance->ssoUrl = $value instanceof Url ? $value : Url::fromValue($value);
+
                     break;
+
                 case 'idpCertificates':
-                    if (!is_array($value)) {
-                        throw new InvalidArgumentException(sprintf('%s must be an array', $key));
+                    if (!\is_array($value)) {
+                        throw new InvalidArgumentException(\sprintf('%s must be an array', $key));
                     }
 
-                    $instance->idpCertificates = array_map(
+                    $instance->idpCertificates = \array_map(
                         /**
                          * @param Certificate|array<String,String> $certificate
+                         *
                          * @return array<Certificate>
                          */
                         function ($certificate) {
                             $certificateObject = $certificate instanceof Certificate ? $certificate : new Certificate($certificate['x509Certificate']);
+
                             return ['x509Certificate' => $certificateObject];
                         },
                         $value
                     );
+
                     break;
+
                 case 'signRequest':
-                    if (!is_bool($value)) {
-                        throw new InvalidArgumentException(sprintf('%s is not a valid property', $key));
+                    if (!\is_bool($value)) {
+                        throw new InvalidArgumentException(\sprintf('%s is not a valid property', $key));
                     }
                     $instance->signRequest = $value;
+
                     break;
+
                 default:
-                 throw new InvalidArgumentException(sprintf('%s is not a valid property', $key));
+                 throw new InvalidArgumentException(\sprintf('%s is not a valid property', $key));
             }
         }
 
         return $instance;
     }
+
     /**
-     * Undocumented function
+     * Undocumented function.
      *
      * @return array<String, mixed>
      */
-    public function toArray() : array
+    public function toArray(): array
     {
         return [
             'idpEntityId' => $this->idpEntityId,
@@ -91,12 +105,11 @@ class IdpConfig implements \JsonSerializable
             'signRequest' => $this->signRequest,
         ];
     }
+
     /**
-     *
-     *
      * @return array<String,String>
      */
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         return \array_filter($this->toArray(), static fn ($value) => $value !== null);
     }

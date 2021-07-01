@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\IdentityPlatform;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\IdentityPlatform\ParsesName;
-use Kreait\Firebase\IdentityPlatform\OAuthResponseType;
 use Kreait\Firebase\Value\Url;
 
 class OAuthIdpConfig
@@ -25,7 +25,7 @@ class OAuthIdpConfig
     // @phpstan-ignore-next-line
     private ?OAuthResponseType $responseType;
 
-    public const FIELD = ['name', 'displayName', 'enabled','clientId','clientSecret', 'responseType'];
+    public const FIELDS = ['name', 'displayName', 'enabled', 'clientId', 'clientSecret', 'responseType'];
 
     final private function __construct()
     {
@@ -43,7 +43,7 @@ class OAuthIdpConfig
      */
     public static function withProperties(array $properties): static
     {
-        $instance =  new static();
+        $instance = new static();
 
         if (!isset($properties['name'])) {
             throw new InvalidArgumentException('name property is a required string');
@@ -53,64 +53,77 @@ class OAuthIdpConfig
             switch ($key) {
                 case 'name':
                     $instance->name = static::parseName($value);
+
                     break;
+
                 case 'issuer':
-                    $instance->$key = $value instanceof Url ? $value : Url::fromValue($value);
+                    $instance->{$key} = $value instanceof Url ? $value : Url::fromValue($value);
+
                     break;
+
                 case 'displayName':
                 case 'clientSecret':
                 case 'clientId':
-                    $instance->$key = $value;
+                    $instance->{$key} = $value;
+
                     break;
+
                 case 'enabled':
-                    if (!is_bool($value)) {
-                        throw new InvalidArgumentException(sprintf('%s must be a boolean', $key));
+                    if (!\is_bool($value)) {
+                        throw new InvalidArgumentException(\sprintf('%s must be a boolean', $key));
                     }
                     $instance->enabled = $value;
+
                 break;
+
                 case 'responseType':
                     $instance->responseType = $value instanceof OAuthResponseType ? $value : OAuthResponseType::fromProperties($value);
+
                 break;
+
                 default:
-                    throw new InvalidArgumentException(sprintf('%s is not a valid property', $key));
+                    throw new InvalidArgumentException(\sprintf('%s is not a valid property', $key));
             }
         }
+
         return $instance;
     }
+
     /**
-     * To Array
+     * To Array.
      *
      * @return array<String, mixed>
      */
-    public function toArray() : array
+    public function toArray(): array
     {
         return [
-            "name"         => $this->name,
-            "issuer"       => $this->issuer ?? null,
-            "displayName"  => $this->displayName ?? null,
-            "enabled"      => $this->enabled ?? null,
-            "clientId"     => $this->clientId ?? null,
-            "clientSecret" => $this->clientSecret ?? null,
-            "responseType" => $this->responseType ?? null,
+            'name' => $this->name,
+            'issuer' => $this->issuer ?? null,
+            'displayName' => $this->displayName ?? null,
+            'enabled' => $this->enabled ?? null,
+            'clientId' => $this->clientId ?? null,
+            'clientSecret' => $this->clientSecret ?? null,
+            'responseType' => $this->responseType ?? null,
         ];
     }
 
     /**
-     * @return array<String, null|bool|String>
+     * @return array<String, bool|String|null>
      */
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         return \array_filter($this->toArray(), static fn ($value) => $value !== null);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public static function validateName(string $name): bool
     {
-        if (stripos($name, 'oidc.') !== 0) {
+        if (\stripos($name, 'oidc.') !== 0) {
             throw new InvalidArgumentException('name property is must start with "saml."');
         }
+
         return true;
     }
 }

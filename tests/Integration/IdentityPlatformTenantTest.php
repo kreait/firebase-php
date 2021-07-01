@@ -6,10 +6,13 @@ namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Contract\IdentityPlatform;
 
+/**
+ * @internal
+ */
 class IdentityPlatformTenantTest extends IdentityPlatformTest
 {
-    protected function setupIdentityPlatform() : IdentityPlatform
+    protected function setupIdentityPlatform(): IdentityPlatform
     {
-        return  self::$factory->withTenantId(self::TENANT_ID)->createIdentityPlatform();
+        return self::$factory->withTenantId(self::TENANT_ID)->createIdentityPlatform();
     }
 }

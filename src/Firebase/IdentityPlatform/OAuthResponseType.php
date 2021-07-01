@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\IdentityPlatform;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
@@ -22,9 +24,8 @@ class OAuthResponseType implements \JsonSerializable
 
     /**
      * @param array<String, mixed> $properties
-     * @return static
      */
-    public static function fromProperties(array $properties) : static
+    public static function fromProperties(array $properties): static
     {
         $instance = new static();
 
@@ -32,14 +33,15 @@ class OAuthResponseType implements \JsonSerializable
             switch ($key) {
                 case 'idToken':
                 case 'code':
-                    if (!is_bool($value)) {
-                        throw new InvalidArgumentException(sprintf('%s must be a boolean', $key));
+                    if (!\is_bool($value)) {
+                        throw new InvalidArgumentException(\sprintf('%s must be a boolean', $key));
                     }
-                    $instance->$key = $value;
+                    $instance->{$key} = $value;
 
                     break;
+
                 default:
-                    throw new InvalidArgumentException(sprintf('%s is not a valid property', $key));
+                    throw new InvalidArgumentException(\sprintf('%s is not a valid property', $key));
             }
         }
         $idTokenEnabled = $instance->idToken ?? null;
@@ -50,15 +52,15 @@ class OAuthResponseType implements \JsonSerializable
 
         return $instance;
     }
+
     /**
      * @return array<String, mixed>
      */
-
-    public function toArray() : array
+    public function toArray(): array
     {
         return [
             'idToken' => $this->idToken ?? null,
-            'code'    => $this->code ?? null,
+            'code' => $this->code ?? null,
         ];
     }
 

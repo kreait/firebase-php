@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kreait\Firebase\Exception;
 
-use Kreait\Firebase\Exception\IdentityPlatform\IdentityPlatformError;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
-use Kreait\Firebase\Http\ErrorResponseParser;
-use Throwable;
 use Kreait\Firebase\Exception\IdentityPlatform\ApiConnectionFailed;
 use Kreait\Firebase\Exception\IdentityPlatform\ConfigurationExists;
 use Kreait\Firebase\Exception\IdentityPlatform\ConfigurationNotFound;
+use Kreait\Firebase\Exception\IdentityPlatform\IdentityPlatformError;
+use Kreait\Firebase\Http\ErrorResponseParser;
+use Throwable;
 
 /**
  * @internal

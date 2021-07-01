@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kreait\Firebase\IdentityPlatform;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\IdentityPlatform\ParsesName;
 
 class DefaultSupportedIdpConfig
 {
@@ -46,19 +45,22 @@ class DefaultSupportedIdpConfig
             switch ($key) {
                 case 'name':
                     $instance->name = static::parseName($value);
+
                 break;
+
                 case 'enabled':
-                    if (!is_bool($value)) {
-                        throw new InvalidArgumentException(sprintf('%s is not a valid property', $key));
+                    if (!\is_bool($value)) {
+                        throw new InvalidArgumentException(\sprintf('%s is not a valid property', $key));
                     }
                     // no break
                 case 'clientId':
                 case 'clientSecret':
-                    $instance->$key = $value;
+                    $instance->{$key} = $value;
 
             break;
+
             default:
-                throw new InvalidArgumentException(sprintf('%s is not a valid property', $key));
+                throw new InvalidArgumentException(\sprintf('%s is not a valid property', $key));
             }
         }
 
@@ -66,22 +68,22 @@ class DefaultSupportedIdpConfig
     }
 
     /**
-     * To Array
+     * To Array.
      *
      * @return array<String, bool|string|null>
      */
     public function toArray(): array
     {
         return [
-                'name' => $this->getName(),
-                'enabled' => $this->enabled ?? null,
-                'clientId' => $this->clientId ?? null,
-                'clientSecret' => $this->clientSecret ?? null,
+            'name' => $this->getName(),
+            'enabled' => $this->enabled ?? null,
+            'clientId' => $this->clientId ?? null,
+            'clientSecret' => $this->clientSecret ?? null,
         ];
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public static function validateName(string $name): bool
     {

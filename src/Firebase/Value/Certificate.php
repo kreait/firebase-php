@@ -16,7 +16,7 @@ class Certificate implements \JsonSerializable
 
     public function __construct(string $certificate)
     {
-        $parsedCertificate = openssl_x509_parse($certificate);
+        $parsedCertificate = \openssl_x509_parse($certificate);
 
         if ($parsedCertificate === false) {
             throw new InvalidArgumentException('Invalid X.509 Certificate');
@@ -34,11 +34,13 @@ class Certificate implements \JsonSerializable
     {
         return $this->value;
     }
+
     /**
-     * OpenSSL parse results for certificate
+     * OpenSSL parse results for certificate.
+     *
      * @return array<string,mixed>|null
      */
-    public function details() : ?array
+    public function details(): ?array
     {
         return $this->certificate;
     }

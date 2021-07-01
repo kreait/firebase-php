@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Request;
 
-use Kreait\Firebase\Request;
 use Kreait\Firebase\IdentityPlatform\DefaultSupportedIdpConfig as BaseConfig;
+use Kreait\Firebase\Request;
 
 final class DefaultSupportedIdpConfig extends BaseConfig implements Request
 {
