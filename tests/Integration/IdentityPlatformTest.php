@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use DateTime;
 use Kreait\Firebase\Contract\IdentityPlatform;
 use Kreait\Firebase\Exception\IdentityPlatform\ConfigurationNotFound;
 use Kreait\Firebase\Exception\IdentityPlatformException;
@@ -24,8 +25,8 @@ class IdentityPlatformTest extends IntegrationTestCase
 
     protected function setUp(): void
     {
-        $this->testClientSecret = Uuid::getFactory()->fromDateTime(\Carbon\Carbon::now())->toString();
-        $this->testClientId = Uuid::getFactory()->fromDateTime(\Carbon\Carbon::now())->toString();
+        $this->testClientSecret = Uuid::getFactory()->fromDateTime(new DateTime())->toString();
+        $this->testClientId = Uuid::getFactory()->fromDateTime(new DateTime())->toString();
         $this->identityPlatform = $this->setupIdentityPlatform();
         $this->cleanup();
     }

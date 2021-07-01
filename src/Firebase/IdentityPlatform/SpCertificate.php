@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\IdentityPlatform;
 
-use Carbon\Carbon;
+use DateTimeImmutable;
 use JsonSerializable;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\Certificate;
+use Kreait\Firebase\Util\DT;
 
 class SpCertificate implements JsonSerializable
 {
     // @phpstan-ignore-next-line
     private Certificate $x509Certificate;
     // @phpstan-ignore-next-line
-    private Carbon $expiresAt;
+    private DateTimeImmutable $expiresAt;
 
     public const FIELDS = ['x509Certificate', 'expiresAt'];
 
@@ -40,17 +41,19 @@ class SpCertificate implements JsonSerializable
             switch ($key) {
                 case 'x509Certificate':
                     $instance->x509Certificate = $value instanceof Certificate ? $value : new Certificate($value);
-
                 break;
 
                  case 'expiresAt':
-                    $instance->expiresAt = $value instanceof Carbon ? $value : new Carbon($value);
-
+                    $instance->expiresAt = $value instanceof DateTimeImmutable ? $value : DT::toUTCDateTimeImmutable($value);
                     break;
 
                 default:
                     throw new InvalidArgumentException(\sprintf('%s is not a valid property', $key));
             }
+        }
+
+        if (!isset($instance->x509Certificate) || !isset($instance->expiresAt)) {
+            throw new InvalidArgumentException('x509Certificate and expiresAt are required propertries');
         }
 
         return $instance;
@@ -65,7 +68,7 @@ class SpCertificate implements JsonSerializable
     {
         return [
             'x509Certificate' => $this->x509Certificate,
-            'expiresAt' => $this->expiresAt ?? null,
+            'expiresAt' => isset($this->expiresAt) ? $this->expiresAt->format(\DATE_ATOM) : null
         ];
     }
 
