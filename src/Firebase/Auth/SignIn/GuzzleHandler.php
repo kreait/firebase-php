@@ -160,11 +160,17 @@ final class GuzzleHandler implements Handler
             $postBody['oauth_token_secret'] = $action->oauthTokenSecret();
         }
 
-        $body = Utils::streamFor(JSON::encode(\array_merge(self::prepareBody($action), [
+        $rawBody = \array_merge(self::prepareBody($action), [
             'postBody' => \http_build_query($postBody),
             'returnIdpCredential' => true,
             'requestUri' => $action->requestUri(),
-        ]), JSON_FORCE_OBJECT));
+        ]);
+
+        if ($action->linkingIdToken()) {
+            $rawBody['idToken'] = $action->linkingIdToken();
+        }
+
+        $body = Utils::streamFor(JSON::encode($rawBody, JSON_FORCE_OBJECT));
 
         $headers = self::$defaultHeaders;
 
