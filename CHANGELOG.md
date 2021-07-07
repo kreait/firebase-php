@@ -6,6 +6,7 @@
 ### Added
 * Added support for Session Cookie Generation
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/authentication.html#session-cookies))
+* Added support for linking Idp to existing account
 
 ### Changes
 * Bumped `kreait/firebase-tokens` to `^1.16`

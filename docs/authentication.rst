@@ -287,6 +287,19 @@ Sign In without a token
     $signInResult = $auth->signInAsUser($userOrUid, array $claims = null);
 
 
+Linking and Unlinking IdP
+-------------------------
+
+.. code-block:: php
+
+    $auth->unlinkProvider($uid, $provider)
+
+For linking IdP you can use any of above methods for signing in with IdP credentials, by providing linking ID token
+
+.. code-block:: php
+
+    $signInResult = $auth->signInWithFacebookAccessToken($accessToken, null, $idToken);
+
 ************************
 Invalidate user sessions
 ************************

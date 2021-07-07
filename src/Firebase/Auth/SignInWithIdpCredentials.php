@@ -9,6 +9,7 @@ final class SignInWithIdpCredentials implements IsTenantAware, SignIn
     private string $provider;
     private ?string $accessToken = null;
     private ?string $idToken = null;
+    private ?string $linkingIdToken = null;
     private ?string $oauthTokenSecret = null;
     private string $requestUri = 'http://localhost';
     private ?TenantId $tenantId = null;
@@ -38,6 +39,14 @@ final class SignInWithIdpCredentials implements IsTenantAware, SignIn
     {
         $instance = new self($provider);
         $instance->idToken = $idToken;
+
+        return $instance;
+    }
+
+    public function withLinkingIdToken(string $idToken): self
+    {
+        $instance = clone $this;
+        $instance->linkingIdToken = $idToken;
 
         return $instance;
     }
@@ -76,6 +85,11 @@ final class SignInWithIdpCredentials implements IsTenantAware, SignIn
     public function idToken(): ?string
     {
         return $this->idToken;
+    }
+
+    public function linkingIdToken(): ?string
+    {
+        return $this->linkingIdToken;
     }
 
     public function requestUri(): string
