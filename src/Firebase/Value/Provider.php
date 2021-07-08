@@ -15,6 +15,7 @@ class Provider implements \JsonSerializable
     public const PASSWORD = 'password';
     public const PHONE = 'phone';
     public const TWITTER = 'twitter.com';
+    public const APPLE = 'apple.com';
 
     private string $value;
 
