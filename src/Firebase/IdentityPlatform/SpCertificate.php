@@ -23,7 +23,7 @@ class SpCertificate implements JsonSerializable
     {
     }
 
-    public static function new(): static
+    public static function new()
     {
         return new static();
     }
@@ -33,7 +33,7 @@ class SpCertificate implements JsonSerializable
      *
      * @throws InvalidArgumentException when invalid properties have been provided
      */
-    public static function withProperties(array $properties): static
+    public static function withProperties(array $properties)
     {
         $instance = new static();
 

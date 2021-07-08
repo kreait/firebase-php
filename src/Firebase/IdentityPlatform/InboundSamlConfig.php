@@ -26,7 +26,7 @@ class InboundSamlConfig
     {
     }
 
-    public static function new(): static
+    public static function new()
     {
         return new static();
     }
@@ -36,7 +36,7 @@ class InboundSamlConfig
      *
      * @throws InvalidArgumentException when invalid properties have been provided
      */
-    public static function withProperties(array $properties): static
+    public static function withProperties(array $properties)
     {
         $instance = new static();
 

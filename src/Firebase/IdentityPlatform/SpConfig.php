@@ -25,7 +25,7 @@ class SpConfig implements \JsonSerializable
         $this->spCertificates = [];
     }
 
-    public static function new(): self
+    public static function new()
     {
         return new self();
     }
@@ -35,7 +35,7 @@ class SpConfig implements \JsonSerializable
      *
      * @throws InvalidArgumentException when invalid properties have been provided
      */
-    public static function withProperties(array $properties): self
+    public static function withProperties(array $properties)
     {
         $instance = new self();
 

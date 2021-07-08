@@ -17,7 +17,7 @@ class OAuthResponseType implements \JsonSerializable
     {
     }
 
-    public static function new(): static
+    public static function new()
     {
         return new static();
     }
@@ -25,7 +25,7 @@ class OAuthResponseType implements \JsonSerializable
     /**
      * @param array<String, mixed> $properties
      */
-    public static function fromProperties(array $properties): static
+    public static function fromProperties(array $properties)
     {
         $instance = new static();
 
