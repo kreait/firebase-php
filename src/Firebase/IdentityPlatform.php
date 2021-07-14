@@ -28,9 +28,6 @@ class IdentityPlatform implements Contract\IdentityPlatform
         $this->client = $client;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function listAllDefaultSupportedIdpConfigs(): array
     {
         $response = $this->client->listAllDefaultSupportedIdpConfigs();
@@ -38,9 +35,6 @@ class IdentityPlatform implements Contract\IdentityPlatform
         return $this->flatten($this->getResponseAsArray($response));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function listDefaultSupportedIdpConfigs(): array
     {
         $response = $this->client->listDefaultSupportedIdpConfigs();
@@ -52,9 +46,6 @@ class IdentityPlatform implements Contract\IdentityPlatform
         return \array_map(fn ($defaultIdpConfig) => DefaultSupportedIdpConfig::withProperties($defaultIdpConfig), $array);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function createDefaultSupportedIdpConfigs($properties): DefaultSupportedIdpConfig
     {
         $request = $properties instanceof DefaultSupportedIdpConfigRequest ? $properties : DefaultSupportedIdpConfigRequest::withProperties($properties);
@@ -64,17 +55,11 @@ class IdentityPlatform implements Contract\IdentityPlatform
         return DefaultSupportedIdpConfig::withProperties($this->getResponseAsArray($response));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function deleteDefaultSupportedIdpConfigs(string $name): ResponseInterface
     {
         return $this->client->deleteDefaultSupportedIdpConfigs($name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDefaultSupportedIdpConfigs(string $name): DefaultSupportedIdpConfig
     {
         $response = $this->client->getDefaultSupportedIdpConfigs($name);
@@ -82,9 +67,6 @@ class IdentityPlatform implements Contract\IdentityPlatform
         return DefaultSupportedIdpConfig::withProperties($this->getResponseAsArray($response));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function updateDefaultSupportedIdpConfigs(string $name, $properties): DefaultSupportedIdpConfig
     {
         $request = $properties instanceof DefaultSupportedIdpConfigRequest ? $properties : DefaultSupportedIdpConfigRequest::withProperties($properties);
@@ -93,9 +75,6 @@ class IdentityPlatform implements Contract\IdentityPlatform
         return DefaultSupportedIdpConfig::withProperties($this->getResponseAsArray($response));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function createInboundSamlConfigs($properties): InboundSamlConfig
     {
         $request = $properties instanceof InboundSamlConfigRequest ? $properties : InboundSamlConfigRequest::withProperties($properties);
@@ -104,17 +83,11 @@ class IdentityPlatform implements Contract\IdentityPlatform
         return InboundSamlConfig::withProperties($this->getResponseAsArray($response));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function deleteInboundSamlConfigs(string $name): ResponseInterface
     {
         return $this->client->deleteInboundSamlConfigs($name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getInboundSamlConfigs(string $name): InboundSamlConfig
     {
         $response = $this->client->getInboundSamlConfigs($name);
@@ -122,9 +95,6 @@ class IdentityPlatform implements Contract\IdentityPlatform
         return InboundSamlConfig::withProperties($this->getResponseAsArray($response));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function updateInboundSamlConfigs(string $name, $properties): InboundSamlConfig
     {
         $request = $properties instanceof InboundSamlConfigRequest ? $properties : InboundSamlConfigRequest::withProperties($properties);
@@ -133,9 +103,6 @@ class IdentityPlatform implements Contract\IdentityPlatform
         return InboundSamlConfig::withProperties($this->getResponseAsArray($response));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function createOauthIdpConfigs($properties): OauthIdpConfig
     {
         $request = $properties instanceof OAuthIdpConfigRequest ? $properties : OAuthIdpConfigRequest::withProperties($properties);
@@ -144,17 +111,11 @@ class IdentityPlatform implements Contract\IdentityPlatform
         return OAuthIdpConfig::withProperties($this->getResponseAsArray($response));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function deleteOauthIdpConfigs(string $name): ResponseInterface
     {
         return $this->client->deleteOauthIdpConfigs($name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getOauthIdpConfigs(string $name): OauthIdpConfig
     {
         $response = $this->client->getOauthIdpConfigs($name);
@@ -162,9 +123,6 @@ class IdentityPlatform implements Contract\IdentityPlatform
         return OAuthIdpConfig::withProperties($this->getResponseAsArray($response));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function updateOauthIdpConfigs(string $name, $properties): OauthIdpConfig
     {
         $request = $properties instanceof OAuthIdpConfigRequest ? $properties : OAuthIdpConfigRequest::withProperties($properties);
