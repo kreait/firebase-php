@@ -12,9 +12,9 @@ class InboundSamlConfig
     // @phpstan-ignore-next-line
     private string $name;
     // @phpstan-ignore-next-line
-    private ?IdpConfig $idpConfig;
+    private ?IdpConfig $idpConfig = null;
     // @phpstan-ignore-next-line
-    private ?SpConfig $spConfig;
+    private ?SpConfig $spConfig = null;
     // @phpstan-ignore-next-line
     private ?string $displayName;
     // @phpstan-ignore-next-line
@@ -94,7 +94,7 @@ class InboundSamlConfig
             'name' => $this->name,
             'idpConfig' => $this->idpConfig,
             'spConfig' => $this->spConfig,
-            'displayName' => $this->displayName,
+            'displayName' => $this->displayName ?? null,
             'enabled' => $this->enabled ?? null,
         ];
     }

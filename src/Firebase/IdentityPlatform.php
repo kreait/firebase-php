@@ -11,7 +11,6 @@ use Kreait\Firebase\IdentityPlatform\OAuthIdpConfig;
 use Kreait\Firebase\Request\DefaultSupportedIdpConfig as DefaultSupportedIdpConfigRequest;
 use Kreait\Firebase\Request\InboundSamlConfig as InboundSamlConfigRequest;
 use Kreait\Firebase\Request\OAuthIdpConfig as OAuthIdpConfigRequest;
-use Kreait\Firebase\Util\ArrayHelper;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
 
@@ -20,17 +19,13 @@ class IdentityPlatform implements Contract\IdentityPlatform
     private ApiClient $client;
 
     /**
-     * @param iterable<ApiClient|null>|ApiClient|null ...$x
+     * @param ApiClient $client
      *
      * @internal
      */
-    public function __construct(...$x)
+    public function __construct(ApiClient $client)
     {
-        foreach ($x as $arg) {
-            if ($arg instanceof ApiClient) {
-                $this->client = $arg;
-            }
-        }
+        $this->client = $client;
     }
 
     /**
@@ -40,7 +35,7 @@ class IdentityPlatform implements Contract\IdentityPlatform
     {
         $response = $this->client->listAllDefaultSupportedIdpConfigs();
 
-        return ArrayHelper::flatten($this->getResponseAsArray($response));
+        return $this->flatten($this->getResponseAsArray($response));
     }
 
     /**
@@ -186,5 +181,26 @@ class IdentityPlatform implements Contract\IdentityPlatform
     private function getResponseAsArray(ResponseInterface $response): array
     {
         return JSON::decode((string) $response->getBody(), true);
+    }
+
+    /**
+     * Flattens Array.
+     *
+     * @param array<mixed,mixed> $arr
+     * @param array<mixed,mixed> $out
+     *
+     * @return array<mixed,mixed>
+     */
+    private function flatten(array $arr, array $out = []): array
+    {
+        foreach ($arr as $item) {
+            if (\is_array($item)) {
+                $out = \array_merge($out, $this->flatten($item));
+            } else {
+                $out[] = $item;
+            }
+        }
+
+        return $out;
     }
 }

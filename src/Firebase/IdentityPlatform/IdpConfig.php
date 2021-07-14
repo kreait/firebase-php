@@ -92,7 +92,7 @@ class IdpConfig implements \JsonSerializable
     }
 
     /**
-     * Undocumented function.
+     * To Array
      *
      * @return array<String, mixed>
      */
