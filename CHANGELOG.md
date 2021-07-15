@@ -5,6 +5,11 @@
 * Added support for Session Cookie Generation
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/authentication.html#session-cookies))
 
+### Changes
+* Bumped `kreait/firebase-tokens` to `^1.16`
+* Updated version constraints of `psr/cache` to allow newer releases
+* Updated version constraints of `psr/log` to allow newer releases
+
 ## [5.20.1] - 2021-05-12
 ### Fixed
 * Restored broken support for Guzzle 6.x
