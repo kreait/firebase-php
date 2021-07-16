@@ -29,14 +29,11 @@ class JSON
         $options = $options ?? 0;
         $depth = $depth ?? 512;
 
-        $json = \json_encode($value, $options, $depth);
-        if (\json_last_error() !== \JSON_ERROR_NONE) {
-            throw new InvalidArgumentException(
-                'json_encode error: '.\json_last_error_msg()
-            );
+        try {
+            return (string) \json_encode($value, JSON_THROW_ON_ERROR | $options, $depth);
+        } catch (Throwable $e) {
+            throw new InvalidArgumentException('json_encode error: '.$e->getMessage());
         }
-
-        return (string) $json;
     }
 
     /**
@@ -59,14 +56,15 @@ class JSON
      */
     public static function decode(string $json, ?bool $assoc = null, ?int $depth = null, ?int $options = null)
     {
-        $data = \json_decode($json, $assoc ?? false, $depth ?? 512, $options ?? 0);
-        if (\json_last_error() !== \JSON_ERROR_NONE) {
-            throw new InvalidArgumentException(
-                'json_decode error: '.\json_last_error_msg()
-            );
-        }
+        $assoc = $assoc ?? false;
+        $depth = $depth ?? 512;
+        $options = $options ?? 0;
 
-        return $data;
+        try {
+            return \json_decode($json, $assoc, $depth, JSON_THROW_ON_ERROR | $options);
+        } catch (Throwable $e) {
+            throw new InvalidArgumentException('json_decode error: '.$e->getMessage());
+        }
     }
 
     /**

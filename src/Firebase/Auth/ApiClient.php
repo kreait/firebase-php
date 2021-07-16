@@ -14,6 +14,7 @@ use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Request;
+use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\Provider;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
@@ -66,7 +67,7 @@ class ApiClient
     {
         return $this->requestApi('https://identitytoolkit.googleapis.com/v1/accounts:update', [
             'localId' => $uid,
-            'customAttributes' => \json_encode((object) $claims),
+            'customAttributes' => JSON::encode($claims, JSON_FORCE_OBJECT),
         ]);
     }
 

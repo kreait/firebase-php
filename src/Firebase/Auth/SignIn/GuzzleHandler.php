@@ -96,7 +96,7 @@ final class GuzzleHandler implements Handler
     {
         $uri = Utils::uriFor('https://identitytoolkit.googleapis.com/v1/accounts:signUp');
 
-        $body = Utils::streamFor(\json_encode(self::prepareBody($action)));
+        $body = Utils::streamFor(JSON::encode(self::prepareBody($action), JSON_FORCE_OBJECT));
 
         $headers = self::$defaultHeaders;
 
@@ -107,9 +107,9 @@ final class GuzzleHandler implements Handler
     {
         $uri = Utils::uriFor('https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken');
 
-        $body = Utils::streamFor(\json_encode(\array_merge(self::prepareBody($action), [
+        $body = Utils::streamFor(JSON::encode(\array_merge(self::prepareBody($action), [
             'token' => $action->customToken(),
-        ])));
+        ]), JSON_FORCE_OBJECT));
 
         $headers = self::$defaultHeaders;
 
@@ -120,11 +120,11 @@ final class GuzzleHandler implements Handler
     {
         $uri = Utils::uriFor('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword');
 
-        $body = Utils::streamFor(\json_encode(\array_merge(self::prepareBody($action), [
+        $body = Utils::streamFor(JSON::encode(\array_merge(self::prepareBody($action), [
             'email' => $action->email(),
             'password' => $action->clearTextPassword(),
             'returnSecureToken' => true,
-        ])));
+        ]), JSON_FORCE_OBJECT));
 
         $headers = self::$defaultHeaders;
 
@@ -135,11 +135,11 @@ final class GuzzleHandler implements Handler
     {
         $uri = Utils::uriFor('https://www.googleapis.com/identitytoolkit/v3/relyingparty/emailLinkSignin');
 
-        $body = Utils::streamFor(\json_encode(\array_merge(self::prepareBody($action), [
+        $body = Utils::streamFor(JSON::encode(\array_merge(self::prepareBody($action), [
             'email' => $action->email(),
             'oobCode' => $action->oobCode(),
             'returnSecureToken' => true,
-        ])));
+        ]), JSON_FORCE_OBJECT));
 
         $headers = self::$defaultHeaders;
 
@@ -160,11 +160,11 @@ final class GuzzleHandler implements Handler
             $postBody['oauth_token_secret'] = $action->oauthTokenSecret();
         }
 
-        $body = Utils::streamFor(\json_encode(\array_merge(self::prepareBody($action), [
+        $body = Utils::streamFor(JSON::encode(\array_merge(self::prepareBody($action), [
             'postBody' => \http_build_query($postBody),
             'returnIdpCredential' => true,
             'requestUri' => $action->requestUri(),
-        ])));
+        ]), JSON_FORCE_OBJECT));
 
         $headers = self::$defaultHeaders;
 
