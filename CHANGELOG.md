@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+
+## [5.21.0] - 2021-07-16
 ### Added
 * Added support for Session Cookie Generation
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/authentication.html#session-cookies))
@@ -265,7 +267,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.20.1...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.21.0...HEAD
+[5.21.0]: https://github.com/kreait/firebase-php/compare/5.20.1...5.21.0
 [5.20.1]: https://github.com/kreait/firebase-php/compare/5.20.0...5.20.1
 [5.20.0]: https://github.com/kreait/firebase-php/compare/5.19.0...5.20.0
 [5.19.0]: https://github.com/kreait/firebase-php/compare/5.18.0...5.19.0
