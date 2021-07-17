@@ -1,0 +1,19 @@
+name: 💫 Feature request
+description: Propose a concrete new feature.
+labels: feature-request
+body:
+  - type: markdown
+    attributes:
+      value: |
+        These issues are for **concrete and actionable proposals**.
+        If you just have a general problem or idea that you would like to brainstorm, join our [Discord Server](https://discord.gg/Yacm7unBsr) instead.
+        Feature requests by [Sponsors](https://github.com/sponsors/jeromegamez) have a higher chance of consideration.
+  - type: textarea
+    attributes:
+      label: Describe the feature you would like to see
+      description: |
+        If referring to existing functionality in other Firebase Admin SDKs, please include links to the relevant documentation and code.
+        Requests for features that are usually only available in **Client** SDKs are usually considered out of scope of this SDK.
+    validations:
+      required: true
+

@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Feature Request
-    url: https://github.com/kreait/firebase-php/discussions?discussions_q=category%3AIdeas
-    about: Share ideas for new features
-  - name: Ask a Question
-    url: https://github.com/kreait/firebase-php/discussions?discussions_q=category%3AQ%26A
-    about: Ask the community for help
-  - name: Bug Report
-    url: https://github.com/kreait/firebase-php/issues/new?template=bug_report.md
-    about: Report a reproducable bug
+  - name: 🤔 Troubleshooting
+    url: https://firebase-php.readthedocs.io/en/5.x/troubleshooting.html
+    about: Please check the troubleshooting section of the documention for commonly known problems.
+  - name: 💬 Discord Server
+    url: https://discord.gg/Yacm7unBsr
+    about: Please visit our Discord server for questions and support requests.
+  - name: ❤️ Sponsor this project
+    url: https://github.com/sponsors/jeromegamez
+    about: Support the continued maintenance and support on this project by becoming a GitHub Sponsor.
