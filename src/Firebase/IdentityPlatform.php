@@ -39,7 +39,7 @@ class IdentityPlatform implements Contract\IdentityPlatform
     {
         $response = $this->client->listDefaultSupportedIdpConfigs();
         /**
-         * @var array<String>
+         * @var array<string>
          */
         $array = $this->getResponseAsArray($response)['defaultSupportedIdpConfigs'] ?? [];
 

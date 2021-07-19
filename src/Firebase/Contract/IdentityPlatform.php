@@ -46,6 +46,8 @@ interface IdentityPlatform
     /**
      * Delete a default supported Idp configuration for an Identity Toolkit project.
      *
+     * @param string $name
+     *
      * @throws Exception\IdentityPlatformException
      * @throws Exception\FirebaseException
      */
