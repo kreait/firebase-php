@@ -10,7 +10,7 @@ use Kreait\Firebase\Value\Url;
 
 class SpConfigTest extends UnitTestCase
 {
-    public function testWithProperties()
+    public function testWithProperties() : void
     {
         $properties = [
                 'spEntityId' => 'testSp',

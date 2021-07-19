@@ -9,7 +9,7 @@ use Kreait\Firebase\Request\DefaultSupportedIdpConfig;
 
 class DefaultSupportedIdpConfigTest extends UnitTestCase
 {
-    public function testWithProperties()
+    public function testWithProperties() : void
     {
         $properties = [
             'name' => 'testName',

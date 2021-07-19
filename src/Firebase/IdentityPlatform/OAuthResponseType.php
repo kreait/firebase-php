@@ -16,7 +16,7 @@ class OAuthResponseType implements \JsonSerializable
     final private function __construct()
     {
     }
-
+    // @phpstan-ignore-next-line (php 8 you can return static instead of self)
     public static function new()
     {
         return new static();
@@ -24,6 +24,7 @@ class OAuthResponseType implements \JsonSerializable
 
     /**
      * @param array<String, mixed> $properties
+     * @phpstan-ignore-next-line (php 8 you can return static instead of self)
      */
     public static function fromProperties(array $properties)
     {

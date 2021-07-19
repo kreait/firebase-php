@@ -28,6 +28,7 @@ class IdpConfig implements \JsonSerializable
     {
     }
 
+    // @phpstan-ignore-next-line (php 8 you can return static instead of self)
     public static function new()
     {
         return new static();
@@ -37,6 +38,7 @@ class IdpConfig implements \JsonSerializable
      * @param array<String, mixed> $properties
      *
      * @throws InvalidArgumentException when invalid properties have been provided
+     * @phpstan-ignore-next-line (php 8 you can return static instead of self)
      */
     public static function withProperties(array $properties)
     {

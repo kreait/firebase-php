@@ -9,7 +9,7 @@ use Kreait\Firebase\IdentityPlatform\IdpConfig;
 
 class IdpConfigTest extends UnitTestCase
 {
-    public function testWithProperties()
+    public function testWithProperties() : void
     {
         $properties = [
             'idpEntityId' => 'https://google.com',

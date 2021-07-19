@@ -11,7 +11,7 @@ use Kreait\Firebase\IdentityPlatform\SpConfig;
 
 class InboundSamlConfigTest extends UnitTestCase
 {
-    public function testWithProperties()
+    public function testWithProperties() : void
     {
         $spConfig = [
                 'spEntityId' => 'testSp',

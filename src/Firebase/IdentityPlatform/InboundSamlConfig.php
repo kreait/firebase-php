@@ -11,21 +11,17 @@ class InboundSamlConfig
     use ParsesName;
     // @phpstan-ignore-next-line
     private string $name;
-    // @phpstan-ignore-next-line
     private ?IdpConfig $idpConfig = null;
-    // @phpstan-ignore-next-line
     private ?SpConfig $spConfig = null;
-    // @phpstan-ignore-next-line
-    private ?string $displayName;
-    // @phpstan-ignore-next-line
-    private ?bool $enabled;
+    private ?string $displayName = null;
+    private ?bool $enabled = null;
 
     public const FIELDS = ['name', 'idpConfig', 'spConfig', 'displayName', 'enabled'];
 
     final private function __construct()
     {
     }
-
+    // @phpstan-ignore-next-line (php 8 you can return static instead of self)
     public static function new()
     {
         return new static();
@@ -35,6 +31,7 @@ class InboundSamlConfig
      * @param array<string, mixed> $properties
      *
      * @throws InvalidArgumentException when invalid properties have been provided
+     * @phpstan-ignore-next-line (php 8 you can return static instead of self)
      */
     public static function withProperties(array $properties)
     {

@@ -9,7 +9,7 @@ use Kreait\Firebase\Value\Url;
 
 class OAuthIdpConfigTest extends UnitTestCase
 {
-    public function testWithProperties()
+    public function testWithProperties() : void
     {
         $properties = [
             'name' => 'oidc.test',
