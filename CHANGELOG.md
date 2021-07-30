@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Notes
+* Remote Config templates now support up to 3000 parameters (instead of up to 2000 parameters)
 
 ## [5.21.0] - 2021-07-16
 ### Added
