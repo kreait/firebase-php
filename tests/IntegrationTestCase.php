@@ -55,10 +55,14 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     }
 
     /**
-     * @param UserRecord|Uid|string $userOrUid
+     * @param UserRecord|Uid|string|null $userOrUid
      */
     protected function deleteUser($userOrUid): void
     {
+        if ($userOrUid === null) {
+            return;
+        }
+
         $uid = $userOrUid instanceof UserRecord ? $userOrUid->uid : $userOrUid;
 
         try {

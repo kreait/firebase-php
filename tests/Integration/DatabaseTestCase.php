@@ -14,7 +14,7 @@ abstract class DatabaseTestCase extends IntegrationTestCase
 {
     protected static string $refPrefix;
 
-    protected static ?string $rtdbUrl;
+    protected static string $rtdbUrl;
 
     protected static Database $db;
 
@@ -22,9 +22,9 @@ abstract class DatabaseTestCase extends IntegrationTestCase
     {
         parent::setUpBeforeClass();
 
-        self::$rtdbUrl = self::rtdbUrlFromEnvironment() ?? self::rtdbUrlFromFile();
+        self::$rtdbUrl = self::rtdbUrlFromEnvironment() ?? self::rtdbUrlFromFile() ?? '';
 
-        if (!self::$rtdbUrl) {
+        if (self::$rtdbUrl === '') {
             self::markTestSkipped('The database tests require a database uri');
         }
 

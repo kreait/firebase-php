@@ -1,6 +1,10 @@
 # CHANGELOG
 
 ## [Unreleased]
+## Added
+* Added support for Realtime Database Auth Variable Overrides
+  ([#625](https://github.com/kreait/firebase-php/pull/625))
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/realtime-database.html#authenticate-with-limited-privileges))
 ### Changes
 * Database Rules are now uploaded as pretty printed JSON to improve readability when viewing
   them in the Firebase Console.
