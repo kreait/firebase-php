@@ -1,7 +1,9 @@
 # CHANGELOG
 
 ## [Unreleased]
-## Added
+
+## [5.22.0] - 2021-07-31
+### Added
 * Added support for Realtime Database Auth Variable Overrides
   ([#625](https://github.com/kreait/firebase-php/pull/625))
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/realtime-database.html#authenticate-with-limited-privileges))
@@ -279,7 +281,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.21.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.22.0...HEAD
+[5.22.0]: https://github.com/kreait/firebase-php/compare/5.21.0...5.22.0
 [5.21.0]: https://github.com/kreait/firebase-php/compare/5.20.1...5.21.0
 [5.20.1]: https://github.com/kreait/firebase-php/compare/5.20.0...5.20.1
 [5.20.0]: https://github.com/kreait/firebase-php/compare/5.19.0...5.20.0
