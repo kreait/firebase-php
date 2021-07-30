@@ -1,6 +1,9 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Changes
+* Database Rules are now uploaded as pretty printed JSON to improve readability when viewing
+  them in the Firebase Console.
 ### Notes
 * Remote Config templates now support up to 3000 parameters (instead of up to 2000 parameters)
 

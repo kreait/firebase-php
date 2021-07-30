@@ -133,7 +133,7 @@ class ApiClient
     public function updateRules($uri, RuleSet $ruleSet)
     {
         $response = $this->requestApi('PUT', $uri, [
-            'body' => JSON::encode($ruleSet, JSON_FORCE_OBJECT),
+            'body' => JSON::encode($ruleSet, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
         ]);
 
         return JSON::decode((string) $response->getBody(), true);
