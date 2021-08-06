@@ -53,7 +53,7 @@ final class CloudMessage implements Message
      *     android?: array{
      *         collapse_key?: string,
      *         priority?: 'normal'|'high',
-     *         ttl?: int|double,
+     *         ttl?: string,
      *         restricted_package_name?: string,
      *         data?: array<string, string>,
      *         notification?: array<string, string>,
@@ -175,7 +175,7 @@ final class CloudMessage implements Message
      * @param AndroidConfig|array{
      *     collapse_key?: string,
      *     priority?: 'normal'|'high',
-     *     ttl?: int|double,
+     *     ttl?: string,
      *     restricted_package_name?: string,
      *     data?: array<string, string>,
      *     notification?: array<string, string>,

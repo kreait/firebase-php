@@ -18,7 +18,7 @@ final class AndroidConfig implements JsonSerializable
     /** @var array{
      *      collapse_key?: string,
      *      priority?: 'normal'|'high',
-     *      ttl?: int|double,
+     *      ttl?: string,
      *      restricted_package_name?: string,
      *      data?: array<string, string>,
      *      notification?: array<string, string>,
@@ -32,7 +32,7 @@ final class AndroidConfig implements JsonSerializable
      * @param array{
      *     collapse_key?: string,
      *     priority?: 'normal'|'high',
-     *     ttl?: int|double,
+     *     ttl?: string,
      *     restricted_package_name?: string,
      *     data?: array<string, string>,
      *     notification?: array<string, string>,
@@ -54,7 +54,7 @@ final class AndroidConfig implements JsonSerializable
      * @param array{
      *     collapse_key?: string,
      *     priority?: 'normal'|'high',
-     *     ttl?: int|double,
+     *     ttl?: string,
      *     restricted_package_name?: string,
      *     data?: array<string, string>,
      *     notification?: array<string, string>,
