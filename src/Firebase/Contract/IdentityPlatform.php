@@ -72,6 +72,16 @@ interface IdentityPlatform
     public function updateDefaultSupportedIdpConfigs(string $name, $properties): DefaultSupportedIdpConfig;
 
     /**
+     * List Default Supported Idps.
+     *
+     * @throws Exception\FirebaseException
+     * @throws Exception\IdentityPlatformException
+     *
+     * @return array<InboundSamlConfig>
+     */
+
+    public function listInboundSamlConfigs() : array;
+    /**
      * Create an inbound SAML configuration for an Identity Toolkit project.
      *
      * @param array<string, mixed>|Request\InboundSamlConfig $properties

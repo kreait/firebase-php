@@ -80,7 +80,16 @@ class ApiClient
 
         return $this->requestApiWithProjectId($uri, [], 'DELETE');
     }
+    /**
+     * @throws AuthException
+     * @throws FirebaseException
+     */
+    public function listInboundSamlConfigs() : ResponseInterface
+    {
+        $uri = 'inboundSamlConfigs';
 
+        return $this->requestApiWithProjectId($uri, [], 'GET');
+    }
     /**
      * @throws AuthException
      * @throws FirebaseException

@@ -35,6 +35,13 @@ class IdentityPlatform implements Contract\IdentityPlatform
         return $this->flatten($this->getResponseAsArray($response));
     }
 
+    public function listInboundSamlConfigs(): array
+    {
+        $response = $this->client->listInboundSamlConfigs();
+
+        return $this->getResponseAsArray($response);
+    }
+
     public function listDefaultSupportedIdpConfigs(): array
     {
         $response = $this->client->listDefaultSupportedIdpConfigs();
