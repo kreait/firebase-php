@@ -38,13 +38,19 @@ class IdentityPlatform implements Contract\IdentityPlatform
     public function listInboundSamlConfigs(): array
     {
         $response = $this->client->listInboundSamlConfigs();
+        /**
+         * @var array<string>
+         */
 
-        return $this->getResponseAsArray($response);
+        $array =  $this->getResponseAsArray($response)['inboundSamlConfigs'];
+
+        return \array_map(fn (array $defaultIdpConfig) => InboundSamlConfig::withProperties($defaultIdpConfig), $array);
     }
 
     public function listDefaultSupportedIdpConfigs(): array
     {
         $response = $this->client->listDefaultSupportedIdpConfigs();
+
         /**
          * @var array<string>
          */
