@@ -37,6 +37,7 @@ use Kreait\Firebase\Value\ClearTextPassword;
 use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\PhoneNumber;
 use Kreait\Firebase\Value\Provider;
+use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Token;
@@ -59,6 +60,8 @@ class Auth implements Contract\Auth
 
     private ?TenantId $tenantId = null;
 
+    private ProjectId $projectId;
+
     /**
      * @param iterable<ApiClient|ClientInterface|TokenGenerator|Verifier|SignInHandler|TenantId|null>|ApiClient|ClientInterface|TokenGenerator|Verifier|SignInHandler|TenantId|null ...$x
      *
@@ -79,6 +82,8 @@ class Auth implements Contract\Auth
                 $this->tenantId = $arg;
             } elseif ($arg instanceof ClientInterface) {
                 $this->httpClient = $arg;
+            } elseif ($arg instanceof ProjectId) {
+                $this->projectId = $arg;
             }
         }
     }
@@ -159,6 +164,16 @@ class Auth implements Contract\Auth
         $response = $this->client->updateUser($request);
 
         return $this->getUserRecordFromResponse($response);
+    }
+
+    public function importUsers(array $users, array $options)
+    {
+        return $this->client->importUsers($users, $options, $this->projectId);
+    }
+    
+    public function deleteUsers(array $options)
+    {
+        return $this->client->deleteUsers($options, $this->projectId);
     }
 
     public function createUserWithEmailAndPassword($email, $password): UserRecord

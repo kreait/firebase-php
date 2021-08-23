@@ -292,6 +292,25 @@ Delete a user
 
     $auth->deleteUser($uid);
 
+*************
+Delete many users
+*************
+
+.. code-block:: php
+
+    $body = [
+        // Required. List of user IDs to be deleted.
+        'localIds' => [
+            'some-uid-1',
+            'some-uid-2',
+            'some-uid-3',
+        ],
+        // Whether to force deleting accounts that are not in disabled state. If false, only disabled accounts will be deleted, and accounts that are not disabled will be added to the errors.
+        'force' => true,
+    ];
+
+    $auth->deleteUsers($body);
+
 ************************
 Using Email Action Codes
 ************************
@@ -445,3 +464,31 @@ Confirm a password reset
         // Another error has occurred
     }
 
+************
+Import users
+************
+
+.. code-block:: php
+    $fac->createAuth()->importUsers([
+        [
+            'uid'=> 'some-uid',
+            'email'=> 'user@example.com',
+            // Must be provided in a byte buffer.
+            'passwordHash'=> base64_encode('password-hash'),
+            // Must be provided in a byte buffer.
+            'passwordSalt'=> base64_encode('salt')
+            // For more: https://cloud.google.com/identity-platform/docs/reference/rest/v1/UserInfo
+        ]
+    ], [
+        'hash'=> [
+            'algorithm'=> 'HMAC_SHA256',
+            // Must be provided in a byte buffer.
+            'key' => base64_encode('secret')
+        ]
+    ])
+.. warning::
+    This function will overwrite any user data for the given UID and not verify against
+    e-mail address unicity if you have enabled it in your project. Use with caution.
+
+    For more information, please visit
+    `The official documentation <https://firebase.google.com/docs/auth/admin/import-users#usage>`_

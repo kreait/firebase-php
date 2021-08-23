@@ -13,6 +13,7 @@ use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Request;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\Provider;
@@ -109,6 +110,41 @@ class ApiClient
             'nextPageToken' => $nextPageToken,
         ]));
     }
+    
+    /**
+     * @throws AuthException
+     * @throws FirebaseException
+     */
+    public function importUsers(array $users, array $options, ProjectId $projectId): ResponseInterface
+    {
+        $body = [];
+        
+        $body['users'] = [];
+
+        $body['hashAlgorithm'] = $options['hash']['algorithm'] ?? null;
+        $body['rounds'] = $options['hash']['rounds'] ?? null;
+        $body['signerKey'] = $options['hash']['key'] ?? null;
+        $body['cpuMemCost'] = $options['hash']['memoryCost'] ?? null;
+        $body['parallelization'] = $options['hash']['parallelization'] ?? null;
+        $body['blockSize'] = $options['hash']['blockSize'] ?? null;
+        $body['dkLen'] = $options['hash']['derivedKeyLength'] ?? null;
+        $body['saltSeparator'] = $options['hash']['saltSeparator'] ?? null;
+
+        foreach ($users as $userData) {
+            $userData['localId'] = $userData['uid'] ?? null;
+            $userData['salt'] = $userData['passwordSalt'] ?? null;
+            unset($userData['uid'], $userData['passwordSalt']);
+
+            $body['users'][] = $userData;
+        }
+
+        return $this->requestApi(
+            "https://identitytoolkit.googleapis.com/v1/projects/{$projectId->value()}/accounts:batchCreate",
+            \array_filter($body, static function ($value) {
+                return $value !== null;
+            })
+        );
+    }
 
     /**
      * @throws AuthException
@@ -119,6 +155,20 @@ class ApiClient
         return $this->requestApi('deleteAccount', [
             'localId' => $uid,
         ]);
+    }
+
+    /**
+     * @throws AuthException
+     * @throws FirebaseException
+     */
+    public function deleteUsers(array $options, ProjectId $projectId): ResponseInterface
+    {
+        return $this->requestApi(
+            "https://identitytoolkit.googleapis.com/v1/projects/{$projectId->value()}/accounts:batchDelete",
+            \array_filter($options, static function ($value) {
+                return $value !== null;
+            })
+        );
     }
 
     /**
