@@ -30,6 +30,7 @@ use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Util\Deprecation;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
@@ -48,39 +49,32 @@ use Traversable;
 class Auth implements Contract\Auth
 {
     private ApiClient $client;
-
     private ClientInterface $httpClient;
-
     private TokenGenerator $tokenGenerator;
-
     private Verifier $idTokenVerifier;
-
     private SignInHandler $signInHandler;
-
-    private ?TenantId $tenantId = null;
+    private ?TenantId $tenantId;
+    private ?ProjectId $projectId;
 
     /**
-     * @param iterable<ApiClient|ClientInterface|TokenGenerator|Verifier|SignInHandler|TenantId|null>|ApiClient|ClientInterface|TokenGenerator|Verifier|SignInHandler|TenantId|null ...$x
-     *
      * @internal
      */
-    public function __construct(...$x)
-    {
-        foreach ($x as $arg) {
-            if ($arg instanceof ApiClient) {
-                $this->client = $arg;
-            } elseif ($arg instanceof TokenGenerator) {
-                $this->tokenGenerator = $arg;
-            } elseif ($arg instanceof Verifier) {
-                $this->idTokenVerifier = $arg;
-            } elseif ($arg instanceof SignInHandler) {
-                $this->signInHandler = $arg;
-            } elseif ($arg instanceof TenantId) {
-                $this->tenantId = $arg;
-            } elseif ($arg instanceof ClientInterface) {
-                $this->httpClient = $arg;
-            }
-        }
+    public function __construct(
+        ApiClient $apiClient,
+        ClientInterface $httpClient,
+        TokenGenerator $tokenGenerator,
+        Verifier $idTokenVerifier,
+        SignInHandler $signInHandler,
+        ?TenantId $tenantId = null,
+        ?ProjectId $projectId = null
+    ) {
+        $this->client = $apiClient;
+        $this->httpClient = $httpClient;
+        $this->tokenGenerator = $tokenGenerator;
+        $this->idTokenVerifier = $idTokenVerifier;
+        $this->signInHandler = $signInHandler;
+        $this->tenantId = $tenantId;
+        $this->projectId = $projectId;
     }
 
     public function getUser($uid): UserRecord
