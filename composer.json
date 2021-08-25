@@ -22,7 +22,7 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
-        "google/auth": "^1.16",
+        "google/auth": "^1.18",
         "google/cloud-core": "^1.42.2",
         "google/cloud-storage": "^1.24.1",
         "guzzlehttp/guzzle": "^6.5.5|^7.3",

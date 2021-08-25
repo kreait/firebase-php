@@ -4,6 +4,9 @@
 ### Added
 * Added `screenName` property to the provider data of a user record
   ([#575](https://github.com/kreait/firebase-php/pull/575))
+### Changed
+* Bumped `google/auth` dependency `^1.18` in order to ensure support for `guzzle/psr ^2.0`
+  (see [google/auth#357](https://github.com/googleapis/google-auth-library-php/pull/357))
 
 ## [5.22.0] - 2021-07-31
 ### Added
