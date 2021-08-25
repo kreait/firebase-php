@@ -14,6 +14,7 @@ use InvalidArgumentException;
 use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
 use Kreait\Firebase\Auth\CreateSessionCookie\FailedToCreateSessionCookie;
+use Kreait\Firebase\Auth\DeleteUsersResult;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
 use Kreait\Firebase\Auth\SignInResult;
@@ -159,6 +160,14 @@ interface Auth
      * @throws Exception\FirebaseException
      */
     public function deleteUser($uid): void;
+
+    /**
+     * @param iterable<Uid|string> $uids
+     * @param bool $forceDeleteEnabledUsers Whether to force deleting accounts that are not in disabled state. If false, only disabled accounts will be deleted, and accounts that are not disabled will be added to the errors.
+     *
+     * @throws Exception\AuthException
+     */
+    public function deleteUsers(iterable $uids, bool $forceDeleteEnabledUsers = false): DeleteUsersResult;
 
     /**
      * @param Email|string $email

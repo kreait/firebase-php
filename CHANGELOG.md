@@ -4,6 +4,9 @@
 ### Added
 * Added `screenName` property to the provider data of a user record
   ([#575](https://github.com/kreait/firebase-php/pull/575))
+* Added support for deleting multiple users at once
+  (based on [#650](https://github.com/kreait/firebase-php/pull/650))
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#delete-multiple-users))
 ### Changed
 * Bumped `google/auth` dependency `^1.18` in order to ensure support for `guzzle/psr ^2.0`
   (see [google/auth#357](https://github.com/googleapis/google-auth-library-php/pull/357))

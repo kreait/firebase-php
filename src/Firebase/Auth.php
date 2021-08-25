@@ -13,6 +13,8 @@ use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\CreateActionLink;
 use Kreait\Firebase\Auth\CreateSessionCookie;
+use Kreait\Firebase\Auth\DeleteUsersRequest;
+use Kreait\Firebase\Auth\DeleteUsersResult;
 use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Auth\SendActionLink;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
@@ -27,6 +29,7 @@ use Kreait\Firebase\Auth\SignInWithIdpCredentials;
 use Kreait\Firebase\Auth\SignInWithRefreshToken;
 use Kreait\Firebase\Auth\TenantId;
 use Kreait\Firebase\Auth\UserRecord;
+use Kreait\Firebase\Exception\Auth\AuthError;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\InvalidArgumentException;
@@ -228,6 +231,24 @@ class Auth implements Contract\Auth
         } catch (UserNotFound $e) {
             throw new UserNotFound("No user with uid '{$uid}' found.");
         }
+    }
+
+    public function deleteUsers(iterable $uids, bool $forceDeleteEnabledUsers = false): DeleteUsersResult
+    {
+        if (!$this->projectId) {
+            throw AuthError::missingProjectId('Batch user deletion cannot be performed.');
+        }
+
+        $request = DeleteUsersRequest::withUids($this->projectId->value(), $uids, $forceDeleteEnabledUsers);
+
+        $response = $this->client->deleteUsers(
+            $request->projectId(),
+            $request->uids(),
+            $request->enabledUsersShouldBeForceDeleted(),
+            $this->tenantId ? $this->tenantId->toString() : null
+        );
+
+        return DeleteUsersResult::fromRequestAndResponse($request, $response);
     }
 
     public function getEmailActionLink(string $type, $email, $actionCodeSettings = null): string

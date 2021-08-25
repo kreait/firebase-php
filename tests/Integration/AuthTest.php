@@ -440,6 +440,40 @@ class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
+    public function testBatchDeleteDisabledUsers(): void
+    {
+        $enabledOne = $this->auth->createAnonymousUser();
+        $enabledTwo = $this->auth->createAnonymousUser();
+
+        $disabled = $this->auth->createAnonymousUser();
+        $this->auth->updateUser($disabled->uid, ['disabled' => true]);
+
+        $uids = [$enabledOne->uid, $disabled->uid, $enabledTwo->uid];
+
+        $result = $this->auth->deleteUsers($uids, false);
+
+        $this->assertSame(1, $result->successCount());
+        $this->assertSame(2, $result->failureCount());
+        $this->assertCount(2, $result->rawErrors());
+    }
+
+    public function testBatchForceDeleteUsers(): void
+    {
+        $enabledOne = $this->auth->createAnonymousUser();
+        $enabledTwo = $this->auth->createAnonymousUser();
+
+        $disabled = $this->auth->createAnonymousUser();
+        $this->auth->updateUser($disabled->uid, ['disabled' => true]);
+
+        $uids = [$enabledOne->uid, $disabled->uid, $enabledTwo->uid];
+
+        $result = $this->auth->deleteUsers($uids, true);
+
+        $this->assertSame(3, $result->successCount());
+        $this->assertSame(0, $result->failureCount());
+        $this->assertCount(0, $result->rawErrors());
+    }
+
     public function testGetCustomUserAttributes(): void
     {
         $user = $this->auth->createAnonymousUser();

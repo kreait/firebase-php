@@ -286,11 +286,52 @@ reserved key names or Firebase reserved names. Custom claims payload must not ex
 Delete a user
 *************
 
+The Firebase Admin SDK allows deleting users by their ``uid``:
+
 .. code-block:: php
 
     $uid = 'some-uid';
 
-    $auth->deleteUser($uid);
+    try {
+        $auth->deleteUser($uid);
+    catch (\Kreait\Firebase\Exception\Auth\UserNotFound $e) {
+        echo $e->getMessage();
+    } catch (\Kreait\Firebase\Exception\AuthException $e) {
+        echo 'Deleting
+    }
+
+This method returns nothing when the deletion completes successfully. If the provided ``uid`` does not correspond
+to an existing user or the user cannot be deleted for any other reason, the delete user method throws an error.
+
+*********************
+Delete multiple users
+*********************
+
+The Firebase Admin SDK can also delete multiple (up to 1000) users at once:
+
+.. code-block:: php
+
+    $uid = ['uid-1', 'uid-2', 'uid-3'];
+    $forceDeleteEnabledUsers = true; // default: false
+
+    $result = $auth->deleteUsers($uids, $forceDeleteEnabledUsers);
+
+By default, only disabled users will be deleted. If you want to also delete enabled users,
+use ``true`` as the second argument.
+
+This method always returns an instance of ``Kreait\Firebase\Auth\DeleteUsersResult``:
+
+.. code-block:: php
+
+    $successCount = $result->successCount();
+    $failureCount = $result->failureCount();
+    $errors = $result->rawErrors();
+
+.. note::
+    Using this method to delete multiple users at once will not trigger ``onDelete()`` event handlers for
+    Cloud Functions for Firebase. This is because batch deletes do not trigger a user deletion event on each user.
+    Delete users one at a time if you want user deletion events to fire for each deleted user.
+
 
 ************************
 Using Email Action Codes
