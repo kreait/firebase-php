@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+
+## [5.23.0] - 2021-08-26
 ### Added
 * Added `screenName` property to the provider data of a user record
   ([#575](https://github.com/kreait/firebase-php/pull/575))
@@ -290,7 +292,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.22.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.23.0...HEAD
+[5.23.0]: https://github.com/kreait/firebase-php/compare/5.22.0...5.23.0
 [5.22.0]: https://github.com/kreait/firebase-php/compare/5.21.0...5.22.0
 [5.21.0]: https://github.com/kreait/firebase-php/compare/5.20.1...5.21.0
 [5.20.1]: https://github.com/kreait/firebase-php/compare/5.20.0...5.20.1
