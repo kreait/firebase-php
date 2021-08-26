@@ -57,8 +57,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-${{ matrix.php }}-v6-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
+          key: ${{ runner.os }}-${{ matrix.php }}-composer-${{ matrix.stability }}-v7-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-${{ matrix.stability }}-v7-
 
       - name: Install dependencies (stable)
         run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-suggest --no-progress
