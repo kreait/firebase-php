@@ -248,3 +248,41 @@ responses will then be pushed to this logger with their full headers and bodies.
 .. code-block:: php
 
     $factory = $factory->withEnabledDebug($logger);
+
+If you want to make sure that the Factory has the configuration you expect it to have,
+call the ``getDebugInfo()`` method:
+
+.. code-block:: php
+
+    $factoryInfo = $factory->getDebugInfo();
+
+The output will be something like this:
+
+.. code-block::
+
+    Array
+    (
+        [credentialsType] => Google\Auth\Credentials\ServiceAccountCredentials
+        [databaseUrl] => https://project-id-default-rtdb.firebaseio.com
+        [defaultStorageBucket] =>
+        [projectId] => project-id
+        [serviceAccount] => Array
+            (
+                [type] => service_account
+                [project_id] => project-id
+                [private_key_id] => a1b2c3d4e5f6g7h8i9j0
+                [private_key] => {exists, redacted}
+                [client_email] => project-id-xyz@beste-firebase.iam.gserviceaccount.com
+                [client_id] => 1234567890987654321
+                [auth_uri] => https://accounts.google.com/o/oauth2/auth
+                [token_uri] => https://oauth2.googleapis.com/token
+                [auth_provider_x509_cert_url] => https://www.googleapis.com/oauth2/v1/certs
+                [client_x509_cert_url] => https://www.googleapis.com/robot/v1/metadata/x509/project-id-xyz%40beste-firebase.iam.gserviceaccount.com
+            )
+
+        [tenantId] =>
+        [tokenCacheType] => Google\Auth\Cache\MemoryCacheItemPool
+        [verifierCacheType] => Firebase\Auth\Token\Cache\InMemoryCache
+    )
+
+The private key of a service account will be redacted.

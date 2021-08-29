@@ -69,7 +69,7 @@ final class IdTokenVerifier implements Verifier
             }
 
             return $token;
-        } catch (UnknownKey | InvalidSignature $e) {
+        } catch (UnknownKey|InvalidSignature $e) {
             throw $e;
         } catch (ExpiredToken $e) {
             // Re-check expiry with the clock

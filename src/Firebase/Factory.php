@@ -600,6 +600,53 @@ class Factory
     }
 
     /**
+     * @codeCoverageIgnore
+     *
+     * @return array{
+     *     credentialsType: class-string|null,
+     *     databaseUrl: string,
+     *     defaultStorageBucket: string|null,
+     *     serviceAccount: array{
+     *         client_email: string|null,
+     *         private_key: string|null,
+     *         project_id: string|null,
+     *         type: string
+     *     }|array<string, string|null>|null,
+     *     projectId: string|null,
+     *     tenantId: string|null,
+     *     verifierCacheType: class-string|null,
+     * }
+     */
+    public function getDebugInfo(): array
+    {
+        $projectId = $this->getProjectId();
+        $credentials = $this->getGoogleAuthTokenCredentials();
+
+        try {
+            $databaseUrl = (string) $this->getDatabaseUri();
+        } catch (Throwable $e) {
+            $databaseUrl = $e->getMessage();
+        }
+
+        $serviceAccountInfo = null;
+        if ($serviceAccount = $this->getServiceAccount()) {
+            $serviceAccountInfo = $serviceAccount->asArray();
+            $serviceAccountInfo['private_key'] = $serviceAccountInfo['private_key'] ? '{exists, redacted}' : '{not set}';
+        }
+
+        return [
+            'credentialsType' => $credentials ? \get_class($credentials) : null,
+            'databaseUrl' => $databaseUrl,
+            'defaultStorageBucket' => $this->defaultStorageBucket,
+            'projectId' => $projectId ? $projectId->value() : null,
+            'serviceAccount' => $serviceAccountInfo,
+            'tenantId' => $this->tenantId ? $this->tenantId->toString() : null,
+            'tokenCacheType' => \get_class($this->authTokenCache),
+            'verifierCacheType' => \get_class($this->verifierCache),
+        ];
+    }
+
+    /**
      * @internal
      *
      * @param array<string, mixed>|null $config
