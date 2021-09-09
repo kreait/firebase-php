@@ -14,7 +14,7 @@ class IdpConfigTest extends UnitTestCase
         $properties = [
             'idpEntityId' => 'https://google.com',
             'ssoUrl' => "https://google.com",
-            'idpCertificates' => [['x509Certificate' => '-----BEGIN CERTIFICATE-----
+            'idpCertificates' => ['-----BEGIN CERTIFICATE-----
 MIID2jCCA0MCAg39MA0GCSqGSIb3DQEBBQUAMIGbMQswCQYDVQQGEwJKUDEOMAwG
 A1UECBMFVG9reW8xEDAOBgNVBAcTB0NodW8ta3UxETAPBgNVBAoTCEZyYW5rNERE
 MRgwFgYDVQQLEw9XZWJDZXJ0IFN1cHBvcnQxGDAWBgNVBAMTD0ZyYW5rNEREIFdl
@@ -38,7 +38,7 @@ l8z5Ek8dC4NNpfpcZc/teT1WqiO2wnpGHjgMDuDL1mxCZNL422jHpiPWkWp3AuDI
 c7tL1QjbfAUHAQYwmHkWgPP+T2wAv0pOt36GgMCM
 -----END CERTIFICATE-----
 ',
-                ]],
+                ],
             'signRequest' => true
         ];
 

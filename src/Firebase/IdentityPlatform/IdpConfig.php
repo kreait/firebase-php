@@ -68,7 +68,7 @@ class IdpConfig implements \JsonSerializable
                          * @return array<Certificate>
                          */
                         function ($certificate) {
-                            $certificateObject = $certificate instanceof Certificate ? $certificate : new Certificate($certificate['x509Certificate']);
+                            $certificateObject = $certificate instanceof Certificate ? $certificate : new Certificate($certificate);
 
                             return ['x509Certificate' => $certificateObject];
                         },
