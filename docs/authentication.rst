@@ -269,6 +269,10 @@ Once you have received those credentials, you can use them to sign a user in wit
     // with a Twitter OAuth 1.0 credential
     $signInResult = $auth->signInWithTwitterOauthCredential($accessToken, $oauthTokenSecret);
 
+    // with an ID token from Apple
+    $signInResult = $auth->signInWithAppleIdToken($idToken);
+    $signInResult = $auth->signInWithAppleIdToken($idToken, $rawNonce);
+
 If you're using a different identity provider or prefer using one method for any provider, you can use:
 
 .. code-block:: php

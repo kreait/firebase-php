@@ -45,7 +45,6 @@ use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
 use Throwable;
 use Traversable;
 
@@ -605,16 +604,59 @@ class Auth implements Contract\Auth
         return $this->signInWithIdpAccessToken(Provider::FACEBOOK, $accessToken, $redirectUrl, null, $linkingIdToken);
     }
 
-    public function signInWithIdpAccessToken($provider, string $accessToken, $redirectUrl = null, ?string $oauthTokenSecret = null, ?string $linkingIdToken = null): SignInResult
+    public function signInWithAppleIdToken(string $idToken, ?string $rawNonce = null, ?string $redirectUrl = null, ?string $linkingIdToken = null): SignInResult
+    {
+        return $this->signInWithIdpIdToken(Provider::APPLE, $idToken, $redirectUrl, $linkingIdToken, $rawNonce);
+    }
+
+    public function signInWithIdpAccessToken($provider, string $accessToken, $redirectUrl = null, ?string $oauthTokenSecret = null, ?string $linkingIdToken = null, ?string $rawNonce = null): SignInResult
     {
         $provider = $provider instanceof Provider ? (string) $provider : $provider;
         $redirectUrl = \trim((string) ($redirectUrl ?? 'http://localhost'));
         $linkingIdToken = \trim((string) $linkingIdToken);
+        $oauthTokenSecret = \trim((string) $oauthTokenSecret);
+        $rawNonce = \trim((string) $rawNonce);
 
-        if ($oauthTokenSecret) {
+        if ($oauthTokenSecret !== '') {
             $action = SignInWithIdpCredentials::withAccessTokenAndOauthTokenSecret($provider, $accessToken, $oauthTokenSecret);
         } else {
             $action = SignInWithIdpCredentials::withAccessToken($provider, $accessToken);
+        }
+
+        if ($linkingIdToken !== '') {
+            $action = $action->withLinkingIdToken($linkingIdToken);
+        }
+
+        if ($rawNonce !== '') {
+            $action = $action->withRawNonce($rawNonce);
+        }
+
+        if ($redirectUrl !== '') {
+            $action = $action->withRequestUri($redirectUrl);
+        }
+
+        if ($this->tenantId instanceof TenantId) {
+            $action = $action->withTenantId($this->tenantId);
+        }
+
+        return $this->signInHandler->handle($action);
+    }
+
+    public function signInWithIdpIdToken($provider, $idToken, $redirectUrl = null, ?string $linkingIdToken = null, ?string $rawNonce = null): SignInResult
+    {
+        $provider = $provider instanceof Provider ? (string) $provider : $provider;
+        $redirectUrl = \trim((string) ($redirectUrl ?? 'http://localhost'));
+        $linkingIdToken = \trim((string) $linkingIdToken);
+        $rawNonce = \trim((string) $rawNonce);
+
+        if ($idToken instanceof Token) {
+            $idToken = $idToken->toString();
+        }
+
+        $action = SignInWithIdpCredentials::withIdToken($provider, $idToken);
+
+        if ($rawNonce !== '') {
+            $action = $action->withRawNonce($rawNonce);
         }
 
         if ($linkingIdToken !== '') {
@@ -625,40 +667,7 @@ class Auth implements Contract\Auth
             $action = $action->withRequestUri($redirectUrl);
         }
 
-        if ($this->tenantId !== null) {
-            $action = $action->withTenantId($this->tenantId);
-        }
-
-        return $this->signInHandler->handle($action);
-    }
-
-    public function signInWithIdpIdToken($provider, $idToken, $redirectUrl = null, ?string $linkingIdToken = null): SignInResult
-    {
-        $provider = $provider instanceof Provider ? (string) $provider : $provider;
-
-        if ($idToken instanceof Token) {
-            $idToken = $idToken->toString();
-        }
-
-        $redirectUrl ??= 'http://localhost';
-
-        if ($redirectUrl instanceof UriInterface) {
-            $redirectUrl = (string) $redirectUrl;
-        }
-
-        $redirectUrl = \trim($redirectUrl);
-
-        $action = SignInWithIdpCredentials::withIdToken($provider, $idToken);
-
-        if ($linkingIdToken) {
-            $action = $action->withLinkingIdToken($linkingIdToken);
-        }
-
-        if ($redirectUrl !== '') {
-            $action = $action->withRequestUri($redirectUrl);
-        }
-
-        if ($this->tenantId !== null) {
+        if ($this->tenantId instanceof TenantId) {
             $action = $action->withTenantId($this->tenantId);
         }
 
