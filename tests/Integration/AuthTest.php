@@ -734,11 +734,18 @@ final class AuthTest extends IntegrationTestCase
         $this->auth->signInWithGoogleIdToken('id_token');
     }
 
-    public function signInWithFacebookAccessToken(): void
+    public function testSignInWithFacebookAccessToken(): void
     {
         // We can't retrieve a credential programmatically, so we'll test the failure case only
         $this->expectException(FailedToSignIn::class);
         $this->auth->signInWithFacebookAccessToken('access_token');
+    }
+
+    public function testSignInWithAppleIdToken(): void
+    {
+        // We can't retrieve a credential programmatically, so we'll test the failure case only
+        $this->expectException(FailedToSignIn::class);
+        $this->auth->signInWithAppleIdToken('id_token', 'nonce');
     }
 
     public function testSignInWithIdpAccessToken(): void

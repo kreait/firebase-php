@@ -1,6 +1,10 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Added
+* Added support for providing a nonce when signing in with IdP credentials
+* Added methods:
+    * `Kreait\Firebase\Auth::signInWithAppleIdToken()`
 
 ## [5.24.0] - 2021-10-05
 ### Added

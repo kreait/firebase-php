@@ -150,8 +150,12 @@ final class GuzzleHandler implements Handler
             'providerId' => $action->provider(),
         ];
 
-        if ($action->oauthTokenSecret()) {
-            $postBody['oauth_token_secret'] = $action->oauthTokenSecret();
+        if ($oauthTokenSecret = $action->oauthTokenSecret()) {
+            $postBody['oauth_token_secret'] = $oauthTokenSecret;
+        }
+
+        if ($rawNonce = $action->rawNonce()) {
+            $postBody['nonce'] = $rawNonce;
         }
 
         $rawBody = \array_merge(self::prepareBody($action), [
