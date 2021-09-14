@@ -76,7 +76,7 @@ class SpConfig implements \JsonSerializable
     {
         return [
             'spEntityId' => $this->spEntityId,
-            'callbackUri' => $this->callbackUri,
+            'callbackUri' => $this->callbackUri ?? null,
             'spCertificates' => $this->spCertificates ?? null,
         ];
     }
