@@ -14,8 +14,11 @@ class Certificate implements \JsonSerializable
      */
     private ?array $certificate;
 
-    public function __construct(string $certificate)
+    public function __construct($certificate)
     {
+        if (is_array($certificate)) {
+            $certificate = $certificate['x509Certificate'] ?? null;
+        }
         $parsedCertificate = \openssl_x509_parse($certificate);
 
         if ($parsedCertificate === false) {
