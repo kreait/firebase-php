@@ -17,8 +17,10 @@ class DefaultSupportedIdpConfig
     private ?string $clientId;
     // @phpstan-ignore-next-line
     private ?string $clientSecret;
+    // @phpstan-ignore-next-line
+    private ?string $appleSignInConfig = null;
 
-    public const FIELDS = ['name', 'enabled', 'clientId', 'clientSecret'];
+    public const FIELDS = ['name', 'enabled', 'clientId', 'clientSecret','appleSignInConfig'];
 
     final private function __construct()
     {
@@ -57,6 +59,7 @@ class DefaultSupportedIdpConfig
                     // no break
                 case 'clientId':
                 case 'clientSecret':
+                case 'appleSignInConfig':
                     $instance->{$key} = $value;
 
             break;
@@ -94,7 +97,7 @@ class DefaultSupportedIdpConfig
 
     public function __get(string $name)
     {
-        if (array_search($name,self::FIELDS) === false) {
+        if (array_search($name, self::FIELDS) === false) {
             return trigger_error("Property $name doesn't exists and cannot be set.", E_USER_ERROR);
         }
 
