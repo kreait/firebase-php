@@ -4,6 +4,9 @@
 ### Added
 * Added `Factory::getDebugInfo()` to display information about the currently configured factory.
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/troubleshooting.html#debugging))
+### Changed
+* Bumped `kreait/firebase-tokens` to `^1.16.1` to ensure a minor security fix in `lcobucci/jwt` 
+  (More info: [GHSA-7322-jrq4-x5hf](https://github.com/lcobucci/jwt/security/advisories/GHSA-7322-jrq4-x5hf))
 
 ## [5.23.0] - 2021-08-26
 ### Added
