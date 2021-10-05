@@ -7,6 +7,9 @@
 ### Changed
 * Bumped `kreait/firebase-tokens` to `^1.16.1` to ensure a minor security fix in `lcobucci/jwt` 
   (More info: [GHSA-7322-jrq4-x5hf](https://github.com/lcobucci/jwt/security/advisories/GHSA-7322-jrq4-x5hf))
+### Fixed
+* Fixed a bug that occurs when using Realtime Database Paths without a leading slash with newer
+  releases of `guzzle/psr7`
 
 ## [5.23.0] - 2021-08-26
 ### Added

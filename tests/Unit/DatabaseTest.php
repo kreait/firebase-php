@@ -34,7 +34,7 @@ class DatabaseTest extends UnitTestCase
 
     public function testGetReference(): void
     {
-        $this->assertSame('any', \trim($this->database->getReference('any')->getUri()->getPath(), '/'));
+        $this->assertSame('any', $this->database->getReference('any')->getPath());
     }
 
     public function testGetRootReference(): void
@@ -66,7 +66,7 @@ class DatabaseTest extends UnitTestCase
     {
         $this->apiClient
             ->method('get')
-            ->with($this->uri->withPath('.settings/rules'))
+            ->with($this->uri->withPath('/.settings/rules'))
             ->willReturn($expected = RuleSet::default()->getRules())
         ;
 

@@ -35,6 +35,8 @@ class Database implements Contract\Database
             $path = '/';
         }
 
+        $path = '/'.\ltrim($path, '/');
+
         try {
             return new Reference($this->uri->withPath($path), $this->client);
         } catch (\InvalidArgumentException $e) {
@@ -59,14 +61,14 @@ class Database implements Contract\Database
 
     public function getRuleSet(): RuleSet
     {
-        $rules = $this->client->get($this->uri->withPath('.settings/rules'));
+        $rules = $this->client->get($this->uri->withPath('/.settings/rules'));
 
         return RuleSet::fromArray($rules);
     }
 
     public function updateRules(RuleSet $ruleSet): void
     {
-        $this->client->updateRules($this->uri->withPath('.settings/rules'), $ruleSet);
+        $this->client->updateRules($this->uri->withPath('/.settings/rules'), $ruleSet);
     }
 
     public function runTransaction(callable $callable)

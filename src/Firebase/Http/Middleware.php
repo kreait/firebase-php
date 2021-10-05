@@ -21,7 +21,7 @@ final class Middleware
         return static function (callable $handler) {
             return static function (RequestInterface $request, ?array $options = null) use ($handler) {
                 $uri = $request->getUri();
-                $path = $uri->getPath();
+                $path = '/'.\ltrim($uri->getPath(), '/');
 
                 if (!\str_ends_with($path, '.json')) {
                     $uri = $uri->withPath($path.'.json');

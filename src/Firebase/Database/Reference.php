@@ -79,7 +79,7 @@ class Reference
             throw new OutOfRangeException('Cannot get parent of root reference');
         }
 
-        return new self($this->uri->withPath($parentPath), $this->apiClient, $this->validator);
+        return new self($this->uri->withPath('/'.\ltrim($parentPath, '/')), $this->apiClient, $this->validator);
     }
 
     /**
@@ -106,7 +106,7 @@ class Reference
      */
     public function getChild(string $path): self
     {
-        $childPath = \sprintf('%s/%s', \trim($this->uri->getPath(), '/'), \trim($path, '/'));
+        $childPath = \sprintf('/%s/%s', \trim($this->uri->getPath(), '/'), \trim($path, '/'));
 
         try {
             return new self($this->uri->withPath($childPath), $this->apiClient, $this->validator);
