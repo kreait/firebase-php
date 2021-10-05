@@ -33,7 +33,7 @@ final class ApiRequest implements RequestInterface
 
         $headers = \array_filter([
             'Content-Type' => 'application/json; charset=UTF-8',
-            'Content-Length' => $body->getSize(),
+            'Content-Length' => (string) $body->getSize(),
             'X-Firebase-Locale' => $action->locale(),
         ]);
 

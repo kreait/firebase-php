@@ -28,7 +28,7 @@ final class ApiRequest implements RequestInterface
 
         $headers = \array_filter([
             'Content-Type' => 'application/json; charset=UTF-8',
-            'Content-Length' => $body->getSize(),
+            'Content-Length' => (string) $body->getSize(),
         ]);
 
         $this->wrappedRequest = new Request('POST', $uri, $headers, $body);

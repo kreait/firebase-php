@@ -23,7 +23,7 @@ final class SendMessage implements MessageRequest, RequestInterface
         $body = Utils::streamFor(JSON::encode(['message' => $message, 'validate_only' => $validateOnly]));
         $headers = [
             'Content-Type' => 'application/json; charset=UTF-8',
-            'Content-Length' => $body->getSize(),
+            'Content-Length' => (string) $body->getSize(),
         ];
 
         $this->wrappedRequest = new Request('POST', $uri, $headers, $body);
