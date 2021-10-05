@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+
+## [5.24.0] - 2021-10-05
 ### Added
 * Added `Factory::getDebugInfo()` to display information about the currently configured factory.
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/troubleshooting.html#debugging))
@@ -301,7 +303,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.23.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.24.0...HEAD
+[5.24.0]: https://github.com/kreait/firebase-php/compare/5.23.0...5.24.0
 [5.23.0]: https://github.com/kreait/firebase-php/compare/5.22.0...5.23.0
 [5.22.0]: https://github.com/kreait/firebase-php/compare/5.21.0...5.22.0
 [5.21.0]: https://github.com/kreait/firebase-php/compare/5.20.1...5.21.0
