@@ -31,6 +31,8 @@ final class AuthTest extends IntegrationTestCase
 
     protected function setUp(): void
     {
+        self::$factory = self::$factory->withAuthEmulatorHost('localhost:9099');
+
         $this->auth = self::$factory->createAuth();
         $this->tenantAwareAuth = self::$factory->withTenantId(self::TENANT_ID)->createAuth();
     }
@@ -39,9 +41,11 @@ final class AuthTest extends IntegrationTestCase
     {
         $user = $this->auth->createAnonymousUser();
 
-        $this->assertNull($user->email);
-
-        $this->auth->deleteUser($user->uid);
+        try {
+            $this->assertNull($user->email);
+        } finally {
+            $this->auth->deleteUser($user->uid);
+        }
     }
 
     public function testCreateUserWithEmailAndPassword(): void
@@ -92,9 +96,11 @@ final class AuthTest extends IntegrationTestCase
 
         $link = $this->auth->getEmailVerificationLink((string) $user->email);
 
-        $this->assertInstanceOf(UriInterface::class, Utils::uriFor($link));
-
-        $this->deleteUser($user);
+        try {
+            $this->assertInstanceOf(UriInterface::class, Utils::uriFor($link));
+        } finally {
+            $this->deleteUser($user);
+        }
     }
 
     public function testSendEmailVerificationLink(): void
@@ -199,25 +205,30 @@ final class AuthTest extends IntegrationTestCase
 
     public function testListUsers(): void
     {
-        // We already should have a list of users, but let's add another one,
-        // just to be sure
-        $createdUsers = [
-            $this->auth->createUser([]),
-            $this->auth->createUser([]),
-        ];
+        $first = $this->auth->createAnonymousUser();
+        $second = $this->auth->createAnonymousUser();
 
         $userRecords = $this->auth->listUsers($maxResults = 2, 1);
 
-        $count = 0;
+        $firstWasFound = false;
+        $secondWasFound = false;
         foreach ($userRecords as $userData) {
             $this->assertInstanceOf(UserRecord::class, $userData);
-            ++$count;
+            if ($userData->uid === $first->uid) {
+                $firstWasFound = true;
+            }
+
+            if ($userData->uid === $second->uid) {
+                $secondWasFound = true;
+            }
         }
 
-        $this->assertSame($maxResults, $count);
-
-        foreach ($createdUsers as $createdUser) {
-            $this->auth->deleteUser($createdUser->uid);
+        try {
+            $this->assertTrue($firstWasFound);
+            $this->assertTrue($secondWasFound);
+        } finally {
+            $this->auth->deleteUser($first->uid);
+            $this->auth->deleteUser($second->uid);
         }
     }
 

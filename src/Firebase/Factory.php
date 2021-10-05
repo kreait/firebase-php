@@ -110,6 +110,7 @@ class Factory
     protected ?TenantId $tenantId = null;
 
     protected HttpClientOptions $httpClientOptions;
+    private ?string $authEmulatorHost = null;
 
     public function __construct()
     {
@@ -421,21 +422,30 @@ class Factory
         return null;
     }
 
+    public function withAuthEmulatorHost(?string $host): self
+    {
+        $factory = clone $this;
+        $factory->authEmulatorHost = $host;
+
+        return $factory;
+    }
+
     public function createAuth(): Contract\Auth
     {
         $projectId = $this->getProjectId();
         $tenantId = $this->tenantId;
+        $emulatorHost = $this->authEmulatorHost;
 
         $httpClient = $this->createApiClient([
             'base_uri' => 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/',
         ]);
 
-        $authApiClient = new Auth\ApiClient($httpClient, $tenantId);
+        $authApiClient = new Auth\ApiClient($httpClient, $tenantId, $projectId, $emulatorHost);
         $customTokenGenerator = $this->createCustomTokenGenerator();
         $idTokenVerifier = $this->createIdTokenVerifier();
-        $signInHandler = new Firebase\Auth\SignIn\GuzzleHandler($httpClient);
+        $signInHandler = new Firebase\Auth\SignIn\ApiClientHandler($authApiClient);
 
-        return new Auth($authApiClient, $httpClient, $customTokenGenerator, $idTokenVerifier, $signInHandler, $tenantId, $projectId);
+        return new Auth($authApiClient, $httpClient, $customTokenGenerator, $idTokenVerifier, $signInHandler, $tenantId);
     }
 
     public function createCustomTokenGenerator(): Generator

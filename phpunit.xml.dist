@@ -24,5 +24,6 @@
 
     <php>
         <ini name="date.timezone" value="UTC"/>
+        <!-- env name="FIREBASE_AUTH_EMULATOR_HOST" value="localhost:9099" /-->
     </php>
 </phpunit>

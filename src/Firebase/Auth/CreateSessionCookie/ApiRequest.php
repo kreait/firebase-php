@@ -26,10 +26,10 @@ final class ApiRequest implements RequestInterface
 
         $body = Utils::streamFor(JSON::encode($data, JSON_FORCE_OBJECT));
 
-        $headers = \array_filter([
+        $headers = [
             'Content-Type' => 'application/json; charset=UTF-8',
             'Content-Length' => (string) $body->getSize(),
-        ]);
+        ];
 
         $this->wrappedRequest = new Request('POST', $uri, $headers, $body);
     }

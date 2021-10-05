@@ -35,7 +35,7 @@ final class ApiRequest implements RequestInterface
             'Content-Type' => 'application/json; charset=UTF-8',
             'Content-Length' => (string) $body->getSize(),
             'X-Firebase-Locale' => $action->locale(),
-        ]);
+        ], static fn ($item) => $item !== null);
 
         $this->wrappedRequest = new Request('POST', $uri, $headers, $body);
     }
