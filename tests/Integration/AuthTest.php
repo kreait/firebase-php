@@ -23,7 +23,7 @@ use Throwable;
 /**
  * @internal
  */
-class AuthTest extends IntegrationTestCase
+final class AuthTest extends IntegrationTestCase
 {
     private Auth $auth;
 
@@ -554,7 +554,7 @@ class AuthTest extends IntegrationTestCase
 
         $url = $this->auth->getPasswordResetLink($user->email);
 
-        \parse_str(\parse_url($url, \PHP_URL_QUERY), $query);
+        \parse_str(\parse_url($url, PHP_URL_QUERY), $query);
 
         $email = $this->auth->verifyPasswordResetCodeAndReturnEmail($query['oobCode']);
 
@@ -577,7 +577,7 @@ class AuthTest extends IntegrationTestCase
 
         $url = $this->auth->getPasswordResetLink($user->email);
 
-        \parse_str(\parse_url($url, \PHP_URL_QUERY), $query);
+        \parse_str(\parse_url($url, PHP_URL_QUERY), $query);
 
         $email = $this->auth->confirmPasswordResetAndReturnEmail($query['oobCode'], 'newPassword123');
 
@@ -594,7 +594,7 @@ class AuthTest extends IntegrationTestCase
 
         $url = $this->auth->getPasswordResetLink($user->email);
 
-        \parse_str(\parse_url($url, \PHP_URL_QUERY), $query);
+        \parse_str(\parse_url($url, PHP_URL_QUERY), $query);
 
         $email = $this->auth->confirmPasswordResetAndReturnEmail($query['oobCode'], 'newPassword123', true);
         \sleep(1); // wait for a second
@@ -686,7 +686,7 @@ class AuthTest extends IntegrationTestCase
         $user = $this->createUserWithEmailAndPassword($email, $password);
 
         $signInLink = $this->auth->getSignInWithEmailLink($email);
-        $query = (string) \parse_url($signInLink, \PHP_URL_QUERY);
+        $query = (string) \parse_url($signInLink, PHP_URL_QUERY);
         $oobCode = Query::parse($query)['oobCode'] ?? '';
 
         $result = $this->auth->signInWithEmailAndOobCode($email, $oobCode);
@@ -770,23 +770,6 @@ class AuthTest extends IntegrationTestCase
 
             $this->assertNull($userWithoutEmail->email);
             $this->assertFalse($userWithoutEmail->emailVerified);
-        } finally {
-            $this->deleteUser($user);
-        }
-    }
-
-    public function testUserRecordLastRefreshAt(): void
-    {
-        $user = $this->auth->createAnonymousUser();
-
-        try {
-            $this->assertNull($user->metadata->lastRefreshAt);
-
-            $signInResult = $this->auth->signInAsUser($user);
-            $this->assertSame($user->uid, $signInResult->firebaseUserId());
-
-            $check = $this->auth->getUser($signInResult->firebaseUserId());
-            $this->assertNotNull($check->metadata->lastRefreshAt);
         } finally {
             $this->deleteUser($user);
         }

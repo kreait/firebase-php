@@ -16,7 +16,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
 /**
  * @internal
  */
-class MessagingTest extends IntegrationTestCase
+final class MessagingTest extends IntegrationTestCase
 {
     public Messaging $messaging;
 

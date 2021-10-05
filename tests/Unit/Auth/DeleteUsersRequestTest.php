@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class DeleteUsersRequestTest extends TestCase
+final class DeleteUsersRequestTest extends TestCase
 {
     public function testItRejectsTooManyUids(): void
     {

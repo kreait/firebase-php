@@ -10,7 +10,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class AndroidConfigTest extends UnitTestCase
+final class AndroidConfigTest extends UnitTestCase
 {
     public function testItIsEmptyWhenItIsEmpty(): void
     {

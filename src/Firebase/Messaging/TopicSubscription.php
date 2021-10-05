@@ -45,7 +45,7 @@ final class TopicSubscription implements JsonSerializable
         return [
             'topic' => $this->topic->value(),
             'registration_token' => $this->registrationToken->value(),
-            'subscribed_at' => $this->subscribedAt->format(\DATE_ATOM),
+            'subscribed_at' => $this->subscribedAt->format(DATE_ATOM),
         ];
     }
 }

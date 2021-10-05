@@ -72,18 +72,15 @@ class MessagingApiExceptionConverter
                 $convertedError = new InvalidMessage($message);
 
                 break;
-
             case 401:
             case 403:
                 $convertedError = new AuthenticationError($message);
 
                 break;
-
             case 404:
                 $convertedError = new NotFound($message);
 
                 break;
-
             case 429:
                 $convertedError = new QuotaExceeded($message);
                 if ($retryAfter = $this->getRetryAfter($response)) {
@@ -91,12 +88,10 @@ class MessagingApiExceptionConverter
                 }
 
                 break;
-
             case 500:
                 $convertedError = new ServerError($message);
 
                 break;
-
             case 503:
                 $convertedError = new ServerUnavailable($message);
                 if ($retryAfter = $this->getRetryAfter($response)) {
@@ -104,7 +99,6 @@ class MessagingApiExceptionConverter
                 }
 
                 break;
-
             default:
                 $convertedError = new MessagingError($message, $code, $previous);
 

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class AuthTest extends TestCase
+final class AuthTest extends TestCase
 {
     public function testItNeedsAProjectIdToBatchDeleteUsers(): void
     {

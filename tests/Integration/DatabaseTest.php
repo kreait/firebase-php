@@ -10,7 +10,7 @@ use Kreait\Firebase\Factory;
 /**
  * @internal
  */
-class DatabaseTest extends DatabaseTestCase
+final class DatabaseTest extends DatabaseTestCase
 {
     public function testWithNonExistingDatabase(): void
     {

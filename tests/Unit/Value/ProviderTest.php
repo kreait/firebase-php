@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class ProviderTest extends TestCase
+final class ProviderTest extends TestCase
 {
     /**
      * @dataProvider validValues

@@ -12,7 +12,7 @@ use stdClass;
 /**
  * @internal
  */
-class ServiceAccountTest extends UnitTestCase
+final class ServiceAccountTest extends UnitTestCase
 {
     private string $pathToUnreadableJson;
 

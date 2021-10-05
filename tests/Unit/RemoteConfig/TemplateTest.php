@@ -16,7 +16,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class TemplateTest extends UnitTestCase
+final class TemplateTest extends UnitTestCase
 {
     public function testGetDefaultEtag(): void
     {

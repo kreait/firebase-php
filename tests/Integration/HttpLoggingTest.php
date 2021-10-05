@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
 /**
  * @internal
  */
-class HttpLoggingTest extends IntegrationTestCase
+final class HttpLoggingTest extends IntegrationTestCase
 {
     /** @var MockObject&LoggerInterface */
     private $logger;

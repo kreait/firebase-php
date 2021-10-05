@@ -20,7 +20,7 @@ use Throwable;
 /**
  * @internal
  */
-class RemoteConfigTest extends IntegrationTestCase
+final class RemoteConfigTest extends IntegrationTestCase
 {
     /** @var string */
     private const TEMPLATE_CONFIG = <<<'CONFIG'

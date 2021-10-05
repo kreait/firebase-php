@@ -12,7 +12,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class LimitToLastTest extends UnitTestCase
+final class LimitToLastTest extends UnitTestCase
 {
     public function testCreateWithInvalidValue(): void
     {

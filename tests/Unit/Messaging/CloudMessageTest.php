@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class CloudMessageTest extends TestCase
+final class CloudMessageTest extends TestCase
 {
     public function testEmptyMessage(): void
     {

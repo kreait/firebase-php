@@ -92,6 +92,6 @@ class JSON
      */
     public static function prettyPrint($value): string
     {
-        return self::encode($value, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES);
+        return self::encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 }

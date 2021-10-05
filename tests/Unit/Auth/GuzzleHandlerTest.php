@@ -79,7 +79,7 @@ final class GuzzleHandlerTest extends UnitTestCase
             'refresh_token' => 'refresh_token',
             'access_token' => 'access_token',
             'expires_in' => 3600,
-        ], \JSON_FORCE_OBJECT)));
+        ], JSON_FORCE_OBJECT)));
 
         $this->handler->handle($this->action);
         $this->addToAssertionCount(1);

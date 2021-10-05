@@ -13,7 +13,7 @@ use stdClass;
 /**
  * @internal
  */
-class DTTest extends TestCase
+final class DTTest extends TestCase
 {
     /**
      * @dataProvider validFixedValues

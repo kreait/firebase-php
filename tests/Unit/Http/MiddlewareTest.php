@@ -12,7 +12,7 @@ use Psr\Http\Message\RequestInterface;
 /**
  * @internal
  */
-class MiddlewareTest extends UnitTestCase
+final class MiddlewareTest extends UnitTestCase
 {
     private Psr7\Request $request;
 

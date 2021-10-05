@@ -11,7 +11,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class SnapshotTest extends UnitTestCase
+final class SnapshotTest extends UnitTestCase
 {
     /** @var Reference|\PHPUnit\Framework\MockObject\MockObject */
     private $reference;

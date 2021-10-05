@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class CreateUserTest extends TestCase
+final class CreateUserTest extends TestCase
 {
     public function testCreateNew(): void
     {

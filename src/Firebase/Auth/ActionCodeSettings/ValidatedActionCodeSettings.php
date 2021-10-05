@@ -44,37 +44,30 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
                     $instance->continueUrl = Utils::uriFor($value);
 
                     break;
-
                 case 'handlecodeinapp':
                     $instance->canHandleCodeInApp = (bool) $value;
 
                     break;
-
                 case 'dynamiclinkdomain':
                     $instance->dynamicLinkDomain = Utils::uriFor($value);
 
                     break;
-
                 case 'androidpackagename':
                     $instance->androidPackageName = (string) $value;
 
                     break;
-
                 case 'androidminimumversion':
                     $instance->androidMinimumVersion = (string) $value;
 
                     break;
-
                 case 'androidinstallapp':
                     $instance->androidInstallApp = (bool) $value;
 
                     break;
-
                 case 'iosbundleid':
                     $instance->iOSBundleId = (string) $value;
 
                     break;
-
                 default:
                     throw new InvalidArgumentException("Unsupported action code setting '{$key}'");
             }

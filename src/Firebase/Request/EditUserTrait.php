@@ -42,22 +42,18 @@ trait EditUserTrait
                     $request = $request->withUid($value);
 
                     break;
-
                 case 'email':
                     $request = $request->withEmail($value);
 
                     break;
-
                 case 'unverifiedemail':
                     $request = $request->withUnverifiedEmail($value);
 
                     break;
-
                 case 'verifiedemail':
                     $request = $request->withVerifiedEmail($value);
 
                     break;
-
                 case 'emailverified':
                     if ($value === true) {
                         $request = $request->markEmailAsVerified();
@@ -66,24 +62,20 @@ trait EditUserTrait
                     }
 
                     break;
-
                 case 'displayname':
                     $request = $request->withDisplayName($value);
 
                     break;
-
                 case 'phone':
                 case 'phonenumber':
                     $request = $request->withPhoneNumber($value);
 
                     break;
-
                 case 'photo':
                 case 'photourl':
                     $request = $request->withPhotoUrl($value);
 
                     break;
-
                 case 'disableuser':
                 case 'disabled':
                 case 'isdisabled':
@@ -94,7 +86,6 @@ trait EditUserTrait
                     }
 
                     break;
-
                 case 'enableuser':
                 case 'enabled':
                 case 'isenabled':
@@ -105,7 +96,6 @@ trait EditUserTrait
                     }
 
                     break;
-
                 case 'password':
                 case 'cleartextpassword':
                     $request = $request->withClearTextPassword($value);

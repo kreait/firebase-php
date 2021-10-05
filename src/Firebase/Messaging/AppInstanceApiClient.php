@@ -87,7 +87,6 @@ class AppInstanceApiClient
                     $result[$topicName] = $topicResults;
 
                     break;
-
                 case 'rejected':
                     $result[$topicName] = $response['reason']->getMessage();
 
@@ -154,7 +153,6 @@ class AppInstanceApiClient
                     $result[$topicName] = $topicResults;
 
                     break;
-
                 case 'rejected':
                     $result[$topicName] = $response['reason']->getMessage();
 

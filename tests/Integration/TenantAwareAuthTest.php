@@ -11,7 +11,7 @@ use Lcobucci\JWT\Token\Plain;
 /**
  * @internal
  */
-class TenantAwareAuthTest extends IntegrationTestCase
+final class TenantAwareAuthTest extends IntegrationTestCase
 {
     private Auth $auth;
 

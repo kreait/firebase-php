@@ -13,7 +13,7 @@ use Psr\Http\Message\UriInterface;
 /**
  * @internal
  */
-class ValidatorTest extends UnitTestCase
+final class ValidatorTest extends UnitTestCase
 {
     private UriInterface $uri;
 

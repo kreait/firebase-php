@@ -28,7 +28,7 @@ use Throwable;
 /**
  * @internal
  */
-class MessagingApiExceptionConverterTest extends TestCase
+final class MessagingApiExceptionConverterTest extends TestCase
 {
     private MessagingApiExceptionConverter $converter;
 
@@ -118,7 +118,7 @@ class MessagingApiExceptionConverterTest extends TestCase
     {
         $expected = $this->clock->now()->modify('+60 seconds');
 
-        $response = new Response(503, ['Retry-After' => $expected->format(\DATE_ATOM)]);
+        $response = new Response(503, ['Retry-After' => $expected->format(DATE_ATOM)]);
 
         /** @var ServerUnavailable $converted */
         $converted = $this->converter->convertResponse($response);

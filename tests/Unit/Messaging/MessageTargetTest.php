@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class MessageTargetTest extends TestCase
+final class MessageTargetTest extends TestCase
 {
     public function testInvalidTargetCausesError(): void
     {

@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class PhoneNumberTest extends TestCase
+final class PhoneNumberTest extends TestCase
 {
     /**
      * @dataProvider validValues

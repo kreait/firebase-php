@@ -13,7 +13,7 @@ use Lcobucci\JWT\Token\Plain;
 /**
  * @internal
  */
-class UpdateUserTest extends IntegrationTestCase
+final class UpdateUserTest extends IntegrationTestCase
 {
     private Auth $auth;
 

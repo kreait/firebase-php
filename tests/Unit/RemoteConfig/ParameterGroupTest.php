@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class ParameterGroupTest extends TestCase
+final class ParameterGroupTest extends TestCase
 {
     public function testItCanBeCreated(): void
     {

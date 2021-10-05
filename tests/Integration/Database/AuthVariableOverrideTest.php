@@ -13,7 +13,7 @@ use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
 /**
  * @internal
  */
-class AuthVariableOverrideTest extends DatabaseTestCase
+final class AuthVariableOverrideTest extends DatabaseTestCase
 {
     private Auth $auth;
 

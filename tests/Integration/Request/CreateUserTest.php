@@ -11,7 +11,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
 /**
  * @internal
  */
-class CreateUserTest extends IntegrationTestCase
+final class CreateUserTest extends IntegrationTestCase
 {
     private Auth $auth;
 

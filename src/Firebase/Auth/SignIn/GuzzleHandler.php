@@ -71,22 +71,16 @@ final class GuzzleHandler implements Handler
         switch (true) {
             case $action instanceof SignInAnonymously:
                 return $this->anonymous($action);
-
             case $action instanceof SignInWithCustomToken:
                 return $this->customToken($action);
-
             case $action instanceof SignInWithEmailAndPassword:
                 return $this->emailAndPassword($action);
-
             case $action instanceof SignInWithEmailAndOobCode:
                 return $this->emailAndOobCode($action);
-
             case $action instanceof SignInWithIdpCredentials:
                 return $this->idpCredentials($action);
-
             case $action instanceof SignInWithRefreshToken:
                 return $this->refreshToken($action);
-
             default:
                 throw new FailedToSignIn(self::class.' does not support '.\get_class($action));
         }

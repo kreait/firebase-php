@@ -24,7 +24,7 @@ use RuntimeException;
 /**
  * @internal
  */
-class FactoryTest extends UnitTestCase
+final class FactoryTest extends UnitTestCase
 {
     private string $validServiceAccountFile;
 

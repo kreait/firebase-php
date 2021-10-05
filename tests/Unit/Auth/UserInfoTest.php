@@ -11,7 +11,7 @@ use Kreait\Firebase\Util\JSON;
 /**
  * @internal
  */
-class UserInfoTest extends UnitTestCase
+final class UserInfoTest extends UnitTestCase
 {
     public function testJsonEncode(): void
     {

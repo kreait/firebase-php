@@ -55,12 +55,12 @@ final class MessageData implements \JsonSerializable
      */
     private static function isStringable($value): bool
     {
-        return \is_null($value) || \is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'));
+        return null === $value || \is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'));
     }
 
     private static function isBinary(string $value): bool
     {
-        return \mb_detect_encoding($value) === false;
+        return \mb_detect_encoding($value, (array) \mb_detect_order(), true) === false;
     }
 
     /**

@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class UrlTest extends TestCase
+final class UrlTest extends TestCase
 {
     /**
      * @dataProvider validValues

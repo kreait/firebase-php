@@ -11,7 +11,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class OrderByChildTest extends UnitTestCase
+final class OrderByChildTest extends UnitTestCase
 {
     /**
      * @dataProvider valueProvider

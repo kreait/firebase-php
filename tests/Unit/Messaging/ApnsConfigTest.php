@@ -10,7 +10,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class ApnsConfigTest extends UnitTestCase
+final class ApnsConfigTest extends UnitTestCase
 {
     public function testItIsEmptyWhenItIsEmpty(): void
     {

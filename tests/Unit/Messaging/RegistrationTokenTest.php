@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class RegistrationTokenTest extends TestCase
+final class RegistrationTokenTest extends TestCase
 {
     /**
      * @dataProvider valueProvider

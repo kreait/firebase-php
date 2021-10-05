@@ -11,7 +11,7 @@ use Kreait\Firebase\Util\JSON;
 /**
  * @internal
  */
-class JSONTest extends UnitTestCase
+final class JSONTest extends UnitTestCase
 {
     public function testEncodeJson(): void
     {
@@ -22,7 +22,7 @@ class JSONTest extends UnitTestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        JSON::encode(\INF);
+        JSON::encode(INF);
     }
 
     public function testDecodeJson(): void
@@ -48,6 +48,6 @@ class JSONTest extends UnitTestCase
     {
         $data = ['foo' => 'bar'];
 
-        $this->assertSame(\json_encode($data, \JSON_PRETTY_PRINT), JSON::prettyPrint($data));
+        $this->assertSame(\json_encode($data, JSON_PRETTY_PRINT), JSON::prettyPrint($data));
     }
 }

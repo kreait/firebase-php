@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class HttpClientOptionsTest extends TestCase
+final class HttpClientOptionsTest extends TestCase
 {
     public function testOptionsCanBeSet(): void
     {

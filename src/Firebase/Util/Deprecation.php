@@ -14,6 +14,6 @@ class Deprecation
             $message .= " Use {$replacement} instead.";
         }
 
-        \trigger_error($message, \E_USER_DEPRECATED);
+        \trigger_error($message, E_USER_DEPRECATED);
     }
 }

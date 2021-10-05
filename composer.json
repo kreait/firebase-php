@@ -45,7 +45,8 @@
         "phpstan/phpstan": "^0.12.92",
         "phpstan/phpstan-phpunit": "^0.12.21",
         "phpunit/phpunit": "^9.5.10",
-        "symfony/var-dumper": "^5.3.3"
+        "symfony/var-dumper": "^5.3.3",
+        "symplify/easy-coding-standard": "^9.4"
     },
     "suggest": {
         "google/cloud-firestore": "^1.0 to use the Firestore component",

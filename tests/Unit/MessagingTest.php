@@ -17,7 +17,7 @@ use stdClass;
 /**
  * @internal
  */
-class MessagingTest extends UnitTestCase
+final class MessagingTest extends UnitTestCase
 {
     private Messaging $messaging;
 

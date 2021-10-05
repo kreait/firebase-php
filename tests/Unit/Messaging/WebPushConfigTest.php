@@ -10,7 +10,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class WebPushConfigTest extends UnitTestCase
+final class WebPushConfigTest extends UnitTestCase
 {
     /**
      * @dataProvider validDataProvider

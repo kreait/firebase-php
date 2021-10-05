@@ -5,10 +5,7 @@
 /docs/_build
 /docs/*.pyc
 /tests/_fixtures/test_*
-/tools
 
-/.php-cs-fixer*
-!/.php-cs-fixer.dist.php
 /.firebaserc
 /.phpunit.result.cache
 /cc-test-reporter

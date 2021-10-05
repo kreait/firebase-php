@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class UpdateUserTest extends TestCase
+final class UpdateUserTest extends TestCase
 {
     /**
      * @dataProvider propertiesProvider

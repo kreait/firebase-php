@@ -12,7 +12,7 @@ use Kreait\Firebase\Util\DT;
 /**
  * @internal
  */
-class ReferenceTest extends DatabaseTestCase
+final class ReferenceTest extends DatabaseTestCase
 {
     private Reference $ref;
 

@@ -158,7 +158,7 @@ class Template implements \JsonSerializable
         return $this->version;
     }
 
-    public function withParameter(Parameter $parameter): Template
+    public function withParameter(Parameter $parameter): self
     {
         $this->assertThatAllConditionalValuesAreValid($parameter);
 
@@ -168,7 +168,7 @@ class Template implements \JsonSerializable
         return $template;
     }
 
-    public function withParameterGroup(ParameterGroup $parameterGroup): Template
+    public function withParameterGroup(ParameterGroup $parameterGroup): self
     {
         $template = clone $this;
         $template->parameterGroups[$parameterGroup->name()] = $parameterGroup;
@@ -176,7 +176,7 @@ class Template implements \JsonSerializable
         return $template;
     }
 
-    public function withCondition(Condition $condition): Template
+    public function withCondition(Condition $condition): self
     {
         $template = clone $this;
         $template->conditions[$condition->name()] = $condition;

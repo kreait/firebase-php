@@ -11,7 +11,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class NotificationTest extends UnitTestCase
+final class NotificationTest extends UnitTestCase
 {
     public function testCreateWithEmptyStrings(): void
     {
