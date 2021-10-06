@@ -12,9 +12,9 @@ jobs:
     if: github.repository == 'kreait/firebase-php'
 
     env:
-      php-version: '7.4'
+      php-version: '8.0'
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
-      key: cache-integration-v3 # can be any string, change to clear the extension cache.
+      key: cache-integration-v4 # can be any string, change to clear the extension cache.
 
     steps:
       - name: Checkout code
@@ -54,7 +54,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-${{ matrix.php }}-v6-composer-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-${{ matrix.php }}-${{ env.key }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
 
       - name: Install dependencies
