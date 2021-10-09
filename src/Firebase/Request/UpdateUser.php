@@ -53,19 +53,16 @@ final class UpdateUser implements Request
                     $request = $request->withRemovedPhotoUrl();
 
                     break;
-
                 case 'deletedisplayname':
                 case 'removedisplayname':
                     $request = $request->withRemovedDisplayName();
 
                     break;
-
                 case 'deleteemail':
                 case 'removeemail':
                     $request = $request->withRemovedEmail();
 
                     break;
-
                 case 'deleteattribute':
                 case 'deleteattributes':
                     foreach ((array) $value as $deleteAttribute) {
@@ -74,13 +71,11 @@ final class UpdateUser implements Request
                                 $request = $request->withRemovedDisplayName();
 
                                 break;
-
                             case 'photo':
                             case 'photourl':
                                 $request = $request->withRemovedPhotoUrl();
 
                                 break;
-
                             case 'email':
                                 $request = $request->withRemovedEmail();
 
@@ -89,13 +84,11 @@ final class UpdateUser implements Request
                     }
 
                     break;
-
                 case 'customattributes':
                 case 'customclaims':
                     $request = $request->withCustomAttributes($value);
 
                     break;
-
                 case 'phonenumber':
                 case 'phone':
                     if (!$value) {
@@ -103,7 +96,6 @@ final class UpdateUser implements Request
                     }
 
                     break;
-
                 case 'deletephone':
                 case 'deletephonenumber':
                 case 'removephone':
@@ -111,7 +103,6 @@ final class UpdateUser implements Request
                     $request = $request->withRemovedPhoneNumber();
 
                     break;
-
                 case 'deleteprovider':
                 case 'deleteproviders':
                 case 'removeprovider':
@@ -123,6 +114,13 @@ final class UpdateUser implements Request
                     );
 
                     break;
+                case 'addprovider':
+                case 'addproviders':
+                    $request = \array_reduce(
+                        (array) $value,
+                        static fn (self $request, $provider) => $request->withAddedProvider($provider),
+                        $request
+                    );
             }
         }
 
@@ -146,6 +144,18 @@ final class UpdateUser implements Request
 
         $request = clone $this;
         $request->providersToDelete[] = $provider;
+
+        return $request;
+    }
+    /**
+     * @param Provider|string $provider
+     */
+    public function withAddedProvider($provider): self
+    {
+        $provider = $provider instanceof Provider ? $provider : new Provider($provider);
+
+        $request = clone $this;
+        $request->providersToLink[] = $provider;
 
         return $request;
     }
@@ -213,6 +223,9 @@ final class UpdateUser implements Request
 
         if (!empty($this->providersToDelete)) {
             $data['deleteProvider'] = $this->providersToDelete;
+        }
+        if (!empty($this->providersToLink)) {
+            $data['providersToLink'] = $this->providersToLink;
         }
 
         return $data;
