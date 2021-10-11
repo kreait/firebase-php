@@ -181,7 +181,7 @@ class ApiClient
      */
     private function requestApi(string $method, $uri, ?array $options = null): ResponseInterface
     {
-        $options = $options ?? [];
+        $options ??= [];
 
         $request = new Request($method, $uri);
 

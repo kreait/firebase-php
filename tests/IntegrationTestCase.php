@@ -42,8 +42,8 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
     protected function createUserWithEmailAndPassword(?string $email = null, ?string $password = null): UserRecord
     {
-        $email = $email ?? self::randomEmail();
-        $password = $password ?? self::randomString();
+        $email ??= self::randomEmail();
+        $password ??= self::randomString();
 
         return self::$factory
             ->createAuth()

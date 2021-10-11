@@ -142,7 +142,7 @@ final class CloudMessage implements Message
     }
 
     /**
-     * @param MessageData|array<string, string> $data
+     * @param MessageData|array<array-key, mixed> $data
      *
      * @throws InvalidArgumentException
      */
@@ -300,9 +300,9 @@ final class CloudMessage implements Message
             $data[$this->target->type()] = $this->target->value();
         }
 
-        return \array_filter($data, static function ($value) {
-            return $value !== null
-                && !($value instanceof MessageData && $value->jsonSerialize() === []);
-        });
+        return \array_filter(
+            $data,
+            static fn ($value) => $value !== null && !($value instanceof MessageData && $value->jsonSerialize() === [])
+        );
     }
 }

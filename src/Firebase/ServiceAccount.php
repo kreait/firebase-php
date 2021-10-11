@@ -49,7 +49,7 @@ class ServiceAccount
     public function asArray(): array
     {
         $array = $this->data;
-        $array['type'] = $array['type'] ?? 'service_account';
+        $array['type'] ??= 'service_account';
 
         return $array;
     }

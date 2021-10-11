@@ -79,7 +79,7 @@ final class AndroidConfig implements JsonSerializable
     public function withSound(string $sound): self
     {
         $config = clone $this;
-        $config->config['notification'] = $config->config['notification'] ?? [];
+        $config->config['notification'] ??= [];
         $config->config['notification']['sound'] = $sound;
 
         return $config;

@@ -17,8 +17,8 @@ final class FailedToCreateSessionCookie extends \RuntimeException implements Fir
 
     public function __construct(CreateSessionCookie $action, ?ResponseInterface $response, string $message = null, int $code = null, ?Throwable $previous = null)
     {
-        $message = $message ?? '';
-        $code = $code ?? 0;
+        $message ??= '';
+        $code ??= 0;
 
         parent::__construct($message, $code, $previous);
 

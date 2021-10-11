@@ -17,8 +17,7 @@ final class FirestoreTest extends IntegrationTestCase
 {
     private Firestore $firestore;
 
-    /** @var mixed string */
-    private $collectionName;
+    private string $collectionName;
 
     protected function setUp(): void
     {

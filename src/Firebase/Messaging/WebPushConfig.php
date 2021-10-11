@@ -89,7 +89,7 @@ final class WebPushConfig implements JsonSerializable
     public function withUrgency(string $urgency): self
     {
         $config = clone $this;
-        $config->config['headers'] = $config->config['headers'] ?? [];
+        $config->config['headers'] ??= [];
         $config->config['headers']['Urgency'] = $urgency;
 
         return $config;

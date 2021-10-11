@@ -31,7 +31,7 @@ final class CreateSessionCookie
      */
     public static function forIdToken($idToken, $ttl, ?Clock $clock = null): self
     {
-        $clock = $clock ?? new Clock\SystemClock();
+        $clock ??= new Clock\SystemClock();
 
         if ($idToken instanceof Token) {
             $idToken = $idToken->toString();

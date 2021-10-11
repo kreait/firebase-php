@@ -120,7 +120,7 @@ class ApiClient
      */
     private function requestApi(string $method, $uri, ?array $options = null): ResponseInterface
     {
-        $options = $options ?? [];
+        $options ??= [];
         $options['decode_content'] = 'gzip';
 
         try {

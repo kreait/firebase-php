@@ -320,7 +320,7 @@ class Reference
      */
     public function push($value = null): self
     {
-        $value = $value ?? [];
+        $value ??= [];
 
         $newKey = $this->apiClient->push($this->uri, $value);
         $newPath = \sprintf('%s/%s', $this->uri->getPath(), $newKey);

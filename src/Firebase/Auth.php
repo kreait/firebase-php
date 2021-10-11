@@ -381,7 +381,7 @@ class Auth implements Contract\Auth
     public function setCustomUserClaims($uid, ?array $claims): void
     {
         $uid = $uid instanceof Uid ? (string) $uid : $uid;
-        $claims = $claims ?? [];
+        $claims ??= [];
 
         $this->client->setCustomUserClaims($uid, $claims);
     }
@@ -504,7 +504,7 @@ class Auth implements Contract\Auth
 
     public function signInAsUser($user, ?array $claims = null): SignInResult
     {
-        $claims = $claims ?? [];
+        $claims ??= [];
         $uid = $user instanceof UserRecord ? $user->uid : (string) $user;
 
         $customToken = $this->createCustomToken($uid, $claims);
@@ -640,7 +640,7 @@ class Auth implements Contract\Auth
             $idToken = $idToken->toString();
         }
 
-        $redirectUrl = $redirectUrl ?? 'http://localhost';
+        $redirectUrl ??= 'http://localhost';
 
         if ($redirectUrl instanceof UriInterface) {
             $redirectUrl = (string) $redirectUrl;

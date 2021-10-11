@@ -73,8 +73,7 @@ class Factory
 
     protected ?ServiceAccount $serviceAccount = null;
 
-    /** @var ServiceAccountCredentials|UserRefreshCredentials|AppIdentityCredentials|GCECredentials|CredentialsLoader|null */
-    protected $googleAuthTokenCredentials;
+    protected ?CredentialsLoader $googleAuthTokenCredentials = null;
 
     protected ?ProjectId $projectId = null;
 
@@ -670,7 +669,7 @@ class Factory
      */
     public function createApiClient(?array $config = null): Client
     {
-        $config = $config ?? [];
+        $config ??= [];
 
         // @codeCoverageIgnoreStart
         if ($this->guzzleDebugModeIsEnabled) {

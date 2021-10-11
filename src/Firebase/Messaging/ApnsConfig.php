@@ -75,8 +75,8 @@ final class ApnsConfig implements JsonSerializable
     {
         $config = clone $this;
 
-        $config->config['payload'] = $config->config['payload'] ?? [];
-        $config->config['payload']['aps'] = $config->config['payload']['aps'] ?? [];
+        $config->config['payload'] ??= [];
+        $config->config['payload']['aps'] ??= [];
         $config->config['payload']['aps']['sound'] = $sound;
 
         return $config;
@@ -88,8 +88,8 @@ final class ApnsConfig implements JsonSerializable
     public function withBadge(int $number): self
     {
         $config = clone $this;
-        $config->config['payload'] = $config->config['payload'] ?? [];
-        $config->config['payload']['aps'] = $config->config['payload']['aps'] ?? [];
+        $config->config['payload'] ??= [];
+        $config->config['payload']['aps'] ??= [];
         $config->config['payload']['aps']['badge'] = $number;
 
         return $config;
@@ -108,7 +108,7 @@ final class ApnsConfig implements JsonSerializable
     public function withPriority(string $priority): self
     {
         $config = clone $this;
-        $config->config['headers'] = $config->config['headers'] ?? [];
+        $config->config['headers'] ??= [];
         $config->config['headers']['apns-priority'] = $priority;
 
         return $config;

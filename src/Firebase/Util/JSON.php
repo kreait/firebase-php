@@ -26,8 +26,8 @@ class JSON
      */
     public static function encode($value, ?int $options = null, ?int $depth = null): string
     {
-        $options = $options ?? 0;
-        $depth = $depth ?? 512;
+        $options ??= 0;
+        $depth ??= 512;
 
         try {
             return \json_encode($value, JSON_THROW_ON_ERROR | $options, $depth);
@@ -56,9 +56,9 @@ class JSON
      */
     public static function decode(string $json, ?bool $assoc = null, ?int $depth = null, ?int $options = null)
     {
-        $assoc = $assoc ?? false;
-        $depth = $depth ?? 512;
-        $options = $options ?? 0;
+        $assoc ??= false;
+        $depth ??= 512;
+        $options ??= 0;
 
         try {
             return \json_decode($json, $assoc, $depth, JSON_THROW_ON_ERROR | $options);

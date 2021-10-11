@@ -16,7 +16,7 @@ final class MessageData implements \JsonSerializable
     }
 
     /**
-     * @param array<string, string> $data
+     * @param array<array-key, mixed> $data
      */
     public static function fromArray(array $data): self
     {
@@ -26,6 +26,9 @@ final class MessageData implements \JsonSerializable
             if (!self::isStringable($key) || !self::isStringable($value)) {
                 throw new InvalidArgumentException('Message data must be a one-dimensional array of string(able) keys and values.');
             }
+
+            $key = (string) $key;
+            $value = (string) $value;
 
             if (self::isBinary($value)) {
                 throw new InvalidArgumentException(

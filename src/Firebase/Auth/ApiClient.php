@@ -95,7 +95,7 @@ class ApiClient
      */
     public function downloadAccount(?int $batchSize = null, ?string $nextPageToken = null): ResponseInterface
     {
-        $batchSize = $batchSize ?? 1000;
+        $batchSize ??= 1000;
 
         return $this->requestApi('downloadAccount', \array_filter([
             'maxResults' => $batchSize,
