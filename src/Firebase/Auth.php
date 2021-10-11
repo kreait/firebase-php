@@ -82,9 +82,11 @@ class Auth implements Contract\Auth
 
     public function getUser($uid): UserRecord
     {
-        $userRecords = $this->getUsers([$uid]);
+        $uid = $uid instanceof Uid ? (string) $uid : $uid;
 
-        if ($userRecord = $userRecords[(string) $uid] ?? null) {
+        $userRecord = $this->getUsers([$uid])[$uid] ?? null;
+
+        if ($userRecord !== null) {
             return $userRecord;
         }
 
@@ -235,17 +237,19 @@ class Auth implements Contract\Auth
 
     public function deleteUsers(iterable $uids, bool $forceDeleteEnabledUsers = false): DeleteUsersResult
     {
-        if (!$this->projectId) {
+        if (!($this->projectId instanceof ProjectId)) {
             throw AuthError::missingProjectId('Batch user deletion cannot be performed.');
         }
 
         $request = DeleteUsersRequest::withUids($this->projectId->value(), $uids, $forceDeleteEnabledUsers);
 
+        $tenantId = $this->tenantId !== null ? $this->tenantId->toString() : null;
+
         $response = $this->client->deleteUsers(
             $request->projectId(),
             $request->uids(),
             $request->enabledUsersShouldBeForceDeleted(),
-            $this->tenantId ? $this->tenantId->toString() : null
+            $tenantId
         );
 
         return DeleteUsersResult::fromRequestAndResponse($request, $response);
@@ -263,7 +267,7 @@ class Auth implements Contract\Auth
                 : ValidatedActionCodeSettings::fromArray($actionCodeSettings);
         }
 
-        $tenantId = $this->tenantId ? $this->tenantId->toString() : null;
+        $tenantId = $this->tenantId !== null ? $this->tenantId->toString() : null;
 
         return (new CreateActionLink\GuzzleApiClientHandler($this->httpClient))
             ->handle(CreateActionLink::new($type, $email, $actionCodeSettings, $tenantId))
@@ -282,7 +286,7 @@ class Auth implements Contract\Auth
                 : ValidatedActionCodeSettings::fromArray($actionCodeSettings);
         }
 
-        $tenantId = $this->tenantId ? $this->tenantId->toString() : null;
+        $tenantId = $this->tenantId !== null ? $this->tenantId->toString() : null;
 
         $createAction = CreateActionLink::new($type, $email, $actionCodeSettings, $tenantId);
         $sendAction = new SendActionLink($createAction, $locale);
@@ -423,7 +427,9 @@ class Auth implements Contract\Auth
             }
 
             // The timestamp, in seconds, which marks a boundary, before which Firebase ID token are considered revoked.
-            if (!($validSince = $user->tokensValidAfterTime ?? null)) {
+            $validSince = $user->tokensValidAfterTime ?? null;
+
+            if (!($validSince instanceof \DateTimeImmutable)) {
                 return $verifiedToken;
             }
 
@@ -432,7 +438,7 @@ class Auth implements Contract\Auth
 
             $validSinceWithLeeway = DT::toUTCDateTimeImmutable($validSince)->modify('-'.$leewayInSeconds.' seconds');
 
-            if ($tokenAuthenticatedAtWithLeeway < $validSinceWithLeeway) {
+            if ($tokenAuthenticatedAtWithLeeway->getTimestamp() < $validSinceWithLeeway->getTimestamp()) {
                 throw new RevokedIdToken($verifiedToken);
             }
         }
@@ -505,7 +511,7 @@ class Auth implements Contract\Auth
 
         $action = SignInWithCustomToken::fromValue($customToken->toString());
 
-        if ($this->tenantId) {
+        if ($this->tenantId !== null) {
             $action = $action->withTenantId($this->tenantId);
         }
 
@@ -518,7 +524,7 @@ class Auth implements Contract\Auth
 
         $action = SignInWithCustomToken::fromValue($token);
 
-        if ($this->tenantId) {
+        if ($this->tenantId !== null) {
             $action = $action->withTenantId($this->tenantId);
         }
 
@@ -529,7 +535,7 @@ class Auth implements Contract\Auth
     {
         $action = SignInWithRefreshToken::fromValue($refreshToken);
 
-        if ($this->tenantId) {
+        if ($this->tenantId !== null) {
             $action = $action->withTenantId($this->tenantId);
         }
 
@@ -543,7 +549,7 @@ class Auth implements Contract\Auth
 
         $action = SignInWithEmailAndPassword::fromValues($email, $clearTextPassword);
 
-        if ($this->tenantId) {
+        if ($this->tenantId !== null) {
             $action = $action->withTenantId($this->tenantId);
         }
 
@@ -556,7 +562,7 @@ class Auth implements Contract\Auth
 
         $action = SignInWithEmailAndOobCode::fromValues($email, $oobCode);
 
-        if ($this->tenantId) {
+        if ($this->tenantId !== null) {
             $action = $action->withTenantId($this->tenantId);
         }
 
@@ -567,7 +573,7 @@ class Auth implements Contract\Auth
     {
         $action = SignInAnonymously::new();
 
-        if ($this->tenantId) {
+        if ($this->tenantId !== null) {
             $action = $action->withTenantId($this->tenantId);
         }
 
@@ -602,11 +608,8 @@ class Auth implements Contract\Auth
     public function signInWithIdpAccessToken($provider, string $accessToken, $redirectUrl = null, ?string $oauthTokenSecret = null, ?string $linkingIdToken = null): SignInResult
     {
         $provider = $provider instanceof Provider ? (string) $provider : $provider;
-        $redirectUrl = $redirectUrl ?? 'http://localhost';
-
-        if ($redirectUrl instanceof UriInterface) {
-            $redirectUrl = (string) $redirectUrl;
-        }
+        $redirectUrl = \trim((string) ($redirectUrl ?? 'http://localhost'));
+        $linkingIdToken = \trim((string) $linkingIdToken);
 
         if ($oauthTokenSecret) {
             $action = SignInWithIdpCredentials::withAccessTokenAndOauthTokenSecret($provider, $accessToken, $oauthTokenSecret);
@@ -614,15 +617,15 @@ class Auth implements Contract\Auth
             $action = SignInWithIdpCredentials::withAccessToken($provider, $accessToken);
         }
 
-        if ($linkingIdToken) {
+        if ($linkingIdToken !== '') {
             $action = $action->withLinkingIdToken($linkingIdToken);
         }
 
-        if ($redirectUrl) {
+        if ($redirectUrl !== '') {
             $action = $action->withRequestUri($redirectUrl);
         }
 
-        if ($this->tenantId) {
+        if ($this->tenantId !== null) {
             $action = $action->withTenantId($this->tenantId);
         }
 
@@ -643,17 +646,19 @@ class Auth implements Contract\Auth
             $redirectUrl = (string) $redirectUrl;
         }
 
+        $redirectUrl = \trim($redirectUrl);
+
         $action = SignInWithIdpCredentials::withIdToken($provider, $idToken);
 
         if ($linkingIdToken) {
             $action = $action->withLinkingIdToken($linkingIdToken);
         }
 
-        if ($redirectUrl) {
+        if ($redirectUrl !== '') {
             $action = $action->withRequestUri($redirectUrl);
         }
 
-        if ($this->tenantId) {
+        if ($this->tenantId !== null) {
             $action = $action->withTenantId($this->tenantId);
         }
 

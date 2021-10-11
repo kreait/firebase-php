@@ -11,6 +11,7 @@ use Kreait\Firebase\Http\Requests;
 use Kreait\Firebase\Http\Responses;
 use Kreait\Firebase\Messaging\Http\Request\MessageRequest;
 use Kreait\Firebase\Util\JSON;
+use Psr\Http\Message\RequestInterface;
 
 final class MulticastSendReport implements Countable
 {
@@ -47,7 +48,7 @@ final class MulticastSendReport implements Countable
 
             $matchingRequest = $requests->findByContentId($responseId);
 
-            if (!$matchingRequest) {
+            if (!($matchingRequest instanceof RequestInterface)) {
                 continue;
             }
 

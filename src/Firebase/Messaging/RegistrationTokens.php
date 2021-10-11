@@ -64,7 +64,7 @@ final class RegistrationTokens implements Countable, IteratorAggregate
 
     public function isEmpty(): bool
     {
-        return \count($this->tokens) === 0;
+        return $this->tokens === [];
     }
 
     /**

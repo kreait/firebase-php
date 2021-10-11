@@ -79,7 +79,7 @@ class Condition implements \JsonSerializable
         return \array_filter([
             'name' => $this->name,
             'expression' => $this->expression,
-            'tagColor' => $this->tagColor ? $this->tagColor->value() : null,
+            'tagColor' => $this->tagColor !== null ? $this->tagColor->value() : null,
         ], static fn ($value) => $value !== null);
     }
 }

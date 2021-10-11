@@ -81,10 +81,13 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
      */
     public function toArray(): array
     {
+        $continueUrl = $this->continueUrl !== null ? (string) $this->continueUrl : null;
+        $dynamicLinkDomain = $this->dynamicLinkDomain !== null ? (string) $this->dynamicLinkDomain : null;
+
         return \array_filter([
-            'continueUrl' => $this->continueUrl ? (string) $this->continueUrl : null,
+            'continueUrl' => $continueUrl,
             'canHandleCodeInApp' => $this->canHandleCodeInApp,
-            'dynamicLinkDomain' => $this->dynamicLinkDomain ? (string) $this->dynamicLinkDomain : null,
+            'dynamicLinkDomain' => $dynamicLinkDomain,
             'androidPackageName' => $this->androidPackageName,
             'androidMinimumVersion' => $this->androidMinimumVersion,
             'androidInstallApp' => $this->androidInstallApp,

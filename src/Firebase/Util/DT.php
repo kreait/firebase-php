@@ -45,10 +45,8 @@ class DT
 
         if (\ctype_digit($value)) {
             // Seconds
-            if ($value === '0' || \mb_strlen($value) === \mb_strlen((string) $now)) {
-                if ($result = DateTimeImmutable::createFromFormat('U', $value)) {
-                    return $result->setTimezone($tz);
-                }
+            if (($value === '0' || \mb_strlen($value) === \mb_strlen((string) $now)) && ($result = DateTimeImmutable::createFromFormat('U', $value))) {
+                return $result->setTimezone($tz);
             }
 
             // Milliseconds

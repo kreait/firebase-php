@@ -29,7 +29,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     {
         $credentials = self::credentialsFromEnvironment() ?? self::credentialsFromFile();
 
-        if (!$credentials) {
+        if (!$credentials instanceof \Kreait\Firebase\ServiceAccount) {
             self::markTestSkipped('The integration tests require credentials');
         }
 

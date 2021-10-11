@@ -67,7 +67,7 @@ class Query
             throw new UnsupportedQuery($this, $e->getMessage(), $e->getCode(), $e->getPrevious());
         }
 
-        if ($this->sorter) {
+        if ($this->sorter !== null) {
             $value = $this->sorter->modifyValue($value);
         }
 
@@ -98,7 +98,7 @@ class Query
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#endAt
      *
-     * @param int|float|string|bool $value
+     * @param scalar $value
      *
      * @return Query
      */
@@ -112,7 +112,7 @@ class Query
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#endbefore
      *
-     * @param int|float|string|bool $value
+     * @param scalar $value
      *
      * @return Query
      */
@@ -126,7 +126,7 @@ class Query
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#equalTo
      *
-     * @param int|float|string|bool $value
+     * @param scalar $value
      *
      * @return Query
      */
@@ -140,7 +140,7 @@ class Query
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#startAt
      *
-     * @param int|float|string|bool $value
+     * @param scalar $value
      *
      * @return Query
      */
@@ -154,7 +154,7 @@ class Query
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Query#startafter
      *
-     * @param int|float|string|bool $value
+     * @param scalar $value
      *
      * @return Query
      */
@@ -274,7 +274,7 @@ class Query
     {
         $uri = $this->reference->getUri();
 
-        if ($this->sorter) {
+        if ($this->sorter !== null) {
             $uri = $this->sorter->modifyUri($uri);
         }
 
@@ -305,7 +305,7 @@ class Query
 
     private function withSorter(Sorter $sorter): self
     {
-        if ($this->sorter) {
+        if ($this->sorter !== null) {
             throw new UnsupportedQuery($this, 'This query is already ordered.');
         }
 

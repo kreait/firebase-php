@@ -201,9 +201,9 @@ class Template implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'conditions' => !empty($this->conditions) ? \array_values($this->conditions) : null,
-            'parameters' => !empty($this->parameters) ? $this->parameters : null,
-            'parameterGroups' => !empty($this->parameterGroups) ? $this->parameterGroups : null,
+            'conditions' => empty($this->conditions) ? null : \array_values($this->conditions),
+            'parameters' => empty($this->parameters) ? null : $this->parameters,
+            'parameterGroups' => empty($this->parameterGroups) ? null : $this->parameterGroups,
         ];
     }
 }

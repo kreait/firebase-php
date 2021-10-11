@@ -18,7 +18,7 @@ final class EqualTo implements Filter
     private $value;
 
     /**
-     * @param bool|float|int|string $value
+     * @param scalar $value
      */
     public function __construct($value)
     {

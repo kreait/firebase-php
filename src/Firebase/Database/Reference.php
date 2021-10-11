@@ -170,7 +170,7 @@ class Reference
      *
      * @see Query::startAt()
      *
-     * @param int|float|string|bool $value
+     * @param scalar $value
      */
     public function startAt($value): Query
     {
@@ -182,7 +182,7 @@ class Reference
      *
      * @see Query::startAfter()
      *
-     * @param int|float|string|bool $value
+     * @param scalar $value
      */
     public function startAfter($value): Query
     {
@@ -194,7 +194,7 @@ class Reference
      *
      * @see Query::endAt()
      *
-     * @param int|float|string|bool $value
+     * @param scalar $value
      */
     public function endAt($value): Query
     {
@@ -206,7 +206,7 @@ class Reference
      *
      * @see Query::endBefore()
      *
-     * @param int|float|string|bool $value
+     * @param scalar $value
      */
     public function endBefore($value): Query
     {
@@ -218,7 +218,7 @@ class Reference
      *
      * @see Query::equalTo()
      *
-     * @param int|float|string|bool $value
+     * @param scalar $value
      */
     public function equalTo($value): Query
     {

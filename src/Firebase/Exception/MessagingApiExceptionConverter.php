@@ -83,7 +83,9 @@ class MessagingApiExceptionConverter
                 break;
             case 429:
                 $convertedError = new QuotaExceeded($message);
-                if ($retryAfter = $this->getRetryAfter($response)) {
+                $retryAfter = $this->getRetryAfter($response);
+
+                if ($retryAfter !== null) {
                     $convertedError = $convertedError->withRetryAfter($retryAfter);
                 }
 
@@ -94,7 +96,9 @@ class MessagingApiExceptionConverter
                 break;
             case 503:
                 $convertedError = new ServerUnavailable($message);
-                if ($retryAfter = $this->getRetryAfter($response)) {
+                $retryAfter = $this->getRetryAfter($response);
+
+                if ($retryAfter !== null) {
                     $convertedError = $convertedError->withRetryAfter($retryAfter);
                 }
 
@@ -110,7 +114,9 @@ class MessagingApiExceptionConverter
 
     private function convertGuzzleRequestException(RequestException $e): MessagingException
     {
-        if ($response = $e->getResponse()) {
+        $response = $e->getResponse();
+
+        if ($response !== null) {
             return $this->convertResponse($response, $e);
         }
 

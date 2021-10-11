@@ -82,9 +82,9 @@ class ApiClient
         $lastVersionNumber = $query->lastVersionNumber();
         $pageSize = $query->pageSize();
 
-        $since = $since ? $since->format('Y-m-d\TH:i:s.v\Z') : null;
-        $until = $until ? $until->format('Y-m-d\TH:i:s.v\Z') : null;
-        $lastVersionNumber = $lastVersionNumber ? (string) $lastVersionNumber : null;
+        $since = $since !== null ? $since->format('Y-m-d\TH:i:s.v\Z') : null;
+        $until = $until !== null ? $until->format('Y-m-d\TH:i:s.v\Z') : null;
+        $lastVersionNumber = $lastVersionNumber !== null ? (string) $lastVersionNumber : null;
         $pageSize = $pageSize ? (string) $pageSize : null;
 
         return $this->requestApi('GET', $uri, [

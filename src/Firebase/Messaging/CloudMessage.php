@@ -296,7 +296,7 @@ final class CloudMessage implements Message
             'fcm_options' => $this->fcmOptions,
         ];
 
-        if ($this->target) {
+        if ($this->target !== null) {
             $data[$this->target->type()] = $this->target->value();
         }
 

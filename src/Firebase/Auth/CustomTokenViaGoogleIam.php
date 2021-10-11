@@ -60,7 +60,7 @@ class CustomTokenViaGoogleIam implements Generator
             ->expiresAt($expiresAt)
         ;
 
-        if ($this->tenantId) {
+        if ($this->tenantId !== null) {
             $builder->withClaim('tenantId', $this->tenantId->toString());
         }
 
