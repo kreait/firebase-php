@@ -45,6 +45,7 @@
         "phpstan/phpstan": "^0.12.92",
         "phpstan/phpstan-phpunit": "^0.12.21",
         "phpunit/phpunit": "^9.5.10",
+        "rector/rector": "^0.11.57",
         "symfony/var-dumper": "^5.3.3",
         "symplify/easy-coding-standard": "^9.4"
     },

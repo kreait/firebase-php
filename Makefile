@@ -35,6 +35,11 @@ view-docs: ## Shows the documentation
 cs: ## Applies coding standards
 	vendor/bin/ecs check --fix
 
+.PHONY: rector
+rector: ## Applies rector rules
+	vendor/bin/rector process
+
+
 .PHONY: clean
 clean:
 	rm -rf build/*

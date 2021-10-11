@@ -13,5 +13,6 @@
 /Makefile export-ignore
 /phpstan.neon.dist export-ignore
 /phpunit.xml.dist export-ignore
+/rector.php export-ignore
 /test_credentials.json.enc export-ignore
 /test_devices.json.enc export-ignore
