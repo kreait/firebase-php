@@ -700,14 +700,12 @@ class Factory
             $handler = HandlerStack::create($handler);
         }
 
-        if ($handler instanceof HandlerStack) {
-            if ($this->httpLogMiddleware) {
-                $handler->push($this->httpLogMiddleware, 'http_logs');
-            }
+        if ($this->httpLogMiddleware) {
+            $handler->push($this->httpLogMiddleware, 'http_logs');
+        }
 
-            if ($this->httpDebugLogMiddleware) {
-                $handler->push($this->httpDebugLogMiddleware, 'http_debug_logs');
-            }
+        if ($this->httpDebugLogMiddleware) {
+            $handler->push($this->httpDebugLogMiddleware, 'http_debug_logs');
         }
 
         $credentials = $this->getGoogleAuthTokenCredentials();

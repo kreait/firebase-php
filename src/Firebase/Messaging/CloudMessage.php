@@ -94,11 +94,11 @@ final class CloudMessage implements Message
         }
 
         if ($targetValue = $data[MessageTarget::CONDITION] ?? null) {
-            $new = $new->withChangedTarget(MessageTarget::CONDITION, (string) $targetValue);
+            $new = $new->withChangedTarget(MessageTarget::CONDITION, $targetValue);
         } elseif ($targetValue = $data[MessageTarget::TOKEN] ?? null) {
-            $new = $new->withChangedTarget(MessageTarget::TOKEN, (string) $targetValue);
+            $new = $new->withChangedTarget(MessageTarget::TOKEN, $targetValue);
         } elseif ($targetValue = $data[MessageTarget::TOPIC] ?? null) {
-            $new = $new->withChangedTarget(MessageTarget::TOPIC, (string) $targetValue);
+            $new = $new->withChangedTarget(MessageTarget::TOPIC, $targetValue);
         }
 
         if ($messageData = ($data['data'] ?? null)) {

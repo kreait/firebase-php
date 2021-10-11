@@ -42,7 +42,7 @@ final class GuzzleApiClientHandler implements Handler
         $sessionCookie = $data['sessionCookie'] ?? null;
 
         if ($sessionCookie !== null) {
-            return (string) $sessionCookie;
+            return $sessionCookie;
         }
 
         throw new FailedToCreateSessionCookie($action, $response, 'The response did not contain a session cookie');

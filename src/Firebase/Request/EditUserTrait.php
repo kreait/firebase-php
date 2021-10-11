@@ -109,8 +109,6 @@ trait EditUserTrait
 
     /**
      * @param Uid|mixed $uid
-     *
-     * @return static
      */
     public function withUid($uid): self
     {
@@ -122,8 +120,6 @@ trait EditUserTrait
 
     /**
      * @param Email|string $email
-     *
-     * @return static
      */
     public function withEmail($email): self
     {
@@ -147,8 +143,6 @@ trait EditUserTrait
 
     /**
      * @param Email|string $email
-     *
-     * @return static
      */
     public function withUnverifiedEmail($email): self
     {
@@ -159,9 +153,6 @@ trait EditUserTrait
         return $request;
     }
 
-    /**
-     * @return static
-     */
     public function withDisplayName(string $displayName): self
     {
         $request = clone $this;
@@ -196,9 +187,6 @@ trait EditUserTrait
         return $request;
     }
 
-    /**
-     * @return static
-     */
     public function markAsDisabled(): self
     {
         $request = clone $this;
@@ -208,9 +196,6 @@ trait EditUserTrait
         return $request;
     }
 
-    /**
-     * @return static
-     */
     public function markAsEnabled(): self
     {
         $request = clone $this;
@@ -220,9 +205,6 @@ trait EditUserTrait
         return $request;
     }
 
-    /**
-     * @return static
-     */
     public function markEmailAsVerified(): self
     {
         $request = clone $this;
@@ -231,9 +213,6 @@ trait EditUserTrait
         return $request;
     }
 
-    /**
-     * @return static
-     */
     public function markEmailAsUnverified(): self
     {
         $request = clone $this;
@@ -244,8 +223,6 @@ trait EditUserTrait
 
     /**
      * @param ClearTextPassword|string $clearTextPassword
-     *
-     * @return static
      */
     public function withClearTextPassword($clearTextPassword): self
     {

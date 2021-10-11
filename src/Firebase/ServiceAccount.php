@@ -58,8 +58,6 @@ class ServiceAccount
      * @param self|string|array|mixed $value
      *
      * @throws InvalidArgumentException
-     *
-     * @return ServiceAccount
      */
     public static function fromValue($value): self
     {

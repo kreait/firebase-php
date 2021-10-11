@@ -68,8 +68,6 @@ class Reference
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Reference#parent
      *
      * @throws OutOfRangeException if requested for the root Reference
-     *
-     * @return Reference
      */
     public function getParent(): self
     {
@@ -86,8 +84,6 @@ class Reference
      * The root location of a Reference.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Reference#root
-     *
-     * @return Reference
      */
     public function getRoot(): self
     {
@@ -277,8 +273,6 @@ class Reference
      * @param mixed $value
      *
      * @throws DatabaseException if the API reported an error
-     *
-     * @return Reference
      */
     public function set($value): self
     {
@@ -369,8 +363,6 @@ class Reference
      * @param array<mixed> $values
      *
      * @throws DatabaseException if the API reported an error
-     *
-     * @return Reference
      */
     public function update(array $values): self
     {

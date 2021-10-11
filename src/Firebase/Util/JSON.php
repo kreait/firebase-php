@@ -30,7 +30,7 @@ class JSON
         $depth = $depth ?? 512;
 
         try {
-            return (string) \json_encode($value, JSON_THROW_ON_ERROR | $options, $depth);
+            return \json_encode($value, JSON_THROW_ON_ERROR | $options, $depth);
         } catch (Throwable $e) {
             throw new InvalidArgumentException('json_encode error: '.$e->getMessage());
         }

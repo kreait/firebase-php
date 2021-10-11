@@ -58,8 +58,6 @@ final class MulticastSendReport implements Countable
                 continue;
             }
 
-            $target = null;
-
             if ($token = $requestData['message']['token'] ?? null) {
                 $target = MessageTarget::with(MessageTarget::TOKEN, (string) $token);
             } elseif ($topic = $requestData['message']['topic'] ?? null) {

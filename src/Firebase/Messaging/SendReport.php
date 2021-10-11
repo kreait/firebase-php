@@ -12,7 +12,7 @@ final class SendReport
 {
     private MessageTarget $target;
 
-    /** @var array<array-key, mixed>|null */
+    /** @var array<array-key, scalar>|null */
     private ?array $result = null;
     private ?Message $message = null;
     private ?Throwable $error = null;
@@ -23,7 +23,7 @@ final class SendReport
     }
 
     /**
-     * @param array<array-key, mixed> $response
+     * @param array<array-key, scalar> $response
      */
     public static function success(MessageTarget $target, array $response, ?Message $message = null): self
     {
@@ -76,7 +76,7 @@ final class SendReport
     }
 
     /**
-     * @return array<mixed>|null
+     * @return array<array-key, scalar>|null
      */
     public function result(): ?array
     {

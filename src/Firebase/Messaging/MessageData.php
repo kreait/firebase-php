@@ -27,16 +27,16 @@ final class MessageData implements \JsonSerializable
                 throw new InvalidArgumentException('Message data must be a one-dimensional array of string(able) keys and values.');
             }
 
-            if (self::isBinary((string) $value)) {
+            if (self::isBinary($value)) {
                 throw new InvalidArgumentException(
                     "The message data field '{$key}' seems to contain binary data. As this can lead to broken messages, "
                     .'please convert it to a string representation first, e.g. with bin2hex() or base64encode().'
                 );
             }
 
-            self::assertValidKey((string) $key);
+            self::assertValidKey($key);
 
-            $messageData->data[(string) $key] = (string) $value;
+            $messageData->data[$key] = $value;
         }
 
         return $messageData;
