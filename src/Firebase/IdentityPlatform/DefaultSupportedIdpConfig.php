@@ -18,7 +18,7 @@ class DefaultSupportedIdpConfig
     // @phpstan-ignore-next-line
     private ?string $clientSecret;
     // @phpstan-ignore-next-line
-    private ?string $appleSignInConfig = null;
+    private ?array $appleSignInConfig = null;
 
     public const FIELDS = ['name', 'enabled', 'clientId', 'clientSecret','appleSignInConfig'];
 
