@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Removed
+* Dropped support for Guzzle 6.x
 * Removed deprecated methods
   * `Auth::setCustomUserAttributes()`, use `Auth::setCustomUserClaims()` instead
   * `Auth::deleteCustomUserAttributes()`, use `Auth::setCustomUserClaims()` with null values instead

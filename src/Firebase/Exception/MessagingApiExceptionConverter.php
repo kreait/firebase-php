@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Exception;
 
 use DateTimeImmutable;
-use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use Kreait\Clock;
 use Kreait\Clock\SystemClock;
@@ -18,6 +17,7 @@ use Kreait\Firebase\Exception\Messaging\QuotaExceeded;
 use Kreait\Firebase\Exception\Messaging\ServerError;
 use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
 use Kreait\Firebase\Http\ErrorResponseParser;
+use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -44,12 +44,11 @@ class MessagingApiExceptionConverter
      */
     public function convertException(Throwable $exception): FirebaseException
     {
-        // @phpstan-ignore-next-line
-        if ($exception instanceof RequestException && !($exception instanceof ConnectException)) {
+        if ($exception instanceof RequestException) {
             return $this->convertGuzzleRequestException($exception);
         }
 
-        if ($exception instanceof ConnectException) {
+        if ($exception instanceof NetworkExceptionInterface) {
             return new ApiConnectionFailed('Unable to connect to the API: '.$exception->getMessage(), $exception->getCode(), $exception);
         }
 
