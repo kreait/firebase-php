@@ -5,6 +5,10 @@
 * Added support for providing a nonce when signing in with IdP credentials
 * Added methods:
     * `Kreait\Firebase\Auth::signInWithAppleIdToken()`
+### Changed
+* When building the RTDB Url from the service account's project ID, the SDK will not replace
+  colons (`:`) and dots (`.`) with dashes (`-`) anymore.
+  ([#351 (comment)](https://github.com/kreait/firebase-php/issues/351#issuecomment-946536698))
 
 ## [5.24.0] - 2021-10-05
 ### Added
