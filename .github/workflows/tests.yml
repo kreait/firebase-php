@@ -7,24 +7,29 @@ on:
 
 jobs:
   tests:
-    name: PHP ${{ matrix.php }} (${{ matrix.stability }})
+    name: PHP ${{ matrix.php }} (${{ matrix.dependencies }})
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        php: ["7.4", "8.0", "8.1"]
-        stability: ["prefer-stable", "prefer-lowest"]
+        php:
+          - "7.4"
+          - "8.0"
+          - "8.1"
+        dependencies:
+          - "lowest"
+          - "highest"
 
     env:
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
-      key: cache-unit-6x-${{ matrix.php }}-v1
+      key: cache-unit-5x-${{ matrix.php }}-${{ matrix.dependencies }}-v1
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Setup cache environment
-        id: cache-env
+        id: extcache
         uses: shivammathur/cache-extensions@v1
         with:
           php-version: ${{ matrix.php }}
@@ -34,9 +39,9 @@ jobs:
       - name: Cache extensions
         uses: actions/cache@v2
         with:
-          path: ${{ steps.cache-env.outputs.dir }}
-          key: ${{ steps.cache-env.outputs.key }}
-          restore-keys: ${{ steps.cache-env.outputs.key }}
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -46,22 +51,13 @@ jobs:
           tools: composer, pecl
           coverage: xdebug
 
+      - uses: "ramsey/composer-install@v1"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "${{ matrix.composer-options }}"
+
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
-
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-${{ matrix.php }}-composer-${{ matrix.stability }}-v7-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-${{ matrix.stability }}-v7-
-
-      - name: Install dependencies (stable)
-        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-suggest --no-progress
 
       - name: Run PHPStan
         if: matrix.stability == 'prefer-stable'

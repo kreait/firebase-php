@@ -14,14 +14,14 @@ jobs:
     env:
       php-version: '8.0'
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
-      key: cache-integration-5x-v1
+      key: cache-integration-5x-${{ matrix.php }}-v1
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Setup cache environment
-        id: cache-env
+        id: extcache
         uses: shivammathur/cache-extensions@v1
         with:
           php-version: ${{ env.php-version }}
@@ -31,9 +31,9 @@ jobs:
       - name: Cache extensions
         uses: actions/cache@v1
         with:
-          path: ${{ steps.cache-env.outputs.dir }}
-          key: ${{ steps.cache-env.outputs.key }}
-          restore-keys: ${{ steps.cache-env.outputs.key }}
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -46,19 +46,7 @@ jobs:
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-${{ matrix.php }}-${{ env.key }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction --no-suggest --no-progress
+      - uses: "ramsey/composer-install@v1"
 
       - name: Setup Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
