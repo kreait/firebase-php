@@ -221,21 +221,6 @@ final class FactoryTest extends UnitTestCase
         \putenv('GOOGLE_CLOUD_PROJECT');
     }
 
-    public function testAProjectIdCanBeProvidedAsAGCloudProjectEnvironmentVariable(): void
-    {
-        // The database component requires a project ID
-        \putenv('GCLOUD_PROJECT=project-id');
-
-        (new Factory())
-            ->withGoogleAuthTokenCredentials($this->userRefreshCredentials)
-            ->createDatabase()
-        ;
-
-        $this->addToAssertionCount(1);
-
-        \putenv('GCLOUD_PROJECT');
-    }
-
     public function testItFailsWhenNoProjectIdCouldBeDetermined(): void
     {
         // User Refresh Credentials don't provide a project ID
@@ -246,18 +231,6 @@ final class FactoryTest extends UnitTestCase
         (new Factory())
             ->withGoogleAuthTokenCredentials($this->userRefreshCredentials)
             ->createDatabase()
-        ;
-    }
-
-    public function testWithoutAProjectIdTheStorageComponentNeedsABucketName(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageMatches('/no default/');
-
-        (new Factory())
-            ->withGoogleAuthTokenCredentials($this->userRefreshCredentials)
-            ->createStorage()
-            ->getBucket()
         ;
     }
 

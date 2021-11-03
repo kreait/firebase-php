@@ -46,7 +46,7 @@ Please see `https://github.com/kreait/laravel-firebase#configuration <https://gi
 With autodiscovery
 ==================
 
-The SDK is able to autodiscover the Service Account for your project in the following conditions:
+The SDK is able to auto-discover the Service Account for your project in the following conditions:
 
 #. Your application runs on Google Cloud Engine.
 

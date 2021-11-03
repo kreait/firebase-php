@@ -1,6 +1,11 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Changed
+* It is now mandatory to provide a Firebase Project ID. When the project ID cannot be determined from the
+  provided credentials (usually a service account), it can be provided by setting the `GOOGLE_CLOUD_PROJECT=<project-id>`
+  environment variable.
+
 ### Removed
 * Removed local phone number validation when `giggsey/libphonenumber-for-php` was installed. Phone numbers are
   validated by the Firebase Service in any case, and even when a phone number was considered valid, in rare

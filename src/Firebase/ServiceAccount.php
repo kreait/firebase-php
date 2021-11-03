@@ -15,13 +15,26 @@ class ServiceAccount
 {
     /**
      * @var array{
-     *     project_id: string|null,
-     *     client_email: string|null,
-     *     private_key: string|null,
-     *     type?: string|null
-     * }|array<string, string|null> $data
+     *     project_id?: string,
+     *     client_email?: string,
+     *     private_key?: string,
+     *     type: string
+     * }
      */
-    private array $data = [];
+    private array $data;
+
+    /**
+     * @phpstan-param array{
+     *     project_id?: string,
+     *     client_email?: string,
+     *     private_key?: string,
+     *     type: string
+     * } $data
+     */
+    private function __construct(array $data)
+    {
+        $this->data = $data;
+    }
 
     public function getProjectId(): string
     {
@@ -40,18 +53,15 @@ class ServiceAccount
 
     /**
      * @return array{
-     *     project_id: string|null,
-     *     client_email: string|null,
-     *     private_key: string|null,
-     *     type: string|null
-     * }|array<string, string|null>
+     *     project_id?: string,
+     *     client_email?: string,
+     *     private_key?: string,
+     *     type: string
+     * }
      */
     public function asArray(): array
     {
-        $array = $this->data;
-        $array['type'] ??= 'service_account';
-
-        return $array;
+        return $this->data;
     }
 
     /**
@@ -93,9 +103,7 @@ class ServiceAccount
      */
     private static function fromArray(array $data): self
     {
-        $type = $data['type'] ?? '';
-
-        if ($type !== 'service_account') {
+        if (!\array_key_exists('type', $data) || $data['type'] !== 'service_account') {
             throw new InvalidArgumentException(
                 'A Service Account specification must have a field "type" with "service_account" as its value.'
                 .' Please make sure you download the Service Account JSON file from the Service Accounts tab'
@@ -104,10 +112,7 @@ class ServiceAccount
             );
         }
 
-        $serviceAccount = new self();
-        $serviceAccount->data = $data;
-
-        return $serviceAccount;
+        return new self($data);
     }
 
     private static function fromJson(string $json): self
