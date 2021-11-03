@@ -52,7 +52,6 @@ The SDK is able to autodiscover the Service Account for your project in the foll
 
 #. The path to the JSON key file is defined in one of the following environment variables
 
-   * ``FIREBASE_CREDENTIALS``
    * ``GOOGLE_APPLICATION_CREDENTIALS``
 
 #. The JSON Key file is located in Google's "well known path"

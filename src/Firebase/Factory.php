@@ -260,20 +260,16 @@ class Factory
             return $this->serviceAccount;
         }
 
-        if ($credentials = Util::getenv('FIREBASE_CREDENTIALS')) {
-            return $this->serviceAccount = ServiceAccount::fromValue($credentials);
-        }
-
-        if ($this->discoveryIsDisabled) {
-            return null;
-        }
-
         if ($credentials = Util::getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
             try {
                 return $this->serviceAccount = ServiceAccount::fromValue($credentials);
             } catch (InvalidArgumentException $e) {
                 // Do nothing, continue trying
             }
+        }
+
+        if ($this->discoveryIsDisabled) {
+            return null;
         }
 
         // @codeCoverageIgnoreStart

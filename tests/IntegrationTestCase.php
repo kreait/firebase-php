@@ -109,7 +109,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
     private static function credentialsFromEnvironment(): ?ServiceAccount
     {
-        if ($credentials = Util::getenv('TEST_FIREBASE_CREDENTIALS')) {
+        if ($credentials = Util::getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
             return ServiceAccount::fromValue($credentials);
         }
 

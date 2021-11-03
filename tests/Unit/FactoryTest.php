@@ -111,17 +111,6 @@ final class FactoryTest extends UnitTestCase
         \putenv('GOOGLE_APPLICATION_CREDENTIALS');
     }
 
-    public function testCreateStorageWithFirebaseCredentials(): void
-    {
-        \putenv('FIREBASE_CREDENTIALS='.$this->validServiceAccountFile);
-
-        // Only with a valid service account is the default bucket available
-        (new Factory())->createStorage()->getBucket();
-        $this->addToAssertionCount(1);
-
-        \putenv('FIREBASE_CREDENTIALS');
-    }
-
     public function testItCannotCreateAStorageWithoutCredentials(): void
     {
         $this->expectException(RuntimeException::class);
