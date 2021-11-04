@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 ### Removed
+* Removed local phone number validation when `giggsey/libphonenumber-for-php` was installed. Phone numbers are
+  validated by the Firebase Service in any case, and even when a phone number was considered valid, in rare
+  cases the Firebase API rejected them still.
 * Removed support for the `FIREBASE_CREDENTIALS` environment variable to be used for credential discovery. 
   `GOOGLE_APPLICATION_CREDENTIALS` was already supported and is the same environment variable the official
   Google Libraries use as well.

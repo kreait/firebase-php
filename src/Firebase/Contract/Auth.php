@@ -29,7 +29,6 @@ use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Request;
 use Kreait\Firebase\Value\ClearTextPassword;
 use Kreait\Firebase\Value\Email;
-use Kreait\Firebase\Value\PhoneNumber;
 use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\UriInterface;
@@ -104,7 +103,7 @@ interface Auth
     public function getUserByEmail($email): UserRecord;
 
     /**
-     * @param PhoneNumber|string $phoneNumber
+     * @param \Stringable|string $phoneNumber
      *
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
@@ -249,8 +248,12 @@ interface Auth
     /**
      * @param Uid|string $uid
      * @param array<string, mixed> $claims
+     * @param int|DateInterval|string $ttl
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
      */
-    public function createCustomToken($uid, array $claims = []): Token;
+    public function createCustomToken($uid, array $claims = [], $ttl = 3600): UnencryptedToken;
 
     public function parseToken(string $tokenString): Token;
 

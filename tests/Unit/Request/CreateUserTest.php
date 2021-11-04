@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Tests\Unit\Request;
 
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Value\ClearTextPassword;
-use Kreait\Firebase\Value\PhoneNumber;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -112,10 +111,6 @@ final class CreateUserTest extends TestCase
             ],
             'phoneNumber' => [
                 $given + ['phoneNumber' => '+123456789'],
-                $expected + ['phoneNumber' => '+123456789'],
-            ],
-            'phoneNumberObject' => [
-                $given + ['phoneNumber' => new PhoneNumber('+123456789')],
                 $expected + ['phoneNumber' => '+123456789'],
             ],
             'photo' => [

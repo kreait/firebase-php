@@ -38,7 +38,6 @@ use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\ClearTextPassword;
 use Kreait\Firebase\Value\Email;
-use Kreait\Firebase\Value\PhoneNumber;
 use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Token;
@@ -183,9 +182,9 @@ class Auth implements Contract\Auth
 
     public function getUserByPhoneNumber($phoneNumber): UserRecord
     {
-        $phoneNumber = $phoneNumber instanceof PhoneNumber ? $phoneNumber : new PhoneNumber($phoneNumber);
+        $phoneNumber = (string) $phoneNumber;
 
-        $response = $this->client->getUserByPhoneNumber((string) $phoneNumber);
+        $response = $this->client->getUserByPhoneNumber($phoneNumber);
 
         $data = JSON::decode((string) $response->getBody(), true);
 

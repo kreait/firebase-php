@@ -38,7 +38,6 @@
         "symfony/polyfill-php81": "^1.23"
     },
     "require-dev": {
-        "giggsey/libphonenumber-for-php": "^8.12.27",
         "google/cloud-firestore": "^1.19.3",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.2",
@@ -49,8 +48,7 @@
         "symplify/easy-coding-standard": "^10.0"
     },
     "suggest": {
-        "google/cloud-firestore": "^1.0 to use the Firestore component",
-        "giggsey/libphonenumber-for-php": "^8.9 to validate phone numbers before attempting to send them to Firebase"
+        "google/cloud-firestore": "^1.0 to use the Firestore component"
     },
     "autoload": {
         "psr-4": {
