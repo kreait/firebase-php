@@ -56,6 +56,23 @@ Getting started
     $defaultBucket = $storage->getBucket();
     $anotherBucket = $storage->getBucket('another-bucket');
 
+
+
+***************
+Upload to Cloud Storage
+***************
+
+.. code-block:: php
+
+    $defaultBucket->upload(
+      file_get_contents($_FILES['name']['tmp_name']),
+      [
+      'name' =>"UploadedFile".$_FILES['name']['name']
+      ]
+  );
+
+
+
 **********************
 Default Storage bucket
 **********************
