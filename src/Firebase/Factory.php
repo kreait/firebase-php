@@ -710,7 +710,10 @@ class Factory
         $credentials = $this->getGoogleAuthTokenCredentials();
 
         if ($credentials !== null) {
-            $credentials = new FetchAuthTokenCache($credentials, null, $this->authTokenCache);
+            $projectId = $credentials instanceof ProjectIdProviderInterface ? $credentials->getProjectId() : 'project';
+            $cachePrefix = 'kreait_firebase_'.$projectId;
+
+            $credentials = new FetchAuthTokenCache($credentials, ['prefix' => $cachePrefix], $this->authTokenCache);
             $authTokenHandlerConfig = $config;
             $authTokenHandlerConfig['handler'] = clone $handler;
 
@@ -740,10 +743,7 @@ class Factory
         return $factory;
     }
 
-    /**
-     * @return ServiceAccountCredentials|UserRefreshCredentials|AppIdentityCredentials|GCECredentials|CredentialsLoader|null
-     */
-    protected function getGoogleAuthTokenCredentials()
+    protected function getGoogleAuthTokenCredentials(): ?CredentialsLoader
     {
         if ($this->googleAuthTokenCredentials !== null) {
             return $this->googleAuthTokenCredentials;
