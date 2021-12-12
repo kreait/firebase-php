@@ -11,6 +11,9 @@ use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 use Kreait\Firebase\Value\Url;
 
+/**
+ * @internal
+ */
 final class DynamicLinks implements Contract\DynamicLinks
 {
     private ClientInterface $apiClient;

@@ -42,7 +42,10 @@ use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Traversable;
 
-class Auth implements Contract\Auth
+/**
+ * @internal
+ */
+final class Auth implements Contract\Auth
 {
     private ApiClient $client;
     private ClientInterface $httpClient;
@@ -52,9 +55,6 @@ class Auth implements Contract\Auth
     private ?string $tenantId;
     private string $projectId;
 
-    /**
-     * @internal
-     */
     public function __construct(
         ApiClient $client,
         ClientInterface $httpClient,

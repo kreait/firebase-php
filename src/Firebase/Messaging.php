@@ -25,7 +25,10 @@ use Kreait\Firebase\Messaging\RegistrationTokens;
 use Kreait\Firebase\Messaging\Topic;
 use Kreait\Firebase\Util\JSON;
 
-class Messaging implements Contract\Messaging
+/**
+ * @internal
+ */
+final class Messaging implements Contract\Messaging
 {
     private string $projectId;
 
@@ -33,9 +36,6 @@ class Messaging implements Contract\Messaging
 
     private AppInstanceApiClient $appInstanceApi;
 
-    /**
-     * @internal
-     */
     public function __construct(string $projectId, ApiClient $messagingApiClient, AppInstanceApiClient $appInstanceApiClient)
     {
         $this->messagingApi = $messagingApiClient;

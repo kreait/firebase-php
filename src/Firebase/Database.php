@@ -12,7 +12,10 @@ use Kreait\Firebase\Database\Transaction;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
-class Database implements Contract\Database
+/**
+ * @internal
+ */
+final class Database implements Contract\Database
 {
     public const SERVER_TIMESTAMP = ['.sv' => 'timestamp'];
 
@@ -20,9 +23,6 @@ class Database implements Contract\Database
 
     private UriInterface $uri;
 
-    /**
-     * @internal
-     */
     public function __construct(UriInterface $uri, ApiClient $client)
     {
         $this->uri = $uri;

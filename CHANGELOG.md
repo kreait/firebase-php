@@ -24,6 +24,9 @@
   `GOOGLE_APPLICATION_CREDENTIALS` was already supported and is the same environment variable the official
   Google Libraries use as well.
 * Dropped support for Guzzle 6.x
+* All components have been made `final` and marked as `@internal`, if you're type-hinting dependencies in your
+  application code, make sure you type-hint the `Kreait\Firebase\Contract\*` **interfaces**, not the
+  `Kreait\Firebase\*` **implementations**
 * Removed deprecated methods
   * `Auth::setCustomUserAttributes()`, use `Auth::setCustomUserClaims()` instead
   * `Auth::deleteCustomUserAttributes()`, use `Auth::setCustomUserClaims()` with null values instead
