@@ -27,9 +27,6 @@ class ApiClient
 
     private AuthApiExceptionConverter $errorHandler;
 
-    /**
-     * @internal
-     */
     public function __construct(ClientInterface $client, ?string $tenantId = null)
     {
         $this->client = $client;

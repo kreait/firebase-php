@@ -9,9 +9,6 @@ namespace Kreait\Firebase;
  */
 final class Util
 {
-    /**
-     * @internal
-     */
     public static function getenv(string $name): ?string
     {
         $value = $_SERVER[$name] ?? $_ENV[$name] ?? \getenv($name);

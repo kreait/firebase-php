@@ -30,9 +30,6 @@ class MessagingApiExceptionConverter
 
     private Clock $clock;
 
-    /**
-     * @internal
-     */
     public function __construct(?Clock $clock = null)
     {
         $this->responseParser = new ErrorResponseParser();

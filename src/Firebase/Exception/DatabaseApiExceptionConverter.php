@@ -18,9 +18,6 @@ class DatabaseApiExceptionConverter
 {
     private ErrorResponseParser $responseParser;
 
-    /**
-     * @internal
-     */
     public function __construct()
     {
         $this->responseParser = new ErrorResponseParser();

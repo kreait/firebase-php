@@ -11,7 +11,7 @@ use Throwable;
 /**
  * @internal
  */
-class ServiceAccount
+final class ServiceAccount
 {
     /**
      * @var array{
