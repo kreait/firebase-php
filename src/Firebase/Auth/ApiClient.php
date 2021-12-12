@@ -23,14 +23,14 @@ use Throwable;
 class ApiClient
 {
     private ClientInterface $client;
-    private ?TenantId $tenantId;
+    private ?string $tenantId;
 
     private AuthApiExceptionConverter $errorHandler;
 
     /**
      * @internal
      */
-    public function __construct(ClientInterface $client, ?TenantId $tenantId = null)
+    public function __construct(ClientInterface $client, ?string $tenantId = null)
     {
         $this->client = $client;
         $this->tenantId = $tenantId;
@@ -212,11 +212,9 @@ class ApiClient
     private function requestApi(string $uri, array $data): ResponseInterface
     {
         $options = [];
-        $tenantId = $data['tenantId'] ?? $this->tenantId ?? null;
-        $tenantId = $tenantId instanceof TenantId ? $tenantId->toString() : $tenantId;
 
-        if ($tenantId) {
-            $data['tenantId'] = $tenantId;
+        if ($this->tenantId !== null) {
+            $data['tenantId'] = $this->tenantId;
         }
 
         if (!empty($data)) {

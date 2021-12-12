@@ -27,7 +27,6 @@ use Kreait\Firebase\Auth\SignInWithEmailAndOobCode;
 use Kreait\Firebase\Auth\SignInWithEmailAndPassword;
 use Kreait\Firebase\Auth\SignInWithIdpCredentials;
 use Kreait\Firebase\Auth\SignInWithRefreshToken;
-use Kreait\Firebase\Auth\TenantId;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
@@ -50,7 +49,7 @@ class Auth implements Contract\Auth
     private TokenGenerator $tokenGenerator;
     private Verifier $idTokenVerifier;
     private SignInHandler $signInHandler;
-    private ?TenantId $tenantId;
+    private ?string $tenantId;
     private string $projectId;
 
     /**
@@ -63,7 +62,7 @@ class Auth implements Contract\Auth
         Verifier $idTokenVerifier,
         SignInHandler $signInHandler,
         string $projectId,
-        ?TenantId $tenantId = null
+        ?string $tenantId = null
     ) {
         $this->client = $client;
         $this->httpClient = $httpClient;
@@ -229,13 +228,11 @@ class Auth implements Contract\Auth
     {
         $request = DeleteUsersRequest::withUids($this->projectId, $uids, $forceDeleteEnabledUsers);
 
-        $tenantId = $this->tenantId !== null ? $this->tenantId->toString() : null;
-
         $response = $this->client->deleteUsers(
             $request->projectId(),
             $request->uids(),
             $request->enabledUsersShouldBeForceDeleted(),
-            $tenantId
+            $this->tenantId
         );
 
         return DeleteUsersResult::fromRequestAndResponse($request, $response);
@@ -253,10 +250,8 @@ class Auth implements Contract\Auth
                 : ValidatedActionCodeSettings::fromArray($actionCodeSettings);
         }
 
-        $tenantId = $this->tenantId !== null ? $this->tenantId->toString() : null;
-
         return (new CreateActionLink\GuzzleApiClientHandler($this->httpClient))
-            ->handle(CreateActionLink::new($type, $email, $actionCodeSettings, $tenantId, $locale))
+            ->handle(CreateActionLink::new($type, $email, $actionCodeSettings, $this->tenantId, $locale))
         ;
     }
 
@@ -272,9 +267,7 @@ class Auth implements Contract\Auth
                 : ValidatedActionCodeSettings::fromArray($actionCodeSettings);
         }
 
-        $tenantId = $this->tenantId !== null ? $this->tenantId->toString() : null;
-
-        $createAction = CreateActionLink::new($type, $email, $actionCodeSettings, $tenantId, $locale);
+        $createAction = CreateActionLink::new($type, $email, $actionCodeSettings, $this->tenantId, $locale);
         $sendAction = new SendActionLink($createAction, $locale);
 
         if (\mb_strtolower($type) === 'verify_email') {
@@ -605,7 +598,7 @@ class Auth implements Contract\Auth
             $action = $action->withRequestUri($redirectUrl);
         }
 
-        if ($this->tenantId instanceof TenantId) {
+        if ($this->tenantId !== null) {
             $action = $action->withTenantId($this->tenantId);
         }
 
@@ -637,7 +630,7 @@ class Auth implements Contract\Auth
             $action = $action->withRequestUri($redirectUrl);
         }
 
-        if ($this->tenantId instanceof TenantId) {
+        if ($this->tenantId !== null) {
             $action = $action->withTenantId($this->tenantId);
         }
 

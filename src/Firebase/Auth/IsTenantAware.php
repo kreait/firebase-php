@@ -6,5 +6,5 @@ namespace Kreait\Firebase\Auth;
 
 interface IsTenantAware
 {
-    public function tenantId(): ?TenantId;
+    public function tenantId(): ?string;
 }

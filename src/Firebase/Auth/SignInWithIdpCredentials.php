@@ -13,7 +13,7 @@ final class SignInWithIdpCredentials implements IsTenantAware, SignIn
     private ?string $oauthTokenSecret = null;
     private ?string $rawNonce = null;
     private string $requestUri = 'http://localhost';
-    private ?TenantId $tenantId = null;
+    private ?string $tenantId = null;
 
     private function __construct(string $provider)
     {
@@ -68,7 +68,7 @@ final class SignInWithIdpCredentials implements IsTenantAware, SignIn
         return $instance;
     }
 
-    public function withTenantId(TenantId $tenantId): self
+    public function withTenantId(string $tenantId): self
     {
         $action = clone $this;
         $action->tenantId = $tenantId;
@@ -111,7 +111,7 @@ final class SignInWithIdpCredentials implements IsTenantAware, SignIn
         return $this->requestUri;
     }
 
-    public function tenantId(): ?TenantId
+    public function tenantId(): ?string
     {
         return $this->tenantId;
     }

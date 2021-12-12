@@ -29,8 +29,9 @@
   * `Auth::deleteCustomUserAttributes()`, use `Auth::setCustomUserClaims()` with null values instead
   * `Auth\UserRecord::$customAttributes`, use `Auth\UserRecord::$customClaims` instead
   * `Factory::withEnabledDebug()`, use `Factory::withHttpDebugLogger()` instead
-* Removed deprecated/obsolete internal classes and methods)
+* Removed deprecated/obsolete/internal classes and methods
   * `Kreait\Firebase\Project\ProjectId`
   * `Kreait\Firebase\Value\Provider`
+  * `Kreait\Firebase\Project\TenantId`
 
 [Unreleased]: https://github.com/kreait/firebase-php/compare/5.x...6.x

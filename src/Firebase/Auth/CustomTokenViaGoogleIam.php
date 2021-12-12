@@ -25,9 +25,9 @@ class CustomTokenViaGoogleIam implements Generator
 
     private Configuration $config;
 
-    private ?TenantId $tenantId;
+    private ?string $tenantId;
 
-    public function __construct(string $clientEmail, ClientInterface $client, ?TenantId $tenantId = null)
+    public function __construct(string $clientEmail, ClientInterface $client, ?string $tenantId = null)
     {
         $this->clientEmail = $clientEmail;
         $this->client = $client;
@@ -60,7 +60,7 @@ class CustomTokenViaGoogleIam implements Generator
         ;
 
         if ($this->tenantId !== null) {
-            $builder->withClaim('tenantId', $this->tenantId->toString());
+            $builder->withClaim('tenantId', $this->tenantId);
         }
 
         if (!empty($claims)) {

@@ -200,7 +200,7 @@ final class GuzzleHandler implements Handler
         $body = self::$defaultBody;
 
         if ($action instanceof IsTenantAware && $tenantId = $action->tenantId()) {
-            $body['tenantId'] = $tenantId->toString();
+            $body['tenantId'] = $tenantId;
         }
 
         return $body;

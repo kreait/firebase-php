@@ -37,7 +37,6 @@ use Kreait\Firebase;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
 use Kreait\Firebase\Auth\DisabledLegacyCustomTokenGenerator;
 use Kreait\Firebase\Auth\IdTokenVerifier;
-use Kreait\Firebase\Auth\TenantId;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Exception\RuntimeException;
@@ -97,7 +96,7 @@ class Factory
     /** @var callable|null */
     protected $databaseAuthVariableOverrideMiddleware;
 
-    protected ?TenantId $tenantId = null;
+    protected ?string $tenantId = null;
 
     protected HttpClientOptions $httpClientOptions;
 
@@ -144,7 +143,7 @@ class Factory
     public function withTenantId(string $tenantId): self
     {
         $factory = clone $this;
-        $factory->tenantId = TenantId::fromString($tenantId);
+        $factory->tenantId = $tenantId;
 
         return $factory;
     }
@@ -389,7 +388,7 @@ class Factory
 
         if ($clientEmail && $privateKey !== '') {
             if ($this->tenantId !== null) {
-                return new TenantAwareGenerator($this->tenantId->toString(), (string) $clientEmail, $privateKey);
+                return new TenantAwareGenerator($this->tenantId, (string) $clientEmail, $privateKey);
             }
 
             return new CustomTokenGenerator((string) $clientEmail, $privateKey);
@@ -411,7 +410,7 @@ class Factory
         $baseVerifier = new LegacyIdTokenVerifier($this->getProjectId(), $keyStore);
 
         if ($this->tenantId !== null) {
-            $baseVerifier = new TenantAwareVerifier($this->tenantId->toString(), $baseVerifier);
+            $baseVerifier = new TenantAwareVerifier($this->tenantId, $baseVerifier);
         }
 
         return new IdTokenVerifier($baseVerifier, $this->clock);
@@ -584,7 +583,7 @@ class Factory
             'defaultStorageBucket' => $this->defaultStorageBucket,
             'projectId' => $projectId,
             'serviceAccount' => $serviceAccount,
-            'tenantId' => $this->tenantId ? $this->tenantId->toString() : null,
+            'tenantId' => $this->tenantId,
             'tokenCacheType' => \get_class($this->authTokenCache),
             'verifierCacheType' => \get_class($this->verifierCache),
         ];
