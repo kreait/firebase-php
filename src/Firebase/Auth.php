@@ -426,7 +426,7 @@ class Auth implements Contract\Auth
 
     public function confirmPasswordResetAndReturnEmail(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): string
     {
-        $newPassword = $newPassword instanceof ClearTextPassword ? $newPassword : new ClearTextPassword($newPassword);
+        $newPassword = (string) (new ClearTextPassword((string) $newPassword));
 
         $response = $this->client->confirmPasswordReset($oobCode, (string) $newPassword);
 
@@ -499,7 +499,7 @@ class Auth implements Contract\Auth
     public function signInWithEmailAndPassword($email, $clearTextPassword): SignInResult
     {
         $email = (string) (new Email((string) $email));
-        $clearTextPassword = $clearTextPassword instanceof ClearTextPassword ? (string) $clearTextPassword : $clearTextPassword;
+        $clearTextPassword = (string) (new ClearTextPassword((string) $clearTextPassword));
 
         $action = SignInWithEmailAndPassword::fromValues($email, $clearTextPassword);
 

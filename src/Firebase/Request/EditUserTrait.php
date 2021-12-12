@@ -24,7 +24,7 @@ trait EditUserTrait
     protected ?string $photoUrl = null;
     protected ?bool $markAsEnabled = null;
     protected ?bool $markAsDisabled = null;
-    protected ?ClearTextPassword $clearTextPassword = null;
+    protected ?string $clearTextPassword = null;
 
     /**
      * @param T $request
@@ -221,14 +221,12 @@ trait EditUserTrait
     }
 
     /**
-     * @param ClearTextPassword|string $clearTextPassword
+     * @param \Stringable|string $clearTextPassword
      */
     public function withClearTextPassword($clearTextPassword): self
     {
         $request = clone $this;
-        $request->clearTextPassword = $clearTextPassword instanceof ClearTextPassword
-            ? $clearTextPassword
-            : new ClearTextPassword($clearTextPassword);
+        $request->clearTextPassword = (string) (new ClearTextPassword((string) $clearTextPassword));
 
         return $request;
     }

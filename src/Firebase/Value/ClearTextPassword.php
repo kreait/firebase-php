@@ -6,13 +6,13 @@ namespace Kreait\Firebase\Value;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
-class ClearTextPassword implements \JsonSerializable
+/**
+ * @internal
+ */
+final class ClearTextPassword implements \JsonSerializable
 {
     private string $value;
 
-    /**
-     * @internal
-     */
     public function __construct(string $value)
     {
         if (\mb_strlen($value) < 6) {

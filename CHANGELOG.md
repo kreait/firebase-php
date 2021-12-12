@@ -11,6 +11,7 @@
     * `Kreait\Firebase\RemoteConfig\User::email()`
 * The following classes are used for validation and have been marked internal. They shouldn't be used directly, as they
   could be updated with breaking changes or get removed entirely in the future.
+    * `Kreait\Firebase\Value\ClearTextPassword`
     * `Kreait\Firebase\Value\Email`
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
