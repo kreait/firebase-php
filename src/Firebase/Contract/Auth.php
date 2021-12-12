@@ -30,7 +30,6 @@ use Kreait\Firebase\Request;
 use Kreait\Firebase\Value\ClearTextPassword;
 use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\PhoneNumber;
-use Kreait\Firebase\Value\Provider;
 use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\UriInterface;
@@ -393,7 +392,7 @@ interface Auth
 
     /**
      * @param Uid|string $uid
-     * @param Provider[]|string[]|string $provider
+     * @param \Stringable[]|string[]|\Stringable|string $provider
      *
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
@@ -440,18 +439,30 @@ interface Auth
      */
     public function signInAnonymously(): SignInResult;
 
+    /**
+     * @deprecated 5.26.0 Use {@see signInWithIdpAccessToken()} with 'twitter.com' instead.
+     */
     public function signInWithTwitterOauthCredential(string $accessToken, string $oauthTokenSecret, ?string $redirectUrl = null, ?string $linkingIdToken = null): SignInResult;
 
+    /**
+     * @deprecated 5.26.0 Use {@see signInWithIdpIdToken()} with 'google.com' instead.
+     */
     public function signInWithGoogleIdToken(string $idToken, ?string $redirectUrl = null, ?string $linkingIdToken = null): SignInResult;
 
+    /**
+     * @deprecated 5.26.0 Use {@see signInWithIdpAccessToken()} with 'facebook.com' instead.
+     */
     public function signInWithFacebookAccessToken(string $accessToken, ?string $redirectUrl = null, ?string $linkingIdToken = null): SignInResult;
 
+    /**
+     * @deprecated 5.26.0 Use {@see signInWithIdpIdToken()} with 'apple.com' instead.
+     */
     public function signInWithAppleIdToken(string $idToken, ?string $rawNonce = null, ?string $redirectUrl = null, ?string $linkingIdToken = null): SignInResult;
 
     /**
      * @see https://cloud.google.com/identity-platform/docs/reference/rest/v1/accounts/signInWithIdp
      *
-     * @param Provider|string $provider
+     * @param \Stringable|string $provider
      * @param UriInterface|string|null $redirectUrl
      *
      * @throws FailedToSignIn
@@ -459,7 +470,7 @@ interface Auth
     public function signInWithIdpAccessToken($provider, string $accessToken, $redirectUrl = null, ?string $oauthTokenSecret = null, ?string $linkingIdToken = null, ?string $rawNonce = null): SignInResult;
 
     /**
-     * @param Provider|string $provider
+     * @param \Stringable|string $provider
      * @param Token|string $idToken
      * @param UriInterface|string|null $redirectUrl
      *

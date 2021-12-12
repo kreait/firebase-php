@@ -249,9 +249,10 @@ Sign In with a Refresh Token
 Sign In with IdP credentials
 ----------------------------
 
-IdP (Identitiy Provider) credentials are credentials provided by authentication providers other than Firebase,
+IdP (Identity Provider) credentials are credentials provided by authentication providers other than Firebase,
 for example Facebook, Github, Google or Twitter. You can find the currently supported authentication providers
-in the constants of `https://github.com/kreait/firebase-php/blob/5.x/src/Firebase/Value/Provider.php <https://github.com/kreait/firebase-php/blob/5.x/src/Firebase/Value/Provider.php>`_
+in the
+`official Firebase documentation <https://firebase.google.com/docs/projects/provisioning/configure-oauth#add-idp>`_.
 
 This could be useful if you already have "Sign in with X" implemented in your application, and want to
 authenticate the same user with Firebase.
@@ -260,26 +261,9 @@ Once you have received those credentials, you can use them to sign a user in wit
 
 .. code-block:: php
 
-    // with an access token from Facebook
-    $signInResult = $auth->signInWithFacebookAccessToken($accessToken);
+    $signInResult = $auth->signInWithIdpAccessToken($provider, string $accessToken, $redirectUrl = null, ?string $oauthTokenSecret = null, ?string $linkingIdToken = null, ?string $rawNonce = null);
 
-    // with an ID token from Google
-    $signInResult = $auth->signInWithGoogleIdToken($idToken);
-
-    // with a Twitter OAuth 1.0 credential
-    $signInResult = $auth->signInWithTwitterOauthCredential($accessToken, $oauthTokenSecret);
-
-    // with an ID token from Apple
-    $signInResult = $auth->signInWithAppleIdToken($idToken);
-    $signInResult = $auth->signInWithAppleIdToken($idToken, $rawNonce);
-
-If you're using a different identity provider or prefer using one method for any provider, you can use:
-
-.. code-block:: php
-
-    $signInResult = $auth->signInWithIdpAccessToken($provider, $accessToken, $redirectUrl = null, $oauthTokenSecret = null);
-
-    $signInResult = $auth->signInWithIdpIdToken($provider, $idToken, $redirectUrl = null);
+    $signInResult = $auth->signInWithIdpIdToken($provider, $idToken, $redirectUrl = null, ?string $linkingIdToken = null, ?string $rawNonce = null);
 
 
 Sign In without a token

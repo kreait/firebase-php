@@ -720,34 +720,6 @@ final class AuthTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testSignInWithTwitterOauthCredential(): void
-    {
-        // We can't retrieve a credential programmatically, so we'll test the failure case only
-        $this->expectException(FailedToSignIn::class);
-        $this->auth->signInWithTwitterOauthCredential('access_token', 'oauth_token_secret');
-    }
-
-    public function testSignInWithGoogleIdToken(): void
-    {
-        // We can't retrieve a credential programmatically, so we'll test the failure case only
-        $this->expectException(FailedToSignIn::class);
-        $this->auth->signInWithGoogleIdToken('id_token');
-    }
-
-    public function testSignInWithFacebookAccessToken(): void
-    {
-        // We can't retrieve a credential programmatically, so we'll test the failure case only
-        $this->expectException(FailedToSignIn::class);
-        $this->auth->signInWithFacebookAccessToken('access_token');
-    }
-
-    public function testSignInWithAppleIdToken(): void
-    {
-        // We can't retrieve a credential programmatically, so we'll test the failure case only
-        $this->expectException(FailedToSignIn::class);
-        $this->auth->signInWithAppleIdToken('id_token', 'nonce');
-    }
-
     public function testSignInWithIdpAccessToken(): void
     {
         // I don't know how to retrieve a current user access token programatically, so we'll

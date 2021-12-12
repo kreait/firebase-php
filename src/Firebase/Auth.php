@@ -40,7 +40,6 @@ use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\ClearTextPassword;
 use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\PhoneNumber;
-use Kreait\Firebase\Value\Provider;
 use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Token;
@@ -491,10 +490,7 @@ class Auth implements Contract\Auth
     public function unlinkProvider($uid, $provider): UserRecord
     {
         $uid = $uid instanceof Uid ? $uid : new Uid($uid);
-        $provider = \array_map(
-            static fn ($provider) => $provider instanceof Provider ? $provider : new Provider($provider),
-            (array) $provider
-        );
+        $provider = \array_map('strval', (array) $provider);
 
         $response = $this->client->unlinkProvider((string) $uid, $provider);
 
@@ -589,29 +585,45 @@ class Auth implements Contract\Auth
         throw new FailedToSignIn('Failed to sign in anonymously: No ID token or UID available');
     }
 
+    /**
+     * @deprecated 5.26.0 Use {@see signInWithIdpAccessToken()} with 'twitter.com' instead.
+     * @codeCoverageIgnore
+     */
     public function signInWithTwitterOauthCredential(string $accessToken, string $oauthTokenSecret, ?string $redirectUrl = null, ?string $linkingIdToken = null): SignInResult
     {
-        return $this->signInWithIdpAccessToken(Provider::TWITTER, $accessToken, $redirectUrl, $oauthTokenSecret, $linkingIdToken);
+        return $this->signInWithIdpAccessToken('twitter.com', $accessToken, $redirectUrl, $oauthTokenSecret, $linkingIdToken);
     }
 
+    /**
+     * @deprecated 5.26.0 Use {@see signInWithIdpIdToken()} with 'google.com' instead.
+     * @codeCoverageIgnore
+     */
     public function signInWithGoogleIdToken(string $idToken, ?string $redirectUrl = null, ?string $linkingIdToken = null): SignInResult
     {
-        return $this->signInWithIdpIdToken(Provider::GOOGLE, $idToken, $redirectUrl, $linkingIdToken);
+        return $this->signInWithIdpIdToken('google.com', $idToken, $redirectUrl, $linkingIdToken);
     }
 
+    /**
+     * @deprecated 5.26.0 Use {@see signInWithIdpAccessToken()} with 'facebook.com' instead.
+     * @codeCoverageIgnore
+     */
     public function signInWithFacebookAccessToken(string $accessToken, ?string $redirectUrl = null, ?string $linkingIdToken = null): SignInResult
     {
-        return $this->signInWithIdpAccessToken(Provider::FACEBOOK, $accessToken, $redirectUrl, null, $linkingIdToken);
+        return $this->signInWithIdpAccessToken('facebook.com', $accessToken, $redirectUrl, null, $linkingIdToken);
     }
 
+    /**
+     * @deprecated 5.26.0 Use {@see signInWithIdpIdToken()} with 'apple.com' instead.
+     * @codeCoverageIgnore
+     */
     public function signInWithAppleIdToken(string $idToken, ?string $rawNonce = null, ?string $redirectUrl = null, ?string $linkingIdToken = null): SignInResult
     {
-        return $this->signInWithIdpIdToken(Provider::APPLE, $idToken, $redirectUrl, $linkingIdToken, $rawNonce);
+        return $this->signInWithIdpIdToken('apple.com', $idToken, $redirectUrl, $linkingIdToken, $rawNonce);
     }
 
     public function signInWithIdpAccessToken($provider, string $accessToken, $redirectUrl = null, ?string $oauthTokenSecret = null, ?string $linkingIdToken = null, ?string $rawNonce = null): SignInResult
     {
-        $provider = $provider instanceof Provider ? (string) $provider : $provider;
+        $provider = (string) $provider;
         $redirectUrl = \trim((string) ($redirectUrl ?? 'http://localhost'));
         $linkingIdToken = \trim((string) $linkingIdToken);
         $oauthTokenSecret = \trim((string) $oauthTokenSecret);
@@ -644,7 +656,7 @@ class Auth implements Contract\Auth
 
     public function signInWithIdpIdToken($provider, $idToken, $redirectUrl = null, ?string $linkingIdToken = null, ?string $rawNonce = null): SignInResult
     {
-        $provider = $provider instanceof Provider ? (string) $provider : $provider;
+        $provider = \trim((string) $provider);
         $redirectUrl = \trim((string) ($redirectUrl ?? 'http://localhost'));
         $linkingIdToken = \trim((string) $linkingIdToken);
         $rawNonce = \trim((string) $rawNonce);

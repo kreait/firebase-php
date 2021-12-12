@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Value;
 
+/**
+ * @deprecated 5.26.0 Use provider strings directly
+ * @see https://firebase.google.com/docs/projects/provisioning/configure-oauth#add-idp
+ * @codeCoverageIgnore
+ */
 class Provider implements \JsonSerializable
 {
     public const ANONYMOUS = 'anonymous';

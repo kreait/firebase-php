@@ -4,6 +4,13 @@
 ### Added
 * Ensured compatibility with PHP 8.1
 
+### Deprecated
+* `Kreait\Firebase\Value\Provider`, use provider strings directly ([supported providers](https://firebase.google.com/docs/projects/provisioning/configure-oauth#add-idp))
+* `Kreait\Firebase\Auth::signInWithTwitterOauthCredential()`, use `signInWithIdpAccessToken('twitter.com')` instead
+* `Kreait\Firebase\Auth::signInWithGoogleIdToken()`, use `signInWithIdpIdToken('google.com')` instead
+* `Kreait\Firebase\Auth::signInWithFacebookAccessToken()`, use `signInWithIdpAccessToken('facebook.com')` instead
+* `Kreait\Firebase\Auth::signInWithAppleIdToken()`, use `signInWithIdpIdToken('apple.com')` instead
+
 ## [5.25.0] - 2021-11-01
 ### Added
 * Added support for providing a nonce when signing in with IdP credentials

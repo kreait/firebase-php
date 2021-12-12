@@ -14,7 +14,6 @@ use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Request;
 use Kreait\Firebase\Util\JSON;
-use Kreait\Firebase\Value\Provider;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -191,12 +190,14 @@ class ApiClient
     }
 
     /**
-     * @param array<int, string|Provider> $providers
+     * @param array<int, \Stringable|string> $providers
      *
      * @throws AuthException
      */
     public function unlinkProvider(string $uid, array $providers): ResponseInterface
     {
+        $providers = \array_map('strval', $providers);
+
         return $this->requestApi('setAccountInfo', [
             'localId' => $uid,
             'deleteProvider' => $providers,
