@@ -15,7 +15,6 @@ use PhpCsFixer\Fixer\FunctionNotation\FopenFlagsFixer;
 use PhpCsFixer\Fixer\FunctionNotation\NativeFunctionInvocationFixer;
 use PhpCsFixer\Fixer\FunctionNotation\NoUselessSprintfFixer;
 use PhpCsFixer\Fixer\FunctionNotation\UseArrowFunctionsFixer;
-use PhpCsFixer\Fixer\LanguageConstruct\ErrorSuppressionFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
@@ -52,9 +51,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         PhpdocToCommentFixer::class,
         PhpUnitTestClassRequiresCoversFixer::class,
         PhpUnitStrictFixer::class,
-        ErrorSuppressionFixer::class => [
-            __DIR__.'/src/Firebase/Util/Deprecation.php',
-        ],
     ]);
 
     $services = $containerConfigurator->services();

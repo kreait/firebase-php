@@ -484,46 +484,6 @@ final class AuthTest extends IntegrationTestCase
         $this->assertCount(0, $result->rawErrors());
     }
 
-    public function testGetCustomUserAttributes(): void
-    {
-        $user = $this->auth->createAnonymousUser();
-
-        try {
-            $this->auth->setCustomUserClaims($user->uid, $claims = ['foo' => 'bar']);
-
-            $this->expectDeprecation();
-            $this->assertEquals($claims, $this->auth->getUser($user->uid)->customAttributes);
-        } finally {
-            $this->auth->deleteUser($user->uid);
-        }
-    }
-
-    public function testSetCustomUserAttributes(): void
-    {
-        $user = $this->auth->createAnonymousUser();
-
-        try {
-            $this->expectDeprecation();
-            $updatedUser = $this->auth->setCustomUserAttributes($user->uid, $claims = ['admin' => true, 'groupId' => '1234']);
-
-            $this->assertEquals($claims, $updatedUser->customClaims);
-        } finally {
-            $this->auth->deleteUser($user->uid);
-        }
-    }
-
-    public function testDeleteCustomUserAttributes(): void
-    {
-        $user = $this->auth->createAnonymousUser();
-
-        try {
-            $this->expectDeprecation();
-            $this->auth->setCustomUserAttributes($user->uid, []);
-        } finally {
-            $this->auth->deleteUser($user->uid);
-        }
-    }
-
     public function testSetCustomUserClaims(): void
     {
         $user = $this->auth->createAnonymousUser();

@@ -302,12 +302,6 @@ final class FactoryTest extends UnitTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function testEnablingDebugWithoutALoggerTriggersADeprecation(): void
-    {
-        $this->expectDeprecation();
-        $this->factory->withEnabledDebug();
-    }
-
     public function testItAcceptsNewHttpClientOptions(): void
     {
         $this->factory->withHttpClientOptions(HttpClientOptions::default());

@@ -247,7 +247,7 @@ responses will then be pushed to this logger with their full headers and bodies.
 
 .. code-block:: php
 
-    $factory = $factory->withEnabledDebug($logger);
+    $factory = $factory->withHttpDebugLogger($logger);
 
 If you want to make sure that the Factory has the configuration you expect it to have,
 call the ``getDebugInfo()`` method:

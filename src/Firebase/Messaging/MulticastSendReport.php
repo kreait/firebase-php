@@ -90,17 +90,6 @@ final class MulticastSendReport implements Countable
     }
 
     /**
-     * @deprecated 5.14.0
-     */
-    public function withAdded(SendReport $report): self
-    {
-        $new = clone $this;
-        $new->items[] = $report;
-
-        return $new;
-    }
-
-    /**
      * @return SendReport[]
      */
     public function getItems(): array

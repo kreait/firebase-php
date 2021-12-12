@@ -85,13 +85,6 @@ class Factory
 
     protected bool $discoveryIsDisabled = false;
 
-    protected bool $guzzleDebugModeIsEnabled = false;
-
-    /**
-     * @deprecated 5.7.0 Use {@see withClientOptions} instead.
-     */
-    protected ?string $httpProxy = null;
-
     protected static string $databaseUriPattern = 'https://%s.firebaseio.com';
 
     protected static string $storageBucketNamePattern = '%s.appspot.com';
@@ -221,22 +214,6 @@ class Factory
         return $factory;
     }
 
-    public function withEnabledDebug(?LoggerInterface $logger = null): self
-    {
-        $factory = clone $this;
-
-        if ($logger !== null) {
-            $factory = $factory->withHttpDebugLogger($logger);
-        } else {
-            Firebase\Util\Deprecation::trigger(__METHOD__.' without a '.LoggerInterface::class);
-            // @codeCoverageIgnoreStart
-            $factory->guzzleDebugModeIsEnabled = true;
-            // @codeCoverageIgnoreEnd
-        }
-
-        return $factory;
-    }
-
     public function withHttpClientOptions(HttpClientOptions $options): self
     {
         $factory = clone $this;
@@ -265,17 +242,6 @@ class Factory
 
         $factory = clone $this;
         $factory->httpDebugLogMiddleware = Middleware::log($logger, $formatter, $logLevel, $errorLogLevel);
-
-        return $factory;
-    }
-
-    public function withHttpProxy(string $proxy): self
-    {
-        $factory = $this->withHttpClientOptions(
-            $this->httpClientOptions->withProxy($proxy)
-        );
-
-        $factory->httpProxy = $factory->httpClientOptions->proxy();
 
         return $factory;
     }
@@ -670,12 +636,6 @@ class Factory
     public function createApiClient(?array $config = null): Client
     {
         $config ??= [];
-
-        // @codeCoverageIgnoreStart
-        if ($this->guzzleDebugModeIsEnabled) {
-            $config[RequestOptions::DEBUG] = true;
-        }
-        // @codeCoverageIgnoreEnd
 
         if ($proxy = $this->httpClientOptions->proxy()) {
             $config[RequestOptions::PROXY] = $proxy;

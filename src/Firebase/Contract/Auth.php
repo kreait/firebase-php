@@ -234,30 +234,6 @@ interface Auth
     public function sendSignInWithEmailLink($email, $actionCodeSettings = null, ?string $locale = null): void;
 
     /**
-     * @param Uid|string $uid
-     * @param array<string, mixed> $attributes
-     *
-     * @throws Exception\AuthException
-     * @throws Exception\FirebaseException
-     *
-     * @deprecated 5.4.0 use {@see setCustomUserClaims}($id, array $claims) instead
-     * @see setCustomUserClaims
-     * @codeCoverageIgnore
-     */
-    public function setCustomUserAttributes($uid, array $attributes): UserRecord;
-
-    /**
-     * @param Uid|string $uid
-     *
-     * @throws Exception\AuthException
-     * @throws Exception\FirebaseException
-     *
-     * @see removeCustomUserClaims
-     * @deprecated 5.4.0 use {@see setCustomUserClaims}($uid) instead
-     */
-    public function deleteCustomUserAttributes($uid): UserRecord;
-
-    /**
      * Sets additional developer claims on an existing user identified by the provided UID.
      *
      * @see https://firebase.google.com/docs/auth/admin/custom-claims

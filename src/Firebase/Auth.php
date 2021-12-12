@@ -34,7 +34,6 @@ use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Project\ProjectId;
-use Kreait\Firebase\Util\Deprecation;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\ClearTextPassword;
@@ -346,34 +345,6 @@ class Auth implements Contract\Auth
     public function sendSignInWithEmailLink($email, $actionCodeSettings = null, ?string $locale = null): void
     {
         $this->sendEmailActionLink('EMAIL_SIGNIN', $email, $actionCodeSettings, $locale);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated 5.4.0 use {@see setCustomUserClaims}($id, array $claims) instead
-     */
-    public function setCustomUserAttributes($uid, array $attributes): UserRecord
-    {
-        Deprecation::trigger(__METHOD__, __CLASS__.'::setCustomUserClaims($uid, $claims)');
-
-        $this->setCustomUserClaims($uid, $attributes);
-
-        return $this->getUser($uid);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated 5.4.0 use {@see setCustomUserClaims}($uid) instead
-     */
-    public function deleteCustomUserAttributes($uid): UserRecord
-    {
-        Deprecation::trigger(__METHOD__, __CLASS__.'::setCustomUserClaims($uid, null)');
-
-        $this->setCustomUserClaims($uid, null);
-
-        return $this->getUser($uid);
     }
 
     public function setCustomUserClaims($uid, ?array $claims): void

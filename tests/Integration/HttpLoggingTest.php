@@ -36,7 +36,7 @@ final class HttpLoggingTest extends IntegrationTestCase
 
         $this->auth = self::$factory->createAuth();
         $this->authWithLogger = self::$factory->withHttpLogger($this->logger)->createAuth();
-        $this->authWithDebugLogger = self::$factory->withEnabledDebug($this->debugLogger)->createAuth();
+        $this->authWithDebugLogger = self::$factory->withHttpDebugLogger($this->debugLogger)->createAuth();
     }
 
     public function testItLogsSuccesses(): void

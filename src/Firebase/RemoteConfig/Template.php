@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Kreait\Firebase\RemoteConfig;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\Util\JSON;
-use Psr\Http\Message\ResponseInterface;
 
 class Template implements \JsonSerializable
 {
@@ -30,21 +28,6 @@ class Template implements \JsonSerializable
     public static function new(): self
     {
         return new self();
-    }
-
-    /**
-     * @internal
-     *
-     * @deprecated 5.10.0
-     * @codeCoverageIgnore
-     */
-    public static function fromResponse(ResponseInterface $response): self
-    {
-        $etagHeader = $response->getHeader('ETag');
-        $etag = \array_shift($etagHeader) ?: '*';
-        $data = JSON::decode((string) $response->getBody(), true);
-
-        return self::fromArray($data, $etag);
     }
 
     /**
