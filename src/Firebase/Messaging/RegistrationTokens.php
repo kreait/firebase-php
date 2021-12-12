@@ -57,7 +57,7 @@ final class RegistrationTokens implements Countable, IteratorAggregate
      *
      * @return Traversable<RegistrationToken>|RegistrationToken[]
      */
-    public function getIterator(): iterable
+    public function getIterator(): Traversable
     {
         yield from $this->tokens;
     }

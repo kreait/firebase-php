@@ -36,17 +36,18 @@
         "psr/log": "^1.1|^2.0|^3.0",
         "psr/simple-cache": "^1.0",
         "riverline/multipart-parser": "^2.0.8",
-        "symfony/polyfill-php80": "^1.23"
+        "symfony/polyfill-php80": "^1.23",
+        "symfony/polyfill-php81": "^1.23"
     },
     "require-dev": {
         "giggsey/libphonenumber-for-php": "^8.12.27",
         "google/cloud-firestore": "^1.19.3",
         "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^0.12.92",
-        "phpstan/phpstan-phpunit": "^0.12.21",
+        "phpstan/phpstan": "^1.2",
+        "phpstan/phpstan-phpunit": "^1.0",
         "phpunit/phpunit": "^9.5.10",
-        "rector/rector": "^0.11.57",
-        "symfony/var-dumper": "^5.3.3",
+        "rector/rector": "^0.12.5",
+        "symfony/var-dumper": "^5.4|^6.0",
         "symplify/easy-coding-standard": "^9.4"
     },
     "suggest": {

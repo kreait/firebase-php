@@ -26,7 +26,7 @@ final class Messages implements Countable, IteratorAggregate
      *
      * @return Traversable<Message>|Message[]
      */
-    public function getIterator(): iterable
+    public function getIterator(): Traversable
     {
         yield from $this->messages;
     }

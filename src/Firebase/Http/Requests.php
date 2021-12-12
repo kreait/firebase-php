@@ -51,7 +51,7 @@ final class Requests implements IteratorAggregate
      *
      * @return Traversable<RequestInterface>|RequestInterface[]
      */
-    public function getIterator(): iterable
+    public function getIterator(): Traversable
     {
         yield from $this->requests;
     }

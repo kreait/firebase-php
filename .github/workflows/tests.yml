@@ -12,12 +12,12 @@ jobs:
 
     strategy:
       matrix:
-        php: ["7.4", "8.0"]
+        php: ["7.4", "8.0", "8.1"]
         stability: ["prefer-stable", "prefer-lowest"]
 
     env:
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
-      key: cache-v6 # can be any string, change to clear the extension cache.
+      key: cache-unit-6x-${{ matrix.php }}-v1
 
     steps:
       - name: Checkout code

@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Added
+* Ensured compatibility with PHP 8.1
 
 ## [5.25.0] - 2021-11-01
 ### Added
@@ -313,7 +315,7 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.25.0...HEAD
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.25.0...5.x
 [5.25.0]: https://github.com/kreait/firebase-php/compare/5.24.0...5.25.0
 [5.24.0]: https://github.com/kreait/firebase-php/compare/5.23.0...5.24.0
 [5.23.0]: https://github.com/kreait/firebase-php/compare/5.22.0...5.23.0

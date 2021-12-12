@@ -31,7 +31,7 @@ final class TopicSubscriptions implements Countable, IteratorAggregate
      *
      * @return Traversable<TopicSubscription>|TopicSubscription[]
      */
-    public function getIterator(): iterable
+    public function getIterator(): Traversable
     {
         yield from $this->subscriptions;
     }

@@ -10,6 +10,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
 
 /**
  * @group Firestore
+ * @requires PHP < 8.1
  *
  * @internal
  */
