@@ -43,7 +43,6 @@ use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\Http\HttpClientOptions;
 use Kreait\Firebase\Http\Middleware;
-use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Value\Email;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\UriInterface;
@@ -73,7 +72,7 @@ class Factory
 
     protected ?CredentialsLoader $googleAuthTokenCredentials = null;
 
-    protected ?ProjectId $projectId = null;
+    protected ?string $projectId = null;
 
     protected ?string $clientEmail = null;
 
@@ -129,7 +128,7 @@ class Factory
     public function withProjectId(string $projectId): self
     {
         $factory = clone $this;
-        $factory->projectId = ProjectId::fromString($projectId);
+        $factory->projectId = $projectId;
 
         return $factory;
     }
@@ -285,7 +284,7 @@ class Factory
         return null;
     }
 
-    protected function getProjectId(): ProjectId
+    protected function getProjectId(): string
     {
         if ($this->projectId !== null) {
             return $this->projectId;
@@ -294,7 +293,7 @@ class Factory
         $serviceAccount = $this->getServiceAccount();
 
         if ($serviceAccount !== null) {
-            return $this->projectId = ProjectId::fromString($serviceAccount->getProjectId());
+            return $this->projectId = $serviceAccount->getProjectId();
         }
 
         if ($this->discoveryIsDisabled) {
@@ -306,11 +305,11 @@ class Factory
             && ($credentials instanceof ProjectIdProviderInterface)
             && ($projectId = $credentials->getProjectId())
         ) {
-            return $this->projectId = ProjectId::fromString($projectId);
+            return $this->projectId = $projectId;
         }
 
         if ($projectId = Util::getenv('GOOGLE_CLOUD_PROJECT')) {
-            return $this->projectId = ProjectId::fromString($projectId);
+            return $this->projectId = $projectId;
         }
 
         throw new RuntimeException('Unable to determine the Firebase Project ID');
@@ -350,7 +349,7 @@ class Factory
     protected function getDatabaseUri(): UriInterface
     {
         if ($this->databaseUri === null) {
-            $this->databaseUri = GuzzleUtils::uriFor(\sprintf(self::$databaseUriPattern, $this->getProjectId()->sanitizedValue()));
+            $this->databaseUri = GuzzleUtils::uriFor(\sprintf(self::$databaseUriPattern, $this->getProjectId()));
         }
 
         return $this->databaseUri;
@@ -359,7 +358,7 @@ class Factory
     protected function getStorageBucketName(): string
     {
         if ($this->defaultStorageBucket === null) {
-            $this->defaultStorageBucket = \sprintf(self::$storageBucketNamePattern, $this->getProjectId()->sanitizedValue());
+            $this->defaultStorageBucket = \sprintf(self::$storageBucketNamePattern, $this->getProjectId());
         }
 
         return $this->defaultStorageBucket;
@@ -409,7 +408,7 @@ class Factory
     {
         $keyStore = new HttpKeyStore(new Client(), $this->verifierCache);
 
-        $baseVerifier = new LegacyIdTokenVerifier($this->getProjectId()->sanitizedValue(), $keyStore);
+        $baseVerifier = new LegacyIdTokenVerifier($this->getProjectId(), $keyStore);
 
         if ($this->tenantId !== null) {
             $baseVerifier = new TenantAwareVerifier($this->tenantId->toString(), $baseVerifier);
@@ -436,7 +435,7 @@ class Factory
     public function createRemoteConfig(): Contract\RemoteConfig
     {
         $http = $this->createApiClient([
-            'base_uri' => "https://firebaseremoteconfig.googleapis.com/v1/projects/{$this->getProjectId()->value()}/remoteConfig",
+            'base_uri' => "https://firebaseremoteconfig.googleapis.com/v1/projects/{$this->getProjectId()}/remoteConfig",
         ]);
 
         return new RemoteConfig(new RemoteConfig\ApiClient($http));
@@ -450,7 +449,7 @@ class Factory
 
         $messagingApiClient = new Messaging\ApiClient(
             $this->createApiClient([
-                'base_uri' => 'https://fcm.googleapis.com/v1/projects/'.$projectId->value(),
+                'base_uri' => 'https://fcm.googleapis.com/v1/projects/'.$projectId,
             ]),
             $errorHandler
         );
@@ -495,7 +494,7 @@ class Factory
         }
 
         if ($projectId !== null) {
-            $config['projectId'] = $projectId->value();
+            $config['projectId'] = $projectId;
         }
 
         try {
@@ -509,8 +508,10 @@ class Factory
 
     public function createStorage(): Contract\Storage
     {
-        $config = [];
-        $projectId = $this->getProjectId();
+        $config = [
+            'projectId' => $this->getProjectId(),
+        ];
+
         $serviceAccount = $this->getServiceAccount();
 
         if ($serviceAccount !== null) {
@@ -518,8 +519,6 @@ class Factory
         } elseif ($this->discoveryIsDisabled) {
             throw new RuntimeException('Unable to create a Storage Client without credentials');
         }
-
-        $config['projectId'] = $projectId->value();
 
         try {
             $storageClient = new StorageClient($config);
@@ -538,7 +537,7 @@ class Factory
      *     databaseUrl: string,
      *     defaultStorageBucket: string|null,
      *     serviceAccount: null|string|array<string, string>,
-     *     projectId: string|null,
+     *     projectId: string,
      *     tenantId: string|null,
      *     tokenCacheType: class-string,
      *     verifierCacheType: class-string,
@@ -547,7 +546,7 @@ class Factory
     public function getDebugInfo(): array
     {
         try {
-            $projectId = $this->getProjectId()->value();
+            $projectId = $this->getProjectId();
         } catch (Throwable $e) {
             $projectId = $e->getMessage();
         }
