@@ -162,9 +162,9 @@ class Auth implements Contract\Auth
 
     public function getUserByEmail($email): UserRecord
     {
-        $email = $email instanceof Email ? $email : new Email($email);
+        $email = (string) (new Email((string) $email));
 
-        $response = $this->client->getUserByEmail((string) $email);
+        $response = $this->client->getUserByEmail($email);
 
         $data = JSON::decode((string) $response->getBody(), true);
 
@@ -244,7 +244,7 @@ class Auth implements Contract\Auth
 
     public function getEmailActionLink(string $type, $email, $actionCodeSettings = null, ?string $locale = null): string
     {
-        $email = $email instanceof Email ? $email : new Email($email);
+        $email = (string) (new Email((string) $email));
 
         if ($actionCodeSettings === null) {
             $actionCodeSettings = ValidatedActionCodeSettings::empty();
@@ -263,7 +263,7 @@ class Auth implements Contract\Auth
 
     public function sendEmailActionLink(string $type, $email, $actionCodeSettings = null, ?string $locale = null): void
     {
-        $email = $email instanceof Email ? $email : new Email($email);
+        $email = (string) (new Email((string) $email));
 
         if ($actionCodeSettings === null) {
             $actionCodeSettings = ValidatedActionCodeSettings::empty();
@@ -411,13 +411,11 @@ class Auth implements Contract\Auth
         $this->verifyPasswordResetCodeAndReturnEmail($oobCode);
     }
 
-    public function verifyPasswordResetCodeAndReturnEmail(string $oobCode): Email
+    public function verifyPasswordResetCodeAndReturnEmail(string $oobCode): string
     {
         $response = $this->client->verifyPasswordResetCode($oobCode);
 
-        $email = JSON::decode((string) $response->getBody(), true)['email'];
-
-        return new Email($email);
+        return JSON::decode((string) $response->getBody(), true)['email'];
     }
 
     public function confirmPasswordReset(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): void
@@ -426,7 +424,7 @@ class Auth implements Contract\Auth
         $this->confirmPasswordResetAndReturnEmail($oobCode, $newPassword, $invalidatePreviousSessions);
     }
 
-    public function confirmPasswordResetAndReturnEmail(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): Email
+    public function confirmPasswordResetAndReturnEmail(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): string
     {
         $newPassword = $newPassword instanceof ClearTextPassword ? $newPassword : new ClearTextPassword($newPassword);
 
@@ -438,7 +436,7 @@ class Auth implements Contract\Auth
             $this->revokeRefreshTokens($this->getUserByEmail($email)->uid);
         }
 
-        return new Email($email);
+        return $email;
     }
 
     public function revokeRefreshTokens($uid): void
@@ -500,7 +498,7 @@ class Auth implements Contract\Auth
 
     public function signInWithEmailAndPassword($email, $clearTextPassword): SignInResult
     {
-        $email = $email instanceof Email ? (string) $email : $email;
+        $email = (string) (new Email((string) $email));
         $clearTextPassword = $clearTextPassword instanceof ClearTextPassword ? (string) $clearTextPassword : $clearTextPassword;
 
         $action = SignInWithEmailAndPassword::fromValues($email, $clearTextPassword);
@@ -514,7 +512,7 @@ class Auth implements Contract\Auth
 
     public function signInWithEmailAndOobCode($email, string $oobCode): SignInResult
     {
-        $email = $email instanceof Email ? (string) $email : $email;
+        $email = (string) (new Email((string) $email));
 
         $action = SignInWithEmailAndOobCode::fromValues($email, $oobCode);
 

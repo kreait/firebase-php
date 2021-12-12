@@ -28,8 +28,6 @@ use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Request;
 use Kreait\Firebase\Value\ClearTextPassword;
-use Kreait\Firebase\Value\Email;
-use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Token;
 use Psr\Http\Message\UriInterface;
 use Traversable;
@@ -85,7 +83,7 @@ interface Auth
     public function updateUser($uid, $properties): UserRecord;
 
     /**
-     * @param Email|string $email
+     * @param \Stringable|string $email
      * @param ClearTextPassword|string $password
      *
      * @throws Exception\AuthException
@@ -94,7 +92,7 @@ interface Auth
     public function createUserWithEmailAndPassword($email, $password): UserRecord;
 
     /**
-     * @param Email|string $email
+     * @param \Stringable|string $email
      *
      * @throws UserNotFound
      * @throws Exception\AuthException
@@ -127,7 +125,7 @@ interface Auth
 
     /**
      * @param \Stringable|string $uid
-     * @param Email|string $newEmail
+     * @param \Stringable|string $newEmail
      *
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
@@ -168,7 +166,7 @@ interface Auth
     public function deleteUsers(iterable $uids, bool $forceDeleteEnabledUsers = false): DeleteUsersResult;
 
     /**
-     * @param Email|string $email
+     * @param \Stringable|string $email
      * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws FailedToCreateActionLink
@@ -176,7 +174,7 @@ interface Auth
     public function getEmailActionLink(string $type, $email, $actionCodeSettings = null, ?string $locale = null): string;
 
     /**
-     * @param Email|string $email
+     * @param \Stringable|string $email
      * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws UserNotFound
@@ -185,7 +183,7 @@ interface Auth
     public function sendEmailActionLink(string $type, $email, $actionCodeSettings = null, ?string $locale = null): void;
 
     /**
-     * @param Email|string $email
+     * @param \Stringable|string $email
      * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws FailedToCreateActionLink
@@ -193,7 +191,7 @@ interface Auth
     public function getEmailVerificationLink($email, $actionCodeSettings = null, ?string $locale = null): string;
 
     /**
-     * @param Email|string $email
+     * @param \Stringable|string $email
      * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws FailedToSendActionLink
@@ -201,7 +199,7 @@ interface Auth
     public function sendEmailVerificationLink($email, $actionCodeSettings = null, ?string $locale = null): void;
 
     /**
-     * @param Email|string $email
+     * @param \Stringable|string $email
      * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws FailedToCreateActionLink
@@ -209,7 +207,7 @@ interface Auth
     public function getPasswordResetLink($email, $actionCodeSettings = null, ?string $locale = null): string;
 
     /**
-     * @param Email|string $email
+     * @param \Stringable|string $email
      * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws FailedToSendActionLink
@@ -217,7 +215,7 @@ interface Auth
     public function sendPasswordResetLink($email, $actionCodeSettings = null, ?string $locale = null): void;
 
     /**
-     * @param Email|string $email
+     * @param \Stringable|string $email
      * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws FailedToCreateActionLink
@@ -225,7 +223,7 @@ interface Auth
     public function getSignInWithEmailLink($email, $actionCodeSettings = null, ?string $locale = null): string;
 
     /**
-     * @param Email|string $email
+     * @param \Stringable|string $email
      * @param ActionCodeSettings|array<string, mixed>|null $actionCodeSettings
      *
      * @throws FailedToSendActionLink
@@ -318,7 +316,7 @@ interface Auth
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      */
-    public function verifyPasswordResetCodeAndReturnEmail(string $oobCode): Email;
+    public function verifyPasswordResetCodeAndReturnEmail(string $oobCode): string;
 
     /**
      * Applies the password reset requested via the given OOB code.
@@ -354,7 +352,7 @@ interface Auth
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      */
-    public function confirmPasswordResetAndReturnEmail(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): Email;
+    public function confirmPasswordResetAndReturnEmail(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): string;
 
     /**
      * Revokes all refresh tokens for the specified user identified by the uid provided.
@@ -399,7 +397,7 @@ interface Auth
     public function signInWithRefreshToken(string $refreshToken): SignInResult;
 
     /**
-     * @param string|Email $email
+     * @param \Stringable|string $email
      * @param string|ClearTextPassword $clearTextPassword
      *
      * @throws FailedToSignIn
@@ -407,7 +405,7 @@ interface Auth
     public function signInWithEmailAndPassword($email, $clearTextPassword): SignInResult;
 
     /**
-     * @param string|Email $email
+     * @param \Stringable|string $email
      *
      * @throws FailedToSignIn
      */

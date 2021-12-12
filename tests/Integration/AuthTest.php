@@ -529,7 +529,7 @@ final class AuthTest extends IntegrationTestCase
         $email = $this->auth->verifyPasswordResetCodeAndReturnEmail($query['oobCode']);
 
         try {
-            $this->assertTrue($email->equalsTo($user->email));
+            $this->assertSame($email, $user->email);
         } finally {
             $this->deleteUser($user);
         }
@@ -552,7 +552,7 @@ final class AuthTest extends IntegrationTestCase
         $email = $this->auth->confirmPasswordResetAndReturnEmail($query['oobCode'], 'newPassword123');
 
         try {
-            $this->assertTrue($email->equalsTo($user->email));
+            $this->assertSame($email, $user->email);
         } finally {
             $this->deleteUser($user);
         }
@@ -570,7 +570,7 @@ final class AuthTest extends IntegrationTestCase
         \sleep(1); // wait for a second
 
         try {
-            $this->assertTrue($email->equalsTo($user->email));
+            $this->assertSame($email, $user->email);
             // $this->assertGreaterThan($user->tokensValidAfterTime, $this->auth->getUser($user->uid)->tokensValidAfterTime);
         } finally {
             $this->deleteUser($user);

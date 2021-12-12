@@ -9,7 +9,6 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use InvalidArgumentException;
 use Kreait\Firebase\DynamicLink\AnalyticsInfo;
 use Kreait\Firebase\DynamicLink\AnalyticsInfo\GooglePlayAnalytics;
 use Kreait\Firebase\DynamicLink\AnalyticsInfo\ITunesConnectAnalytics;
@@ -96,12 +95,6 @@ final class DynamicLinksTest extends TestCase
         $this->assertEquals($responseData, \json_decode(JSON::encode($dynamicLink), true));
     }
 
-    public function testItRejectsAnInvalidCreationParameter(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->service->createShortLink(true);
-    }
-
     public function testCreationFailsIfNoConnectionIsAvailable(): void
     {
         $connectionError = new ConnectException('Connection error', $this->createMock(RequestInterface::class));
@@ -155,12 +148,6 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
         $this->assertEquals($responseData, \json_decode(JSON::encode($dynamicLink), true));
-    }
-
-    public function testItRejectsAnInvalidShorteningParameter(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->service->shortenLongDynamicLink(true);
     }
 
     public function testShorteningFailsIfNoConnectionIsAvailable(): void
@@ -264,12 +251,6 @@ final class DynamicLinksTest extends TestCase
         $this->assertCount(10, $eventStats->onAndroid()->appReOpens());
         $this->assertCount(0, $eventStats->onDesktop()->appReOpens());
         $this->assertCount(20, $eventStats->onIOS()->appReOpens());
-    }
-
-    public function testItRejectsAnInvalidLinkStatsParameter(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->service->getStatistics(true);
     }
 
     public function testLinkStatsFailIfNoConnectionIsAvailable(): void

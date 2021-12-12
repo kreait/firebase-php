@@ -17,7 +17,7 @@ use Kreait\Firebase\Value\Url;
 trait EditUserTrait
 {
     protected ?string $uid = null;
-    protected ?Email $email = null;
+    protected ?string $email = null;
     protected ?string $displayName = null;
     protected ?bool $emailIsVerified = null;
     protected ?string $phoneNumber = null;
@@ -120,35 +120,35 @@ trait EditUserTrait
     }
 
     /**
-     * @param Email|string $email
+     * @param \Stringable|string $email
      */
     public function withEmail($email): self
     {
         $request = clone $this;
-        $request->email = $email instanceof Email ? $email : new Email($email);
+        $request->email = (string) (new Email((string) $email));
 
         return $request;
     }
 
     /**
-     * @param Email|string $email
+     * @param \Stringable|string $email
      */
     public function withVerifiedEmail($email): self
     {
         $request = clone $this;
-        $request->email = $email instanceof Email ? $email : new Email($email);
+        $request->email = (string) (new Email((string) $email));
         $request->emailIsVerified = true;
 
         return $request;
     }
 
     /**
-     * @param Email|string $email
+     * @param \Stringable|string $email
      */
     public function withUnverifiedEmail($email): self
     {
         $request = clone $this;
-        $request->email = $email instanceof Email ? $email : new Email($email);
+        $request->email = (string) (new Email((string) $email));
         $request->emailIsVerified = false;
 
         return $request;
