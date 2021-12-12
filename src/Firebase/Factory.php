@@ -45,7 +45,6 @@ use Kreait\Firebase\Http\HttpClientOptions;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Value\Email;
-use Kreait\Firebase\Value\Url;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\Log\LoggerInterface;
@@ -470,13 +469,13 @@ class Factory
     }
 
     /**
-     * @param string|Url|UriInterface|mixed $defaultDynamicLinksDomain
+     * @param \Stringable|string|null $defaultDynamicLinksDomain
      */
     public function createDynamicLinksService($defaultDynamicLinksDomain = null): Contract\DynamicLinks
     {
         $apiClient = $this->createApiClient();
 
-        if ($defaultDynamicLinksDomain) {
+        if ($defaultDynamicLinksDomain !== null) {
             return DynamicLinks::withApiClientAndDefaultDomain($apiClient, $defaultDynamicLinksDomain);
         }
 

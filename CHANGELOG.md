@@ -5,9 +5,10 @@
 * It is now mandatory to provide a Firebase Project ID. When the project ID cannot be determined from the
   provided credentials (usually a service account), it can be provided by setting the `GOOGLE_CLOUD_PROJECT=<project-id>`
   environment variable.
-* The following classes have been marked internal and shouldn't be used directly, as they could be updated with
-  breaking changes or get removed entirely in the future.
+* The following classes are used for validation and have been marked internal. They shouldn't be used directly, as they
+  could be updated with breaking changes or get removed entirely in the future.
     * `Kreait\Firebase\Value\Uid`
+    * `Kreait\Firebase\Value\Url`
 
 ### Removed
 * Removed local phone number validation when `giggsey/libphonenumber-for-php` was installed. Phone numbers are
