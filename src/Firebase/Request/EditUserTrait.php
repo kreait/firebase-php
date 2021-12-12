@@ -16,7 +16,7 @@ use Kreait\Firebase\Value\Url;
  */
 trait EditUserTrait
 {
-    protected ?Uid $uid = null;
+    protected ?string $uid = null;
     protected ?Email $email = null;
     protected ?string $displayName = null;
     protected ?bool $emailIsVerified = null;
@@ -109,12 +109,12 @@ trait EditUserTrait
     }
 
     /**
-     * @param Uid|mixed $uid
+     * @param \Stringable|mixed $uid
      */
     public function withUid($uid): self
     {
         $request = clone $this;
-        $request->uid = $uid instanceof Uid ? $uid : new Uid((string) $uid);
+        $request->uid = (string) (new Uid((string) $uid));
 
         return $request;
     }

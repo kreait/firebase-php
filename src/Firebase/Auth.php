@@ -77,7 +77,7 @@ class Auth implements Contract\Auth
 
     public function getUser($uid): UserRecord
     {
-        $uid = $uid instanceof Uid ? (string) $uid : $uid;
+        $uid = (string) (new Uid((string) $uid));
 
         $userRecord = $this->getUsers([$uid])[$uid] ?? null;
 
@@ -90,11 +90,7 @@ class Auth implements Contract\Auth
 
     public function getUsers(array $uids): array
     {
-        $uids = \array_map(static function ($uid) {
-            $uid = $uid instanceof Uid ? $uid : new Uid($uid);
-
-            return (string) $uid;
-        }, $uids);
+        $uids = \array_map(static fn ($uid) => (string) (new Uid((string) $uid)), $uids);
 
         $users = \array_fill_keys($uids, null);
 
@@ -221,10 +217,10 @@ class Auth implements Contract\Auth
 
     public function deleteUser($uid): void
     {
-        $uid = $uid instanceof Uid ? $uid : new Uid($uid);
+        $uid = (string) (new Uid((string) $uid));
 
         try {
-            $this->client->deleteUser((string) $uid);
+            $this->client->deleteUser($uid);
         } catch (UserNotFound $e) {
             throw new UserNotFound("No user with uid '{$uid}' found.");
         }
@@ -343,7 +339,7 @@ class Auth implements Contract\Auth
 
     public function setCustomUserClaims($uid, ?array $claims): void
     {
-        $uid = $uid instanceof Uid ? (string) $uid : $uid;
+        $uid = (string) (new Uid((string) $uid));
         $claims ??= [];
 
         $this->client->setCustomUserClaims($uid, $claims);
@@ -351,7 +347,7 @@ class Auth implements Contract\Auth
 
     public function createCustomToken($uid, array $claims = []): Token
     {
-        $uid = $uid instanceof Uid ? $uid : new Uid($uid);
+        $uid = (string) (new Uid((string) $uid));
 
         return $this->tokenGenerator->createCustomToken($uid, $claims);
     }
@@ -447,17 +443,17 @@ class Auth implements Contract\Auth
 
     public function revokeRefreshTokens($uid): void
     {
-        $uid = $uid instanceof Uid ? $uid : new Uid($uid);
+        $uid = (string) (new Uid((string) $uid));
 
-        $this->client->revokeRefreshTokens((string) $uid);
+        $this->client->revokeRefreshTokens($uid);
     }
 
     public function unlinkProvider($uid, $provider): UserRecord
     {
-        $uid = $uid instanceof Uid ? $uid : new Uid($uid);
+        $uid = (string) (new Uid((string) $uid));
         $provider = \array_map('strval', (array) $provider);
 
-        $response = $this->client->unlinkProvider((string) $uid, $provider);
+        $response = $this->client->unlinkProvider($uid, $provider);
 
         return $this->getUserRecordFromResponse($response);
     }

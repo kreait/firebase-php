@@ -27,7 +27,7 @@ final class DeleteUsersRequest
     }
 
     /**
-     * @param iterable<Uid|string> $uids
+     * @param iterable<\Stringable|string> $uids
      */
     public static function withUids(string $projectId, iterable $uids, bool $forceDeleteEnabledUsers = false): self
     {
@@ -35,7 +35,7 @@ final class DeleteUsersRequest
         $count = 0;
 
         foreach ($uids as $uid) {
-            $validatedUids[] = (string) (\is_string($uid) ? new Uid(\trim($uid)) : $uid);
+            $validatedUids[] = (string) (new Uid((string) $uid));
             ++$count;
 
             if ($count > self::MAX_BATCH_SIZE) {

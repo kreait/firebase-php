@@ -13,7 +13,6 @@ use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
-use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Token;
 use Throwable;
@@ -38,7 +37,7 @@ class CustomTokenViaGoogleIam implements Generator
     }
 
     /**
-     * @param Uid|string$uid
+     * @param \Stringable|string$uid
      * @param array<string, mixed> $claims
      *
      * @throws AuthException

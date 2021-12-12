@@ -9,7 +9,6 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Util;
 use Kreait\Firebase\Util\JSON;
-use Kreait\Firebase\Value\Uid;
 use Throwable;
 
 abstract class IntegrationTestCase extends FirebaseTestCase
@@ -55,7 +54,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     }
 
     /**
-     * @param UserRecord|Uid|string|null $userOrUid
+     * @param UserRecord|\Stringable|string|null $userOrUid
      */
     protected function deleteUser($userOrUid): void
     {
