@@ -47,6 +47,7 @@ methods.
   validated by the Firebase Service in any case, and even when a phone number was considered valid, in rare
   cases the Firebase API rejected them still.
 * The following classes and methods have been removed:
+  * `Kreait\Firebase\Auth\ActionCodeSettings\RawActionCodeSettings`
   * `Kreait\Firebase\Project\ProjectId`
   * `Kreait\Firebase\Value\Provider`
   * `Kreait\Firebase\Project\TenantId`
