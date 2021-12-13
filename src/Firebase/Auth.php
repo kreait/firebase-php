@@ -30,7 +30,6 @@ use Kreait\Firebase\Exception\Auth\AuthError;
 use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
-use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\JWT\CustomTokenGenerator;
 use Kreait\Firebase\JWT\IdTokenVerifier;
@@ -488,7 +487,7 @@ final class Auth implements Contract\Auth
 
         try {
             $customToken = $this->createCustomToken($uid, $claims);
-        } catch (AuthException $e) {
+        } catch (Throwable $e) {
             throw FailedToSignIn::fromPrevious($e);
         }
 

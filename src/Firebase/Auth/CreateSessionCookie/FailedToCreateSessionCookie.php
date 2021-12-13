@@ -13,7 +13,7 @@ use Throwable;
 final class FailedToCreateSessionCookie extends \RuntimeException implements FirebaseException
 {
     private CreateSessionCookie $action;
-    private ?ResponseInterface $response = null;
+    private ?ResponseInterface $response;
 
     public function __construct(CreateSessionCookie $action, ?ResponseInterface $response, string $message = null, int $code = null, ?Throwable $previous = null)
     {

@@ -412,15 +412,12 @@ class Factory
 
     public function createDatabase(): Contract\Database
     {
-        $http = $this->createApiClient();
+        $middlewares = \array_filter([
+            Firebase\Http\Middleware::ensureJsonSuffix(),
+            $this->databaseAuthVariableOverrideMiddleware,
+        ]);
 
-        /** @var HandlerStack $handler */
-        $handler = $http->getConfig('handler');
-        $handler->push(Firebase\Http\Middleware::ensureJsonSuffix(), 'realtime_database_json_suffix');
-
-        if ($this->databaseAuthVariableOverrideMiddleware) {
-            $handler->push($this->databaseAuthVariableOverrideMiddleware, 'database_auth_variable_override');
-        }
+        $http = $this->createApiClient(null, $middlewares);
 
         return new Database($this->getDatabaseUri(), new Database\ApiClient($http));
     }
@@ -476,18 +473,16 @@ class Factory
 
     public function createFirestore(): Contract\Firestore
     {
-        $config = [];
-        $projectId = $this->getProjectId();
+        $config = [
+            'projectId' => $this->getProjectId(),
+        ];
+
         $serviceAccount = $this->getServiceAccount();
 
         if ($serviceAccount !== null) {
             $config['keyFile'] = $serviceAccount->asArray();
         } elseif ($this->discoveryIsDisabled) {
             throw new RuntimeException('Unable to create a Firestore Client without credentials');
-        }
-
-        if ($projectId !== null) {
-            $config['projectId'] = $projectId;
         }
 
         try {
@@ -587,8 +582,9 @@ class Factory
      * @internal
      *
      * @param array<string, mixed>|null $config
+     * @param array<callable(callable): callable>|null $middlewares
      */
-    public function createApiClient(?array $config = null): Client
+    public function createApiClient(?array $config = null, ?array $middlewares = null): Client
     {
         $config ??= [];
 
@@ -620,6 +616,12 @@ class Factory
 
         if ($this->httpDebugLogMiddleware) {
             $handler->push($this->httpDebugLogMiddleware, 'http_debug_logs');
+        }
+
+        if ($middlewares !== null) {
+            foreach ($middlewares as $middleware) {
+                $handler->push($middleware);
+            }
         }
 
         $credentials = $this->getGoogleAuthTokenCredentials();

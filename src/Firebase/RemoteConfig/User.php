@@ -26,7 +26,7 @@ final class User
     {
         $new = new self();
         $new->name = $data['name'] ?? null;
-        $new->email = ($data['email'] ?? null) ? ((string) $data['email']) : null;
+        $new->email = $data['email'] ?? null;
         $new->imageUri = ($data['imageUrl'] ?? null) ? new Uri($data['imageUrl']) : null;
 
         return $new;

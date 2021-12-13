@@ -36,7 +36,7 @@ class ApiClient
     public function send(RequestInterface $request, array $options = []): ResponseInterface
     {
         try {
-            return $this->client->send($request);
+            return $this->client->send($request, $options);
         } catch (Throwable $e) {
             throw $this->errorHandler->convertException($e);
         }

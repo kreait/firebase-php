@@ -33,6 +33,9 @@ final class MulticastSendReport implements Countable
         return $report;
     }
 
+    /**
+     * @internal
+     */
     public static function fromRequestsAndResponses(Requests $requests, Responses $responses): self
     {
         $reports = [];
