@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Tests\IntegrationTestCase;
-use Lcobucci\JWT\Token\Plain;
 
 /**
  * @internal
@@ -36,21 +35,28 @@ final class TenantAwareAuthTest extends IntegrationTestCase
 
     public function testCustomTokensIncludeTheTenant(): void
     {
-        $token = $this->auth->createCustomToken('some-uid');
+        $user = $this->auth->createAnonymousUser();
 
-        $this->assertInstanceOf(Plain::class, $token);
-        $this->assertSame(self::TENANT_ID, $token->claims()->get('tenant_id'));
+        $token = $this->auth->createCustomToken($user->uid);
+
+        $parsed = $this->auth->parseToken($token->toString());
+
+        try {
+            $this->assertSame(self::TENANT_ID, $parsed->claims()->get('tenant_id'));
+        } finally {
+            $this->auth->deleteUser($user->uid);
+        }
     }
 
     public function it_can_sign_in_anonymously(): void
     {
-        $result = $this->auth->signInAnonymously();
+        $user = $this->auth->createAnonymousUser();
+        $result = $this->auth->signInAsUser($user);
 
         try {
             $this->assertSame(self::TENANT_ID, $result->firebaseTenantId());
-            $this->auth->verifyIdToken($result->idToken());
         } finally {
-            $this->auth->deleteUser($result->firebaseUserId());
+            $this->auth->deleteUser($user->uid);
         }
     }
 
@@ -61,9 +67,8 @@ final class TenantAwareAuthTest extends IntegrationTestCase
 
         try {
             $this->assertSame(self::TENANT_ID, $result->firebaseTenantId());
-            $this->auth->verifyIdToken($result->idToken());
         } finally {
-            $this->auth->deleteUser($result->firebaseUserId());
+            $this->auth->deleteUser($user->uid);
         }
     }
 }

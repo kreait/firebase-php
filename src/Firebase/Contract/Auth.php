@@ -5,11 +5,6 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Contract;
 
 use DateInterval;
-use Firebase\Auth\Token\Exception\ExpiredToken;
-use Firebase\Auth\Token\Exception\InvalidSignature;
-use Firebase\Auth\Token\Exception\InvalidToken;
-use Firebase\Auth\Token\Exception\IssuedInTheFuture;
-use Firebase\Auth\Token\Exception\UnknownKey;
 use InvalidArgumentException;
 use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
@@ -21,6 +16,7 @@ use Kreait\Firebase\Auth\SignInResult;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
+use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\OperationNotAllowed;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
@@ -28,6 +24,7 @@ use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Request;
 use Lcobucci\JWT\Token;
+use Lcobucci\JWT\UnencryptedToken;
 use Psr\Http\Message\UriInterface;
 use Traversable;
 
@@ -252,7 +249,7 @@ interface Auth
      */
     public function createCustomToken($uid, array $claims = [], $ttl = 3600): UnencryptedToken;
 
-    public function parseToken(string $tokenString): Token;
+    public function parseToken(string $tokenString): UnencryptedToken;
 
     /**
      * Creates a new Firebase session cookie with the given lifetime.
@@ -280,16 +277,13 @@ interface Auth
      *
      * @param Token|string $idToken the JWT to verify
      * @param bool $checkIfRevoked whether to check if the ID token is revoked
+     * @param positive-int|null $leewayInSeconds number of seconds to allow a token to be expired, in case that there
+     *                                           is a clock skew between the signing and the verifying server
      *
-     * @throws InvalidArgumentException if the token could not be parsed
-     * @throws InvalidToken if the token could be parsed, but is invalid for any reason (invalid signature, expired, time errors)
-     * @throws InvalidSignature if the signature doesn't match
-     * @throws ExpiredToken if the token is expired
-     * @throws IssuedInTheFuture if the token is issued in the future
-     * @throws UnknownKey if the token's kid header doesnt' contain a known key
+     * @throws FailedToVerifyToken if the token could not be verified
      * @throws RevokedIdToken if the token has been revoked
      */
-    public function verifyIdToken($idToken, bool $checkIfRevoked = false): Token;
+    public function verifyIdToken($idToken, bool $checkIfRevoked = false, int $leewayInSeconds = null): UnencryptedToken;
 
     /**
      * Verifies the given password reset code.

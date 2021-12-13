@@ -10,10 +10,9 @@ use Google\Auth\Credentials\UserRefreshCredentials;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Uri;
-use InvalidArgumentException;
 use Kreait\Clock\FrozenClock;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
-use Kreait\Firebase\Auth\DisabledLegacyCustomTokenGenerator;
+use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Http\HttpClientOptions;
 use Kreait\Firebase\ServiceAccount;
@@ -84,7 +83,7 @@ final class FactoryTest extends UnitTestCase
         \putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->validServiceAccountFile);
 
         $generator = (new Factory())->createCustomTokenGenerator();
-        $this->assertNotInstanceOf(DisabledLegacyCustomTokenGenerator::class, $generator);
+        $this->assertNotNull($generator);
 
         \putenv('GOOGLE_APPLICATION_CREDENTIALS');
     }
@@ -169,9 +168,9 @@ final class FactoryTest extends UnitTestCase
 
     public function testIdTokenVerificationIsPossibleWithoutCredentialsButAProjectId(): void
     {
-        // Invalid argument means that the ID Token Verifier tried to verify but couldn't,
+        // VerificationFailed means that the ID Token Verifier tried to verify but couldn't,
         // meaning it works :)
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(FailedToVerifyToken::class);
 
         (new Factory())
             ->withDisabledAutoDiscovery()

@@ -121,41 +121,33 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
 
 .. code-block:: php
 
-    use Firebase\Auth\Token\Exception\InvalidToken;
+    use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 
     $idTokenString = '...';
 
     try {
         $verifiedIdToken = $auth->verifyIdToken($idTokenString);
-    } catch (InvalidToken $e) {
+    } catch (FailedToVerifyToken $e) {
         echo 'The token is invalid: '.$e->getMessage();
-    } catch (\InvalidArgumentException $e) {
-        echo 'The token could not be parsed: '.$e->getMessage();
     }
 
-    // if you're using lcobucci/jwt ^4.0
-    $uid = $verifiedIdToken->claims()->get('sub');
-    // or, if you're using lcobucci/jwt ^3.0
     $uid = $verifiedIdToken->claims()->get('sub');
 
     $user = $auth->getUser($uid);
 
 ``Auth::verifyIdToken()`` accepts the following parameters:
 
-============================ ============ ===========
-Parameter                    Type         Description
-============================ ============ ===========
-``idToken``                  string|Token **(required)** The ID token to verify
-``checkIfRevoked``           boolean      (optional, default: ``false`` ) check if the ID token is revoked
-============================ ============ ===========
-
-.. note::
-    A leeway of 5 minutes is applied when verifying time based claims starting with release 4.25.0
+============================ ================= ===========
+Parameter                    Type              Description
+============================ ================= ===========
+``idToken``                  string|Token      **(required)** The ID token to verify
+``checkIfRevoked``           boolean           (optional, default: ``false`` ) check if the ID token is revoked
+``leewayInSeconds``          positive-int|null (optional, default: ``null``) number of seconds to allow a token to be expired, in case that there is a clock skew between the signing and the verifying server.
+============================ ================= ===========
 
 .. note::
     This library uses `lcobucci/jwt <https://github.com/lcobucci/jwt>`_ to work with JSON Web Tokens (JWT).
-    You can find the usage instructions at
-    `https://github.com/lcobucci/jwt/blob/3.2/README.md <https://github.com/lcobucci/jwt/blob/3.2/README.md>`_.
+    You can find the usage instructions at `https://lcobucci-jwt.readthedocs.io/ <https://lcobucci-jwt.readthedocs.io/>`_.
 
 
 ***************************

@@ -4,14 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase;
 
-use Firebase\Auth\Token\Cache\InMemoryCache;
-use Firebase\Auth\Token\Domain\Generator;
-use Firebase\Auth\Token\Domain\Verifier;
-use Firebase\Auth\Token\Generator as CustomTokenGenerator;
-use Firebase\Auth\Token\HttpKeyStore;
-use Firebase\Auth\Token\TenantAwareGenerator;
-use Firebase\Auth\Token\TenantAwareVerifier;
-use Firebase\Auth\Token\Verifier as LegacyIdTokenVerifier;
 use Google\Auth\ApplicationDefaultCredentials;
 use Google\Auth\Cache\MemoryCacheItemPool;
 use Google\Auth\Credentials\AppIdentityCredentials;
@@ -35,13 +27,14 @@ use Kreait\Clock;
 use Kreait\Clock\SystemClock;
 use Kreait\Firebase;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
-use Kreait\Firebase\Auth\DisabledLegacyCustomTokenGenerator;
-use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\Http\HttpClientOptions;
 use Kreait\Firebase\Http\Middleware;
+use Kreait\Firebase\JWT\Cache\InMemoryCache;
+use Kreait\Firebase\JWT\CustomTokenGenerator;
+use Kreait\Firebase\JWT\IdTokenVerifier;
 use Kreait\Firebase\Value\Email;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\UriInterface;
@@ -103,7 +96,7 @@ class Factory
     public function __construct()
     {
         $this->clock = new SystemClock();
-        $this->verifierCache = new InMemoryCache();
+        $this->verifierCache = InMemoryCache::createEmpty();
         $this->authTokenCache = new MemoryCacheItemPool();
         $this->httpClientOptions = HttpClientOptions::default();
     }
@@ -377,43 +370,44 @@ class Factory
         $idTokenVerifier = $this->createIdTokenVerifier();
         $signInHandler = new Firebase\Auth\SignIn\GuzzleHandler($httpClient);
 
-        return new Auth($authApiClient, $httpClient, $customTokenGenerator, $idTokenVerifier, $signInHandler, $projectId, $tenantId);
+        return new Auth($authApiClient, $httpClient, $customTokenGenerator, $idTokenVerifier, $signInHandler, $projectId, $tenantId, $this->clock);
     }
 
-    public function createCustomTokenGenerator(): Generator
+    /**
+     * @return CustomTokenGenerator|CustomTokenViaGoogleIam|null
+     */
+    public function createCustomTokenGenerator()
     {
         $serviceAccount = $this->getServiceAccount();
         $clientEmail = $this->getClientEmail();
-        $privateKey = $serviceAccount !== null ? $serviceAccount->getPrivateKey() : '';
+        $privateKey = $serviceAccount !== null ? $serviceAccount->getPrivateKey() : null;
 
-        if ($clientEmail && $privateKey !== '') {
+        if ($clientEmail && $privateKey) {
+            $generator = CustomTokenGenerator::withClientEmailAndPrivateKey($clientEmail, $privateKey);
+
             if ($this->tenantId !== null) {
-                return new TenantAwareGenerator($this->tenantId, (string) $clientEmail, $privateKey);
+                $generator = $generator->withTenantId($this->tenantId);
             }
 
-            return new CustomTokenGenerator((string) $clientEmail, $privateKey);
+            return $generator;
         }
 
         if ($clientEmail !== null) {
-            return new CustomTokenViaGoogleIam((string) $clientEmail, $this->createApiClient(), $this->tenantId);
+            return new CustomTokenViaGoogleIam($clientEmail, $this->createApiClient(), $this->tenantId);
         }
 
-        return new DisabledLegacyCustomTokenGenerator(
-            'Custom Token Generation is disabled because the current credentials do not permit it'
-        );
+        return null;
     }
 
-    public function createIdTokenVerifier(): Verifier
+    public function createIdTokenVerifier(): IdTokenVerifier
     {
-        $keyStore = new HttpKeyStore(new Client(), $this->verifierCache);
-
-        $baseVerifier = new LegacyIdTokenVerifier($this->getProjectId(), $keyStore);
+        $verifier = IdTokenVerifier::createWithProjectIdAndCache($this->getProjectId(), $this->verifierCache);
 
         if ($this->tenantId !== null) {
-            $baseVerifier = new TenantAwareVerifier($this->tenantId, $baseVerifier);
+            $verifier = $verifier->withExpectedTenantId($this->tenantId);
         }
 
-        return new IdTokenVerifier($baseVerifier, $this->clock);
+        return $verifier;
     }
 
     public function createDatabase(): Contract\Database

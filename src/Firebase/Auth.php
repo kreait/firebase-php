@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase;
 
-use Firebase\Auth\Token\Domain\Generator as TokenGenerator;
-use Firebase\Auth\Token\Domain\Verifier;
-use Firebase\Auth\Token\Exception\InvalidToken;
 use GuzzleHttp\ClientInterface;
+use Kreait\Clock;
 use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\CreateActionLink;
 use Kreait\Firebase\Auth\CreateSessionCookie;
+use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
 use Kreait\Firebase\Auth\DeleteUsersRequest;
 use Kreait\Firebase\Auth\DeleteUsersResult;
-use Kreait\Firebase\Auth\IdTokenVerifier;
 use Kreait\Firebase\Auth\SendActionLink;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
@@ -28,9 +26,15 @@ use Kreait\Firebase\Auth\SignInWithEmailAndPassword;
 use Kreait\Firebase\Auth\SignInWithIdpCredentials;
 use Kreait\Firebase\Auth\SignInWithRefreshToken;
 use Kreait\Firebase\Auth\UserRecord;
+use Kreait\Firebase\Exception\Auth\AuthError;
+use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
+use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\JWT\CustomTokenGenerator;
+use Kreait\Firebase\JWT\IdTokenVerifier;
+use Kreait\Firebase\JWT\Value\Duration;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\ClearTextPassword;
@@ -38,6 +42,7 @@ use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Token;
+use Lcobucci\JWT\UnencryptedToken;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Traversable;
@@ -49,20 +54,27 @@ final class Auth implements Contract\Auth
 {
     private ApiClient $client;
     private ClientInterface $httpClient;
-    private TokenGenerator $tokenGenerator;
-    private Verifier $idTokenVerifier;
+
+    /** @var CustomTokenGenerator|CustomTokenViaGoogleIam|null */
+    private $tokenGenerator;
+    private IdTokenVerifier $idTokenVerifier;
     private SignInHandler $signInHandler;
     private ?string $tenantId;
     private string $projectId;
+    private Clock $clock;
 
+    /**
+     * @param CustomTokenGenerator|CustomTokenViaGoogleIam|null $tokenGenerator
+     */
     public function __construct(
         ApiClient $client,
         ClientInterface $httpClient,
-        TokenGenerator $tokenGenerator,
-        Verifier $idTokenVerifier,
+        $tokenGenerator,
+        IdTokenVerifier $idTokenVerifier,
         SignInHandler $signInHandler,
         string $projectId,
-        ?string $tenantId = null
+        ?string $tenantId,
+        Clock $clock
     ) {
         $this->client = $client;
         $this->httpClient = $httpClient;
@@ -71,6 +83,7 @@ final class Auth implements Contract\Auth
         $this->signInHandler = $signInHandler;
         $this->tenantId = $tenantId;
         $this->projectId = $projectId;
+        $this->clock = $clock;
     }
 
     public function getUser($uid): UserRecord
@@ -337,61 +350,81 @@ final class Auth implements Contract\Auth
         $this->client->setCustomUserClaims($uid, $claims);
     }
 
-    public function createCustomToken($uid, array $claims = []): Token
+    public function createCustomToken($uid, array $claims = [], $ttl = 3600): UnencryptedToken
     {
         $uid = (string) (new Uid((string) $uid));
 
-        return $this->tokenGenerator->createCustomToken($uid, $claims);
+        $generator = $this->tokenGenerator;
+
+        if ($generator instanceof CustomTokenGenerator) {
+            $tokenString = $generator->createCustomToken($uid, $claims, $ttl)->toString();
+        } elseif ($generator instanceof CustomTokenViaGoogleIam) {
+            $expiresAt = $this->clock->now()->add(Duration::make($ttl)->value());
+
+            $tokenString = $generator->createCustomToken($uid, $claims, $expiresAt)->toString();
+        } else {
+            throw new AuthError('Custom Token Generation is disabled because the current credentials do not permit it');
+        }
+
+        return $this->parseToken($tokenString);
     }
 
-    public function parseToken(string $tokenString): Token
+    public function parseToken(string $tokenString): UnencryptedToken
     {
         try {
-            return Configuration::forUnsecuredSigner()->parser()->parse($tokenString);
+            $parsedToken = Configuration::forUnsecuredSigner()->parser()->parse($tokenString);
+            \assert($parsedToken instanceof UnencryptedToken);
         } catch (Throwable $e) {
             throw new InvalidArgumentException('The given token could not be parsed: '.$e->getMessage());
         }
+
+        return $parsedToken;
     }
 
-    public function verifyIdToken($idToken, bool $checkIfRevoked = false): Token
+    public function verifyIdToken($idToken, bool $checkIfRevoked = false, int $leewayInSeconds = null): UnencryptedToken
     {
-        $leewayInSeconds = 300;
         $verifier = $this->idTokenVerifier;
 
-        if ($verifier instanceof IdTokenVerifier) {
-            $verifier = $verifier->withLeewayInSeconds($leewayInSeconds);
+        $idTokenString = \is_string($idToken) ? $idToken : $idToken->toString();
+
+        try {
+            if ($leewayInSeconds !== null) {
+                $verifier->verifyIdTokenWithLeeway($idTokenString, $leewayInSeconds);
+            } else {
+                $verifier->verifyIdToken($idTokenString);
+            }
+        } catch (Throwable $e) {
+            throw new FailedToVerifyToken($e->getMessage());
         }
 
-        $verifiedToken = $verifier->verifyIdToken($idToken);
+        $verifiedToken = $this->parseToken($idTokenString);
 
-        if ($checkIfRevoked) {
-            // @codeCoverageIgnoreStart
-            if (!($verifiedToken instanceof Token\Plain)) {
-                throw new InvalidToken($verifiedToken, 'The ID token could not be decrypted');
-            }
-            // @codeCoverageIgnoreEnd
+        if ($checkIfRevoked === false) {
+            return $verifiedToken;
+        }
 
-            try {
-                $user = $this->getUser($verifiedToken->claims()->get('sub'));
-            } catch (Throwable $e) {
-                throw new InvalidToken($verifiedToken, "Error while getting the token's user: {$e->getMessage()}", $e->getCode(), $e);
-            }
+        try {
+            $user = $this->getUser($verifiedToken->claims()->get('sub'));
+        } catch (Throwable $e) {
+            throw new FailedToVerifyToken("Error while getting the token's user: {$e->getMessage()}", 0, $e);
+        }
 
-            // The timestamp, in seconds, which marks a boundary, before which Firebase ID token are considered revoked.
-            $validSince = $user->tokensValidAfterTime ?? null;
+        // The timestamp, in seconds, which marks a boundary, before which Firebase ID token are considered revoked.
+        $validSince = $user->tokensValidAfterTime ?? null;
 
-            if (!($validSince instanceof \DateTimeImmutable)) {
-                return $verifiedToken;
-            }
+        if (!($validSince instanceof \DateTimeImmutable)) {
+            // The user hasn't logged in yet, so there's nothing to revoke
+            return $verifiedToken;
+        }
 
-            $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->claims()->get('auth_time'));
-            $tokenAuthenticatedAtWithLeeway = $tokenAuthenticatedAt->modify('-'.$leewayInSeconds.' seconds');
+        $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->claims()->get('auth_time'));
 
-            $validSinceWithLeeway = DT::toUTCDateTimeImmutable($validSince)->modify('-'.$leewayInSeconds.' seconds');
+        if ($leewayInSeconds) {
+            $tokenAuthenticatedAt = $tokenAuthenticatedAt->modify('-'.$leewayInSeconds.' seconds');
+        }
 
-            if ($tokenAuthenticatedAtWithLeeway->getTimestamp() < $validSinceWithLeeway->getTimestamp()) {
-                throw new RevokedIdToken($verifiedToken);
-            }
+        if ($tokenAuthenticatedAt->getTimestamp() < $validSince->getTimestamp()) {
+            throw new RevokedIdToken($verifiedToken);
         }
 
         return $verifiedToken;
@@ -453,7 +486,11 @@ final class Auth implements Contract\Auth
         $claims ??= [];
         $uid = $user instanceof UserRecord ? $user->uid : (string) $user;
 
-        $customToken = $this->createCustomToken($uid, $claims);
+        try {
+            $customToken = $this->createCustomToken($uid, $claims);
+        } catch (AuthException $e) {
+            throw FailedToSignIn::fromPrevious($e);
+        }
 
         $action = SignInWithCustomToken::fromValue($customToken->toString());
 

@@ -16,9 +16,7 @@ use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Tests\IntegrationTestCase;
-use Lcobucci\JWT\Token\Plain;
 use Psr\Http\Message\UriInterface;
-use Throwable;
 
 /**
  * @internal
@@ -233,13 +231,24 @@ final class AuthTest extends IntegrationTestCase
 
     public function testVerifyIdToken(): void
     {
-        $idToken = $this->auth->signInAnonymously()->idToken();
-        $this->assertIsString($idToken);
+        $result = $this->auth->signInAnonymously();
 
-        $verifiedToken = $this->auth->verifyIdToken($idToken);
-        $this->assertInstanceOf(Plain::class, $verifiedToken);
+        $uid = $result->firebaseUserId();
+        $this->assertIsString($uid);
 
-        $this->auth->deleteUser($verifiedToken->claims()->get('sub'));
+        try {
+            $idToken = $result->idToken();
+            $this->assertIsString($result->firebaseUserId());
+            $this->assertIsString($idToken);
+
+            $verifiedToken = $this->auth->verifyIdToken($idToken);
+
+            $this->assertSame($uid, $verifiedToken->claims()->get('sub'));
+
+            $this->addToAssertionCount(1);
+        } finally {
+            $this->auth->deleteUser($uid);
+        }
     }
 
     public function testRevokeRefreshTokens(): void
@@ -248,21 +257,16 @@ final class AuthTest extends IntegrationTestCase
         $this->assertIsString($idToken);
 
         $token = $this->auth->verifyIdToken($idToken, $checkIfRevoked = false);
-        $this->assertInstanceOf(Plain::class, $token);
 
         $uid = $token->claims()->get('sub');
 
-        $this->auth->revokeRefreshTokens($uid);
         \sleep(1);
+        $this->auth->revokeRefreshTokens($uid);
+
+        $this->expectException(RevokedIdToken::class);
 
         try {
-            $this->auth->verifyIdToken($idToken, $checkIfRevoked = true);
-        } catch (RevokedIdToken $e) {
-            $token = $e->getToken();
-            $this->assertInstanceOf(Plain::class, $token);
-            $this->assertSame($uid, $token->claims()->get('user_id'));
-        } catch (Throwable $e) {
-            throw $e;
+            $this->auth->verifyIdToken($idToken, true);
         } finally {
             $this->auth->deleteUser($uid);
         }
@@ -270,15 +274,20 @@ final class AuthTest extends IntegrationTestCase
 
     public function testVerifyIdTokenString(): void
     {
-        $idToken = $this->auth->signInAnonymously()->idToken();
+        $result = $this->auth->signInAnonymously();
+
+        $uid = $result->firebaseUserId();
+        $this->assertIsString($uid);
+
+        $idToken = $result->idToken();
         $this->assertIsString($idToken);
 
-        $verifiedToken = $this->auth->verifyIdToken($idToken);
-
-        $this->assertInstanceOf(Plain::class, $verifiedToken);
-
-        $this->auth->deleteUser($verifiedToken->claims()->get('sub'));
-        $this->addToAssertionCount(1);
+        try {
+            $verifiedToken = $this->auth->verifyIdToken($idToken);
+            $this->assertSame($uid, $verifiedToken->claims()->get('sub'));
+        } finally {
+            $this->auth->deleteUser($uid);
+        }
     }
 
     public function testCreateSessionCookie(): void
@@ -295,7 +304,6 @@ final class AuthTest extends IntegrationTestCase
             $this->assertIsString($sessionCookie);
 
             $parsed = $this->auth->parseToken($sessionCookie);
-            $this->assertInstanceOf(Plain::class, $parsed);
 
             $this->assertSame($uid, $parsed->claims()->get('sub'));
         } finally {
@@ -682,7 +690,6 @@ final class AuthTest extends IntegrationTestCase
 
         $token = $this->auth->parseToken($idToken);
 
-        $this->assertInstanceOf(Plain::class, $token);
         $this->assertIsString($uid = $token->claims()->get('sub'));
         $user = $this->auth->getUser($uid);
         $this->addToAssertionCount(1);
@@ -730,6 +737,7 @@ final class AuthTest extends IntegrationTestCase
 
         try {
             $idToken = $signInResult->idToken();
+            $this->assertIsString($idToken);
 
             $parsedToken = $this->auth->parseToken($idToken);
             $this->auth->verifyIdToken($parsedToken);

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
-use Firebase\Auth\Token\Domain\Generator;
 use GuzzleHttp\ClientInterface;
 use InvalidArgumentException;
 use Kreait\Firebase\Exception\Auth\AuthError;
@@ -17,7 +16,10 @@ use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Token;
 use Throwable;
 
-class CustomTokenViaGoogleIam implements Generator
+/**
+ * @internal
+ */
+final class CustomTokenViaGoogleIam
 {
     private string $clientEmail;
 

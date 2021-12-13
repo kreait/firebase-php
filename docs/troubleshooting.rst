@@ -156,31 +156,6 @@ setting in your ``php.ini``:
     [curl]
     curl.cainfo = /absolute/path/to/cacert.pem
 
-**********************************
-ID Tokens are issued in the future
-**********************************
-
-When ID Token verification fails because of an ``IssuedInTheFuture`` exception, this is an
-indication that the system time in your environment is not set correctly.
-
-If you chose to ignore the issue, you can catch the exception and return the ID token nonetheless:
-
-.. code-block:: php
-
-    use Firebase\Auth\Token\Exception\InvalidToken;
-    use Firebase\Auth\Token\Exception\IssuedInTheFuture;
-
-    $auth = $factory->createAuth();
-
-    try {
-        return $auth->verifyIdToken($idTokenString);
-    } catch (IssuedInTheFuture $e) {
-        return $e->getToken();
-    } catch (InvalidIdToken $e) {
-        echo $e->getMessage();
-        exit;
-    }
-
 **********************
 "403 Forbidden" Errors
 **********************
