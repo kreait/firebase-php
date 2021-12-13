@@ -13,6 +13,7 @@ use Kreait\Firebase\Value\Url;
 
 /**
  * @codeCoverageIgnore
+ * @template T
  */
 trait EditUserTrait
 {
@@ -27,13 +28,14 @@ trait EditUserTrait
     protected ?ClearTextPassword $clearTextPassword = null;
 
     /**
+     * @param T $request
      * @param array<string, mixed> $properties
      *
      * @throws InvalidArgumentException when invalid properties have been provided
      *
-     * @return static
+     * @return T
      */
-    protected static function withEditableProperties(self $request, array $properties)
+    protected static function withEditableProperties(self $request, array $properties): self
     {
         foreach ($properties as $key => $value) {
             switch (\mb_strtolower((string) \preg_replace('/[^a-z]/i', '', $key))) {

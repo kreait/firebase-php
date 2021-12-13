@@ -10,6 +10,7 @@ use Kreait\Firebase\Util\JSON;
 
 final class UpdateUser implements Request
 {
+    /** @phpstan-use EditUserTrait<self> */
     use EditUserTrait;
 
     public const DISPLAY_NAME = 'DISPLAY_NAME';

@@ -18,6 +18,7 @@ use PhpCsFixer\Fixer\FunctionNotation\UseArrowFunctionsFixer;
 use PhpCsFixer\Fixer\LanguageConstruct\ErrorSuppressionFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer;
+use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesOrderFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitInternalClassFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
@@ -48,6 +49,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         FinalInternalClassFixer::class => [
             __DIR__.'/src',
         ],
+        PhpdocToCommentFixer::class,
         PhpUnitTestClassRequiresCoversFixer::class,
         PhpUnitStrictFixer::class,
         ErrorSuppressionFixer::class => [
