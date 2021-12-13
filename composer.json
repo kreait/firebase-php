@@ -48,7 +48,7 @@
         "phpunit/phpunit": "^9.5.10",
         "rector/rector": "^0.12.5",
         "symfony/var-dumper": "^5.4|^6.0",
-        "symplify/easy-coding-standard": "^9.4"
+        "symplify/easy-coding-standard": "^10.0"
     },
     "suggest": {
         "google/cloud-firestore": "^1.0 to use the Firestore component",
