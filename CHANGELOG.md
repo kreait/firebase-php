@@ -29,6 +29,9 @@ methods.
 * `Kreait\Firebase\Contract\Auth::verifyIdToken()` will now throw either
   `Kreait\Firebase\Exception\Auth\FailedToVerifyToken` when the verification failed, or
   `Kreait\Firebase\Exception\Auth\RevokedIdToken` when the token has been revoked.
+* `Kreait\Firebase\Contract\Auth::verifyPasswordResetCode()` now returns the email address the password was reset for.
+  * This was previously done with the method `Kreait\Firebase\Contract\Auth::verifyPasswordResetCodeAndReturnEmail()` -
+    this method has been removed.
 * The following methods now return strings instead of value objects:
     * `Kreait\Firebase\Contract\Auth::confirmPasswordResetAndReturnEmail()`
     * `Kreait\Firebase\Contract\Auth::verifyPasswordResetCodeAndReturnEmail()`
@@ -51,10 +54,11 @@ methods.
   * `Kreait\Firebase\Project\ProjectId`
   * `Kreait\Firebase\Value\Provider`
   * `Kreait\Firebase\Project\TenantId`
-  * `Auth::setCustomUserAttributes()`, use `Auth::setCustomUserClaims()` instead
-  * `Auth::deleteCustomUserAttributes()`, use `Auth::setCustomUserClaims()` with null values instead
-  * `Auth\UserRecord::$customAttributes`, use `Auth\UserRecord::$customClaims` instead
-  * `Factory::withEnabledDebug()`, use `Factory::withHttpDebugLogger()` instead
+  * `Kreait\Firebase\Auth::setCustomUserAttributes()`, use `Kreait\Firebase\Auth::setCustomUserClaims()` instead
+  * `Kreait\Firebase\Auth::deleteCustomUserAttributes()`, use `Kreait\Firebase\Auth::setCustomUserClaims()` with null values instead
+  * `Kreait\Firebase\Contract\Auth::verifyPasswordResetCodeAndReturnEmail()`, use `Kreait\Firebase\Contract\Auth::verifyPasswordResetCode()` instead 
+  * `Kreait\Firebase\Auth\UserRecord::$customAttributes`, use `Kreait\Firebase\Auth\UserRecord::$customClaims` instead
+  * `Kreait\Firebase\Factory::withEnabledDebug()`, use `Kreait\Firebase\Factory::withHttpDebugLogger()` instead
 * The following classes are mainly used for validation and have been marked internal. They shouldn't be used directly,
   as they could be updated with breaking changes or get removed entirely in the future.
     * `Kreait\Firebase\Value\ClearTextPassword`

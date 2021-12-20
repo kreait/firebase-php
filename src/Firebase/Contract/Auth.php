@@ -286,19 +286,6 @@ interface Auth
     public function verifyIdToken($idToken, bool $checkIfRevoked = false, int $leewayInSeconds = null): UnencryptedToken;
 
     /**
-     * Verifies the given password reset code.
-     *
-     * @see https://firebase.google.com/docs/reference/rest/auth#section-verify-password-reset-code
-     *
-     * @throws ExpiredOobCode
-     * @throws InvalidOobCode
-     * @throws OperationNotAllowed
-     * @throws Exception\AuthException
-     * @throws Exception\FirebaseException
-     */
-    public function verifyPasswordResetCode(string $oobCode): void;
-
-    /**
      * Verifies the given password reset code and returns the associated user's email address.
      *
      * @see https://firebase.google.com/docs/reference/rest/auth#section-verify-password-reset-code
@@ -309,7 +296,7 @@ interface Auth
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      */
-    public function verifyPasswordResetCodeAndReturnEmail(string $oobCode): string;
+    public function verifyPasswordResetCode(string $oobCode): string;
 
     /**
      * Applies the password reset requested via the given OOB code.

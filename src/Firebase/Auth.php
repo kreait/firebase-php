@@ -429,13 +429,7 @@ final class Auth implements Contract\Auth
         return $verifiedToken;
     }
 
-    public function verifyPasswordResetCode(string $oobCode): void
-    {
-        // Not returning the email on purpose to not break BC
-        $this->verifyPasswordResetCodeAndReturnEmail($oobCode);
-    }
-
-    public function verifyPasswordResetCodeAndReturnEmail(string $oobCode): string
+    public function verifyPasswordResetCode(string $oobCode): string
     {
         $response = $this->client->verifyPasswordResetCode($oobCode);
 

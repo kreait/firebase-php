@@ -534,7 +534,7 @@ final class AuthTest extends IntegrationTestCase
 
         \parse_str(\parse_url($url, PHP_URL_QUERY), $query);
 
-        $email = $this->auth->verifyPasswordResetCodeAndReturnEmail($query['oobCode']);
+        $email = $this->auth->verifyPasswordResetCode($query['oobCode']);
 
         try {
             $this->assertSame($email, $user->email);
