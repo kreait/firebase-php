@@ -436,13 +436,7 @@ final class Auth implements Contract\Auth
         return JSON::decode((string) $response->getBody(), true)['email'];
     }
 
-    public function confirmPasswordReset(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): void
-    {
-        // Not returning the email on purpose to not break BC
-        $this->confirmPasswordResetAndReturnEmail($oobCode, $newPassword, $invalidatePreviousSessions);
-    }
-
-    public function confirmPasswordResetAndReturnEmail(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): string
+    public function confirmPasswordReset(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): string
     {
         $newPassword = (string) (new ClearTextPassword((string) $newPassword));
 

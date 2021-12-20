@@ -32,9 +32,12 @@ methods.
 * `Kreait\Firebase\Contract\Auth::verifyPasswordResetCode()` now returns the email address the password was reset for.
   * This was previously done with the method `Kreait\Firebase\Contract\Auth::verifyPasswordResetCodeAndReturnEmail()` -
     this method has been removed.
+* `Kreait\Firebase\Contract\Auth::confirmPasswordReset()` now returns the email address the password reset was confirmed for.
+    * This was previously done with the method `Kreait\Firebase\Contract\Auth::confirmPasswordResetAndReturnEmail()` -
+      this method has been removed.
 * The following methods now return strings instead of value objects:
-    * `Kreait\Firebase\Contract\Auth::confirmPasswordResetAndReturnEmail()`
-    * `Kreait\Firebase\Contract\Auth::verifyPasswordResetCodeAndReturnEmail()`
+    * `Kreait\Firebase\Contract\Auth::confirmPasswordReset()`
+    * `Kreait\Firebase\Contract\Auth::verifyPasswordResetCode()`
     * `Kreait\Firebase\RemoteConfig\User::email()`
 * The following classes are mainly used for validation and have been marked internal. They shouldn't be used directly,
   as they could be updated with breaking changes or get removed entirely in the future.
@@ -57,6 +60,7 @@ methods.
   * `Kreait\Firebase\Auth::setCustomUserAttributes()`, use `Kreait\Firebase\Auth::setCustomUserClaims()` instead
   * `Kreait\Firebase\Auth::deleteCustomUserAttributes()`, use `Kreait\Firebase\Auth::setCustomUserClaims()` with null values instead
   * `Kreait\Firebase\Contract\Auth::verifyPasswordResetCodeAndReturnEmail()`, use `Kreait\Firebase\Contract\Auth::verifyPasswordResetCode()` instead 
+  * `Kreait\Firebase\Contract\Auth::confirmPasswordResetAndReturnEmail()`, use `Kreait\Firebase\Contract\Auth::confirmPasswordReset()` instead 
   * `Kreait\Firebase\Auth\UserRecord::$customAttributes`, use `Kreait\Firebase\Auth\UserRecord::$customClaims` instead
   * `Kreait\Firebase\Factory::withEnabledDebug()`, use `Kreait\Firebase\Factory::withHttpDebugLogger()` instead
 * The following classes are mainly used for validation and have been marked internal. They shouldn't be used directly,

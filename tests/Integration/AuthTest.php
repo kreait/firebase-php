@@ -557,7 +557,7 @@ final class AuthTest extends IntegrationTestCase
 
         \parse_str(\parse_url($url, PHP_URL_QUERY), $query);
 
-        $email = $this->auth->confirmPasswordResetAndReturnEmail($query['oobCode'], 'newPassword123');
+        $email = $this->auth->confirmPasswordReset($query['oobCode'], 'newPassword123');
 
         try {
             $this->assertSame($email, $user->email);
@@ -569,17 +569,22 @@ final class AuthTest extends IntegrationTestCase
     public function testConfirmPasswordResetAndInvalidateRefreshTokens(): void
     {
         $user = $this->createUserWithEmailAndPassword();
+        \assert(\is_string($user->email));
 
         $url = $this->auth->getPasswordResetLink($user->email);
 
-        \parse_str(\parse_url($url, PHP_URL_QUERY), $query);
+        $queryString = \parse_url($url, PHP_URL_QUERY);
+        \assert(\is_string($queryString));
 
-        $email = $this->auth->confirmPasswordResetAndReturnEmail($query['oobCode'], 'newPassword123', true);
+        \parse_str($queryString, $query);
+        \assert(\is_array($query));
+
+        $email = $this->auth->confirmPasswordReset($query['oobCode'], 'newPassword123', true);
         \sleep(1); // wait for a second
 
         try {
             $this->assertSame($email, $user->email);
-            // $this->assertGreaterThan($user->tokensValidAfterTime, $this->auth->getUser($user->uid)->tokensValidAfterTime);
+            $this->assertGreaterThan($user->tokensValidAfterTime, $this->auth->getUser($user->uid)->tokensValidAfterTime);
         } finally {
             $this->deleteUser($user);
         }

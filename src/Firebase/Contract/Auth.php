@@ -299,24 +299,6 @@ interface Auth
     public function verifyPasswordResetCode(string $oobCode): string;
 
     /**
-     * Applies the password reset requested via the given OOB code.
-     *
-     * @see https://firebase.google.com/docs/reference/rest/auth#section-confirm-reset-password
-     *
-     * @param string $oobCode the email action code sent to the user's email for resetting the password
-     * @param \Stringable|string $newPassword
-     * @param bool $invalidatePreviousSessions Invalidate sessions initialized with the previous credentials
-     *
-     * @throws ExpiredOobCode
-     * @throws InvalidOobCode
-     * @throws OperationNotAllowed
-     * @throws UserDisabled
-     * @throws Exception\AuthException
-     * @throws Exception\FirebaseException
-     */
-    public function confirmPasswordReset(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): void;
-
-    /**
      * Applies the password reset requested via the given OOB code and returns the associated user's email address.
      *
      * @see https://firebase.google.com/docs/reference/rest/auth#section-confirm-reset-password
@@ -332,7 +314,7 @@ interface Auth
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      */
-    public function confirmPasswordResetAndReturnEmail(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): string;
+    public function confirmPasswordReset(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): string;
 
     /**
      * Revokes all refresh tokens for the specified user identified by the uid provided.
