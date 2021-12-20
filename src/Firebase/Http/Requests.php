@@ -9,6 +9,7 @@ use Psr\Http\Message\RequestInterface;
 use Traversable;
 
 /**
+ * @internal
  * @implements IteratorAggregate<RequestInterface>
  */
 final class Requests implements IteratorAggregate

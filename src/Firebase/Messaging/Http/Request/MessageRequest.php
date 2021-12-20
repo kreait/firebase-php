@@ -6,6 +6,9 @@ namespace Kreait\Firebase\Messaging\Http\Request;
 
 use Kreait\Firebase\Messaging\Message;
 
+/**
+ * @internal
+ */
 interface MessageRequest
 {
     public function message(): Message;

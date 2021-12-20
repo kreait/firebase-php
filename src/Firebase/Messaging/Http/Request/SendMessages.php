@@ -12,6 +12,9 @@ use Kreait\Firebase\Http\WrappedPsr7Request;
 use Kreait\Firebase\Messaging\Messages;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * @internal
+ */
 final class SendMessages implements HasSubRequests, RequestInterface
 {
     use WrappedPsr7Request;

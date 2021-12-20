@@ -8,6 +8,9 @@ use InvalidArgumentException;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * @internal
+ */
 final class ErrorResponseParser
 {
     public function getErrorReasonFromResponse(ResponseInterface $response): string

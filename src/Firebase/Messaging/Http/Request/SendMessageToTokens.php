@@ -13,6 +13,9 @@ use Kreait\Firebase\Messaging\RawMessageFromArray;
 use Kreait\Firebase\Messaging\RegistrationTokens;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * @internal
+ */
 final class SendMessageToTokens implements HasSubRequests, RequestInterface
 {
     use WrappedPsr7Request;

@@ -11,6 +11,9 @@ use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * @internal
+ */
 final class SendMessage implements MessageRequest, RequestInterface
 {
     use WrappedPsr7Request;

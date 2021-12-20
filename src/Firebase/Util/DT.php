@@ -12,7 +12,7 @@ use Throwable;
 /**
  * @internal
  */
-class DT
+final class DT
 {
     /**
      * @param mixed $value

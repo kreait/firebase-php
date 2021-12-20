@@ -10,7 +10,7 @@ use Throwable;
 /**
  * @internal
  */
-class JSON
+final class JSON
 {
     /**
      * Wrapper for JSON encoding that throws when an error occurs.
