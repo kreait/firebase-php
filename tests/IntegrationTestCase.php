@@ -18,6 +18,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     protected static Factory $factory;
 
     protected static ServiceAccount $serviceAccount;
+    protected static string $rtdbUrl;
 
     /** @var string[] */
     protected static array $registrationTokens = [];
@@ -28,13 +29,17 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     {
         $credentials = self::credentialsFromEnvironment() ?? self::credentialsFromFile();
 
-        if (!$credentials instanceof \Kreait\Firebase\ServiceAccount) {
+        if (!$credentials instanceof ServiceAccount) {
             self::markTestSkipped('The integration tests require credentials');
         }
 
         self::$serviceAccount = $credentials;
+        self::$rtdbUrl = self::rtdbUrlFromEnvironment() ?? self::rtdbUrlFromFile() ?? '';
 
-        self::$factory = (new Factory())->withServiceAccount(self::$serviceAccount);
+        self::$factory = (new Factory())
+            ->withServiceAccount(self::$serviceAccount)
+            ->withDatabaseUri(self::$rtdbUrl)
+        ;
 
         self::$registrationTokens = self::registrationTokensFromEnvironment() ?? self::registrationTokensFromFile() ?? [];
     }
@@ -151,5 +156,29 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         } catch (Throwable $e) {
             return null;
         }
+    }
+
+    private static function rtdbUrlFromFile(): ?string
+    {
+        $path = self::$fixturesDir.'/test_rtdb.json';
+
+        if (!\file_exists($path)) {
+            return null;
+        }
+
+        try {
+            if ($contents = \file_get_contents($path)) {
+                return JSON::decode($contents, true);
+            }
+
+            return null;
+        } catch (Throwable $e) {
+            return null;
+        }
+    }
+
+    private static function rtdbUrlFromEnvironment(): ?string
+    {
+        return Util::getenv('TEST_FIREBASE_RTDB_URI');
     }
 }
