@@ -17,8 +17,6 @@ use Psr\Http\Message\UriInterface;
  */
 final class Database implements Contract\Database
 {
-    public const SERVER_TIMESTAMP = ['.sv' => 'timestamp'];
-
     private ApiClient $client;
 
     private UriInterface $uri;

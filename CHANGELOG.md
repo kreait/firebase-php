@@ -46,6 +46,9 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
+### Realtime Database Component
+* The constant `Kreait\Firebase\Database::SERVER_TIMESTAMP` has been moved to `Kreait\Firebase\Contract\Database::SERVER_TIMESTAMP`
+
 ### Other
 * Dropped support for Guzzle <7.0
 * Dropped support for `lcobucci/jwt` <4.1
