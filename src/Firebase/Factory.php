@@ -6,10 +6,7 @@ namespace Kreait\Firebase;
 
 use Google\Auth\ApplicationDefaultCredentials;
 use Google\Auth\Cache\MemoryCacheItemPool;
-use Google\Auth\Credentials\AppIdentityCredentials;
-use Google\Auth\Credentials\GCECredentials;
 use Google\Auth\Credentials\ServiceAccountCredentials;
-use Google\Auth\Credentials\UserRefreshCredentials;
 use Google\Auth\CredentialsLoader;
 use Google\Auth\FetchAuthTokenCache;
 use Google\Auth\HttpHandler\HttpHandlerFactory;
@@ -43,7 +40,7 @@ use Psr\Log\LogLevel;
 use Psr\SimpleCache\CacheInterface;
 use Throwable;
 
-class Factory
+final class Factory
 {
     public const API_CLIENT_SCOPES = [
         'https://www.googleapis.com/auth/iam',
@@ -56,42 +53,42 @@ class Factory
         'https://www.googleapis.com/auth/securetoken',
     ];
 
-    protected ?UriInterface $databaseUri = null;
+    private ?string $databaseUri = null;
 
-    protected ?string $defaultStorageBucket = null;
+    private ?string $defaultStorageBucket = null;
 
-    protected ?ServiceAccount $serviceAccount = null;
+    private ?ServiceAccount $serviceAccount = null;
 
-    protected ?CredentialsLoader $googleAuthTokenCredentials = null;
+    private ?CredentialsLoader $googleAuthTokenCredentials = null;
 
-    protected ?string $projectId = null;
+    private ?string $projectId = null;
 
-    protected ?string $clientEmail = null;
+    private ?string $clientEmail = null;
 
-    protected CacheInterface $verifierCache;
+    private CacheInterface $verifierCache;
 
-    protected CacheItemPoolInterface $authTokenCache;
+    private CacheItemPoolInterface $authTokenCache;
 
-    protected bool $discoveryIsDisabled = false;
+    private bool $discoveryIsDisabled = false;
 
-    protected static string $databaseUriPattern = 'https://%s.firebaseio.com';
+    private static string $databaseUriPattern = 'https://%s.firebaseio.com';
 
-    protected static string $storageBucketNamePattern = '%s.appspot.com';
+    private static string $storageBucketNamePattern = '%s.appspot.com';
 
-    protected Clock $clock;
-
-    /** @var callable|null */
-    protected $httpLogMiddleware;
+    private Clock $clock;
 
     /** @var callable|null */
-    protected $httpDebugLogMiddleware;
+    private $httpLogMiddleware;
 
     /** @var callable|null */
-    protected $databaseAuthVariableOverrideMiddleware;
+    private $httpDebugLogMiddleware;
 
-    protected ?string $tenantId = null;
+    /** @var callable|null */
+    private $databaseAuthVariableOverrideMiddleware;
 
-    protected HttpClientOptions $httpClientOptions;
+    private ?string $tenantId = null;
+
+    private HttpClientOptions $httpClientOptions;
 
     public function __construct()
     {
@@ -111,10 +108,7 @@ class Factory
         $factory = clone $this;
         $factory->serviceAccount = $serviceAccount;
 
-        return $factory
-            ->withProjectId($serviceAccount->getProjectId())
-            ->withClientEmail($serviceAccount->getClientEmail())
-        ;
+        return $factory;
     }
 
     public function withProjectId(string $projectId): self
@@ -155,7 +149,7 @@ class Factory
     public function withDatabaseUri($uri): self
     {
         $factory = clone $this;
-        $factory->databaseUri = GuzzleUtils::uriFor($uri);
+        $factory->databaseUri = (string) GuzzleUtils::uriFor($uri);
 
         return $factory;
     }
@@ -243,7 +237,7 @@ class Factory
         return $factory;
     }
 
-    protected function getServiceAccount(): ?ServiceAccount
+    private function getServiceAccount(): ?ServiceAccount
     {
         if ($this->serviceAccount !== null) {
             return $this->serviceAccount;
@@ -276,7 +270,7 @@ class Factory
         return null;
     }
 
-    protected function getProjectId(): string
+    private function getProjectId(): string
     {
         if ($this->projectId !== null) {
             return $this->projectId;
@@ -307,7 +301,7 @@ class Factory
         throw new RuntimeException('Unable to determine the Firebase Project ID');
     }
 
-    protected function getClientEmail(): ?string
+    private function getClientEmail(): ?string
     {
         if ($this->clientEmail !== null) {
             return $this->clientEmail;
@@ -338,16 +332,16 @@ class Factory
         return null;
     }
 
-    protected function getDatabaseUri(): UriInterface
+    private function getDatabaseUri(): UriInterface
     {
         if ($this->databaseUri === null) {
-            $this->databaseUri = GuzzleUtils::uriFor(\sprintf(self::$databaseUriPattern, $this->getProjectId()));
+            $this->databaseUri = \sprintf(self::$databaseUriPattern, $this->getProjectId());
         }
 
-        return $this->databaseUri;
+        return GuzzleUtils::uriFor($this->databaseUri);
     }
 
-    protected function getStorageBucketName(): string
+    private function getStorageBucketName(): string
     {
         if ($this->defaultStorageBucket === null) {
             $this->defaultStorageBucket = \sprintf(self::$storageBucketNamePattern, $this->getProjectId());
@@ -376,7 +370,7 @@ class Factory
     /**
      * @return CustomTokenGenerator|CustomTokenViaGoogleIam|null
      */
-    public function createCustomTokenGenerator()
+    private function createCustomTokenGenerator()
     {
         $serviceAccount = $this->getServiceAccount();
         $clientEmail = $this->getClientEmail();
@@ -399,7 +393,7 @@ class Factory
         return null;
     }
 
-    public function createIdTokenVerifier(): IdTokenVerifier
+    private function createIdTokenVerifier(): IdTokenVerifier
     {
         $verifier = IdTokenVerifier::createWithProjectIdAndCache($this->getProjectId(), $this->verifierCache);
 
@@ -604,11 +598,7 @@ class Factory
             $config[RequestOptions::TIMEOUT] = $totalTimeout;
         }
 
-        $handler = $config['handler'] ?? null;
-
-        if (!($handler instanceof HandlerStack)) {
-            $handler = HandlerStack::create($handler);
-        }
+        $handler = HandlerStack::create();
 
         if ($this->httpLogMiddleware) {
             $handler->push($this->httpLogMiddleware, 'http_logs');
@@ -626,15 +616,16 @@ class Factory
 
         $credentials = $this->getGoogleAuthTokenCredentials();
 
+        if ($credentials === null && $this->discoveryIsDisabled) {
+            throw new RuntimeException('Unable to create an API client without credentials');
+        }
+
         if ($credentials !== null) {
-            $projectId = $credentials instanceof ProjectIdProviderInterface ? $credentials->getProjectId() : 'project';
+            $projectId = $credentials instanceof ProjectIdProviderInterface ? $credentials->getProjectId() : $this->getProjectId();
             $cachePrefix = 'kreait_firebase_'.$projectId;
 
             $credentials = new FetchAuthTokenCache($credentials, ['prefix' => $cachePrefix], $this->authTokenCache);
-            $authTokenHandlerConfig = $config;
-            $authTokenHandlerConfig['handler'] = clone $handler;
-
-            $authTokenHandler = HttpHandlerFactory::build(new Client($authTokenHandlerConfig));
+            $authTokenHandler = HttpHandlerFactory::build(new Client());
 
             $handler->push(new AuthTokenMiddleware($credentials, $authTokenHandler));
         }
@@ -647,20 +638,7 @@ class Factory
         return new Client($config);
     }
 
-    /**
-     * @internal
-     *
-     * @param ServiceAccountCredentials|UserRefreshCredentials|AppIdentityCredentials|GCECredentials|CredentialsLoader $credentials
-     */
-    public function withGoogleAuthTokenCredentials($credentials): self
-    {
-        $factory = clone $this;
-        $factory->googleAuthTokenCredentials = $credentials;
-
-        return $factory;
-    }
-
-    protected function getGoogleAuthTokenCredentials(): ?CredentialsLoader
+    private function getGoogleAuthTokenCredentials(): ?CredentialsLoader
     {
         if ($this->googleAuthTokenCredentials !== null) {
             return $this->googleAuthTokenCredentials;

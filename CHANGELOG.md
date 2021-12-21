@@ -17,6 +17,8 @@ methods.
 * All components have been made `final` and marked as `@internal`, if you're type-hinting dependencies in your
   application code, make sure you type-hint the `Kreait\Firebase\Contract\*` **interfaces**, not the
   `Kreait\Firebase\*` **implementations**
+* `Kreait\Firebase\Factory` has been locked down. It should only be used to configure and retrieve the services
+  provided by the SDK as documented.
 
 ### Auth component
 * `Kreait\Firebase\Contract\Auth::parseToken()` and `Kreait\Firebase\Contract\Auth::verifyIdToken()` now return
