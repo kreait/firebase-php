@@ -560,42 +560,6 @@ final class Auth implements Contract\Auth
         throw new FailedToSignIn('Failed to sign in anonymously: No ID token or UID available');
     }
 
-    /**
-     * @deprecated 5.26.0 Use {@see signInWithIdpAccessToken()} with 'twitter.com' instead.
-     * @codeCoverageIgnore
-     */
-    public function signInWithTwitterOauthCredential(string $accessToken, string $oauthTokenSecret, ?string $redirectUrl = null, ?string $linkingIdToken = null): SignInResult
-    {
-        return $this->signInWithIdpAccessToken('twitter.com', $accessToken, $redirectUrl, $oauthTokenSecret, $linkingIdToken);
-    }
-
-    /**
-     * @deprecated 5.26.0 Use {@see signInWithIdpIdToken()} with 'google.com' instead.
-     * @codeCoverageIgnore
-     */
-    public function signInWithGoogleIdToken(string $idToken, ?string $redirectUrl = null, ?string $linkingIdToken = null): SignInResult
-    {
-        return $this->signInWithIdpIdToken('google.com', $idToken, $redirectUrl, $linkingIdToken);
-    }
-
-    /**
-     * @deprecated 5.26.0 Use {@see signInWithIdpAccessToken()} with 'facebook.com' instead.
-     * @codeCoverageIgnore
-     */
-    public function signInWithFacebookAccessToken(string $accessToken, ?string $redirectUrl = null, ?string $linkingIdToken = null): SignInResult
-    {
-        return $this->signInWithIdpAccessToken('facebook.com', $accessToken, $redirectUrl, null, $linkingIdToken);
-    }
-
-    /**
-     * @deprecated 5.26.0 Use {@see signInWithIdpIdToken()} with 'apple.com' instead.
-     * @codeCoverageIgnore
-     */
-    public function signInWithAppleIdToken(string $idToken, ?string $rawNonce = null, ?string $redirectUrl = null, ?string $linkingIdToken = null): SignInResult
-    {
-        return $this->signInWithIdpIdToken('apple.com', $idToken, $redirectUrl, $linkingIdToken, $rawNonce);
-    }
-
     public function signInWithIdpAccessToken($provider, string $accessToken, $redirectUrl = null, ?string $oauthTokenSecret = null, ?string $linkingIdToken = null, ?string $rawNonce = null): SignInResult
     {
         $provider = (string) $provider;
