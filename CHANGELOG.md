@@ -18,7 +18,8 @@ methods.
   application code, make sure you type-hint the `Kreait\Firebase\Contract\*` **interfaces**, not the
   `Kreait\Firebase\*` **implementations**
 * `Kreait\Firebase\Factory` has been locked down. It should only be used to configure and retrieve the services
-  provided by the SDK as documented.
+  provided by the SDK as documented. The method `Kreait\Firebase\Factory::createApiClient()` will provide you with
+  an authorized Guzzle HTTP Client that you can use for custom API operations.
 * `Kreait\Firebase\Factory::withVerifierCache()` now expects a PSR-6 Cache Item Pool and doesn't directly support
   PSR-16 Caches anymore. If you only have a PSR-16 Cache available in your project, you can use an adapter, e.g.
   one provided by the `symfony/cache` component. If you're using the Firebase Bundle or the Laravel Package, this

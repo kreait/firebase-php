@@ -571,8 +571,6 @@ final class Factory
     }
 
     /**
-     * @internal
-     *
      * @param array<string, mixed>|null $config
      * @param array<callable(callable): callable>|null $middlewares
      */
