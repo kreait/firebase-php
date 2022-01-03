@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Exception;
 
+use Beste\Clock\FrozenClock;
 use DateTimeImmutable;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Kreait\Clock\FrozenClock;
 use Kreait\Firebase\Exception\Messaging\ApiConnectionFailed;
 use Kreait\Firebase\Exception\Messaging\AuthenticationError;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
@@ -36,7 +36,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->clock = new FrozenClock(new DateTimeImmutable());
+        $this->clock = FrozenClock::fromUTC();
         $this->converter = new MessagingApiExceptionConverter($this->clock);
     }
 

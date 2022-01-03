@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit;
 
-use DateTimeImmutable;
+use Beste\Clock\FrozenClock;
 use GuzzleHttp\Psr7\Uri;
-use Kreait\Clock;
-use Kreait\Clock\FrozenClock;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Http\HttpClientOptions;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Clock\ClockInterface;
 use RuntimeException;
 
 /**
@@ -96,7 +95,7 @@ final class FactoryTest extends UnitTestCase
 
     public function testItUsesAClock(): void
     {
-        $factory = (new Factory())->withClock($clock = new FrozenClock(new DateTimeImmutable()));
+        $factory = (new Factory())->withClock($clock = FrozenClock::fromUTC());
 
         $this->assertClock($factory, $clock);
     }
@@ -189,7 +188,7 @@ final class FactoryTest extends UnitTestCase
         $this->assertSame($expected, (string) $value);
     }
 
-    private function assertClock(Factory $factory, Clock $expected): void
+    private function assertClock(Factory $factory, ClockInterface $expected): void
     {
         $property = (new \ReflectionObject($factory))->getProperty('clock');
         $property->setAccessible(true);

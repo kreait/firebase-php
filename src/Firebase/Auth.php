@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kreait\Firebase;
 
 use GuzzleHttp\ClientInterface;
-use Kreait\Clock;
 use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Auth\ApiClient;
@@ -42,6 +41,7 @@ use Kreait\Firebase\Value\Uid;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Token;
 use Lcobucci\JWT\UnencryptedToken;
+use Psr\Clock\ClockInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Traversable;
@@ -60,7 +60,7 @@ final class Auth implements Contract\Auth
     private SignInHandler $signInHandler;
     private ?string $tenantId;
     private string $projectId;
-    private Clock $clock;
+    private ClockInterface $clock;
 
     /**
      * @param CustomTokenGenerator|CustomTokenViaGoogleIam|null $tokenGenerator
@@ -73,7 +73,7 @@ final class Auth implements Contract\Auth
         SignInHandler $signInHandler,
         string $projectId,
         ?string $tenantId,
-        Clock $clock
+        ClockInterface $clock
     ) {
         $this->client = $client;
         $this->httpClient = $httpClient;

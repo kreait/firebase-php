@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase;
 
+use Beste\Clock\SystemClock;
 use Google\Auth\ApplicationDefaultCredentials;
 use Google\Auth\Cache\MemoryCacheItemPool;
 use Google\Auth\Credentials\ServiceAccountCredentials;
@@ -20,8 +21,6 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Psr7\Utils as GuzzleUtils;
 use GuzzleHttp\RequestOptions;
-use Kreait\Clock;
-use Kreait\Clock\SystemClock;
 use Kreait\Firebase;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
 use Kreait\Firebase\Exception\InvalidArgumentException;
@@ -33,6 +32,7 @@ use Kreait\Firebase\JWT\CustomTokenGenerator;
 use Kreait\Firebase\JWT\IdTokenVerifier;
 use Kreait\Firebase\Value\Email;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Clock\ClockInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -73,7 +73,7 @@ final class Factory
 
     private static string $storageBucketNamePattern = '%s.appspot.com';
 
-    private Clock $clock;
+    private ClockInterface $clock;
 
     /** @var callable|null */
     private $httpLogMiddleware;
@@ -90,7 +90,7 @@ final class Factory
 
     public function __construct()
     {
-        $this->clock = new SystemClock();
+        $this->clock = SystemClock::create();
         $this->verifierCache = new MemoryCacheItemPool();
         $this->authTokenCache = new MemoryCacheItemPool();
         $this->httpClientOptions = HttpClientOptions::default();
@@ -227,7 +227,7 @@ final class Factory
         return $factory;
     }
 
-    public function withClock(Clock $clock): self
+    public function withClock(ClockInterface $clock): self
     {
         $factory = clone $this;
         $factory->clock = $clock;

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Exception;
 
+use Beste\Clock\SystemClock;
 use DateTimeImmutable;
 use GuzzleHttp\Exception\RequestException;
-use Kreait\Clock;
-use Kreait\Clock\SystemClock;
 use Kreait\Firebase\Exception\Messaging\ApiConnectionFailed;
 use Kreait\Firebase\Exception\Messaging\AuthenticationError;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
@@ -17,6 +16,7 @@ use Kreait\Firebase\Exception\Messaging\QuotaExceeded;
 use Kreait\Firebase\Exception\Messaging\ServerError;
 use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
 use Kreait\Firebase\Http\ErrorResponseParser;
+use Psr\Clock\ClockInterface;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
@@ -28,12 +28,12 @@ class MessagingApiExceptionConverter
 {
     private ErrorResponseParser $responseParser;
 
-    private Clock $clock;
+    private ClockInterface $clock;
 
-    public function __construct(?Clock $clock = null)
+    public function __construct(?ClockInterface $clock = null)
     {
         $this->responseParser = new ErrorResponseParser();
-        $this->clock = $clock ?? new SystemClock();
+        $this->clock = $clock ?? SystemClock::create();
     }
 
     /**
