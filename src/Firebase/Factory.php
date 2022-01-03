@@ -29,7 +29,6 @@ use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\Http\HttpClientOptions;
 use Kreait\Firebase\Http\Middleware;
-use Kreait\Firebase\JWT\Cache\InMemoryCache;
 use Kreait\Firebase\JWT\CustomTokenGenerator;
 use Kreait\Firebase\JWT\IdTokenVerifier;
 use Kreait\Firebase\Value\Email;
@@ -37,7 +36,6 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Psr\SimpleCache\CacheInterface;
 use Throwable;
 
 final class Factory
@@ -65,7 +63,7 @@ final class Factory
 
     private ?string $clientEmail = null;
 
-    private CacheInterface $verifierCache;
+    private CacheItemPoolInterface $verifierCache;
 
     private CacheItemPoolInterface $authTokenCache;
 
@@ -93,7 +91,7 @@ final class Factory
     public function __construct()
     {
         $this->clock = new SystemClock();
-        $this->verifierCache = InMemoryCache::createEmpty();
+        $this->verifierCache = new MemoryCacheItemPool();
         $this->authTokenCache = new MemoryCacheItemPool();
         $this->httpClientOptions = HttpClientOptions::default();
     }
@@ -181,7 +179,7 @@ final class Factory
         return $factory;
     }
 
-    public function withVerifierCache(CacheInterface $cache): self
+    public function withVerifierCache(CacheItemPoolInterface $cache): self
     {
         $factory = clone $this;
         $factory->verifierCache = $cache;
@@ -616,7 +614,7 @@ final class Factory
 
         $credentials = $this->getGoogleAuthTokenCredentials();
 
-        if ($credentials === null && $this->discoveryIsDisabled) {
+        if (!($credentials instanceof CredentialsLoader) && $this->discoveryIsDisabled) {
             throw new RuntimeException('Unable to create an API client without credentials');
         }
 

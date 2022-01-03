@@ -12,7 +12,6 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\Http\HttpClientOptions;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\SimpleCache\CacheInterface;
 use RuntimeException;
 
 /**
@@ -104,7 +103,7 @@ final class FactoryTest extends UnitTestCase
 
     public function testItUsesAVerifierCache(): void
     {
-        $factory = (new Factory())->withVerifierCache($cache = $this->createMock(CacheInterface::class));
+        $factory = (new Factory())->withVerifierCache($cache = $this->createMock(CacheItemPoolInterface::class));
 
         $this->assertVerifierCache($factory, $cache);
     }
@@ -198,7 +197,7 @@ final class FactoryTest extends UnitTestCase
         $this->assertSame($expected, $property->getValue($factory));
     }
 
-    private function assertVerifierCache(Factory $factory, CacheInterface $expected): void
+    private function assertVerifierCache(Factory $factory, CacheItemPoolInterface $expected): void
     {
         $property = (new \ReflectionObject($factory))->getProperty('verifierCache');
         $property->setAccessible(true);

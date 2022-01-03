@@ -398,7 +398,7 @@ final class Auth implements Contract\Auth
 
         $verifiedToken = $this->parseToken($idTokenString);
 
-        if ($checkIfRevoked === false) {
+        if (!$checkIfRevoked) {
             return $verifiedToken;
         }
 

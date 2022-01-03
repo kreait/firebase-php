@@ -19,6 +19,10 @@ methods.
   `Kreait\Firebase\*` **implementations**
 * `Kreait\Firebase\Factory` has been locked down. It should only be used to configure and retrieve the services
   provided by the SDK as documented.
+* `Kreait\Firebase\Factory::withVerifierCache()` now expects a PSR-6 Cache Item Pool and doesn't directly support
+  PSR-16 Caches anymore. If you only have a PSR-16 Cache available in your project, you can use an adapter, e.g.
+  one provided by the `symfony/cache` component. If you're using the Firebase Bundle or the Laravel Package, this
+  will be taken care of once they are updated to use the new release.
 
 ### Auth component
 * `Kreait\Firebase\Contract\Auth::parseToken()` and `Kreait\Firebase\Contract\Auth::verifyIdToken()` now return
