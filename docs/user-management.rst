@@ -11,7 +11,7 @@ rate limiting.
 User Records
 ************
 
-``UserRecord`` s returned by methods from the ``Kreait\Firebase\Auth`` class have the
+``UserRecord`` s returned by methods from ``Kreait\Firebase\Contract\Auth`` class have the
 following signature:
 
 .. code-block:: json

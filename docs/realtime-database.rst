@@ -19,7 +19,7 @@ Initializing the Realtime Database component
 
 .. code-block:: php
 
-    use Kreait\Firebase\Database;
+    use Kreait\Firebase\Contract\Database;
 
     class MyService
     {

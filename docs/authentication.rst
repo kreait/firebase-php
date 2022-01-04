@@ -43,7 +43,7 @@ Initializing the Auth component
 
 .. code-block:: php
 
-    use Kreait\Firebase\Auth;
+    use Kreait\Firebase\Contract\Auth;
 
     class MyService
     {
@@ -164,10 +164,6 @@ Each of the methods documented below will return an instance of ``Kreait\Firebas
 with the following accessors:
 
 .. code-block:: php
-
-    use Kreait\Firebase\Auth;
-
-    // $signInResult = $auth->signIn*()
 
     $signInResult->idToken(); // string|null
     $signInResult->firebaseUserId(); // string|null

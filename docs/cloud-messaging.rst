@@ -27,7 +27,7 @@ Initializing the Messaging component
 
 .. code-block:: php
 
-    use Kreait\Firebase\Messaging;
+    use Kreait\Firebase\Contract\Messaging;
 
     class MyService
     {

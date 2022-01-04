@@ -36,7 +36,7 @@ Initializing the Realtime Database component
 
 .. code-block:: php
 
-    use Kreait\Firebase\RemoteConfig;
+    use Kreait\Firebase\Contract\RemoteConfig;
 
     class MyService
     {
