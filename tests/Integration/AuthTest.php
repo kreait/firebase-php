@@ -191,6 +191,16 @@ final class AuthTest extends IntegrationTestCase
         $this->auth->getEmailActionLink('unsupported', self::randomEmail(__FUNCTION__));
     }
 
+    public function testGetLocalizedEmailActionLink(): void
+    {
+        $user = $this->createUserWithEmailAndPassword();
+        $this->assertIsString($user->email);
+
+        $link = $this->auth->getEmailVerificationLink($user->email, null, 'fr');
+
+        $this->assertStringContainsString('lang=fr', $link);
+    }
+
     public function testSendUnsupportedEmailActionLink(): void
     {
         $this->expectException(FailedToSendActionLink::class);

@@ -410,6 +410,7 @@ or you will get an email action link that you can use in a custom email.
 
     $link = $auth->getEmailVerificationLink($email);
     $link = $auth->getEmailVerificationLink($email, $actionCodeSettings);
+    $link = $auth->getEmailVerificationLink($email, $actionCodeSettings, $locale);
 
     $auth->sendEmailVerificationLink($email);
     $auth->sendEmailVerificationLink($email, $actionCodeSettings);
@@ -427,6 +428,7 @@ or you will get an email action link that you can use in a custom email.
 
     $link = $auth->getPasswordResetLink($email);
     $link = $auth->getPasswordResetLink($email, $actionCodeSettings);
+    $link = $auth->getPasswordResetLink($email, $actionCodeSettings, $locale);
 
     $auth->sendPasswordResetLink($email);
     $auth->sendPasswordResetLink($email, $actionCodeSettings);

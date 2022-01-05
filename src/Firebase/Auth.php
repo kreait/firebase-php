@@ -253,7 +253,7 @@ class Auth implements Contract\Auth
         return DeleteUsersResult::fromRequestAndResponse($request, $response);
     }
 
-    public function getEmailActionLink(string $type, $email, $actionCodeSettings = null): string
+    public function getEmailActionLink(string $type, $email, $actionCodeSettings = null, ?string $locale = null): string
     {
         $email = $email instanceof Email ? $email : new Email($email);
 
@@ -268,7 +268,7 @@ class Auth implements Contract\Auth
         $tenantId = $this->tenantId !== null ? $this->tenantId->toString() : null;
 
         return (new CreateActionLink\GuzzleApiClientHandler($this->httpClient))
-            ->handle(CreateActionLink::new($type, $email, $actionCodeSettings, $tenantId))
+            ->handle(CreateActionLink::new($type, $email, $actionCodeSettings, $tenantId, $locale))
         ;
     }
 
@@ -286,7 +286,7 @@ class Auth implements Contract\Auth
 
         $tenantId = $this->tenantId !== null ? $this->tenantId->toString() : null;
 
-        $createAction = CreateActionLink::new($type, $email, $actionCodeSettings, $tenantId);
+        $createAction = CreateActionLink::new($type, $email, $actionCodeSettings, $tenantId, $locale);
         $sendAction = new SendActionLink($createAction, $locale);
 
         if (\mb_strtolower($type) === 'verify_email') {
@@ -318,9 +318,9 @@ class Auth implements Contract\Auth
         (new SendActionLink\GuzzleApiClientHandler($this->httpClient))->handle($sendAction);
     }
 
-    public function getEmailVerificationLink($email, $actionCodeSettings = null): string
+    public function getEmailVerificationLink($email, $actionCodeSettings = null, ?string $locale = null): string
     {
-        return $this->getEmailActionLink('VERIFY_EMAIL', $email, $actionCodeSettings);
+        return $this->getEmailActionLink('VERIFY_EMAIL', $email, $actionCodeSettings, $locale);
     }
 
     public function sendEmailVerificationLink($email, $actionCodeSettings = null, ?string $locale = null): void
@@ -328,9 +328,9 @@ class Auth implements Contract\Auth
         $this->sendEmailActionLink('VERIFY_EMAIL', $email, $actionCodeSettings, $locale);
     }
 
-    public function getPasswordResetLink($email, $actionCodeSettings = null): string
+    public function getPasswordResetLink($email, $actionCodeSettings = null, ?string $locale = null): string
     {
-        return $this->getEmailActionLink('PASSWORD_RESET', $email, $actionCodeSettings);
+        return $this->getEmailActionLink('PASSWORD_RESET', $email, $actionCodeSettings, $locale);
     }
 
     public function sendPasswordResetLink($email, $actionCodeSettings = null, ?string $locale = null): void
@@ -338,9 +338,9 @@ class Auth implements Contract\Auth
         $this->sendEmailActionLink('PASSWORD_RESET', $email, $actionCodeSettings, $locale);
     }
 
-    public function getSignInWithEmailLink($email, $actionCodeSettings = null): string
+    public function getSignInWithEmailLink($email, $actionCodeSettings = null, ?string $locale = null): string
     {
-        return $this->getEmailActionLink('EMAIL_SIGNIN', $email, $actionCodeSettings);
+        return $this->getEmailActionLink('EMAIL_SIGNIN', $email, $actionCodeSettings, $locale);
     }
 
     public function sendSignInWithEmailLink($email, $actionCodeSettings = null, ?string $locale = null): void

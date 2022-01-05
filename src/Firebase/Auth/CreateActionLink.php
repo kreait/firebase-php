@@ -13,6 +13,7 @@ final class CreateActionLink
     private Email $email;
     private ActionCodeSettings $settings;
     private ?string $tenantId = null;
+    private ?string $locale = null;
 
     private function __construct(string $type, Email $email, ActionCodeSettings $settings)
     {
@@ -21,10 +22,11 @@ final class CreateActionLink
         $this->settings = $settings;
     }
 
-    public static function new(string $type, Email $email, ActionCodeSettings $settings, ?string $tenantId = null): self
+    public static function new(string $type, Email $email, ActionCodeSettings $settings, ?string $tenantId = null, ?string $locale = null): self
     {
         $instance = new self($type, $email, $settings);
         $instance->tenantId = $tenantId;
+        $instance->locale = $locale;
 
         return $instance;
     }
@@ -47,5 +49,10 @@ final class CreateActionLink
     public function tenantId(): ?string
     {
         return $this->tenantId;
+    }
+
+    public function locale(): ?string
+    {
+        return $this->locale;
     }
 }

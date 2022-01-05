@@ -174,7 +174,7 @@ interface Auth
      *
      * @throws FailedToCreateActionLink
      */
-    public function getEmailActionLink(string $type, $email, $actionCodeSettings = null): string;
+    public function getEmailActionLink(string $type, $email, $actionCodeSettings = null, ?string $locale = null): string;
 
     /**
      * @param Email|string $email
@@ -191,7 +191,7 @@ interface Auth
      *
      * @throws FailedToCreateActionLink
      */
-    public function getEmailVerificationLink($email, $actionCodeSettings = null): string;
+    public function getEmailVerificationLink($email, $actionCodeSettings = null, ?string $locale = null): string;
 
     /**
      * @param Email|string $email
@@ -207,7 +207,7 @@ interface Auth
      *
      * @throws FailedToCreateActionLink
      */
-    public function getPasswordResetLink($email, $actionCodeSettings = null): string;
+    public function getPasswordResetLink($email, $actionCodeSettings = null, ?string $locale = null): string;
 
     /**
      * @param Email|string $email
@@ -223,7 +223,7 @@ interface Auth
      *
      * @throws FailedToCreateActionLink
      */
-    public function getSignInWithEmailLink($email, $actionCodeSettings = null): string;
+    public function getSignInWithEmailLink($email, $actionCodeSettings = null, ?string $locale = null): string;
 
     /**
      * @param Email|string $email

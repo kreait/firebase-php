@@ -3,6 +3,12 @@
 ## [Unreleased]
 ### Added
 * Ensured compatibility with PHP 8.1
+* Added optional `$locale` parameter to the following methods
+  ([#679](https://github.com/kreait/firebase-php/pull/679))
+  * `Kreait\Firebase\Auth::getEmailActionLink(string $type, $email, $actionCodeSettings = null, ?string $locale = null)` 
+  * `Kreait\Firebase\Auth::getEmailVerificationLink($email, $actionCodeSettings = null, ?string $locale = null)` 
+  * `Kreait\Firebase\Auth::getPasswordResetLink($email, $actionCodeSettings = null, ?string $locale = null)` 
+  * `Kreait\Firebase\Auth::getSignInWithEmailLink($email, $actionCodeSettings = null, ?string $locale = null)`
 
 ### Deprecated
 * `Kreait\Firebase\Value\Provider`, use provider strings directly ([supported providers](https://firebase.google.com/docs/projects/provisioning/configure-oauth#add-idp))
