@@ -26,6 +26,7 @@ final class CreateActionLink
     {
         $instance = new self($type, $email, $settings);
         $instance->tenantId = $tenantId;
+        $instance->locale = $locale;
 
         return $instance;
     }
