@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+
+## [5.26.0] - 2022-01-06
 ### Added
 * Ensured compatibility with PHP 8.1
 * Added optional `$locale` parameter to the following methods
@@ -328,7 +330,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.25.0...5.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.26.0...5.x
+[5.26.0]: https://github.com/kreait/firebase-php/compare/5.25.0...5.26.0
 [5.25.0]: https://github.com/kreait/firebase-php/compare/5.24.0...5.25.0
 [5.24.0]: https://github.com/kreait/firebase-php/compare/5.23.0...5.24.0
 [5.23.0]: https://github.com/kreait/firebase-php/compare/5.22.0...5.23.0
