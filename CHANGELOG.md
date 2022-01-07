@@ -12,7 +12,7 @@ methods.
 ### Setup
 * It is now mandatory to provide a Firebase Project ID. When the project ID cannot be determined from the
   provided credentials (usually a service account), it can be provided by setting the `GOOGLE_CLOUD_PROJECT=<project-id>`
-  environment variable.
+  environment variable or by calling `$factory = $factory->withProjectId('project-id')`.
 * The environment variable `FIREBASE_CREDENTIALS` will not be evaluated anymore for credentials auto-discovery. If you
   rely on auto-discovery, use the `GOOGLE_APPLICATION_CREDENTIALS` environment variable. This was already supported in
   earlier versions and is the same environment variable the official Google Libraries use.
