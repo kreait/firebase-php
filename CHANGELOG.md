@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.0.0] - 2022-01-07
+
 This is a release with breaking changes. Please review the following changes and adapt your application where needed.
 
 The supported way to interact with the SDK is to instantiate Components with the `Kreait\Firebase\Factory::create*`
@@ -87,4 +89,5 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.x...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.0.0...6.x
+[6.0.0]: https://github.com/kreait/firebase-php/compare/5.x...6.0.0
