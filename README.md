@@ -54,6 +54,10 @@ Integrations for Laravel, Lumen and Symfony are available:
 - [Discord Community](https://discord.gg/Yacm7unBsr)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/firebase+php)
 
+_If you or your team rely on this project and me maintaining it, please consider becoming a
+[Sponsor](https://github.com/sponsors/jeromegamez/) 🙏. Higher tiers enable access to extended
+support._
+
 ## License
 
 Firebase Admin PHP SDK is licensed under the [MIT License](LICENSE).
