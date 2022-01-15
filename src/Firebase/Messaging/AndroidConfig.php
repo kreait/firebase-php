@@ -17,7 +17,7 @@ final class AndroidConfig implements JsonSerializable
 
     /** @var array{
      *      collapse_key?: string,
-     *      priority?: 'normal'|'high',
+     *      priority?: self::PRIORITY_*,
      *      ttl?: string,
      *      restricted_package_name?: string,
      *      data?: array<string, string>,
@@ -31,7 +31,7 @@ final class AndroidConfig implements JsonSerializable
     /**
      * @param array{
      *     collapse_key?: string,
-     *     priority?: 'normal'|'high',
+     *     priority?: self::PRIORITY_*,
      *     ttl?: string,
      *     restricted_package_name?: string,
      *     data?: array<string, string>,
@@ -53,7 +53,7 @@ final class AndroidConfig implements JsonSerializable
     /**
      * @param array{
      *     collapse_key?: string,
-     *     priority?: 'normal'|'high',
+     *     priority?: self::PRIORITY_*,
      *     ttl?: string,
      *     restricted_package_name?: string,
      *     data?: array<string, string>,
@@ -95,6 +95,9 @@ final class AndroidConfig implements JsonSerializable
         return $this->withPriority(self::PRIORITY_NORMAL);
     }
 
+    /**
+     * @param self::PRIORITY_* $priority
+     */
     public function withPriority(string $priority): self
     {
         $config = clone $this;

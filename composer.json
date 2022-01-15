@@ -40,7 +40,7 @@
     "require-dev": {
         "google/cloud-firestore": "^1.19.3",
         "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^1.2",
+        "phpstan/phpstan": "^1.4",
         "phpstan/phpstan-phpunit": "^1.0",
         "phpunit/phpunit": "^9.5.10",
         "rector/rector": "^0.12.5",

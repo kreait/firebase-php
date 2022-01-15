@@ -12,7 +12,7 @@ final class CreateDynamicLink implements JsonSerializable
     public const WITH_UNGUESSABLE_SUFFIX = 'UNGUESSABLE';
     public const WITH_SHORT_SUFFIX = 'SHORT';
 
-    /** @var array<string, array<string, string>> */
+    /** @var array<string, mixed> */
     private array $data = [
         'dynamicLinkInfo' => [],
         'suffix' => ['option' => self::WITH_UNGUESSABLE_SUFFIX],
@@ -23,7 +23,7 @@ final class CreateDynamicLink implements JsonSerializable
     }
 
     /**
-     * @param array<string, array<string, string>> $data
+     * @param array<string, mixed> $data
      */
     public static function fromArray(array $data): self
     {
@@ -78,7 +78,7 @@ final class CreateDynamicLink implements JsonSerializable
         $info = $data instanceof AnalyticsInfo ? $data : AnalyticsInfo::fromArray($data);
 
         $action = clone $this;
-        $action->data['dynamicLinkInfo']['analyticsInfo'] = $info;
+        $action->data['dynamicLinkInfo']['analyticsInfo'] = $info->jsonSerialize();
 
         return $action;
     }
@@ -104,7 +104,7 @@ final class CreateDynamicLink implements JsonSerializable
         $info = $data instanceof IOSInfo ? $data : IOSInfo::fromArray($data);
 
         $action = clone $this;
-        $action->data['dynamicLinkInfo']['iosInfo'] = $info;
+        $action->data['dynamicLinkInfo']['iosInfo'] = $info->jsonSerialize();
 
         return $action;
     }
@@ -130,7 +130,7 @@ final class CreateDynamicLink implements JsonSerializable
         $info = $data instanceof SocialMetaTagInfo ? $data : SocialMetaTagInfo::fromArray($data);
 
         $action = clone $this;
-        $action->data['dynamicLinkInfo']['socialMetaTagInfo'] = $info;
+        $action->data['dynamicLinkInfo']['socialMetaTagInfo'] = $info->jsonSerialize();
 
         return $action;
     }
