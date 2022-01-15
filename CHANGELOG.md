@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Added
+* When signing in with IdP credentials a user's Firebase UID is retrieved from the returned `localId` field, if present
+
 ## [6.0.0] - 2022-01-07
 
 This is a release with breaking changes. Please review the following changes and adapt your application where needed.
