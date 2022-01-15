@@ -37,6 +37,13 @@ final class SignInResultTest extends UnitTestCase
         ], $result->asTokenResponse());
     }
 
+    public function testItUsesTheLocalIdWhenTheFirebaseUidIsNotPresent(): void
+    {
+        $result = SignInResult::fromData(['localId' => 'some-id']);
+
+        $this->assertSame('some-id', $result->firebaseUserId());
+    }
+
     /**
      * @return array<string, array<int, array<string, mixed>>>
      */

@@ -73,6 +73,10 @@ final class SignInResult
             }
         }
 
+        if ($localId = $this->data['localId'] ?? null) {
+            return $this->firebaseUserId = $localId;
+        }
+
         return null;
     }
 

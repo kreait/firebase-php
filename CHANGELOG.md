@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Added
+* When signing in with IdP credentials a user's Firebase UID is retrieved from the returned `localId` field, if present
+
 ## [5.26.0] - 2022-01-06
 ### Added
 * Ensured compatibility with PHP 8.1
