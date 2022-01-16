@@ -2,7 +2,9 @@
 
 ## [Unreleased]
 
-### Added
+## [6.0.0] - 2022-01-16
+
+### Fixed
 * When signing in with IdP credentials a user's Firebase UID is retrieved from the returned `localId` field, if present
 
 ## [6.0.0] - 2022-01-07
@@ -92,5 +94,6 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.0.0...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.0.1...6.x
+[6.0.1]: https://github.com/kreait/firebase-php/compare/6.0.0...6.0.1
 [6.0.0]: https://github.com/kreait/firebase-php/compare/5.x...6.0.0
