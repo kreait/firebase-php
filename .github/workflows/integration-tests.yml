@@ -14,7 +14,7 @@ jobs:
     env:
       php-version: '8.0'
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
-      key: cache-integration-5x-${{ matrix.php }}-v1
+      key: cache-integration-6x-${{ matrix.php }}-v1
 
     steps:
       - name: Checkout code

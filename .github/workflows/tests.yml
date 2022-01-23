@@ -22,7 +22,7 @@ jobs:
 
     env:
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
-      key: cache-unit-5x-${{ matrix.php }}-${{ matrix.dependencies }}-v1
+      key: cache-unit-6x-${{ matrix.php }}-${{ matrix.dependencies }}-v1
 
     steps:
       - name: Checkout code
