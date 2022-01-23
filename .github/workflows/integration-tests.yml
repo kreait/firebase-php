@@ -9,7 +9,7 @@ jobs:
   integration-tests:
     name: Integration Tests
     runs-on: ubuntu-latest
-    if: github.repository == 'kreait/firebase-php'
+    if: github.repository_owner == 'kreait' || github.repository_owner == 'beste-access'
 
     env:
       php-version: '8.0'
