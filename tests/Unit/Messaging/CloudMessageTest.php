@@ -164,4 +164,14 @@ final class CloudMessageTest extends TestCase
             ]],
         ];
     }
+
+    public function testGetTarget()
+    {
+        $message = CloudMessage::new()->withChangedTarget('topic', 'test topic');
+        $target = $message->getTarget();
+
+        $this->assertInstanceOf(MessageTarget::class, $target);
+        $this->assertSame('topic', $target->type());
+        $this->assertSame('test topic', $target->value());
+    }
 }

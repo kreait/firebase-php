@@ -282,6 +282,11 @@ final class CloudMessage implements Message
         return (bool) $this->target;
     }
 
+    public function getTarget(): ?MessageTarget
+    {
+        return $this->target;
+    }
+
     /**
      * @return array<string, mixed>
      */
