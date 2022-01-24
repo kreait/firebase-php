@@ -382,51 +382,12 @@ final class Auth implements Contract\Auth
 
     public function verifyIdToken($idToken, bool $checkIfRevoked = false, int $leewayInSeconds = null): UnencryptedToken
     {
-        $verifier = $this->idTokenVerifier;
+        return $this->verifyTokenOrCookie($idToken, $checkIfRevoked, $leewayInSeconds);
+    }
 
-        $idTokenString = \is_string($idToken) ? $idToken : $idToken->toString();
-
-        try {
-            if ($leewayInSeconds !== null) {
-                $verifier->verifyIdTokenWithLeeway($idTokenString, $leewayInSeconds);
-            } else {
-                $verifier->verifyIdToken($idTokenString);
-            }
-        } catch (Throwable $e) {
-            throw new FailedToVerifyToken($e->getMessage());
-        }
-
-        $verifiedToken = $this->parseToken($idTokenString);
-
-        if (!$checkIfRevoked) {
-            return $verifiedToken;
-        }
-
-        try {
-            $user = $this->getUser($verifiedToken->claims()->get('sub'));
-        } catch (Throwable $e) {
-            throw new FailedToVerifyToken("Error while getting the token's user: {$e->getMessage()}", 0, $e);
-        }
-
-        // The timestamp, in seconds, which marks a boundary, before which Firebase ID token are considered revoked.
-        $validSince = $user->tokensValidAfterTime ?? null;
-
-        if (!($validSince instanceof \DateTimeImmutable)) {
-            // The user hasn't logged in yet, so there's nothing to revoke
-            return $verifiedToken;
-        }
-
-        $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->claims()->get('auth_time'));
-
-        if ($leewayInSeconds) {
-            $tokenAuthenticatedAt = $tokenAuthenticatedAt->modify('-'.$leewayInSeconds.' seconds');
-        }
-
-        if ($tokenAuthenticatedAt->getTimestamp() < $validSince->getTimestamp()) {
-            throw new RevokedIdToken($verifiedToken);
-        }
-
-        return $verifiedToken;
+    public function verifySessionCookie($cookie, bool $checkIfRevoked = false, int $leewayInSeconds = null): UnencryptedToken
+    {
+        return $this->verifyTokenOrCookie($cookie, $checkIfRevoked, $leewayInSeconds);
     }
 
     public function verifyPasswordResetCode(string $oobCode): string
@@ -643,5 +604,54 @@ final class Auth implements Contract\Auth
         $uid = JSON::decode((string) $response->getBody(), true)['localId'];
 
         return $this->getUser($uid);
+    }
+
+    private function verifyTokenOrCookie($idToken, bool $checkIfRevoked = false, int $leewayInSeconds = null): UnencryptedToken
+    {
+        $verifier = $this->idTokenVerifier;
+
+        $idTokenString = \is_string($idToken) ? $idToken : $idToken->toString();
+
+        try {
+            if ($leewayInSeconds !== null) {
+                $verifier->verifyIdTokenWithLeeway($idTokenString, $leewayInSeconds);
+            } else {
+                $verifier->verifyIdToken($idTokenString);
+            }
+        } catch (Throwable $e) {
+            throw new FailedToVerifyToken($e->getMessage());
+        }
+
+        $verifiedToken = $this->parseToken($idTokenString);
+
+        if (!$checkIfRevoked) {
+            return $verifiedToken;
+        }
+
+        try {
+            $user = $this->getUser($verifiedToken->claims()->get('sub'));
+        } catch (Throwable $e) {
+            throw new FailedToVerifyToken("Error while getting the token's user: {$e->getMessage()}", 0, $e);
+        }
+
+        // The timestamp, in seconds, which marks a boundary, before which Firebase ID token are considered revoked.
+        $validSince = $user->tokensValidAfterTime ?? null;
+
+        if (!($validSince instanceof \DateTimeImmutable)) {
+            // The user hasn't logged in yet, so there's nothing to revoke
+            return $verifiedToken;
+        }
+
+        $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->claims()->get('auth_time'));
+
+        if ($leewayInSeconds) {
+            $tokenAuthenticatedAt = $tokenAuthenticatedAt->modify('-'.$leewayInSeconds.' seconds');
+        }
+
+        if ($tokenAuthenticatedAt->getTimestamp() < $validSince->getTimestamp()) {
+            throw new RevokedIdToken($verifiedToken);
+        }
+
+        return $verifiedToken;
     }
 }
