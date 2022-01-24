@@ -13,7 +13,7 @@ use Throwable;
 
 abstract class IntegrationTestCase extends FirebaseTestCase
 {
-    public const TENANT_ID = 'Beste-lgiu8';
+    public const TENANT_ID = 'Test-bs38l';
 
     protected static Factory $factory;
 
