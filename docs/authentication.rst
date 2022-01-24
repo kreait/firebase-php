@@ -322,6 +322,11 @@ Before you start, please read about Firebase Session Cookies in the official doc
 Create session cookie
 ---------------------
 
+.. warning::
+    Creating session cookies when using tenants is currently not possible. Please follow
+    `this issue on GitHub <https://github.com/firebase/firebase-admin-python/issues/577>`_ or
+    `in the Google Issue Tracker <https://issuetracker.google.com/issues/204377229>`_ for updates.
+
 Given an ID token sent to your server application from a client application, you can convert it to a session cookie:
 
 .. code-block:: php
