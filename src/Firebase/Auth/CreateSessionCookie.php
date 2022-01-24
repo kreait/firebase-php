@@ -16,12 +16,14 @@ final class CreateSessionCookie
     private const TWO_WEEKS = 'P14D';
 
     private string $idToken;
+    private ?string $tenantId;
     private DateInterval $ttl;
     private ClockInterface $clock;
 
-    private function __construct(string $idToken, DateInterval $ttl, ClockInterface $clock)
+    private function __construct(string $idToken, ?string $tenantId, DateInterval $ttl, ClockInterface $clock)
     {
         $this->idToken = $idToken;
+        $this->tenantId = $tenantId;
         $this->ttl = $ttl;
         $this->clock = $clock;
     }
@@ -30,7 +32,7 @@ final class CreateSessionCookie
      * @param Token|string $idToken
      * @param int|DateInterval $ttl
      */
-    public static function forIdToken($idToken, $ttl, ?ClockInterface $clock = null): self
+    public static function forIdToken($idToken, ?string $tenantId, $ttl, ?ClockInterface $clock = null): self
     {
         $clock ??= SystemClock::create();
 
@@ -40,12 +42,17 @@ final class CreateSessionCookie
 
         $ttl = self::assertValidDuration($ttl, $clock);
 
-        return new self($idToken, $ttl, $clock);
+        return new self($idToken, $tenantId, $ttl, $clock);
     }
 
     public function idToken(): string
     {
         return $this->idToken;
+    }
+
+    public function tenantId(): ?string
+    {
+        return $this->tenantId;
     }
 
     public function ttl(): DateInterval

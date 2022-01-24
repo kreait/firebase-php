@@ -262,7 +262,7 @@ final class Auth implements Contract\Auth
                 : ValidatedActionCodeSettings::fromArray($actionCodeSettings);
         }
 
-        return (new CreateActionLink\GuzzleApiClientHandler($this->httpClient))
+        return (new CreateActionLink\GuzzleApiClientHandler($this->httpClient, $this->projectId))
             ->handle(CreateActionLink::new($type, $email, $actionCodeSettings, $this->tenantId, $locale))
         ;
     }
@@ -308,7 +308,7 @@ final class Auth implements Contract\Auth
             $sendAction = $sendAction->withIdTokenString($idToken);
         }
 
-        (new SendActionLink\GuzzleApiClientHandler($this->httpClient))->handle($sendAction);
+        (new SendActionLink\GuzzleApiClientHandler($this->httpClient, $this->projectId))->handle($sendAction);
     }
 
     public function getEmailVerificationLink($email, $actionCodeSettings = null, ?string $locale = null): string
@@ -627,8 +627,8 @@ final class Auth implements Contract\Auth
 
     public function createSessionCookie($idToken, $ttl): string
     {
-        return (new CreateSessionCookie\GuzzleApiClientHandler($this->httpClient))
-            ->handle(CreateSessionCookie::forIdToken($idToken, $ttl))
+        return (new CreateSessionCookie\GuzzleApiClientHandler($this->httpClient, $this->projectId))
+            ->handle(CreateSessionCookie::forIdToken($idToken, $this->tenantId, $ttl, $this->clock))
         ;
     }
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests;
 
-use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Util;
@@ -42,38 +41,6 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         ;
 
         self::$registrationTokens = self::registrationTokensFromEnvironment() ?? self::registrationTokensFromFile() ?? [];
-    }
-
-    protected function createUserWithEmailAndPassword(?string $email = null, ?string $password = null): UserRecord
-    {
-        $email ??= self::randomEmail();
-        $password ??= self::randomString();
-
-        return self::$factory
-            ->createAuth()
-            ->createUser([
-                'email' => $email,
-                'clear_text_password' => $password,
-            ])
-        ;
-    }
-
-    /**
-     * @param UserRecord|\Stringable|string|null $userOrUid
-     */
-    protected function deleteUser($userOrUid): void
-    {
-        if ($userOrUid === null) {
-            return;
-        }
-
-        $uid = $userOrUid instanceof UserRecord ? $userOrUid->uid : $userOrUid;
-
-        try {
-            self::$factory->createAuth()->deleteUser($uid);
-        } catch (Throwable $e) {
-            // Well, if that failed, *we're* failed
-        }
     }
 
     protected function getTestRegistrationToken(): string

@@ -11,6 +11,10 @@ use Kreait\Firebase\Http\WrappedPsr7Request;
 use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * @deprecated 6.0.1
+ * @codeCoverageIgnore
+ */
 final class ApiRequest implements RequestInterface
 {
     use WrappedPsr7Request;

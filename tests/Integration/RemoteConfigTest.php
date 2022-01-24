@@ -14,6 +14,7 @@ use Kreait\Firebase\RemoteConfig\Template;
 use Kreait\Firebase\RemoteConfig\UpdateOrigin;
 use Kreait\Firebase\RemoteConfig\UpdateType;
 use Kreait\Firebase\RemoteConfig\Version;
+use Kreait\Firebase\RemoteConfig\VersionNumber;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Throwable;
 
@@ -111,7 +112,7 @@ final class RemoteConfigTest extends IntegrationTestCase
 
         $version = $check->version();
 
-        if (!$version instanceof \Kreait\Firebase\RemoteConfig\Version) {
+        if (!$version instanceof Version) {
             $this->fail('The template has no version');
         }
 
@@ -151,7 +152,7 @@ final class RemoteConfigTest extends IntegrationTestCase
     {
         $version = $this->remoteConfig->get()->version();
 
-        if (!$version instanceof \Kreait\Firebase\RemoteConfig\Version) {
+        if (!$version instanceof Version) {
             $this->fail('The template has no version');
         }
 
@@ -168,7 +169,7 @@ final class RemoteConfigTest extends IntegrationTestCase
 
         $refetchedVersion = $this->remoteConfig->get()->version();
 
-        if (!$refetchedVersion instanceof \Kreait\Firebase\RemoteConfig\Version) {
+        if (!$refetchedVersion instanceof Version) {
             $this->fail('The template has no version');
         }
 
@@ -182,7 +183,7 @@ final class RemoteConfigTest extends IntegrationTestCase
     {
         $initialVersion = $this->remoteConfig->get()->version();
 
-        if (!$initialVersion instanceof \Kreait\Firebase\RemoteConfig\Version) {
+        if (!$initialVersion instanceof Version) {
             $this->fail('The template has no version');
         }
 
@@ -210,14 +211,14 @@ final class RemoteConfigTest extends IntegrationTestCase
 
         $newVersion = $this->remoteConfig->get()->version();
 
-        if (!$newVersion instanceof \Kreait\Firebase\RemoteConfig\Version) {
+        if (!$newVersion instanceof Version) {
             $this->fail('The new template has no version');
         }
 
         $newVersionNumber = $newVersion->versionNumber();
         $rollbackSource = $newVersion->rollbackSource();
 
-        if (!$rollbackSource instanceof \Kreait\Firebase\RemoteConfig\VersionNumber) {
+        if (!$rollbackSource instanceof VersionNumber) {
             $this->fail('The new template version has no rollback source');
         }
 
@@ -242,7 +243,7 @@ final class RemoteConfigTest extends IntegrationTestCase
     {
         $currentVersion = $this->remoteConfig->get()->version();
 
-        if (!$currentVersion instanceof \Kreait\Firebase\RemoteConfig\Version) {
+        if (!$currentVersion instanceof Version) {
             $this->fail('The new template has no version');
         }
 
@@ -274,7 +275,7 @@ final class RemoteConfigTest extends IntegrationTestCase
     {
         $currentVersion = $this->remoteConfig->get()->version();
 
-        if (!$currentVersion instanceof \Kreait\Firebase\RemoteConfig\Version) {
+        if (!$currentVersion instanceof Version) {
             $this->fail('The template has no version');
         }
 
@@ -289,7 +290,7 @@ final class RemoteConfigTest extends IntegrationTestCase
     {
         $currentVersion = $this->remoteConfig->get()->version();
 
-        if (!$currentVersion instanceof \Kreait\Firebase\RemoteConfig\Version) {
+        if (!$currentVersion instanceof Version) {
             $this->fail('The template has no version');
         }
 

@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### Changed
+* Tenant-aware auth methods are now tested the same way as tenant-unaware methods. In order to achieve this,
+  some internal implementations had to be changed, warranting this minor version bump. Please note that
+  the tests uncovered that creating session tokens is currently not possible when working with tenants.
+  ([GitHub issue](https://github.com/firebase/firebase-admin-python/issues/577) /
+  [Google Issue Tracker issue](https://issuetracker.google.com/issues/204377229)))
+* Deprecated classes
+  * `Kreait\Firebase\Auth\CreateActionLink\ApiRequest`
+  * `Kreait\Firebase\Auth\CreateSessionCookie\ApiRequest`
+  * `Kreait\Firebase\Auth\SendActionLink\ApiRequest`
+
 ## [6.0.0] - 2022-01-16
 
 ### Fixed
