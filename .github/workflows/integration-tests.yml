@@ -62,3 +62,4 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           flags: integration
+        if: github.repository_owner == 'kreait'
