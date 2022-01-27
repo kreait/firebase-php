@@ -412,7 +412,15 @@ You can also delete by specifying null as the value for another write operation 
 
     $database->getReference('posts')->set(null);
 
-You can use this technique with ``update()`` to delete multiple children in a single API call.
+You can also delete in bulk using the function ``removeChildren()``:
+
+.. code-block:: php
+
+    $data->getReference()->removeChildren([
+        'posts/post1',
+        'user-posts/f55dee9a-dd67-4e78-bd7d-f1b4be157a53/post1',
+        'users/f55dee9a-dd67-4e78-bd7d-f1b4be157a53'
+    ]);
 
 *********************
 Database transactions

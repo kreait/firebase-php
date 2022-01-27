@@ -347,6 +347,29 @@ class Reference
     }
 
     /**
+     * Remove the data at the given locations.
+     *
+     * Each location can either be a simple property (for example, "name"), or a relative path
+     * (for example, "name/first") from the current location to the data to remove.
+     *
+     * Any data at child locations will also be deleted.
+     *
+     * @param string[] $keys Locations to remove
+     *
+     * @return Reference
+     *
+     * @throws DatabaseException
+     */
+    public function removeChildren(array $keys): self
+    {
+        $this->update(
+            array_fill_keys($keys, null)
+        );
+
+        return $this;
+    }
+
+    /**
      * Writes multiple values to the database at once.
      *
      * The values argument contains multiple property/value pairs that will be written to the database together.

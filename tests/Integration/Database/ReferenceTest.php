@@ -81,6 +81,32 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertEquals(['second' => 'value'], $ref->getValue());
     }
 
+    public function testRemoveChildren(): void
+    {
+        $ref = $this->ref->getChild(__FUNCTION__);
+
+        $ref->set([
+            'first' => 'value',
+            'second' => [
+                'first_nested' => 'value',
+                'second_nested' => 'value',
+            ],
+            'third' => 'value',
+        ]);
+
+        $ref->removeChildren([
+            'first',
+            'second/first_nested',
+        ]);
+
+        $this->assertEquals([
+            'second' => [
+                'second_nested' => 'value'
+            ],
+            'third' => 'value',
+        ], $ref->getValue());
+    }
+
     public function testPushToGetKey(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
