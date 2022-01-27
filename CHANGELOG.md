@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Added
+
+* Added convenience method to bulk-remove multiple children of an RTDB Reference
+  ([#686](https://github.com/kreait/firebase-php/pull/686))
+* Added methods:
+  * `Kreait\Firebase\Database\Reference::removeChildren()`
+
 ### Changed
 * Tenant-aware auth methods are now tested the same way as tenant-unaware methods. In order to achieve this,
   some internal implementations had to be changed, warranting this minor version bump. Please note that
