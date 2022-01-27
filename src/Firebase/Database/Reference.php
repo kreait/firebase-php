@@ -329,27 +329,42 @@ class Reference
     }
 
     /**
-     * Remove the data at this database location or at the locations given as an argument.
+     * Remove the data at this database location.
      *
      * Any data at child locations will also be deleted.
      *
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove
      *
-     * @param array|null $values
-     *
      * @throws DatabaseException if the API reported an error
      *
      * @return Reference A new instance for the now empty Reference
      */
-    public function remove(?array $values = null): self
+    public function remove(): self
     {
-        if (is_null($values)) {
-            $this->apiClient->remove($this->uri);
-        } else {
-            $this->update(
-                array_fill_keys($values, null)
-            );
-        }
+        $this->apiClient->remove($this->uri);
+
+        return $this;
+    }
+
+    /**
+     * Remove the data at the given locations.
+     *
+     * Each location can either be a simple property (for example, "name"), or a relative path
+     * (for example, "name/first") from the current location to the data to remove.
+     *
+     * Any data at child locations will also be deleted.
+     *
+     * @param string[] $keys Locations to remove
+     *
+     * @return Reference
+     *
+     * @throws DatabaseException
+     */
+    public function removeChildren(array $keys): self
+    {
+        $this->update(
+            array_fill_keys($keys, null)
+        );
 
         return $this;
     }

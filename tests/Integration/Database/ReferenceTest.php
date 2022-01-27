@@ -81,7 +81,7 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertEquals(['second' => 'value'], $ref->getValue());
     }
 
-    public function testBulkRemove(): void
+    public function testRemoveChildren(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
 
@@ -94,7 +94,7 @@ final class ReferenceTest extends DatabaseTestCase
             'third' => 'value',
         ]);
 
-        $ref->remove([
+        $ref->removeChildren([
             'first',
             'second/first_nested',
         ]);
