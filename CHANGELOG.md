@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.1.0] - 2022-01-28
+
 ### Added
 
 * Added convenience method to bulk-remove multiple children of an RTDB Reference
@@ -26,7 +28,7 @@
   * `Kreait\Firebase\Auth\CreateSessionCookie\ApiRequest`
   * `Kreait\Firebase\Auth\SendActionLink\ApiRequest`
 
-## [6.0.0] - 2022-01-16
+## [6.0.1] - 2022-01-16
 
 ### Fixed
 * When signing in with IdP credentials a user's Firebase UID is retrieved from the returned `localId` field, if present
@@ -118,6 +120,7 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.0.1...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.1.0...6.x
+[6.1.0]: https://github.com/kreait/firebase-php/compare/6.0.1...6.1.0
 [6.0.1]: https://github.com/kreait/firebase-php/compare/6.0.0...6.0.1
 [6.0.0]: https://github.com/kreait/firebase-php/compare/5.x...6.0.0
