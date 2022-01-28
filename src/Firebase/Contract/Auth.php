@@ -285,6 +285,8 @@ interface Auth
      */
     public function verifyIdToken($idToken, bool $checkIfRevoked = false, int $leewayInSeconds = null): UnencryptedToken;
 
+    public function verifySessionCookie($cookieToken, bool $checkIfRevoked = false, int $leewayInSeconds = null): UnencryptedToken;
+
     /**
      * Verifies the given password reset code and returns the associated user's email address.
      *

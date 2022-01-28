@@ -30,6 +30,7 @@ use Kreait\Firebase\Http\HttpClientOptions;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\JWT\CustomTokenGenerator;
 use Kreait\Firebase\JWT\IdTokenVerifier;
+use Kreait\Firebase\JWT\SessionCookieVerifier;
 use Kreait\Firebase\Value\Email;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Clock\ClockInterface;
@@ -360,9 +361,10 @@ final class Factory
         $authApiClient = new Auth\ApiClient($httpClient, $tenantId);
         $customTokenGenerator = $this->createCustomTokenGenerator();
         $idTokenVerifier = $this->createIdTokenVerifier();
+        $sessionCookieVerifier = $this->createSessionCookieVerifier();
         $signInHandler = new Firebase\Auth\SignIn\GuzzleHandler($httpClient);
 
-        return new Auth($authApiClient, $httpClient, $customTokenGenerator, $idTokenVerifier, $signInHandler, $projectId, $tenantId, $this->clock);
+        return new Auth($authApiClient, $httpClient, $customTokenGenerator, $idTokenVerifier, $sessionCookieVerifier, $signInHandler, $projectId, $tenantId, $this->clock);
     }
 
     /**
@@ -398,6 +400,13 @@ final class Factory
         if ($this->tenantId !== null) {
             $verifier = $verifier->withExpectedTenantId($this->tenantId);
         }
+
+        return $verifier;
+    }
+
+    private function createSessionCookieVerifier(): SessionCookieVerifier
+    {
+        $verifier = SessionCookieVerifier::createWithProjectIdAndCache($this->getProjectId(), $this->verifierCache);
 
         return $verifier;
     }
