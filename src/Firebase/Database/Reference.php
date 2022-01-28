@@ -315,8 +315,6 @@ class Reference
      * @param mixed|null $value
      *
      * @throws DatabaseException if the API reported an error
-     *
-     * @return Reference A new reference for the added child
      */
     public function push($value = null): self
     {
@@ -336,8 +334,6 @@ class Reference
      * @see https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove
      *
      * @throws DatabaseException if the API reported an error
-     *
-     * @return Reference A new instance for the now empty Reference
      */
     public function remove(): self
     {
@@ -356,14 +352,12 @@ class Reference
      *
      * @param string[] $keys Locations to remove
      *
-     * @return Reference
-     *
      * @throws DatabaseException
      */
     public function removeChildren(array $keys): self
     {
         $this->update(
-            array_fill_keys($keys, null)
+            \array_fill_keys($keys, null)
         );
 
         return $this;

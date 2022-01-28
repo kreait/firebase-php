@@ -101,7 +101,7 @@ final class ReferenceTest extends DatabaseTestCase
 
         $this->assertEquals([
             'second' => [
-                'second_nested' => 'value'
+                'second_nested' => 'value',
             ],
             'third' => 'value',
         ], $ref->getValue());

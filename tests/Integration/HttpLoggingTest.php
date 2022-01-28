@@ -15,10 +15,10 @@ use Psr\Log\LoggerInterface;
  */
 final class HttpLoggingTest extends IntegrationTestCase
 {
-    /** @var MockObject&LoggerInterface */
+    /** @var MockObject|LoggerInterface */
     private $logger;
 
-    /** @var MockObject&LoggerInterface */
+    /** @var MockObject|LoggerInterface */
     private $debugLogger;
 
     private Auth $auth;

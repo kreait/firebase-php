@@ -17,7 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 final class DatabaseTest extends UnitTestCase
 {
-    /** @var ApiClient&MockObject */
+    /** @var ApiClient|MockObject */
     private $apiClient;
 
     private Uri $uri;
