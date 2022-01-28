@@ -6,7 +6,13 @@
 
 * Added convenience method to bulk-remove multiple children of an RTDB Reference
   ([#686](https://github.com/kreait/firebase-php/pull/686))
+* Added support for Session Cookie Verification.
+  * Tenants don't seem to be supported at the moment (creating or verifying a Session Cookie with a tenant-enabled 
+    Firebase project yields an `UNSUPPORTED_TENANT_OPERATION` error), but once it _is_ supported, the SDK will need
+    no or just minimal updates.
+    Integration tests are in place to checking for this error so that we know early on when it starts working.
 * Added methods:
+  * `Kreait\Firebase\Auth::verifySessionCookie()` 
   * `Kreait\Firebase\Database\Reference::removeChildren()`
 
 ### Changed

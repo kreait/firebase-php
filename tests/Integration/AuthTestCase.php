@@ -14,6 +14,7 @@ use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
+use Kreait\Firebase\Exception\Auth\RevokedSessionCookie;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
@@ -243,7 +244,7 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testRevokeRefreshTokens(): void
+    public function testRevokeRefreshTokensAfterIdTokenVerification(): void
     {
         $idToken = $this->auth->signInAnonymously()->idToken();
         $this->assertIsString($idToken);
@@ -324,7 +325,56 @@ abstract class AuthTestCase extends IntegrationTestCase
     {
         $this->expectException(FailedToCreateSessionCookie::class);
         $this->expectExceptionMessageMatches('/INVALID_ID_TOKEN/');
+
         $this->auth->createSessionCookie('invalid', 3600);
+    }
+
+    public function testVerifySessionCookie(): void
+    {
+        $result = $this->auth->signInAnonymously();
+
+        $uid = $result->firebaseUserId();
+        \assert(\is_string($uid));
+
+        $idToken = $result->idToken();
+        \assert(\is_string($idToken));
+
+        $sessionCookie = $this->auth->createSessionCookie($idToken, new \DateInterval('PT5M'));
+
+        try {
+            $verifiedCookie = $this->auth->verifySessionCookie($sessionCookie);
+            $this->assertSame($uid, $verifiedCookie->claims()->get('sub'));
+        } finally {
+            $this->auth->deleteUser($uid);
+        }
+    }
+
+    public function testVerifySessionCookieAfterTokenRevocation(): void
+    {
+        $result = $this->auth->signInAnonymously();
+
+        $uid = $result->firebaseUserId();
+        \assert(\is_string($uid));
+
+        $idToken = $result->idToken();
+        \assert(\is_string($idToken));
+
+        $sessionCookie = $this->auth->createSessionCookie($idToken, new \DateInterval('PT5M'));
+
+        $verifiedCookie = $this->auth->verifySessionCookie($sessionCookie, $checkIfRevoked = false);
+
+        $uid = $verifiedCookie->claims()->get('sub');
+
+        \sleep(1);
+        $this->auth->revokeRefreshTokens($uid);
+
+        $this->expectException(RevokedSessionCookie::class);
+
+        try {
+            $this->auth->verifySessionCookie($sessionCookie, $checkIfRevoked = true);
+        } finally {
+            $this->auth->deleteUser($uid);
+        }
     }
 
     public function testDisableAndEnableUser(): void

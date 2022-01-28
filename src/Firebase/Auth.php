@@ -26,12 +26,15 @@ use Kreait\Firebase\Auth\SignInWithIdpCredentials;
 use Kreait\Firebase\Auth\SignInWithRefreshToken;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception\Auth\AuthError;
+use Kreait\Firebase\Exception\Auth\FailedToVerifySessionCookie;
 use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
+use Kreait\Firebase\Exception\Auth\RevokedSessionCookie;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\JWT\CustomTokenGenerator;
 use Kreait\Firebase\JWT\IdTokenVerifier;
+use Kreait\Firebase\JWT\SessionCookieVerifier;
 use Kreait\Firebase\JWT\Value\Duration;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Util\JSON;
@@ -57,6 +60,7 @@ final class Auth implements Contract\Auth
     /** @var CustomTokenGenerator|CustomTokenViaGoogleIam|null */
     private $tokenGenerator;
     private IdTokenVerifier $idTokenVerifier;
+    private SessionCookieVerifier $sessionCookieVerifier;
     private SignInHandler $signInHandler;
     private ?string $tenantId;
     private string $projectId;
@@ -70,6 +74,7 @@ final class Auth implements Contract\Auth
         ClientInterface $httpClient,
         $tokenGenerator,
         IdTokenVerifier $idTokenVerifier,
+        SessionCookieVerifier $sessionCookieVerifier,
         SignInHandler $signInHandler,
         string $projectId,
         ?string $tenantId,
@@ -79,6 +84,7 @@ final class Auth implements Contract\Auth
         $this->httpClient = $httpClient;
         $this->tokenGenerator = $tokenGenerator;
         $this->idTokenVerifier = $idTokenVerifier;
+        $this->sessionCookieVerifier = $sessionCookieVerifier;
         $this->signInHandler = $signInHandler;
         $this->tenantId = $tenantId;
         $this->projectId = $projectId;
@@ -408,25 +414,44 @@ final class Auth implements Contract\Auth
             throw new FailedToVerifyToken("Error while getting the token's user: {$e->getMessage()}", 0, $e);
         }
 
-        // The timestamp, in seconds, which marks a boundary, before which Firebase ID token are considered revoked.
-        $validSince = $user->tokensValidAfterTime ?? null;
-
-        if (!($validSince instanceof \DateTimeImmutable)) {
-            // The user hasn't logged in yet, so there's nothing to revoke
-            return $verifiedToken;
-        }
-
-        $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->claims()->get('auth_time'));
-
-        if ($leewayInSeconds) {
-            $tokenAuthenticatedAt = $tokenAuthenticatedAt->modify('-'.$leewayInSeconds.' seconds');
-        }
-
-        if ($tokenAuthenticatedAt->getTimestamp() < $validSince->getTimestamp()) {
+        if ($this->userSessionHasBeenRevoked($verifiedToken, $user, $leewayInSeconds)) {
             throw new RevokedIdToken($verifiedToken);
         }
 
         return $verifiedToken;
+    }
+
+    public function verifySessionCookie(string $sessionCookie, bool $checkIfRevoked = false, ?int $leewayInSeconds = null): UnencryptedToken
+    {
+        $verifier = $this->sessionCookieVerifier;
+
+        try {
+            if ($leewayInSeconds !== null) {
+                $verifier->verifySessionCookieWithLeeway($sessionCookie, $leewayInSeconds);
+            } else {
+                $verifier->verifySessionCookie($sessionCookie);
+            }
+        } catch (Throwable $e) {
+            throw new FailedToVerifySessionCookie($e->getMessage());
+        }
+
+        $verifiedSessionCookie = $this->parseToken($sessionCookie);
+
+        if (!$checkIfRevoked) {
+            return $verifiedSessionCookie;
+        }
+
+        try {
+            $user = $this->getUser($verifiedSessionCookie->claims()->get('sub'));
+        } catch (Throwable $e) {
+            throw new FailedToVerifySessionCookie("Error while getting the session cookie's user: {$e->getMessage()}", 0, $e);
+        }
+
+        if ($this->userSessionHasBeenRevoked($verifiedSessionCookie, $user, $leewayInSeconds)) {
+            throw new RevokedSessionCookie($verifiedSessionCookie);
+        }
+
+        return $verifiedSessionCookie;
     }
 
     public function verifyPasswordResetCode(string $oobCode): string
@@ -643,5 +668,24 @@ final class Auth implements Contract\Auth
         $uid = JSON::decode((string) $response->getBody(), true)['localId'];
 
         return $this->getUser($uid);
+    }
+
+    private function userSessionHasBeenRevoked(UnencryptedToken $verifiedToken, UserRecord $user, ?int $leewayInSeconds = null): bool
+    {
+        // The timestamp, in seconds, which marks a boundary, before which Firebase ID token are considered revoked.
+        $validSince = $user->tokensValidAfterTime ?? null;
+
+        if (!($validSince instanceof \DateTimeImmutable)) {
+            // The user hasn't logged in yet, so there's nothing to revoke
+            return false;
+        }
+
+        $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->claims()->get('auth_time'));
+
+        if ($leewayInSeconds) {
+            $tokenAuthenticatedAt = $tokenAuthenticatedAt->modify('-'.$leewayInSeconds.' seconds');
+        }
+
+        return $tokenAuthenticatedAt->getTimestamp() < $validSince->getTimestamp();
     }
 }

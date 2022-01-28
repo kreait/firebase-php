@@ -315,17 +315,30 @@ If the check fails, a ``RevokedIdToken`` exception will be thrown.
 Session Cookies
 ***************
 
-Before you start, please read about Firebase Session Cookies in the official documentation:
+Firebase Auth provides server-side session cookie management for traditional websites that rely on session cookies.
+This solution has several advantages over client-side short-lived ID tokens, which may require a redirect mechanism
+each time to update the session cookie on expiration:
+
+* Improved security via JWT-based session tokens that can only be generated using authorized service accounts.
+* Stateless session cookies that come with all the benefit of using JWTs for authentication. The session cookie has
+  the same claims (including custom claims) as the ID token, making the same permissions checks enforceable on the
+  session cookies.
+* Ability to create session cookies with custom expiration times ranging from 5 minutes to 2 weeks.
+* Flexibility to enforce cookie policies based on application requirements: domain, path, secure, httpOnly, etc.
+* Ability to revoke session cookies when token theft is suspected using the existing refresh token revocation API.
+* Ability to detect session revocation on major account changes.
+
+You can learn more about Firebase Session Cookies in the official documentation:
 
 * `Manage Session Cookies <https://firebase.google.com/docs/auth/admin/manage-cookies>`_
 
-Create session cookie
----------------------
-
 .. warning::
-    Creating session cookies when using tenants is currently not possible. Please follow
+    Creating and verifying session cookies when using tenants is currently not possible. Please follow
     `this issue on GitHub <https://github.com/firebase/firebase-admin-python/issues/577>`_ or
     `in the Google Issue Tracker <https://issuetracker.google.com/issues/204377229>`_ for updates.
+
+Create session cookie
+---------------------
 
 Given an ID token sent to your server application from a client application, you can convert it to a session cookie:
 
@@ -346,6 +359,41 @@ Given an ID token sent to your server application from a client application, you
     } catch (FailedToCreateSessionCookie $e) {
         echo $e->getMessage();
     }
+
+Verify a Firebase Session Cookie
+--------------------------------
+
+Use ``Auth::verifySessionCookie()`` to verify a Session Cookie:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Exception\Auth\FailedToVerifySessionCookie;
+
+    $sessionCookieString = '...';
+
+    try {
+        $verifiedSessionCookie = $auth->verifySessionCookie($sessionCookieString);
+    } catch (FailedToVerifySessionCookie $e) {
+        echo 'The Session Cookie is invalid: '.$e->getMessage();
+    }
+
+    $uid = $verifiedSessionCookie->claims()->get('sub');
+
+    $user = $auth->getUser($uid);
+
+``Auth::verifySessionCookie()`` accepts the following parameters:
+
+============================ ================= ===========
+Parameter                    Type              Description
+============================ ================= ===========
+``sessionCookie``            string            **(required)** The Session Cookie to verify
+``checkIfRevoked``           boolean           (optional, default: ``false`` ) check if the ID token is revoked
+``leewayInSeconds``          positive-int|null (optional, default: ``null``) number of seconds to allow a Session Cookie to be expired, in case that there is a clock skew between the signing and the verifying server.
+============================ ================= ===========
+
+.. note::
+    This library uses `lcobucci/jwt <https://github.com/lcobucci/jwt>`_ to work with JSON Web Tokens (JWT).
+    You can find the usage instructions at `https://lcobucci-jwt.readthedocs.io/ <https://lcobucci-jwt.readthedocs.io/>`_.
 
 ****************
 Tenant Awareness

@@ -27,7 +27,7 @@
         "google/cloud-core": "^1.42.2",
         "google/cloud-storage": "^1.24.1",
         "guzzlehttp/guzzle": "^7.4",
-        "kreait/firebase-tokens": "^2.0.1",
+        "kreait/firebase-tokens": "^2.2.0",
         "lcobucci/jwt": "^4.1",
         "mtdowling/jmespath.php": "^2.6.1",
         "psr/cache": "^1.0.1|^2.0|^3.0",

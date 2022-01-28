@@ -16,10 +16,12 @@ use Kreait\Firebase\Auth\SignInResult;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
+use Kreait\Firebase\Exception\Auth\FailedToVerifySessionCookie;
 use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\OperationNotAllowed;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
+use Kreait\Firebase\Exception\Auth\RevokedSessionCookie;
 use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Request;
@@ -265,15 +267,16 @@ interface Auth
     public function createSessionCookie($idToken, $ttl): string;
 
     /**
-     * Verifies a JWT auth token. Returns a Promise with the tokens claims. Rejects the promise if the token
-     * could not be verified. If checkRevoked is set to true, verifies if the session corresponding to the
-     * ID token was revoked. If the corresponding user's session was invalidated, a RevokedToken
-     * exception is thrown. If not specified the check is not applied.
+     * Verifies a JWT auth token.
+     *
+     * Returns a token with the token's claims or rejects it if the token could not be verified.
+     *
+     * If checkRevoked is set to true, verifies if the session corresponding to the ID token was revoked.
+     * If the corresponding user's session was invalidated, a RevokedIdToken exception is thrown.
+     * If not specified the check is not applied.
      *
      * NOTE: Allowing time inconsistencies might impose a security risk. Do this only when you are not able
-     * to fix your environment's time to be consistent with Google's servers. This parameter is here
-     * for backwards compatibility reasons, and will be removed in the next major version. You
-     * shouldn't rely on it.
+     * to fix your environment's time to be consistent with Google's servers.
      *
      * @param Token|string $idToken the JWT to verify
      * @param bool $checkIfRevoked whether to check if the ID token is revoked
@@ -284,6 +287,25 @@ interface Auth
      * @throws RevokedIdToken if the token has been revoked
      */
     public function verifyIdToken($idToken, bool $checkIfRevoked = false, int $leewayInSeconds = null): UnencryptedToken;
+
+    /**
+     * Verifies a JWT session cookie.
+     *
+     * Returns a token with the cookie's claims or rejects it if the session cookie could not be verified.
+     *
+     * If checkRevoked is set to true, verifies if the session corresponding to the ID token was revoked.
+     * If the corresponding user's session was invalidated, a RevokedSessionCookie exception is thrown.
+     * If not specified the check is not applied.
+     *
+     * NOTE: Allowing time inconsistencies might impose a security risk. Do this only when you are not able
+     * to fix your environment's time to be consistent with Google's servers.
+     *
+     * @param positive-int|null $leewayInSeconds
+     *
+     * @throws FailedToVerifySessionCookie
+     * @throws RevokedSessionCookie
+     */
+    public function verifySessionCookie(string $sessionCookie, bool $checkIfRevoked = false, ?int $leewayInSeconds = null): UnencryptedToken;
 
     /**
      * Verifies the given password reset code and returns the associated user's email address.
