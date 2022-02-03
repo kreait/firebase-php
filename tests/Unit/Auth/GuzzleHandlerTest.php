@@ -37,8 +37,7 @@ final class GuzzleHandlerTest extends UnitTestCase
     public function testItFailsOnAnUnsupportedAction(): void
     {
         $this->expectException(FailedToSignIn::class);
-        $this->handler->handle(new class() implements SignIn {
-        });
+        $this->handler->handle($this->createMock(SignIn::class));
     }
 
     public function testItFailsWhenGuzzleFails(): void

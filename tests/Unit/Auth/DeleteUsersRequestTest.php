@@ -18,12 +18,12 @@ final class DeleteUsersRequestTest extends TestCase
         $uids = \array_map('strval', \range(0, 1001));
 
         $this->expectException(InvalidArgumentException::class);
-        DeleteUsersRequest::withUids('project-id', $uids);
+        DeleteUsersRequest::withUids($uids);
     }
 
     public function testItRejectsInvalidUids(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        DeleteUsersRequest::withUids('project-id', ['']);
+        DeleteUsersRequest::withUids(['']);
     }
 }

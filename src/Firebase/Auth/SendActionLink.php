@@ -46,7 +46,7 @@ final class SendActionLink
      *
      * Only to be used when the API endpoint expects the ID Token of the given user.
      *
-     * Currently seems only to be the case on VERIFY_EMAIL actions.
+     * Currently, this seems only to be the case on VERIFY_EMAIL actions.
      *
      * @see https://github.com/firebase/firebase-js-sdk/issues/1958
      */

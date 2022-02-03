@@ -40,7 +40,6 @@ final class TenantAwareAuthTest extends AuthTestCase
         parent::testVerifySessionCookieAfterTokenRevocation();
     }
 
-
     public function testNewUsersAreScopedToATenant(): void
     {
         $user = $this->auth->createUserWithEmailAndPassword(

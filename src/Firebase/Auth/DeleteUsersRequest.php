@@ -11,7 +11,6 @@ final class DeleteUsersRequest
 {
     private const MAX_BATCH_SIZE = 1000;
 
-    private string $projectId;
     /** @var string[] */
     private array $uids;
     private bool $enabledUsersShouldBeForceDeleted;
@@ -19,9 +18,8 @@ final class DeleteUsersRequest
     /**
      * @param string[] $uids
      */
-    private function __construct(string $projectId, array $uids, bool $enabledUsersShouldBeForceDeleted)
+    private function __construct(array $uids, bool $enabledUsersShouldBeForceDeleted)
     {
-        $this->projectId = $projectId;
         $this->uids = $uids;
         $this->enabledUsersShouldBeForceDeleted = $enabledUsersShouldBeForceDeleted;
     }
@@ -29,7 +27,7 @@ final class DeleteUsersRequest
     /**
      * @param iterable<\Stringable|string> $uids
      */
-    public static function withUids(string $projectId, iterable $uids, bool $forceDeleteEnabledUsers = false): self
+    public static function withUids(iterable $uids, bool $forceDeleteEnabledUsers = false): self
     {
         $validatedUids = [];
         $count = 0;
@@ -43,12 +41,7 @@ final class DeleteUsersRequest
             }
         }
 
-        return new self($projectId, $validatedUids, $forceDeleteEnabledUsers);
-    }
-
-    public function projectId(): string
-    {
-        return $this->projectId;
+        return new self($validatedUids, $forceDeleteEnabledUsers);
     }
 
     /**
