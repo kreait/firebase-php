@@ -33,11 +33,6 @@ class ApiClient
     private SignInHandler $signInHandler;
     private ClockInterface $clock;
 
-    private string $baseUrl;
-
-    /** @var array<string, string> */
-    private array $defaultUrlParams;
-
     private AuthApiExceptionConverter $errorHandler;
 
     public function __construct(string $projectId, ?string $tenantId, ClientInterface $client, SignInHandler $signInHandler, ClockInterface $clock)
@@ -48,15 +43,6 @@ class ApiClient
         $this->signInHandler = $signInHandler;
         $this->clock = $clock;
         $this->errorHandler = new AuthApiExceptionConverter();
-
-        $this->defaultUrlParams = ['{projectId}' => $projectId];
-
-        if ($this->tenantId !== null) {
-            $this->baseUrl = self::TENANT_URL_FORMAT;
-            $this->defaultUrlParams['{tenantId}'] = $this->tenantId;
-        } else {
-            $this->baseUrl = self::PROJECT_URL_FORMAT;
-        }
     }
 
     /**
@@ -135,8 +121,10 @@ class ApiClient
             'nextPageToken' => (string) $nextPageToken,
         ]);
 
+        $query = \http_build_query($urlParams);
+
         return $this->requestApi(
-            $this->createUrl('/accounts:batchGet', $urlParams),
+            $this->createUrl('/accounts:batchGet?'.$query),
             [],
             'GET'
         );
@@ -312,20 +300,20 @@ class ApiClient
         }
     }
 
-    /**
-     * @param array<string, string>|null $urlParams
-     */
-    private function createUrl(?string $api, ?array $urlParams = null): string
+    private function createUrl(?string $api): string
     {
-        $urlParams = \array_merge(
-            $this->defaultUrlParams,
-            [
-                '{api}' => $api ?? '',
-                '{version}' => 'v1',
-            ],
-            $urlParams ?? []
-        );
+        $baseUrl = self::PROJECT_URL_FORMAT;
+        $pathParams = [
+            '{api}' => $api ?? '',
+            '{projectId}' => $this->projectId,
+            '{version}' => 'v1',
+        ];
 
-        return \strtr($this->baseUrl, $urlParams);
+        if ($this->tenantId !== null) {
+            $baseUrl = self::TENANT_URL_FORMAT;
+            $pathParams['{tenantId}'] = $this->tenantId;
+        }
+
+        return \strtr($baseUrl, $pathParams);
     }
 }
