@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
-use Kreait\Firebase\Util\JSON;
+use Beste\Json;
 use Psr\Http\Message\ResponseInterface;
 
 final class DeleteUsersResult
@@ -37,7 +37,7 @@ final class DeleteUsersResult
 
     public static function fromRequestAndResponse(DeleteUsersRequest $request, ResponseInterface $response): self
     {
-        $data = JSON::decode((string) $response->getBody(), true);
+        $data = Json::decode((string) $response->getBody(), true);
         $errors = $data['errors'] ?? [];
 
         $failureCount = \count($errors);

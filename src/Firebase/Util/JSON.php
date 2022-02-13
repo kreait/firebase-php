@@ -9,6 +9,9 @@ use Throwable;
 
 /**
  * @internal
+ *
+ * @deprecated 6.2
+ * @codeCoverageIgnore
  */
 final class JSON
 {

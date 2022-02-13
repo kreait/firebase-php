@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests;
 
+use Beste\Json;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Util;
-use Kreait\Firebase\Util\JSON;
 use Throwable;
 
 abstract class IntegrationTestCase extends FirebaseTestCase
@@ -100,7 +100,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
         try {
             if ($contents = \file_get_contents($path)) {
-                return JSON::decode($contents, true);
+                return Json::decode($contents, true);
             }
 
             return null;
@@ -119,7 +119,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         }
 
         try {
-            return JSON::decode($tokens, true);
+            return Json::decode($tokens, true);
         } catch (Throwable $e) {
             return null;
         }
@@ -135,7 +135,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
         try {
             if ($contents = \file_get_contents($path)) {
-                return JSON::decode($contents, true);
+                return Json::decode($contents, true);
             }
 
             return null;

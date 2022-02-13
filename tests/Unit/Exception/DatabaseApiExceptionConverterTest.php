@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Exception;
 
+use Beste\Json;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
@@ -15,7 +16,6 @@ use Kreait\Firebase\Exception\Database\DatabaseNotFound;
 use Kreait\Firebase\Exception\Database\PermissionDenied;
 use Kreait\Firebase\Exception\DatabaseApiExceptionConverter;
 use Kreait\Firebase\Tests\UnitTestCase;
-use Kreait\Firebase\Util\JSON;
 
 /**
  * @internal
@@ -79,7 +79,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $e = new ClientException(
             'Foo',
             $this->request,
-            new Response(401, [], JSON::encode(['error' => 'Permission denied']))
+            new Response(401, [], Json::encode(['error' => 'Permission denied']))
         );
 
         $result = $this->converter->convertException($e);
@@ -92,7 +92,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $e = new ClientException(
             'Foo',
             $this->request,
-            new Response(403, [], JSON::encode(['error' => 'Permission denied']))
+            new Response(403, [], Json::encode(['error' => 'Permission denied']))
         );
 
         $result = $this->converter->convertException($e);
@@ -105,7 +105,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $e = new ClientException(
             'Foo',
             $this->request,
-            new Response(404, [], JSON::encode(['error' => 'Not found']))
+            new Response(404, [], Json::encode(['error' => 'Not found']))
         );
 
         $result = $this->converter->convertException($e);

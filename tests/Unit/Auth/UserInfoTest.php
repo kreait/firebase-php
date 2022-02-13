@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Auth;
 
+use Beste\Json;
 use Kreait\Firebase\Auth\UserInfo;
 use Kreait\Firebase\Tests\UnitTestCase;
-use Kreait\Firebase\Util\JSON;
 
 /**
  * @internal
@@ -20,7 +20,7 @@ final class UserInfoTest extends UnitTestCase
             'providerId' => 'some-provider',
         ]);
 
-        $decoded = \json_decode(JSON::encode($info), false);
+        $decoded = \json_decode(Json::encode($info), false);
 
         $this->assertSame($info->uid, $decoded->uid);
         $this->assertSame($info->providerId, $decoded->providerId);

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
+use Beste\Json;
 use DateTimeImmutable;
 use Kreait\Firebase\Util\DT;
-use Kreait\Firebase\Util\JSON;
 
 class UserRecord implements \JsonSerializable
 {
@@ -57,7 +57,7 @@ class UserRecord implements \JsonSerializable
         }
 
         if ($customClaims = $data['customClaims'] ?? $data['customAttributes'] ?? '{}') {
-            $record->customClaims = JSON::decode($customClaims, true);
+            $record->customClaims = Json::decode($customClaims, true);
         }
 
         return $record;

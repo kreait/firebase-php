@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
+use Beste\Json;
 use GuzzleHttp\ClientInterface;
 use Kreait\Firebase\Auth\SignIn\Handler as SignInHandler;
 use Kreait\Firebase\Exception\Auth\EmailNotFound;
@@ -14,7 +15,6 @@ use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Request;
-use Kreait\Firebase\Util\JSON;
 use Psr\Clock\ClockInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
@@ -89,7 +89,7 @@ class ApiClient
             $this->createUrl('/accounts:update'),
             [
                 'localId' => $uid,
-                'customAttributes' => JSON::encode($claims, JSON_FORCE_OBJECT),
+                'customAttributes' => Json::encode($claims, JSON_FORCE_OBJECT),
             ]
         );
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Exception;
 
 use Beste\Clock\FrozenClock;
+use Beste\Json;
 use DateTimeImmutable;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
@@ -19,7 +20,6 @@ use Kreait\Firebase\Exception\Messaging\QuotaExceeded;
 use Kreait\Firebase\Exception\Messaging\ServerError;
 use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
-use Kreait\Firebase\Util\JSON;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use RuntimeException;
@@ -86,7 +86,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
         return new RequestException(
             'Firebase Error Test',
             new Request('GET', 'https://domain.tld'),
-            new Response($code, [], JSON::encode([
+            new Response($code, [], Json::encode([
                 'error' => [
                     'errors' => [
                         'domain' => 'global',

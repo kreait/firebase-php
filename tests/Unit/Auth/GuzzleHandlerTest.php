@@ -53,7 +53,7 @@ final class GuzzleHandlerTest extends UnitTestCase
 
     public function testItFailsOnAnUnsuccessfulResponse(): void
     {
-        $this->httpResponses->append($response = new Response(400));
+        $this->httpResponses->append($response = new Response(400, [], '""'));
 
         try {
             $this->handler->handle($this->action);

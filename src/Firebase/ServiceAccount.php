@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase;
 
+use Beste\Json;
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\Util\JSON;
 use Throwable;
 
 /**
@@ -78,10 +78,10 @@ final class ServiceAccount
         if (\is_string($value)) {
             try {
                 if (\str_starts_with($value, '{')) {
-                    return self::fromJson($value);
+                    return self::fromArray(Json::decode($value, true));
                 }
 
-                return self::fromJsonFile($value);
+                return self::fromArray(Json::decodeFile($value, true));
             } catch (Throwable $e) {
                 throw new InvalidArgumentException('Invalid service account: '.$e->getMessage(), $e->getCode(), $e);
             }
@@ -113,30 +113,5 @@ final class ServiceAccount
         }
 
         return new self($data);
-    }
-
-    private static function fromJson(string $json): self
-    {
-        $config = JSON::decode($json, true);
-
-        return self::fromArray($config);
-    }
-
-    private static function fromJsonFile(string $filePath): self
-    {
-        try {
-            $file = new \SplFileObject($filePath);
-            $json = (string) $file->fread($file->getSize());
-        } catch (Throwable $e) {
-            throw new InvalidArgumentException("{$filePath} can not be read: {$e->getMessage()}");
-        }
-
-        try {
-            $serviceAccount = self::fromJson($json);
-        } catch (Throwable $e) {
-            throw new InvalidArgumentException(\sprintf('%s could not be parsed to a Service Account: %s', $filePath, $e->getMessage()));
-        }
-
-        return $serviceAccount;
     }
 }

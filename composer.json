@@ -23,6 +23,7 @@
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "beste/clock": "^1.0",
+        "beste/json": "^1.0",
         "google/auth": "^1.18",
         "google/cloud-core": "^1.42.2",
         "google/cloud-storage": "^1.24.1",

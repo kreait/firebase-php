@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth\CreateSessionCookie;
 
+use Beste\Json;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Utils;
 use Kreait\Firebase\Auth\CreateSessionCookie;
-use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
 
 final class GuzzleApiClientHandler implements Handler
@@ -39,7 +39,7 @@ final class GuzzleApiClientHandler implements Handler
 
         try {
             /** @var array{sessionCookie?: string|null} $data */
-            $data = JSON::decode((string) $response->getBody(), true);
+            $data = Json::decode((string) $response->getBody(), true);
         } catch (\InvalidArgumentException $e) {
             throw new FailedToCreateSessionCookie($action, $response, 'Unable to parse the response data: '.$e->getMessage(), 0, $e);
         }
@@ -66,7 +66,7 @@ final class GuzzleApiClientHandler implements Handler
             $uri = "https://identitytoolkit.googleapis.com/v1/projects/{$this->projectId}:createSessionCookie";
         }
 
-        $body = Utils::streamFor(JSON::encode($data, JSON_FORCE_OBJECT));
+        $body = Utils::streamFor(Json::encode($data, JSON_FORCE_OBJECT));
 
         $headers = \array_filter([
             'Content-Type' => 'application/json; charset=UTF-8',

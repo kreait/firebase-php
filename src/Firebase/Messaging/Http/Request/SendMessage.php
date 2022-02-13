@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging\Http\Request;
 
+use Beste\Json;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Utils;
 use Kreait\Firebase\Http\WrappedPsr7Request;
 use Kreait\Firebase\Messaging\Message;
-use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -23,7 +23,7 @@ final class SendMessage implements MessageRequest, RequestInterface
     public function __construct(string $projectId, Message $message, bool $validateOnly = false)
     {
         $uri = Utils::uriFor('https://fcm.googleapis.com/v1/projects/'.$projectId.'/messages:send');
-        $body = Utils::streamFor(JSON::encode(['message' => $message, 'validate_only' => $validateOnly]));
+        $body = Utils::streamFor(Json::encode(['message' => $message, 'validate_only' => $validateOnly]));
         $headers = [
             'Content-Type' => 'application/json; charset=UTF-8',
             'Content-Length' => (string) $body->getSize(),

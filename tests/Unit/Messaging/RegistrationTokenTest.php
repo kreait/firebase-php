@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
+use Beste\Json;
 use Kreait\Firebase\Messaging\RegistrationToken;
-use Kreait\Firebase\Util\JSON;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,7 +21,7 @@ final class RegistrationTokenTest extends TestCase
         $token = RegistrationToken::fromValue($value);
 
         $this->assertSame($expected, $token->value());
-        $this->assertSame('"'.$token.'"', JSON::encode($token));
+        $this->assertSame('"'.$token.'"', Json::encode($token));
     }
 
     /**

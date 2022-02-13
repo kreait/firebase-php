@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging;
 
+use Beste\Json;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Promise;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
-use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -48,7 +48,7 @@ class AppInstanceApiClient
                         'registration_tokens' => $tokenStrings,
                     ],
                 ])
-                ->then(static fn (ResponseInterface $response) => JSON::decode((string) $response->getBody(), true))
+                ->then(static fn (ResponseInterface $response) => Json::decode((string) $response->getBody(), true))
             ;
         }
 
@@ -114,7 +114,7 @@ class AppInstanceApiClient
                         'registration_tokens' => $tokenStrings,
                     ],
                 ])
-                ->then(static fn (ResponseInterface $response) => JSON::decode((string) $response->getBody(), true))
+                ->then(static fn (ResponseInterface $response) => Json::decode((string) $response->getBody(), true))
             ;
         }
 
@@ -165,7 +165,7 @@ class AppInstanceApiClient
         return $this->client
             ->requestAsync('GET', '/iid/'.$registrationToken->value().'?details=true')
             ->then(static function (ResponseInterface $response) use ($registrationToken) {
-                $data = JSON::decode((string) $response->getBody(), true);
+                $data = Json::decode((string) $response->getBody(), true);
 
                 return AppInstance::fromRawData($registrationToken, $data);
             })

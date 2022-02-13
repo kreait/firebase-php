@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase;
 
+use Beste\Json;
 use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Auth\ApiClient;
@@ -32,7 +33,6 @@ use Kreait\Firebase\JWT\IdTokenVerifier;
 use Kreait\Firebase\JWT\SessionCookieVerifier;
 use Kreait\Firebase\JWT\Value\Duration;
 use Kreait\Firebase\Util\DT;
-use Kreait\Firebase\Util\JSON;
 use Kreait\Firebase\Value\ClearTextPassword;
 use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\Uid;
@@ -94,7 +94,7 @@ final class Auth implements Contract\Auth
 
         $response = $this->client->getAccountInfo($uids);
 
-        $data = JSON::decode((string) $response->getBody(), true);
+        $data = Json::decode((string) $response->getBody(), true);
 
         foreach ($data['users'] ?? [] as $userData) {
             $userRecord = UserRecord::fromResponseData($userData);
@@ -111,7 +111,7 @@ final class Auth implements Contract\Auth
 
         do {
             $response = $this->client->downloadAccount($batchSize, $pageToken);
-            $result = JSON::decode((string) $response->getBody(), true);
+            $result = Json::decode((string) $response->getBody(), true);
 
             foreach ((array) ($result['users'] ?? []) as $userData) {
                 yield UserRecord::fromResponseData($userData);
@@ -164,7 +164,7 @@ final class Auth implements Contract\Auth
 
         $response = $this->client->getUserByEmail($email);
 
-        $data = JSON::decode((string) $response->getBody(), true);
+        $data = Json::decode((string) $response->getBody(), true);
 
         if (empty($data['users'][0])) {
             throw new UserNotFound("No user with email '{$email}' found.");
@@ -179,7 +179,7 @@ final class Auth implements Contract\Auth
 
         $response = $this->client->getUserByPhoneNumber($phoneNumber);
 
-        $data = JSON::decode((string) $response->getBody(), true);
+        $data = Json::decode((string) $response->getBody(), true);
 
         if (empty($data['users'][0])) {
             throw new UserNotFound("No user with phone number '{$phoneNumber}' found.");
@@ -433,7 +433,7 @@ final class Auth implements Contract\Auth
     {
         $response = $this->client->verifyPasswordResetCode($oobCode);
 
-        return JSON::decode((string) $response->getBody(), true)['email'];
+        return Json::decode((string) $response->getBody(), true)['email'];
     }
 
     public function confirmPasswordReset(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true): string
@@ -442,7 +442,7 @@ final class Auth implements Contract\Auth
 
         $response = $this->client->confirmPasswordReset($oobCode, (string) $newPassword);
 
-        $email = JSON::decode((string) $response->getBody(), true)['email'];
+        $email = Json::decode((string) $response->getBody(), true)['email'];
 
         if ($invalidatePreviousSessions) {
             $this->revokeRefreshTokens($this->getUserByEmail($email)->uid);
@@ -600,7 +600,7 @@ final class Auth implements Contract\Auth
      */
     private function getUserRecordFromResponse(ResponseInterface $response): UserRecord
     {
-        $uid = JSON::decode((string) $response->getBody(), true)['localId'];
+        $uid = Json::decode((string) $response->getBody(), true)['localId'];
 
         return $this->getUser($uid);
     }

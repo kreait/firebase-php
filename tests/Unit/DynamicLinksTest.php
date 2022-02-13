@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit;
 
+use Beste\Json;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Handler\MockHandler;
@@ -23,7 +24,6 @@ use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink\FailedToShortenLongDynamicLink;
 use Kreait\Firebase\DynamicLink\SocialMetaTagInfo;
 use Kreait\Firebase\DynamicLinks;
-use Kreait\Firebase\Util\JSON;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
@@ -49,7 +49,7 @@ final class DynamicLinksTest extends TestCase
     public function testItCreatesADynamicLink(): void
     {
         $this->httpHandler->append(
-            new Response(200, [], JSON::encode($responseData = [
+            new Response(200, [], Json::encode($responseData = [
                 'shortLink' => $shortLink = $this->dynamicLinksDomain.'/'.($suffix = 'short'),
                 'previewLink' => $previewLink = $shortLink.'?d=1',
                 'warning' => $warnings = [
@@ -71,13 +71,13 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, \json_decode(JSON::encode($dynamicLink), true));
+        $this->assertEquals($responseData, \json_decode(Json::encode($dynamicLink), true));
     }
 
     public function testItCreatesADynamicLinkFromAnArrayOfParameters(): void
     {
         $this->httpHandler->append(
-            new Response(200, [], JSON::encode($responseData = [
+            new Response(200, [], Json::encode($responseData = [
                 'shortLink' => $shortLink = $this->dynamicLinksDomain.'/'.($suffix = 'short'),
                 'previewLink' => $previewLink = $shortLink.'?d=1',
             ]))
@@ -92,7 +92,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, \json_decode(JSON::encode($dynamicLink), true));
+        $this->assertEquals($responseData, \json_decode(Json::encode($dynamicLink), true));
     }
 
     public function testCreationFailsIfNoConnectionIsAvailable(): void
@@ -132,7 +132,7 @@ final class DynamicLinksTest extends TestCase
     public function testItShortensALonkLinkFromAnArrayOfParameters(): void
     {
         $this->httpHandler->append(
-            new Response(200, [], JSON::encode($responseData = [
+            new Response(200, [], Json::encode($responseData = [
                 'shortLink' => $shortLink = $this->dynamicLinksDomain.'/'.($suffix = 'short'),
                 'previewLink' => $previewLink = $shortLink.'?d=1',
             ]))
@@ -147,7 +147,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, \json_decode(JSON::encode($dynamicLink), true));
+        $this->assertEquals($responseData, \json_decode(Json::encode($dynamicLink), true));
     }
 
     public function testShorteningFailsIfNoConnectionIsAvailable(): void
@@ -169,7 +169,7 @@ final class DynamicLinksTest extends TestCase
             $this->service->shortenLongDynamicLink($action);
             $this->fail('An exception should have been thrown');
         } catch (FailedToShortenLongDynamicLink $e) {
-            $this->assertJsonStringEqualsJsonString(JSON::encode($action), JSON::encode($e->action()));
+            $this->assertJsonStringEqualsJsonString(Json::encode($action), Json::encode($e->action()));
             $this->assertSame($response, $e->response());
         }
     }
@@ -185,7 +185,7 @@ final class DynamicLinksTest extends TestCase
     public function testItGetsLinkStatistics(): void
     {
         $this->httpHandler->append(
-            new Response(200, [], JSON::encode($responseData = [
+            new Response(200, [], Json::encode($responseData = [
                 'linkEventStats' => [
                     ['platform' => 'ANDROID', 'count' => '10', 'event' => 'CLICK'],
                     ['platform' => 'DESKTOP', 'count' => '20', 'event' => 'CLICK'],

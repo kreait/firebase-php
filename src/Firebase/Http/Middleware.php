@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Http;
 
+use Beste\Json;
 use GuzzleHttp;
 use GuzzleHttp\Psr7\Query;
-use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -46,7 +46,7 @@ final class Middleware
                 $uri = $request->getUri();
 
                 $uri = $uri->withQuery(Query::build(
-                    \array_merge(Query::parse($uri->getQuery()), ['auth_variable_override' => JSON::encode($override)])
+                    \array_merge(Query::parse($uri->getQuery()), ['auth_variable_override' => Json::encode($override)])
                 ));
 
                 return $handler($request->withUri($uri), $options ?: []);

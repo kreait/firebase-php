@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase;
 
+use Beste\Json;
 use GuzzleHttp\Promise\Utils;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
@@ -19,11 +20,11 @@ use Kreait\Firebase\Messaging\Http\Request\SendMessages;
 use Kreait\Firebase\Messaging\Http\Request\SendMessageToTokens;
 use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\Messages;
+use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\MulticastSendReport;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Messaging\RegistrationTokens;
 use Kreait\Firebase\Messaging\Topic;
-use Kreait\Firebase\Util\JSON;
 
 /**
  * @internal
@@ -47,6 +48,10 @@ final class Messaging implements Contract\Messaging
     {
         $message = $this->makeMessage($message);
 
+        if (!$this->messageHasTarget($message)) {
+            throw new InvalidArgument('The given message is missing a target');
+        }
+
         $request = new SendMessage($this->projectId, $message, $validateOnly);
 
         try {
@@ -60,7 +65,7 @@ final class Messaging implements Contract\Messaging
             throw $e;
         }
 
-        return JSON::decode((string) $response->getBody(), true);
+        return Json::decode((string) $response->getBody(), true);
     }
 
     public function sendMulticast($message, $registrationTokens, bool $validateOnly = false): MulticastSendReport
@@ -203,6 +208,15 @@ final class Messaging implements Contract\Messaging
         }
 
         return CloudMessage::fromArray($message);
+    }
+
+    private function messageHasTarget(Message $message): bool
+    {
+        $check = Json::decode(Json::encode($message), true);
+
+        return \array_key_exists(MessageTarget::CONDITION, $check)
+            || \array_key_exists(MessageTarget::TOKEN, $check)
+            || \array_key_exists(MessageTarget::TOPIC, $check);
     }
 
     /**

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Request;
 
+use Beste\Json;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Request;
-use Kreait\Firebase\Util\JSON;
 
 final class UpdateUser implements Request
 {
@@ -192,7 +192,7 @@ final class UpdateUser implements Request
             if (empty($this->customAttributes)) {
                 $data['customAttributes'] = '{}';
             } else {
-                $data['customAttributes'] = JSON::encode($this->customAttributes);
+                $data['customAttributes'] = Json::encode($this->customAttributes);
             }
         }
 

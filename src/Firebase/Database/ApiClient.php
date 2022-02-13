@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Database;
 
+use Beste\Json;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Request;
 use Kreait\Firebase\Exception\DatabaseApiExceptionConverter;
 use Kreait\Firebase\Exception\DatabaseException;
-use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Throwable;
@@ -38,7 +38,7 @@ class ApiClient
     {
         $response = $this->requestApi('GET', $uri);
 
-        return JSON::decode((string) $response->getBody(), true);
+        return Json::decode((string) $response->getBody(), true);
     }
 
     /**
@@ -56,7 +56,7 @@ class ApiClient
             ],
         ]);
 
-        $value = JSON::decode((string) $response->getBody(), true);
+        $value = Json::decode((string) $response->getBody(), true);
         $etag = $response->getHeaderLine('ETag');
 
         return [
@@ -77,7 +77,7 @@ class ApiClient
     {
         $response = $this->requestApi('PUT', $uri, ['json' => $value]);
 
-        return JSON::decode((string) $response->getBody(), true);
+        return Json::decode((string) $response->getBody(), true);
     }
 
     /**
@@ -97,7 +97,7 @@ class ApiClient
             'json' => $value,
         ]);
 
-        return JSON::decode((string) $response->getBody(), true);
+        return Json::decode((string) $response->getBody(), true);
     }
 
     /**
@@ -124,10 +124,10 @@ class ApiClient
     public function updateRules($uri, RuleSet $ruleSet)
     {
         $response = $this->requestApi('PUT', $uri, [
-            'body' => JSON::encode($ruleSet, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
+            'body' => Json::encode($ruleSet, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
         ]);
 
-        return JSON::decode((string) $response->getBody(), true);
+        return Json::decode((string) $response->getBody(), true);
     }
 
     /**
@@ -140,7 +140,7 @@ class ApiClient
     {
         $response = $this->requestApi('POST', $uri, ['json' => $value]);
 
-        return JSON::decode((string) $response->getBody(), true)['name'];
+        return Json::decode((string) $response->getBody(), true)['name'];
     }
 
     /**

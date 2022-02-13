@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Changed
+
+* Replaced internal JSON helper class with [`beste/json`](https://github.com/beste/json)
+* Deprecated classes
+  * `Kreait\Firebase\Util\JSON`
+
 ## [6.1.0] - 2022-01-28
 
 ### Added

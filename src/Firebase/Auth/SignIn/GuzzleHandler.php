@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth\SignIn;
 
+use Beste\Json;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Query;
@@ -18,7 +19,6 @@ use Kreait\Firebase\Auth\SignInWithEmailAndOobCode;
 use Kreait\Firebase\Auth\SignInWithEmailAndPassword;
 use Kreait\Firebase\Auth\SignInWithIdpCredentials;
 use Kreait\Firebase\Auth\SignInWithRefreshToken;
-use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -58,8 +58,8 @@ final class GuzzleHandler implements Handler
         }
 
         try {
-            $data = JSON::decode((string) $response->getBody(), true);
-        } catch (\InvalidArgumentException $e) {
+            $data = Json::decode((string) $response->getBody(), true);
+        } catch (\UnexpectedValueException $e) {
             throw FailedToSignIn::fromPrevious($e);
         }
 
@@ -90,7 +90,7 @@ final class GuzzleHandler implements Handler
     {
         $uri = Utils::uriFor('https://identitytoolkit.googleapis.com/v1/accounts:signUp');
 
-        $body = Utils::streamFor(JSON::encode(self::prepareBody($action), JSON_FORCE_OBJECT));
+        $body = Utils::streamFor(Json::encode(self::prepareBody($action), JSON_FORCE_OBJECT));
 
         $headers = self::$defaultHeaders;
 
@@ -101,7 +101,7 @@ final class GuzzleHandler implements Handler
     {
         $uri = Utils::uriFor('https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken');
 
-        $body = Utils::streamFor(JSON::encode(\array_merge(self::prepareBody($action), [
+        $body = Utils::streamFor(Json::encode(\array_merge(self::prepareBody($action), [
             'token' => $action->customToken(),
         ]), JSON_FORCE_OBJECT));
 
@@ -114,7 +114,7 @@ final class GuzzleHandler implements Handler
     {
         $uri = Utils::uriFor('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword');
 
-        $body = Utils::streamFor(JSON::encode(\array_merge(self::prepareBody($action), [
+        $body = Utils::streamFor(Json::encode(\array_merge(self::prepareBody($action), [
             'email' => $action->email(),
             'password' => $action->clearTextPassword(),
             'returnSecureToken' => true,
@@ -129,7 +129,7 @@ final class GuzzleHandler implements Handler
     {
         $uri = Utils::uriFor('https://www.googleapis.com/identitytoolkit/v3/relyingparty/emailLinkSignin');
 
-        $body = Utils::streamFor(JSON::encode(\array_merge(self::prepareBody($action), [
+        $body = Utils::streamFor(Json::encode(\array_merge(self::prepareBody($action), [
             'email' => $action->email(),
             'oobCode' => $action->oobCode(),
             'returnSecureToken' => true,
@@ -168,7 +168,7 @@ final class GuzzleHandler implements Handler
             $rawBody['idToken'] = $action->linkingIdToken();
         }
 
-        $body = Utils::streamFor(JSON::encode($rawBody, JSON_FORCE_OBJECT));
+        $body = Utils::streamFor(Json::encode($rawBody, JSON_FORCE_OBJECT));
 
         $headers = self::$defaultHeaders;
 
