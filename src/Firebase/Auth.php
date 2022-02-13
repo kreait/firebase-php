@@ -109,6 +109,10 @@ final class Auth implements Contract\Auth
         $pageToken = null;
         $count = 0;
 
+        if ($batchSize > $maxResults) {
+            $batchSize = $maxResults;
+        }
+
         do {
             $response = $this->client->downloadAccount($batchSize, $pageToken);
             $result = Json::decode((string) $response->getBody(), true);

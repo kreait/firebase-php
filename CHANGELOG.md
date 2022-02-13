@@ -4,6 +4,10 @@
 
 ### Changed
 
+* In `Auth::listUsers()`, if the specified batch size exceeds the specified maximum number of
+  to be returned users, the batch size will be adapted. As an example: previously,
+  `Auth::listUsers(2)` would download 1000 accounts (the default batch size), but return only
+  the first two. After the change, actually only two accounts will be downloaded and returnded.
 * Replaced internal JSON helper class with [`beste/json`](https://github.com/beste/json)
 * Deprecated classes
   * `Kreait\Firebase\Util\JSON`
