@@ -115,6 +115,19 @@ final class ApnsConfig implements JsonSerializable
     }
 
     /**
+     * A subtitle of the notification, supported by iOS 9+, silently ignored for others
+     */
+    public function withSubtitle(String $subtitle): self
+    {
+        $config = clone $this;
+        $config->config['payload'] ??= [];
+        $config->config['payload']['aps'] ??= [];
+        $config->config['payload']['aps']['subtitle'] = $subtitle;
+
+        return $config;
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function jsonSerialize(): array

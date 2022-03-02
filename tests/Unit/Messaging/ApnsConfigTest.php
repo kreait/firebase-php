@@ -70,6 +70,22 @@ final class ApnsConfigTest extends UnitTestCase
         $this->assertSame('5', $config->jsonSerialize()['headers']['apns-priority']);
     }
 
+    public function testItHasASubtitle(): void
+    {
+        $expected = [
+            'payload' => [
+                'aps' => [
+                    'subtitle' => 'i am a subtitle',
+                ],
+            ],
+        ];
+
+        $this->assertJsonStringEqualsJsonString(
+            \json_encode($expected),
+            \json_encode(ApnsConfig::new()->withSubtitle('i am a subtitle'))
+        );
+    }
+
     /**
      * @return array<string, array<int, array<string, mixed>>>
      */
