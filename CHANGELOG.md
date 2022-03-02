@@ -2,19 +2,21 @@
 
 ## [Unreleased]
 
+## [6.2.0] - 2022-03-03
+
 ### Added
 
 * Cloud Messaging: Added support for APNS subtitles (supported by iOS 9+, silently ignored for others)
   ([#692](https://github.com/kreait/firebase-php/pull/692))
+* Auth: In `Auth::listUsers()`, if the specified batch size exceeds the specified maximum number of
+  to be returned users, the batch size will be reduced from the default 1000. As an example: previously,
+  `Auth::listUsers(2)` would have downloaded 1000 accounts (the default batch size), but return only
+  the first two. After the change, only two accounts will be downloaded.
 * Added methods
   * `Kreait\Firebase\Messaging\ApnsConfig::withSubtitle()`
 
 ### Changed
 
-* In `Auth::listUsers()`, if the specified batch size exceeds the specified maximum number of
-  to be returned users, the batch size will be adapted. As an example: previously,
-  `Auth::listUsers(2)` would download 1000 accounts (the default batch size), but return only
-  the first two. After the change, actually only two accounts will be downloaded and returnded.
 * Replaced internal JSON helper class with [`beste/json`](https://github.com/beste/json)
 * Deprecated classes
   * `Kreait\Firebase\Util\JSON`
@@ -137,7 +139,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.1.0...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.2.0...6.x
+[6.2.0]: https://github.com/kreait/firebase-php/compare/6.1.0...6.2.0
 [6.1.0]: https://github.com/kreait/firebase-php/compare/6.0.1...6.1.0
 [6.0.1]: https://github.com/kreait/firebase-php/compare/6.0.0...6.0.1
 [6.0.0]: https://github.com/kreait/firebase-php/compare/5.x...6.0.0
