@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Added
+
+* Cloud Messaging: Added support for APNS subtitles (supported by iOS 9+, silently ignored for others)
+  ([#692](https://github.com/kreait/firebase-php/pull/692))
+* Added methods
+  * `Kreait\Firebase\Messaging\ApnsConfig::withSubtitle()`
+
 ### Changed
 
 * In `Auth::listUsers()`, if the specified batch size exceeds the specified maximum number of
