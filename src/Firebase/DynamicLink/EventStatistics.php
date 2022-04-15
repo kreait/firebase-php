@@ -119,6 +119,10 @@ final class EventStatistics implements Countable, IteratorAggregate
 
     public function count(): int
     {
-        return (int) \array_sum(\array_column($this->events, 'count'));
+        $result = (int) \array_sum(\array_column($this->events, 'count'));
+
+        \assert($result >= 0);
+
+        return $result;
     }
 }
