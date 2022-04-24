@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.3.0] - 2022-04-24
+
 ### Added
 
 * Added support for the Firebase Auth Emulator.
@@ -145,7 +147,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.2.0...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.3.0...6.x
+[6.3.0]: https://github.com/kreait/firebase-php/compare/6.2.0...6.3.0
 [6.2.0]: https://github.com/kreait/firebase-php/compare/6.1.0...6.2.0
 [6.1.0]: https://github.com/kreait/firebase-php/compare/6.0.1...6.1.0
 [6.0.1]: https://github.com/kreait/firebase-php/compare/6.0.0...6.0.1
