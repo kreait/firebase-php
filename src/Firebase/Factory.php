@@ -11,6 +11,7 @@ use Google\Auth\Cache\MemoryCacheItemPool;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\Auth\CredentialsLoader;
 use Google\Auth\FetchAuthTokenCache;
+use Google\Auth\FetchAuthTokenInterface;
 use Google\Auth\HttpHandler\HttpHandlerFactory;
 use Google\Auth\Middleware\AuthTokenMiddleware;
 use Google\Auth\ProjectIdProviderInterface;
@@ -59,7 +60,7 @@ final class Factory
 
     private ?ServiceAccount $serviceAccount = null;
 
-    private ?CredentialsLoader $googleAuthTokenCredentials = null;
+    private ?FetchAuthTokenInterface $googleAuthTokenCredentials = null;
 
     private ?string $projectId = null;
 
@@ -643,7 +644,7 @@ final class Factory
         return new Client($config);
     }
 
-    private function getGoogleAuthTokenCredentials(): ?CredentialsLoader
+    private function getGoogleAuthTokenCredentials(): ?FetchAuthTokenInterface
     {
         if ($this->googleAuthTokenCredentials !== null) {
             return $this->googleAuthTokenCredentials;
