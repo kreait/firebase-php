@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase;
 
 use Beste\Clock\SystemClock;
+use Beste\Clock\WrappingClock;
 use Google\Auth\ApplicationDefaultCredentials;
 use Google\Auth\Cache\MemoryCacheItemPool;
 use Google\Auth\Credentials\ServiceAccountCredentials;
@@ -33,10 +34,10 @@ use Kreait\Firebase\JWT\IdTokenVerifier;
 use Kreait\Firebase\JWT\SessionCookieVerifier;
 use Kreait\Firebase\Value\Email;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\Clock\ClockInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use StellaMaris\Clock\ClockInterface;
 use Throwable;
 
 final class Factory
@@ -228,8 +229,12 @@ final class Factory
         return $factory;
     }
 
-    public function withClock(ClockInterface $clock): self
+    public function withClock(object $clock): self
     {
+        if (!$clock instanceof ClockInterface) {
+            $clock = WrappingClock::wrapping($clock);
+        }
+
         $factory = clone $this;
         $factory->clock = $clock;
 

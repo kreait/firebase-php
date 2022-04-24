@@ -15,8 +15,8 @@ use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Request;
-use Psr\Clock\ClockInterface;
 use Psr\Http\Message\ResponseInterface;
+use StellaMaris\Clock\ClockInterface;
 use Throwable;
 
 /**

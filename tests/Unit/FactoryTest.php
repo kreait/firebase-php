@@ -10,8 +10,8 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\Http\HttpClientOptions;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\Clock\ClockInterface;
 use RuntimeException;
+use StellaMaris\Clock\ClockInterface;
 
 /**
  * @internal

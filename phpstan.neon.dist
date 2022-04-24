@@ -8,7 +8,7 @@ parameters:
 			message: '#Parameter .+ expects .+, .+ given#'
 			path: tests
 		-
-			message: '#Call to an undefined method.+Invader::#'
+			message: '#undefined.+Invader::#'
 			path: tests
 
 	checkUninitializedProperties: true
