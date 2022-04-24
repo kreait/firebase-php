@@ -31,7 +31,7 @@ final class GuzzleHandlerTest extends UnitTestCase
         $this->httpResponses = new MockHandler();
         $this->action = SignInAnonymously::new();
 
-        $this->handler = new GuzzleHandler(new Client(['handler' => $this->httpResponses]));
+        $this->handler = new GuzzleHandler('my-project', new Client(['handler' => $this->httpResponses]));
     }
 
     public function testItFailsOnAnUnsupportedAction(): void
@@ -45,7 +45,7 @@ final class GuzzleHandlerTest extends UnitTestCase
         $client = $this->createMock(ClientInterface::class);
         $client->method('send')->willThrowException($this->createMock(ConnectException::class));
 
-        $handler = new GuzzleHandler($client);
+        $handler = new GuzzleHandler('my-project', $client);
 
         $this->expectException(FailedToSignIn::class);
         $handler->handle($this->action);

@@ -4,6 +4,7 @@
 /tests export-ignore
 
 /.editorconfig export-ignore
+/firebase.json export-ignore
 /.gitattributes export-ignore
 /.github export-ignore
 /.gitignore export-ignore

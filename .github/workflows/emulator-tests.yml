@@ -1,4 +1,4 @@
-name: Integration Tests
+name: Emulator Tests
 
 on:
   pull_request:
@@ -22,15 +22,15 @@ on:
   workflow_dispatch:
 
 jobs:
-  integration-tests:
-    name: Integration Tests
+  emulator-tests:
+    name: Emulator Tests
     runs-on: ubuntu-latest
     if: github.repository_owner == 'kreait' || github.repository_owner == 'beste-access'
 
     env:
       php-version: '8.0'
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
-      key: cache-integration-6x-${{ matrix.php }}-v1
+      key: cache-emulators-6x-${{ matrix.php }}-v1
 
     steps:
       - name: Checkout code
@@ -67,15 +67,25 @@ jobs:
       - name: Setup Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: Run Integration Tests
+      - name: Set Up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install Firebase Tools
+        run: npm install -g firebase-tools
+
+      - name: Run emulated Integration Tests
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
           TEST_REGISTRATION_TOKENS: ${{secrets.TEST_REGISTRATION_TOKENS}}
           TEST_FIREBASE_RTDB_URI: ${{secrets.TEST_FIREBASE_RTDB_URI}}
-        run: vendor/bin/phpunit --testsuite=integration --coverage-clover=coverage.xml --log-junit=test-report.xml --verbose
+          FIREBASE_AUTH_EMULATOR_HOST: localhost:9099
+          XDEBUG_MODE: coverage
+        run: firebase emulators:exec --only auth --project beste-firebase 'XDEBUG_MODE=coverage vendor/bin/phpunit --group=emulator --coverage-clover=coverage.xml --log-junit=test-report.xml'
 
       - name: Upload code coverage
         uses: codecov/codecov-action@v2
         with:
-          flags: integration
-        if: github.repository_owner == 'kreait'
+          flags: emulator
+        if: github.repository_owner == 'kreait' || github.repository_owner == 'beste-access'

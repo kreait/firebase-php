@@ -18,6 +18,9 @@ use Kreait\Firebase\Exception\Auth\RevokedSessionCookie;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
+/**
+ * @internal
+ */
 abstract class AuthTestCase extends IntegrationTestCase
 {
     /** @var Auth */
@@ -189,7 +192,11 @@ abstract class AuthTestCase extends IntegrationTestCase
 
         $link = $this->auth->getEmailVerificationLink($user->email, null, 'fr');
 
-        $this->assertStringContainsString('lang=fr', $link);
+        if (self::isEmulated()) {
+            $this->assertStringNotContainsString('lang=fr', $link);
+        } else {
+            $this->assertStringContainsString('lang=fr', $link);
+        }
     }
 
     public function testSendUnsupportedEmailActionLink(): void
@@ -627,7 +634,7 @@ abstract class AuthTestCase extends IntegrationTestCase
 
         try {
             $this->assertSame($email, $user->email);
-            $this->assertGreaterThan($user->tokensValidAfterTime, $this->auth->getUser($user->uid)->tokensValidAfterTime);
+            $this->assertGreaterThanOrEqual($user->tokensValidAfterTime, $this->auth->getUser($user->uid)->tokensValidAfterTime);
         } finally {
             $this->auth->deleteUser($user->uid);
         }
@@ -795,6 +802,21 @@ abstract class AuthTestCase extends IntegrationTestCase
             $this->addToAssertionCount(1);
         } finally {
             $this->auth->deleteUser($uid);
+        }
+    }
+
+    public function testItDownloadsOnlyAsManyAccountsAsItIsSupposedTo(): void
+    {
+        // Make sure we have at least two users present
+        $first = $this->auth->createAnonymousUser();
+        $second = $this->auth->createAnonymousUser();
+
+        try {
+            $users = $this->auth->listUsers(2, 99);
+            $this->assertCount(2, $users);
+        } finally {
+            $this->auth->deleteUser($first->uid);
+            $this->auth->deleteUser($second->uid);
         }
     }
 
