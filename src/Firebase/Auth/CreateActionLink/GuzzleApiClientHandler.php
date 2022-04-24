@@ -11,6 +11,8 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
 use Kreait\Firebase\Auth\CreateActionLink;
+use Kreait\Firebase\Auth\ProjectAwareAuthResourceUrlBuilder;
+use Kreait\Firebase\Auth\TenantAwareAuthResourceUrlBuilder;
 use Psr\Http\Message\RequestInterface;
 
 final class GuzzleApiClientHandler implements Handler
@@ -60,10 +62,12 @@ final class GuzzleApiClientHandler implements Handler
         ]) + $action->settings()->toArray();
 
         if ($tenantId = $action->tenantId()) {
-            $uri = "https://identitytoolkit.googleapis.com/v1/projects/{$this->projectId}/tenants/{$tenantId}/accounts:sendOobCode";
+            $urlBuilder = TenantAwareAuthResourceUrlBuilder::forProjectAndTenant($this->projectId, $tenantId);
         } else {
-            $uri = "https://identitytoolkit.googleapis.com/v1/projects/{$this->projectId}/accounts:sendOobCode";
+            $urlBuilder = ProjectAwareAuthResourceUrlBuilder::forProject($this->projectId);
         }
+
+        $url = $urlBuilder->getUrl('/accounts:sendOobCode');
 
         $body = Utils::streamFor(Json::encode($data, JSON_FORCE_OBJECT));
 
@@ -73,6 +77,6 @@ final class GuzzleApiClientHandler implements Handler
             'X-Firebase-Locale' => $action->locale(),
         ]);
 
-        return new Request('POST', $uri, $headers, $body);
+        return new Request('POST', $url, $headers, $body);
     }
 }

@@ -4,6 +4,8 @@
 
 ### Added
 
+* Added support for the Firebase Auth Emulator.
+  ([#692](https://github.com/kreait/firebase-php/pull/692)) ([Documentation](https://firebase-php.readthedocs.io/en/latest/testing.html))
 * Tenant aware session cookie handling is now officially supported.
 
 ## [6.2.0] - 2022-03-03

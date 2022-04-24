@@ -361,7 +361,7 @@ final class Factory
 
         $httpClient = $this->createApiClient();
 
-        $signInHandler = new Firebase\Auth\SignIn\GuzzleHandler($httpClient);
+        $signInHandler = new Firebase\Auth\SignIn\GuzzleHandler($projectId, $httpClient);
         $authApiClient = new Auth\ApiClient($projectId, $this->tenantId, $httpClient, $signInHandler, $this->clock);
         $customTokenGenerator = $this->createCustomTokenGenerator();
         $idTokenVerifier = $this->createIdTokenVerifier();
@@ -622,7 +622,7 @@ final class Factory
 
         $credentials = $this->getGoogleAuthTokenCredentials();
 
-        if (!($credentials instanceof CredentialsLoader) && $this->discoveryIsDisabled) {
+        if (!($credentials instanceof FetchAuthTokenInterface) && $this->discoveryIsDisabled) {
             throw new RuntimeException('Unable to create an API client without credentials');
         }
 

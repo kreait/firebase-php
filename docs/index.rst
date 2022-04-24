@@ -67,5 +67,6 @@ User Guide
     dynamic-links
     remote-config
     framework-integrations
+    testing
     tutorials
     troubleshooting

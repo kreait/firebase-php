@@ -32,6 +32,7 @@ final class CreateSessionCookie
     /**
      * @param Token|string $idToken
      * @param int|DateInterval $ttl
+     * @param object|null $clock
      */
     public static function forIdToken($idToken, ?string $tenantId, $ttl, object $clock = null): self
     {

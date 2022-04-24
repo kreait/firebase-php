@@ -10,6 +10,8 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Utils;
 use Kreait\Firebase\Auth\CreateSessionCookie;
+use Kreait\Firebase\Auth\ProjectAwareAuthResourceUrlBuilder;
+use Kreait\Firebase\Auth\TenantAwareAuthResourceUrlBuilder;
 use Psr\Http\Message\RequestInterface;
 
 final class GuzzleApiClientHandler implements Handler
@@ -61,10 +63,12 @@ final class GuzzleApiClientHandler implements Handler
         ];
 
         if ($tenantId = $action->tenantId()) {
-            $uri = "https://identitytoolkit.googleapis.com/v1/projects/{$this->projectId}/tenants/{$tenantId}:createSessionCookie";
+            $urlBuilder = TenantAwareAuthResourceUrlBuilder::forProjectAndTenant($this->projectId, $tenantId);
         } else {
-            $uri = "https://identitytoolkit.googleapis.com/v1/projects/{$this->projectId}:createSessionCookie";
+            $urlBuilder = ProjectAwareAuthResourceUrlBuilder::forProject($this->projectId);
         }
+
+        $url = $urlBuilder->getUrl(':createSessionCookie');
 
         $body = Utils::streamFor(Json::encode($data, JSON_FORCE_OBJECT));
 
@@ -73,6 +77,6 @@ final class GuzzleApiClientHandler implements Handler
             'Content-Length' => (string) $body->getSize(),
         ]);
 
-        return new Request('POST', $uri, $headers, $body);
+        return new Request('POST', $url, $headers, $body);
     }
 }
