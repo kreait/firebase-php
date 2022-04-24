@@ -57,6 +57,9 @@
         }
     },
     "autoload-dev": {
+        "files": [
+            "tests/helpers.php"
+        ],
         "psr-4": {
             "Kreait\\Firebase\\Tests\\": "tests"
         }

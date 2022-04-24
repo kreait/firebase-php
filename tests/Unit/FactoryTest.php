@@ -39,14 +39,14 @@ final class FactoryTest extends UnitTestCase
 
         $factory = (new Factory())->withDatabaseUri($uri);
 
-        $this->assertDatabaseUri($factory, $expected);
+        $this->assertSame($expected, \invade($factory)->getDatabaseUri()->__toString());
     }
 
     public function testItUsesACustomDefaultStorageBucket(): void
     {
-        $factory = (new Factory())->withDefaultStorageBucket($bucket = 'foo');
+        $factory = (new Factory())->withDefaultStorageBucket('foo');
 
-        $this->assertStorageBucket($factory, $bucket);
+        $this->assertSame('foo', \invade($factory)->getStorageBucketName());
     }
 
     public function testItUsesTheCredentialsFromTheGooglaApplicationCredentialsEnvironmentVariable(): void
@@ -55,8 +55,8 @@ final class FactoryTest extends UnitTestCase
 
         $factory = (new Factory());
 
-        $this->assertProjectId($factory, $this->projectId);
-        $this->assertClientEmail($factory, $this->clientEmail);
+        $this->assertSame($this->projectId, \invade($factory)->getProjectId());
+        $this->assertSame($this->clientEmail, \invade($factory)->getClientEmail());
 
         $this->assertServices($factory);
 
@@ -70,9 +70,9 @@ final class FactoryTest extends UnitTestCase
             ->withClientEmail($email = 'does@not.matter')
         ;
 
-        $this->assertClientEmail($factory, $email);
+        $this->assertSame($email, \invade($factory)->getClientEmail());
         $this->expectException(RuntimeException::class);
-        $this->assertProjectId($factory, null);
+        $this->assertNull(\invade($factory)->getProjectId());
     }
 
     public function testItNeedsCredentials(): void
@@ -87,8 +87,8 @@ final class FactoryTest extends UnitTestCase
     {
         $factory = (new Factory())->withServiceAccount($this->serviceAccount);
 
-        $this->assertProjectId($factory, $this->projectId);
-        $this->assertClientEmail($factory, $this->clientEmail);
+        $this->assertSame($this->clientEmail, \invade($factory)->getClientEmail());
+        $this->assertSame($this->projectId, \invade($factory)->getProjectId());
 
         $this->assertServices($factory);
     }
@@ -97,21 +97,35 @@ final class FactoryTest extends UnitTestCase
     {
         $factory = (new Factory())->withClock($clock = FrozenClock::fromUTC());
 
-        $this->assertClock($factory, $clock);
+        $this->assertInstanceOf(ClockInterface::class, \invade($factory)->clock);
+    }
+
+    public function testItWrapsANonClockInAClock(): void
+    {
+        $clock = new class() {
+            public function now(): \DateTimeImmutable
+            {
+                return new \DateTimeImmutable();
+            }
+        };
+
+        $factory = (new Factory())->withClock($clock);
+
+        $this->assertInstanceOf(ClockInterface::class, \invade($factory)->clock);
     }
 
     public function testItUsesAVerifierCache(): void
     {
         $factory = (new Factory())->withVerifierCache($cache = $this->createMock(CacheItemPoolInterface::class));
 
-        $this->assertVerifierCache($factory, $cache);
+        $this->assertSame($cache, \invade($factory)->verifierCache);
     }
 
     public function testItUsesAnAuthTokenCache(): void
     {
         $factory = (new Factory())->withAuthTokenCache($cache = $this->createMock(CacheItemPoolInterface::class));
 
-        $this->assertAuthTokenCache($factory, $cache);
+        $this->assertSame($cache, \invade($factory)->authTokenCache);
     }
 
     public function testItUsesAProjectId(): void
@@ -145,79 +159,12 @@ final class FactoryTest extends UnitTestCase
     {
         $factory = (new Factory())->withHttpClientOptions($options = HttpClientOptions::default());
 
-        $this->assertHttpClientOptions($factory, $options);
+        $this->assertSame($options, \invade($factory)->httpClientOptions);
     }
 
     private function assertProjectId(Factory $factory, ?string $expected): void
     {
-        $method = (new \ReflectionObject($factory))->getMethod('getProjectId');
-        $method->setAccessible(true);
-
-        $value = $method->invoke($factory);
-
-        $this->assertSame($expected, $value);
-    }
-
-    private function assertClientEmail(Factory $factory, string $expected): void
-    {
-        $method = (new \ReflectionObject($factory))->getMethod('getClientEmail');
-        $method->setAccessible(true);
-
-        $value = $method->invoke($factory);
-
-        $this->assertSame($expected, $value);
-    }
-
-    private function assertDatabaseUri(Factory $factory, string $expected): void
-    {
-        $method = (new \ReflectionObject($factory))->getMethod('getDatabaseUri');
-        $method->setAccessible(true);
-
-        $value = $method->invoke($factory);
-
-        $this->assertSame($expected, (string) $value);
-    }
-
-    private function assertStorageBucket(Factory $factory, string $expected): void
-    {
-        $method = (new \ReflectionObject($factory))->getMethod('getStorageBucketName');
-        $method->setAccessible(true);
-
-        $value = $method->invoke($factory);
-
-        $this->assertSame($expected, (string) $value);
-    }
-
-    private function assertClock(Factory $factory, ClockInterface $expected): void
-    {
-        $property = (new \ReflectionObject($factory))->getProperty('clock');
-        $property->setAccessible(true);
-
-        $this->assertSame($expected, $property->getValue($factory));
-    }
-
-    private function assertVerifierCache(Factory $factory, CacheItemPoolInterface $expected): void
-    {
-        $property = (new \ReflectionObject($factory))->getProperty('verifierCache');
-        $property->setAccessible(true);
-
-        $this->assertSame($expected, $property->getValue($factory));
-    }
-
-    private function assertAuthTokenCache(Factory $factory, CacheItemPoolInterface $expected): void
-    {
-        $property = (new \ReflectionObject($factory))->getProperty('authTokenCache');
-        $property->setAccessible(true);
-
-        $this->assertSame($expected, $property->getValue($factory));
-    }
-
-    private function assertHttpClientOptions(Factory $factory, HttpClientOptions $expected): void
-    {
-        $property = (new \ReflectionObject($factory))->getProperty('httpClientOptions');
-        $property->setAccessible(true);
-
-        $this->assertSame($expected, $property->getValue($factory));
+        $this->assertSame($expected, \invade($factory)->getProjectId());
     }
 
     private function assertServices(Factory $factory): void
