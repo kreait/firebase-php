@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+* Tenant aware session cookie handling is now officially supported.
+
 ## [6.2.0] - 2022-03-03
 
 ### Added

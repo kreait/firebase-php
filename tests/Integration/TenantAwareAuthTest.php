@@ -16,30 +16,6 @@ final class TenantAwareAuthTest extends AuthTestCase
         $this->auth = self::$factory->withTenantId(self::TENANT_ID)->createAuth();
     }
 
-    public function testCreateSessionCookie(): void
-    {
-        $this->expectException(FailedToCreateSessionCookie::class);
-        $this->expectExceptionMessageMatches('/UNSUPPORTED_TENANT_OPERATION/');
-
-        parent::testCreateSessionCookie();
-    }
-
-    public function testVerifySessionCookie(): void
-    {
-        $this->expectException(FailedToCreateSessionCookie::class);
-        $this->expectExceptionMessageMatches('/UNSUPPORTED_TENANT_OPERATION/');
-
-        parent::testVerifySessionCookie();
-    }
-
-    public function testVerifySessionCookieAfterTokenRevocation(): void
-    {
-        $this->expectException(FailedToCreateSessionCookie::class);
-        $this->expectExceptionMessageMatches('/UNSUPPORTED_TENANT_OPERATION/');
-
-        parent::testVerifySessionCookieAfterTokenRevocation();
-    }
-
     public function testNewUsersAreScopedToATenant(): void
     {
         $user = $this->auth->createUserWithEmailAndPassword(
