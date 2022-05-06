@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* Nested lists in custom user claims were not correctly encoded. 
+  ([#699](https://github.com/kreait/firebase-php/pull/699))
+
 ## [6.3.0] - 2022-04-24
 
 ### Added
