@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.3.1] - 2022-05-07
+
 ### Fixed
 
 * Nested lists in custom user claims were not correctly encoded. 
@@ -152,7 +154,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.3.0...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.3.1...6.x
+[6.3.1]: https://github.com/kreait/firebase-php/compare/6.3.0...6.3.1
 [6.3.0]: https://github.com/kreait/firebase-php/compare/6.2.0...6.3.0
 [6.2.0]: https://github.com/kreait/firebase-php/compare/6.1.0...6.2.0
 [6.1.0]: https://github.com/kreait/firebase-php/compare/6.0.1...6.1.0
