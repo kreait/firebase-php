@@ -62,7 +62,7 @@ class ApiClient
     {
         return $this->requestApi('https://identitytoolkit.googleapis.com/v1/accounts:update', [
             'localId' => $uid,
-            'customAttributes' => JSON::encode($claims, JSON_FORCE_OBJECT),
+            'customAttributes' => JSON::encode((object) $claims),
         ]);
     }
 
