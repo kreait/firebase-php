@@ -1,9 +1,25 @@
 name: Tests
 
 on:
-  - pull_request
-  - push
-  - workflow_dispatch
+  pull_request:
+    branches:
+      - '**:**'
+    paths:
+      - 'composer.json'
+      - 'phpunit.xml.dist'
+      - 'phpstan.neon.dist'
+      - 'src/**/*.php'
+      - 'tests/**/*.php'
+  push:
+    tags-ignore:
+      - '**'
+    paths:
+      - 'composer.json'
+      - 'phpunit.xml.dist'
+      - 'phpstan.neon.dist'
+      - 'src/**/*.php'
+      - 'tests/**/*.php'
+  workflow_dispatch:
 
 jobs:
   tests:
