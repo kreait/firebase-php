@@ -7,37 +7,27 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Configuration\Option;
+use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
-use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Set\ValueObject\SetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    // get parameters
-    $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::PATHS, [
+return static function (RectorConfig $config): void {
+    $config->phpVersion(PhpVersion::PHP_74);
+    $config->paths([
         __DIR__.'/src',
         __DIR__.'/tests',
         __FILE__,
     ]);
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_74);
-    $parameters->set(Option::SKIP, [
+
+    $config->skip([
         ClosureToArrowFunctionRector::class => [
             __DIR__.'/src/Firebase/Http/Middleware.php'
         ],
     ]);
 
     // Define what rule sets will be applied
-    $containerConfigurator->import(SetList::CODE_QUALITY);
-    $containerConfigurator->import(SetList::DEAD_CODE);
-    $containerConfigurator->import(SetList::PHP_74);
-
-
-    // get services (needed for register a single rule)
-    // $services = $containerConfigurator->services();
-
-    // register a single rule
-    // $services->set(TypedPropertyRector::class);
+    $config->import(SetList::CODE_QUALITY);
+    $config->import(SetList::DEAD_CODE);
+    $config->import(SetList::PHP_74);
 };
