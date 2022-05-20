@@ -444,7 +444,7 @@ final class Auth implements Contract\Auth
     {
         $newPassword = (string) (new ClearTextPassword((string) $newPassword));
 
-        $response = $this->client->confirmPasswordReset($oobCode, (string) $newPassword);
+        $response = $this->client->confirmPasswordReset($oobCode, $newPassword);
 
         $email = Json::decode((string) $response->getBody(), true)['email'];
 

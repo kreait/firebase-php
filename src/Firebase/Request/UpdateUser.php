@@ -189,11 +189,7 @@ final class UpdateUser implements Request
         $data = $this->prepareJsonSerialize();
 
         if (\is_array($this->customAttributes)) {
-            if (empty($this->customAttributes)) {
-                $data['customAttributes'] = '{}';
-            } else {
-                $data['customAttributes'] = Json::encode($this->customAttributes);
-            }
+            $data['customAttributes'] = empty($this->customAttributes) ? '{}' : Json::encode($this->customAttributes);
         }
 
         if (!empty($this->attributesToDelete)) {

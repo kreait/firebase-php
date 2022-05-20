@@ -27,7 +27,7 @@ final class TenantAwareAuthResourceUrlBuilder
 
     public static function forProjectAndTenant(string $projectId, string $tenantId, ?string $version = null): self
     {
-        $version = $version ?? self::DEFAULT_API_VERSION;
+        $version ??= self::DEFAULT_API_VERSION;
         $emulatorHost = Util::authEmulatorHost();
 
         $urlFormat = $emulatorHost !== ''
@@ -42,7 +42,7 @@ final class TenantAwareAuthResourceUrlBuilder
      */
     public function getUrl(?string $api = null, ?array $params = null): string
     {
-        $api = $api ?? '';
+        $api ??= '';
 
         $url = \strtr($this->urlFormat, [
             '{version}' => $this->apiVersion,

@@ -29,7 +29,7 @@ final class ProjectAwareAuthResourceUrlBuilder
 
     public static function forProject(string $projectId, ?string $version = null): self
     {
-        $version = $version ?? self::DEFAULT_API_VERSION;
+        $version ??= self::DEFAULT_API_VERSION;
         $emulatorHost = Util::authEmulatorHost();
 
         $urlFormat = $emulatorHost !== ''
@@ -44,7 +44,7 @@ final class ProjectAwareAuthResourceUrlBuilder
      */
     public function getUrl(?string $api = null, ?array $params = null): string
     {
-        $api = $api ?? '';
+        $api ??= '';
 
         $url = \strtr($this->urlFormat, [
             '{version}' => $this->apiVersion,
