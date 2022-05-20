@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging\Http\Request;
 
-use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Http\HasSubRequests;
 use Kreait\Firebase\Http\WrappedPsr7Request;
 use Kreait\Firebase\Messaging\Message;
@@ -25,7 +25,7 @@ final class SendMessageToTokens implements HasSubRequests, RequestInterface
     public function __construct(string $projectId, Message $message, RegistrationTokens $registrationTokens, bool $validateOnly = false)
     {
         if ($registrationTokens->count() > self::MAX_AMOUNT_OF_TOKENS) {
-            throw new InvalidArgumentException('A multicast message can be sent to a maximum amount of '.self::MAX_AMOUNT_OF_TOKENS.' tokens.');
+            throw new InvalidArgument('A multicast message can be sent to a maximum amount of '.self::MAX_AMOUNT_OF_TOKENS.' tokens.');
         }
 
         $messageData = $message->jsonSerialize();

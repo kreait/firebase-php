@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging\Http\Request;
 
-use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Http\HasSubRequests;
 use Kreait\Firebase\Http\Requests;
 use Kreait\Firebase\Http\RequestWithSubRequests;
@@ -24,7 +24,7 @@ final class SendMessages implements HasSubRequests, RequestInterface
     public function __construct(string $projectId, Messages $messages, bool $validateOnly = false)
     {
         if ($messages->count() > self::MAX_AMOUNT_OF_MESSAGES) {
-            throw new InvalidArgumentException('Only '.self::MAX_AMOUNT_OF_MESSAGES.' can be sent at a time.');
+            throw new InvalidArgument('Only '.self::MAX_AMOUNT_OF_MESSAGES.' can be sent at a time.');
         }
 
         $subRequests = [];
