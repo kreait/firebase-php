@@ -47,7 +47,7 @@ use Traversable;
 /**
  * @internal
  */
-class Auth implements Contract\Auth
+final class Auth implements Contract\Auth
 {
     private ApiClient $client;
     /** @var CustomTokenGenerator|CustomTokenViaGoogleIam|null */
