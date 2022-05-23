@@ -233,6 +233,18 @@ class ApiClient
         ]);
     }
 
+    public function linkEmailProvider(string $uid, string $email, string $password): ResponseInterface
+    {
+        $url = $this->awareAuthResourceUrlBuilder->getUrl('/accounts:update');
+
+        return $this->requestApi($url, [
+            'localId' => $uid,
+            'email' => $email,
+            'password' => $password,
+            'returnSecureToken' => true
+        ]);
+    }
+
     /**
      * @param int|\DateInterval $ttl
      */

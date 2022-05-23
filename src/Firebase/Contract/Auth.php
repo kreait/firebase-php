@@ -361,6 +361,16 @@ interface Auth
     public function unlinkProvider($uid, $provider): UserRecord;
 
     /**
+     * @param \Stringable|string $uid
+     * @param \Stringable|string $email
+     * @param \Stringable|string $password
+     *
+     * @throws Exception\AuthException
+     * @throws Exception\FirebaseException
+     */
+    public function linkEmailProvider($uid, $email, $password): UserRecord;
+
+    /**
      * @param UserRecord|\Stringable|string $user
      * @param array<string, mixed>|null $claims
      *

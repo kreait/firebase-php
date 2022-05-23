@@ -472,6 +472,15 @@ final class Auth implements Contract\Auth
         return $this->getUserRecordFromResponse($response);
     }
 
+    public function linkEmailProvider($uid, $email, $password): UserRecord
+    {
+        $uid = (string) (new Uid((string) $uid));
+
+        $response = $this->client->linkEmailProvider($uid, $email, $password);
+
+        return $this->getUserRecordFromResponse($response);
+    }
+
     public function signInAsUser($user, ?array $claims = null): SignInResult
     {
         $claims ??= [];
