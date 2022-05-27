@@ -70,23 +70,4 @@ final class TenantAwareAuthTest extends AuthTestCase
             $this->auth->deleteUser($user->uid);
         }
     }
-
-    public function testSignInWithRefreshToken(): void
-    {
-        if (!$this->isEmulated()) {
-            parent::testSignInWithRefreshToken();
-
-            return;
-        }
-
-        // The Firebase Emulator is not yet able to sign in with refresh tokens
-        // scoped to a tenant.
-        // See https://github.com/firebase/firebase-js-sdk/issues/6125
-        try {
-            parent::testSignInWithRefreshToken();
-            $this->fail('Signing in with a refresh token scoped to a tenant should not be working.');
-        } catch (FailedToSignIn $e) {
-            $this->assertSame('INVALID_REFRESH_TOKEN', $e->getMessage());
-        }
-    }
 }
