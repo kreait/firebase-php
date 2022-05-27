@@ -1,24 +1,20 @@
 name: Tests
 
 on:
-  pull_request:
-    branches:
-      - '**:**'
-    paths:
-      - 'composer.json'
-      - 'phpunit.xml.dist'
-      - 'phpstan.neon.dist'
-      - 'src/**/*.php'
-      - 'tests/**/*.php'
   push:
-    tags-ignore:
-      - '**'
     paths:
+      - '.github/workflows/**'
       - 'composer.json'
       - 'phpunit.xml.dist'
       - 'phpstan.neon.dist'
-      - 'src/**/*.php'
-      - 'tests/**/*.php'
+      - '*.php'
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'composer.json'
+      - 'phpunit.xml.dist'
+      - 'phpstan.neon.dist'
+      - '*.php'
   workflow_dispatch:
 
 jobs:
@@ -86,6 +82,6 @@ jobs:
         run: vendor/bin/phpunit --testsuite=unit --coverage-clover=coverage.xml --log-junit=test-report.xml --verbose
 
       - name: Upload code coverage
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           flags: unit
