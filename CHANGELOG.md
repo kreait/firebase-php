@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Changed
+
+* FCM notifications (`Kreait\Firebase\Messaging\Notification`) can now be created with null values. 
+  If a notification has _only_ null values, the notification payload will be removed on 
+  serialization as if it wasn't provided at all.
+
 ## [6.3.1] - 2022-05-07
 
 ### Fixed
