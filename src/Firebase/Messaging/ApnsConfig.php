@@ -10,56 +10,83 @@ use JsonSerializable;
  * @see https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification
  * @see https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/sending_notification_requests_to_apns
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#apnsconfig
+ *
+ * @phpstan-type ApnsConfigShape array{
+ *     headers?: array<non-empty-string, non-empty-string>,
+ *     payload?: array<non-empty-string, mixed>,
+ *     fcm_options?: array{
+ *         analytics_label?: string,
+ *         image?: string
+ *     }
+ * }
  */
 final class ApnsConfig implements JsonSerializable
 {
     private const PRIORITY_CONSERVE_POWER = '5';
     private const PRIORITY_IMMEDIATE = '10';
 
-    /** @var array{
-     *      headers?: array<string, string>,
-     *      payload?: array<string, mixed>,
-     *      fcm_options?: array{
-     *          analytics_label?: string,
-     *          image?: string
-     *      }
-     * }
-     */
-    private array $config;
+    private bool $isBackgroundMessage = false;
+
+    /** @var array<non-empty-string, non-empty-string> */
+    private array $headers;
+
+    /** @var array<non-empty-string, mixed> */
+    private array $payload = [];
 
     /**
-     * @param array{
-     *      headers?: array<string, string>,
-     *      payload?: array<string, mixed>,
-     *      fcm_options?: array{
-     *          analytics_label?: string,
-     *          image?: string
-     *      }
-     * } $config
+     * @var array{
+     *     analytics_label?: string,
+     *     image?: string
+     * }
      */
-    private function __construct(array $config)
+    private array $fcmOptions = [];
+
+    /**
+     * @param array<non-empty-string, non-empty-string> $headers
+     * @param array<non-empty-string, mixed> $payload
+     * @param array<non-empty-string, string> $fcmOptions
+     */
+    private function __construct(array $headers, array $payload, array $fcmOptions)
     {
-        $this->config = $config;
+        $this->headers = $headers;
+        $this->payload = $payload;
+        $this->fcmOptions = $fcmOptions;
     }
 
     public static function new(): self
     {
-        return new self([]);
+        return new self([], [], []);
     }
 
     /**
-     * @param array{
-     *      headers?: array<string, string>,
-     *      payload?: array<string, mixed>,
-     *      fcm_options?: array{
-     *          analytics_label?: string,
-     *          image?: string
-     *      }
-     * } $data
+     * @param ApnsConfigShape $data
      */
     public static function fromArray(array $data): self
     {
-        return new self($data);
+        $headers = $data['headers'] ?? [];
+        $payload = $data['payload'] ?? [];
+        $fcmOptions = $data['fcm_options'] ?? [];
+
+        return new self($headers, $payload, $fcmOptions);
+    }
+
+    public function asBackgroundMessage(): self
+    {
+        $config = clone $this;
+
+        $config->isBackgroundMessage = true;
+        $config->payload['aps'] ??= [];
+        $config->payload['aps']['content-available'] = 1;
+
+        // Unset keys that need to be absent to qualify as a background message
+        // @see https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification#2943363
+        unset(
+            $config->payload['aps']['alert'],
+            $config->payload['aps']['badge'],
+            $config->payload['aps']['sound'],
+        );
+
+        return $config;
     }
 
     public function withDefaultSound(): self
@@ -73,11 +100,16 @@ final class ApnsConfig implements JsonSerializable
      */
     public function withSound(string $sound): self
     {
+        // @todo Throw an exception in the next major release that background messages can't have sounds.
+        if ($this->isBackgroundMessage) {
+            return $this;
+        }
+
         $config = clone $this;
 
-        $config->config['payload'] ??= [];
-        $config->config['payload']['aps'] ??= [];
-        $config->config['payload']['aps']['sound'] = $sound;
+        $config->payload ??= [];
+        $config->payload['aps'] ??= [];
+        $config->payload['aps']['sound'] = $sound;
 
         return $config;
     }
@@ -87,10 +119,15 @@ final class ApnsConfig implements JsonSerializable
      */
     public function withBadge(int $number): self
     {
+        // @todo Throw an exception in the next major release that background messages can't have sounds.
+        if ($this->isBackgroundMessage) {
+            return $this;
+        }
+
         $config = clone $this;
-        $config->config['payload'] ??= [];
-        $config->config['payload']['aps'] ??= [];
-        $config->config['payload']['aps']['badge'] = $number;
+        $config->payload ??= [];
+        $config->payload['aps'] ??= [];
+        $config->payload['aps']['badge'] = $number;
 
         return $config;
     }
@@ -105,11 +142,14 @@ final class ApnsConfig implements JsonSerializable
         return $this->withPriority(self::PRIORITY_CONSERVE_POWER);
     }
 
+    /**
+     * @param non-empty-string $priority
+     */
     public function withPriority(string $priority): self
     {
         $config = clone $this;
-        $config->config['headers'] ??= [];
-        $config->config['headers']['apns-priority'] = $priority;
+
+        $config->headers['apns-priority'] = $priority;
 
         return $config;
     }
@@ -120,18 +160,23 @@ final class ApnsConfig implements JsonSerializable
     public function withSubtitle(string $subtitle): self
     {
         $config = clone $this;
-        $config->config['payload'] ??= [];
-        $config->config['payload']['aps'] ??= [];
-        $config->config['payload']['aps']['subtitle'] = $subtitle;
+        $config->payload['aps'] ??= [];
+        $config->payload['aps']['subtitle'] = $subtitle;
 
         return $config;
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<non-empty-string, mixed>
      */
     public function jsonSerialize(): array
     {
-        return \array_filter($this->config, static fn ($value) => $value !== null && $value !== []);
+        $filter = static fn ($value): bool => $value !== null && $value !== [];
+
+        return array_filter([
+            'headers' => array_filter($this->headers, $filter),
+            'payload' => array_filter($this->payload, $filter),
+            'fcm_options' => array_filter($this->fcmOptions, $filter),
+        ], $filter);
     }
 }

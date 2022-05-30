@@ -9,6 +9,11 @@ use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 
 /**
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages
+ *
+ * @phpstan-import-type AndroidConfigShape from AndroidConfig
+ * @phpstan-import-type ApnsConfigShape from ApnsConfig
+ * @phpstan-import-type FcmOptionsShape from FcmOptions
+ * @phpstan-import-type WebPushConfigShape from WebPushConfig
  */
 final class CloudMessage implements Message
 {
@@ -41,45 +46,19 @@ final class CloudMessage implements Message
 
     /**
      * @param array{
-     *     token?: string,
-     *     topic?: string,
-     *     condition?: string,
+     *     token?: non-empty-string,
+     *     topic?: non-empty-string,
+     *     condition?: non-empty-string,
      *     data?: MessageData|array<string, string>,
      *     notification?: Notification|array{
      *         title?: string,
      *         body?: string,
      *         image?: string
      *     },
-     *     android?: array{
-     *         collapse_key?: string,
-     *         priority?: 'normal'|'high',
-     *         ttl?: string,
-     *         restricted_package_name?: string,
-     *         data?: array<string, string>,
-     *         notification?: array<string, string>,
-     *         fcm_options?: array<string, mixed>,
-     *         direct_boot_ok?: bool
-     *     },
-     *     apns?: ApnsConfig|array{
-     *          headers?: array<string, string>,
-     *          payload?: array<string, mixed>,
-     *          fcm_options?: array{
-     *              analytics_label?: string,
-     *              image?: string
-     *          }
-     *     },
-     *     webpush?: WebPushConfig|array{
-     *         headers?: array<string, string>,
-     *         data?: array<string, string>,
-     *         notification?: array<string, mixed>,
-     *         fcm_options?: array{
-     *             link?: string,
-     *             analytics_label?: string
-     *         }
-     *     },
-     *     fcm_options?: FcmOptions|array{
-     *         analytics_label?: string
-     *     }
+     *     android?: AndroidConfigShape,
+     *     apns?: ApnsConfig|ApnsConfigShape,
+     *     webpush?: WebPushConfig|WebPushConfigShape,
+     *     fcm_options?: FcmOptions|FcmOptionsShape
      * } $data
      */
     public static function fromArray(array $data): self
@@ -172,16 +151,7 @@ final class CloudMessage implements Message
     }
 
     /**
-     * @param AndroidConfig|array{
-     *     collapse_key?: string,
-     *     priority?: 'normal'|'high',
-     *     ttl?: string,
-     *     restricted_package_name?: string,
-     *     data?: array<string, string>,
-     *     notification?: array<string, string>,
-     *     fcm_options?: array<string, mixed>,
-     *     direct_boot_ok?: bool
-     * } $config
+     * @param AndroidConfig|AndroidConfigShape $config
      *
      * @throws InvalidArgumentException
      */
@@ -194,14 +164,7 @@ final class CloudMessage implements Message
     }
 
     /**
-     * @param ApnsConfig|array{
-     *     headers?: array<string, string>,
-     *     payload?: array<string, mixed>,
-     *     fcm_options?: array{
-     *         analytics_label?: string,
-     *         image?: string
-     *     }
-     * } $config
+     * @param ApnsConfig|ApnsConfigShape $config
      *
      * @throws InvalidArgumentException
      */
@@ -214,15 +177,7 @@ final class CloudMessage implements Message
     }
 
     /**
-     * @param WebPushConfig|array{
-     *     headers?: array<string, string>,
-     *     data?: array<string, string>,
-     *     notification?: array<string, mixed>,
-     *     fcm_options?: array{
-     *         link?: string,
-     *         analytics_label?: string
-     *     }
-     * } $config
+     * @param WebPushConfig|WebPushConfigShape $config
      */
     public function withWebPushConfig($config): self
     {
@@ -233,9 +188,7 @@ final class CloudMessage implements Message
     }
 
     /**
-     * @param FcmOptions|array{
-     *     analytics_label?: string
-     * } $options
+     * @param FcmOptions|FcmOptionsShape $options
      */
     public function withFcmOptions($options): self
     {

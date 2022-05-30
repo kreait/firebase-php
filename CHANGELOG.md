@@ -4,6 +4,7 @@
 
 ### Added
 
+* FCM Messages are now annotated for better PHPStan/Psalm resolution
 * Added methods
   * `\Kreait\Firebase\Messaging\AndroidConfig::withMinimalNotificationPriority()`
   * `\Kreait\Firebase\Messaging\AndroidConfig::withLowNotificationPriority()`

@@ -8,7 +8,49 @@ use JsonSerializable;
 
 /**
  * @see https://tools.ietf.org/html/rfc8030#section-5.3 Web Push Message Urgency
- * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
+ *
+ * @phpstan-type WebPushHeadersShape array{
+ *     TTL?: positive-int,
+ *     Urgency?: self::URGENCY_*
+ * }
+ *
+ * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushfcmoptions WebPush FCM Options
+ * @phpstan-type WebPushFcmOptionsShape array{
+ *     link?: non-empty-string,
+ *     analytics_label?: non-empty-string
+ * }
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification#syntax WebPush Notification Syntax
+ * @phpstan-type WebPushNotificationShape array{
+ *     title: non-empty-string,
+ *     options?: array{
+ *         dir?: 'ltr'|'rtl'|'auto',
+ *         lang?: string,
+ *         badge?: non-empty-string,
+ *         body?: non-empty-string,
+ *         tag?: non-empty-string,
+ *         icon?: non-empty-string,
+ *         image?: non-empty-string,
+ *         data?: mixed,
+ *         vibrate?: list<positive-int>,
+ *         renotify?: bool,
+ *         requireInteraction?: bool,
+ *         actions?: list<array{
+ *             action: non-empty-string,
+ *             title: non-empty-string,
+ *             icon: non-empty-string
+ *         }>,
+ *         silent?: bool
+ *     }
+ * }
+ *
+ * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig WebPush Config Syntax
+ * @phpstan-type WebPushConfigShape array{
+ *     headers?: WebPushHeadersShape,
+ *     data?: array<non-empty-string, non-empty-string>,
+ *     notification?: WebPushNotificationShape,
+ *     fcm_options?: WebPushFcmOptionsShape
+ * }
  */
 final class WebPushConfig implements JsonSerializable
 {
@@ -17,28 +59,13 @@ final class WebPushConfig implements JsonSerializable
     private const URGENCY_NORMAL = 'normal';
     private const URGENCY_HIGH = 'high';
 
-    /** @var array{
-     *      headers?: array<string, string>,
-     *      data?: array<string, string>,
-     *      notification?: array<string, mixed>,
-     *      fcm_options?: array{
-     *          link?: string,
-     *          analytics_label?: string
-     *      }
-     * }
+    /**
+     * @var WebPushConfigShape
      */
     private array $config;
 
     /**
-     * @param array{
-     *     headers?: array<string, string>,
-     *     data?: array<string, string>,
-     *     notification?: array<string, mixed>,
-     *     fcm_options?: array{
-     *         link?: string,
-     *         analytics_label?: string
-     *     }
-     * } $config
+     * @param WebPushConfigShape $config
      */
     private function __construct(array $config)
     {
@@ -51,15 +78,7 @@ final class WebPushConfig implements JsonSerializable
     }
 
     /**
-     * @param array{
-     *     headers?: array<string, string>,
-     *     data?: array<string, string>,
-     *     notification?: array<string, mixed>,
-     *     fcm_options?: array{
-     *         link?: string,
-     *         analytics_label?: string
-     *     }
-     * } $config
+     * @param WebPushConfigShape $config
      */
     public static function fromArray(array $config): self
     {
@@ -86,9 +105,13 @@ final class WebPushConfig implements JsonSerializable
         return $this->withUrgency(self::URGENCY_VERY_LOW);
     }
 
+    /**
+     * @param self::URGENCY_* $urgency
+     */
     public function withUrgency(string $urgency): self
     {
         $config = clone $this;
+
         $config->config['headers'] ??= [];
         $config->config['headers']['Urgency'] = $urgency;
 

@@ -9,20 +9,67 @@ use JsonSerializable;
 /**
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidconfig
  * @see https://firebase.google.com/docs/cloud-messaging/concept-options#setting-the-priority-of-a-message
+ * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidmessagepriority Android Message Priorities
+ *
+ * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidfcmoptions Android FCM Options Syntax
+ * @phpstan-type AndroidFcmOptionsShape array{
+ *     analytics_label?: non-empty-string
+ * }
+ *
+ * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#LightSettings Android FCM Light Settings Syntax
+ * @phpstan-type AndroidFcmLightSettingsShape array{
+ *     color: array{
+ *         red: float,
+ *         green: float,
+ *         blue: float,
+ *         alpha: float
+ *     },
+ *     light_on_duration: non-empty-string,
+ *     light_off_duration: non-empty-string
+ * }
+ *
+ * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#AndroidNotification Android Notification Syntax
+ * @phpstan-type AndroidNotificationShape array{
+ *     title?: non-empty-string,
+ *     body?: non-empty-string,
+ *     icon?: non-empty-string,
+ *     color?: non-empty-string,
+ *     sound?: non-empty-string,
+ *     click_action?: non-empty-string,
+ *     body_loc_key?: non-empty-string,
+ *     body_loc_args?: list<non-empty-string>,
+ *     title_loc_key?: non-empty-string,
+ *     title_loc_args?: list<non-empty-string>,
+ *     channel_id?: non-empty-string,
+ *     ticker?: non-empty-string,
+ *     sticky?: bool,
+ *     event_time?: non-empty-string,
+ *     local_only?: bool,
+ *     notification_priority?: self::NOTIFICATION_PRIORITY_*,
+ *     default_sound?: bool,
+ *     default_vibrate_timings?: bool,
+ *     default_light_settings?: bool,
+ *     vibrate_timings?: list<non-empty-string>,
+ *     visibility?: self::NOTIFICATION_VISIBILITY_*,
+ *     notification_count?: positive-int,
+ *     light_settings?: AndroidFcmLightSettingsShape,
+ *     image?: non-empty-string
+ * }
+ *
+ * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidconfig Android Config Syntax
+ * @phpstan-type AndroidConfigShape array{
+ *     collapse_key?: non-empty-string,
+ *     priority?: self::MESSAGE_PRIORITY_*,
+ *     ttl?: positive-int,
+ *     restricted_package_name?: non-empty-string,
+ *     data?: array<non-empty-string, non-empty-string>,
+ *     notification?: AndroidNotificationShape,
+ *     fcm_options?: AndroidFcmOptionsShape,
+ *     direct_boot_ok?: bool
+ * }
  */
 final class AndroidConfig implements JsonSerializable
 {
-    /** @var array{
-     *      collapse_key?: string,
-     *      priority?: self::PRIORITY_*,
-     *      ttl?: string,
-     *      restricted_package_name?: string,
-     *      data?: array<string, string>,
-     *      notification?: array<string, string>,
-     *      fcm_options?: array<string, mixed>,
-     *      direct_boot_ok?: bool
-     * }
-     */
     private const MESSAGE_PRIORITY_NORMAL = 'normal';
     private const MESSAGE_PRIORITY_HIGH = 'high';
 
@@ -41,16 +88,7 @@ final class AndroidConfig implements JsonSerializable
     private array $config;
 
     /**
-     * @param array{
-     *     collapse_key?: string,
-     *     priority?: self::PRIORITY_*,
-     *     ttl?: string,
-     *     restricted_package_name?: string,
-     *     data?: array<string, string>,
-     *     notification?: array<string, string>,
-     *     fcm_options?: array<string, mixed>,
-     *     direct_boot_ok?: bool
-     * } $config
+     * @param AndroidConfigShape $config
      */
     private function __construct(array $config)
     {
@@ -63,16 +101,7 @@ final class AndroidConfig implements JsonSerializable
     }
 
     /**
-     * @param array{
-     *     collapse_key?: string,
-     *     priority?: self::PRIORITY_*,
-     *     ttl?: string,
-     *     restricted_package_name?: string,
-     *     data?: array<string, string>,
-     *     notification?: array<string, string>,
-     *     fcm_options?: array<string, mixed>,
-     *     direct_boot_ok?: bool
-     * } $config
+     * @param AndroidConfigShape $config
      */
     public static function fromArray(array $config): self
     {
@@ -87,10 +116,13 @@ final class AndroidConfig implements JsonSerializable
     /**
      * The sound to play when the device receives the notification. Supports "default" or the filename
      * of a sound resource bundled in the app. Sound files must reside in /res/raw/.
+     *
+     * @param non-empty-string $sound
      */
     public function withSound(string $sound): self
     {
         $config = clone $this;
+
         $config->config['notification'] ??= [];
         $config->config['notification']['sound'] = $sound;
 
