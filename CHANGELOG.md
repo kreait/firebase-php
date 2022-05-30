@@ -7,6 +7,13 @@
 * FCM notifications (`Kreait\Firebase\Messaging\Notification`) can now be created with null values. 
   If a notification has _only_ null values, the notification payload will be removed on 
   serialization as if it wasn't provided at all.
+* Deprecations
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withHighPriority()`, 
+    use `\Kreait\Firebase\Messaging\AndroidConfig::withHighMessagePriority()` instead
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withNormalPriority()`, 
+    use `\Kreait\Firebase\Messaging\AndroidConfig::withNormalMessagePriority()` instead
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withPriority()`, 
+    use `\Kreait\Firebase\Messaging\AndroidConfig::withMessagePriority()` instead
 
 ## [6.3.1] - 2022-05-07
 

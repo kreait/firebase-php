@@ -12,9 +12,6 @@ use JsonSerializable;
  */
 final class AndroidConfig implements JsonSerializable
 {
-    private const PRIORITY_NORMAL = 'normal';
-    private const PRIORITY_HIGH = 'high';
-
     /** @var array{
      *      collapse_key?: string,
      *      priority?: self::PRIORITY_*,
@@ -26,6 +23,9 @@ final class AndroidConfig implements JsonSerializable
      *      direct_boot_ok?: bool
      * }
      */
+    private const MESSAGE_PRIORITY_NORMAL = 'normal';
+    private const MESSAGE_PRIORITY_HIGH = 'high';
+
     private array $config;
 
     /**
@@ -85,21 +85,53 @@ final class AndroidConfig implements JsonSerializable
         return $config;
     }
 
+    /**
+     * @deprecated 6.4.0 Use {@see withHighMessagePriority()} instead
+     */
     public function withHighPriority(): self
     {
-        return $this->withPriority(self::PRIORITY_HIGH);
+        return $this->withMessagePriority(self::MESSAGE_PRIORITY_HIGH);
     }
 
-    public function withNormalPriority(): self
+    public function withHighMessagePriority(): self
     {
-        return $this->withPriority(self::PRIORITY_NORMAL);
+        return $this->withMessagePriority(self::MESSAGE_PRIORITY_HIGH);
     }
 
     /**
-     * @param self::PRIORITY_* $priority
+     * @deprecated 6.4.0 Use {@see withNormalMessagePriority()} instead
+     */
+    public function withNormalPriority(): self
+    {
+        return $this->withMessagePriority(self::MESSAGE_PRIORITY_NORMAL);
+    }
+
+    public function withNormalMessagePriority(): self
+    {
+        return $this->withMessagePriority(self::MESSAGE_PRIORITY_NORMAL);
+    }
+
+    /**
+     * @deprecated 6.4.0 Use {@see withMessagePriority()} instead
+     *
+     * @param self::MESSAGE_PRIORITY_* $priority
      */
     public function withPriority(string $priority): self
     {
+        return $this->withMessagePriority($priority);
+    }
+
+    /**
+     * @param self::MESSAGE_PRIORITY_* $messagePriority
+     */
+    public function withMessagePriority(string $messagePriority): self
+    {
+        $config = clone $this;
+        $config->config['priority'] = $messagePriority;
+
+        return $config;
+    }
+
         $config = clone $this;
         $config->config['priority'] = $priority;
 
