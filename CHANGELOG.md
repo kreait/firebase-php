@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+### Added
+
+* Added methods
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withMinimalNotificationPriority()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withLowNotificationPriority()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withDefaultNotificationPriority()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withHighNotificationPriority()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withMaximalNotificationPriority()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withNotificationPriority()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withUnspecifiedNotificationPriority()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withPrivateNotificationVisibility()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withPublicNotificationVisibility()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withSecretNotificationVisibility()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withNotificationVisibility()`
+
 ### Changed
 
 * FCM notifications (`Kreait\Firebase\Messaging\Notification`) can now be created with null values. 

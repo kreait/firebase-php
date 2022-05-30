@@ -26,6 +26,18 @@ final class AndroidConfig implements JsonSerializable
     private const MESSAGE_PRIORITY_NORMAL = 'normal';
     private const MESSAGE_PRIORITY_HIGH = 'high';
 
+    private const NOTIFICATION_PRIORITY_UNSPECIFIED = 'PRIORITY_UNSPECIFIED';
+    private const NOTIFICATION_PRIORITY_MIN = 'PRIORITY_MIN';
+    private const NOTIFICATION_PRIORITY_LOW = 'PRIORITY_LOW';
+    private const NOTIFICATION_PRIORITY_DEFAULT = 'PRIORITY_DEFAULT';
+    private const NOTIFICATION_PRIORITY_HIGH = 'PRIORITY_HIGH';
+    private const NOTIFICATION_PRIORITY_MAX = 'PRIORITY_MAX';
+
+    private const NOTIFICATION_VISIBILITY_PRIVATE = 'PRIVATE';
+    private const NOTIFICATION_VISIBILITY_PUBLIC = 'PUBLIC';
+    private const NOTIFICATION_VISIBILITY_SECRET = 'SECRET';
+
+    /** @var AndroidConfigShape */
     private array $config;
 
     /**
@@ -132,8 +144,73 @@ final class AndroidConfig implements JsonSerializable
         return $config;
     }
 
+    public function withMinimalNotificationPriority(): self
+    {
+        return $this->withNotificationPriority(self::NOTIFICATION_PRIORITY_MIN);
+    }
+
+    public function withLowNotificationPriority(): self
+    {
+        return $this->withNotificationPriority(self::NOTIFICATION_PRIORITY_LOW);
+    }
+
+    public function withDefaultNotificationPriority(): self
+    {
+        return $this->withNotificationPriority(self::NOTIFICATION_PRIORITY_DEFAULT);
+    }
+
+    public function withHighNotificationPriority(): self
+    {
+        return $this->withNotificationPriority(self::NOTIFICATION_PRIORITY_HIGH);
+    }
+
+    public function withMaximalNotificationPriority(): self
+    {
+        return $this->withNotificationPriority(self::NOTIFICATION_PRIORITY_MAX);
+    }
+
+    public function withUnspecifiedNotificationPriority(): self
+    {
+        return $this->withNotificationPriority(self::NOTIFICATION_PRIORITY_UNSPECIFIED);
+    }
+
+    /**
+     * @param self::NOTIFICATION_PRIORITY_* $notificationPriority
+     */
+    public function withNotificationPriority(string $notificationPriority): self
+    {
         $config = clone $this;
-        $config->config['priority'] = $priority;
+
+        $config->config['notification'] ??= [];
+        $config->config['notification']['notification_priority'] = $notificationPriority;
+
+        return $config;
+    }
+
+    public function withPrivateNotificationVisibility(): self
+    {
+        return $this->withNotificationVisibility(self::NOTIFICATION_VISIBILITY_PRIVATE);
+    }
+
+    public function withPublicNotificationVisibility(): self
+    {
+        return $this->withNotificationVisibility(self::NOTIFICATION_VISIBILITY_PUBLIC);
+    }
+
+    public function withSecretNotificationVisibility(): self
+    {
+        return $this->withNotificationVisibility(self::NOTIFICATION_VISIBILITY_SECRET);
+    }
+
+    /**
+     * @param self::NOTIFICATION_VISIBILITY_* $notificationVisibility
+     */
+    public function withNotificationVisibility(string $notificationVisibility): self
+    {
+        $config = clone $this;
+
+        $config->config['notification'] ??= [];
+        $config->config['notification']['visibility'] = $notificationVisibility;
 
         return $config;
     }
