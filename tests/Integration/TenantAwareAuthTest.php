@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
-use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
-
 /**
  * @internal
  *
