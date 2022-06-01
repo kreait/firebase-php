@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Messaging;
 
 use JsonSerializable;
+use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 
 /**
  * @see https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification
@@ -25,13 +26,11 @@ final class ApnsConfig implements JsonSerializable
     private const PRIORITY_CONSERVE_POWER = '5';
     private const PRIORITY_IMMEDIATE = '10';
 
-    private bool $isBackgroundMessage = false;
-
     /** @var array<non-empty-string, non-empty-string> */
     private array $headers;
 
     /** @var array<non-empty-string, mixed> */
-    private array $payload = [];
+    private array $payload;
 
     /**
      * @var array{
@@ -70,21 +69,48 @@ final class ApnsConfig implements JsonSerializable
         return new self($headers, $payload, $fcmOptions);
     }
 
-    public function asBackgroundMessage(): self
+    /**
+     * @param non-empty-string $name
+     * @param non-empty-string $value
+     */
+    public function withHeader(string $name, string $value): self
     {
         $config = clone $this;
+        $config->headers[$name] = $value;
 
-        $config->isBackgroundMessage = true;
+        return $config;
+    }
+
+    public function hasHeader(string $name): bool
+    {
+        return array_key_exists($name, $this->headers);
+    }
+
+    /**
+     * @param non-empty-string $key
+     * @param mixed $value
+     */
+    public function withApsField(string $key, $value): self
+    {
+        $config = clone $this;
         $config->payload['aps'] ??= [];
-        $config->payload['aps']['content-available'] = 1;
+        $config->payload['aps'][$key] = $value;
 
-        // Unset keys that need to be absent to qualify as a background message
-        // @see https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification#2943363
-        unset(
-            $config->payload['aps']['alert'],
-            $config->payload['aps']['badge'],
-            $config->payload['aps']['sound'],
-        );
+        return $config;
+    }
+
+    /**
+     * @param non-empty-string $name
+     * @param mixed $value
+     */
+    public function withDataField(string $name, $value): self
+    {
+        if ($name === 'aps') {
+            throw new InvalidArgument('"aps" is a reserved field name');
+        }
+
+        $config = clone $this;
+        $config->payload[$name] = $value;
 
         return $config;
     }
@@ -100,18 +126,7 @@ final class ApnsConfig implements JsonSerializable
      */
     public function withSound(string $sound): self
     {
-        // @todo Throw an exception in the next major release that background messages can't have sounds.
-        if ($this->isBackgroundMessage) {
-            return $this;
-        }
-
-        $config = clone $this;
-
-        $config->payload ??= [];
-        $config->payload['aps'] ??= [];
-        $config->payload['aps']['sound'] = $sound;
-
-        return $config;
+        return $this->withApsField('sound', $sound);
     }
 
     /**
@@ -119,17 +134,7 @@ final class ApnsConfig implements JsonSerializable
      */
     public function withBadge(int $number): self
     {
-        // @todo Throw an exception in the next major release that background messages can't have sounds.
-        if ($this->isBackgroundMessage) {
-            return $this;
-        }
-
-        $config = clone $this;
-        $config->payload ??= [];
-        $config->payload['aps'] ??= [];
-        $config->payload['aps']['badge'] = $number;
-
-        return $config;
+        return $this->withApsField('badge', $number);
     }
 
     public function withImmediatePriority(): self
@@ -147,11 +152,7 @@ final class ApnsConfig implements JsonSerializable
      */
     public function withPriority(string $priority): self
     {
-        $config = clone $this;
-
-        $config->headers['apns-priority'] = $priority;
-
-        return $config;
+        return $this->withHeader('apns-priority', $priority);
     }
 
     /**
@@ -159,17 +160,34 @@ final class ApnsConfig implements JsonSerializable
      */
     public function withSubtitle(string $subtitle): self
     {
-        $config = clone $this;
-        $config->payload['aps'] ??= [];
-        $config->payload['aps']['subtitle'] = $subtitle;
+        return $this->withApsField('subtitle', $subtitle);
+    }
 
-        return $config;
+    public function isAlert(): bool
+    {
+        return
+            isset($this->payload['aps']['alert'])
+            || isset($this->payload['aps']['badge'])
+            || isset($this->payload['aps']['sound'])
+        ;
     }
 
     /**
      * @return array<non-empty-string, mixed>
      */
-    public function jsonSerialize(): array
+    public function data(): array
+    {
+        $payload = $this->payload;
+
+        unset($payload['aps']);
+
+        return $payload;
+    }
+
+    /**
+     * @return array<non-empty-string, mixed>
+     */
+    public function toArray(): array
     {
         $filter = static fn ($value): bool => $value !== null && $value !== [];
 
@@ -178,5 +196,13 @@ final class ApnsConfig implements JsonSerializable
             'payload' => array_filter($this->payload, $filter),
             'fcm_options' => array_filter($this->fcmOptions, $filter),
         ], $filter);
+    }
+
+    /**
+     * @return array<non-empty-string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }
