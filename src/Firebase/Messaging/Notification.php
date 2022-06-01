@@ -6,6 +6,13 @@ namespace Kreait\Firebase\Messaging;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
+/**
+ * @phpstan-type NotificationShape array{
+ *     title?: string,
+ *     body?: string,
+ *     imageUrl?: string
+ * }
+ */
 final class Notification implements \JsonSerializable
 {
     private ?string $title;

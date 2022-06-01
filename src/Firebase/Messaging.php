@@ -22,6 +22,8 @@ use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\Messages;
 use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\MulticastSendReport;
+use Kreait\Firebase\Messaging\Processor\SetApnsContentAvailableIfNeeded;
+use Kreait\Firebase\Messaging\Processor\SetApnsPushTypeIfNeeded;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Messaging\RegistrationTokens;
 use Kreait\Firebase\Messaging\Topic;
@@ -203,11 +205,12 @@ final class Messaging implements Contract\Messaging
      */
     private function makeMessage($message): Message
     {
-        if ($message instanceof Message) {
-            return $message;
-        }
+        $message = $message instanceof Message ? $message : CloudMessage::fromArray($message);
 
-        return CloudMessage::fromArray($message);
+        $message = (new SetApnsPushTypeIfNeeded())($message);
+        $message = (new SetApnsContentAvailableIfNeeded())($message);
+
+        return $message;
     }
 
     private function messageHasTarget(Message $message): bool

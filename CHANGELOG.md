@@ -4,6 +4,10 @@
 
 ### Added
 
+* If not already set, APNs configs are enriched with the necessary headers and fields to ensure the delivery of
+  iOS background messages and alerts.
+  * The `apns-push-type` header is set to `background` or `alert`
+  * The `content-available` field is set to `1` in case of a background message
 * FCM Messages are now annotated for better PHPStan/Psalm resolution
 * Added methods
   * `\Kreait\Firebase\Messaging\AndroidConfig::withMinimalNotificationPriority()`
@@ -17,6 +21,13 @@
   * `\Kreait\Firebase\Messaging\AndroidConfig::withPublicNotificationVisibility()`
   * `\Kreait\Firebase\Messaging\AndroidConfig::withSecretNotificationVisibility()`
   * `\Kreait\Firebase\Messaging\AndroidConfig::withNotificationVisibility()`
+  * `\Kreait\Firebase\Messaging\ApnsConfig::data()`
+  * `\Kreait\Firebase\Messaging\ApnsConfig::hasHeader()`
+  * `\Kreait\Firebase\Messaging\ApnsConfig::isAlert()`
+  * `\Kreait\Firebase\Messaging\ApnsConfig::toArray()`
+  * `\Kreait\Firebase\Messaging\ApnsConfig::withApsField()`
+  * `\Kreait\Firebase\Messaging\ApnsConfig::withDataField()`
+  * `\Kreait\Firebase\Messaging\ApnsConfig::withHeader()`
 
 ### Changed
 

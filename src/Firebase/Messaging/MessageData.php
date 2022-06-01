@@ -8,7 +8,7 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 
 final class MessageData implements \JsonSerializable
 {
-    /** @var array<string, string> */
+    /** @var array<non-empty-string, string> */
     private array $data = [];
 
     private function __construct()
@@ -37,7 +37,7 @@ final class MessageData implements \JsonSerializable
                 );
             }
 
-            self::assertValidKey($key);
+            $key = self::assertValidKey($key);
 
             $messageData->data[$key] = $value;
         }
@@ -46,11 +46,19 @@ final class MessageData implements \JsonSerializable
     }
 
     /**
-     * @return array<string, string>
+     * @return array<non-empty-string, string>
+     */
+    public function toArray(): array
+    {
+        return $this->data;
+    }
+
+    /**
+     * @return array<non-empty-string, string>
      */
     public function jsonSerialize(): array
     {
-        return $this->data;
+        return $this->toArray();
     }
 
     /**
@@ -68,10 +76,17 @@ final class MessageData implements \JsonSerializable
 
     /**
      * @see https://firebase.google.com/docs/cloud-messaging/concept-options#data_messages
+     *
+     * @return non-empty-string
      */
-    private static function assertValidKey(string $value): void
+    private static function assertValidKey(string $value): string
     {
-        $value = \mb_strtolower($value);
+        $value = \mb_strtolower(trim($value));
+
+        if ($value === '') {
+            throw new InvalidArgumentException("'Empty keys are not allowed in FCM data payloads");
+        }
+
         // According to the docs, "notification" is reserved, but it's still accepted ¯\_(ツ)_/¯
         $reservedWords = ['from', /*'notification',*/ 'message_type'];
         $reservedPrefixes = ['google', 'gcm'];
@@ -85,5 +100,7 @@ final class MessageData implements \JsonSerializable
                 throw new InvalidArgumentException("'{$prefix}' is a reserved prefix and can not be used as a key in FCM data payloads");
             }
         }
+
+        return $value;
     }
 }
