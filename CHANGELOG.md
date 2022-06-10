@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+* Raised minimum version of Guzzle to address [CVE-2022-31042](https://github.com/advisories/GHSA-f2wf-25xc-69c9)
+
 ## [6.4.0] - 2022-06-08
 
 ### Added
