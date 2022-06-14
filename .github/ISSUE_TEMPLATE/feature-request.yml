@@ -6,7 +6,6 @@ body:
     attributes:
       value: |
         These issues are for **concrete and actionable proposals**.
-        If you just have a general problem or idea that you would like to brainstorm, join our [Discord Server](https://discord.gg/Yacm7unBsr) instead.
         Feature requests by [Sponsors](https://github.com/sponsors/jeromegamez) have a higher chance of consideration.
   - type: textarea
     attributes:

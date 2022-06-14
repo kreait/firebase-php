@@ -8,7 +8,6 @@
 [![Integration Tests](https://github.com/kreait/firebase-php/actions/workflows/integration-tests.yml/badge.svg)](https://github.com/kreait/firebase-php/actions/workflows/integration-tests.yml)
 [![Emulator Tests](https://github.com/kreait/firebase-php/actions/workflows/emulator-tests.yml/badge.svg)](https://github.com/kreait/firebase-php/actions/workflows/emulator-tests.yml)
 [![codecov](https://codecov.io/gh/kreait/firebase-php/branch/main/graph/badge.svg)](https://codecov.io/gh/kreait/firebase-php)
-[![Discord](https://img.shields.io/discord/807679292573220925.svg?color=7289da&logo=discord)](https://discord.gg/Yacm7unBsr)
 [![Sponsor](https://img.shields.io/static/v1?logo=GitHub&label=Sponsor&message=%E2%9D%A4&color=ff69b4)](https://github.com/sponsors/jeromegamez)
 
 ## Table of Contents
@@ -51,8 +50,6 @@ Integrations for Laravel, Lumen and Symfony are available:
 ## Support
 
 - [Issue Tracker](https://github.com/kreait/firebase-php/issues/)
-- [Feature Requests and Discussions](https://github.com/kreait/firebase-php/discussions)
-- [Discord Community](https://discord.gg/Yacm7unBsr)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/firebase+php)
 
 _If you or your team rely on this project and me maintaining it, please consider becoming a
