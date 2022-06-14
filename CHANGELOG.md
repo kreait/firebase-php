@@ -1,6 +1,9 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Fixed
+* Updating a Realtime Database Ruleset converted lists to objects with numeric keys.
+  (backported from [#707](https://github.com/kreait/firebase-php/pull/707))
 
 ## [5.26.2]
 ### Fixed
