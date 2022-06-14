@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.4.1 - 2022-06-15]
+
 ### Fixed
 
 * Updating a Realtime Database Ruleset converted lists to objects with numeric keys.
@@ -205,7 +207,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.4.0...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.4.1...6.x
+[6.4.1]: https://github.com/kreait/firebase-php/compare/6.4.0...6.4.1
 [6.4.0]: https://github.com/kreait/firebase-php/compare/6.3.1...6.4.0
 [6.3.1]: https://github.com/kreait/firebase-php/compare/6.3.0...6.3.1
 [6.3.0]: https://github.com/kreait/firebase-php/compare/6.2.0...6.3.0
