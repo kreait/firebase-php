@@ -2,26 +2,16 @@ name: Emulator Tests
 
 on:
   push:
-    paths:
-      - '.github/workflows/**'
-      - 'composer.json'
-      - 'phpunit.xml.dist'
-      - 'phpstan.neon.dist'
-      - '*.php'
   pull_request:
-    paths:
-      - '.github/workflows/**'
-      - 'composer.json'
-      - 'phpunit.xml.dist'
-      - 'phpstan.neon.dist'
-      - '*.php'
   workflow_dispatch:
 
 jobs:
   emulator-tests:
     name: Emulator Tests
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'kreait' || github.repository_owner == 'beste-access'
+
+    # We want integration tests only to run on the original repo and not on internal PRs
+    if: (github.repository_owner == 'kreait' || github.repository_owner == 'beste-access') && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository)
 
     env:
       php-version: '8.0'
