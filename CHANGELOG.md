@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* Updating a Realtime Database Ruleset converted lists to objects with numeric keys.
+  ([#706](https://github.com/kreait/firebase-php/pull/706))
+
 ### Changed
 
 * Raised minimum version of Guzzle to address [CVE-2022-31042](https://github.com/advisories/GHSA-f2wf-25xc-69c9)
