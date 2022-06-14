@@ -7,6 +7,9 @@ parameters:
 		-
 			message: '#Parameter .+ expects .+, .+ given#'
 			path: tests
+		-
+			message: '#Access to an uninitialized property.+RequestWithSubRequests::\$wrappedRequest#'
+			path: src/Firebase/Http/RequestWithSubRequests.php
 
 	checkUninitializedProperties: true
 
