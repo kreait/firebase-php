@@ -1,28 +1,15 @@
 name: Tests
 
 on:
-  pull_request:
-    branches:
-      - '**:**'
-    paths:
-      - 'composer.json'
-      - 'phpunit.xml.dist'
-      - 'phpstan.neon.dist'
-      - 'src/**/*.php'
-      - 'tests/**/*.php'
   push:
-    tags-ignore:
-      - '**'
-    paths:
-      - 'composer.json'
-      - 'phpunit.xml.dist'
-      - 'phpstan.neon.dist'
-      - 'src/**/*.php'
-      - 'tests/**/*.php'
+  pull_request:
   workflow_dispatch:
 
 jobs:
   tests:
+    # Don't run the tests on internal PRs
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+
     name: PHP ${{ matrix.php }} (${{ matrix.dependencies }})
     runs-on: ubuntu-latest
 
