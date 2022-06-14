@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+
+## [5.26.3]
 ### Fixed
 * Updating a Realtime Database Ruleset converted lists to objects with numeric keys.
   (backported from [#707](https://github.com/kreait/firebase-php/pull/707))
@@ -342,7 +344,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.26.2...5.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.26.3...5.x
+[5.26.3]: https://github.com/kreait/firebase-php/compare/5.26.2...5.26.3
 [5.26.2]: https://github.com/kreait/firebase-php/compare/5.26.1...5.26.2
 [5.26.1]: https://github.com/kreait/firebase-php/compare/5.26.0...5.26.1
 [5.26.0]: https://github.com/kreait/firebase-php/compare/5.25.0...5.26.0
