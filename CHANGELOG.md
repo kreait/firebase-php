@@ -7,6 +7,11 @@
 * Problems while fetching Dynamic Link statistics now result in more helpful exception messages.
   ([#707](https://github.com/kreait/firebase-php/issues/707)
 
+### Changed
+
+* Raised minimum version of Guzzle to address [CVE-2022-31090](https://github.com/advisories/GHSA-25mq-v84q-4j7r)
+  and [CVE-2022-31091](https://github.com/advisories/GHSA-q559-8m2m-g699)
+
 ## [6.4.1 - 2022-06-15]
 
 ### Fixed
