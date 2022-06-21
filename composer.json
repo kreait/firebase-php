@@ -23,6 +23,7 @@
         "ext-openssl": "*",
         "beste/clock": "^2.1",
         "beste/json": "^1.0",
+        "fig/http-message-util": "^1.1",
         "google/auth": "^1.21",
         "google/cloud-core": "^1.44.2",
         "google/cloud-storage": "^1.26.2",

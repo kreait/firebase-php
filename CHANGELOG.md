@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Added
+
+* Problems while fetching Dynamic Link statistics now result in more helpful exception messages.
+  ([#707](https://github.com/kreait/firebase-php/issues/707)
+
 ## [6.4.1 - 2022-06-15]
 
 ### Fixed

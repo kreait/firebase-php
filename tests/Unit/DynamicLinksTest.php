@@ -262,12 +262,28 @@ final class DynamicLinksTest extends TestCase
         $this->service->getStatistics('anything');
     }
 
-    public function testLinkStatsFailOnUnsuccessfulResponse(): void
+    /**
+     * @dataProvider provideCodeAndExpectedMessageRegExForFailingStatisticsRetrieval
+     */
+    public function testLinkStatsFailOnUnsuccessfulResponse(int $code, string $expectedMessageRegex): void
     {
-        $this->httpHandler->append($response = new Response(400, [], '{}'));
+        $this->httpHandler->append(new Response($code, [], '{"the body does": "not matter here"}'));
 
+        $this->expectException(FailedToGetStatisticsForDynamicLink::class);
+        $this->expectExceptionCode($code);
+        $this->expectExceptionMessageMatches($expectedMessageRegex);
+
+        $this->service->getStatistics(
+            GetStatisticsForDynamicLink::forLink('anything')
+        );
+    }
+
+    public function testLinkStatExceptionsProvideTheActionAndTheResponse(): void
+    {
         $action = GetStatisticsForDynamicLink::forLink('anything');
+        $response = new Response(418, [], '{"key": "value"}');
 
+        $this->httpHandler->append($response);
         try {
             $this->service->getStatistics($action);
             $this->fail('An exception should have been thrown');
@@ -275,14 +291,6 @@ final class DynamicLinksTest extends TestCase
             $this->assertSame($action, $e->action());
             $this->assertSame($response, $e->response());
         }
-    }
-
-    public function testLinkStatsFailGracefullyIfAnUnsuccessfulResponseCannotBeParsed(): void
-    {
-        $this->httpHandler->append(new Response(400, [], 'probably html'));
-
-        $this->expectException(FailedToGetStatisticsForDynamicLink::class);
-        $this->service->getStatistics('https://domain.tld/irrelevant');
     }
 
     public function testDynamicLinkComponentsCanBeCreatedNewOrFromArrays(): void
@@ -364,5 +372,15 @@ final class DynamicLinksTest extends TestCase
                     ->withImageLink('https://domain.tld/image.jpg')
             )
         ;
+    }
+
+
+    /**
+     * @return iterable<string, array{0: int, 1: string}>
+     */
+    public function provideCodeAndExpectedMessageRegExForFailingStatisticsRetrieval(): iterable
+    {
+        yield '403' => [403, '/missing permissions/i'];
+        yield '418' => [418, '/response.+details/'];
     }
 }
