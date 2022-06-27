@@ -79,28 +79,30 @@ final class MessageData implements \JsonSerializable
      *
      * @return non-empty-string
      */
-    private static function assertValidKey(string $value): string
+    private static function assertValidKey(string $key): string
     {
-        $value = \mb_strtolower(trim($value));
+        $key = trim($key);
 
-        if ($value === '') {
+        if ($key === '') {
             throw new InvalidArgumentException("'Empty keys are not allowed in FCM data payloads");
         }
+
+        $check = \mb_strtolower($key);
 
         // According to the docs, "notification" is reserved, but it's still accepted ¯\_(ツ)_/¯
         $reservedWords = ['from', /*'notification',*/ 'message_type'];
         $reservedPrefixes = ['google', 'gcm'];
 
-        if (\in_array($value, $reservedWords, true)) {
-            throw new InvalidArgumentException("'{$value}' is a reserved word and can not be used as a key in FCM data payloads");
+        if (\in_array($check, $reservedWords, true)) {
+            throw new InvalidArgumentException("'{$key}' is a reserved word and can not be used as a key in FCM data payloads");
         }
 
         foreach ($reservedPrefixes as $prefix) {
-            if (\str_starts_with($value, $prefix)) {
+            if (\str_starts_with($check, $prefix)) {
                 throw new InvalidArgumentException("'{$prefix}' is a reserved prefix and can not be used as a key in FCM data payloads");
             }
         }
 
-        return $value;
+        return $key;
     }
 }

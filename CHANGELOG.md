@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* Keys in the data payload of an FCM message were always lower-cased, although they shouldn't have been.
+  ([#709](https://github.com/kreait/firebase-php/issues/709)
+
 ## [6.5.0] - 2022-06-22
 
 ### Added
