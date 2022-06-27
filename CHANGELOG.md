@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.5.1] - 2022-06-27
+
 ### Fixed
 
 * Keys in the data payload of an FCM message were always lower-cased, although they shouldn't have been.
@@ -224,7 +226,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.5.0...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.5.1...6.x
+[6.5.1]: https://github.com/kreait/firebase-php/compare/6.5.0...6.5.1
 [6.5.0]: https://github.com/kreait/firebase-php/compare/6.4.1...6.5.0
 [6.4.1]: https://github.com/kreait/firebase-php/compare/6.4.0...6.4.1
 [6.4.0]: https://github.com/kreait/firebase-php/compare/6.3.1...6.4.0
