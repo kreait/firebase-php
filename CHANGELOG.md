@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.6.0] - 2022-07-07
+
 ### Fixed
 
 * The `AndroidConfig` class is now more lenient with TTL values
@@ -241,7 +243,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.5.1...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.6.0...6.x
+[6.6.0]: https://github.com/kreait/firebase-php/compare/6.5.1...6.6.0
 [6.5.1]: https://github.com/kreait/firebase-php/compare/6.5.0...6.5.1
 [6.5.0]: https://github.com/kreait/firebase-php/compare/6.4.1...6.5.0
 [6.4.1]: https://github.com/kreait/firebase-php/compare/6.4.0...6.4.1
