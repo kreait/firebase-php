@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Messaging;
 
 use JsonSerializable;
+use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 
 /**
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidconfig
@@ -60,7 +61,7 @@ use JsonSerializable;
  * @phpstan-type AndroidConfigShape array{
  *     collapse_key?: non-empty-string,
  *     priority?: self::MESSAGE_PRIORITY_*,
- *     ttl?: positive-int,
+ *     ttl?: positive-int|non-empty-string,
  *     restricted_package_name?: non-empty-string,
  *     data?: array<non-empty-string, non-empty-string>,
  *     notification?: AndroidNotificationShape,
@@ -102,10 +103,47 @@ final class AndroidConfig implements JsonSerializable
 
     /**
      * @param AndroidConfigShape $config
+     *
+     * @throws InvalidArgument
      */
     public static function fromArray(array $config): self
     {
+        if (array_key_exists('ttl', $config)) {
+            $config['ttl'] = self::ensureValidTtl($config['ttl']);
+        }
+
         return new self($config);
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @throws InvalidArgument
+     *
+     * @return non-empty-string
+     */
+    private static function ensureValidTtl($value): string
+    {
+        $expectedPattern = '/^\d+s$/';
+        $errorMessage = "The TTL of an AndroidConfig must be an positive integer or string matching $expectedPattern";
+
+        if (is_int($value) && $value >= 0) {
+            return sprintf('%ds', $value);
+        }
+
+        if (!is_string($value)) {
+            throw new InvalidArgument($errorMessage);
+        }
+
+        if (preg_match('/^\d+$/', $value) === 1) {
+            return sprintf('%ds', $value);
+        }
+
+        if (preg_match($expectedPattern, $value) === 1) {
+            return sprintf('%s', $value);
+        }
+
+        throw new InvalidArgument($errorMessage);
     }
 
     public function withDefaultSound(): self

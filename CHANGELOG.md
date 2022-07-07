@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* The `AndroidConfig` class is now more lenient with TTL values
+  ([#713](https://github.com/kreait/firebase-php/issues/713)
+
 ## [6.5.1] - 2022-06-27
 
 ### Fixed
