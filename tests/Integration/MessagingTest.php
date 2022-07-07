@@ -381,7 +381,7 @@ final class MessagingTest extends IntegrationTestCase
     /**
      * @see https://github.com/kreait/firebase-php/issues/713
      *
-     * @dataProvider validAndroidConfigTtlValues
+     * @dataProvider \Kreait\Firebase\Tests\Unit\Messaging\AndroidConfigTest::validTtlValues
      *
      * @param int|string $value
      */
@@ -397,20 +397,5 @@ final class MessagingTest extends IntegrationTestCase
         $this->messaging->send($message);
 
         $this->addToAssertionCount(1);
-    }
-
-    /**
-     * @return array<string, list<mixed>>
-     */
-    public function validAndroidConfigTtlValues(): array
-    {
-        return [
-            'int' => [1],
-            'numeric string' => ['1'],
-            'valid string' => ['1s'],
-            'zero' => [0],
-            'zero string' => ['0'],
-            'zero s string' => ['0s'],
-        ];
     }
 }
