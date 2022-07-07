@@ -111,6 +111,9 @@ final class AndroidConfigTest extends UnitTestCase
             'positive int' => [1],
             'positive numeric string' => ['1'],
             'expected string' => ['1s'],
+            'zero' => [0],
+            'zero string' => ['0'],
+            'zero string with suffix' => ['0s'],
         ];
     }
 
@@ -125,7 +128,8 @@ final class AndroidConfigTest extends UnitTestCase
             'wrong suffix' => ['1m'],
             'not numeric' => [true],
             'negative int' => [-1],
-            'negative string' => ['-1s']
+            'negative string' => ['-1'],
+            'negative string with suffix' => ['-1s'],
         ];
     }
 }

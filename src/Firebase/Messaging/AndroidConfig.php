@@ -108,8 +108,8 @@ final class AndroidConfig implements JsonSerializable
      */
     public static function fromArray(array $config): self
     {
-        if ($ttl = $config['ttl'] ?? null) {
-            $config['ttl'] = self::ensureValidTtl($ttl);
+        if (array_key_exists('ttl', $config)) {
+            $config['ttl'] = self::ensureValidTtl($config['ttl']);
         }
 
         return new self($config);
@@ -127,7 +127,7 @@ final class AndroidConfig implements JsonSerializable
         $expectedPattern = '/^\d+s$/';
         $errorMessage = "The TTL of an AndroidConfig must be an positive integer or string matching $expectedPattern";
 
-        if (is_int($value) && $value > 0) {
+        if (is_int($value) && $value >= 0) {
             return sprintf('%ds', $value);
         }
 

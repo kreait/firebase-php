@@ -407,7 +407,10 @@ final class MessagingTest extends IntegrationTestCase
         return [
             'int' => [1],
             'numeric string' => ['1'],
-            'valid string' => ['1s']
+            'valid string' => ['1s'],
+            'zero' => [0],
+            'zero string' => ['0'],
+            'zero s string' => ['0s'],
         ];
     }
 }
