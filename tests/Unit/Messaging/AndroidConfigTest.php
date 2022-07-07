@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
+use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
 
@@ -49,7 +50,35 @@ final class AndroidConfigTest extends UnitTestCase
     {
         $config = AndroidConfig::fromArray($data);
 
-        $this->assertEquals($data, $config->jsonSerialize());
+        $this->assertEqualsCanonicalizing($data, $config->jsonSerialize());
+    }
+
+    /**
+     * @dataProvider validTtlValues
+     *
+     * @param int|string $ttl
+     */
+    public function testItAcceptsValidTtls($ttl): void
+    {
+        AndroidConfig::fromArray([
+            'ttl' => $ttl,
+        ]);
+
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * @dataProvider invalidTtlValues
+     *
+     * @param mixed $ttl
+     */
+    public function testItRejectsInvalidTtls($ttl): void
+    {
+        $this->expectException(InvalidArgument::class);
+
+        AndroidConfig::fromArray([
+            'ttl' => $ttl,
+        ]);
     }
 
     /**
@@ -70,6 +99,33 @@ final class AndroidConfigTest extends UnitTestCase
                     'sound' => 'default',
                 ],
             ]],
+        ];
+    }
+
+    /**
+     * @return array<string, list<int|string>>
+     */
+    public function validTtlValues(): array
+    {
+        return [
+            'positive int' => [1],
+            'positive numeric string' => ['1'],
+            'expected string' => ['1s'],
+        ];
+    }
+
+
+    /**
+     * @return array<string, list<mixed>>
+     */
+    public function invalidTtlValues(): array
+    {
+        return [
+            'float' => [1.2],
+            'wrong suffix' => ['1m'],
+            'not numeric' => [true],
+            'negative int' => [-1],
+            'negative string' => ['-1s']
         ];
     }
 }
