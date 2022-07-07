@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging\Http\Request;
 
+use Kreait\Firebase\Contract\Messaging;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Http\HasSubRequests;
 use Kreait\Firebase\Http\Requests;
@@ -19,12 +20,15 @@ final class SendMessages implements HasSubRequests, RequestInterface
 {
     use WrappedPsr7Request;
 
-    public const MAX_AMOUNT_OF_MESSAGES = 500;
+    /**
+     * @deprecated 6.6.0 Use {@see Messaging::BATCH_MESSAGE_LIMIT} instead
+     */
+    public const MAX_AMOUNT_OF_MESSAGES = Messaging::BATCH_MESSAGE_LIMIT;
 
     public function __construct(string $projectId, Messages $messages, bool $validateOnly = false)
     {
-        if ($messages->count() > self::MAX_AMOUNT_OF_MESSAGES) {
-            throw new InvalidArgument('Only '.self::MAX_AMOUNT_OF_MESSAGES.' can be sent at a time.');
+        if ($messages->count() > Messaging::BATCH_MESSAGE_LIMIT) {
+            throw new InvalidArgument('Only '.Messaging::BATCH_MESSAGE_LIMIT.' can be sent at a time.');
         }
 
         $subRequests = [];

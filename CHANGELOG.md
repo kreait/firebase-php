@@ -7,6 +7,16 @@
 * The `AndroidConfig` class is now more lenient with TTL values
   ([#713](https://github.com/kreait/firebase-php/issues/713)
 
+### Added
+
+* The maximum amount of messages that can be sent in batches can be accessed 
+  `Kreait\Firebase\Contract\Messaging::BATCH_MESSAGE_LIMIT`
+
+### Deprecated
+
+* `Kreait\Firebase\Messaging\Http\Request\SendMessages::MAX_AMOUNT_OF_MESSAGES`
+* `Kreait\Firebase\Messaging\Http\Request\SendMessageToTokens::MAX_AMOUNT_OF_TOKENS`
+
 ## [6.5.1] - 2022-06-27
 
 ### Fixed
