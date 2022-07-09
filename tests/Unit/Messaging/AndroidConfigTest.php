@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
+use Beste\Json;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
 
 /**
  * @internal
+ *
+ * @phpstan-import-type AndroidConfigShape from AndroidConfig
  */
 final class AndroidConfigTest extends UnitTestCase
 {
     public function testItIsEmptyWhenItIsEmpty(): void
     {
-        $this->assertSame('[]', \json_encode(AndroidConfig::new()));
+        $this->assertSame('[]', Json::encode(AndroidConfig::new()));
     }
 
     public function testItHasADefaultSound(): void
@@ -27,24 +30,24 @@ final class AndroidConfigTest extends UnitTestCase
         ];
 
         $this->assertJsonStringEqualsJsonString(
-            \json_encode($expected),
-            \json_encode(AndroidConfig::new()->withDefaultSound())
+            Json::encode($expected),
+            Json::encode(AndroidConfig::new()->withDefaultSound())
         );
     }
 
     public function testItCanHaveAPriority(): void
     {
-        $config = AndroidConfig::new()->withNormalPriority();
+        $config = AndroidConfig::new()->withNormalMessagePriority();
         $this->assertSame('normal', $config->jsonSerialize()['priority']);
 
-        $config = AndroidConfig::new()->withHighPriority();
+        $config = AndroidConfig::new()->withHighMessagePriority();
         $this->assertSame('high', $config->jsonSerialize()['priority']);
     }
 
     /**
      * @dataProvider validDataProvider
      *
-     * @param array<string, array<string, mixed>> $data
+     * @param AndroidConfigShape $data
      */
     public function testItCanBeCreatedFromAnArray(array $data): void
     {
@@ -82,7 +85,7 @@ final class AndroidConfigTest extends UnitTestCase
     }
 
     /**
-     * @return array<string, array<int, array<string, mixed>>>
+     * @return array<array-key, list<AndroidConfigShape>>
      */
     public function validDataProvider(): array
     {

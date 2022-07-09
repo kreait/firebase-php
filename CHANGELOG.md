@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* The `WebPushConfig` class is now more lenient with TTL values, and urgencies are checked if they are valid
+  ([#713](https://github.com/kreait/firebase-php/issues/716)
+
 ## [6.6.0] - 2022-07-07
 
 ### Fixed
