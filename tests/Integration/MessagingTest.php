@@ -13,10 +13,13 @@ use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\RawMessageFromArray;
+use Kreait\Firebase\Messaging\WebPushConfig;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 /**
  * @internal
+ *
+ * @phpstan-import-type WebPushHeadersShape from WebPushConfig
  */
 final class MessagingTest extends IntegrationTestCase
 {
@@ -376,6 +379,27 @@ final class MessagingTest extends IntegrationTestCase
 
         $message = CloudMessage::withTarget(MessageTarget::TOKEN, $this->getTestRegistrationToken())
             ->withAndroidConfig($config);
+
+        $this->messaging->send($message);
+
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * @see https://github.com/kreait/firebase-php/issues/716
+     *
+     * @dataProvider \Kreait\Firebase\Tests\Unit\Messaging\WebPushConfigTest::validHeaders
+     *
+     * @param WebPushHeadersShape $headers
+     */
+    public function testWebPushConfigTtlWorksWithValidValues(array $headers): void
+    {
+        $config = WebPushConfig::fromArray([
+            'headers' => $headers,
+        ]);
+
+        $message = CloudMessage::withTarget(MessageTarget::TOKEN, $this->getTestRegistrationToken())
+            ->withWebPushConfig($config);
 
         $this->messaging->send($message);
 

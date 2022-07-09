@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
+use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\WebPushConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
 
 /**
  * @internal
+ * @phpstan-import-type WebPushConfigShape from WebPushConfig
+ * @phpstan-import-type WebPushHeadersShape from WebPushConfig
  */
 final class WebPushConfigTest extends UnitTestCase
 {
@@ -17,7 +20,7 @@ final class WebPushConfigTest extends UnitTestCase
      *
      * @param array<string, mixed> $data
      */
-    public function testCreateFromArray(array $data): void
+    public function testCreateFromValidPayload(array $data): void
     {
         $config = WebPushConfig::fromArray($data);
 
@@ -40,7 +43,19 @@ final class WebPushConfigTest extends UnitTestCase
     }
 
     /**
-     * @return array<string, array<string, array<string, mixed>>>
+     * @dataProvider invalidHeaders
+     *
+     * @param WebPushHeadersShape $headers
+     */
+    public function testItRejectsInvalidHeaders(array $headers): void
+    {
+        $this->expectException(InvalidArgument::class);
+
+        WebPushConfig::fromArray(['headers' => $headers]);
+    }
+
+    /**
+     * @return array<string, array<WebPushConfigShape>>
      */
     public function validDataProvider(): array
     {
@@ -56,6 +71,31 @@ final class WebPushConfigTest extends UnitTestCase
                     'icon' => 'https://my-server/icon.png',
                 ],
             ],
+        ];
+    }
+
+    /**
+     * @return array<string, array<WebPushHeadersShape>>
+     */
+    public function validHeaders(): array
+    {
+        return [
+            'positive int ttl' => [['TTL' => 1]],
+            'positive string ttl' => [['TTL' => '1']],
+        ];
+    }
+
+    /**
+     * @return array<string, array<array<string, mixed>>>
+     */
+    public function invalidHeaders(): array
+    {
+        return [
+            'negative int ttl' => [['TTL' => -1]],
+            'negative string ttl' => [['TTL' => '-1']],
+            'zero int ttl' => [['TTL' => -1]],
+            'zero string ttl' => [['TTL' => '-1']],
+            'unsupported urgency' => [['Urgency' => 'unsupported']],
         ];
     }
 }
