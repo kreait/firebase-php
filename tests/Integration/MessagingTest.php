@@ -363,23 +363,6 @@ final class MessagingTest extends IntegrationTestCase
 
     /**
      * @see https://github.com/kreait/firebase-php/issues/713
-     */
-    public function testAndroidConfigTtlWorksWithAPositiveInt(): void
-    {
-        $config = AndroidConfig::fromArray([
-            'ttl' => 1,
-        ]);
-
-        $message = CloudMessage::withTarget(MessageTarget::TOKEN, $this->getTestRegistrationToken())
-            ->withAndroidConfig($config);
-
-        $this->messaging->send($message);
-
-        $this->addToAssertionCount(1);
-    }
-
-    /**
-     * @see https://github.com/kreait/firebase-php/issues/713
      *
      * @dataProvider \Kreait\Firebase\Tests\Unit\Messaging\AndroidConfigTest::validTtlValues
      *
