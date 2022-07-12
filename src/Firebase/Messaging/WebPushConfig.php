@@ -10,7 +10,7 @@ use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 /**
  * @see https://tools.ietf.org/html/rfc8030#section-5.3 Web Push Message Urgency
  * @phpstan-type WebPushHeadersShape array{
- *     TTL?: positive-int|numeric-string,
+ *     TTL?: positive-int|numeric-string|null,
  *     Urgency?: self::URGENCY_*
  * }
  *
@@ -91,6 +91,10 @@ final class WebPushConfig implements JsonSerializable
     {
         if (array_key_exists('headers', $config) && is_array($config['headers'])) {
             $config['headers'] = self::ensureValidHeaders($config['headers']);
+
+            if ($config['headers'] === []) {
+                unset($config['headers']);
+            }
         }
 
         return new self($config);
@@ -103,16 +107,18 @@ final class WebPushConfig implements JsonSerializable
      */
     private static function ensureValidHeaders(array $headers): array
     {
-        if (array_key_exists('TTL', $headers) && is_int($headers['TTL'])) {
-            $headers['TTL'] = (string) $headers['TTL'];
-        }
+        if (array_key_exists('TTL', $headers)) {
+            if (is_int($headers['TTL'])) {
+                $headers['TTL'] = (string) $headers['TTL'];
+            }
 
-        if (
-            array_key_exists('TTL', $headers)
-            && is_string($headers['TTL'])
-            && preg_match('/^[\-0]/', $headers['TTL']) === 1
-        ) {
-            throw new InvalidArgument('The TTL in the WebPushConfig must must be a positive int');
+            if (is_string($headers['TTL']) && (preg_match('/^[1-9]\d*$/', $headers['TTL']) !== 1)) {
+                throw new InvalidArgument('The TTL in the WebPushConfig must must be a positive int');
+            }
+
+            if ($headers['TTL'] === null) {
+                unset($headers['TTL']);
+            }
         }
 
         if (array_key_exists('Urgency', $headers)) {
