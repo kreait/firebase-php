@@ -43,6 +43,18 @@ final class WebPushConfigTest extends UnitTestCase
     }
 
     /**
+     * @dataProvider validHeaders
+     *
+     * @param WebPushHeadersShape $headers
+     */
+    public function testItAcceptsValidHeaders(array $headers): void
+    {
+        WebPushConfig::fromArray(['headers' => $headers]);
+
+        $this->addToAssertionCount(1);
+    }
+
+    /**
      * @dataProvider invalidHeaders
      *
      * @param WebPushHeadersShape $headers
@@ -82,6 +94,7 @@ final class WebPushConfigTest extends UnitTestCase
         return [
             'positive int ttl' => [['TTL' => 1]],
             'positive string ttl' => [['TTL' => '1']],
+            'null (#719)' => [['TTL' => null]],
         ];
     }
 
@@ -93,8 +106,8 @@ final class WebPushConfigTest extends UnitTestCase
         return [
             'negative int ttl' => [['TTL' => -1]],
             'negative string ttl' => [['TTL' => '-1']],
-            'zero int ttl' => [['TTL' => -1]],
-            'zero string ttl' => [['TTL' => '-1']],
+            'zero int ttl' => [['TTL' => 0]],
+            'zero string ttl' => [['TTL' => '0']],
             'unsupported urgency' => [['Urgency' => 'unsupported']],
         ];
     }
