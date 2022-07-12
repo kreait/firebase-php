@@ -106,7 +106,7 @@ final class AndroidConfigTest extends UnitTestCase
     }
 
     /**
-     * @return array<string, list<int|string>>
+     * @return array<string, list<int|string|null>>
      */
     public function validTtlValues(): array
     {
@@ -117,6 +117,7 @@ final class AndroidConfigTest extends UnitTestCase
             'zero' => [0],
             'zero string' => ['0'],
             'zero string with suffix' => ['0s'],
+            'null (#719)' => [null],
         ];
     }
 
