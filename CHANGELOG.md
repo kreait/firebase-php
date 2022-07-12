@@ -5,14 +5,16 @@
 ### Fixed
 
 * The `WebPushConfig` class is now more lenient with TTL values, and urgencies are checked if they are valid
-  ([#713](https://github.com/kreait/firebase-php/issues/716)
+  ([#716](https://github.com/kreait/firebase-php/issues/716))
+* The `AndroidConfig` didn't allow the TTL to be `null`)
+  ([#719](https://github.com/kreait/firebase-php/issues/719))
 
 ## [6.6.0] - 2022-07-07
 
 ### Fixed
 
 * The `AndroidConfig` class is now more lenient with TTL values
-  ([#713](https://github.com/kreait/firebase-php/issues/713)
+  ([#713](https://github.com/kreait/firebase-php/issues/713))
 
 ### Added
 

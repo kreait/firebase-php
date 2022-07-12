@@ -61,7 +61,7 @@ use Kreait\Firebase\Exception\Messaging\InvalidArgument;
  * @phpstan-type AndroidConfigShape array{
  *     collapse_key?: non-empty-string,
  *     priority?: self::MESSAGE_PRIORITY_*,
- *     ttl?: positive-int|non-empty-string,
+ *     ttl?: positive-int|non-empty-string|null,
  *     restricted_package_name?: non-empty-string,
  *     data?: array<non-empty-string, non-empty-string>,
  *     notification?: AndroidNotificationShape,
@@ -108,7 +108,7 @@ final class AndroidConfig implements JsonSerializable
      */
     public static function fromArray(array $config): self
     {
-        if (array_key_exists('ttl', $config)) {
+        if (array_key_exists('ttl', $config) && $config['ttl'] !== null) {
             $config['ttl'] = self::ensureValidTtl($config['ttl']);
         }
 
