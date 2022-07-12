@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.6.1] - 2022-07-12
+
 ### Fixed
 
 * The `WebPushConfig` class is now more lenient with TTL values, and urgencies are checked if they are valid
@@ -250,7 +252,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.6.0...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.6.1...6.x
+[6.6.1]: https://github.com/kreait/firebase-php/compare/6.6.0...6.6.1
 [6.6.0]: https://github.com/kreait/firebase-php/compare/6.5.1...6.6.0
 [6.5.1]: https://github.com/kreait/firebase-php/compare/6.5.0...6.5.1
 [6.5.0]: https://github.com/kreait/firebase-php/compare/6.4.1...6.5.0
