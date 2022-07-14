@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Http;
 
+use Beste\Json;
 use GuzzleHttp;
+use GuzzleHttp\Psr7\Query;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @internal
+ */
 final class Middleware
 {
     /**
@@ -19,7 +24,7 @@ final class Middleware
         return static function (callable $handler) {
             return static function (RequestInterface $request, ?array $options = null) use ($handler) {
                 $uri = $request->getUri();
-                $path = $uri->getPath();
+                $path = '/'.\ltrim($uri->getPath(), '/');
 
                 if (!\str_ends_with($path, '.json')) {
                     $uri = $uri->withPath($path.'.json');
@@ -27,6 +32,24 @@ final class Middleware
                 }
 
                 return $handler($request, $options ?: []);
+            };
+        };
+    }
+
+    /**
+     * @param array<string, mixed>|null $override
+     */
+    public static function addDatabaseAuthVariableOverride(?array $override): callable
+    {
+        return static function (callable $handler) use ($override) {
+            return static function (RequestInterface $request, ?array $options = null) use ($handler, $override) {
+                $uri = $request->getUri();
+
+                $uri = $uri->withQuery(Query::build(
+                    \array_merge(Query::parse($uri->getQuery()), ['auth_variable_override' => Json::encode($override)])
+                ));
+
+                return $handler($request->withUri($uri), $options ?: []);
             };
         };
     }

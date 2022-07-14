@@ -18,9 +18,9 @@ use Throwable;
 /**
  * @internal
  */
-class TransactionTest extends TestCase
+final class TransactionTest extends TestCase
 {
-    /** @var ApiClient&MockObject */
+    /** @var ApiClient|MockObject */
     private $apiClient;
 
     private Transaction $transaction;

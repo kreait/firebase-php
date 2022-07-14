@@ -20,7 +20,7 @@ use Throwable;
 /**
  * @internal
  */
-class ApiClientTest extends UnitTestCase
+final class ApiClientTest extends UnitTestCase
 {
     private MockHandler $mockHandler;
 

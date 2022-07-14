@@ -10,6 +10,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
 
 /**
  * @group Firestore
+ * @requires PHP < 8.1
  *
  * @internal
  */
@@ -17,8 +18,7 @@ final class FirestoreTest extends IntegrationTestCase
 {
     private Firestore $firestore;
 
-    /** @var mixed string */
-    private $collectionName;
+    private string $collectionName;
 
     protected function setUp(): void
     {

@@ -17,7 +17,7 @@ use Psr\Http\Message\UriInterface;
 /**
  * @internal
  */
-class ReferenceTest extends UnitTestCase
+final class ReferenceTest extends UnitTestCase
 {
     /** @var ApiClient|\PHPUnit\Framework\MockObject\MockObject */
     private $apiClient;

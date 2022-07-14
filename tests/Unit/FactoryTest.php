@@ -4,217 +4,135 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit;
 
-use DateTimeImmutable;
-use Google\Auth\Credentials\ServiceAccountCredentials;
-use Google\Auth\Credentials\UserRefreshCredentials;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
+use Beste\Clock\FrozenClock;
 use GuzzleHttp\Psr7\Uri;
-use InvalidArgumentException;
-use Kreait\Clock\FrozenClock;
-use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
-use Kreait\Firebase\Auth\DisabledLegacyCustomTokenGenerator;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Http\HttpClientOptions;
-use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Tests\UnitTestCase;
-use Psr\SimpleCache\CacheInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use RuntimeException;
+use StellaMaris\Clock\ClockInterface;
 
 /**
  * @internal
  */
-class FactoryTest extends UnitTestCase
+final class FactoryTest extends UnitTestCase
 {
-    private string $validServiceAccountFile;
-
-    private ServiceAccount $validServiceAccount;
-
-    private UserRefreshCredentials $userRefreshCredentials;
-
-    private Factory $factory;
+    private string $serviceAccount;
+    private string $projectId;
+    private string $clientEmail;
 
     protected function setUp(): void
     {
-        $this->validServiceAccountFile = self::$fixturesDir.'/ServiceAccount/valid.json';
-        $this->validServiceAccount = ServiceAccount::fromValue($this->validServiceAccountFile);
+        $this->serviceAccount = self::$fixturesDir.'/ServiceAccount/valid.json';
 
-        \putenv('SUPPRESS_GCLOUD_CREDS_WARNING=true');
-        $this->userRefreshCredentials = new UserRefreshCredentials(Factory::API_CLIENT_SCOPES, self::$fixturesDir.'/user_refresh_credentials.json');
+        $json = \json_decode(\file_get_contents($this->serviceAccount), true);
+        \assert(\is_array($json));
 
-        $this->factory = (new Factory());
+        $this->projectId = $json['project_id'];
+        $this->clientEmail = $json['client_email'];
     }
 
-    protected function tearDown(): void
+    public function testItUsesACustomDatabaseUri(): void
     {
-        parent::tearDown();
+        $uri = new Uri($expected = 'http://domain.tld/');
 
-        \putenv('SUPPRESS_GCLOUD_CREDS_WARNING');
+        $factory = (new Factory())->withDatabaseUri($uri);
+
+        $this->assertSame($expected, \invade($factory)->getDatabaseUri()->__toString());
     }
 
-    public function testItAcceptsACustomDatabaseUri(): void
+    public function testItUsesACustomDefaultStorageBucket(): void
     {
-        $uri = new Uri('http://domain.tld/');
+        $factory = (new Factory())->withDefaultStorageBucket('foo');
 
-        $database = (new Factory())
-            ->withServiceAccount($this->validServiceAccount)
-            ->withDatabaseUri($uri)
-            ->createDatabase()
-        ;
-
-        $databaseUri = $database->getReference()->getUri();
-
-        $this->assertSame($uri->getScheme(), $databaseUri->getScheme());
-        $this->assertSame($uri->getHost(), $databaseUri->getHost());
+        $this->assertSame('foo', \invade($factory)->getStorageBucketName());
     }
 
-    public function testItAcceptsACustomDefaultStorageBucket(): void
+    public function testItUsesTheCredentialsFromTheGooglaApplicationCredentialsEnvironmentVariable(): void
     {
-        $storage = (new Factory())
-            ->withServiceAccount($this->validServiceAccount)
-            ->withDefaultStorageBucket('foo')
-            ->createStorage()
-        ;
+        \putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->serviceAccount);
 
-        $this->assertSame('foo', $storage->getBucket()->name());
-    }
+        $factory = (new Factory());
 
-    public function testCreateCustomTokenGeneratorWithApplicationDefaultCredentials(): void
-    {
-        \putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->validServiceAccountFile);
+        $this->assertSame($this->projectId, \invade($factory)->getProjectId());
+        $this->assertSame($this->clientEmail, \invade($factory)->getClientEmail());
 
-        $generator = (new Factory())->createCustomTokenGenerator();
-        $this->assertNotInstanceOf(DisabledLegacyCustomTokenGenerator::class, $generator);
+        $this->assertServices($factory);
 
         \putenv('GOOGLE_APPLICATION_CREDENTIALS');
     }
 
-    public function testCreateCustomTokenGeneratorWithClientEmailOnly(): void
+    public function testItUsesACustomClientEmail(): void
     {
-        $generator = (new Factory())
+        $factory = (new Factory())
             ->withDisabledAutoDiscovery()
-            ->withClientEmail('does@not.matter')
-            ->createCustomTokenGenerator()
+            ->withClientEmail($email = 'does@not.matter')
         ;
 
-        $this->assertInstanceOf(CustomTokenViaGoogleIam::class, $generator);
+        $this->assertSame($email, \invade($factory)->getClientEmail());
+        $this->expectException(RuntimeException::class);
+        $this->assertNull(\invade($factory)->getProjectId());
     }
 
-    public function testCreateStorageWithApplicationDefaultCredentials(): void
-    {
-        \putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->validServiceAccountFile);
-
-        // Only with a valid service account is the default bucket available
-        (new Factory())->createStorage()->getBucket();
-        $this->addToAssertionCount(1);
-
-        \putenv('GOOGLE_APPLICATION_CREDENTIALS');
-    }
-
-    public function testCreateStorageWithFirebaseCredentials(): void
-    {
-        \putenv('FIREBASE_CREDENTIALS='.$this->validServiceAccountFile);
-
-        // Only with a valid service account is the default bucket available
-        (new Factory())->createStorage()->getBucket();
-        $this->addToAssertionCount(1);
-
-        \putenv('FIREBASE_CREDENTIALS');
-    }
-
-    public function testItCannotCreateAStorageWithoutCredentials(): void
+    public function testItNeedsCredentials(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageMatches('/Unable to/');
+        $this->expectExceptionMessageMatches('/credential/');
 
-        (new Factory())->withDisabledAutoDiscovery()->createStorage();
+        (new Factory())->withDisabledAutoDiscovery()->createApiClient();
     }
 
-    public function testItAcceptsAServiceAccount(): void
+    public function testItUsesAServiceAccount(): void
     {
-        (new Factory())->withServiceAccount($this->validServiceAccount);
-        $this->addToAssertionCount(1);
+        $factory = (new Factory())->withServiceAccount($this->serviceAccount);
+
+        $this->assertSame($this->clientEmail, \invade($factory)->getClientEmail());
+        $this->assertSame($this->projectId, \invade($factory)->getProjectId());
+
+        $this->assertServices($factory);
     }
 
-    public function testItAcceptsAClock(): void
+    public function testItUsesAClock(): void
     {
-        (new Factory())->withClock(new FrozenClock(new DateTimeImmutable()));
-        $this->addToAssertionCount(1);
+        $factory = (new Factory())->withClock($clock = FrozenClock::fromUTC());
+
+        $this->assertInstanceOf(ClockInterface::class, \invade($factory)->clock);
     }
 
-    public function testItAcceptsAVerifierCache(): void
+    public function testItWrapsANonClockInAClock(): void
     {
-        (new Factory())->withVerifierCache($this->createMock(CacheInterface::class));
-        $this->addToAssertionCount(1);
+        $clock = new class() {
+            public function now(): \DateTimeImmutable
+            {
+                return new \DateTimeImmutable();
+            }
+        };
+
+        $factory = (new Factory())->withClock($clock);
+
+        $this->assertInstanceOf(ClockInterface::class, \invade($factory)->clock);
     }
 
-    public function testDynamicLinksCanBeCreatedWithoutADefaultDomain(): void
+    public function testItUsesAVerifierCache(): void
     {
-        $this->factory->createDynamicLinksService();
-        $this->addToAssertionCount(1);
+        $factory = (new Factory())->withVerifierCache($cache = $this->createMock(CacheItemPoolInterface::class));
+
+        $this->assertSame($cache, \invade($factory)->verifierCache);
     }
 
-    public function testCreateApiClientWithCustomHandlerStack(): void
+    public function testItUsesAnAuthTokenCache(): void
     {
-        $stack = HandlerStack::create();
+        $factory = (new Factory())->withAuthTokenCache($cache = $this->createMock(CacheItemPoolInterface::class));
 
-        $apiClient = $this->factory->createApiClient(['handler' => $stack]);
-
-        $this->assertSame($stack, $apiClient->getConfig('handler'));
+        $this->assertSame($cache, \invade($factory)->authTokenCache);
     }
 
-    public function testCustomTokenGenerationIsDisabledWithMissingRequirements(): void
+    public function testItUsesAProjectId(): void
     {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageMatches('/disabled/');
-        (new Factory())->withDisabledAutoDiscovery()->createAuth()->createCustomToken('uid');
-    }
+        $factory = (new Factory())->withDisabledAutoDiscovery()->withProjectId($projectId = 'a-custom-project-id');
 
-    public function testIdTokenVerificationIsDisabledWithMissingRequirements(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageMatches('/disabled/');
-
-        (new Factory())->withDisabledAutoDiscovery()->createAuth()->verifyIdToken('idtoken');
-    }
-
-    public function testIdTokenVerificationIsPossibleWithoutCredentialsButAProjectId(): void
-    {
-        // Invalid argument means that the ID Token Verifier tried to verify but couldn't,
-        // meaning it works :)
-        $this->expectException(InvalidArgumentException::class);
-
-        (new Factory())
-            ->withDisabledAutoDiscovery()
-            ->withProjectId('project-id')
-            ->createAuth()
-            ->verifyIdToken('idtoken')
-        ;
-    }
-
-    public function testAProjectIdCanBeProvidedDirectly(): void
-    {
-        // The database component requires a project ID
-        (new Factory())->withDisabledAutoDiscovery()->withProjectId('project-id')->createDatabase();
-        $this->addToAssertionCount(1);
-    }
-
-    public function testAProjectIdCanBeProvidedViaAServiceAccount(): void
-    {
-        // The database component requires a project ID
-        (new Factory())->withServiceAccount($this->validServiceAccount)->createDatabase();
-        $this->addToAssertionCount(1);
-    }
-
-    public function testAProjectIdCanBeProvidedViaCredentials(): void
-    {
-        // The database component requires a project ID
-        (new Factory())
-            ->withGoogleAuthTokenCredentials(new ServiceAccountCredentials(Factory::API_CLIENT_SCOPES, $this->validServiceAccountFile))
-            ->createDatabase()
-        ;
-
-        $this->addToAssertionCount(1);
+        $this->assertProjectId($factory, $projectId);
     }
 
     public function testAProjectIdCanBeProvidedAsAGoogleCloudProjectEnvironmentVariable(): void
@@ -222,95 +140,54 @@ class FactoryTest extends UnitTestCase
         // The database component requires a project ID
         \putenv('GOOGLE_CLOUD_PROJECT=project-id');
 
-        (new Factory())
-            ->withGoogleAuthTokenCredentials($this->userRefreshCredentials)
-            ->createDatabase()
-        ;
+        (new Factory())->createDatabase();
 
         $this->addToAssertionCount(1);
 
         \putenv('GOOGLE_CLOUD_PROJECT');
     }
 
-    public function testAProjectIdCanBeProvidedAsAGCloudProjectEnvironmentVariable(): void
-    {
-        // The database component requires a project ID
-        \putenv('GCLOUD_PROJECT=project-id');
-
-        (new Factory())
-            ->withGoogleAuthTokenCredentials($this->userRefreshCredentials)
-            ->createDatabase()
-        ;
-
-        $this->addToAssertionCount(1);
-
-        \putenv('GCLOUD_PROJECT');
-    }
-
-    public function testItFailsWhenNoProjectIdCouldBeDetermined(): void
-    {
-        // User Refresh Credentials don't provide a project ID
-        // The database component requires a project ID
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageMatches('/Unable to/');
-
-        (new Factory())
-            ->withGoogleAuthTokenCredentials($this->userRefreshCredentials)
-            ->createDatabase()
-        ;
-    }
-
-    public function testWithoutAProjectIdTheStorageComponentNeedsABucketName(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageMatches('/no default/');
-
-        (new Factory())
-            ->withGoogleAuthTokenCredentials($this->userRefreshCredentials)
-            ->createStorage()
-            ->getBucket()
-        ;
-    }
-
-    public function testNoRemoteConfigWithoutAProjectId(): void
+    public function testItFailsWithoutAProjectId(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageMatches('/Unable to/');
 
-        (new Factory())->withDisabledAutoDiscovery()->createRemoteConfig();
-    }
-
-    public function testNoMessagingWithoutAProjectId(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageMatches('/Unable to/');
-
-        (new Factory())->withDisabledAutoDiscovery()->createMessaging();
-    }
-
-    public function testNoFirestoreWithoutCredentials(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageMatches('/Unable to/');
-
-        (new Factory())->withDisabledAutoDiscovery()->createFirestore();
-    }
-
-    public function testItAcceptsACustomGuzzleHttpHandler(): void
-    {
-        $this->factory->createApiClient(['handler' => new MockHandler()]);
-        $this->addToAssertionCount(1);
-    }
-
-    public function testEnablingDebugWithoutALoggerTriggersADeprecation(): void
-    {
-        $this->expectDeprecation();
-        $this->factory->withEnabledDebug();
+        (new Factory())->withDisabledAutoDiscovery()->createApiClient();
     }
 
     public function testItAcceptsNewHttpClientOptions(): void
     {
-        $this->factory->withHttpClientOptions(HttpClientOptions::default());
+        $factory = (new Factory())->withHttpClientOptions($options = HttpClientOptions::default());
+
+        $this->assertSame($options, \invade($factory)->httpClientOptions);
+    }
+
+    private function assertProjectId(Factory $factory, ?string $expected): void
+    {
+        $this->assertSame($expected, \invade($factory)->getProjectId());
+    }
+
+    private function assertServices(Factory $factory): void
+    {
+        $factory->createAuth();
+        $this->addToAssertionCount(1);
+
+        $factory->createDatabase();
+        $this->addToAssertionCount(1);
+
+        $factory->createDynamicLinksService();
+        $this->addToAssertionCount(1);
+
+        $factory->createFirestore();
+        $this->addToAssertionCount(1);
+
+        $factory->createMessaging();
+        $this->addToAssertionCount(1);
+
+        $factory->createRemoteConfig();
+        $this->addToAssertionCount(1);
+
+        $factory->createStorage();
         $this->addToAssertionCount(1);
     }
 }

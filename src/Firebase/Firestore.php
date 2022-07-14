@@ -6,6 +6,9 @@ namespace Kreait\Firebase;
 
 use Kreait\Firebase\Firestore\ApiClient;
 
+/**
+ * @internal
+ */
 final class Firestore implements Contract\Firestore
 {
     private ApiClient $client;

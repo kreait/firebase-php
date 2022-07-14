@@ -43,7 +43,7 @@ Initializing the Auth component
 
 .. code-block:: php
 
-    use Kreait\Firebase\Auth;
+    use Kreait\Firebase\Contract\Auth;
 
     class MyService
     {
@@ -121,41 +121,33 @@ Use ``Auth::verifyIdToken()`` to verify an ID token:
 
 .. code-block:: php
 
-    use Firebase\Auth\Token\Exception\InvalidToken;
+    use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
 
     $idTokenString = '...';
 
     try {
         $verifiedIdToken = $auth->verifyIdToken($idTokenString);
-    } catch (InvalidToken $e) {
+    } catch (FailedToVerifyToken $e) {
         echo 'The token is invalid: '.$e->getMessage();
-    } catch (\InvalidArgumentException $e) {
-        echo 'The token could not be parsed: '.$e->getMessage();
     }
 
-    // if you're using lcobucci/jwt ^4.0
-    $uid = $verifiedIdToken->claims()->get('sub');
-    // or, if you're using lcobucci/jwt ^3.0
     $uid = $verifiedIdToken->claims()->get('sub');
 
     $user = $auth->getUser($uid);
 
 ``Auth::verifyIdToken()`` accepts the following parameters:
 
-============================ ============ ===========
-Parameter                    Type         Description
-============================ ============ ===========
-``idToken``                  string|Token **(required)** The ID token to verify
-``checkIfRevoked``           boolean      (optional, default: ``false`` ) check if the ID token is revoked
-============================ ============ ===========
-
-.. note::
-    A leeway of 5 minutes is applied when verifying time based claims starting with release 4.25.0
+============================ ================= ===========
+Parameter                    Type              Description
+============================ ================= ===========
+``idToken``                  string|Token      **(required)** The ID token to verify
+``checkIfRevoked``           boolean           (optional, default: ``false`` ) check if the ID token is revoked
+``leewayInSeconds``          positive-int|null (optional, default: ``null``) number of seconds to allow a token to be expired, in case that there is a clock skew between the signing and the verifying server.
+============================ ================= ===========
 
 .. note::
     This library uses `lcobucci/jwt <https://github.com/lcobucci/jwt>`_ to work with JSON Web Tokens (JWT).
-    You can find the usage instructions at
-    `https://github.com/lcobucci/jwt/blob/3.2/README.md <https://github.com/lcobucci/jwt/blob/3.2/README.md>`_.
+    You can find the usage instructions at `https://lcobucci-jwt.readthedocs.io/ <https://lcobucci-jwt.readthedocs.io/>`_.
 
 
 ***************************
@@ -172,10 +164,6 @@ Each of the methods documented below will return an instance of ``Kreait\Firebas
 with the following accessors:
 
 .. code-block:: php
-
-    use Kreait\Firebase\Auth;
-
-    // $signInResult = $auth->signIn*()
 
     $signInResult->idToken(); // string|null
     $signInResult->firebaseUserId(); // string|null
@@ -249,34 +237,21 @@ Sign In with a Refresh Token
 Sign In with IdP credentials
 ----------------------------
 
-IdP (Identitiy Provider) credentials are credentials provided by authentication providers other than Firebase,
+IdP (Identity Provider) credentials are credentials provided by authentication providers other than Firebase,
 for example Facebook, Github, Google or Twitter. You can find the currently supported authentication providers
-in the constants of `https://github.com/kreait/firebase-php/blob/master/src/Firebase/Value/Provider.php <https://github.com/kreait/firebase-php/blob/master/src/Firebase/Value/Provider.php>`_
+in the
+`official Firebase documentation <https://firebase.google.com/docs/projects/provisioning/configure-oauth#add-idp>`_.
 
-This could be useful if you already have "Sign in with Twitter" implemented in your application, and want to
+This could be useful if you already have "Sign in with X" implemented in your application, and want to
 authenticate the same user with Firebase.
 
 Once you have received those credentials, you can use them to sign a user in with them:
 
 .. code-block:: php
 
-    // with an access token from Facebook
-    $signInResult = $auth->signInWithFacebookAccessToken($accessToken);
+    $signInResult = $auth->signInWithIdpAccessToken($provider, string $accessToken, $redirectUrl = null, ?string $oauthTokenSecret = null, ?string $linkingIdToken = null, ?string $rawNonce = null);
 
-    // with an ID token from Google
-    $signInResult = $auth->signInWithGoogleIdToken($idToken);
-
-    // with a Twitter OAuth 1.0 credential
-    $signInResult = $auth->signInWithTwitterOauthCredential($accessToken, $oauthTokenSecret);
-
-
-If you're using a different identity provider, you can use:
-
-.. code-block:: php
-
-    $signInResult = $auth->signInWithIdpAccessToken($provider, $accessToken);
-
-    $signInResult = $auth->signInWithIdpIdToken($provider, $idToken);
+    $signInResult = $auth->signInWithIdpIdToken($provider, $idToken, $redirectUrl = null, ?string $linkingIdToken = null, ?string $rawNonce = null);
 
 
 Sign In without a token
@@ -285,6 +260,24 @@ Sign In without a token
 .. code-block:: php
 
     $signInResult = $auth->signInAsUser($userOrUid, array $claims = null);
+
+
+Linking and Unlinking Identity Providers
+----------------------------------------
+
+For linking IdP you can add use any of above methods for signing in with IdP credentials, by providing the ID token of
+a user to link to as an additional parameter:
+
+.. code-block:: php
+
+    $signInResult = $auth->signInWithIdpAccessToken($provider, $accessToken, $redirectUrl = null, $oauthTokenSecret = null, $linkingIdToken);
+    $signInResult = $auth->signInWithGoogleIdToken($idToken, $redirectUrl = null, $linkingIdToken);
+
+You can unlink a provider from a given user with the ``unlinkProvider()`` method:
+
+.. code-block:: php
+
+    $auth->unlinkProvider($uid, $provider)
 
 
 ************************
@@ -322,9 +315,27 @@ If the check fails, a ``RevokedIdToken`` exception will be thrown.
 Session Cookies
 ***************
 
-Before you start, please read about Firebase Session Cookies in the official documentation:
+Firebase Auth provides server-side session cookie management for traditional websites that rely on session cookies.
+This solution has several advantages over client-side short-lived ID tokens, which may require a redirect mechanism
+each time to update the session cookie on expiration:
+
+* Improved security via JWT-based session tokens that can only be generated using authorized service accounts.
+* Stateless session cookies that come with all the benefit of using JWTs for authentication. The session cookie has
+  the same claims (including custom claims) as the ID token, making the same permissions checks enforceable on the
+  session cookies.
+* Ability to create session cookies with custom expiration times ranging from 5 minutes to 2 weeks.
+* Flexibility to enforce cookie policies based on application requirements: domain, path, secure, httpOnly, etc.
+* Ability to revoke session cookies when token theft is suspected using the existing refresh token revocation API.
+* Ability to detect session revocation on major account changes.
+
+You can learn more about Firebase Session Cookies in the official documentation:
 
 * `Manage Session Cookies <https://firebase.google.com/docs/auth/admin/manage-cookies>`_
+
+.. warning::
+    Creating and verifying session cookies when using tenants is currently not possible. Please follow
+    `this issue on GitHub <https://github.com/firebase/firebase-admin-python/issues/577>`_ or
+    `in the Google Issue Tracker <https://issuetracker.google.com/issues/204377229>`_ for updates.
 
 Create session cookie
 ---------------------
@@ -348,6 +359,41 @@ Given an ID token sent to your server application from a client application, you
     } catch (FailedToCreateSessionCookie $e) {
         echo $e->getMessage();
     }
+
+Verify a Firebase Session Cookie
+--------------------------------
+
+Use ``Auth::verifySessionCookie()`` to verify a Session Cookie:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Exception\Auth\FailedToVerifySessionCookie;
+
+    $sessionCookieString = '...';
+
+    try {
+        $verifiedSessionCookie = $auth->verifySessionCookie($sessionCookieString);
+    } catch (FailedToVerifySessionCookie $e) {
+        echo 'The Session Cookie is invalid: '.$e->getMessage();
+    }
+
+    $uid = $verifiedSessionCookie->claims()->get('sub');
+
+    $user = $auth->getUser($uid);
+
+``Auth::verifySessionCookie()`` accepts the following parameters:
+
+============================ ================= ===========
+Parameter                    Type              Description
+============================ ================= ===========
+``sessionCookie``            string            **(required)** The Session Cookie to verify
+``checkIfRevoked``           boolean           (optional, default: ``false`` ) check if the ID token is revoked
+``leewayInSeconds``          positive-int|null (optional, default: ``null``) number of seconds to allow a Session Cookie to be expired, in case that there is a clock skew between the signing and the verifying server.
+============================ ================= ===========
+
+.. note::
+    This library uses `lcobucci/jwt <https://github.com/lcobucci/jwt>`_ to work with JSON Web Tokens (JWT).
+    You can find the usage instructions at `https://lcobucci-jwt.readthedocs.io/ <https://lcobucci-jwt.readthedocs.io/>`_.
 
 ****************
 Tenant Awareness

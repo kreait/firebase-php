@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class UidTest extends TestCase
+final class UidTest extends TestCase
 {
     /**
      * @dataProvider validValues

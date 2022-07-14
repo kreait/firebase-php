@@ -8,12 +8,11 @@ use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Request\UpdateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
-use Lcobucci\JWT\Token\Plain;
 
 /**
  * @internal
  */
-class UpdateUserTest extends IntegrationTestCase
+final class UpdateUserTest extends IntegrationTestCase
 {
     private Auth $auth;
 
@@ -130,7 +129,6 @@ class UpdateUserTest extends IntegrationTestCase
 
         $verifiedToken = $this->auth->verifyIdToken($idToken);
 
-        $this->assertInstanceOf(Plain::class, $verifiedToken);
         $this->assertTrue($verifiedToken->claims()->get('admin'));
         $this->assertSame('1234', $verifiedToken->claims()->get('groupId'));
 
@@ -180,12 +178,14 @@ class UpdateUserTest extends IntegrationTestCase
     {
         $user = $this->auth->createAnonymousUser();
 
-        $this->assertNull($user->metadata->passwordUpdatedAt);
+        try {
+            $this->assertNull($user->metadata->passwordUpdatedAt);
 
-        $updatedUser = $this->auth->updateUser($user->uid, ['password' => 'new-password']);
+            $updatedUser = $this->auth->updateUser($user->uid, ['password' => 'new-password']);
 
-        $this->assertInstanceOf(\DateTimeImmutable::class, $updatedUser->metadata->passwordUpdatedAt);
-
-        $this->deleteUser($user);
+            $this->assertInstanceOf(\DateTimeImmutable::class, $updatedUser->metadata->passwordUpdatedAt);
+        } finally {
+            $this->auth->deleteUser($user->uid);
+        }
     }
 }

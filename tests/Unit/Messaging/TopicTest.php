@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class TopicTest extends TestCase
+final class TopicTest extends TestCase
 {
     /**
      * @dataProvider valueProvider

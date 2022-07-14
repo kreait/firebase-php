@@ -12,7 +12,7 @@ use stdClass;
 /**
  * @internal
  */
-class ServiceAccountTest extends UnitTestCase
+final class ServiceAccountTest extends UnitTestCase
 {
     private string $pathToUnreadableJson;
 
@@ -85,7 +85,7 @@ class ServiceAccountTest extends UnitTestCase
 
     public function testCreateFromServiceAccount(): void
     {
-        $serviceAccount = $this->createMock(ServiceAccount::class);
+        $serviceAccount = ServiceAccount::fromValue($this->validJson);
 
         $this->assertSame($serviceAccount, ServiceAccount::fromValue($serviceAccount));
     }

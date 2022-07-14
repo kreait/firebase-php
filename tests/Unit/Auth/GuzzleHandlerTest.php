@@ -31,14 +31,13 @@ final class GuzzleHandlerTest extends UnitTestCase
         $this->httpResponses = new MockHandler();
         $this->action = SignInAnonymously::new();
 
-        $this->handler = new GuzzleHandler(new Client(['handler' => $this->httpResponses]));
+        $this->handler = new GuzzleHandler('my-project', new Client(['handler' => $this->httpResponses]));
     }
 
     public function testItFailsOnAnUnsupportedAction(): void
     {
         $this->expectException(FailedToSignIn::class);
-        $this->handler->handle(new class() implements SignIn {
-        });
+        $this->handler->handle($this->createMock(SignIn::class));
     }
 
     public function testItFailsWhenGuzzleFails(): void
@@ -46,7 +45,7 @@ final class GuzzleHandlerTest extends UnitTestCase
         $client = $this->createMock(ClientInterface::class);
         $client->method('send')->willThrowException($this->createMock(ConnectException::class));
 
-        $handler = new GuzzleHandler($client);
+        $handler = new GuzzleHandler('my-project', $client);
 
         $this->expectException(FailedToSignIn::class);
         $handler->handle($this->action);
@@ -54,7 +53,7 @@ final class GuzzleHandlerTest extends UnitTestCase
 
     public function testItFailsOnAnUnsuccessfulResponse(): void
     {
-        $this->httpResponses->append($response = new Response(400));
+        $this->httpResponses->append($response = new Response(400, [], '""'));
 
         try {
             $this->handler->handle($this->action);
@@ -79,7 +78,7 @@ final class GuzzleHandlerTest extends UnitTestCase
             'refresh_token' => 'refresh_token',
             'access_token' => 'access_token',
             'expires_in' => 3600,
-        ], \JSON_FORCE_OBJECT)));
+        ], JSON_FORCE_OBJECT)));
 
         $this->handler->handle($this->action);
         $this->addToAssertionCount(1);

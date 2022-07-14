@@ -4,38 +4,67 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
+use Beste\Json;
+use Psr\Http\Message\ResponseInterface;
+
 final class DeleteUsersResult
 {
-    /** @var int */
-    private $users;
-
-    /** @var array<DeleteUserError> */
-    private $errors;
+    private int $failureCount;
+    private int $successCount;
 
     /**
-     * @param array<DeleteUserError> $errors
+     * @var array{
+     *             index: int,
+     *             localId: string,
+     *             message: string
+     *             }
      */
-    public function __construct(int $users, array $errors = [])
+    private array $rawErrors;
+
+    /**
+     * @param array{
+     *     index: int,
+     *     localId: string,
+     *     message: string
+     * } $rawErrors
+     */
+    private function __construct(int $successCount, int $failureCount, array $rawErrors)
     {
-        $this->users = $users;
-        $this->errors = $errors;
+        $this->successCount = $successCount;
+        $this->failureCount = $failureCount;
+        $this->rawErrors = $rawErrors;
     }
 
-    public function getSuccessCount(): int
+    public static function fromRequestAndResponse(DeleteUsersRequest $request, ResponseInterface $response): self
     {
-        return $this->users - \count($this->errors);
+        $data = Json::decode((string) $response->getBody(), true);
+        $errors = $data['errors'] ?? [];
+
+        $failureCount = \count($errors);
+        $successCount = \count($request->uids()) - $failureCount;
+
+        return new self($successCount, $failureCount, $errors);
     }
 
-    public function getFailureCount(): int
+    public function failureCount(): int
     {
-        return \count($this->errors);
+        return $this->failureCount;
+    }
+
+    public function successCount(): int
+    {
+        return $this->successCount;
     }
 
     /**
-     * @return array<DeleteUserError>
+     * @return array{
+     *                index: int,
+     *                localId: string,
+     *                message: string
+     *                }
      */
-    public function getErrors(): array
+    public function rawErrors(): array
     {
-        return $this->errors;
+        return $this->rawErrors;
     }
 }

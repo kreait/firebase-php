@@ -11,7 +11,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class ConditionalValueTest extends UnitTestCase
+final class ConditionalValueTest extends UnitTestCase
 {
     public function testCreate(): void
     {

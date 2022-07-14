@@ -10,7 +10,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class ApnsConfigTest extends UnitTestCase
+final class ApnsConfigTest extends UnitTestCase
 {
     public function testItIsEmptyWhenItIsEmpty(): void
     {
@@ -68,6 +68,22 @@ class ApnsConfigTest extends UnitTestCase
 
         $config = ApnsConfig::new()->withPowerConservingPriority();
         $this->assertSame('5', $config->jsonSerialize()['headers']['apns-priority']);
+    }
+
+    public function testItHasASubtitle(): void
+    {
+        $expected = [
+            'payload' => [
+                'aps' => [
+                    'subtitle' => 'i am a subtitle',
+                ],
+            ],
+        ];
+
+        $this->assertJsonStringEqualsJsonString(
+            \json_encode($expected),
+            \json_encode(ApnsConfig::new()->withSubtitle('i am a subtitle'))
+        );
     }
 
     /**

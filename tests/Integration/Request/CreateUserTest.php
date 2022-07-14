@@ -11,7 +11,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
 /**
  * @internal
  */
-class CreateUserTest extends IntegrationTestCase
+final class CreateUserTest extends IntegrationTestCase
 {
     private Auth $auth;
 
@@ -41,22 +41,6 @@ class CreateUserTest extends IntegrationTestCase
         $this->assertSame($email, $user->email);
         $this->assertTrue($user->emailVerified);
         $this->assertFalse($user->disabled);
-
-        $this->auth->deleteUser($user->uid);
-    }
-
-    public function testCreateUserWithoutEmailButMarkTheEmailAsVerified(): void
-    {
-        $request = CreateUser::new()
-            ->withUid($uid = \bin2hex(\random_bytes(5)))
-            ->markEmailAsVerified()
-        ;
-
-        $user = $this->auth->createUser($request);
-
-        $this->assertSame($uid, $user->uid);
-        $this->assertNull($user->email);
-        $this->assertFalse($user->emailVerified);
 
         $this->auth->deleteUser($user->uid);
     }

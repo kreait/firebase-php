@@ -57,7 +57,10 @@ final class ParameterGroup implements \JsonSerializable
         return $group;
     }
 
-    public function jsonSerialize()
+    /**
+     * @return array{description: string, parameters: Parameter[]}
+     */
+    public function jsonSerialize(): array
     {
         return [
             'description' => $this->description,

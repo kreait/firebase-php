@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\RemoteConfig;
 
+use Beste\Json;
 use GuzzleHttp\ClientInterface;
 use Kreait\Firebase\Exception\RemoteConfigApiExceptionConverter;
 use Kreait\Firebase\Exception\RemoteConfigException;
-use Kreait\Firebase\Util\JSON;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Throwable;
@@ -20,9 +20,6 @@ class ApiClient
     private ClientInterface $client;
     private RemoteConfigApiExceptionConverter $errorHandler;
 
-    /**
-     * @internal
-     */
     public function __construct(ClientInterface $client)
     {
         $this->client = $client;
@@ -50,7 +47,7 @@ class ApiClient
             'query' => [
                 'validate_only' => 'true',
             ],
-            'body' => JSON::encode($template),
+            'body' => Json::encode($template),
         ]);
     }
 
@@ -64,7 +61,7 @@ class ApiClient
                 'Content-Type' => 'application/json; UTF-8',
                 'If-Match' => $template->etag(),
             ],
-            'body' => JSON::encode($template),
+            'body' => Json::encode($template),
         ]);
     }
 
@@ -82,9 +79,9 @@ class ApiClient
         $lastVersionNumber = $query->lastVersionNumber();
         $pageSize = $query->pageSize();
 
-        $since = $since ? $since->format('Y-m-d\TH:i:s.v\Z') : null;
-        $until = $until ? $until->format('Y-m-d\TH:i:s.v\Z') : null;
-        $lastVersionNumber = $lastVersionNumber ? (string) $lastVersionNumber : null;
+        $since = $since !== null ? $since->format('Y-m-d\TH:i:s.v\Z') : null;
+        $until = $until !== null ? $until->format('Y-m-d\TH:i:s.v\Z') : null;
+        $lastVersionNumber = $lastVersionNumber !== null ? (string) $lastVersionNumber : null;
         $pageSize = $pageSize ? (string) $pageSize : null;
 
         return $this->requestApi('GET', $uri, [
@@ -120,7 +117,7 @@ class ApiClient
      */
     private function requestApi(string $method, $uri, ?array $options = null): ResponseInterface
     {
-        $options = $options ?? [];
+        $options ??= [];
         $options['decode_content'] = 'gzip';
 
         try {

@@ -34,7 +34,7 @@ final class TransactionFailed extends RuntimeException implements FirebaseExcept
 
     public static function onReference(Reference $reference, ?Throwable $error = null): self
     {
-        $code = $error ? $error->getCode() : 0;
+        $code = $error !== null ? $error->getCode() : 0;
 
         return new self($reference, '', $code, $error);
     }

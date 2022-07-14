@@ -1,27 +1,31 @@
 name: Integration Tests
 
 on:
-  - pull_request
-  - push
-  - workflow_dispatch
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   integration-tests:
+
+
     name: Integration Tests
     runs-on: ubuntu-latest
-    if: github.repository == 'kreait/firebase-php'
+
+    # We want integration tests only to run on the original repo and not on internal PRs
+    if: (github.repository_owner == 'kreait' || github.repository_owner == 'beste-access') && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository)
 
     env:
-      php-version: '7.4'
+      php-version: '8.0'
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
-      key: cache-integration-v3 # can be any string, change to clear the extension cache.
+      key: cache-integration-6x-${{ matrix.php }}-v1
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Setup cache environment
-        id: cache-env
+        id: extcache
         uses: shivammathur/cache-extensions@v1
         with:
           php-version: ${{ env.php-version }}
@@ -31,9 +35,9 @@ jobs:
       - name: Cache extensions
         uses: actions/cache@v1
         with:
-          path: ${{ steps.cache-env.outputs.dir }}
-          key: ${{ steps.cache-env.outputs.key }}
-          restore-keys: ${{ steps.cache-env.outputs.key }}
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -46,32 +50,20 @@ jobs:
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-${{ matrix.php }}-v6-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction --no-suggest --no-progress
+      - uses: "ramsey/composer-install@v2"
 
       - name: Setup Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Run Integration Tests
         env:
-          TEST_FIREBASE_CREDENTIALS: ${{secrets.TEST_FIREBASE_CREDENTIALS}}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
           TEST_REGISTRATION_TOKENS: ${{secrets.TEST_REGISTRATION_TOKENS}}
           TEST_FIREBASE_RTDB_URI: ${{secrets.TEST_FIREBASE_RTDB_URI}}
         run: vendor/bin/phpunit --testsuite=integration --coverage-clover=coverage.xml --log-junit=test-report.xml --verbose
 
       - name: Upload code coverage
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           flags: integration
+        if: github.repository_owner == 'kreait'

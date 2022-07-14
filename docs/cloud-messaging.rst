@@ -27,7 +27,7 @@ Initializing the Messaging component
 
 .. code-block:: php
 
-    use Kreait\Firebase\Messaging;
+    use Kreait\Firebase\Contract\Messaging;
 
     class MyService
     {
@@ -178,7 +178,7 @@ Each of the Firebase client SDKs are able to generate these registration tokens:
 Send messages to multiple devices (Multicast)
 *********************************************
 
-You can send send one message to up to 500 devices:
+You can send one message to up to 500 devices:
 
 .. code-block:: php
 
@@ -223,7 +223,7 @@ methods to determine the successes and failures of the multicasted message:
 Send multiple messages at once
 ******************************
 
-You can send send up to 500 prepared messages (each message has a token, topic or condition as a target) in one go:
+You can send up to 500 prepared messages (each message has a token, topic or condition as a target) in one go:
 
 .. code-block:: php
 

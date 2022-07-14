@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Kreait\Firebase\RemoteConfig;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\Util\JSON;
-use Psr\Http\Message\ResponseInterface;
 
 class Template implements \JsonSerializable
 {
@@ -30,21 +28,6 @@ class Template implements \JsonSerializable
     public static function new(): self
     {
         return new self();
-    }
-
-    /**
-     * @internal
-     *
-     * @deprecated 5.10.0
-     * @codeCoverageIgnore
-     */
-    public static function fromResponse(ResponseInterface $response): self
-    {
-        $etagHeader = $response->getHeader('ETag');
-        $etag = \array_shift($etagHeader) ?: '*';
-        $data = JSON::decode((string) $response->getBody(), true);
-
-        return self::fromArray($data, $etag);
     }
 
     /**
@@ -158,7 +141,7 @@ class Template implements \JsonSerializable
         return $this->version;
     }
 
-    public function withParameter(Parameter $parameter): Template
+    public function withParameter(Parameter $parameter): self
     {
         $this->assertThatAllConditionalValuesAreValid($parameter);
 
@@ -168,7 +151,7 @@ class Template implements \JsonSerializable
         return $template;
     }
 
-    public function withParameterGroup(ParameterGroup $parameterGroup): Template
+    public function withParameterGroup(ParameterGroup $parameterGroup): self
     {
         $template = clone $this;
         $template->parameterGroups[$parameterGroup->name()] = $parameterGroup;
@@ -176,7 +159,7 @@ class Template implements \JsonSerializable
         return $template;
     }
 
-    public function withCondition(Condition $condition): Template
+    public function withCondition(Condition $condition): self
     {
         $template = clone $this;
         $template->conditions[$condition->name()] = $condition;
@@ -201,9 +184,9 @@ class Template implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'conditions' => !empty($this->conditions) ? \array_values($this->conditions) : null,
-            'parameters' => !empty($this->parameters) ? $this->parameters : null,
-            'parameterGroups' => !empty($this->parameterGroups) ? $this->parameterGroups : null,
+            'conditions' => empty($this->conditions) ? null : \array_values($this->conditions),
+            'parameters' => empty($this->parameters) ? null : $this->parameters,
+            'parameterGroups' => empty($this->parameterGroups) ? null : $this->parameterGroups,
         ];
     }
 }

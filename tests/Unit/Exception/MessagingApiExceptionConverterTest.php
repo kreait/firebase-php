@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Exception;
 
+use Beste\Clock\FrozenClock;
+use Beste\Json;
 use DateTimeImmutable;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Kreait\Clock\FrozenClock;
 use Kreait\Firebase\Exception\Messaging\ApiConnectionFailed;
 use Kreait\Firebase\Exception\Messaging\AuthenticationError;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
@@ -19,7 +20,6 @@ use Kreait\Firebase\Exception\Messaging\QuotaExceeded;
 use Kreait\Firebase\Exception\Messaging\ServerError;
 use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
-use Kreait\Firebase\Util\JSON;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use RuntimeException;
@@ -28,7 +28,7 @@ use Throwable;
 /**
  * @internal
  */
-class MessagingApiExceptionConverterTest extends TestCase
+final class MessagingApiExceptionConverterTest extends TestCase
 {
     private MessagingApiExceptionConverter $converter;
 
@@ -36,7 +36,7 @@ class MessagingApiExceptionConverterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->clock = new FrozenClock(new DateTimeImmutable());
+        $this->clock = FrozenClock::fromUTC();
         $this->converter = new MessagingApiExceptionConverter($this->clock);
     }
 
@@ -86,7 +86,7 @@ class MessagingApiExceptionConverterTest extends TestCase
         return new RequestException(
             'Firebase Error Test',
             new Request('GET', 'https://domain.tld'),
-            new Response($code, [], JSON::encode([
+            new Response($code, [], Json::encode([
                 'error' => [
                     'errors' => [
                         'domain' => 'global',
@@ -118,7 +118,7 @@ class MessagingApiExceptionConverterTest extends TestCase
     {
         $expected = $this->clock->now()->modify('+60 seconds');
 
-        $response = new Response(503, ['Retry-After' => $expected->format(\DATE_ATOM)]);
+        $response = new Response(503, ['Retry-After' => $expected->format(DATE_ATOM)]);
 
         /** @var ServerUnavailable $converted */
         $converted = $this->converter->convertResponse($response);

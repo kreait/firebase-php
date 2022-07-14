@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth\CreateActionLink;
 
+use Beste\Json;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Utils;
 use Kreait\Firebase\Auth\CreateActionLink;
 use Kreait\Firebase\Http\WrappedPsr7Request;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * @deprecated 6.0.1
+ * @codeCoverageIgnore
+ */
 final class ApiRequest implements RequestInterface
 {
     use WrappedPsr7Request;
@@ -25,11 +30,12 @@ final class ApiRequest implements RequestInterface
             'tenantId' => $action->tenantId(),
         ]) + $action->settings()->toArray();
 
-        $body = Utils::streamFor(\json_encode($data));
+        $body = Utils::streamFor(Json::encode($data, JSON_FORCE_OBJECT));
 
         $headers = \array_filter([
             'Content-Type' => 'application/json; charset=UTF-8',
-            'Content-Length' => $body->getSize(),
+            'Content-Length' => (string) $body->getSize(),
+            'X-Firebase-Locale' => $action->locale(),
         ]);
 
         $this->wrappedRequest = new Request('POST', $uri, $headers, $body);

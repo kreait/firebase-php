@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Exception;
 
+use Beste\Clock\SystemClock;
 use DateTimeImmutable;
-use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
-use Kreait\Clock;
-use Kreait\Clock\SystemClock;
 use Kreait\Firebase\Exception\Messaging\ApiConnectionFailed;
 use Kreait\Firebase\Exception\Messaging\AuthenticationError;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
@@ -18,7 +16,9 @@ use Kreait\Firebase\Exception\Messaging\QuotaExceeded;
 use Kreait\Firebase\Exception\Messaging\ServerError;
 use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
 use Kreait\Firebase\Http\ErrorResponseParser;
+use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
+use StellaMaris\Clock\ClockInterface;
 use Throwable;
 
 /**
@@ -28,15 +28,12 @@ class MessagingApiExceptionConverter
 {
     private ErrorResponseParser $responseParser;
 
-    private Clock $clock;
+    private ClockInterface $clock;
 
-    /**
-     * @internal
-     */
-    public function __construct(?Clock $clock = null)
+    public function __construct(?ClockInterface $clock = null)
     {
         $this->responseParser = new ErrorResponseParser();
-        $this->clock = $clock ?? new SystemClock();
+        $this->clock = $clock ?? SystemClock::create();
     }
 
     /**
@@ -44,12 +41,11 @@ class MessagingApiExceptionConverter
      */
     public function convertException(Throwable $exception): FirebaseException
     {
-        // @phpstan-ignore-next-line
-        if ($exception instanceof RequestException && !($exception instanceof ConnectException)) {
+        if ($exception instanceof RequestException) {
             return $this->convertGuzzleRequestException($exception);
         }
 
-        if ($exception instanceof ConnectException) {
+        if ($exception instanceof NetworkExceptionInterface) {
             return new ApiConnectionFailed('Unable to connect to the API: '.$exception->getMessage(), $exception->getCode(), $exception);
         }
 
@@ -72,39 +68,37 @@ class MessagingApiExceptionConverter
                 $convertedError = new InvalidMessage($message);
 
                 break;
-
             case 401:
             case 403:
                 $convertedError = new AuthenticationError($message);
 
                 break;
-
             case 404:
                 $convertedError = new NotFound($message);
 
                 break;
-
             case 429:
                 $convertedError = new QuotaExceeded($message);
-                if ($retryAfter = $this->getRetryAfter($response)) {
+                $retryAfter = $this->getRetryAfter($response);
+
+                if ($retryAfter !== null) {
                     $convertedError = $convertedError->withRetryAfter($retryAfter);
                 }
 
                 break;
-
             case 500:
                 $convertedError = new ServerError($message);
 
                 break;
-
             case 503:
                 $convertedError = new ServerUnavailable($message);
-                if ($retryAfter = $this->getRetryAfter($response)) {
+                $retryAfter = $this->getRetryAfter($response);
+
+                if ($retryAfter !== null) {
                     $convertedError = $convertedError->withRetryAfter($retryAfter);
                 }
 
                 break;
-
             default:
                 $convertedError = new MessagingError($message, $code, $previous);
 
@@ -116,7 +110,9 @@ class MessagingApiExceptionConverter
 
     private function convertGuzzleRequestException(RequestException $e): MessagingException
     {
-        if ($response = $e->getResponse()) {
+        $response = $e->getResponse();
+
+        if ($response !== null) {
             return $this->convertResponse($response, $e);
         }
 

@@ -10,14 +10,13 @@ use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Project\ProjectId;
 use Kreait\Firebase\Tests\UnitTestCase;
 use stdClass;
 
 /**
  * @internal
  */
-class MessagingTest extends UnitTestCase
+final class MessagingTest extends UnitTestCase
 {
     private Messaging $messaging;
 
@@ -26,7 +25,7 @@ class MessagingTest extends UnitTestCase
         $messagingApi = $this->createMock(ApiClient::class);
         $appInstanceApi = $this->createMock(AppInstanceApiClient::class);
 
-        $this->messaging = new Messaging(ProjectId::fromString('project-id'), $messagingApi, $appInstanceApi);
+        $this->messaging = new Messaging('project-id', $messagingApi, $appInstanceApi);
     }
 
     public function testSendInvalidArray(): void

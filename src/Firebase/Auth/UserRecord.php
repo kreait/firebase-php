@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
+use Beste\Json;
 use DateTimeImmutable;
-use Kreait\Firebase\Util\Deprecation;
 use Kreait\Firebase\Util\DT;
-use Kreait\Firebase\Util\JSON;
 
-/**
- * @property array<string, mixed> $customAttributes Deprecated, use {@see UserRecord::$customClaims} instead
- */
 class UserRecord implements \JsonSerializable
 {
     public string $uid;
@@ -61,7 +57,7 @@ class UserRecord implements \JsonSerializable
         }
 
         if ($customClaims = $data['customClaims'] ?? $data['customAttributes'] ?? '{}') {
-            $record->customClaims = JSON::decode($customClaims, true);
+            $record->customClaims = Json::decode($customClaims, true);
         }
 
         return $record;
@@ -95,8 +91,8 @@ class UserRecord implements \JsonSerializable
     {
         $data = \get_object_vars($this);
 
-        $data['tokensValidAfterTime'] = $this->tokensValidAfterTime
-            ? $this->tokensValidAfterTime->format(\DATE_ATOM)
+        $data['tokensValidAfterTime'] = $this->tokensValidAfterTime !== null
+            ? $this->tokensValidAfterTime->format(DATE_ATOM)
             : null;
 
         return $data;
@@ -107,12 +103,6 @@ class UserRecord implements \JsonSerializable
      */
     public function __get(string $name)
     {
-        if (\mb_strtolower($name) === 'customattributes') {
-            Deprecation::trigger(__CLASS__.'::customAttributes', __CLASS__.'::customClaims');
-
-            return $this->customClaims;
-        }
-
         return $this->{$name};
     }
 }

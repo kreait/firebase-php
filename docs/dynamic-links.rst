@@ -50,7 +50,7 @@ To define the default Dynamic Links Domain for **Laravel**, configure the ``FIRE
 
 .. code-block:: php
 
-    use Kreait\Firebase\DynamicLinks;
+    use Kreait\Firebase\Contract\DynamicLinks;
 
     class MyService
     {

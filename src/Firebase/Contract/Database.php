@@ -18,6 +18,8 @@ use Psr\Http\Message\UriInterface;
  */
 interface Database
 {
+    public const SERVER_TIMESTAMP = ['.sv' => 'timestamp'];
+
     /**
      * Returns a Reference to the root or the specified path.
      *

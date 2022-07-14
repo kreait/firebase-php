@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Request;
 
+use Beste\Json;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Request;
-use Kreait\Firebase\Util\JSON;
-use Kreait\Firebase\Value\Provider;
 
 final class UpdateUser implements Request
 {
+    /** @phpstan-use EditUserTrait<self> */
     use EditUserTrait;
 
     public const DISPLAY_NAME = 'DISPLAY_NAME';
@@ -20,7 +20,7 @@ final class UpdateUser implements Request
     /** @var array<string> */
     private array $attributesToDelete = [];
 
-    /** @var Provider[] */
+    /** @var string[] */
     private array $providersToDelete = [];
 
     /** @var array<string, mixed>|null */
@@ -53,19 +53,16 @@ final class UpdateUser implements Request
                     $request = $request->withRemovedPhotoUrl();
 
                     break;
-
                 case 'deletedisplayname':
                 case 'removedisplayname':
                     $request = $request->withRemovedDisplayName();
 
                     break;
-
                 case 'deleteemail':
                 case 'removeemail':
                     $request = $request->withRemovedEmail();
 
                     break;
-
                 case 'deleteattribute':
                 case 'deleteattributes':
                     foreach ((array) $value as $deleteAttribute) {
@@ -74,13 +71,11 @@ final class UpdateUser implements Request
                                 $request = $request->withRemovedDisplayName();
 
                                 break;
-
                             case 'photo':
                             case 'photourl':
                                 $request = $request->withRemovedPhotoUrl();
 
                                 break;
-
                             case 'email':
                                 $request = $request->withRemovedEmail();
 
@@ -89,13 +84,11 @@ final class UpdateUser implements Request
                     }
 
                     break;
-
                 case 'customattributes':
                 case 'customclaims':
                     $request = $request->withCustomAttributes($value);
 
                     break;
-
                 case 'phonenumber':
                 case 'phone':
                     if (!$value) {
@@ -103,7 +96,6 @@ final class UpdateUser implements Request
                     }
 
                     break;
-
                 case 'deletephone':
                 case 'deletephonenumber':
                 case 'removephone':
@@ -111,7 +103,6 @@ final class UpdateUser implements Request
                     $request = $request->withRemovedPhoneNumber();
 
                     break;
-
                 case 'deleteprovider':
                 case 'deleteproviders':
                 case 'removeprovider':
@@ -138,14 +129,12 @@ final class UpdateUser implements Request
     }
 
     /**
-     * @param Provider|string $provider
+     * @param \Stringable|string $provider
      */
     public function withRemovedProvider($provider): self
     {
-        $provider = $provider instanceof Provider ? $provider : new Provider($provider);
-
         $request = clone $this;
-        $request->providersToDelete[] = $provider;
+        $request->providersToDelete[] = (string) $provider;
 
         return $request;
     }
@@ -200,11 +189,7 @@ final class UpdateUser implements Request
         $data = $this->prepareJsonSerialize();
 
         if (\is_array($this->customAttributes)) {
-            if (empty($this->customAttributes)) {
-                $data['customAttributes'] = '{}';
-            } else {
-                $data['customAttributes'] = JSON::encode($this->customAttributes);
-            }
+            $data['customAttributes'] = empty($this->customAttributes) ? '{}' : Json::encode($this->customAttributes);
         }
 
         if (!empty($this->attributesToDelete)) {

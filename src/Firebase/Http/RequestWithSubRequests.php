@@ -11,6 +11,8 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
+ * @internal
+ *
  * This is basically a Multipart Request, except that in the parts the sub request start lines
  * are injected between the headers and the body.
  *

@@ -36,6 +36,18 @@ final class MessageDataTest extends TestCase
     }
 
     /**
+     * @see https://github.com/kreait/firebase-php/issues/709
+     */
+    public function testItDoesNotLowerCaseKeys(): void
+    {
+        $input = $output = ['notificationType' => 'email'];
+
+        $data = MessageData::fromArray($input);
+
+        $this->assertSame($data->toArray(), $output);
+    }
+
+    /**
      * @return array<string, array<int, array<string, mixed>>>
      */
     public function validData(): array

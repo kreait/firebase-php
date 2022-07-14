@@ -10,12 +10,12 @@ use Kreait\Firebase\Factory;
 /**
  * @internal
  */
-class DatabaseTest extends DatabaseTestCase
+final class DatabaseTest extends DatabaseTestCase
 {
     public function testWithNonExistingDatabase(): void
     {
         $credentials = self::$serviceAccount->asArray();
-        $credentials['project_id'] .= 'non-existing';
+        $credentials['project_id'] = 'non-existing';
 
         $this->expectException(DatabaseNotFound::class);
 

@@ -11,7 +11,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class ShallowTest extends UnitTestCase
+final class ShallowTest extends UnitTestCase
 {
     public function testModifyUri(): void
     {

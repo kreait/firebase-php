@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class DefaultValueTest extends TestCase
+final class DefaultValueTest extends TestCase
 {
     public function testCreateInAppDefaultValue(): void
     {

@@ -46,13 +46,12 @@ Please see `https://github.com/kreait/laravel-firebase#configuration <https://gi
 With autodiscovery
 ==================
 
-The SDK is able to autodiscover the Service Account for your project in the following conditions:
+The SDK is able to auto-discover the Service Account for your project in the following conditions:
 
 #. Your application runs on Google Cloud Engine.
 
 #. The path to the JSON key file is defined in one of the following environment variables
 
-   * ``FIREBASE_CREDENTIALS``
    * ``GOOGLE_APPLICATION_CREDENTIALS``
 
 #. The JSON Key file is located in Google's "well known path"
@@ -61,6 +60,24 @@ The SDK is able to autodiscover the Service Account for your project in the foll
    * on Windows: ``$APPDATA/gcloud/application_default_credentials.json``
 
 If you want to use autodiscovery, a Service Account must not be explicitly configured.
+
+**********
+Project ID
+**********
+
+Service Account credentials include the ID of the Google Cloud Project your Firebase project belongs to.
+
+If you use another type of credential, it might be necessary to provide it manually to the Firebase Factory.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Factory;
+
+    $factory = (new Factory())
+        ->withProjectId('my-project')
+        ->withDatabaseUri('https://my-project.firebaseio.com');
+
+You can also set a ``GOOGLE_CLOUD_PROJECT=<project-id>`` environment variable before calling the factory.
 
 
 *********************

@@ -1,14 +1,14 @@
+*.log
+
 /.xdebug
 /build
 /vendor
 /docs/_build
 /docs/*.pyc
 /tests/_fixtures/test_*
-/tools
 
 /.env
-/.php-cs-fixer*
-!/.php-cs-fixer.dist.php
+/.firebaserc
 /.phpunit.result.cache
 /cc-test-reporter
 /composer.lock

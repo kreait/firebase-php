@@ -15,7 +15,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class ApiClientTest extends UnitTestCase
+final class ApiClientTest extends UnitTestCase
 {
     /** @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $http;

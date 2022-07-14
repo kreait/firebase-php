@@ -3,6 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     beStrictAboutOutputDuringTests="true"
+    convertDeprecationsToExceptions="true"
     colors="true"
 >
 
@@ -15,7 +16,7 @@
         </testsuite>
     </testsuites>
 
-    <coverage ignoreDeprecatedCodeUnits="true" processUncoveredFiles="true">
+    <coverage ignoreDeprecatedCodeUnits="true" processUncoveredFiles="true" cacheDirectory="build/coverage-cache">
         <include>
             <directory suffix=".php">src/Firebase</directory>
         </include>

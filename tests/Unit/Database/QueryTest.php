@@ -17,7 +17,7 @@ use Throwable;
 /**
  * @internal
  */
-class QueryTest extends UnitTestCase
+final class QueryTest extends UnitTestCase
 {
     protected Uri $uri;
 

@@ -12,11 +12,9 @@ use Throwable;
 /**
  * @internal
  */
-class DT
+final class DT
 {
     /**
-     * @internal
-     *
      * @param mixed $value
      */
     public static function toUTCDateTimeImmutable($value): DateTimeImmutable
@@ -45,18 +43,18 @@ class DT
 
         if (\ctype_digit($value)) {
             // Seconds
-            if ($value === '0' || \mb_strlen($value) === \mb_strlen((string) $now)) {
-                if ($result = DateTimeImmutable::createFromFormat('U', $value)) {
-                    return $result->setTimezone($tz);
-                }
+            if (($value === '0' || \mb_strlen($value) === \mb_strlen((string) $now)) && ($result = DateTimeImmutable::createFromFormat('U', $value))) {
+                return $result->setTimezone($tz);
             }
 
             // Milliseconds
-            if (
-                (\mb_strlen($value) === \mb_strlen((string) ($now * 1000)))
-                && $result = DateTimeImmutable::createFromFormat('U.u', \sprintf('%F', (float) ($value / 1000)))
-            ) {
-                return $result->setTimezone($tz);
+            if (\mb_strlen($value) === \mb_strlen((string) ($now * 1000))) {
+                $floatValue = (float) $value;
+                $result = DateTimeImmutable::createFromFormat('U.u', \sprintf('%F', $floatValue / 1000));
+
+                if ($result !== false) {
+                    return $result->setTimezone($tz);
+                }
             }
         }
 

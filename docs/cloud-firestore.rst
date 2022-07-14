@@ -39,7 +39,7 @@ Initializing the Firestore component
 
 .. code-block:: php
 
-    use Kreait\Firebase\Firestore;
+    use Kreait\Firebase\Contract\Firestore;
 
     class MyService
     {

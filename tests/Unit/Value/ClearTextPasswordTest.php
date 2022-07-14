@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class ClearTextPasswordTest extends TestCase
+final class ClearTextPasswordTest extends TestCase
 {
     /**
      * @dataProvider validValues
