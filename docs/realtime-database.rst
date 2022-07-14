@@ -19,7 +19,7 @@ Initializing the Realtime Database component
 
 .. code-block:: php
 
-    use Kreait\Firebase\Database;
+    use Kreait\Firebase\Contract\Database;
 
     class MyService
     {
@@ -412,7 +412,15 @@ You can also delete by specifying null as the value for another write operation 
 
     $database->getReference('posts')->set(null);
 
-You can use this technique with ``update()`` to delete multiple children in a single API call.
+You can also delete in bulk using the function ``removeChildren()``:
+
+.. code-block:: php
+
+    $data->getReference()->removeChildren([
+        'posts/post1',
+        'user-posts/f55dee9a-dd67-4e78-bd7d-f1b4be157a53/post1',
+        'users/f55dee9a-dd67-4e78-bd7d-f1b4be157a53'
+    ]);
 
 *********************
 Database transactions
@@ -578,3 +586,59 @@ Learn more about the usage of Firebase Realtime Database Rules in the
 
         $freshRuleSet = $database->getRuleSet(); // Returns a new RuleSet instance
         $actualRules = $ruleSet->getRules(); // returns an array
+
+************************************
+Authenticate with limited privileges
+************************************
+
+As a best practice, a service should have access to only the resources it needs. To get more fine-grained control
+over the resources a Firebase app instance can access, use a unique identifier in your Security Rules to represent
+your service. Then set up appropriate rules which grant your service access to the resources it needs. For example:
+
+.. code-block:: json
+
+    {
+      "rules": {
+        "public_resource": {
+          ".read": true,
+          ".write": true
+        },
+        "some_resource": {
+          ".read": "auth.uid === 'my-service-worker'",
+          ".write": false
+        },
+        "another_resource": {
+          ".read": "auth.uid === 'my-service-worker'",
+          ".write": "auth.uid === 'my-service-worker'"
+        }
+      }
+    }
+
+Then, when instantiating the database component of the SDK, use the ``withDatabaseAuthVariableOverride()`` method
+to override the auth object used by your database rules. In this custom auth object, set the ``uid`` field to the
+identifier you used to represent your service in your Security Rules.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Factory;
+
+    $factory = (new Factory)
+        ->withServiceAccount('/path/to/firebase_credentials.json')
+        ->withDatabaseUri('https://my-project-default-rtdb.firebaseio.com');
+
+    $database = $factory
+        ->withDatabaseAuthVariableOverride('my-service-worker')
+        ->createDatabase();
+
+    // $database now only has access as defined in the Security Rules
+
+In some cases, you may want to downscope the Admin SDKs to act as an unauthenticated client. You can do this by
+providing a value of ``null`` for the database auth variable override.
+
+.. code-block:: php
+
+    $database = $factory
+        ->withDatabaseAuthVariableOverride(null)
+        ->createDatabase();
+
+    // $database now only has access to public resources

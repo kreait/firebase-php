@@ -4,24 +4,31 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth\CreateActionLink;
 
+use Beste\Json;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
 use Kreait\Firebase\Auth\CreateActionLink;
-use Kreait\Firebase\Util\JSON;
+use Kreait\Firebase\Auth\ProjectAwareAuthResourceUrlBuilder;
+use Kreait\Firebase\Auth\TenantAwareAuthResourceUrlBuilder;
+use Psr\Http\Message\RequestInterface;
 
 final class GuzzleApiClientHandler implements Handler
 {
     private ClientInterface $client;
+    private string $projectId;
 
-    public function __construct(ClientInterface $client)
+    public function __construct(ClientInterface $client, string $projectId)
     {
         $this->client = $client;
+        $this->projectId = $projectId;
     }
 
     public function handle(CreateActionLink $action): string
     {
-        $request = new ApiRequest($action);
+        $request = $this->createRequest($action);
 
         try {
             $response = $this->client->send($request, ['http_errors' => false]);
@@ -34,7 +41,7 @@ final class GuzzleApiClientHandler implements Handler
         }
 
         try {
-            $data = JSON::decode((string) $response->getBody(), true);
+            $data = Json::decode((string) $response->getBody(), true);
         } catch (InvalidArgumentException $e) {
             throw new FailedToCreateActionLink('Unable to parse the response data: '.$e->getMessage(), $e->getCode(), $e);
         }
@@ -44,5 +51,32 @@ final class GuzzleApiClientHandler implements Handler
         }
 
         return (string) $actionCode;
+    }
+
+    private function createRequest(CreateActionLink $action): RequestInterface
+    {
+        $data = \array_filter([
+            'requestType' => $action->type(),
+            'email' => $action->email(),
+            'returnOobLink' => true,
+        ]) + $action->settings()->toArray();
+
+        if ($tenantId = $action->tenantId()) {
+            $urlBuilder = TenantAwareAuthResourceUrlBuilder::forProjectAndTenant($this->projectId, $tenantId);
+        } else {
+            $urlBuilder = ProjectAwareAuthResourceUrlBuilder::forProject($this->projectId);
+        }
+
+        $url = $urlBuilder->getUrl('/accounts:sendOobCode');
+
+        $body = Utils::streamFor(Json::encode($data, JSON_FORCE_OBJECT));
+
+        $headers = \array_filter([
+            'Content-Type' => 'application/json; charset=UTF-8',
+            'Content-Length' => (string) $body->getSize(),
+            'X-Firebase-Locale' => $action->locale(),
+        ]);
+
+        return new Request('POST', $url, $headers, $body);
     }
 }

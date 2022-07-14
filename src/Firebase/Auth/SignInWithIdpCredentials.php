@@ -9,9 +9,11 @@ final class SignInWithIdpCredentials implements IsTenantAware, SignIn
     private string $provider;
     private ?string $accessToken = null;
     private ?string $idToken = null;
+    private ?string $linkingIdToken = null;
     private ?string $oauthTokenSecret = null;
+    private ?string $rawNonce = null;
     private string $requestUri = 'http://localhost';
-    private ?TenantId $tenantId = null;
+    private ?string $tenantId = null;
 
     private function __construct(string $provider)
     {
@@ -42,6 +44,22 @@ final class SignInWithIdpCredentials implements IsTenantAware, SignIn
         return $instance;
     }
 
+    public function withRawNonce(string $rawNonce): self
+    {
+        $instance = clone $this;
+        $instance->rawNonce = $rawNonce;
+
+        return $instance;
+    }
+
+    public function withLinkingIdToken(string $idToken): self
+    {
+        $instance = clone $this;
+        $instance->linkingIdToken = $idToken;
+
+        return $instance;
+    }
+
     public function withRequestUri(string $requestUri): self
     {
         $instance = clone $this;
@@ -50,7 +68,7 @@ final class SignInWithIdpCredentials implements IsTenantAware, SignIn
         return $instance;
     }
 
-    public function withTenantId(TenantId $tenantId): self
+    public function withTenantId(string $tenantId): self
     {
         $action = clone $this;
         $action->tenantId = $tenantId;
@@ -78,12 +96,22 @@ final class SignInWithIdpCredentials implements IsTenantAware, SignIn
         return $this->idToken;
     }
 
+    public function rawNonce(): ?string
+    {
+        return $this->rawNonce;
+    }
+
+    public function linkingIdToken(): ?string
+    {
+        return $this->linkingIdToken;
+    }
+
     public function requestUri(): string
     {
         return $this->requestUri;
     }
 
-    public function tenantId(): ?TenantId
+    public function tenantId(): ?string
     {
         return $this->tenantId;
     }

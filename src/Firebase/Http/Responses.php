@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Traversable;
 
 /**
+ * @internal
  * @implements IteratorAggregate<ResponseInterface>
  */
 final class Responses implements IteratorAggregate
@@ -26,7 +27,7 @@ final class Responses implements IteratorAggregate
      *
      * @return Traversable<ResponseInterface>|ResponseInterface[]
      */
-    public function getIterator(): iterable
+    public function getIterator(): Traversable
     {
         yield from $this->responses;
     }

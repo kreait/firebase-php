@@ -10,7 +10,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class RuleSetTest extends UnitTestCase
+final class RuleSetTest extends UnitTestCase
 {
     public function testCustomWithMissingRulesKey(): void
     {

@@ -44,37 +44,30 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
                     $instance->continueUrl = Utils::uriFor($value);
 
                     break;
-
                 case 'handlecodeinapp':
                     $instance->canHandleCodeInApp = (bool) $value;
 
                     break;
-
                 case 'dynamiclinkdomain':
                     $instance->dynamicLinkDomain = Utils::uriFor($value);
 
                     break;
-
                 case 'androidpackagename':
                     $instance->androidPackageName = (string) $value;
 
                     break;
-
                 case 'androidminimumversion':
                     $instance->androidMinimumVersion = (string) $value;
 
                     break;
-
                 case 'androidinstallapp':
                     $instance->androidInstallApp = (bool) $value;
 
                     break;
-
                 case 'iosbundleid':
                     $instance->iOSBundleId = (string) $value;
 
                     break;
-
                 default:
                     throw new InvalidArgumentException("Unsupported action code setting '{$key}'");
             }
@@ -88,10 +81,13 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
      */
     public function toArray(): array
     {
+        $continueUrl = $this->continueUrl !== null ? (string) $this->continueUrl : null;
+        $dynamicLinkDomain = $this->dynamicLinkDomain !== null ? (string) $this->dynamicLinkDomain : null;
+
         return \array_filter([
-            'continueUrl' => $this->continueUrl ? (string) $this->continueUrl : null,
+            'continueUrl' => $continueUrl,
             'canHandleCodeInApp' => $this->canHandleCodeInApp,
-            'dynamicLinkDomain' => $this->dynamicLinkDomain ? (string) $this->dynamicLinkDomain : null,
+            'dynamicLinkDomain' => $dynamicLinkDomain,
             'androidPackageName' => $this->androidPackageName,
             'androidMinimumVersion' => $this->androidMinimumVersion,
             'androidInstallApp' => $this->androidInstallApp,

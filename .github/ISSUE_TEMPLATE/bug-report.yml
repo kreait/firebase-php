@@ -1,0 +1,89 @@
+name: 🐞 Bug report
+description: For unintended behaviors. Missing features aren't bugs.
+labels: bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue form is for reporting bugs only!
+        Please provide as much information as possible. If a problem cannot be reproduced or understood, your issue may be closed as non-actionable.
+  - type: textarea
+    attributes:
+      label: Describe the issue you are experiencing
+      description: Provide a clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ## Environment
+  - type: textarea
+    attributes:
+      label: Installed packages
+      description: |
+        You can generate a list with `composer show --installed`.
+        This can help with finding outdated dependencies or known conflicts.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: PHP version and extensions
+      description: |
+        You can generate a list with `composer show --platform`.
+        This can help with finding missing, outdated or conflicting PHP versions and extensions.
+    validations:
+      required: true
+  - type: checkboxes
+    id: operating-systems
+    attributes:
+      label: On which operating system(s) does the issue occur?
+      options:
+        - label: Linux
+        - label: MacOS
+        - label: Windows
+      description: >
+        Some problems are OS-related and require different approaches when inspecting issues. (You may select more than one)
+  - type: markdown
+    attributes:
+      value: |
+        ## Details
+  - type: textarea
+    attributes:
+      label: Steps to reproduce the issue.
+      description: |
+        Please tell us exactly how to reproduce your issue.
+        Provide clear and concise step by step instructions and add code snippets if needed.
+        Please note that bugs without minimal reproductions can be closed as non-actionable.
+      value: |
+        1. ...
+        2. ...
+        3. ...
+
+        ```php
+        use Kreait\Firebase;
+
+        $factory = (new Firebase\Factory())
+            ->withServiceAccount('/path/to/firebase_credentials.com')
+            ->withDatabaseUri('https://my-project.firebaseio.com')
+        ;
+
+        // ...
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Error message/Stack trace
+      description: |
+        If a stack trace is available, please include it in full.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: >
+        If you have any additional information for us, use the field below.
+        Please note, you can attach screenshots or screen recordings here, by
+        dragging and dropping files in the field below.

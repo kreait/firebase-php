@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests;
 
-use Kreait\Firebase\Auth\UserRecord;
+use Beste\Json;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Util;
-use Kreait\Firebase\Util\JSON;
-use Kreait\Firebase\Value\Uid;
 use Throwable;
 
 abstract class IntegrationTestCase extends FirebaseTestCase
 {
-    public const TENANT_ID = 'Beste-lgiu8';
+    public const TENANT_ID = 'Test-bs38l';
 
     protected static Factory $factory;
 
     protected static ServiceAccount $serviceAccount;
+    protected static string $rtdbUrl;
 
     /** @var string[] */
     protected static array $registrationTokens = [];
@@ -29,43 +28,19 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     {
         $credentials = self::credentialsFromEnvironment() ?? self::credentialsFromFile();
 
-        if (!$credentials) {
+        if (!$credentials instanceof ServiceAccount) {
             self::markTestSkipped('The integration tests require credentials');
         }
 
         self::$serviceAccount = $credentials;
+        self::$rtdbUrl = self::rtdbUrlFromEnvironment() ?? self::rtdbUrlFromFile() ?? '';
 
-        self::$factory = (new Factory())->withServiceAccount(self::$serviceAccount);
+        self::$factory = (new Factory())
+            ->withServiceAccount(self::$serviceAccount)
+            ->withDatabaseUri(self::$rtdbUrl)
+        ;
 
         self::$registrationTokens = self::registrationTokensFromEnvironment() ?? self::registrationTokensFromFile() ?? [];
-    }
-
-    protected function createUserWithEmailAndPassword(?string $email = null, ?string $password = null): UserRecord
-    {
-        $email = $email ?? self::randomEmail();
-        $password = $password ?? self::randomString();
-
-        return self::$factory
-            ->createAuth()
-            ->createUser([
-                'email' => $email,
-                'clear_text_password' => $password,
-            ])
-        ;
-    }
-
-    /**
-     * @param UserRecord|Uid|string $userOrUid
-     */
-    protected function deleteUser($userOrUid): void
-    {
-        $uid = $userOrUid instanceof UserRecord ? $userOrUid->uid : $userOrUid;
-
-        try {
-            self::$factory->createAuth()->deleteUser($uid);
-        } catch (Throwable $e) {
-            // Well, if that failed, *we're* failed
-        }
     }
 
     protected function getTestRegistrationToken(): string
@@ -88,6 +63,11 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         return self::randomString($suffix.'@domain.tld');
     }
 
+    protected static function isEmulated(): bool
+    {
+        return !\in_array(Util::getenv('FIREBASE_AUTH_EMULATOR_HOST'), [null, ''], true);
+    }
+
     private static function credentialsFromFile(): ?ServiceAccount
     {
         $credentialsPath = self::$fixturesDir.'/test_credentials.json';
@@ -105,7 +85,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
     private static function credentialsFromEnvironment(): ?ServiceAccount
     {
-        if ($credentials = Util::getenv('TEST_FIREBASE_CREDENTIALS')) {
+        if ($credentials = Util::getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
             return ServiceAccount::fromValue($credentials);
         }
 
@@ -125,7 +105,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
         try {
             if ($contents = \file_get_contents($path)) {
-                return JSON::decode($contents, true);
+                return Json::decode($contents, true);
             }
 
             return null;
@@ -144,9 +124,33 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         }
 
         try {
-            return JSON::decode($tokens, true);
+            return Json::decode($tokens, true);
         } catch (Throwable $e) {
             return null;
         }
+    }
+
+    private static function rtdbUrlFromFile(): ?string
+    {
+        $path = self::$fixturesDir.'/test_rtdb.json';
+
+        if (!\file_exists($path)) {
+            return null;
+        }
+
+        try {
+            if ($contents = \file_get_contents($path)) {
+                return Json::decode($contents, true);
+            }
+
+            return null;
+        } catch (Throwable $e) {
+            return null;
+        }
+    }
+
+    private static function rtdbUrlFromEnvironment(): ?string
+    {
+        return Util::getenv('TEST_FIREBASE_RTDB_URI');
     }
 }

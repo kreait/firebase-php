@@ -11,7 +11,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
 /**
  * @internal
  */
-class StorageTest extends IntegrationTestCase
+final class StorageTest extends IntegrationTestCase
 {
     private Storage $storage;
 

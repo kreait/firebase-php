@@ -15,38 +15,24 @@ use Kreait\Firebase\Value\Url;
 
 class ImportUserRecord implements \JsonSerializable
 {
-    /** @var Uid|null */
-    private $uid;
-
-    /** @var Email|null */
-    private $email;
-
-    /** @var bool|null */
-    private $emailVerified;
-
-    /** @var string|null */
-    private $displayName;
-
-    /** @var Url|null */
-    private $photoUrl;
-
-    /** @var PhoneNumber|null */
-    private $phoneNumber;
+    private ?Uid $uid = null;
+    private ?Email $email = null;
+    private ?bool $emailVerified = null;
+    private ?string $displayName = null;
+    private ?Url $photoUrl = null;
+    private ?string $phoneNumber = null;
 
     /** @var array<string, mixed> */
-    private $customClaims = [];
+    private array $customClaims = [];
 
-    /** @var DateTimeImmutable|null */
-    private $tokensValidAfterTime;
-
-    /** @var bool|null */
-    private $markAsEnabled;
+    private ?DateTimeImmutable $tokensValidAfterTime = null;
 
     /** @var bool|null */
-    private $markAsDisabled;
+    private ?bool $markAsEnabled = null;
+    private ?bool $markAsDisabled = null;
 
-    /** @var UserInfo[] */
-    private $providers = [];
+    /** @var list<UserInfo> */
+    private array $providers = [];
 
     private function __construct()
     {
@@ -113,7 +99,7 @@ class ImportUserRecord implements \JsonSerializable
     public function withPhoneNumber(string $phoneNumber): self
     {
         $request = clone $this;
-        $request->phoneNumber = new PhoneNumber($phoneNumber);
+        $request->phoneNumber = $phoneNumber;
 
         return $request;
     }
@@ -191,7 +177,7 @@ class ImportUserRecord implements \JsonSerializable
             $disableUser = false;
         }
 
-        $customClaims = \count($this->customClaims) > 0 ? JSON::encode($this->customClaims) : null;
+        $customClaims = \count($this->customClaims) > 0 ? Json::encode($this->customClaims) : null;
         $tokensValidAfterTime = $this->tokensValidAfterTime !== null
             ? $this->tokensValidAfterTime->format(\DATE_ATOM)
             : null;

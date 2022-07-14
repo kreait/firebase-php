@@ -42,22 +42,18 @@ final class MessageTarget
                 $targetValue = (string) Condition::fromValue($value);
 
                 break;
-
             case self::TOKEN:
                 $targetValue = (string) RegistrationToken::fromValue($value);
 
                 break;
-
             case self::TOPIC:
                 $targetValue = (string) Topic::fromValue($value);
 
                 break;
-
             case self::UNKNOWN:
                 $targetValue = $value;
 
                 break;
-
             default:
                 throw new InvalidArgumentException("Invalid target type '{$type}', valid types: ".\implode(', ', self::TYPES));
         }

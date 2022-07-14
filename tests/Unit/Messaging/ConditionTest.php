@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-class ConditionTest extends TestCase
+final class ConditionTest extends TestCase
 {
     /**
      * @dataProvider valueProvider

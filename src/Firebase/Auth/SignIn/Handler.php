@@ -8,6 +8,9 @@ use Kreait\Firebase\Auth\SignIn;
 use Kreait\Firebase\Auth\SignInResult;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
+/**
+ * @internal
+ */
 interface Handler
 {
     /**

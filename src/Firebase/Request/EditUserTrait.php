@@ -7,33 +7,34 @@ namespace Kreait\Firebase\Request;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\ClearTextPassword;
 use Kreait\Firebase\Value\Email;
-use Kreait\Firebase\Value\PhoneNumber;
 use Kreait\Firebase\Value\Uid;
 use Kreait\Firebase\Value\Url;
 
 /**
  * @codeCoverageIgnore
+ * @template T
  */
 trait EditUserTrait
 {
-    protected ?Uid $uid = null;
-    protected ?Email $email = null;
+    protected ?string $uid = null;
+    protected ?string $email = null;
     protected ?string $displayName = null;
     protected ?bool $emailIsVerified = null;
-    protected ?PhoneNumber $phoneNumber = null;
-    protected ?Url $photoUrl = null;
+    protected ?string $phoneNumber = null;
+    protected ?string $photoUrl = null;
     protected ?bool $markAsEnabled = null;
     protected ?bool $markAsDisabled = null;
-    protected ?ClearTextPassword $clearTextPassword = null;
+    protected ?string $clearTextPassword = null;
 
     /**
+     * @param T $request
      * @param array<string, mixed> $properties
      *
      * @throws InvalidArgumentException when invalid properties have been provided
      *
-     * @return static
+     * @return T
      */
-    protected static function withEditableProperties(self $request, array $properties)
+    protected static function withEditableProperties(self $request, array $properties): self
     {
         foreach ($properties as $key => $value) {
             switch (\mb_strtolower((string) \preg_replace('/[^a-z]/i', '', $key))) {
@@ -42,22 +43,18 @@ trait EditUserTrait
                     $request = $request->withUid($value);
 
                     break;
-
                 case 'email':
                     $request = $request->withEmail($value);
 
                     break;
-
                 case 'unverifiedemail':
                     $request = $request->withUnverifiedEmail($value);
 
                     break;
-
                 case 'verifiedemail':
                     $request = $request->withVerifiedEmail($value);
 
                     break;
-
                 case 'emailverified':
                     if ($value === true) {
                         $request = $request->markEmailAsVerified();
@@ -66,24 +63,20 @@ trait EditUserTrait
                     }
 
                     break;
-
                 case 'displayname':
                     $request = $request->withDisplayName($value);
 
                     break;
-
                 case 'phone':
                 case 'phonenumber':
                     $request = $request->withPhoneNumber($value);
 
                     break;
-
                 case 'photo':
                 case 'photourl':
                     $request = $request->withPhotoUrl($value);
 
                     break;
-
                 case 'disableuser':
                 case 'disabled':
                 case 'isdisabled':
@@ -94,7 +87,6 @@ trait EditUserTrait
                     }
 
                     break;
-
                 case 'enableuser':
                 case 'enabled':
                 case 'isenabled':
@@ -105,7 +97,6 @@ trait EditUserTrait
                     }
 
                     break;
-
                 case 'password':
                 case 'cleartextpassword':
                     $request = $request->withClearTextPassword($value);
@@ -118,60 +109,51 @@ trait EditUserTrait
     }
 
     /**
-     * @param Uid|mixed $uid
-     *
-     * @return static
+     * @param \Stringable|mixed $uid
      */
     public function withUid($uid): self
     {
         $request = clone $this;
-        $request->uid = $uid instanceof Uid ? $uid : new Uid((string) $uid);
+        $request->uid = (string) (new Uid((string) $uid));
 
         return $request;
     }
 
     /**
-     * @param Email|string $email
-     *
-     * @return static
+     * @param \Stringable|string $email
      */
     public function withEmail($email): self
     {
         $request = clone $this;
-        $request->email = $email instanceof Email ? $email : new Email($email);
+        $request->email = (string) (new Email((string) $email));
 
         return $request;
     }
 
     /**
-     * @param Email|string $email
+     * @param \Stringable|string $email
      */
     public function withVerifiedEmail($email): self
     {
         $request = clone $this;
-        $request->email = $email instanceof Email ? $email : new Email($email);
+        $request->email = (string) (new Email((string) $email));
         $request->emailIsVerified = true;
 
         return $request;
     }
 
     /**
-     * @param Email|string $email
-     *
-     * @return static
+     * @param \Stringable|string $email
      */
     public function withUnverifiedEmail($email): self
     {
         $request = clone $this;
-        $request->email = $email instanceof Email ? $email : new Email($email);
+        $request->email = (string) (new Email((string) $email));
         $request->emailIsVerified = false;
 
         return $request;
     }
 
-    /**
-     * @return static
-     */
     public function withDisplayName(string $displayName): self
     {
         $request = clone $this;
@@ -181,13 +163,11 @@ trait EditUserTrait
     }
 
     /**
-     * @param PhoneNumber|string|null $phoneNumber
+     * @param \Stringable|string|null $phoneNumber
      */
     public function withPhoneNumber($phoneNumber): self
     {
-        $phoneNumber = $phoneNumber !== null
-            ? new PhoneNumber((string) $phoneNumber)
-            : null;
+        $phoneNumber = $phoneNumber !== null ? (string) $phoneNumber : null;
 
         $request = clone $this;
         $request->phoneNumber = $phoneNumber;
@@ -196,19 +176,16 @@ trait EditUserTrait
     }
 
     /**
-     * @param Url|string $url
+     * @param \Stringable|string $url
      */
     public function withPhotoUrl($url): self
     {
         $request = clone $this;
-        $request->photoUrl = $url instanceof Url ? $url : Url::fromValue($url);
+        $request->photoUrl = (string) Url::fromValue((string) $url);
 
         return $request;
     }
 
-    /**
-     * @return static
-     */
     public function markAsDisabled(): self
     {
         $request = clone $this;
@@ -218,9 +195,6 @@ trait EditUserTrait
         return $request;
     }
 
-    /**
-     * @return static
-     */
     public function markAsEnabled(): self
     {
         $request = clone $this;
@@ -230,9 +204,6 @@ trait EditUserTrait
         return $request;
     }
 
-    /**
-     * @return static
-     */
     public function markEmailAsVerified(): self
     {
         $request = clone $this;
@@ -241,9 +212,6 @@ trait EditUserTrait
         return $request;
     }
 
-    /**
-     * @return static
-     */
     public function markEmailAsUnverified(): self
     {
         $request = clone $this;
@@ -253,16 +221,12 @@ trait EditUserTrait
     }
 
     /**
-     * @param ClearTextPassword|string $clearTextPassword
-     *
-     * @return static
+     * @param \Stringable|string $clearTextPassword
      */
     public function withClearTextPassword($clearTextPassword): self
     {
         $request = clone $this;
-        $request->clearTextPassword = $clearTextPassword instanceof ClearTextPassword
-            ? $clearTextPassword
-            : new ClearTextPassword($clearTextPassword);
+        $request->clearTextPassword = (string) (new ClearTextPassword((string) $clearTextPassword));
 
         return $request;
     }

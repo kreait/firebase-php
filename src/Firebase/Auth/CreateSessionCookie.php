@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
+use Beste\Clock\SystemClock;
+use Beste\Clock\WrappingClock;
 use DateInterval;
-use Kreait\Clock;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Lcobucci\JWT\Token;
+use StellaMaris\Clock\ClockInterface;
 
 final class CreateSessionCookie
 {
@@ -15,12 +17,14 @@ final class CreateSessionCookie
     private const TWO_WEEKS = 'P14D';
 
     private string $idToken;
+    private ?string $tenantId;
     private DateInterval $ttl;
-    private Clock $clock;
+    private ClockInterface $clock;
 
-    private function __construct(string $idToken, DateInterval $ttl, Clock $clock)
+    private function __construct(string $idToken, ?string $tenantId, DateInterval $ttl, ClockInterface $clock)
     {
         $this->idToken = $idToken;
+        $this->tenantId = $tenantId;
         $this->ttl = $ttl;
         $this->clock = $clock;
     }
@@ -28,10 +32,15 @@ final class CreateSessionCookie
     /**
      * @param Token|string $idToken
      * @param int|DateInterval $ttl
+     * @param object|null $clock
      */
-    public static function forIdToken($idToken, $ttl, ?Clock $clock = null): self
+    public static function forIdToken($idToken, ?string $tenantId, $ttl, object $clock = null): self
     {
-        $clock = $clock ?? new Clock\SystemClock();
+        $clock ??= SystemClock::create();
+
+        if (!($clock instanceof ClockInterface)) {
+            $clock = WrappingClock::wrapping($clock);
+        }
 
         if ($idToken instanceof Token) {
             $idToken = $idToken->toString();
@@ -39,12 +48,17 @@ final class CreateSessionCookie
 
         $ttl = self::assertValidDuration($ttl, $clock);
 
-        return new self($idToken, $ttl, $clock);
+        return new self($idToken, $tenantId, $ttl, $clock);
     }
 
     public function idToken(): string
     {
         return $this->idToken;
+    }
+
+    public function tenantId(): ?string
+    {
+        return $this->tenantId;
     }
 
     public function ttl(): DateInterval
@@ -64,7 +78,7 @@ final class CreateSessionCookie
      *
      * @throws InvalidArgumentException
      */
-    private static function assertValidDuration($ttl, Clock $clock): DateInterval
+    private static function assertValidDuration($ttl, ClockInterface $clock): DateInterval
     {
         if (\is_int($ttl)) {
             if ($ttl < 0) {

@@ -43,7 +43,7 @@ final class DatabaseNotFound extends LogicException implements DatabaseException
             suffix.
 
             For instructions on how to set the name of the used Realtime Database, please
-            see https://firebase-php.readthedocs.io/en/5.x/#quick-start
+            see https://firebase-php.readthedocs.io/en/6.x/#quick-start
 
 
             MESSAGE;

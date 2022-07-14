@@ -12,7 +12,7 @@ use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
 /**
  * @internal
  */
-class TransactionTest extends DatabaseTestCase
+final class TransactionTest extends DatabaseTestCase
 {
     private Reference $ref;
 

@@ -5,10 +5,52 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Messaging;
 
 use JsonSerializable;
+use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 
 /**
  * @see https://tools.ietf.org/html/rfc8030#section-5.3 Web Push Message Urgency
- * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
+ * @phpstan-type WebPushHeadersShape array{
+ *     TTL?: positive-int|numeric-string|null,
+ *     Urgency?: self::URGENCY_*
+ * }
+ *
+ * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushfcmoptions WebPush FCM Options
+ * @phpstan-type WebPushFcmOptionsShape array{
+ *     link?: non-empty-string,
+ *     analytics_label?: non-empty-string
+ * }
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification#syntax WebPush Notification Syntax
+ * @phpstan-type WebPushNotificationShape array{
+ *     title: non-empty-string,
+ *     options?: array{
+ *         dir?: 'ltr'|'rtl'|'auto',
+ *         lang?: string,
+ *         badge?: non-empty-string,
+ *         body?: non-empty-string,
+ *         tag?: non-empty-string,
+ *         icon?: non-empty-string,
+ *         image?: non-empty-string,
+ *         data?: mixed,
+ *         vibrate?: list<positive-int>,
+ *         renotify?: bool,
+ *         requireInteraction?: bool,
+ *         actions?: list<array{
+ *             action: non-empty-string,
+ *             title: non-empty-string,
+ *             icon: non-empty-string
+ *         }>,
+ *         silent?: bool
+ *     }
+ * }
+ *
+ * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig WebPush Config Syntax
+ * @phpstan-type WebPushConfigShape array{
+ *     headers?: WebPushHeadersShape,
+ *     data?: array<non-empty-string, non-empty-string>,
+ *     notification?: WebPushNotificationShape,
+ *     fcm_options?: WebPushFcmOptionsShape
+ * }
  */
 final class WebPushConfig implements JsonSerializable
 {
@@ -17,28 +59,20 @@ final class WebPushConfig implements JsonSerializable
     private const URGENCY_NORMAL = 'normal';
     private const URGENCY_HIGH = 'high';
 
-    /** @var array{
-     *      headers?: array<string, string>,
-     *      data?: array<string, string>,
-     *      notification?: array<string, mixed>,
-     *      fcm_options?: array{
-     *          link?: string,
-     *          analytics_label?: string
-     *      }
-     * }
+    private const VALID_URGENCIES = [
+        self::URGENCY_VERY_LOW,
+        self::URGENCY_LOW,
+        self::URGENCY_NORMAL,
+        self::URGENCY_HIGH,
+    ];
+
+    /**
+     * @var WebPushConfigShape
      */
     private array $config;
 
     /**
-     * @param array{
-     *     headers?: array<string, string>,
-     *     data?: array<string, string>,
-     *     notification?: array<string, mixed>,
-     *     fcm_options?: array{
-     *         link?: string,
-     *         analytics_label?: string
-     *     }
-     * } $config
+     * @param WebPushConfigShape $config
      */
     private function __construct(array $config)
     {
@@ -51,19 +85,52 @@ final class WebPushConfig implements JsonSerializable
     }
 
     /**
-     * @param array{
-     *     headers?: array<string, string>,
-     *     data?: array<string, string>,
-     *     notification?: array<string, mixed>,
-     *     fcm_options?: array{
-     *         link?: string,
-     *         analytics_label?: string
-     *     }
-     * } $config
+     * @param WebPushConfigShape $config
      */
     public static function fromArray(array $config): self
     {
+        if (array_key_exists('headers', $config) && is_array($config['headers'])) {
+            $config['headers'] = self::ensureValidHeaders($config['headers']);
+
+            if ($config['headers'] === []) {
+                unset($config['headers']);
+            }
+        }
+
         return new self($config);
+    }
+
+    /**
+     * @param WebPushHeadersShape $headers
+     *
+     * @return WebPushHeadersShape
+     */
+    private static function ensureValidHeaders(array $headers): array
+    {
+        if (array_key_exists('TTL', $headers)) {
+            if (is_int($headers['TTL'])) {
+                $headers['TTL'] = (string) $headers['TTL'];
+            }
+
+            if (is_string($headers['TTL']) && (preg_match('/^[1-9]\d*$/', $headers['TTL']) !== 1)) {
+                throw new InvalidArgument('The TTL in the WebPushConfig must must be a positive int');
+            }
+
+            if ($headers['TTL'] === null) {
+                unset($headers['TTL']);
+            }
+        }
+
+        if (array_key_exists('Urgency', $headers)) {
+            if (!in_array($headers['Urgency'], self::VALID_URGENCIES, true)) {
+                throw new InvalidArgument(sprintf(
+                    'The Urgency in the WebPushConfig header must must be one of %s',
+                    implode(',', self::VALID_URGENCIES)
+                ));
+            }
+        }
+
+        return $headers;
     }
 
     public function withHighUrgency(): self
@@ -86,10 +153,14 @@ final class WebPushConfig implements JsonSerializable
         return $this->withUrgency(self::URGENCY_VERY_LOW);
     }
 
+    /**
+     * @param self::URGENCY_* $urgency
+     */
     public function withUrgency(string $urgency): self
     {
         $config = clone $this;
-        $config->config['headers'] = $config->config['headers'] ?? [];
+
+        $config->config['headers'] ??= [];
         $config->config['headers']['Urgency'] = $urgency;
 
         return $config;

@@ -1,289 +1,267 @@
 # CHANGELOG
 
 ## [Unreleased]
-### Added
-* Added support for Session Cookie Generation
-  ([Documentation](https://firebase-php.readthedocs.io/en/latest/authentication.html#session-cookies))
 
-## [5.20.1] - 2021-05-12
+## [6.6.1] - 2022-07-12
+
 ### Fixed
-* Restored broken support for Guzzle 6.x
 
-## [5.20.0] - 2021-05-11
-* Dropped support for unsupported PHP versions. Dropped support for unsupported PHP versions. Starting with this 
-  release, supported are PHP versions >=7.4.
+* The `WebPushConfig` class is now more lenient with TTL values, and urgencies are checked if they are valid
+  ([#716](https://github.com/kreait/firebase-php/issues/716))
+* The `AndroidConfig` didn't allow the TTL to be `null`)
+  ([#719](https://github.com/kreait/firebase-php/issues/719))
 
-## [5.19.0] - 2021-05-09
-### Added
-* Added the `startAfter` and `endBefore` filters for the Realtime Database. At the moment they
-  don't seem to have an effect on the returned results (just as if they didn't exist); it's
-  unclear if the implementation is incorrect or if the REST API doesn't support the new
-  filters yet. If you see why it's not working or if it _does_ work for you, please
-  let me know.
-### Changed
-* `CloudMessage::withData()` allowed the message data to be empty, resulting in the Firebase
-  API rejecting the message. If the message data is empty, the field is now removed before
-  sending the message.
-  ([#591](https://github.com/kreait/firebase-php/issues/591))
+## [6.6.0] - 2022-07-07
 
-## [5.18.0] - 2021-04-19
-### Added
-* Added support for more public keys from Google that ID Tokens could have been signed with. 
-
-## [5.17.1] - 2021-04-13
 ### Fixed
-* [5.16.0] introduced a check for reserved words and prefixes in FCM Data Payloads - although stated
-  otherwise in the official documentation, the keyword `notification` is _not_ be rejected by the
-  Firebase API, causing projects to break that used it and updated the SDK. This release removes
-  the check for this key.
 
-## [5.17.0] - 2021-03-21
+* The `AndroidConfig` class is now more lenient with TTL values
+  ([#713](https://github.com/kreait/firebase-php/issues/713))
+
 ### Added
-* Helper methods to specify a message priority
-  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#message-priority))
-### Changed
-* `giggsey/libphonenumber-for-php` is now an _optional_ dependency instead of a required one. It can be used
-  to validate a phone number before sending it to the Firebase Servers, where an invalid phone number will
-  be rejected anyway. If you want to continue using the "pre"-validation, please add the library to your
-  project's direct dependencies, e.g. with `composer require "giggsey/libphonenumber-for-php:^8.9"`.
-  ([#577](https://github.com/kreait/firebase-php/discussions/577))
 
-## [5.16.0] - 2021-03-07
-### Fixed
-* It was not possible to send password reset emails to users belonging to a tenant. 
-  ([#573](https://github.com/kreait/firebase-php/issues/573))
-### Changed
-* FCM Data Payloads are now checked for reserved words and prefixes, according to the
-  [FCM Data Messages Documentation](https://firebase.google.com/docs/cloud-messaging/concept-options#data_messages).
-  Reserved words include "from", "notification," "message_type", or any word starting with "google" or "gcm."
-  Instead of throwing an exception after the FCM API has rejected a message, the exception will no be thrown 
-  _before_ sending the message. 
-  ([#574](https://github.com/kreait/firebase-php/issues/574))
+* The maximum amount of messages that can be sent in batches can be accessed 
+  `Kreait\Firebase\Contract\Messaging::BATCH_MESSAGE_LIMIT`
 
-## [5.15.0] - 2021-03-01
-### Added
-* All main components of the SDK are now based on Interfaces in the `Kreait\Firebase\Contract` namespace. 
-  This should enable projects implementing the SDK to mock the components more easily (Note: the
-  `Kreait\Firebase\Factory` class is not provided as a contract, and you should not rely 
-  on it in your tests).
-  
-  The added contracts are:
-  * `\Kreait\Firebase\Contract\Auth`
-  * `\Kreait\Firebase\Contract\Database`
-  * `\Kreait\Firebase\Contract\DynamicLinks`
-  * `\Kreait\Firebase\Contract\Firestore`
-  * `\Kreait\Firebase\Contract\RemoteConfig`
-  * `\Kreait\Firebase\Contract\Storage`
-
-### Changed
-* More explanatory error messages when
-  * a requested Realtime Database instance could not be reached
-  * an FCM target device is not known to the current project
-
-## [5.14.1] - 2020-12-31
-### Fixed
-* Fixed handling of rejected promises in the App Instance API Client
-  ([#536](https://github.com/kreait/firebase-php/issues/536))
-
-## [5.14.0] - 2020-12-13
-### Added
-* Single reports of a `MulticastSendReport` now include the sent message, in addition to the response.
-* It is now possible to validate multiple messages at once by adding a parameter to the `send*` Methods
-  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#validating-messages))
-* It is now possible to check a list of registration tokens whether they are valid and known, unknown, or invalid
-  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#validating-registration-tokens))
-* Added methods:
-  * `Kreait\Firebase\Messaging::validateRegistrationTokens($registrationTokenOrTokens)`
 ### Deprecated
-* `Kreait\Firebase\Http\Requests::findBy()`
-* `Kreait\Firebase\Messaging\MulticastSendReport::withAdded()`
+
+* `Kreait\Firebase\Messaging\Http\Request\SendMessages::MAX_AMOUNT_OF_MESSAGES`
+* `Kreait\Firebase\Messaging\Http\Request\SendMessageToTokens::MAX_AMOUNT_OF_TOKENS`
+
+## [6.5.1] - 2022-06-27
+
 ### Fixed
-* 5.13 introduced a bug which caused expired ID tokens not to be rejected as invalid. 
-  [#526](https://github.com/kreait/firebase-php/issues/526)
 
-## [5.13.0] - 2020-12-10
+* Keys in the data payload of an FCM message were always lower-cased, although they shouldn't have been.
+  ([#709](https://github.com/kreait/firebase-php/issues/709)
 
-This release ensures compatibility with PHP 8.0
+## [6.5.0] - 2022-06-22
 
-## [5.12.0] - 2020-11-27
 ### Added
-* The Auth component is now tenant-aware.
-  ([Documentation](https://firebase-php.readthedocs.io/en/latest/authentication.html#tenant-awareness))
+
+* Problems while fetching Dynamic Link statistics now result in more helpful exception messages.
+  ([#707](https://github.com/kreait/firebase-php/issues/707)
+
+### Changed
+
+* Raised minimum version of Guzzle to address [CVE-2022-31090](https://github.com/advisories/GHSA-25mq-v84q-4j7r)
+  and [CVE-2022-31091](https://github.com/advisories/GHSA-q559-8m2m-g699)
+
+## [6.4.1 - 2022-06-15]
+
+### Fixed
+
+* Updating a Realtime Database Ruleset converted lists to objects with numeric keys.
+  ([#706](https://github.com/kreait/firebase-php/pull/706))
+
+### Changed
+
+* Raised minimum version of Guzzle to address [CVE-2022-31042](https://github.com/advisories/GHSA-f2wf-25xc-69c9)
+
+## [6.4.0] - 2022-06-08
+
+### Added
+
+* If not already set, APNs configs are enriched with the necessary headers and fields to ensure the delivery of
+  iOS background messages and alerts.
+  * The `apns-push-type` header is set to `background` or `alert`
+  * The `content-available` field is set to `1` in case of a background message
+* FCM Messages are now annotated for better PHPStan/Psalm resolution
 * Added methods
-  * `\Kreait\Firebase\RemoteConfig\Parameter::description()`
-### Fixed
-* Fix usage of deprecated functionality from lcobucci/jwt
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withMinimalNotificationPriority()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withLowNotificationPriority()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withDefaultNotificationPriority()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withHighNotificationPriority()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withMaximalNotificationPriority()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withNotificationPriority()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withUnspecifiedNotificationPriority()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withPrivateNotificationVisibility()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withPublicNotificationVisibility()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withSecretNotificationVisibility()`
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withNotificationVisibility()`
+  * `\Kreait\Firebase\Messaging\ApnsConfig::data()`
+  * `\Kreait\Firebase\Messaging\ApnsConfig::hasHeader()`
+  * `\Kreait\Firebase\Messaging\ApnsConfig::isAlert()`
+  * `\Kreait\Firebase\Messaging\ApnsConfig::toArray()`
+  * `\Kreait\Firebase\Messaging\ApnsConfig::withApsField()`
+  * `\Kreait\Firebase\Messaging\ApnsConfig::withDataField()`
+  * `\Kreait\Firebase\Messaging\ApnsConfig::withHeader()`
 
-## [5.11.0] - 2020-11-01
-### Added
-* Added helper methods to add default/specific notification sounds to messages
-  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#notification-sounds))
-  * `Kreait\Firebase\Messaging\ApnsConfig::withDefaultSound()`
-  * `Kreait\Firebase\Messaging\ApnsConfig::withSound($sound)`
-  * `Kreait\Firebase\Messaging\AndroidConfig::withDefaultSound()`
-  * `Kreait\Firebase\Messaging\AndroidConfig::withSound($sound)`
-  * `Kreait\Firebase\Messaging\CloudMessage::withDefaultSounds()`
-* Added exception handler for FCM errors concerning quota/rate limits. When a quota is exceeded, a
-  `Kreait\Firebase\Exception\Messaging\QuotaExceeded` exception is thrown. You can get the
-  datetime after which to retry with `Kreait\Firebase\Exception\Messaging\QuotaExceeded::retryAfter()`
-* When the Firebase API is unavailable and/or overloaded, the response might return a `Retry-After`
-  header. When it does, you can get the datetime after which it is suggested to retry with
-  `Kreait\Firebase\Exception\Messaging\ServerUnavailable::retryAfter()`
-* Added support for the retrieval of user's last activity time with `Kreait\Firebase\Auth\UserMetadata::$lastRefreshedAt`
-### Fixed
-* `Kreait\Firebase\Messaging\CloudMessage::fromArray()` did not allow providing pre-configured message components
-  (objects instead of "pure" arrays)
-
-## [5.10.0] - 2020-10-20
-### Added
-* Added `Kreait\Firebase\Auth::getUsers()` enables retrieving multiple users at once.
-  ([#477](https://github.com/kreait/firebase-php/pull/477))
-  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#get-information-about-multiple-users))
-* Added support to sign in with Twitter OAuth credentials
-  ([#481](https://github.com/kreait/firebase-php/pull/481))
-* Added convenience method to sign in with IDP credentials ([Documentation](https://firebase-php.readthedocs.io/en/latest/authentication.html#sign-in-with-idp-credentials)):
-  * `Kreait\Firebase\Auth::signInWithTwitterOauthCredential($accessToken, $oauthTokenSecret)`
-  * `Kreait\Firebase\Auth::signInWithGoogleIdToken($idToken)`
-  * `Kreait\Firebase\Auth::signInWithFacebookAccessToken($accessToken)`
-* It is now possible to add/remove multiple topic subscriptions for multiple registration tokens.
-  (Previously, you could already work with multiple registration tokens, but only on single message topics).
-  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html#topic-management))
-  * `Kreait\Firebase\Messaging::subscribeToTopics($topics, $registrationTokenOrTokens)` 
-  * `Kreait\Firebase\Messaging::unsubscribeFromTopics($topics, $registrationTokenOrTokens)` 
-  * `Kreait\Firebase\Messaging::unsubscribeFromAllTopics($registrationTokenOrTokens)`
-* The RemoteConfig component now support Parameter Groups.
-  ([Documentation](https://firebase-php.readthedocs.io/en/latest/remote-config.html#parameter-groups))
-* Added methods allowing to use the email address associated with OOB password resets.
-  ([#482](https://github.com/kreait/firebase-php/pull/482), [#485](https://github.com/kreait/firebase-php/pull/485))
-  * `Kreait\Firebase\Auth::verifyPasswordResetCodeAndReturnEmail(string $oobCode)`
-  * `Kreait\Firebase\Auth::confirmPasswordResetAndReturnEmail(string $oobCode, $newPassword, bool $invalidatePreviousSessions = true)`
 ### Changed
-  * Replaced usage of deprecated Guzzle helpers
-### Deprecated
-  * `Kreait\Firebase\RemoteConfig\Parameter::fromArray()`
-  * `Kreait\Firebase\RemoteConfig\Template::fromResponse()`
 
-## [5.9.0] - 2020-10-04
-### Added
-* PHP `^8.0` is now an allowed (but untested) PHP version
+* FCM notifications (`Kreait\Firebase\Messaging\Notification`) can now be created with null values. 
+  If a notification has _only_ null values, the notification payload will be removed on 
+  serialization as if it wasn't provided at all.
+* Deprecations
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withHighPriority()`, 
+    use `\Kreait\Firebase\Messaging\AndroidConfig::withHighMessagePriority()` instead
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withNormalPriority()`, 
+    use `\Kreait\Firebase\Messaging\AndroidConfig::withNormalMessagePriority()` instead
+  * `\Kreait\Firebase\Messaging\AndroidConfig::withPriority()`, 
+    use `\Kreait\Firebase\Messaging\AndroidConfig::withMessagePriority()` instead
 
-## [5.8.1] - 2020-09-05
+## [6.3.1] - 2022-05-07
+
 ### Fixed
-* The `HttpClientOptions` introduced in 5.8.0 caused a misconfiguration in the underlying
-  HTTP Client by trying to be too fancy (I'm sorry). 
-  ([#466](https://github.com/kreait/firebase-php/issues/466))
-  
-  _This is technically a breaking change because the return type of some public methods
-  of the `HttpClientOptions` has changed - but since they are meant to be used for service
-  creation, it is very unlikely that they have been used outside the SDK internals, so
-  the risk of breaking an existing application with this change is so low, that I'll
-  take the risk of getting shouted at for it._ 
 
-## [5.8.0] - 2020-08-23
-### Added
-* It is now possible to remove emails from users in the auth database.
-  ([#459](https://github.com/kreait/firebase-php/issues/459)).
-* You can configure the behavior of the HTTP Client performing the API 
-  requests by passing an instance of `Kreait\Firebase\Http\HttpClientOptions` 
-  to the factory before creating a service.
-  ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#http-client-options))
+* Nested lists in custom user claims were not correctly encoded. 
+  ([#699](https://github.com/kreait/firebase-php/pull/699))
 
-## [5.7.0] - 2020-07-19
-### Added
-* Added `Kreait\Firebase\RemoteConfig\DefaultValue` now has an added `value()` method to 
-  retrieve a default value's value.
-* When a given service account could not be processed, the error message now includes 
-  more details.
+## [6.3.0] - 2022-04-24
 
-## [5.6.0] - 2020-07-02
 ### Added
-* User Records now contain the date and time when a user's password has last been updated.
-  ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#user-records))
+
+* Added support for the Firebase Auth Emulator.
+  ([#692](https://github.com/kreait/firebase-php/pull/692)) ([Documentation](https://firebase-php.readthedocs.io/en/latest/testing.html))
+* Tenant aware session cookie handling is now officially supported.
+
+## [6.2.0] - 2022-03-03
+
+### Added
+
+* Cloud Messaging: Added support for APNS subtitles (supported by iOS 9+, silently ignored for others)
+  ([#692](https://github.com/kreait/firebase-php/pull/692))
+* Auth: In `Auth::listUsers()`, if the specified batch size exceeds the specified maximum number of
+  to be returned users, the batch size will be reduced from the default 1000. As an example: previously,
+  `Auth::listUsers(2)` would have downloaded 1000 accounts (the default batch size), but return only
+  the first two. After the change, only two accounts will be downloaded.
+* Added methods
+  * `Kreait\Firebase\Messaging\ApnsConfig::withSubtitle()`
+
 ### Changed
-* Message data added to a with `CloudMessage::withData()` now rejects binary data to avoid broken
-  messages being sent to the Firebase API.
-  ([#441](https://github.com/kreait/firebase-php/issues/441))
+
+* Replaced internal JSON helper class with [`beste/json`](https://github.com/beste/json)
+* Deprecated classes
+  * `Kreait\Firebase\Util\JSON`
+
+## [6.1.0] - 2022-01-28
+
+### Added
+
+* Added convenience method to bulk-remove multiple children of an RTDB Reference
+  ([#686](https://github.com/kreait/firebase-php/pull/686))
+* Added support for Session Cookie Verification.
+  * Tenants don't seem to be supported at the moment (creating or verifying a Session Cookie with a tenant-enabled 
+    Firebase project yields an `UNSUPPORTED_TENANT_OPERATION` error), but once it _is_ supported, the SDK will need
+    no or just minimal updates.
+    Integration tests are in place to checking for this error so that we know early on when it starts working.
+* Added methods:
+  * `Kreait\Firebase\Auth::verifySessionCookie()` 
+  * `Kreait\Firebase\Database\Reference::removeChildren()`
+
+### Changed
+* Tenant-aware auth methods are now tested the same way as tenant-unaware methods. In order to achieve this,
+  some internal implementations had to be changed, warranting this minor version bump. Please note that
+  the tests uncovered that creating session tokens is currently not possible when working with tenants.
+  ([GitHub issue](https://github.com/firebase/firebase-admin-python/issues/577) /
+  [Google Issue Tracker issue](https://issuetracker.google.com/issues/204377229)))
+* Deprecated classes
+  * `Kreait\Firebase\Auth\CreateActionLink\ApiRequest`
+  * `Kreait\Firebase\Auth\CreateSessionCookie\ApiRequest`
+  * `Kreait\Firebase\Auth\SendActionLink\ApiRequest`
+
+## [6.0.1] - 2022-01-16
+
 ### Fixed
-* It was not possible to instantiate a Custom Token Generator on GAE/GCE due to missing
-  auto discovery.
+* When signing in with IdP credentials a user's Firebase UID is retrieved from the returned `localId` field, if present
 
-## [5.5.0] - 2020-06-19
-### Added
-* It is now possible to log outgoing HTTP requests and responses to the Firebase APIs. 
-  ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#logging))
-### Changed
-* `Kreait\Firebase\Factory::withEnabledDebug()` now accepts an instance of 
-  `Psr\Log\LoggerInterface` as parameter to log HTTP messages.
-### Deprecated
-* Calling `Kreait\Firebase\Factory::withEnabledDebug()` without a Logger continues to enable Guzzle's
-  default debug behaviour to print HTTP debug output to STDOUT, but will trigger a deprecation notice suggesting using a Logger instead.
+## [6.0.0] - 2022-01-07
 
-## [5.4.0] - 2020-06-09
-### Added
-* `Kreait\Firebase\Auth::setCustomUserClaims()` as a replacement for `Kreait\Firebase\Auth::setCustomUserAttributes()`
-  and `Kreait\Firebase\Auth::deleteCustomUserAttributes()`
-* `Kreait\Firebase\Auth\UserRecord::$customClaims` as a replacement for 
-  `Kreait\Firebase\Auth\UserRecord::$customAttributes`
-### Changed
-* The default branch of the GitHub repository has been renamed from `master` to `main` - if you're using `dev-master`
-  as a version constraint in your `composer.json`, please update it to `dev-main`.
-### Deprecated
-* `Kreait\Firebase\Auth::setCustomUserAttributes()`
-* `Kreait\Firebase\Auth\UserRecord::$customAttributes`
-### Fixed
-* Exceptions thrown by the Messaging component did not include the previous ``RequestException`` 
-  ([#428](https://github.com/kreait/firebase-php/issues/428))
+This is a release with breaking changes. Please review the following changes and adapt your application where needed.
 
-## [5.3.0] - 2020-05-27
-### Changed
-* In addition to with `getenv()`, the SDK now looks for environment variables in `$_SERVER` and `$_ENV` as well. 
+The supported way to interact with the SDK is to instantiate Components with the `Kreait\Firebase\Factory::create*`
+methods.
 
-## [5.2.0] - 2020-05-03
-### Added
-* It is now possible to retrieve the Firebase User ID directly from a `SignInResult` after a successful user sign-in 
-  with `SignInResult::firebaseUserId()`
+### Setup
+* It is now mandatory to provide a Firebase Project ID. When the project ID cannot be determined from the
+  provided credentials (usually a service account), it can be provided by setting the `GOOGLE_CLOUD_PROJECT=<project-id>`
+  environment variable or by calling `$factory = $factory->withProjectId('project-id')`.
+* The environment variable `FIREBASE_CREDENTIALS` will not be evaluated anymore for credentials auto-discovery. If you
+  rely on auto-discovery, use the `GOOGLE_APPLICATION_CREDENTIALS` environment variable. This was already supported in
+  earlier versions and is the same environment variable the official Google Libraries use.
+* All components have been made `final` and marked as `@internal`, if you're type-hinting dependencies in your
+  application code, make sure you type-hint the `Kreait\Firebase\Contract\*` **interfaces**, not the
+  `Kreait\Firebase\*` **implementations**
+* `Kreait\Firebase\Factory` has been locked down. It should only be used to configure and retrieve the services
+  provided by the SDK as documented. The method `Kreait\Firebase\Factory::createApiClient()` will provide you with
+  an authorized Guzzle HTTP Client that you can use for custom API operations.
+* `Kreait\Firebase\Factory::withVerifierCache()` now expects a PSR-6 Cache Item Pool and doesn't directly support
+  PSR-16 Caches anymore. If you only have a PSR-16 Cache available in your project, you can use an adapter, e.g.
+  one provided by the `symfony/cache` component. If you're using the Firebase Bundle or the Laravel Package, this
+  will be taken care of once they are updated to use the new release.
 
-## [5.1.1] - 2020-04-16
-### Fixed
-* Custom Token Generation was not possible with an auto-discovered Service Account 
-  ([#412](https://github.com/kreait/firebase-php/issues/412)) 
+### Auth component
+* `Kreait\Firebase\Contract\Auth::parseToken()` and `Kreait\Firebase\Contract\Auth::verifyIdToken()` now return
+  an instance of `Lcobucci\JWT\UnencryptedToken` instead of `\Lcobucci\JWT\Token` - this ensures access to its
+  `getClaims()` method.
+* `Kreait\Firebase\Contract\Auth::verifyIdToken()` now accepts an optional third parameter, `$leewayInSeconds`, to
+  specify the number of seconds a token is allowed to be expired, in case that there is a clock skew between the signing
+  and the verifying server. **The previous default of a 300 seconds leeway has been removed**, if you want to restore
+  the previous behavior, call the method with the third parameter set: `verifyIdToken($token, false, 300)`
+* `Kreait\Firebase\Contract\Auth::verifyIdToken()` will now throw either
+  `Kreait\Firebase\Exception\Auth\FailedToVerifyToken` when the verification failed, or
+  `Kreait\Firebase\Exception\Auth\RevokedIdToken` when the token has been revoked.
+* `Kreait\Firebase\Contract\Auth::verifyPasswordResetCode()` now returns the email address the password was reset for.
+  * This was previously done with the method `Kreait\Firebase\Contract\Auth::verifyPasswordResetCodeAndReturnEmail()` -
+    this method has been removed.
+* `Kreait\Firebase\Contract\Auth::confirmPasswordReset()` now returns the email address the password reset was confirmed for.
+    * This was previously done with the method `Kreait\Firebase\Contract\Auth::confirmPasswordResetAndReturnEmail()` -
+      this method has been removed.
+* The following methods were shortcuts for `Kreait\Firebase\Contract\Auth::signInWithIdpAccessToken()` and
+  `Kreait\Firebase\Contract\Auth::signInWithIdpIdToken()` and have been removed.
+  * `Kreait\Firebase\Contract\Auth::signInWithAppleIdToken()`, use `signInWithIdpIdToken('apple.com', ...)` instead
+  * `Kreait\Firebase\Contract\Auth::signInWithFacebookAccessToken()`, use `signInWithIdpAccessToken('facebook.com', ...)` instead
+  * `Kreait\Firebase\Contract\Auth::signInWithGoogleIdToken()`, use `signInWithIdpIdToken('google.com', ...)` instead
+  * `Kreait\Firebase\Contract\Auth::signInWithTwitterOauthCredential()`, use `signInWithIdpAccessToken('twitter.com', ...)` instead
+* The following methods now return strings instead of value objects:
+    * `Kreait\Firebase\Contract\Auth::confirmPasswordReset()`
+    * `Kreait\Firebase\Contract\Auth::verifyPasswordResetCode()`
+    * `Kreait\Firebase\RemoteConfig\User::email()`
+* The following classes are mainly used for validation and have been marked internal. They shouldn't be used directly,
+  as they could be updated with breaking changes or get removed entirely in the future.
+    * `Kreait\Firebase\Value\ClearTextPassword`
+    * `Kreait\Firebase\Value\Email`
+    * `Kreait\Firebase\Value\Uid`
+    * `Kreait\Firebase\Value\Url`
 
-## [5.1.0] - 2020-04-06
-### Added
-* Fetched authentication tokens (to authenticate requests to the Firebase API) are now cached in-memory by default
-  ([#404](https://github.com/kreait/firebase-php/issues/404)) 
+### Realtime Database Component
+* The constant `Kreait\Firebase\Database::SERVER_TIMESTAMP` has been moved to `Kreait\Firebase\Contract\Database::SERVER_TIMESTAMP`
 
-## [5.0.0] - 2020-04-01
-**If you are not using any classes or methods marked as `@deprecated` or `@internal` you should be able 
-to upgrade from a 4.x release to 5.0 without changes to your code.**
-### Removed
-* Support for PHP `<7.2`
-* Deprecated methods and classes
+### Other
+* Dropped support for Guzzle <7.0
+* Dropped support for `lcobucci/jwt` <4.1
+* Removed local phone number validation when `giggsey/libphonenumber-for-php` was installed. Phone numbers are
+  validated by the Firebase Service in any case, and even when a phone number was considered valid, in rare
+  cases the Firebase API rejected them still.
+* Replaced `kreait/clock` with `beste/clock`, which implements the proposed [PSR-20 Clock Interface](https://github.com/php-fig/fig-standards/blob/master/proposed/clock.md).
+* The following classes and methods have been removed:
+  * `Kreait\Firebase\Auth\ActionCodeSettings\RawActionCodeSettings`
+  * `Kreait\Firebase\Project\ProjectId`
+  * `Kreait\Firebase\Value\Provider`
+  * `Kreait\Firebase\Project\TenantId`
+  * `Kreait\Firebase\Auth::setCustomUserAttributes()`, use `Kreait\Firebase\Auth::setCustomUserClaims()` instead
+  * `Kreait\Firebase\Auth::deleteCustomUserAttributes()`, use `Kreait\Firebase\Auth::setCustomUserClaims()` with null values instead
+  * `Kreait\Firebase\Contract\Auth::verifyPasswordResetCodeAndReturnEmail()`, use `Kreait\Firebase\Contract\Auth::verifyPasswordResetCode()` instead 
+  * `Kreait\Firebase\Contract\Auth::confirmPasswordResetAndReturnEmail()`, use `Kreait\Firebase\Contract\Auth::confirmPasswordReset()` instead 
+  * `Kreait\Firebase\Auth\UserRecord::$customAttributes`, use `Kreait\Firebase\Auth\UserRecord::$customClaims` instead
+  * `Kreait\Firebase\Factory::withEnabledDebug()`, use `Kreait\Firebase\Factory::withHttpDebugLogger()` instead
+* The following classes are mainly used for validation and have been marked internal. They shouldn't be used directly,
+  as they could be updated with breaking changes or get removed entirely in the future.
+    * `Kreait\Firebase\Value\ClearTextPassword`
+    * `Kreait\Firebase\Value\Email`
+    * `Kreait\Firebase\Value\Uid`
+    * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.20.1...HEAD
-[5.20.1]: https://github.com/kreait/firebase-php/compare/5.20.0...5.20.1
-[5.20.0]: https://github.com/kreait/firebase-php/compare/5.19.0...5.20.0
-[5.19.0]: https://github.com/kreait/firebase-php/compare/5.18.0...5.19.0
-[5.18.0]: https://github.com/kreait/firebase-php/compare/5.17.1...5.18.0
-[5.17.1]: https://github.com/kreait/firebase-php/compare/5.17.0...5.17.1
-[5.17.0]: https://github.com/kreait/firebase-php/compare/5.16.0...5.17.0
-[5.16.0]: https://github.com/kreait/firebase-php/compare/5.15.0...5.16.0
-[5.15.0]: https://github.com/kreait/firebase-php/compare/5.14.1...5.15.0
-[5.14.1]: https://github.com/kreait/firebase-php/compare/5.14.0...5.14.1
-[5.14.0]: https://github.com/kreait/firebase-php/compare/5.13.0...5.14.0
-[5.13.0]: https://github.com/kreait/firebase-php/compare/5.12.0...5.13.0
-[5.12.0]: https://github.com/kreait/firebase-php/compare/5.11.0...5.12.0
-[5.11.0]: https://github.com/kreait/firebase-php/compare/5.10.0...5.11.0
-[5.10.0]: https://github.com/kreait/firebase-php/compare/5.9.0...5.10.0
-[5.9.0]: https://github.com/kreait/firebase-php/compare/5.8.1...5.9.0
-[5.8.1]: https://github.com/kreait/firebase-php/compare/5.8.0...5.8.1
-[5.8.0]: https://github.com/kreait/firebase-php/compare/5.7.0...5.8.0
-[5.7.0]: https://github.com/kreait/firebase-php/compare/5.6.0...5.7.0
-[5.6.0]: https://github.com/kreait/firebase-php/compare/5.5.0...5.6.0
-[5.5.0]: https://github.com/kreait/firebase-php/compare/5.4.0...5.5.0
-[5.4.0]: https://github.com/kreait/firebase-php/compare/5.3.0...5.4.0
-[5.3.0]: https://github.com/kreait/firebase-php/compare/5.2.0...5.3.0
-[5.2.0]: https://github.com/kreait/firebase-php/compare/5.1.1...5.2.0
-[5.1.1]: https://github.com/kreait/firebase-php/compare/5.1.0...5.1.1
-[5.1.0]: https://github.com/kreait/firebase-php/compare/5.0.0...5.1.0
-[5.0.0]: https://github.com/kreait/firebase-php/compare/4.44.0...5.0.0
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.6.1...6.x
+[6.6.1]: https://github.com/kreait/firebase-php/compare/6.6.0...6.6.1
+[6.6.0]: https://github.com/kreait/firebase-php/compare/6.5.1...6.6.0
+[6.5.1]: https://github.com/kreait/firebase-php/compare/6.5.0...6.5.1
+[6.5.0]: https://github.com/kreait/firebase-php/compare/6.4.1...6.5.0
+[6.4.1]: https://github.com/kreait/firebase-php/compare/6.4.0...6.4.1
+[6.4.0]: https://github.com/kreait/firebase-php/compare/6.3.1...6.4.0
+[6.3.1]: https://github.com/kreait/firebase-php/compare/6.3.0...6.3.1
+[6.3.0]: https://github.com/kreait/firebase-php/compare/6.2.0...6.3.0
+[6.2.0]: https://github.com/kreait/firebase-php/compare/6.1.0...6.2.0
+[6.1.0]: https://github.com/kreait/firebase-php/compare/6.0.1...6.1.0
+[6.0.1]: https://github.com/kreait/firebase-php/compare/6.0.0...6.0.1
+[6.0.0]: https://github.com/kreait/firebase-php/compare/5.x...6.0.0

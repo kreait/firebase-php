@@ -11,7 +11,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class ConditionTest extends UnitTestCase
+final class ConditionTest extends UnitTestCase
 {
     /**
      * @dataProvider valueProvider

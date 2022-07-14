@@ -29,7 +29,7 @@ Initializing the Storage component
 
 .. code-block:: php
 
-    use Kreait\Firebase\Storage;
+    use Kreait\Firebase\Contract\Storage;
 
     class MyService
     {

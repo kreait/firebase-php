@@ -18,9 +18,6 @@ class RemoteConfigApiExceptionConverter
 {
     private ErrorResponseParser $responseParser;
 
-    /**
-     * @internal
-     */
     public function __construct()
     {
         $this->responseParser = new ErrorResponseParser();
@@ -43,8 +40,9 @@ class RemoteConfigApiExceptionConverter
     {
         $message = $e->getMessage();
         $code = $e->getCode();
+        $response = $e->getResponse();
 
-        if ($response = $e->getResponse()) {
+        if ($response !== null) {
             $message = $this->responseParser->getErrorReasonFromResponse($response);
             $code = $response->getStatusCode();
         }

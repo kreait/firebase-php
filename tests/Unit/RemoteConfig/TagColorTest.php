@@ -11,7 +11,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class TagColorTest extends UnitTestCase
+final class TagColorTest extends UnitTestCase
 {
     public function testCreateWithInvalidValue(): void
     {

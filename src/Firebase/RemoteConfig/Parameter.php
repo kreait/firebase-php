@@ -89,30 +89,6 @@ class Parameter implements \JsonSerializable
     }
 
     /**
-     * @deprecated 5.10.0
-     * @codeCoverageIgnore
-     *
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        \reset($data);
-        $parameterData = \current($data);
-
-        $parameter = new self((string) \key($data), DefaultValue::fromArray($parameterData['defaultValue'] ?? []));
-
-        foreach ((array) ($parameterData['conditionalValues'] ?? []) as $key => $conditionalValueData) {
-            $parameter = $parameter->withConditionalValue(new ConditionalValue($key, $conditionalValueData['value']));
-        }
-
-        if (\is_string($parameterData['description'] ?? null)) {
-            $parameter->description = $parameterData['description'];
-        }
-
-        return $parameter;
-    }
-
-    /**
      * @return array<string, mixed>
      */
     public function jsonSerialize(): array

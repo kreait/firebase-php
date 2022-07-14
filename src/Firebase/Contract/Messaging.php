@@ -19,6 +19,8 @@ use Kreait\Firebase\Messaging\Topic;
 
 interface Messaging
 {
+    public const BATCH_MESSAGE_LIMIT = 500;
+
     /**
      * @param Message|array<string, mixed> $message
      *

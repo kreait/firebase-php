@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Request;
 
+use Beste\Json;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Request\UpdateUser;
-use Kreait\Firebase\Util\JSON;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-class UpdateUserTest extends TestCase
+final class UpdateUserTest extends TestCase
 {
     /**
      * @dataProvider propertiesProvider
@@ -157,11 +157,11 @@ class UpdateUserTest extends TestCase
             ],
             'customClaims' => [
                 $given + ['customClaims' => $claims = ['admin' => true, 'groupId' => '1234']],
-                $expected + ['customAttributes' => JSON::encode($claims)],
+                $expected + ['customAttributes' => Json::encode($claims)],
             ],
             'customAttributes' => [
                 $given + ['customAttributes' => $claims = ['admin' => true, 'groupId' => '1234']],
-                $expected + ['customAttributes' => JSON::encode($claims)],
+                $expected + ['customAttributes' => Json::encode($claims)],
             ],
         ];
     }

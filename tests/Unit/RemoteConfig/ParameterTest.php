@@ -12,7 +12,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 /**
  * @internal
  */
-class ParameterTest extends UnitTestCase
+final class ParameterTest extends UnitTestCase
 {
     public function testCreateWithImplicitDefaultValue(): void
     {

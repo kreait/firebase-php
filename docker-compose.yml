@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./docker/php/Dockerfile
       args:
-        PHP_VERSION: 7.4
+        PHP_VERSION: 8.1
     image: firebase/php
     container_name: firebase_php
     networks:
@@ -17,7 +17,7 @@ services:
     environment:
       PHP_IDE_CONFIG: "serverName=Docker"
     extra_hosts:
-      docker.host: ${IP:-127.0.0.1}
+      - "docker.host:${IP:-127.0.0.1}"
 networks:
   firebase:
     name: firebase
