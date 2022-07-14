@@ -481,7 +481,7 @@ final class Factory
 
         $apiClient = new Firestore\ApiClient(
             $this->createApiClient([
-                'base_uri' => 'https://firestore.googleapis.com/v1/projects/' . $projectId->value() . '/databases/(default)/',
+                'base_uri' => 'https://firestore.googleapis.com/v1/projects/' . $projectId . '/databases/(default)/',
             ])
         );
 

@@ -30,7 +30,6 @@ use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\RevokedSessionCookie;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\JWT\CustomTokenGenerator;
 use Kreait\Firebase\JWT\IdTokenVerifier;
 use Kreait\Firebase\JWT\SessionCookieVerifier;
@@ -245,10 +244,6 @@ final class Auth implements Contract\Auth
 
     public function importUsers(array $users, array $options = []): ImportUsersResult
     {
-        if ($this->projectId === null) {
-            throw new RuntimeException('Batch import operation requires known projectId.');
-        }
-
         if (\count($users) === 0) {
             throw new InvalidArgumentException('Users must not be empty.');
         }
@@ -259,8 +254,8 @@ final class Auth implements Contract\Auth
             );
         }
 
-        $response = $this->client->importUsers($users, $this->projectId, $options);
-        $body = \Kreait\Firebase\Util\JSON::decode((string) $response->getBody(), true);
+        $response = $this->client->importUsers($users, $options);
+        $body = Json::decode((string) $response->getBody(), true);
 
         $errors = \array_map(
             static function (array $error): ImportUserError {

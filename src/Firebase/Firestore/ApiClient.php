@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Firestore;
 
+use Beste\Json;
 use GuzzleHttp\ClientInterface;
 use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Exception\FirestoreApiExceptionConverter;
 use Kreait\Firebase\Exception\FirestoreException;
-use Kreait\Firebase\Util\JSON;
 use Throwable;
 
 /**
@@ -17,9 +17,7 @@ use Throwable;
 class ApiClient
 {
     private ClientInterface $client;
-
-    /** @var FirestoreApiExceptionConverter */
-    private $errorHandler;
+    private FirestoreApiExceptionConverter $errorHandler;
 
     /**
      * @internal
@@ -31,6 +29,8 @@ class ApiClient
     }
 
     /**
+     * @param array<string, mixed> $options
+     *
      * @return mixed
      * @throws FirebaseException
      * @throws FirestoreException
@@ -41,6 +41,9 @@ class ApiClient
     }
 
     /**
+     * @param array<string, mixed> $data
+     * @param array<string, mixed> $options
+     *
      * @return mixed
      * @throws FirebaseException
      * @throws FirestoreException
@@ -53,6 +56,8 @@ class ApiClient
     }
 
     /**
+     * @param array<string, mixed> $options
+     *
      * @throws FirestoreException
      * @throws FirebaseException
      * @return mixed
@@ -62,7 +67,7 @@ class ApiClient
         try {
             $response = $this->client->request($method, $uri, $options);
 
-            return JSON::decode((string) $response->getBody());
+            return Json::decode((string) $response->getBody());
         } catch (Throwable $e) {
             throw $this->errorHandler->convertException($e);
         }

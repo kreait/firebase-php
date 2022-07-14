@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Utils;
 use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
 use Kreait\Firebase\Auth\CreateSessionCookie\FailedToCreateSessionCookie;
+use Kreait\Firebase\Auth\ImportUserRecord;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
 use Kreait\Firebase\Auth\UserRecord;
@@ -16,6 +17,7 @@ use Kreait\Firebase\Exception\Auth\InvalidOobCode;
 use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\RevokedSessionCookie;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
+use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 /**
@@ -523,6 +525,75 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->assertSame(1, $result->successCount());
         $this->assertSame(2, $result->failureCount());
         $this->assertCount(2, $result->rawErrors());
+    }
+
+    public function testBatchImportUsers(): void
+    {
+        $importResult = $this->auth->importUsers(
+            [
+                ImportUserRecord::new()
+                    ->withUid($uid = \bin2hex(\random_bytes(5)))
+                    ->withDisplayName($displayName = 'Some display name')
+                    ->withPhotoUrl($photoUrl = 'https://example.org/photo.jpg')
+                    ->withPhoneNumber($phoneNumber = '+1234567'.\random_int(1000, 9999))
+                    ->withVerifiedEmail($email = $uid.'@example.org')
+                    ->withCustomClaims($claims = ['admin' => true]),
+            ]
+        );
+
+        $this->assertEquals(1, $importResult->getSuccessCount());
+
+        $user = $this->auth->getUser($uid);
+
+        $this->assertSame($uid, $user->uid);
+        $this->assertSame($displayName, $user->displayName);
+        $this->assertSame($photoUrl, $user->photoUrl); // Firebase stores the photo url in the email provider info
+        $this->assertSame($phoneNumber, $user->phoneNumber);
+        $this->assertSame($email, $user->email);
+        $this->assertTrue($user->emailVerified);
+        $this->assertEquals($claims, $user->customClaims);
+        $this->assertFalse($user->disabled);
+
+        $this->auth->deleteUser($user->uid);
+    }
+
+    public function testBachImportedUserReplacesExistingUsers(): void
+    {
+        $this->auth->createUser(
+            CreateUser::new()
+                ->withUid($uid = \bin2hex(\random_bytes(5)))
+                ->withVerifiedEmail($email = $uid.'@example.org')
+                ->withPhoneNumber('+1234567'.\random_int(1000, 9999))
+                ->withPhotoUrl('https://example.org/old-photo.jpg')
+                ->withDisplayName('Old display name')
+        );
+
+        $importResult = $this->auth->importUsers(
+            [
+                ImportUserRecord::new()
+                    ->withUid($uid)
+                    ->withDisplayName($newDisplayName = 'Some display name')
+                    ->withPhotoUrl($newPhotoUrl = 'https://example.org/photo.jpg')
+                    ->withVerifiedEmail($email)
+                    ->markAsDisabled(),
+            ]
+        );
+
+        $this->assertEquals(1, $importResult->getSuccessCount());
+
+        $user = $this->auth->getUser($uid);
+
+        $this->assertSame($uid, $user->uid);
+        $this->assertSame($newDisplayName, $user->displayName);
+        $this->assertSame($newPhotoUrl, $user->photoUrl);
+        $this->assertSame($email, $user->email);
+        $this->assertTrue($user->emailVerified);
+        $this->assertTrue($user->disabled);
+
+        // Values that are not provided with import request fallback to default state
+        $this->assertNull($user->phoneNumber);
+
+        $this->auth->deleteUser($user->uid);
     }
 
     public function testBatchForceDeleteUsers(): void
