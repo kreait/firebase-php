@@ -4,11 +4,20 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Database;
 
+use function array_fill_keys;
+use function array_keys;
+use function array_map;
+use function basename;
+use function dirname;
+use function is_array;
 use Kreait\Firebase\Database\Reference\Validator;
 use Kreait\Firebase\Exception\DatabaseException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
+use function ltrim;
 use Psr\Http\Message\UriInterface;
+use function sprintf;
+use function trim;
 
 /**
  * A Reference represents a specific location in your database and can be used
@@ -19,9 +28,8 @@ use Psr\Http\Message\UriInterface;
 class Reference
 {
     private UriInterface $uri;
-
     private ApiClient $apiClient;
-
+    private UrlBuilder $urlBuilder;
     private Validator $validator;
 
     /**
@@ -29,13 +37,18 @@ class Reference
      *
      * @throws InvalidArgumentException if the reference URI is invalid
      */
-    public function __construct(UriInterface $uri, ApiClient $apiClient, ?Validator $validator = null)
-    {
+    public function __construct(
+        UriInterface $uri,
+        ApiClient    $apiClient,
+        UrlBuilder   $urlBuilder,
+        ?Validator   $validator = null
+    ) {
         $this->validator = $validator ?? new Validator();
         $this->validator->validateUri($uri);
 
         $this->uri = $uri;
         $this->apiClient = $apiClient;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -49,7 +62,7 @@ class Reference
      */
     public function getKey(): ?string
     {
-        $key = \basename($this->getPath());
+        $key = basename($this->getPath());
 
         return $key !== '' ? $key : null;
     }
@@ -59,7 +72,7 @@ class Reference
      */
     public function getPath(): string
     {
-        return \trim($this->uri->getPath(), '/');
+        return trim($this->uri->getPath(), '/');
     }
 
     /**
@@ -71,13 +84,18 @@ class Reference
      */
     public function getParent(): self
     {
-        $parentPath = \dirname($this->getPath());
+        $parentPath = dirname($this->getPath());
 
         if ($parentPath === '.') {
             throw new OutOfRangeException('Cannot get parent of root reference');
         }
 
-        return new self($this->uri->withPath('/'.\ltrim($parentPath, '/')), $this->apiClient, $this->validator);
+        return new self(
+            $this->uri->withPath('/'. ltrim($parentPath, '/')),
+            $this->apiClient,
+            $this->urlBuilder,
+            $this->validator
+        );
     }
 
     /**
@@ -87,7 +105,7 @@ class Reference
      */
     public function getRoot(): self
     {
-        return new self($this->uri->withPath('/'), $this->apiClient, $this->validator);
+        return new self($this->uri->withPath('/'), $this->apiClient, $this->urlBuilder, $this->validator);
     }
 
     /**
@@ -102,10 +120,15 @@ class Reference
      */
     public function getChild(string $path): self
     {
-        $childPath = \sprintf('/%s/%s', \trim($this->uri->getPath(), '/'), \trim($path, '/'));
+        $childPath = sprintf('/%s/%s', trim($this->uri->getPath(), '/'), trim($path, '/'));
 
         try {
-            return new self($this->uri->withPath($childPath), $this->apiClient, $this->validator);
+            return new self(
+                $this->uri->withPath($childPath),
+                $this->apiClient,
+                $this->urlBuilder,
+                $this->validator
+            );
         } catch (\InvalidArgumentException $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
@@ -243,11 +266,11 @@ class Reference
     {
         $snapshot = $this->shallow()->getSnapshot();
 
-        if (\is_array($value = $snapshot->getValue())) {
-            return \array_map('strval', \array_keys($value));
+        if (is_array($value = $snapshot->getValue())) {
+            return array_map('strval', array_keys($value));
         }
 
-        throw new OutOfRangeException(\sprintf('%s has no children with keys', $this));
+        throw new OutOfRangeException(sprintf('%s has no children with keys', $this));
     }
 
     /**
@@ -277,9 +300,9 @@ class Reference
     public function set($value): self
     {
         if ($value === null) {
-            $this->apiClient->remove($this->uri);
+            $this->apiClient->remove($this->uri->getPath());
         } else {
-            $this->apiClient->set($this->uri, $value);
+            $this->apiClient->set($this->uri->getPath(), $value);
         }
 
         return $this;
@@ -292,7 +315,7 @@ class Reference
      */
     public function getSnapshot(): Snapshot
     {
-        $value = $this->apiClient->get($this->uri);
+        $value = $this->apiClient->get($this->uri->getPath());
 
         return new Snapshot($this, $value);
     }
@@ -320,10 +343,10 @@ class Reference
     {
         $value ??= [];
 
-        $newKey = $this->apiClient->push($this->uri, $value);
-        $newPath = \sprintf('%s/%s', $this->uri->getPath(), $newKey);
+        $newKey = $this->apiClient->push($this->uri->getPath(), $value);
+        $newPath = sprintf('%s/%s', $this->uri->getPath(), $newKey);
 
-        return new self($this->uri->withPath($newPath), $this->apiClient, $this->validator);
+        return new self($this->uri->withPath($newPath), $this->apiClient, $this->urlBuilder, $this->validator);
     }
 
     /**
@@ -337,7 +360,7 @@ class Reference
      */
     public function remove(): self
     {
-        $this->apiClient->remove($this->uri);
+        $this->apiClient->remove($this->uri->getPath());
 
         return $this;
     }
@@ -357,7 +380,7 @@ class Reference
     public function removeChildren(array $keys): self
     {
         $this->update(
-            \array_fill_keys($keys, null)
+            array_fill_keys($keys, null)
         );
 
         return $this;
@@ -383,7 +406,7 @@ class Reference
      */
     public function update(array $values): self
     {
-        $this->apiClient->update($this->uri, $values);
+        $this->apiClient->update($this->uri->getPath(), $values);
 
         return $this;
     }

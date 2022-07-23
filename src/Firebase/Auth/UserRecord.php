@@ -10,7 +10,7 @@ use Kreait\Firebase\Util\DT;
 
 class UserRecord implements \JsonSerializable
 {
-    public string $uid;
+    public string $uid = '';
     public bool $emailVerified = false;
     public bool $disabled = false;
     public UserMetaData $metadata;
@@ -30,7 +30,6 @@ class UserRecord implements \JsonSerializable
     public function __construct()
     {
         $this->metadata = new UserMetaData();
-        $this->uid = '';
     }
 
     /**

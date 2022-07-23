@@ -13,6 +13,8 @@ use Throwable;
 
 /**
  * @internal
+ * @group auth-emulator
+ * @group emulator
  */
 final class CustomTokenViaGoogleIamTest extends IntegrationTestCase
 {

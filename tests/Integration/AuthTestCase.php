@@ -192,7 +192,7 @@ abstract class AuthTestCase extends IntegrationTestCase
 
         $link = $this->auth->getEmailVerificationLink($user->email, null, 'fr');
 
-        if (self::isEmulated()) {
+        if (self::authIsEmulated()) {
             $this->assertStringNotContainsString('lang=fr', $link);
         } else {
             $this->assertStringContainsString('lang=fr', $link);

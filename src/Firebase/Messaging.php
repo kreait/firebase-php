@@ -208,9 +208,8 @@ final class Messaging implements Contract\Messaging
         $message = $message instanceof Message ? $message : CloudMessage::fromArray($message);
 
         $message = (new SetApnsPushTypeIfNeeded())($message);
-        $message = (new SetApnsContentAvailableIfNeeded())($message);
 
-        return $message;
+        return (new SetApnsContentAvailableIfNeeded())($message);
     }
 
     private function messageHasTarget(Message $message): bool

@@ -10,7 +10,6 @@ use GuzzleHttp\Psr7\Request;
 use Kreait\Firebase\Exception\DatabaseApiExceptionConverter;
 use Kreait\Firebase\Exception\DatabaseException;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
 use Throwable;
 
 /**
@@ -20,37 +19,35 @@ class ApiClient
 {
     private ClientInterface $client;
     protected DatabaseApiExceptionConverter $errorHandler;
+    private UrlBuilder $resourceUrlBuilder;
 
-    public function __construct(ClientInterface $httpClient)
+    public function __construct(ClientInterface $httpClient, UrlBuilder $resourceUrlBuilder)
     {
         $this->client = $httpClient;
         $this->errorHandler = new DatabaseApiExceptionConverter();
+        $this->resourceUrlBuilder = $resourceUrlBuilder;
     }
 
     /**
-     * @param UriInterface|string $uri
-     *
      * @throws DatabaseException
      *
      * @return mixed
      */
-    public function get($uri)
+    public function get(string $path)
     {
-        $response = $this->requestApi('GET', $uri);
+        $response = $this->requestApi('GET', $path);
 
         return Json::decode((string) $response->getBody(), true);
     }
 
     /**
-     * @param UriInterface|string $uri
-     *
      * @throws DatabaseException
      *
      * @return array<string, mixed>
      */
-    public function getWithETag($uri): array
+    public function getWithETag(string $path): array
     {
-        $response = $this->requestApi('GET', $uri, [
+        $response = $this->requestApi('GET', $path, [
             'headers' => [
                 'X-Firebase-ETag' => 'true',
             ],
@@ -66,31 +63,28 @@ class ApiClient
     }
 
     /**
-     * @param UriInterface|string $uri
      * @param mixed $value
      *
      * @throws DatabaseException
      *
      * @return mixed
      */
-    public function set($uri, $value)
+    public function set(string $path, $value)
     {
-        $response = $this->requestApi('PUT', $uri, ['json' => $value]);
+        $response = $this->requestApi('PUT', $path, ['json' => $value]);
 
         return Json::decode((string) $response->getBody(), true);
     }
 
     /**
-     * @param UriInterface|string $uri
      * @param mixed $value
      *
      * @throws DatabaseException
-     *
      * @return mixed
      */
-    public function setWithEtag($uri, $value, string $etag)
+    public function setWithEtag(string $path, $value, string $etag)
     {
-        $response = $this->requestApi('PUT', $uri, [
+        $response = $this->requestApi('PUT', $path, [
             'headers' => [
                 'if-match' => $etag,
             ],
@@ -101,13 +95,11 @@ class ApiClient
     }
 
     /**
-     * @param UriInterface|string $uri
-     *
      * @throws DatabaseException
      */
-    public function removeWithEtag($uri, string $etag): void
+    public function removeWithEtag(string $path, string $etag): void
     {
-        $this->requestApi('DELETE', $uri, [
+        $this->requestApi('DELETE', $path, [
             'headers' => [
                 'if-match' => $etag,
             ],
@@ -115,18 +107,16 @@ class ApiClient
     }
 
     /**
-     * @param UriInterface|string $uri
-     *
      * @throws DatabaseException
      *
      * @return mixed
      */
-    public function updateRules($uri, RuleSet $ruleSet)
+    public function updateRules(string $path, RuleSet $ruleSet)
     {
         $rules = $ruleSet->getRules();
         $encodedRules = Json::encode((object) $rules);
 
-        $response = $this->requestApi('PUT', $uri, [
+        $response = $this->requestApi('PUT', $path, [
             'body' => $encodedRules,
         ]);
 
@@ -134,50 +124,47 @@ class ApiClient
     }
 
     /**
-     * @param UriInterface|string $uri
      * @param mixed $value
      *
      * @throws DatabaseException
      */
-    public function push($uri, $value): string
+    public function push(string $path, $value): string
     {
-        $response = $this->requestApi('POST', $uri, ['json' => $value]);
+        $response = $this->requestApi('POST', $path, ['json' => $value]);
 
         return Json::decode((string) $response->getBody(), true)['name'];
     }
 
     /**
-     * @param UriInterface|string $uri
-     *
      * @throws DatabaseException
      */
-    public function remove($uri): void
+    public function remove(string $path): void
     {
-        $this->requestApi('DELETE', $uri);
+        $this->requestApi('DELETE', $path);
     }
 
     /**
-     * @param UriInterface|string $uri
-     * @param array<mixed> $values
+     * @param array<array-key, mixed> $values
      *
      * @throws DatabaseException
      */
-    public function update($uri, array $values): void
+    public function update(string $path, array $values): void
     {
-        $this->requestApi('PATCH', $uri, ['json' => $values]);
+        $this->requestApi('PATCH', $path, ['json' => $values]);
     }
 
     /**
-     * @param UriInterface|string $uri
      * @param array<string, mixed>|null $options
      *
      * @throws DatabaseException
      */
-    private function requestApi(string $method, $uri, ?array $options = null): ResponseInterface
+    private function requestApi(string $method, string $path, ?array $options = []): ResponseInterface
     {
         $options ??= [];
 
-        $request = new Request($method, $uri);
+        $url = $this->resourceUrlBuilder->getUrl($path);
+
+        $request = new Request($method, $url);
 
         try {
             return $this->client->send($request, $options);

@@ -11,6 +11,8 @@ use Kreait\Firebase\Util\DT;
 
 /**
  * @internal
+ * @group database-emulator
+ * @group emulator
  */
 final class ReferenceTest extends DatabaseTestCase
 {

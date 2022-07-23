@@ -16,11 +16,21 @@ class Validator
     /**
      * Checks the reference URI for invalid properties.
      *
-     * @throws InvalidArgumentException on
+     * @throws InvalidArgumentException
      */
     public function validateUri(UriInterface $uri): void
     {
-        $path = \trim($uri->getPath(), '/');
+        $this->validatePath($uri->getPath());
+    }
+
+    /**
+     * Checks a reference path for invalid properties.
+     *
+     * @throws InvalidArgumentException
+     */
+    public function validatePath(string $path): void
+    {
+        $path = trim($path, '/');
 
         $this->validateDepth($path);
 
