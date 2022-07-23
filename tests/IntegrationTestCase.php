@@ -63,9 +63,14 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         return self::randomString($suffix.'@domain.tld');
     }
 
-    protected static function isEmulated(): bool
+    protected static function authIsEmulated(): bool
     {
-        return !\in_array(Util::getenv('FIREBASE_AUTH_EMULATOR_HOST'), [null, ''], true);
+        return Util::authEmulatorHost() !== '';
+    }
+
+    protected static function databaseIsEmulated(): bool
+    {
+        return Util::rtdbEmulatorHost() !== '';
     }
 
     private static function credentialsFromFile(): ?ServiceAccount

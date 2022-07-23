@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase;
 
+use function array_filter;
+use function array_key_exists;
 use Beste\Clock\SystemClock;
 use Beste\Clock\WrappingClock;
+use function get_class;
 use Google\Auth\ApplicationDefaultCredentials;
 use Google\Auth\Cache\MemoryCacheItemPool;
 use Google\Auth\Credentials\ServiceAccountCredentials;
@@ -38,7 +41,9 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use function sprintf;
 use StellaMaris\Clock\ClockInterface;
+use Stringable;
 use Throwable;
 
 final class Factory
@@ -54,8 +59,10 @@ final class Factory
         'https://www.googleapis.com/auth/securetoken',
     ];
 
-    private ?string $databaseUri = null;
+    /** @var non-empty-string|null  */
+    private ?string $databaseUrl = null;
 
+    /** @var non-empty-string|null  */
     private ?string $defaultStorageBucket = null;
 
     private ?ServiceAccount $serviceAccount = null;
@@ -71,10 +78,6 @@ final class Factory
     private CacheItemPoolInterface $authTokenCache;
 
     private bool $discoveryIsDisabled = false;
-
-    private static string $databaseUriPattern = 'https://%s.firebaseio.com';
-
-    private static string $storageBucketNamePattern = '%s.appspot.com';
 
     private ClockInterface $clock;
 
@@ -149,8 +152,14 @@ final class Factory
      */
     public function withDatabaseUri($uri): self
     {
+        $url = trim($uri instanceof UriInterface ? $uri->__toString() : $uri);
+
+        if ($url === '') {
+            throw new InvalidArgumentException('The database URI cannot be empty');
+        }
+
         $factory = clone $this;
-        $factory->databaseUri = (string) GuzzleUtils::uriFor($uri);
+        $factory->databaseUrl = $url;
 
         return $factory;
     }
@@ -174,6 +183,9 @@ final class Factory
         return $factory;
     }
 
+    /**
+     * @param non-empty-string $name
+     */
     public function withDefaultStorageBucket(string $name): self
     {
         $factory = clone $this;
@@ -337,19 +349,22 @@ final class Factory
         return null;
     }
 
-    private function getDatabaseUri(): UriInterface
+    /**
+     * @return non-empty-string
+     */
+    private function getDatabaseUrl(): string
     {
-        if ($this->databaseUri === null) {
-            $this->databaseUri = \sprintf(self::$databaseUriPattern, $this->getProjectId());
+        if ($this->databaseUrl === null) {
+            $this->databaseUrl = sprintf('https://%s.firebaseio.com', $this->getProjectId());
         }
 
-        return GuzzleUtils::uriFor($this->databaseUri);
+        return $this->databaseUrl;
     }
 
     private function getStorageBucketName(): string
     {
         if ($this->defaultStorageBucket === null) {
-            $this->defaultStorageBucket = \sprintf(self::$storageBucketNamePattern, $this->getProjectId());
+            $this->defaultStorageBucket = sprintf('%s.appspot.com', $this->getProjectId());
         }
 
         return $this->defaultStorageBucket;
@@ -414,14 +429,20 @@ final class Factory
 
     public function createDatabase(): Contract\Database
     {
-        $middlewares = \array_filter([
+        $middlewares = array_filter([
             Firebase\Http\Middleware::ensureJsonSuffix(),
             $this->databaseAuthVariableOverrideMiddleware,
         ]);
 
         $http = $this->createApiClient(null, $middlewares);
+        $databaseUrl = $this->getDatabaseUrl();
+        $resourceUrlBuilder = Firebase\Database\UrlBuilder::create($databaseUrl);
 
-        return new Database($this->getDatabaseUri(), new Database\ApiClient($http));
+        return new Database(
+            GuzzleUtils::uriFor($databaseUrl),
+            new Database\ApiClient($http, $resourceUrlBuilder),
+            $resourceUrlBuilder
+        );
     }
 
     public function createRemoteConfig(): Contract\RemoteConfig
@@ -460,7 +481,7 @@ final class Factory
     }
 
     /**
-     * @param \Stringable|string|null $defaultDynamicLinksDomain
+     * @param Stringable|string|null $defaultDynamicLinksDomain
      */
     public function createDynamicLinksService($defaultDynamicLinksDomain = null): Contract\DynamicLinks
     {
@@ -545,7 +566,7 @@ final class Factory
             $credentials = $this->getGoogleAuthTokenCredentials();
 
             if ($credentials !== null) {
-                $credentials = \get_class($credentials);
+                $credentials = get_class($credentials);
             }
         } catch (Throwable $e) {
             $credentials = $e->getMessage();
@@ -554,7 +575,7 @@ final class Factory
         try {
             if (($serviceAccount = $this->getServiceAccount()) !== null) {
                 $serviceAccount = $serviceAccount->asArray();
-                if (\array_key_exists('private_key', $serviceAccount)) {
+                if (array_key_exists('private_key', $serviceAccount)) {
                     $serviceAccount['private_key'] = '{exists, redacted}';
                 }
             }
@@ -563,7 +584,7 @@ final class Factory
         }
 
         try {
-            $databaseUrl = (string) $this->getDatabaseUri();
+            $databaseUrl = $this->getDatabaseUrl();
         } catch (Throwable $e) {
             $databaseUrl = $e->getMessage();
         }
@@ -575,8 +596,8 @@ final class Factory
             'projectId' => $projectId,
             'serviceAccount' => $serviceAccount,
             'tenantId' => $this->tenantId,
-            'tokenCacheType' => \get_class($this->authTokenCache),
-            'verifierCacheType' => \get_class($this->verifierCache),
+            'tokenCacheType' => get_class($this->authTokenCache),
+            'verifierCacheType' => get_class($this->verifierCache),
         ];
     }
 

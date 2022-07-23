@@ -8,6 +8,9 @@ use GuzzleHttp\Client;
 use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
+/**
+ * @internal
+ */
 abstract class DatabaseTestCase extends IntegrationTestCase
 {
     protected static string $refPrefix;

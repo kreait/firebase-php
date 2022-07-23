@@ -45,4 +45,15 @@ final class Util
 
         return '';
     }
+
+    public static function rtdbEmulatorHost(): string
+    {
+        $emulatorHost = self::getenv('FIREBASE_DATABASE_EMULATOR_HOST');
+
+        if (!\in_array($emulatorHost, [null, ''], true)) {
+            return $emulatorHost;
+        }
+
+        return '';
+    }
 }

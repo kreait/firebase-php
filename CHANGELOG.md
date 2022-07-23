@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Added
+
+* Added support for the Firebase Auth Emulator.
+  ([#722](https://github.com/kreait/firebase-php/pull/722)) ([Documentation](https://firebase-php.readthedocs.io/en/latest/testing.html))
+
 ### Changed
 
 * The default HTTP Client options have been updated

@@ -9,6 +9,7 @@ use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\Query;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\Snapshot;
+use Kreait\Firebase\Database\UrlBuilder;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
 use Kreait\Firebase\Tests\UnitTestCase;
@@ -29,8 +30,13 @@ final class ReferenceTest extends UnitTestCase
         parent::setUp();
 
         $this->apiClient = $this->createMock(ApiClient::class);
+        $url = 'https://project.domain.tld/parent/key';
 
-        $this->reference = new Reference(new Uri('http://domain.tld/parent/key'), $this->apiClient);
+        $this->reference = new Reference(
+            new Uri($url),
+            $this->apiClient,
+            UrlBuilder::create($url)
+        );
     }
 
     public function testGetKey(): void

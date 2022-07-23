@@ -22,17 +22,21 @@ Using the Firebase Emulator Suite
 For an introduction to the Firebase Emulator suite, please visit the official documentation:
 `https://firebase.google.com/docs/emulator-suite <https://firebase.google.com/docs/emulator-suite>`_
 
+.. warning::
+    Only the Auth and Realtime Database Emulators are currently supported in this PHP SDK.
+
 To use the Firebase Emulator Suite, you must first `install it <https://firebase.google.com/docs/cli>`_.
 
-.. warning::
-    Only the Auth Emulator is currently supported. The other Emulators are not yet available,
-    and side-effects could occur.
+See the `official documentation <https://firebase.google.com/docs/emulator-suite/install_and_configure#startup>`_
+for instructions how to work with it.
+
+The emulator suite must be running otherwise the PHP SDK can't connect to it.
 
 Auth Emulator
 -------------
 
-In your project, create a `firebase.json` file and make sure that at least the following fields are set
-(the port number can be changed to your requirements):
+If not already present, create a `firebase.json` file in the root of your project and make sure that at least the
+following fields are set (the port number can be changed to your requirements):
 
 .. code-block:: js
 
@@ -44,7 +48,7 @@ In your project, create a `firebase.json` file and make sure that at least the f
       }
     }
 
-The Firebase Admin SDK automatically connects to the Authentication emulator when the
+Firebase Admin SDKs automatically connect to the Authentication emulator when the
 ``FIREBASE_AUTH_EMULATOR_HOST`` environment variable is set.
 
 .. code-block:: bash
@@ -58,3 +62,30 @@ development and testing. Please make sure not to set the environment variable in
 When connecting to the Authentication emulator, you will need to specify a project ID. You can pass a project ID to
 the Factory directly or set the ``GOOGLE_CLOUD_PROJECT`` environment variable. Note that you do not need to use your
 real Firebase project ID; the Authentication emulator will accept any project ID.
+
+Realtime Database Emulator
+--------------------------
+
+If not already present, create a `firebase.json` file in the root of your project and make sure that at least the
+following fields are set (the port number can be changed to your requirements):
+
+.. code-block:: js
+
+    {
+      "emulators": {
+        "database": {
+          "port": 9100
+        }
+      }
+    }
+
+.. note::
+    The Realtime Database Emulator uses port ``9000`` by default. This port is also used by PHP-FPM, so it is
+    recommended to chose one that differs to not run into conflicts.
+
+Firebase Admin SDKs automatically connect to the Realtime Database emulator when the
+``FIREBASE_DATABASE_EMULATOR_HOST`` environment variable is set.
+
+.. code-block:: bash
+
+    $ export FIREBASE_DATABASE_EMULATOR_HOST="localhost:9100"

@@ -116,7 +116,7 @@ final class AndroidConfig implements JsonSerializable
     }
 
     /**
-     * @param mixed $value
+     * @param int|string $value
      *
      * @throws InvalidArgument
      *
@@ -131,7 +131,7 @@ final class AndroidConfig implements JsonSerializable
             return sprintf('%ds', $value);
         }
 
-        if (!is_string($value)) {
+        if (!is_string($value) || $value === '') {
             throw new InvalidArgument($errorMessage);
         }
 
@@ -140,7 +140,7 @@ final class AndroidConfig implements JsonSerializable
         }
 
         if (preg_match($expectedPattern, $value) === 1) {
-            return sprintf('%s', $value);
+            return $value;
         }
 
         throw new InvalidArgument($errorMessage);

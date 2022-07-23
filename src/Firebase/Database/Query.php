@@ -29,7 +29,7 @@ class Query
     private Reference $reference;
     private ApiClient $apiClient;
     /** @var Filter[] */
-    private array $filters;
+    private array $filters = [];
     private ?Sorter $sorter = null;
 
     /**
@@ -39,7 +39,6 @@ class Query
     {
         $this->reference = $reference;
         $this->apiClient = $apiClient;
-        $this->filters = [];
     }
 
     /**
@@ -60,7 +59,7 @@ class Query
     public function getSnapshot(): Snapshot
     {
         try {
-            $value = $this->apiClient->get($this->getUri());
+            $value = $this->apiClient->get($this->getUri()->getPath());
         } catch (DatabaseNotFound $e) {
             throw $e;
         } catch (DatabaseException $e) {
