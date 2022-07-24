@@ -39,14 +39,14 @@
         "symfony/polyfill-php81": "^1.23"
     },
     "require-dev": {
-        "google/cloud-firestore": "^1.19.3",
+        "google/cloud-firestore": "^1.24",
         "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^1.4",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "phpunit/phpunit": "^9.5.10",
-        "rector/rector": "^0.13.4",
-        "symfony/var-dumper": "^5.4|^6.0",
-        "symplify/easy-coding-standard": "^10.0"
+        "phpstan/phpstan": "^1.8.2",
+        "phpstan/phpstan-phpunit": "^1.1.1",
+        "phpunit/phpunit": "^9.5.21",
+        "rector/rector": "^0.13.9",
+        "symfony/var-dumper": "^5.4|^6.1",
+        "symplify/easy-coding-standard": "^10.3.3"
     },
     "suggest": {
         "google/cloud-firestore": "^1.0 to use the Firestore component"
