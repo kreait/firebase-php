@@ -11,7 +11,7 @@ final class HttpClientOptions
     /**
      * The amount of seconds to wait while connecting to a server.
      *
-     * Defaults to indefinitely.
+     * Defaults to 15 seconds.
      */
     private ?float $connectTimeout = 15;
 
@@ -25,7 +25,7 @@ final class HttpClientOptions
     /**
      * The amount of seconds to wait for a full request (connect + transfer + read) to complete.
      *
-     * Defaults to indefinitely.
+     * Defaults to 30 seconds.
      */
     private ?float $timeout = 30;
 
