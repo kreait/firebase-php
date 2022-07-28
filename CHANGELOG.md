@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Changed
+
+* The default HTTP Client options have been updated
+  ([#723](https://github.com/kreait/firebase-php/issues/723))
+  * Connect Timeout from ∞ to 15 seconds
+  * Timeout from ∞ to 30 seconds
+
 ## [6.6.1] - 2022-07-12
 
 ### Fixed
