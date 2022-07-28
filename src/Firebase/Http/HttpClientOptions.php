@@ -13,7 +13,7 @@ final class HttpClientOptions
      *
      * Defaults to indefinitely.
      */
-    private ?float $connectTimeout = null;
+    private ?float $connectTimeout = 15;
 
     /**
      * The amount of seconds to wait while reading a streamed body.
@@ -27,7 +27,7 @@ final class HttpClientOptions
      *
      * Defaults to indefinitely.
      */
-    private ?float $timeout = null;
+    private ?float $timeout = 30;
 
     /**
      * The proxy that all requests should be passed through.
