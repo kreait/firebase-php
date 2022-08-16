@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.7.1] - 2022-08-17
+
 ### Fixed
 
 * Limits and filters were not applied to Realtime Database Queries
@@ -11,7 +13,7 @@
 
 ### Added
 
-* Added support for the Firebase Auth Emulator.
+* Added support for the Firebase Realtime Database Emulator.
   ([#722](https://github.com/kreait/firebase-php/pull/722)) ([Documentation](https://firebase-php.readthedocs.io/en/latest/testing.html))
 
 ### Changed
@@ -271,7 +273,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.7.0...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.7.1...6.x
+[6.7.1]: https://github.com/kreait/firebase-php/compare/6.7.0...6.7.1
 [6.7.0]: https://github.com/kreait/firebase-php/compare/6.6.1...6.7.0
 [6.6.1]: https://github.com/kreait/firebase-php/compare/6.6.0...6.6.1
 [6.6.0]: https://github.com/kreait/firebase-php/compare/6.5.1...6.6.0
