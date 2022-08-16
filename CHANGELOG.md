@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* Limits and filters were not applied to Realtime Database Queries
+  ([#725](https://github.com/kreait/firebase-php/pull/725))
+
 ## [6.7.0] - 2022-07-28
 
 ### Added

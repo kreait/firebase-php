@@ -6,7 +6,9 @@ namespace Kreait\Firebase\Database;
 
 use Beste\Json;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Exception\DatabaseApiExceptionConverter;
 use Kreait\Firebase\Exception\DatabaseException;
 use Psr\Http\Message\ResponseInterface;
@@ -162,7 +164,12 @@ class ApiClient
     {
         $options ??= [];
 
-        $url = $this->resourceUrlBuilder->getUrl($path);
+        $uri = new Uri($path);
+
+        $url = $this->resourceUrlBuilder->getUrl(
+            $uri->getPath(),
+            Query::parse($uri->getQuery()),
+        );
 
         $request = new Request($method, $url);
 

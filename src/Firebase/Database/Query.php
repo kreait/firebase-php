@@ -58,8 +58,12 @@ class Query
      */
     public function getSnapshot(): Snapshot
     {
+        $uri = $this->getUri();
+
+        $pathAndQuery = $uri->getPath().'?'.$uri->getQuery();
+
         try {
-            $value = $this->apiClient->get($this->getUri()->getPath());
+            $value = $this->apiClient->get($pathAndQuery);
         } catch (DatabaseNotFound $e) {
             throw $e;
         } catch (DatabaseException $e) {
