@@ -23,7 +23,14 @@ final class SendMessage implements MessageRequest, RequestInterface
     public function __construct(string $projectId, Message $message, bool $validateOnly = false)
     {
         $uri = Utils::uriFor('https://fcm.googleapis.com/v1/projects/'.$projectId.'/messages:send');
-        $body = Utils::streamFor(Json::encode(['message' => $message, 'validate_only' => $validateOnly]));
+
+        $payload = ['message' => $message];
+
+        if ($validateOnly === true) {
+            $payload['validate_only'] = true;
+        }
+
+        $body = Utils::streamFor(Json::encode($payload));
         $headers = [
             'Content-Type' => 'application/json; charset=UTF-8',
             'Content-Length' => (string) $body->getSize(),
