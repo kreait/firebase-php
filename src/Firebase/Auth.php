@@ -104,6 +104,39 @@ final class Auth implements Contract\Auth
         return $users;
     }
 
+
+    public function recentlyRegisteredUsers(int $limit = 10): array
+    {
+        $response = $this->client->queryUsers( $limit, 0, 'CREATED_AT', 'DESC');
+
+        $data = Json::decode((string) $response->getBody(), true);
+
+        $users = [];
+
+        foreach ($data['userInfo'] ?? [] as $userData) {
+            $userRecord = UserRecord::fromResponseData($userData);
+            $users[$userRecord->uid] = $userRecord;
+        }
+
+        return $users;
+    }
+
+    public function lastActiveUsers(int $limit = 10): array
+    {
+        $response = $this->client->queryUsers( $limit, 0, 'LAST_LOGIN_AT', 'DESC');
+
+        $data = Json::decode((string) $response->getBody(), true);
+
+        $users = [];
+
+        foreach ($data['userInfo'] ?? [] as $userData) {
+            $userRecord = UserRecord::fromResponseData($userData);
+            $users[$userRecord->uid] = $userRecord;
+        }
+
+        return $users;
+    }
+
     public function listUsers(int $maxResults = 1000, int $batchSize = 1000): Traversable
     {
         $pageToken = null;

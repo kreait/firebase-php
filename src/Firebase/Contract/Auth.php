@@ -52,6 +52,24 @@ interface Auth
     public function getUsers(array $uids): array;
 
     /**
+     *
+     * @throws Exception\FirebaseException
+     * @throws Exception\AuthException
+     *
+     * @return array<string, UserRecord|null>
+     */
+    public function recentlyRegisteredUsers(int $limit): array;
+
+    /**
+     *
+     * @throws Exception\FirebaseException
+     * @throws Exception\AuthException
+     *
+     * @return array<string, UserRecord|null>
+     */
+    public function lastActiveUsers(int $limit): array;
+
+    /**
      * @throws Exception\FirebaseException
      * @throws Exception\AuthException
      *
