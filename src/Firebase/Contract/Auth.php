@@ -13,6 +13,7 @@ use Kreait\Firebase\Auth\DeleteUsersResult;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
 use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
 use Kreait\Firebase\Auth\SignInResult;
+use Kreait\Firebase\Auth\UserQuery;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Exception;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
@@ -51,6 +52,16 @@ interface Auth
      * @throws Exception\FirebaseException
      */
     public function getUsers(array $uids): array;
+
+    /**
+     * @param UserQuery|array<int, mixed> $query
+     *
+     * @throws Exception\FirebaseException
+     * @throws Exception\AuthException
+     *
+     * @return array<string, UserRecord|null>
+     */
+    public function queryUsers($query): array;
 
     /**
      * @throws Exception\FirebaseException
