@@ -175,6 +175,21 @@ class ApiClient
     }
 
     /**
+     *
+     * @param UserQuery $query
+     *
+     * @return ResponseInterface
+     *
+     * @throws AuthException
+     */
+    public function queryUsers(UserQuery $query): ResponseInterface
+    {
+        $url = $this->awareAuthResourceUrlBuilder->getUrl('/accounts:query');
+
+        return $this->requestApi($url, $query->jsonSerialize());
+    }
+
+    /**
      * @throws ExpiredOobCode
      * @throws InvalidOobCode
      * @throws OperationNotAllowed
