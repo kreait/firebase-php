@@ -13,10 +13,10 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
  */
 class UserQuery implements \JsonSerializable
 {
-    private int $limit;
-    private int $offset;
-    private string $sortBy;
-    private string $order ;
+    private ?int $limit = null;
+    private ?int $offset = null;
+    private ?string $sortBy = null;
+    private ?string $order = null;
 
     public const FIELD_USER_ID = 'USER_ID';
     public const FIELD_NAME = 'NAME';
@@ -40,28 +40,12 @@ class UserQuery implements \JsonSerializable
         self::SORT_BY_ORDER_DESC
     ];
 
-    public function __construct()
-    {
-        $this->limit = 500;
-        $this->offset = 0;
-        $this->sortBy = self::FIELD_USER_ID;
-        $this->order = self::SORT_BY_ORDER_ASC;
-    }
 
     /**
      * @param value-of<self::VALID_SORT_BY_VALUES> $sortedBy
-     *
-     * @throws InvalidArgumentException
-     *
      */
     public function sortedBy(string $sortedBy): self
     {
-        if (!\in_array($sortedBy, self::VALID_SORT_BY_VALUES)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid sort by value: %s. Valid values are: %s',
-                $sortedBy,
-                \implode(',', self::VALID_SORT_BY_VALUES)));
-        }
         $query = clone $this;
         $query->sortBy = $sortedBy;
 
@@ -70,18 +54,9 @@ class UserQuery implements \JsonSerializable
 
     /**
      * @param value-of<self::VALID_SORT_BY_ORDERS> $orderBy
-     *
-     * @throws InvalidArgumentException
-     *
      */
     public function orderBy(string $orderBy): self
     {
-        if (!\in_array($orderBy, self::VALID_SORT_BY_ORDERS)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid sort by order: %s. Valid values are: %s',
-                $orderBy,
-                \implode(',', self::VALID_SORT_BY_ORDERS)));
-        }
         $query = clone $this;
         $query->order = $orderBy;
 
@@ -121,7 +96,7 @@ class UserQuery implements \JsonSerializable
 
     /**
      * @param array{
-     *     limit?: positive-int,
+     *     limit?: int<0, 500>,
      *     offset?: positive-int,
      *     sortBy?: value-of<self::VALID_SORT_BY_VALUES>,
      *     order?: value-of<self::VALID_SORT_BY_ORDERS>
