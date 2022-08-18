@@ -105,10 +105,6 @@ final class Auth implements Contract\Auth
         return $users;
     }
 
-    /**
-     * @param UserQuery|array<int, mixed> $query
-     * @throws Exception\AuthException
-     */
     public function queryUsers($query): array
     {
         $userQuery = $query instanceof UserQuery ? $query : UserQuery::fromArray($query);
