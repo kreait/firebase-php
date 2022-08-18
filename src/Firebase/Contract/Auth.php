@@ -32,6 +32,9 @@ use Psr\Http\Message\UriInterface;
 use Stringable;
 use Traversable;
 
+/**
+ * @phpstan-import-type UserQueryShape from UserQuery
+ */
 interface Auth
 {
     /**
@@ -54,12 +57,12 @@ interface Auth
     public function getUsers(array $uids): array;
 
     /**
-     * @param UserQuery|array<int, mixed> $query
+     * @param UserQuery|UserQueryShape $query
      *
      * @throws Exception\FirebaseException
      * @throws Exception\AuthException
      *
-     * @return array<string, UserRecord|null>
+     * @return array<string, UserRecord>
      */
     public function queryUsers($query): array;
 
