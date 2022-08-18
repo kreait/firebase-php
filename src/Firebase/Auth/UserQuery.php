@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Auth;
 
 use Beste\Json;
-use Kreait\Firebase\Auth\Query\SortByField;
-use Kreait\Firebase\Auth\Query\SortByOrder;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
 
@@ -17,41 +15,75 @@ class UserQuery implements \JsonSerializable
 {
     private int $limit;
     private int $offset;
-    private SortByField $sortBy;
-    private SortByOrder $order ;
+    private string $sortBy;
+    private string $order ;
+
+    public const FIELD_USER_ID = 'USER_ID';
+    public const FIELD_NAME = 'NAME';
+    public const FIELD_CREATED_AT = 'CREATED_AT';
+    public const FIELD_LAST_LOGIN_AT = 'LAST_LOGIN_AT';
+    public const FIELD_USER_EMAIL = 'USER_EMAIL';
+
+    public const VALID_SORT_BY_VALUES = [
+        self::FIELD_USER_ID,
+        self::FIELD_NAME,
+        self::FIELD_CREATED_AT,
+        self::FIELD_LAST_LOGIN_AT,
+        self::FIELD_USER_EMAIL,
+    ];
+
+    public const SORT_BY_ORDER_ASC = 'ASC';
+    public const SORT_BY_ORDER_DESC = 'DESC';
+
+    public const VALID_SORT_BY_ORDERS = [
+        self::SORT_BY_ORDER_ASC,
+        self::SORT_BY_ORDER_DESC
+    ];
 
     public function __construct()
     {
         $this->limit = 500;
         $this->offset = 0;
-        $this->sortBy = new SortByField(SortByField::SORT_BY_USER_ID);
-        $this->order = new SortByOrder(SortByOrder::SORT_BY_ORDER_ASC);
+        $this->sortBy = self::FIELD_USER_ID;
+        $this->order = self::SORT_BY_ORDER_ASC;
     }
 
     /**
-     * @param SortByField|string $sortedBy
+     * @param value-of<self::VALID_SORT_BY_VALUES> $sortedBy
      *
      * @throws InvalidArgumentException
      *
      */
-    public function sortedBy($sortedBy): self
+    public function sortedBy(string $sortedBy): self
     {
+        if (!\in_array($sortedBy, self::VALID_SORT_BY_VALUES)) {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid sort by value: %s. Valid values are: %s',
+                $sortedBy,
+                \implode(',', self::VALID_SORT_BY_VALUES)));
+        }
         $query = clone $this;
-        $query->sortBy =  $sortedBy instanceof SortByField ? $sortedBy : new SortByField($sortedBy);
+        $query->sortBy = $sortedBy;
 
         return $query;
     }
 
     /**
-     * @param SortByOrder|string $orderBy
+     * @param value-of<self::VALID_SORT_BY_ORDERS> $orderBy
      *
      * @throws InvalidArgumentException
      *
      */
-    public function orderBy($orderBy): self
+    public function orderBy(string $orderBy): self
     {
+        if (!\in_array($orderBy, self::VALID_SORT_BY_ORDERS)) {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid sort by order: %s. Valid values are: %s',
+                $orderBy,
+                \implode(',', self::VALID_SORT_BY_ORDERS)));
+        }
         $query = clone $this;
-        $query->order =  $orderBy instanceof SortByOrder ? $orderBy : new SortByOrder($orderBy);
+        $query->order = $orderBy;
 
         return $query;
     }
@@ -63,12 +95,12 @@ class UserQuery implements \JsonSerializable
 
     public function inAscendingOrder(): self
     {
-        return $this->orderBy(SortByOrder::SORT_BY_ORDER_ASC);
+        return $this->orderBy(self::SORT_BY_ORDER_ASC);
     }
 
     public function inDescendingOrder(): self
     {
-        return $this->orderBy(SortByOrder::SORT_BY_ORDER_DESC);
+        return $this->orderBy(self::SORT_BY_ORDER_DESC);
     }
 
     public function withOffset(int $offset): self
@@ -91,8 +123,8 @@ class UserQuery implements \JsonSerializable
      * @param array{
      *     limit?: positive-int,
      *     offset?: positive-int,
-     *     sortBy?: SortByField|non-empty-string,
-     *     order?: SortByOrder|non-empty-string
+     *     sortBy?: value-of<self::VALID_SORT_BY_VALUES>,
+     *     order?: value-of<self::VALID_SORT_BY_ORDERS>
      * } $data
      */
     public static function fromArray(array $data): self
