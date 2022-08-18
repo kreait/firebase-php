@@ -176,25 +176,17 @@ class ApiClient
 
     /**
      *
-     * @param int $limit
-     * @param int $offset
-     * @param string|null $sortBy
-     * @param string|null $order
+     * @param UserQuery $query
      *
      * @return ResponseInterface
      *
      * @throws AuthException
      */
-    public function queryUsers( int $limit = 500, int $offset = 0, string $sortBy = null, string $order = null): ResponseInterface
+    public function queryUsers( UserQuery $query ): ResponseInterface
     {
         $url = $this->awareAuthResourceUrlBuilder->getUrl('/accounts:query');
 
-        return $this->requestApi($url, [
-            'limit' => $limit,
-            'offset' => $offset,
-            'sortBy' => $sortBy,
-            'order' => $order
-        ]);
+        return $this->requestApi($url, $query->jsonSerialize());
     }
 
     /**
