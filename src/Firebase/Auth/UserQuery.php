@@ -88,7 +88,7 @@ class UserQuery implements \JsonSerializable
     }
 
     /**
-     * @param array {
+     * @param array{
      *     limit?: positive-int,
      *     offset?: positive-int,
      *     sortBy?: SortByField|non-empty-string,
