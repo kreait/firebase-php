@@ -28,7 +28,7 @@ docs: ## Builds the documentation
 	$(MAKE) -C docs html
 
 .PHONY: view-docs
-view-docs: ## Shows the documentation
+view-docs: docs ## Shows the documentation
 	php -S localhost:1338 -t docs/_build/html
 
 .PHONY: cs
