@@ -67,6 +67,54 @@ this methods returns a `Generator <http://php.net/manual/en/language.generators.
     }, iterator_to_array($users));
 
 
+***********
+Query users
+***********
+
+Listing all users with ``listUser()`` is fast an memory-efficient if you want to process a large
+number of users. However, if you prefer paginating over subsets of users with more parameters,
+you can use the ``queryUsers()`` method.
+
+User queries can be created in two ways: by building a ``UserQuery`` object or by passing an array.
+
+The following two snippets show all possible query modifiers with both ways:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Auth\UserQuery;
+
+    # Building a user query object
+    $userQuery = UserQuery::all()
+        ->sortedBy(UserQuery::FIELD_USER_EMAIL)
+        ->inDescendingOrder()
+        // ->inAscendingOrder() # this is the default
+        ->withOffset(1)
+        ->withLimit(499); # The maximum supported limit is 500
+
+    # Using an array
+    $userQuery = [
+        'sortBy' => UserQuery::FIELD_USER_EMAIL,
+        'order' => UserQuery::ORDER_DESC,
+        // 'order' => UserQuery::ORDER_DESC # this is the default
+        'offset' => 1,
+        'limit' => 499, # The maximum supported limit is 500
+    ];
+
+It is possible to sort by the following fields:
+
+* ``UserQuery::FIELD_CREATED_AT``
+* ``UserQuery::FIELD_LAST_LOGIN_AT``
+* ``UserQuery::FIELD_NAME``
+* ``UserQuery::FIELD_USER_EMAIL``
+* ``UserQuery::FIELD_USER_ID``
+
+.. code-block:: php
+
+    $users = $auth->queryUsers($userQuery);
+
+This will return an array of ``UserRecord`` s.
+
+
 *************************************
 Get information about a specific user
 *************************************
