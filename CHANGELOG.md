@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.8.0] - 2022-08-20
+
 ### Added
 
 * Added `Auth::queryUsers()` to process subsets of users with more parameters than `Auth::listUsers()`. 
@@ -281,7 +283,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.7.1...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.8.0...6.x
+[6.8.0]: https://github.com/kreait/firebase-php/compare/6.7.1...6.8.0
 [6.7.1]: https://github.com/kreait/firebase-php/compare/6.7.0...6.7.1
 [6.7.0]: https://github.com/kreait/firebase-php/compare/6.6.1...6.7.0
 [6.6.1]: https://github.com/kreait/firebase-php/compare/6.6.0...6.6.1
