@@ -112,7 +112,26 @@ It is possible to sort by the following fields:
 
     $users = $auth->queryUsers($userQuery);
 
-This will return an array of ``UserRecord`` s.
+You can also filter by email, phone number or uid:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Auth\UserQuery;
+
+    $userQuery = UserQuery::all()->withFilter(UserQuery::FILTER_EMAIL, '<email>');
+    $userQuery = UserQuery::all()->withFilter(UserQuery::FILTER_PHONE_NUMBER, '<phone number>');
+    $userQuery = UserQuery::all()->withFilter(UserQuery::FILTER_UID, '<uid>');
+
+    $userQuery = ['filter' => [UserQuery::FILTER_EMAIL => '<email>'];
+    $userQuery = ['filter' => [UserQuery::FILTER_PHONE_NUMBER => '<email>'];
+    $userQuery = ['filter' => [UserQuery::FILTER_UID => '<email>'];
+
+A user query will always return an array of ``UserRecord`` s. If none could be found, the array
+will be empty.
+
+.. note::
+    Filters don't support partial matches, and only one filter can be applied at the same time.
+    If you specify multiple filters, only the last one will be submitted.
 
 
 *************************************
@@ -149,9 +168,6 @@ Result:
        'another-uid' => <UserRecord>,
        'non-existing-uid' => null
     ]
-
-
-
 
 *************
 Create a user

@@ -10,6 +10,8 @@ use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 /**
+ * @internal
+ *
  * @phpstan-import-type UserQueryShape from UserQuery
  */
 final class UserQueryTest extends IntegrationTestCase
@@ -117,6 +119,77 @@ final class UserQueryTest extends IntegrationTestCase
         } finally {
             $this->auth->deleteUser($firstUser->uid);
             $this->auth->deleteUser($secondUser->uid);
+        }
+    }
+
+    public function testFilterByUid(): void
+    {
+        $user = $this->createUserWithEmailAndPassword();
+
+        $query = [
+            'filter' => [
+                'userId' => $user->uid,
+            ],
+            'limit' => 1,
+        ];
+
+        $result = $this->auth->queryUsers($query);
+        $found = current($result);
+
+        try {
+            $this->assertCount(1, $result);
+            $this->assertInstanceOf(UserRecord::class, $found);
+            $this->assertSame($user->uid, $found->uid);
+        } finally {
+            $this->auth->deleteUser($user->uid);
+        }
+    }
+
+    public function testFilterByEmail(): void
+    {
+        $user = $this->createUserWithEmailAndPassword();
+
+        $query = [
+            'filter' => [
+                'email' => $user->email,
+            ],
+            'limit' => 1,
+        ];
+
+        $result = $this->auth->queryUsers($query);
+        $found = current($result);
+
+        try {
+            $this->assertCount(1, $result);
+            $this->assertInstanceOf(UserRecord::class, $found);
+            $this->assertSame($user->email, $found->email);
+        } finally {
+            $this->auth->deleteUser($user->uid);
+        }
+    }
+
+    public function testFilterByPhoneNumber(): void
+    {
+        $user = $this->auth->createUser([
+            'phoneNumber' => '+49'.random_int(90000000000, 99999999999)
+        ]);
+
+        $query = [
+            'filter' => [
+                'phoneNumber' => $user->phoneNumber,
+            ],
+            'limit' => 1,
+        ];
+
+        $result = $this->auth->queryUsers($query);
+        $found = current($result);
+
+        try {
+            $this->assertCount(1, $result);
+            $this->assertInstanceOf(UserRecord::class, $found);
+            $this->assertSame($user->phoneNumber, $found->phoneNumber);
+        } finally {
+            $this->auth->deleteUser($user->uid);
         }
     }
 

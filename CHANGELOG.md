@@ -6,7 +6,7 @@
 
 * Added `Auth::queryUsers()` to process subsets of users with more parameters than `Auth::listUsers()`. 
   `listUsers()` is a fast and memory-efficient way to process a large list of users. `queryUsers()` provides 
-  sorting by given fields and pagination.
+  sorting and filtering by given fields and pagination.
   ([#727](https://github.com/kreait/firebase-php/pull/727)/[#728](https://github.com/kreait/firebase-php/pull/728)) 
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/user-management.html#query-users))
 
