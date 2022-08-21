@@ -1,15 +1,14 @@
 *.log
 
-/build
+/.build
 /vendor
 /docs/_build
 /docs/*.pyc
 /tests/_fixtures/test_*
+/tools
 
 /.firebaserc
 /.phpunit.result.cache
-/cc-test-reporter
 /composer.lock
 /phpstan.neon
 /phpunit.xml
-/google-service-account.json

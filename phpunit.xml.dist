@@ -3,6 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     beStrictAboutOutputDuringTests="true"
+    cacheResultFile="tools/.phpunit.result.cache"
     convertDeprecationsToExceptions="true"
     colors="true"
 >
@@ -16,13 +17,9 @@
         </testsuite>
     </testsuites>
 
-    <coverage ignoreDeprecatedCodeUnits="true" processUncoveredFiles="true" cacheDirectory="build/coverage-cache">
+    <coverage ignoreDeprecatedCodeUnits="true" processUncoveredFiles="true" cacheDirectory=".build/coverage-cache">
         <include>
             <directory suffix=".php">src/Firebase</directory>
         </include>
     </coverage>
-
-    <php>
-        <ini name="date.timezone" value="UTC"/>
-    </php>
 </phpunit>
