@@ -6,6 +6,11 @@ namespace Kreait\Firebase\RemoteConfig;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
+use function implode;
+use function in_array;
+use function mb_strtoupper;
+use function sprintf;
+
 class TagColor
 {
     public const BLUE = 'BLUE';
@@ -19,37 +24,35 @@ class TagColor
     public const PINK = 'PINK';
     public const PURPLE = 'PURPLE';
     public const TEAL = 'TEAL';
-
     public const VALID_COLORS = [
         self::BLUE, self::BROWN, self::CYAN, self::DEEP_ORANGE, self::GREEN, self::INDIGO, self::LIME,
         self::ORANGE, self::PINK, self::PURPLE, self::TEAL,
     ];
-
     private string $value;
 
     public function __construct(string $value)
     {
-        $value = \mb_strtoupper($value);
+        $value = mb_strtoupper($value);
 
-        if (!\in_array($value, self::VALID_COLORS, true)) {
+        if (!in_array($value, self::VALID_COLORS, true)) {
             throw new InvalidArgumentException(
-                \sprintf(
+                sprintf(
                     'Invalid tag color "%s". Supported colors are "%s".',
                     $value,
-                    \implode('", "', self::VALID_COLORS)
-                )
+                    implode('", "', self::VALID_COLORS),
+                ),
             );
         }
 
         $this->value = $value;
     }
 
-    public function value(): string
+    public function __toString()
     {
         return $this->value;
     }
 
-    public function __toString()
+    public function value(): string
     {
         return $this->value;
     }

@@ -51,7 +51,9 @@ final class DefaultValueTest extends TestCase
     public function arrayValueProvider()
     {
         yield 'inAppDefault' => [true, ['useInAppDefault' => true]];
+
         yield 'bool' => [true, ['value' => true]];
+
         yield 'string' => ['foo', ['value' => 'foo']];
     }
 }

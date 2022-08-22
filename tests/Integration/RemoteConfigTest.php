@@ -18,6 +18,8 @@ use Kreait\Firebase\RemoteConfig\VersionNumber;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Throwable;
 
+use function json_decode;
+
 /**
  * @internal
  */
@@ -91,15 +93,13 @@ final class RemoteConfigTest extends IntegrationTestCase
             }
         }
         CONFIG;
-
     private Template $template;
-
     private RemoteConfig $remoteConfig;
 
     protected function setUp(): void
     {
         $this->remoteConfig = self::$factory->createRemoteConfig();
-        $this->template = Template::fromArray(\json_decode(self::TEMPLATE_CONFIG, true));
+        $this->template = Template::fromArray(json_decode(self::TEMPLATE_CONFIG, true));
     }
 
     public function testForcePublishAndGet(): void
@@ -175,7 +175,7 @@ final class RemoteConfigTest extends IntegrationTestCase
 
         $this->assertTrue(
             $currentVersionNumber->equalsTo($refetchedVersion->versionNumber()),
-            "Expected the template version to be {$currentVersionNumber}, got {$refetchedVersion->versionNumber()}"
+            "Expected the template version to be {$currentVersionNumber}, got {$refetchedVersion->versionNumber()}",
         );
     }
 
@@ -191,10 +191,10 @@ final class RemoteConfigTest extends IntegrationTestCase
 
         $query = FindVersions::all()
             ->withLimit(2)
-            ->upToVersion($initialVersionNumber)
-        ;
+            ->upToVersion($initialVersionNumber);
 
         $targetVersionNumber = null;
+
         foreach ($this->remoteConfig->listVersions($query) as $version) {
             $versionNumber = $version->versionNumber();
 

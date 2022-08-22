@@ -8,6 +8,9 @@ use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database\Query\Sorter\OrderByChild;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+use function rawurlencode;
+use function sprintf;
+
 /**
  * @internal
  */
@@ -24,8 +27,8 @@ final class OrderByChildTest extends UnitTestCase
         $sut = new OrderByChild($childKey);
 
         $this->assertStringContainsString(
-            'orderBy='.\rawurlencode(\sprintf('"%s"', $childKey)),
-            (string) $sut->modifyUri(new Uri('http://domain.tld'))
+            'orderBy='.rawurlencode(sprintf('"%s"', $childKey)),
+            (string) $sut->modifyUri(new Uri('http://domain.tld')),
         );
 
         $this->assertSame($expected, $sut->modifyValue($given));

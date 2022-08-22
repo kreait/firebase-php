@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Database;
 
-use function JmesPath\search;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+
+use function count;
+use function is_array;
+use function JmesPath\search;
+use function str_replace;
+use function trim;
 
 /**
  * A Snapshot contains data from a database location.
@@ -78,8 +83,8 @@ class Snapshot
      */
     public function getChild(string $path): self
     {
-        $path = \trim($path, '/');
-        $expression = '"'.\str_replace('/', '"."', $path).'"';
+        $path = trim($path, '/');
+        $expression = '"'.str_replace('/', '"."', $path).'"';
 
         $childValue = search($expression, $this->value);
 
@@ -105,8 +110,8 @@ class Snapshot
      */
     public function hasChild(string $path): bool
     {
-        $path = \trim($path, '/');
-        $expression = '"'.\str_replace('/', '"."', $path).'"';
+        $path = trim($path, '/');
+        $expression = '"'.str_replace('/', '"."', $path).'"';
 
         return search($expression, $this->value) !== null;
     }
@@ -123,7 +128,7 @@ class Snapshot
      */
     public function hasChildren(): bool
     {
-        return \is_array($this->value) && !empty($this->value);
+        return is_array($this->value) && !empty($this->value);
     }
 
     /**
@@ -133,7 +138,7 @@ class Snapshot
      */
     public function numChildren(): int
     {
-        return \is_array($this->value) ? \count($this->value) : 0;
+        return is_array($this->value) ? count($this->value) : 0;
     }
 
     /**

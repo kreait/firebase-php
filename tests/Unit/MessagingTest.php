@@ -13,6 +13,8 @@ use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Tests\UnitTestCase;
 use stdClass;
 
+use function array_fill;
+
 /**
  * @internal
  */
@@ -64,7 +66,7 @@ final class MessagingTest extends UnitTestCase
 
     public function testAMulticastMessageCannotBeTooLarge(): void
     {
-        $tokens = \array_fill(0, 501, 'token');
+        $tokens = array_fill(0, 501, 'token');
 
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->sendMulticast(CloudMessage::new(), $tokens);
@@ -72,7 +74,7 @@ final class MessagingTest extends UnitTestCase
 
     public function testSendAllCannotBeTooLarge(): void
     {
-        $messages = \array_fill(0, 501, CloudMessage::new());
+        $messages = array_fill(0, 501, CloudMessage::new());
 
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->sendAll($messages);

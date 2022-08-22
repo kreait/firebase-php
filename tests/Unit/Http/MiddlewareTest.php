@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Http;
 
+use Closure;
 use GuzzleHttp\Psr7;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\Tests\UnitTestCase;
@@ -15,8 +16,7 @@ use Psr\Http\Message\RequestInterface;
 final class MiddlewareTest extends UnitTestCase
 {
     private Psr7\Request $request;
-
-    private \Closure $handler;
+    private Closure $handler;
 
     protected function setUp(): void
     {
@@ -28,6 +28,7 @@ final class MiddlewareTest extends UnitTestCase
     {
         $middleware = Middleware::ensureJsonSuffix();
         $handlerClosure = $middleware($this->handler);
+
         /** @var RequestInterface $request */
         $request = $handlerClosure($this->request);
 

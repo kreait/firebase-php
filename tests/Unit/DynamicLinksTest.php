@@ -27,15 +27,15 @@ use Kreait\Firebase\DynamicLinks;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
+use function json_decode;
+
 /**
  * @internal
  */
 final class DynamicLinksTest extends TestCase
 {
     private MockHandler $httpHandler;
-
     private string $dynamicLinksDomain = 'https://link.domain.tld';
-
     private DynamicLinks $service;
 
     protected function setUp(): void
@@ -56,7 +56,7 @@ final class DynamicLinksTest extends TestCase
                     ['warningCode' => 'WARNING_CODE_1', 'warningMessage' => 'Warning Message 1'],
                     ['warningCode' => 'WARNING_CODE_2', 'warningMessage' => 'Warning Message 2'],
                 ],
-            ]))
+            ])),
         );
 
         $action = $this->createDynamicLinkAction('https://domain.tld');
@@ -71,7 +71,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, \json_decode(Json::encode($dynamicLink), true));
+        $this->assertEquals($responseData, json_decode(Json::encode($dynamicLink), true));
     }
 
     public function testItCreatesADynamicLinkFromAnArrayOfParameters(): void
@@ -80,7 +80,7 @@ final class DynamicLinksTest extends TestCase
             new Response(200, [], Json::encode($responseData = [
                 'shortLink' => $shortLink = $this->dynamicLinksDomain.'/'.($suffix = 'short'),
                 'previewLink' => $previewLink = $shortLink.'?d=1',
-            ]))
+            ])),
         );
 
         $dynamicLink = $this->service->createDynamicLink(['link' => 'https://domain.tld']);
@@ -92,7 +92,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, \json_decode(Json::encode($dynamicLink), true));
+        $this->assertEquals($responseData, json_decode(Json::encode($dynamicLink), true));
     }
 
     public function testCreationFailsIfNoConnectionIsAvailable(): void
@@ -135,7 +135,7 @@ final class DynamicLinksTest extends TestCase
             new Response(200, [], Json::encode($responseData = [
                 'shortLink' => $shortLink = $this->dynamicLinksDomain.'/'.($suffix = 'short'),
                 'previewLink' => $previewLink = $shortLink.'?d=1',
-            ]))
+            ])),
         );
 
         $dynamicLink = $this->service->shortenLongDynamicLink(['longDynamicLink' => 'https://domain.tld']);
@@ -147,7 +147,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, \json_decode(Json::encode($dynamicLink), true));
+        $this->assertEquals($responseData, json_decode(Json::encode($dynamicLink), true));
     }
 
     public function testShorteningFailsIfNoConnectionIsAvailable(): void
@@ -203,7 +203,7 @@ final class DynamicLinksTest extends TestCase
                     ['platform' => 'ANDROID', 'count' => '10', 'event' => 'APP_RE_OPEN'],
                     ['platform' => 'IOS', 'count' => '20', 'event' => 'APP_RE_OPEN'],
                 ],
-            ]))
+            ])),
         );
 
         $stats = $this->service->getStatistics($this->dynamicLinksDomain.'/abcd');
@@ -274,7 +274,7 @@ final class DynamicLinksTest extends TestCase
         $this->expectExceptionMessageMatches($expectedMessageRegex);
 
         $this->service->getStatistics(
-            GetStatisticsForDynamicLink::forLink('anything')
+            GetStatisticsForDynamicLink::forLink('anything'),
         );
     }
 
@@ -284,6 +284,7 @@ final class DynamicLinksTest extends TestCase
         $response = new Response(418, [], '{"key": "value"}');
 
         $this->httpHandler->append($response);
+
         try {
             $this->service->getStatistics($action);
             $this->fail('An exception should have been thrown');
@@ -322,6 +323,16 @@ final class DynamicLinksTest extends TestCase
         $this->assertEmpty(SocialMetaTagInfo::new()->jsonSerialize());
     }
 
+    /**
+     * @return iterable<string, array{0: int, 1: string}>
+     */
+    public function provideCodeAndExpectedMessageRegExForFailingStatisticsRetrieval(): iterable
+    {
+        yield '403' => [403, '/missing permissions/i'];
+
+        yield '418' => [418, '/response.+details/'];
+    }
+
     private function createDynamicLinkAction(string $url): CreateDynamicLink
     {
         return CreateDynamicLink::forUrl($url)
@@ -335,20 +346,20 @@ final class DynamicLinksTest extends TestCase
                             ->withUtmContent('utmContent')
                             ->withUtmMedium('utmMedium')
                             ->withUtmSource('utmSource')
-                            ->withUtmTerm('utmTerm')
+                            ->withUtmTerm('utmTerm'),
                     )
                     ->withItunesConnectAnalytics(
                         ITunesConnectAnalytics::new()
                             ->withAffiliateToken('affiliateToken')
                             ->withCampaignToken('campaignToken')
                             ->withMediaType('8')
-                            ->withProviderToken('providerToken')
-                    )
+                            ->withProviderToken('providerToken'),
+                    ),
             )
             ->withNavigationInfo(
                 NavigationInfo::new()
                     ->withForcedRedirect()
-                    ->withoutForcedRedirect() // cheating the code coverage :)
+                    ->withoutForcedRedirect(), // cheating the code coverage :)
             )
             ->withIOSInfo(
                 IOSInfo::new()
@@ -357,30 +368,19 @@ final class DynamicLinksTest extends TestCase
                     ->withCustomScheme('customScheme')
                     ->withFallbackLink('https://fallback.domain.tld')
                     ->withIPadBundleId('iPadBundleId')
-                    ->withIPadFallbackLink('https://ipad-fallback.domain.tld')
+                    ->withIPadFallbackLink('https://ipad-fallback.domain.tld'),
             )
             ->withAndroidInfo(
                 AndroidInfo::new()
                     ->withFallbackLink('https://fallback.domain.tld')
                     ->withPackageName('packageName')
-                    ->withMinPackageVersionCode('minPackageVersionCode')
+                    ->withMinPackageVersionCode('minPackageVersionCode'),
             )
             ->withSocialMetaTagInfo(
                 SocialMetaTagInfo::new()
                     ->withDescription('Social Meta Tag description')
                     ->withTitle('Social Meta Tag title')
-                    ->withImageLink('https://domain.tld/image.jpg')
-            )
-        ;
-    }
-
-
-    /**
-     * @return iterable<string, array{0: int, 1: string}>
-     */
-    public function provideCodeAndExpectedMessageRegExForFailingStatisticsRetrieval(): iterable
-    {
-        yield '403' => [403, '/missing permissions/i'];
-        yield '418' => [418, '/response.+details/'];
+                    ->withImageLink('https://domain.tld/image.jpg'),
+            );
     }
 }

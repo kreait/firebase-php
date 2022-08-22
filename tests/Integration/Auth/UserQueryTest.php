@@ -9,6 +9,13 @@ use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
+use function array_values;
+use function assert;
+use function current;
+use function end;
+use function random_int;
+use function usleep;
+
 /**
  * @internal
  *
@@ -32,7 +39,7 @@ final class UserQueryTest extends IntegrationTestCase
             'sortBy' => UserQuery::FIELD_CREATED_AT,
             'order' => UserQuery::ORDER_DESC,
             'limit' => 10,
-            ]);
+        ]);
 
         try {
             $this->assertUserExists($user, $result);
@@ -171,7 +178,7 @@ final class UserQueryTest extends IntegrationTestCase
     public function testFilterByPhoneNumber(): void
     {
         $user = $this->auth->createUser([
-            'phoneNumber' => '+49'.random_int(90000000000, 99999999999)
+            'phoneNumber' => '+49'.random_int(90000000000, 99999999999),
         ]);
 
         $query = [
@@ -193,21 +200,6 @@ final class UserQueryTest extends IntegrationTestCase
         }
     }
 
-    /**
-     * @param array<UserRecord> $queryResult
-     */
-    private function assertUserExists(UserRecord $userRecord, array $queryResult): void
-    {
-        foreach ($queryResult as $record) {
-            if ($record->uid === $userRecord->uid) {
-                $this->addToAssertionCount(1);
-                return;
-            }
-        }
-
-        $this->fail('Expected query result to contain a user with UID '.$userRecord->uid);
-    }
-
     protected function createUserWithEmailAndPassword(?string $email = null, ?string $password = null): UserRecord
     {
         $email ??= self::randomEmail();
@@ -217,5 +209,21 @@ final class UserQueryTest extends IntegrationTestCase
             'email' => $email,
             'clear_text_password' => $password,
         ]);
+    }
+
+    /**
+     * @param array<UserRecord> $queryResult
+     */
+    private function assertUserExists(UserRecord $userRecord, array $queryResult): void
+    {
+        foreach ($queryResult as $record) {
+            if ($record->uid === $userRecord->uid) {
+                $this->addToAssertionCount(1);
+
+                return;
+            }
+        }
+
+        $this->fail('Expected query result to contain a user with UID '.$userRecord->uid);
     }
 }

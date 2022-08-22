@@ -8,6 +8,8 @@ use Beste\Json;
 use Psr\Http\Message\ResponseInterface;
 use UnexpectedValueException;
 
+use function is_string;
+
 /**
  * @internal
  */
@@ -23,11 +25,11 @@ final class ErrorResponseParser
             return $responseBody;
         }
 
-        if (\is_string($data['error']['message'] ?? null)) {
+        if (is_string($data['error']['message'] ?? null)) {
             return $data['error']['message'];
         }
 
-        if (\is_string($data['error'] ?? null)) {
+        if (is_string($data['error'] ?? null)) {
             return $data['error'];
         }
 

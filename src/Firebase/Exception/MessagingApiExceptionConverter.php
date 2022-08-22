@@ -21,13 +21,14 @@ use Psr\Http\Message\ResponseInterface;
 use StellaMaris\Clock\ClockInterface;
 use Throwable;
 
+use function is_numeric;
+
 /**
  * @internal
  */
 class MessagingApiExceptionConverter
 {
     private ErrorResponseParser $responseParser;
-
     private ClockInterface $clock;
 
     public function __construct(?ClockInterface $clock = null)
@@ -68,15 +69,18 @@ class MessagingApiExceptionConverter
                 $convertedError = new InvalidMessage($message);
 
                 break;
+
             case 401:
             case 403:
                 $convertedError = new AuthenticationError($message);
 
                 break;
+
             case 404:
                 $convertedError = new NotFound($message);
 
                 break;
+
             case 429:
                 $convertedError = new QuotaExceeded($message);
                 $retryAfter = $this->getRetryAfter($response);
@@ -86,10 +90,12 @@ class MessagingApiExceptionConverter
                 }
 
                 break;
+
             case 500:
                 $convertedError = new ServerError($message);
 
                 break;
+
             case 503:
                 $convertedError = new ServerUnavailable($message);
                 $retryAfter = $this->getRetryAfter($response);
@@ -99,6 +105,7 @@ class MessagingApiExceptionConverter
                 }
 
                 break;
+
             default:
                 $convertedError = new MessagingError($message, $code, $previous);
 
@@ -127,7 +134,7 @@ class MessagingApiExceptionConverter
             return null;
         }
 
-        if (\is_numeric($retryAfter)) {
+        if (is_numeric($retryAfter)) {
             return $this->clock->now()->modify("+{$retryAfter} seconds");
         }
 

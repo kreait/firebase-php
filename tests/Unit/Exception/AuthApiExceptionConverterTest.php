@@ -47,7 +47,7 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $requestExcpeption = new RequestException(
             'Error without valid json',
             new Request('GET', 'https://domain.tld'),
-            new Response(400, [], $responseBody = '{"what is this"')
+            new Response(400, [], $responseBody = '{"what is this"'),
         );
 
         $convertedError = $this->converter->convertException($requestExcpeption);
@@ -60,7 +60,7 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
     {
         $connectException = new ConnectException(
             'curl error xx',
-            $this->createMock(RequestInterface::class)
+            $this->createMock(RequestInterface::class),
         );
 
         $this->assertInstanceOf(ApiConnectionFailed::class, $this->converter->convertException($connectException));
@@ -91,7 +91,7 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
                     'code' => 400,
                     'message' => 'Some error that might include the idenfier "'.$identifier.'"',
                 ],
-            ]))
+            ])),
         );
 
         $convertedError = $this->converter->convertException($requestException);

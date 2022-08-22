@@ -10,18 +10,25 @@ use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Util;
 use Throwable;
 
+use function array_rand;
+use function bin2hex;
+use function file_exists;
+use function file_get_contents;
+use function mb_strtolower;
+use function random_bytes;
+
+/**
+ * @internal
+ */
 abstract class IntegrationTestCase extends FirebaseTestCase
 {
     public const TENANT_ID = 'Test-bs38l';
-
     protected static Factory $factory;
-
     protected static ServiceAccount $serviceAccount;
     protected static string $rtdbUrl;
 
     /** @var string[] */
     protected static array $registrationTokens = [];
-
     protected static string $unknownToken = 'd_RTtLHR_JgI4r4tbYM9CA:APA91bEzb2Tb3WlKwddpEPYY2ZAx7AOmjOhiw-jVq6J9ekJGpBAefAgMb1muDJcKBMsrMq7zSCfBzl0Ll7JCZ0o8QI9zLVG1F18nqW9AOFKDXi8-MyT3R5Stt6GGKnq9rd9l5kopGEbO';
 
     public static function setUpBeforeClass(): void
@@ -37,8 +44,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
         self::$factory = (new Factory())
             ->withServiceAccount(self::$serviceAccount)
-            ->withDatabaseUri(self::$rtdbUrl)
-        ;
+            ->withDatabaseUri(self::$rtdbUrl);
 
         self::$registrationTokens = self::registrationTokensFromEnvironment() ?? self::registrationTokensFromFile() ?? [];
     }
@@ -50,12 +56,12 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         }
 
         // @noinspection NonSecureArrayRandUsageInspection
-        return self::$registrationTokens[\array_rand(self::$registrationTokens)];
+        return self::$registrationTokens[array_rand(self::$registrationTokens)];
     }
 
     protected static function randomString(string $suffix = ''): string
     {
-        return \mb_strtolower(\bin2hex(\random_bytes(5)).$suffix);
+        return mb_strtolower(bin2hex(random_bytes(5)).$suffix);
     }
 
     protected static function randomEmail(string $suffix = ''): string
@@ -77,7 +83,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     {
         $credentialsPath = self::$fixturesDir.'/test_credentials.json';
 
-        if (!\file_exists($credentialsPath)) {
+        if (!file_exists($credentialsPath)) {
             return null;
         }
 
@@ -104,12 +110,12 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     {
         $path = self::$fixturesDir.'/test_devices.json';
 
-        if (!\file_exists($path)) {
+        if (!file_exists($path)) {
             return null;
         }
 
         try {
-            if ($contents = \file_get_contents($path)) {
+            if ($contents = file_get_contents($path)) {
                 return Json::decode($contents, true);
             }
 
@@ -139,12 +145,12 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     {
         $path = self::$fixturesDir.'/test_rtdb.json';
 
-        if (!\file_exists($path)) {
+        if (!file_exists($path)) {
             return null;
         }
 
         try {
-            if ($contents = \file_get_contents($path)) {
+            if ($contents = file_get_contents($path)) {
                 return Json::decode($contents, true);
             }
 

@@ -11,6 +11,8 @@ use Kreait\Firebase\DynamicLink\CreateDynamicLink;
 use Kreait\Firebase\Http\WrappedPsr7Request;
 use Psr\Http\Message\RequestInterface;
 
+use const JSON_FORCE_OBJECT;
+
 final class ApiRequest implements RequestInterface
 {
     use WrappedPsr7Request;

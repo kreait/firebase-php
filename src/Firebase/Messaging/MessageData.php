@@ -4,9 +4,20 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging;
 
+use JsonSerializable;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
-final class MessageData implements \JsonSerializable
+use function in_array;
+use function is_object;
+use function is_scalar;
+use function mb_detect_encoding;
+use function mb_detect_order;
+use function mb_strtolower;
+use function method_exists;
+use function str_starts_with;
+use function trim;
+
+final class MessageData implements JsonSerializable
 {
     /** @var array<non-empty-string, string> */
     private array $data = [];
@@ -33,7 +44,7 @@ final class MessageData implements \JsonSerializable
             if (self::isBinary($value)) {
                 throw new InvalidArgumentException(
                     "The message data field '{$key}' seems to contain binary data. As this can lead to broken messages, "
-                    .'please convert it to a string representation first, e.g. with bin2hex() or base64encode().'
+                    .'please convert it to a string representation first, e.g. with bin2hex() or base64encode().',
                 );
             }
 
@@ -66,12 +77,12 @@ final class MessageData implements \JsonSerializable
      */
     private static function isStringable($value): bool
     {
-        return null === $value || \is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'));
+        return null === $value || is_scalar($value) || (is_object($value) && method_exists($value, '__toString'));
     }
 
     private static function isBinary(string $value): bool
     {
-        return \mb_detect_encoding($value, (array) \mb_detect_order(), true) === false;
+        return mb_detect_encoding($value, (array) mb_detect_order(), true) === false;
     }
 
     /**
@@ -87,18 +98,18 @@ final class MessageData implements \JsonSerializable
             throw new InvalidArgumentException("'Empty keys are not allowed in FCM data payloads");
         }
 
-        $check = \mb_strtolower($key);
+        $check = mb_strtolower($key);
 
         // According to the docs, "notification" is reserved, but it's still accepted ¯\_(ツ)_/¯
-        $reservedWords = ['from', /*'notification',*/ 'message_type'];
+        $reservedWords = ['from', /* 'notification', */ 'message_type'];
         $reservedPrefixes = ['google', 'gcm'];
 
-        if (\in_array($check, $reservedWords, true)) {
+        if (in_array($check, $reservedWords, true)) {
             throw new InvalidArgumentException("'{$key}' is a reserved word and can not be used as a key in FCM data payloads");
         }
 
         foreach ($reservedPrefixes as $prefix) {
-            if (\str_starts_with($check, $prefix)) {
+            if (str_starts_with($check, $prefix)) {
                 throw new InvalidArgumentException("'{$prefix}' is a reserved prefix and can not be used as a key in FCM data payloads");
             }
         }

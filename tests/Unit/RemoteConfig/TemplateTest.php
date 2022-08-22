@@ -60,13 +60,11 @@ final class TemplateTest extends UnitTestCase
     {
         $german = Condition::named('lang_german')
             ->withExpression("device.language in ['de', 'de_AT', 'de_CH']")
-            ->withTagColor(TagColor::ORANGE)
-        ;
+            ->withTagColor(TagColor::ORANGE);
 
         $french = Condition::named('lang_french')
             ->withExpression("device.language in ['fr', 'fr_CA', 'fr_CH']")
-            ->withTagColor(TagColor::GREEN)
-        ;
+            ->withTagColor(TagColor::GREEN);
 
         $germanWelcomeMessage = ConditionalValue::basedOn($german)->withValue('Willkommen!');
         $frenchWelcomeMessage = new ConditionalValue('lang_french', 'Bienvenu!');
@@ -75,21 +73,18 @@ final class TemplateTest extends UnitTestCase
             ->withDefaultValue('Welcome!')
             ->withDescription('This is a welcome message')
             ->withConditionalValue($germanWelcomeMessage)
-            ->withConditionalValue($frenchWelcomeMessage)
-        ;
+            ->withConditionalValue($frenchWelcomeMessage);
 
         $uiColors = ParameterGroup::named('ui_colors')
             ->withDescription('Some colors for the UI')
             ->withParameter(Parameter::named('primary_color')->withDefaultValue('blue'))
-            ->withParameter(Parameter::named('secondary_color')->withDefaultValue('green'))
-        ;
+            ->withParameter(Parameter::named('secondary_color')->withDefaultValue('green'));
 
         $template = Template::new()
             ->withCondition($german)
             ->withCondition($french)
             ->withParameter($welcomeMessageParameter)
-            ->withParameterGroup($uiColors)
-        ;
+            ->withParameterGroup($uiColors);
 
         $this->assertSame($german, $template->conditions()['lang_german']);
         $this->assertSame($french, $template->conditions()['lang_french']);

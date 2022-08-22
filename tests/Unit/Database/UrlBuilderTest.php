@@ -9,6 +9,9 @@ use Kreait\Firebase\Database\UrlBuilder;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Kreait\Firebase\Util;
 
+/**
+ * @internal
+ */
 final class UrlBuilderTest extends UnitTestCase
 {
     protected function tearDown(): void
@@ -34,7 +37,7 @@ final class UrlBuilderTest extends UnitTestCase
     {
         return [
             'wrong scheme' => ['http://domain.tld'],
-            'no scheme' => ['domain.tld']
+            'no scheme' => ['domain.tld'],
         ];
     }
 
@@ -67,6 +70,7 @@ final class UrlBuilderTest extends UnitTestCase
 
         $this->assertSame($expected, $url);
     }
+
     /**
      * @return array<array-key, array<array-key, string|array<string, string>>>
      */
@@ -129,21 +133,21 @@ final class UrlBuilderTest extends UnitTestCase
                 $baseUrl,
                 '',
                 [],
-                'http://'.$emulatorHost.'/?ns=namespace'
+                'http://'.$emulatorHost.'/?ns=namespace',
             ],
             'path without trailing slash, empty query' => [
                 $emulatorHost,
                 $baseUrl,
                 '/path/to/child',
                 [],
-                'http://'.$emulatorHost.'/path/to/child?ns=namespace'
+                'http://'.$emulatorHost.'/path/to/child?ns=namespace',
             ],
             'path with trailing slash, empty query' => [
                 $emulatorHost,
                 $baseUrl,
                 '/path/to/child/',
                 [],
-                'http://'.$emulatorHost.'/path/to/child?ns=namespace'
+                'http://'.$emulatorHost.'/path/to/child?ns=namespace',
             ],
             'path without trailing slash, non-empty query' => [
                 $emulatorHost,

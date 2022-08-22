@@ -9,6 +9,9 @@ use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
+use function array_filter;
+use function mb_strtolower;
+
 final class ValidatedActionCodeSettings implements ActionCodeSettings
 {
     private ?UriInterface $continueUrl = null;
@@ -35,39 +38,46 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
     {
         $instance = new self();
 
-        $settings = \array_filter($settings, static fn ($value) => $value !== null);
+        $settings = array_filter($settings, static fn ($value) => $value !== null);
 
         foreach ($settings as $key => $value) {
-            switch (\mb_strtolower($key)) {
+            switch (mb_strtolower($key)) {
                 case 'continueurl':
                 case 'url':
                     $instance->continueUrl = Utils::uriFor($value);
 
                     break;
+
                 case 'handlecodeinapp':
                     $instance->canHandleCodeInApp = (bool) $value;
 
                     break;
+
                 case 'dynamiclinkdomain':
                     $instance->dynamicLinkDomain = Utils::uriFor($value);
 
                     break;
+
                 case 'androidpackagename':
                     $instance->androidPackageName = (string) $value;
 
                     break;
+
                 case 'androidminimumversion':
                     $instance->androidMinimumVersion = (string) $value;
 
                     break;
+
                 case 'androidinstallapp':
                     $instance->androidInstallApp = (bool) $value;
 
                     break;
+
                 case 'iosbundleid':
                     $instance->iOSBundleId = (string) $value;
 
                     break;
+
                 default:
                     throw new InvalidArgumentException("Unsupported action code setting '{$key}'");
             }
@@ -84,7 +94,7 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
         $continueUrl = $this->continueUrl !== null ? (string) $this->continueUrl : null;
         $dynamicLinkDomain = $this->dynamicLinkDomain !== null ? (string) $this->dynamicLinkDomain : null;
 
-        return \array_filter([
+        return array_filter([
             'continueUrl' => $continueUrl,
             'canHandleCodeInApp' => $this->canHandleCodeInApp,
             'dynamicLinkDomain' => $dynamicLinkDomain,

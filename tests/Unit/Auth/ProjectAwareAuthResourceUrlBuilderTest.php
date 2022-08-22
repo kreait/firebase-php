@@ -7,6 +7,8 @@ namespace Kreait\Firebase\Tests\Unit\Auth;
 use Kreait\Firebase\Auth\ProjectAwareAuthResourceUrlBuilder;
 use PHPUnit\Framework\TestCase;
 
+use function putenv;
+
 /**
  * @internal
  */
@@ -18,7 +20,7 @@ final class ProjectAwareAuthResourceUrlBuilderTest extends TestCase
     protected function setUp(): void
     {
         // Make sure the environment variable is not set (just in case it is set by an integration test)
-        \putenv('FIREBASE_AUTH_EMULATOR_HOST');
+        putenv('FIREBASE_AUTH_EMULATOR_HOST');
 
         $this->projectId = 'my-project';
         $this->builder = ProjectAwareAuthResourceUrlBuilder::forProject($this->projectId);
@@ -31,7 +33,7 @@ final class ProjectAwareAuthResourceUrlBuilderTest extends TestCase
 
     public function testItUsesAnEmulatorHostIfProvidedByEnvironmentVariable(): void
     {
-        \putenv('FIREBASE_AUTH_EMULATOR_HOST=localhost:1234');
+        putenv('FIREBASE_AUTH_EMULATOR_HOST=localhost:1234');
 
         $builder = ProjectAwareAuthResourceUrlBuilder::forProject($this->projectId);
 
@@ -40,7 +42,7 @@ final class ProjectAwareAuthResourceUrlBuilderTest extends TestCase
 
     public function testItDoesNotUseTheEmulatorHostWhenItIsEmpty(): void
     {
-        \putenv('FIREBASE_AUTH_EMULATOR_HOST=');
+        putenv('FIREBASE_AUTH_EMULATOR_HOST=');
 
         $builder = ProjectAwareAuthResourceUrlBuilder::forProject($this->projectId);
 

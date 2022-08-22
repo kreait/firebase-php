@@ -12,6 +12,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Throwable;
 
+use function array_filter;
+use function rtrim;
+
 /**
  * @internal
  */
@@ -72,7 +75,7 @@ class ApiClient
      */
     public function listVersions(FindVersions $query, ?string $nextPageToken = null): ResponseInterface
     {
-        $uri = \rtrim((string) $this->client->getConfig('base_uri'), '/').':listVersions';
+        $uri = rtrim((string) $this->client->getConfig('base_uri'), '/').':listVersions';
 
         $since = $query->since();
         $until = $query->until();
@@ -85,7 +88,7 @@ class ApiClient
         $pageSize = $pageSize ? (string) $pageSize : null;
 
         return $this->requestApi('GET', $uri, [
-            'query' => \array_filter([
+            'query' => array_filter([
                 'startTime' => $since,
                 'endTime' => $until,
                 'endVersionNumber' => $lastVersionNumber,
@@ -100,7 +103,7 @@ class ApiClient
      */
     public function rollbackToVersion(VersionNumber $versionNumber): ResponseInterface
     {
-        $uri = \rtrim((string) $this->client->getConfig('base_uri'), '/').':rollback';
+        $uri = rtrim((string) $this->client->getConfig('base_uri'), '/').':rollback';
 
         return $this->requestApi('POST', $uri, [
             'json' => [

@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\RemoteConfig;
 
-final class UpdateType implements \JsonSerializable
+use JsonSerializable;
+
+final class UpdateType implements JsonSerializable
 {
     public const UNSPECIFIED = 'REMOTE_CONFIG_UPDATE_TYPE_UNSPECIFIED';
     public const INCREMENTAL_UPDATE = 'INCREMENTAL_UPDATE';
     public const FORCED_UPDATE = 'FORCED_UPDATE';
     public const ROLLBACK = 'ROLLBACK';
-
     private string $value;
 
     private function __construct(string $value)
@@ -18,14 +19,14 @@ final class UpdateType implements \JsonSerializable
         $this->value = $value;
     }
 
-    public static function fromValue(string $value): self
-    {
-        return new self($value);
-    }
-
     public function __toString(): string
     {
         return $this->value;
+    }
+
+    public static function fromValue(string $value): self
+    {
+        return new self($value);
     }
 
     public function jsonSerialize(): string

@@ -31,7 +31,7 @@ final class AndroidConfigTest extends UnitTestCase
 
         $this->assertJsonStringEqualsJsonString(
             Json::encode($expected),
-            Json::encode(AndroidConfig::new()->withDefaultSound())
+            Json::encode(AndroidConfig::new()->withDefaultSound()),
         );
     }
 
@@ -120,7 +120,6 @@ final class AndroidConfigTest extends UnitTestCase
             'null (#719)' => [null],
         ];
     }
-
 
     /**
      * @return array<string, list<mixed>>

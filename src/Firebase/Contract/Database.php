@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Contract;
 
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\RuleSet;
+use Kreait\Firebase\Database\Transaction;
 use Kreait\Firebase\Exception\DatabaseException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
@@ -60,7 +61,7 @@ interface Database
     public function updateRules(RuleSet $ruleSet): void;
 
     /**
-     * @param callable(\Kreait\Firebase\Database\Transaction $transaction):mixed $callable
+     * @param callable(Transaction $transaction):mixed $callable
      *
      * @return mixed
      */

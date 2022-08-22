@@ -8,6 +8,8 @@ use Kreait\Firebase\RemoteConfig\Condition;
 use Kreait\Firebase\RemoteConfig\TagColor;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+use function array_filter;
+
 /**
  * @internal
  */
@@ -37,7 +39,7 @@ final class ConditionTest extends UnitTestCase
             'tagColor' => $tagColor ? (string) $tagColor : null,
         ];
 
-        $this->assertEquals(\array_filter($expected), $condition->jsonSerialize());
+        $this->assertEquals(array_filter($expected), $condition->jsonSerialize());
         $this->assertEquals($condition, Condition::fromArray($expected));
     }
 

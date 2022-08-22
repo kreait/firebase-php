@@ -10,13 +10,15 @@ use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink;
 use Kreait\Firebase\Http\WrappedPsr7Request;
 use Psr\Http\Message\RequestInterface;
 
+use function rawurlencode;
+
 final class ApiRequest implements RequestInterface
 {
     use WrappedPsr7Request;
 
     public function __construct(GetStatisticsForDynamicLink $action)
     {
-        $link = \rawurlencode($action->dynamicLink());
+        $link = rawurlencode($action->dynamicLink());
 
         $uri = Utils::uriFor('https://firebasedynamiclinks.googleapis.com/v1/'.$link.'/linkStats?durationDays='.$action->durationInDays());
 

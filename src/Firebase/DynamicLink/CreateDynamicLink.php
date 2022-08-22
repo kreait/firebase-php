@@ -6,6 +6,7 @@ namespace Kreait\Firebase\DynamicLink;
 
 use JsonSerializable;
 use Kreait\Firebase\Value\Url;
+use Stringable;
 
 final class CreateDynamicLink implements JsonSerializable
 {
@@ -44,7 +45,7 @@ final class CreateDynamicLink implements JsonSerializable
      * displaying a welcome screen). This link must be a well-formatted URL, be properly
      * URL-encoded, use either HTTP or HTTPS, and cannot be another Dynamic Link.
      *
-     * @param string|\Stringable $url
+     * @param string|Stringable $url
      */
     public static function forUrl($url): self
     {
@@ -55,7 +56,7 @@ final class CreateDynamicLink implements JsonSerializable
     }
 
     /**
-     * @param \Stringable|string $dynamicLinkDomain
+     * @param Stringable|string $dynamicLinkDomain
      */
     public function withDynamicLinkDomain($dynamicLinkDomain): self
     {

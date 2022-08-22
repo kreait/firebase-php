@@ -19,8 +19,8 @@ use Throwable;
  */
 class ApiClient
 {
-    private ClientInterface $client;
     protected DatabaseApiExceptionConverter $errorHandler;
+    private ClientInterface $client;
     private UrlBuilder $resourceUrlBuilder;
 
     public function __construct(ClientInterface $httpClient, UrlBuilder $resourceUrlBuilder)
@@ -82,6 +82,7 @@ class ApiClient
      * @param mixed $value
      *
      * @throws DatabaseException
+     *
      * @return mixed
      */
     public function setWithEtag(string $path, $value, string $etag)

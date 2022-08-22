@@ -8,13 +8,14 @@ use Google\Cloud\Storage\Bucket;
 use Google\Cloud\Storage\StorageClient;
 use Kreait\Firebase\Exception\RuntimeException;
 
+use function array_key_exists;
+
 /**
  * @internal
  */
 final class Storage implements Contract\Storage
 {
     private StorageClient $storageClient;
-
     private ?string $defaultBucket;
 
     /** @var Bucket[] */
@@ -37,11 +38,11 @@ final class Storage implements Contract\Storage
 
         if ($name === null) {
             throw new RuntimeException(
-                'No bucket name was given and no default bucked was configured.'
+                'No bucket name was given and no default bucked was configured.',
             );
         }
 
-        if (!\array_key_exists($name, $this->buckets)) {
+        if (!array_key_exists($name, $this->buckets)) {
             $this->buckets[$name] = $this->storageClient->bucket($name);
         }
 

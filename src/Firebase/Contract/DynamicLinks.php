@@ -12,11 +12,12 @@ use Kreait\Firebase\DynamicLink\DynamicLinkStatistics;
 use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink\FailedToShortenLongDynamicLink;
+use Stringable;
 
 interface DynamicLinks
 {
     /**
-     * @param \Stringable|string|CreateDynamicLink|array<string, array<string, string>> $url
+     * @param Stringable|string|CreateDynamicLink|array<string, array<string, string>> $url
      *
      * @throws InvalidArgumentException
      * @throws FailedToCreateDynamicLink
@@ -24,7 +25,7 @@ interface DynamicLinks
     public function createUnguessableLink($url): DynamicLink;
 
     /**
-     * @param \Stringable|string|CreateDynamicLink|array<string, array<string, string>> $url
+     * @param Stringable|string|CreateDynamicLink|array<string, array<string, string>> $url
      *
      * @throws InvalidArgumentException
      * @throws FailedToCreateDynamicLink
@@ -32,7 +33,7 @@ interface DynamicLinks
     public function createShortLink($url): DynamicLink;
 
     /**
-     * @param \Stringable|string|CreateDynamicLink|array<string, array<string, string>> $actionOrParametersOrUrl
+     * @param Stringable|string|CreateDynamicLink|array<string, array<string, string>> $actionOrParametersOrUrl
      *
      * @throws InvalidArgumentException
      * @throws FailedToCreateDynamicLink
@@ -40,7 +41,7 @@ interface DynamicLinks
     public function createDynamicLink($actionOrParametersOrUrl, ?string $suffixType = null): DynamicLink;
 
     /**
-     * @param \Stringable|string|ShortenLongDynamicLink|array<string, array<string, string>> $longDynamicLinkOrAction
+     * @param Stringable|string|ShortenLongDynamicLink|array<string, array<string, string>> $longDynamicLinkOrAction
      *
      * @throws InvalidArgumentException
      * @throws FailedToShortenLongDynamicLink
@@ -48,7 +49,7 @@ interface DynamicLinks
     public function shortenLongDynamicLink($longDynamicLinkOrAction, ?string $suffixType = null): DynamicLink;
 
     /**
-     * @param \Stringable|string|GetStatisticsForDynamicLink $dynamicLinkOrAction
+     * @param Stringable|string|GetStatisticsForDynamicLink $dynamicLinkOrAction
      *
      * @throws InvalidArgumentException
      * @throws GetStatisticsForDynamicLink\FailedToGetStatisticsForDynamicLink

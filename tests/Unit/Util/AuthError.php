@@ -9,11 +9,8 @@ use JsonSerializable;
 final class AuthError implements JsonSerializable
 {
     private string $message;
-
     private int $code;
-
     private string $reason;
-
     private string $domain;
 
     public function __construct(string $message, ?int $code = null, ?string $reason = null, ?string $domain = null)

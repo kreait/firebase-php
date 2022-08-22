@@ -6,9 +6,13 @@ namespace Kreait\Firebase\Tests\Unit\Util;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use InvalidArgumentException;
 use Kreait\Firebase\Util\DT;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+
+use function microtime;
+use function time;
 
 /**
  * @internal
@@ -47,7 +51,7 @@ final class DTTest extends TestCase
      */
     public function testConvertInvalid($value): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         DT::toUTCDateTimeImmutable($value);
     }
@@ -63,7 +67,7 @@ final class DTTest extends TestCase
             'milliseconds_2' => ['1234567890.123000', 1_234_567_890_123],
             'date_string' => ['345254400.000000', '10.12.1980'],
             'timezoned_1' => ['345328496.789012', '10.12.1980 12:34:56.789012 -08:00'],
-            'timezoned_2' => ['345328496.789012', new \DateTimeImmutable('10.12.1980 12:34:56.789012', new DateTimeZone('America/Los_Angeles'))],
+            'timezoned_2' => ['345328496.789012', new DateTimeImmutable('10.12.1980 12:34:56.789012', new DateTimeZone('America/Los_Angeles'))],
         ];
     }
 
@@ -78,9 +82,9 @@ final class DTTest extends TestCase
             'zero_as_string' => ['0'],
             'true' => [true],
             'false' => [false],
-            'microtime' => [\microtime()],
-            'time' => [\time()],
-            'now in LA' => [new \DateTimeImmutable('now', new DateTimeZone('America/Los_Angeles'))],
+            'microtime' => [microtime()],
+            'time' => [time()],
+            'now in LA' => [new DateTimeImmutable('now', new DateTimeZone('America/Los_Angeles'))],
             'now in Bangkok' => [new DateTimeImmutable('now', new DateTimeZone('Asia/Bangkok'))],
         ];
     }

@@ -8,6 +8,8 @@ use Kreait\Firebase\Auth\AuthResourceUrlBuilder;
 use Kreait\Firebase\Util;
 use PHPUnit\Framework\TestCase;
 
+use function putenv;
+
 /**
  * @internal
  */
@@ -25,7 +27,7 @@ final class AuthResourceUrlBuilderTest extends TestCase
 
     public function testItUsesAnEmulatorHostIfProvidedByEnvironmentVariable(): void
     {
-        \putenv('FIREBASE_AUTH_EMULATOR_HOST=localhost:1234');
+        putenv('FIREBASE_AUTH_EMULATOR_HOST=localhost:1234');
 
         $builder = AuthResourceUrlBuilder::create();
 
@@ -34,7 +36,7 @@ final class AuthResourceUrlBuilderTest extends TestCase
 
     public function testItDoesNotUseTheEmulatorHostWhenItIsEmpty(): void
     {
-        \putenv('FIREBASE_AUTH_EMULATOR_HOST=');
+        putenv('FIREBASE_AUTH_EMULATOR_HOST=');
 
         $builder = AuthResourceUrlBuilder::create();
 

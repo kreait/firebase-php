@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Kreait\Firebase\DynamicLink;
 
 use Kreait\Firebase\Value\Url;
+use Stringable;
 
 final class GetStatisticsForDynamicLink
 {
     public const DEFAULT_DURATION_IN_DAYS = 7;
-
     private string $dynamicLink;
     private int $durationInDays = self::DEFAULT_DURATION_IN_DAYS;
 
@@ -19,7 +19,7 @@ final class GetStatisticsForDynamicLink
     }
 
     /**
-     * @param \Stringable|string $link
+     * @param Stringable|string $link
      */
     public static function forLink($link): self
     {

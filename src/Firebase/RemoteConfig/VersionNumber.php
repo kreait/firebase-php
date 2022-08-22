@@ -4,15 +4,23 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\RemoteConfig;
 
+use JsonSerializable;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
-final class VersionNumber implements \JsonSerializable
+use function ctype_digit;
+
+final class VersionNumber implements JsonSerializable
 {
     private string $value;
 
     private function __construct(string $value)
     {
         $this->value = $value;
+    }
+
+    public function __toString()
+    {
+        return $this->value;
     }
 
     /**
@@ -22,16 +30,11 @@ final class VersionNumber implements \JsonSerializable
     {
         $valueString = (string) $value;
 
-        if (!\ctype_digit($valueString)) {
+        if (!ctype_digit($valueString)) {
             throw new InvalidArgumentException('A version number should only consist of digits');
         }
 
         return new self($valueString);
-    }
-
-    public function __toString()
-    {
-        return $this->value;
     }
 
     public function jsonSerialize(): string

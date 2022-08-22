@@ -8,6 +8,9 @@ use Beste\Json;
 use Kreait\Firebase\Auth\UserQuery;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 final class UserQueryTest extends TestCase
 {
     public function testItCanBeComposed(): void
@@ -17,7 +20,7 @@ final class UserQueryTest extends TestCase
             'sortBy' => 'USER_EMAIL',
             'order' => 'DESC',
             'offset' => 1,
-            'limit' => 499
+            'limit' => 499,
         ];
 
         $query = UserQuery::all()
@@ -45,7 +48,7 @@ final class UserQueryTest extends TestCase
     {
         $expected = [
             'returnUserInfo' => true,
-            'order' => 'DESC'
+            'order' => 'DESC',
         ];
 
         $query = UserQuery::all()->inDescendingOrder();
@@ -60,7 +63,7 @@ final class UserQueryTest extends TestCase
             'sortBy' => 'USER_EMAIL',
             'order' => 'DESC',
             'offset' => 1,
-            'limit' => 499
+            'limit' => 499,
         ];
 
         $query = UserQuery::fromArray($data);

@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Database;
 
+use Kreait\Firebase\Database\Reference\Validator;
+use Kreait\Firebase\Exception\DatabaseException;
+use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\OutOfRangeException;
+use Psr\Http\Message\UriInterface;
+
 use function array_fill_keys;
 use function array_keys;
 use function array_map;
 use function basename;
 use function dirname;
 use function is_array;
-use Kreait\Firebase\Database\Reference\Validator;
-use Kreait\Firebase\Exception\DatabaseException;
-use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\Exception\OutOfRangeException;
 use function ltrim;
-use Psr\Http\Message\UriInterface;
 use function sprintf;
 use function trim;
 
@@ -39,9 +40,9 @@ class Reference
      */
     public function __construct(
         UriInterface $uri,
-        ApiClient    $apiClient,
-        UrlBuilder   $urlBuilder,
-        ?Validator   $validator = null
+        ApiClient $apiClient,
+        UrlBuilder $urlBuilder,
+        ?Validator $validator = null
     ) {
         $this->validator = $validator ?? new Validator();
         $this->validator->validateUri($uri);
@@ -49,6 +50,16 @@ class Reference
         $this->uri = $uri;
         $this->apiClient = $apiClient;
         $this->urlBuilder = $urlBuilder;
+    }
+
+    /**
+     * Returns the absolute URL for this location.
+     *
+     * @see getUri()
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getUri();
     }
 
     /**
@@ -91,10 +102,10 @@ class Reference
         }
 
         return new self(
-            $this->uri->withPath('/'. ltrim($parentPath, '/')),
+            $this->uri->withPath('/'.ltrim($parentPath, '/')),
             $this->apiClient,
             $this->urlBuilder,
-            $this->validator
+            $this->validator,
         );
     }
 
@@ -127,7 +138,7 @@ class Reference
                 $this->uri->withPath($childPath),
                 $this->apiClient,
                 $this->urlBuilder,
-                $this->validator
+                $this->validator,
             );
         } catch (\InvalidArgumentException $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
@@ -257,8 +268,8 @@ class Reference
     /**
      * Returns the keys of a reference's children.
      *
-     * @throws OutOfRangeException if the reference has no children with keys
      * @throws DatabaseException if the API reported an error
+     * @throws OutOfRangeException if the reference has no children with keys
      *
      * @return string[]
      */
@@ -380,7 +391,7 @@ class Reference
     public function removeChildren(array $keys): self
     {
         $this->update(
-            array_fill_keys($keys, null)
+            array_fill_keys($keys, null),
         );
 
         return $this;
@@ -427,16 +438,6 @@ class Reference
     public function getUri(): UriInterface
     {
         return $this->uri;
-    }
-
-    /**
-     * Returns the absolute URL for this location.
-     *
-     * @see getUri()
-     */
-    public function __toString(): string
-    {
-        return (string) $this->getUri();
     }
 
     /**

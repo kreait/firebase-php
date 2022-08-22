@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
+use JsonSerializable;
+
+use function array_filter;
+
 /**
  * @see https://cloud.google.com/identity-platform/docs/reference/rest/v1/projects.accounts/query#request-body
  *
@@ -15,21 +19,18 @@ namespace Kreait\Firebase\Auth;
  *     filter?: array<self::FILTER_*, non-empty-string>
  * }
  */
-class UserQuery implements \JsonSerializable
+class UserQuery implements JsonSerializable
 {
     public const FIELD_CREATED_AT = 'CREATED_AT';
     public const FIELD_LAST_LOGIN_AT = 'LAST_LOGIN_AT';
     public const FIELD_NAME = 'NAME';
     public const FIELD_USER_EMAIL = 'USER_EMAIL';
     public const FIELD_USER_ID = 'USER_ID';
-
     public const FILTER_EMAIL = 'email';
     public const FILTER_PHONE_NUMBER = 'phoneNumber';
     public const FILTER_USER_ID = 'userId';
-
     public const ORDER_ASC = 'ASC';
     public const ORDER_DESC = 'DESC';
-
     public const MAX_LIMIT = 500;
 
     /** @var int<1, self::MAX_LIMIT>|null */
@@ -79,17 +80,6 @@ class UserQuery implements \JsonSerializable
     {
         $query = clone $this;
         $query->sortBy = $sortedBy;
-
-        return $query;
-    }
-
-    /**
-     * @param self::ORDER_* $direction
-     */
-    private function withOrder(string $direction): self
-    {
-        $query = clone $this;
-        $query->order = $direction;
 
         return $query;
     }
@@ -163,5 +153,16 @@ class UserQuery implements \JsonSerializable
         }
 
         return $data;
+    }
+
+    /**
+     * @param self::ORDER_* $direction
+     */
+    private function withOrder(string $direction): self
+    {
+        $query = clone $this;
+        $query->order = $direction;
+
+        return $query;
     }
 }

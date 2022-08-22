@@ -9,13 +9,15 @@ use Kreait\Firebase\Exception\FirebaseException;
 use RuntimeException;
 use Throwable;
 
+use function trim;
+
 final class TransactionFailed extends RuntimeException implements FirebaseException
 {
     private Reference $reference;
 
     public function __construct(Reference $query, string $message = '', int $code = 0, ?Throwable $previous = null)
     {
-        if (\trim($message) === '') {
+        if (trim($message) === '') {
             $queryPath = $query->getPath();
 
             $message = "The transaction on {$queryPath} failed";

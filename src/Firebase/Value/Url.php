@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Value;
 
 use GuzzleHttp\Psr7\Uri;
+use JsonSerializable;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
+use Stringable;
 use Throwable;
 
 /**
  * @internal
  */
-final class Url implements \JsonSerializable
+final class Url implements JsonSerializable
 {
     private UriInterface $value;
 
@@ -21,8 +23,13 @@ final class Url implements \JsonSerializable
         $this->value = $value;
     }
 
+    public function __toString()
+    {
+        return (string) $this->value;
+    }
+
     /**
-     * @param \Stringable|string $value
+     * @param Stringable|string $value
      *
      * @throws InvalidArgumentException
      */
@@ -44,18 +51,13 @@ final class Url implements \JsonSerializable
         return $this->value;
     }
 
-    public function __toString()
-    {
-        return (string) $this->value;
-    }
-
     public function jsonSerialize(): string
     {
         return (string) $this->value;
     }
 
     /**
-     * @param \Stringable|string $other
+     * @param Stringable|string $other
      */
     public function equalsTo($other): bool
     {

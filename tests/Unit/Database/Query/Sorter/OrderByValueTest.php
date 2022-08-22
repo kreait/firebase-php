@@ -8,6 +8,8 @@ use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database\Query\Sorter\OrderByValue;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+use function rawurlencode;
+
 /**
  * @internal
  */
@@ -23,8 +25,8 @@ final class OrderByValueTest extends UnitTestCase
     public function testModifyUri(): void
     {
         $this->assertStringContainsString(
-            'orderBy='.\rawurlencode('"$value"'),
-            (string) $this->sorter->modifyUri(new Uri('http://domain.tld'))
+            'orderBy='.rawurlencode('"$value"'),
+            (string) $this->sorter->modifyUri(new Uri('http://domain.tld')),
         );
     }
 

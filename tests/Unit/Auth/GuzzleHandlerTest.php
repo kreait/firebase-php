@@ -15,15 +15,17 @@ use Kreait\Firebase\Auth\SignIn\GuzzleHandler;
 use Kreait\Firebase\Auth\SignInAnonymously;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+use const JSON_FORCE_OBJECT;
+
+use function json_encode;
+
 /**
  * @internal
  */
 final class GuzzleHandlerTest extends UnitTestCase
 {
     private MockHandler $httpResponses;
-
     private SignIn $action;
-
     private GuzzleHandler $handler;
 
     protected function setUp(): void
@@ -73,7 +75,7 @@ final class GuzzleHandlerTest extends UnitTestCase
 
     public function testItWorks(): void
     {
-        $this->httpResponses->append(new Response(200, [], (string) \json_encode([
+        $this->httpResponses->append(new Response(200, [], (string) json_encode([
             'id_token' => 'id_token',
             'refresh_token' => 'refresh_token',
             'access_token' => 'access_token',

@@ -7,6 +7,13 @@ namespace Kreait\Firebase\Util;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Throwable;
 
+use const JSON_PRETTY_PRINT;
+use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_SLASHES;
+
+use function json_decode;
+use function json_encode;
+
 /**
  * @internal
  *
@@ -34,7 +41,7 @@ final class JSON
         $depth ??= 512;
 
         try {
-            return \json_encode($value, JSON_THROW_ON_ERROR | $options, $depth);
+            return json_encode($value, JSON_THROW_ON_ERROR | $options, $depth);
         } catch (Throwable $e) {
             throw new InvalidArgumentException('json_encode error: '.$e->getMessage());
         }
@@ -63,7 +70,7 @@ final class JSON
         $options ??= 0;
 
         try {
-            return \json_decode($json, $assoc, $depth, JSON_THROW_ON_ERROR | $options);
+            return json_decode($json, $assoc, $depth, JSON_THROW_ON_ERROR | $options);
         } catch (Throwable $e) {
             throw new InvalidArgumentException('json_decode error: '.$e->getMessage());
         }

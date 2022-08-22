@@ -11,6 +11,10 @@ use Kreait\Firebase\Auth\CreateSessionCookie;
 use Kreait\Firebase\Http\WrappedPsr7Request;
 use Psr\Http\Message\RequestInterface;
 
+use const JSON_FORCE_OBJECT;
+
+use function array_filter;
+
 /**
  * @deprecated 6.0.1
  * @codeCoverageIgnore
@@ -30,7 +34,7 @@ final class ApiRequest implements RequestInterface
 
         $body = Utils::streamFor(Json::encode($data, JSON_FORCE_OBJECT));
 
-        $headers = \array_filter([
+        $headers = array_filter([
             'Content-Type' => 'application/json; charset=UTF-8',
             'Content-Length' => (string) $body->getSize(),
         ]);

@@ -9,6 +9,8 @@ use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
 
+use function current;
+
 /**
  * @internal
  * @group database-emulator
@@ -30,8 +32,8 @@ final class QueryTest extends DatabaseTestCase
         $rules = self::$db->getRuleSet()->getRules();
 
         $rules['rules'][$this->ref->getPath()] =
-            [__FUNCTION__ => ['.indexOn' => ['key']]
-        ];
+            [__FUNCTION__ => ['.indexOn' => ['key']],
+            ];
 
         self::$db->updateRules(RuleSet::fromArray($rules));
 

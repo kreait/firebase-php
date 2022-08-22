@@ -10,6 +10,9 @@ use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Exception\Database\PermissionDenied;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
 
+use function assert;
+use function is_string;
+
 /**
  * @internal
  * @group database-emulator
@@ -34,7 +37,7 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
     public function testItCanAccessAReferenceThatBelongsToTheSameUser(): void
     {
         $uid = $this->auth->signInAnonymously()->firebaseUserId();
-        \assert(\is_string($uid));
+        assert(is_string($uid));
 
         $this->publishRules(__FUNCTION__, ['.read' => 'auth.uid === "'.$uid.'"']);
 
@@ -51,7 +54,7 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
     public function testItCanNotAccessAReferenceThatRequiresAnotherUser(): void
     {
         $uid = $this->auth->signInAnonymously()->firebaseUserId();
-        \assert(\is_string($uid));
+        assert(is_string($uid));
 
         $this->publishRules(__FUNCTION__, ['.read' => 'auth.uid === "someone-else"']);
 
@@ -68,7 +71,7 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
     public function testItCanAccessAPublicReferenceWhenAuthOverrideIsSetToBeUnauthenticated(): void
     {
         $uid = $this->auth->signInAnonymously()->firebaseUserId();
-        \assert(\is_string($uid));
+        assert(is_string($uid));
 
         $this->publishRules(__FUNCTION__, ['.read' => true]);
 
@@ -76,8 +79,7 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
             $this->databaseWithAuthOverride(null)
                 ->getReference(self::$refPrefix)
                 ->getChild(__FUNCTION__)
-                ->getValue()
-            ;
+                ->getValue();
 
             $this->addToAssertionCount(1);
         } finally {
@@ -88,7 +90,7 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
     public function testWhenUnauthenticatedItCanNotAccessAReferenceThatRequiresAuthentication(): void
     {
         $uid = $this->auth->signInAnonymously()->firebaseUserId();
-        \assert(\is_string($uid));
+        assert(is_string($uid));
 
         $this->publishRules(__FUNCTION__, ['.read' => 'auth != null']);
 
@@ -123,7 +125,6 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
         return self::$factory
             ->withDatabaseUri(self::$rtdbUrl)
             ->withDatabaseAuthVariableOverride($override)
-            ->createDatabase()
-        ;
+            ->createDatabase();
     }
 }

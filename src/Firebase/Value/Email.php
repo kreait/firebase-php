@@ -4,18 +4,23 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Value;
 
+use JsonSerializable;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+
+use const FILTER_VALIDATE_EMAIL;
+
+use function filter_var;
 
 /**
  * @internal
  */
-final class Email implements \JsonSerializable
+final class Email implements JsonSerializable
 {
     private string $value;
 
     public function __construct(string $value)
     {
-        if (!\filter_var($value, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
             throw new InvalidArgumentException('The email address is invalid.');
         }
 

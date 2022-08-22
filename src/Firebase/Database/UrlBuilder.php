@@ -7,6 +7,15 @@ namespace Kreait\Firebase\Database;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Util;
 
+use function assert;
+use function http_build_query;
+use function in_array;
+use function is_string;
+use function preg_match;
+use function rtrim;
+use function strtr;
+use function trim;
+
 final class UrlBuilder
 {
     private const EXPECTED_URL_FORMAT = '@^https://(?P<namespace>[^.]+)\.(?P<host>.+)$@';
@@ -22,6 +31,7 @@ final class UrlBuilder
 
     /**
      * @phpstan-param 'http'|'https' $scheme
+     *
      * @param non-empty-string $host
      * @param array<string, string> $defaultQueryParams
      */
@@ -40,6 +50,25 @@ final class UrlBuilder
         ['scheme' => $scheme, 'host' => $host, 'query' => $query] = self::parseDatabaseUrl($databaseUrl);
 
         return new self($scheme, $host, $query);
+    }
+
+    /**
+     * @param array<string, string> $queryParams
+     */
+    public function getUrl(string $path, array $queryParams = []): string
+    {
+        $allQueryParams = $this->defaultQueryParams + $queryParams;
+        $path = '/'.trim($path, '/');
+
+        $url = strtr('{scheme}://{host}{path}?{queryParams}', [
+            '{scheme}' => $this->scheme,
+            '{host}' => $this->host,
+            '{path}' => $path,
+            '{queryParams}' => http_build_query($allQueryParams),
+        ]);
+
+        // If no queryParams are present, remove the trailing '?'
+        return trim($url, '?');
     }
 
     /**
@@ -64,7 +93,9 @@ final class UrlBuilder
         $host = $matches['host'];
         assert(is_string($host) && $host !== '');
 
-        if (($emulatorHost = Util::rtdbEmulatorHost()) !== '' && ($emulatorHost = Util::rtdbEmulatorHost()) !== '0') {
+        $emulatorHost = Util::rtdbEmulatorHost();
+
+        if (!in_array($emulatorHost, ['', '0'], true)) {
             return [
                 'scheme' => 'http',
                 'host' => $emulatorHost,
@@ -77,24 +108,5 @@ final class UrlBuilder
             'host' => $namespace.'.'.$host,
             'query' => [],
         ];
-    }
-
-    /**
-     * @param array<string, string> $queryParams
-     */
-    public function getUrl(string $path, array $queryParams = []): string
-    {
-        $allQueryParams = $this->defaultQueryParams + $queryParams;
-        $path = '/'.trim($path, '/');
-
-        $url = strtr('{scheme}://{host}{path}?{queryParams}', [
-            '{scheme}' => $this->scheme,
-            '{host}' => $this->host,
-            '{path}' => $path,
-            '{queryParams}' => http_build_query($allQueryParams)
-        ]);
-
-        // If no queryParams are present, remove the trailing '?'
-        return trim($url, '?');
     }
 }

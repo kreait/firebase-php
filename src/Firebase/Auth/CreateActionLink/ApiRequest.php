@@ -11,6 +11,10 @@ use Kreait\Firebase\Auth\CreateActionLink;
 use Kreait\Firebase\Http\WrappedPsr7Request;
 use Psr\Http\Message\RequestInterface;
 
+use const JSON_FORCE_OBJECT;
+
+use function array_filter;
+
 /**
  * @deprecated 6.0.1
  * @codeCoverageIgnore
@@ -23,7 +27,7 @@ final class ApiRequest implements RequestInterface
     {
         $uri = Utils::uriFor('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode');
 
-        $data = \array_filter([
+        $data = array_filter([
             'requestType' => $action->type(),
             'email' => $action->email(),
             'returnOobLink' => true,
@@ -32,7 +36,7 @@ final class ApiRequest implements RequestInterface
 
         $body = Utils::streamFor(Json::encode($data, JSON_FORCE_OBJECT));
 
-        $headers = \array_filter([
+        $headers = array_filter([
             'Content-Type' => 'application/json; charset=UTF-8',
             'Content-Length' => (string) $body->getSize(),
             'X-Firebase-Locale' => $action->locale(),

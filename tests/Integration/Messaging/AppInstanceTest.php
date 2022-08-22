@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Tests\Integration\Messaging;
 use Kreait\Firebase\Contract\Messaging;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
+use function bin2hex;
+use function random_bytes;
+
 /**
  * @internal
  */
@@ -23,8 +26,8 @@ final class AppInstanceTest extends IntegrationTestCase
     {
         $token = $this->getTestRegistrationToken();
 
-        $firstTopic = \bin2hex(\random_bytes(5)).__FUNCTION__;
-        $secondTopic = \bin2hex(\random_bytes(5)).__FUNCTION__;
+        $firstTopic = bin2hex(random_bytes(5)).__FUNCTION__;
+        $secondTopic = bin2hex(random_bytes(5)).__FUNCTION__;
 
         $this->messaging->subscribeToTopic($firstTopic, $token);
         $this->messaging->subscribeToTopic($secondTopic, $token);

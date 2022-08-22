@@ -8,6 +8,8 @@ use Kreait\Firebase\Exception\Database\ReferenceHasNotBeenSnapshotted;
 use Kreait\Firebase\Exception\Database\TransactionFailed;
 use Kreait\Firebase\Exception\DatabaseException;
 
+use function array_key_exists;
+
 class Transaction
 {
     private ApiClient $apiClient;
@@ -77,7 +79,7 @@ class Transaction
     {
         $path = $reference->getPath();
 
-        if (\array_key_exists($path, $this->etags)) {
+        if (array_key_exists($path, $this->etags)) {
             return $this->etags[$path];
         }
 

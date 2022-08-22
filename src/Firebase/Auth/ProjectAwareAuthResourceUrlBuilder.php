@@ -6,6 +6,10 @@ namespace Kreait\Firebase\Auth;
 
 use Kreait\Firebase\Util;
 
+use function http_build_query;
+use function str_replace;
+use function strtr;
+
 /**
  * @internal
  */
@@ -13,9 +17,7 @@ final class ProjectAwareAuthResourceUrlBuilder
 {
     private const URL_FORMAT = 'https://identitytoolkit.googleapis.com/{version}/projects/{projectId}{api}';
     private const EMULATOR_URL_FORMAT = 'http://{host}/identitytoolkit.googleapis.com/{version}/projects/{projectId}{api}';
-
     private const DEFAULT_API_VERSION = 'v1';
-
     private string $projectId;
     private string $apiVersion;
     private string $urlFormat;
@@ -33,7 +35,7 @@ final class ProjectAwareAuthResourceUrlBuilder
         $emulatorHost = Util::authEmulatorHost();
 
         $urlFormat = $emulatorHost !== ''
-            ? \str_replace('{host}', $emulatorHost, self::EMULATOR_URL_FORMAT)
+            ? str_replace('{host}', $emulatorHost, self::EMULATOR_URL_FORMAT)
             : self::URL_FORMAT;
 
         return new self($projectId, $version, $urlFormat);
@@ -46,14 +48,14 @@ final class ProjectAwareAuthResourceUrlBuilder
     {
         $api ??= '';
 
-        $url = \strtr($this->urlFormat, [
+        $url = strtr($this->urlFormat, [
             '{version}' => $this->apiVersion,
             '{projectId}' => $this->projectId,
             '{api}' => $api,
         ]);
 
         if ($params !== null) {
-            $url .= '?'.\http_build_query($params);
+            $url .= '?'.http_build_query($params);
         }
 
         return $url;

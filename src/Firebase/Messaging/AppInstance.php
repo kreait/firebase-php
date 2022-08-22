@@ -16,7 +16,6 @@ final class AppInstance implements JsonSerializable
 
     /** @var array<string, mixed> */
     private array $rawData;
-
     private TopicSubscriptions $topicSubscriptions;
 
     /**

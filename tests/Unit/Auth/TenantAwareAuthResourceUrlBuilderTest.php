@@ -7,6 +7,8 @@ namespace Kreait\Firebase\Tests\Unit\Auth;
 use Kreait\Firebase\Auth\TenantAwareAuthResourceUrlBuilder;
 use PHPUnit\Framework\TestCase;
 
+use function putenv;
+
 /**
  * @internal
  */
@@ -19,14 +21,14 @@ final class TenantAwareAuthResourceUrlBuilderTest extends TestCase
     protected function setUp(): void
     {
         // Make sure the environment variable is not set (just in case it is set by an integration test)
-        \putenv('FIREBASE_AUTH_EMULATOR_HOST');
+        putenv('FIREBASE_AUTH_EMULATOR_HOST');
 
         $this->projectId = 'my-project';
         $this->tenantId = 'my-tenant';
 
         $this->builder = TenantAwareAuthResourceUrlBuilder::forProjectAndTenant(
             $this->projectId,
-            $this->tenantId
+            $this->tenantId,
         );
     }
 
@@ -42,11 +44,11 @@ final class TenantAwareAuthResourceUrlBuilderTest extends TestCase
 
     public function testItUsesAnEmulatorHostIfProvidedByEnvironmentVariable(): void
     {
-        \putenv('FIREBASE_AUTH_EMULATOR_HOST=localhost:1234');
+        putenv('FIREBASE_AUTH_EMULATOR_HOST=localhost:1234');
 
         $builder = TenantAwareAuthResourceUrlBuilder::forProjectAndTenant(
             $this->projectId,
-            $this->tenantId
+            $this->tenantId,
         );
 
         $this->assertStringContainsString('localhost:1234', $builder->getUrl());
@@ -54,11 +56,11 @@ final class TenantAwareAuthResourceUrlBuilderTest extends TestCase
 
     public function testItDoesNotUseTheEmulatorHostWhenItIsEmpty(): void
     {
-        \putenv('FIREBASE_AUTH_EMULATOR_HOST=');
+        putenv('FIREBASE_AUTH_EMULATOR_HOST=');
 
         $builder = TenantAwareAuthResourceUrlBuilder::forProjectAndTenant(
             $this->projectId,
-            $this->tenantId
+            $this->tenantId,
         );
 
         $this->assertStringNotContainsString('{host}', $builder->getUrl());

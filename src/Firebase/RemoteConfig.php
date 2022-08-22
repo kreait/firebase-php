@@ -14,6 +14,8 @@ use Kreait\Firebase\RemoteConfig\VersionNumber;
 use Psr\Http\Message\ResponseInterface;
 use Traversable;
 
+use function array_shift;
+
 /**
  * @internal
  */
@@ -40,10 +42,9 @@ final class RemoteConfig implements Contract\RemoteConfig
     {
         $etag = $this->client
             ->publishTemplate($this->ensureTemplate($template))
-            ->getHeader('ETag')
-        ;
+            ->getHeader('ETag');
 
-        return \array_shift($etag) ?: '';
+        return array_shift($etag) ?: '';
     }
 
     public function getVersion($versionNumber): Version
@@ -79,6 +80,7 @@ final class RemoteConfig implements Contract\RemoteConfig
 
             foreach ((array) ($result['versions'] ?? []) as $versionData) {
                 ++$count;
+
                 yield Version::fromArray($versionData);
 
                 if ($count === $limit) {
@@ -109,7 +111,7 @@ final class RemoteConfig implements Contract\RemoteConfig
     private function buildTemplateFromResponse(ResponseInterface $response): Template
     {
         $etagHeader = $response->getHeader('ETag');
-        $etag = \array_shift($etagHeader) ?: '*';
+        $etag = array_shift($etagHeader) ?: '*';
 
         $data = Json::decode((string) $response->getBody(), true);
 

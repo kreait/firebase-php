@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Auth;
 
 use DateTimeImmutable;
+use JsonSerializable;
 use Kreait\Firebase\Util\DT;
 
-class UserMetaData implements \JsonSerializable
+use const DATE_ATOM;
+
+use function get_object_vars;
+
+class UserMetaData implements JsonSerializable
 {
     public ?DateTimeImmutable $createdAt = null;
     public ?DateTimeImmutable $lastLoginAt = null;
@@ -47,7 +52,7 @@ class UserMetaData implements \JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        $data = \get_object_vars($this);
+        $data = get_object_vars($this);
 
         $data['createdAt'] = $this->createdAt !== null ? $this->createdAt->format(DATE_ATOM) : null;
         $data['lastLoginAt'] = $this->lastLoginAt !== null ? $this->lastLoginAt->format(DATE_ATOM) : null;

@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging;
 
+use JsonSerializable;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+
+use function array_filter;
 
 /**
  * @phpstan-type NotificationShape array{
@@ -13,7 +16,7 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
  *     imageUrl?: string
  * }
  */
-final class Notification implements \JsonSerializable
+final class Notification implements JsonSerializable
 {
     private ?string $title;
     private ?string $body;
@@ -51,7 +54,7 @@ final class Notification implements \JsonSerializable
         return new self(
             $data['title'] ?? null,
             $data['body'] ?? null,
-            $data['image'] ?? null
+            $data['image'] ?? null,
         );
     }
 
@@ -99,7 +102,7 @@ final class Notification implements \JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return \array_filter([
+        return array_filter([
             'title' => $this->title,
             'body' => $this->body,
             'image' => $this->imageUrl,

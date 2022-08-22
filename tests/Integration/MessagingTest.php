@@ -131,8 +131,7 @@ final class MessagingTest extends IntegrationTestCase
     public function testSendingAMessageWithEmptyMessageDataShouldNotFail(): void
     {
         $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
-            ->withData([])
-        ;
+            ->withData([]);
 
         $this->messaging->send($message);
         $this->addToAssertionCount(1);
@@ -144,8 +143,7 @@ final class MessagingTest extends IntegrationTestCase
     public function testSendMessageWithReservedKeywordInMessageDataThatIsStillAccepted(string $keyword): void
     {
         $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
-            ->withData([$keyword => 'value'])
-        ;
+            ->withData([$keyword => 'value']);
 
         $this->messaging->send($message);
         $this->addToAssertionCount(1);

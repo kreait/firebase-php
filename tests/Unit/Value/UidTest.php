@@ -8,6 +8,8 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\Uid;
 use PHPUnit\Framework\TestCase;
 
+use function str_repeat;
+
 /**
  * @internal
  */
@@ -55,7 +57,7 @@ final class UidTest extends TestCase
     {
         return [
             'empty string' => [''],
-            'too long' => [\str_repeat('x', 129)],
+            'too long' => [str_repeat('x', 129)],
         ];
     }
 }

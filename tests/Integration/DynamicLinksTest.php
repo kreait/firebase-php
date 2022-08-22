@@ -8,13 +8,14 @@ use Kreait\Firebase\Contract\DynamicLinks;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
+use function mb_strlen;
+
 /**
  * @internal
  */
 final class DynamicLinksTest extends IntegrationTestCase
 {
     private DynamicLinks $service;
-
     private string $domain = 'https://beste.page.link';
 
     protected function setUp(): void
@@ -27,7 +28,7 @@ final class DynamicLinksTest extends IntegrationTestCase
         $link = $this->service->createUnguessableLink('https://domain.tld');
 
         $this->assertSame($this->domain, $link->domain());
-        $this->assertSame(17, \mb_strlen($link->suffix()));
+        $this->assertSame(17, mb_strlen($link->suffix()));
     }
 
     public function testItCreatesAShortLink(): void
@@ -35,7 +36,7 @@ final class DynamicLinksTest extends IntegrationTestCase
         $link = $this->service->createShortLink('https://domain.tld');
 
         $this->assertSame($this->domain, $link->domain());
-        $this->assertSame(4, \mb_strlen($link->suffix()));
+        $this->assertSame(4, mb_strlen($link->suffix()));
     }
 
     public function testItCreatesAnUnguessableLinkByDefault(): void
@@ -43,7 +44,7 @@ final class DynamicLinksTest extends IntegrationTestCase
         $link = $this->service->createUnguessableLink('https://domain.tld');
 
         $this->assertSame($this->domain, $link->domain());
-        $this->assertSame(17, \mb_strlen($link->suffix()));
+        $this->assertSame(17, mb_strlen($link->suffix()));
     }
 
     public function testItShortensALongDynamicLinkToAnUnguessableLinkByDefault(): void
@@ -51,29 +52,29 @@ final class DynamicLinksTest extends IntegrationTestCase
         $link = $this->service->shortenLongDynamicLink($this->domain.'/?link=https://domain.tld');
 
         $this->assertSame($this->domain, $link->domain());
-        $this->assertSame(17, \mb_strlen($link->suffix()));
+        $this->assertSame(17, mb_strlen($link->suffix()));
     }
 
     public function testItShortensALongDynamicLinkToAShortLink(): void
     {
         $link = $this->service->shortenLongDynamicLink(
             $this->domain.'/?link=https://domain.tld',
-            ShortenLongDynamicLink::WITH_SHORT_SUFFIX
+            ShortenLongDynamicLink::WITH_SHORT_SUFFIX,
         );
 
         $this->assertSame($this->domain, $link->domain());
-        $this->assertSame(4, \mb_strlen($link->suffix()));
+        $this->assertSame(4, mb_strlen($link->suffix()));
     }
 
     public function testItShortensALongDynamicLinkToAnUnguessableShortLink(): void
     {
         $link = $this->service->shortenLongDynamicLink(
             $this->domain.'/?link=https://domain.tld',
-            ShortenLongDynamicLink::WITH_UNGUESSABLE_SUFFIX
+            ShortenLongDynamicLink::WITH_UNGUESSABLE_SUFFIX,
         );
 
         $this->assertSame($this->domain, $link->domain());
-        $this->assertSame(17, \mb_strlen($link->suffix()));
+        $this->assertSame(17, mb_strlen($link->suffix()));
     }
 
     public function testItGetsLinkStatistics(): void

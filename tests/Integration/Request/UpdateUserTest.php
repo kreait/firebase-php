@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration\Request;
 
+use DateTimeImmutable;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Request\UpdateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+
+use function bin2hex;
+use function random_bytes;
+use function random_int;
 
 /**
  * @internal
@@ -53,7 +58,7 @@ final class UpdateUserTest extends IntegrationTestCase
     {
         $user = $this->auth->createUser(
             CreateUser::new()
-                ->withUid($uid = \bin2hex(\random_bytes(5)))
+                ->withUid($uid = bin2hex(random_bytes(5))),
         );
 
         $this->assertNotTrue($user->emailVerified);
@@ -72,8 +77,8 @@ final class UpdateUserTest extends IntegrationTestCase
     {
         $user = $this->auth->createUser(
             CreateUser::new()
-                ->withUid($uid = \bin2hex(\random_bytes(5)))
-                ->withUnverifiedEmail($uid.'@example.org')
+                ->withUid($uid = bin2hex(random_bytes(5)))
+                ->withUnverifiedEmail($uid.'@example.org'),
         );
 
         $this->assertFalse($user->emailVerified);
@@ -91,8 +96,8 @@ final class UpdateUserTest extends IntegrationTestCase
     {
         $user = $this->auth->createUser(
             CreateUser::new()
-                ->withUid($uid = \bin2hex(\random_bytes(5)))
-                ->withVerifiedEmail($uid.'@example.org')
+                ->withUid($uid = bin2hex(random_bytes(5)))
+                ->withVerifiedEmail($uid.'@example.org'),
         );
 
         $this->assertTrue($user->emailVerified);
@@ -109,8 +114,7 @@ final class UpdateUserTest extends IntegrationTestCase
     public function testUpdateUserWithCustomAttributes(): void
     {
         $request = CreateUser::new()
-            ->withUid($uid = \bin2hex(\random_bytes(5)))
-        ;
+            ->withUid($uid = bin2hex(random_bytes(5)));
 
         $this->auth->createUser($request);
 
@@ -118,8 +122,7 @@ final class UpdateUserTest extends IntegrationTestCase
             ->withCustomAttributes($claims = [
                 'admin' => true,
                 'groupId' => '1234',
-            ])
-        ;
+            ]);
 
         $user = $this->auth->updateUser($uid, $request);
         $this->assertEquals($claims, $user->customClaims);
@@ -139,16 +142,16 @@ final class UpdateUserTest extends IntegrationTestCase
     {
         $user = $this->auth->createUser(
             CreateUser::new()
-                ->withUid($uid = \bin2hex(\random_bytes(5)))
+                ->withUid($uid = bin2hex(random_bytes(5)))
                 ->withVerifiedEmail($uid.'@example.org')
-                ->withPhoneNumber($phoneNumber = '+1234567'.\random_int(1000, 9999))
+                ->withPhoneNumber($phoneNumber = '+1234567'.random_int(1000, 9999)),
         );
 
         $this->assertSame($phoneNumber, $user->phoneNumber);
 
         $updatedUser = $this->auth->updateUser(
             $user->uid,
-            UpdateUser::new()->withRemovedPhoneNumber()
+            UpdateUser::new()->withRemovedPhoneNumber(),
         );
 
         $this->assertNull($updatedUser->phoneNumber);
@@ -183,7 +186,7 @@ final class UpdateUserTest extends IntegrationTestCase
 
             $updatedUser = $this->auth->updateUser($user->uid, ['password' => 'new-password']);
 
-            $this->assertInstanceOf(\DateTimeImmutable::class, $updatedUser->metadata->passwordUpdatedAt);
+            $this->assertInstanceOf(DateTimeImmutable::class, $updatedUser->metadata->passwordUpdatedAt);
         } finally {
             $this->auth->deleteUser($user->uid);
         }

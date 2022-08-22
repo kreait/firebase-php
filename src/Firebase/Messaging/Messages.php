@@ -8,6 +8,8 @@ use Countable;
 use IteratorAggregate;
 use Traversable;
 
+use function count;
+
 /**
  * @implements IteratorAggregate<Message>
  */
@@ -33,6 +35,6 @@ final class Messages implements Countable, IteratorAggregate
 
     public function count(): int
     {
-        return \count($this->messages);
+        return count($this->messages);
     }
 }

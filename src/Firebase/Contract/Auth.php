@@ -49,10 +49,10 @@ interface Auth
     /**
      * @param array<Stringable|string> $uids
      *
-     * @return array<string, UserRecord|null>
      *@throws Exception\AuthException
-     *
      * @throws Exception\FirebaseException
+     *
+     * @return array<string, UserRecord|null>
      */
     public function getUsers(array $uids): array;
 
@@ -67,6 +67,9 @@ interface Auth
     public function queryUsers($query): array;
 
     /**
+     * @param positive-int $maxResults
+     * @param positive-int $batchSize
+     *
      * @throws Exception\FirebaseException
      * @throws Exception\AuthException
      *
@@ -301,7 +304,7 @@ interface Auth
      * @throws FailedToVerifyToken if the token could not be verified
      * @throws RevokedIdToken if the token has been revoked
      */
-    public function verifyIdToken($idToken, bool $checkIfRevoked = false, int $leewayInSeconds = null): UnencryptedToken;
+    public function verifyIdToken($idToken, bool $checkIfRevoked = false, ?int $leewayInSeconds = null): UnencryptedToken;
 
     /**
      * Verifies a JWT session cookie.

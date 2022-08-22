@@ -28,7 +28,6 @@ final class DatabaseTest extends DatabaseTestCase
         (new Factory())
             ->withServiceAccount($credentials)
             ->createDatabase()
-            ->getRuleSet()
-        ;
+            ->getRuleSet();
     }
 }

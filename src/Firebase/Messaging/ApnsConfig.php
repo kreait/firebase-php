@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Messaging;
 use JsonSerializable;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 
+use function array_filter;
+use function array_key_exists;
+
 /**
  * @see https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification
  * @see https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/sending_notification_requests_to_apns
@@ -38,7 +41,7 @@ final class ApnsConfig implements JsonSerializable
      *     image?: string
      * }
      */
-    private array $fcmOptions = [];
+    private array $fcmOptions;
 
     /**
      * @param array<non-empty-string, non-empty-string> $headers
@@ -168,8 +171,7 @@ final class ApnsConfig implements JsonSerializable
         return
             isset($this->payload['aps']['alert'])
             || isset($this->payload['aps']['badge'])
-            || isset($this->payload['aps']['sound'])
-        ;
+            || isset($this->payload['aps']['sound']);
     }
 
     /**

@@ -30,8 +30,8 @@ class ApiClient
     /**
      * @param array<string, mixed> $options
      *
-     * @throws MessagingException
      * @throws FirebaseException
+     * @throws MessagingException
      */
     public function send(RequestInterface $request, array $options = []): ResponseInterface
     {
@@ -50,7 +50,6 @@ class ApiClient
         return $this->client->sendAsync($request, $options)
             ->then(null, function (Throwable $e): void {
                 throw $this->errorHandler->convertException($e);
-            })
-        ;
+            });
     }
 }

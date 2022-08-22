@@ -11,6 +11,9 @@ use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\MessageData;
 use Kreait\Firebase\Messaging\Notification;
 
+use function array_key_exists;
+use function is_array;
+
 /**
  * @phpstan-import-type ApnsConfigShape from ApnsConfig
  * @phpstan-import-type NotificationShape from Notification
@@ -32,9 +35,7 @@ final class SetApnsContentAvailableIfNeeded
         $messageData = $this->getMessageData($payload);
         $apnsData = $apnsConfig->data();
 
-        $hasData = $messageData->toArray() !== [] || $apnsData !== [];
-
-        if (!$hasData) {
+        if (($apnsData === []) || ($messageData->toArray() === [])) {
             // No data, no 'content-available' field
             return $message;
         }
@@ -84,6 +85,7 @@ final class SetApnsContentAvailableIfNeeded
         } else {
             $messageData = MessageData::fromArray([]);
         }
+
         return $messageData;
     }
 }

@@ -24,6 +24,14 @@ use Kreait\Firebase\Auth\SignInWithRefreshToken;
 use Kreait\Firebase\Auth\TenantAwareAuthResourceUrlBuilder;
 use Kreait\Firebase\Util;
 use Psr\Http\Message\RequestInterface;
+use UnexpectedValueException;
+
+use const JSON_FORCE_OBJECT;
+
+use function array_merge;
+use function get_class;
+use function http_build_query;
+use function str_replace;
 
 /**
  * @internal
@@ -39,7 +47,6 @@ final class GuzzleHandler implements Handler
     private static array $defaultHeaders = [
         'Content-Type' => 'application/json; charset=UTF-8',
     ];
-
     private string $projectId;
     private ClientInterface $client;
 
@@ -65,7 +72,7 @@ final class GuzzleHandler implements Handler
 
         try {
             $data = Json::decode((string) $response->getBody(), true);
-        } catch (\UnexpectedValueException $e) {
+        } catch (UnexpectedValueException $e) {
             throw FailedToSignIn::fromPrevious($e);
         }
 
@@ -77,18 +84,24 @@ final class GuzzleHandler implements Handler
         switch (true) {
             case $action instanceof SignInAnonymously:
                 return $this->anonymous($action);
+
             case $action instanceof SignInWithCustomToken:
                 return $this->customToken($action);
+
             case $action instanceof SignInWithEmailAndPassword:
                 return $this->emailAndPassword($action);
+
             case $action instanceof SignInWithEmailAndOobCode:
                 return $this->emailAndOobCode($action);
+
             case $action instanceof SignInWithIdpCredentials:
                 return $this->idpCredentials($action);
+
             case $action instanceof SignInWithRefreshToken:
                 return $this->refreshToken($action);
+
             default:
-                throw new FailedToSignIn(self::class.' does not support '.\get_class($action));
+                throw new FailedToSignIn(self::class.' does not support '.get_class($action));
         }
     }
 
@@ -107,7 +120,7 @@ final class GuzzleHandler implements Handler
     {
         $url = AuthResourceUrlBuilder::create()->getUrl('/accounts:signInWithCustomToken');
 
-        $body = Utils::streamFor(Json::encode(\array_merge($this->prepareBody($action), [
+        $body = Utils::streamFor(Json::encode(array_merge($this->prepareBody($action), [
             'token' => $action->customToken(),
         ]), JSON_FORCE_OBJECT));
 
@@ -120,7 +133,7 @@ final class GuzzleHandler implements Handler
     {
         $url = AuthResourceUrlBuilder::create()->getUrl('/accounts:signInWithPassword');
 
-        $body = Utils::streamFor(Json::encode(\array_merge($this->prepareBody($action), [
+        $body = Utils::streamFor(Json::encode(array_merge($this->prepareBody($action), [
             'email' => $action->email(),
             'password' => $action->clearTextPassword(),
             'returnSecureToken' => true,
@@ -135,7 +148,7 @@ final class GuzzleHandler implements Handler
     {
         $url = AuthResourceUrlBuilder::create()->getUrl('/accounts:signInWithEmailLink');
 
-        $body = Utils::streamFor(Json::encode(\array_merge($this->prepareBody($action), [
+        $body = Utils::streamFor(Json::encode(array_merge($this->prepareBody($action), [
             'email' => $action->email(),
             'oobCode' => $action->oobCode(),
             'returnSecureToken' => true,
@@ -164,8 +177,8 @@ final class GuzzleHandler implements Handler
             $postBody['nonce'] = $rawNonce;
         }
 
-        $rawBody = \array_merge($this->prepareBody($action), [
-            'postBody' => \http_build_query($postBody),
+        $rawBody = array_merge($this->prepareBody($action), [
+            'postBody' => http_build_query($postBody),
             'returnIdpCredential' => true,
             'requestUri' => $action->requestUri(),
         ]);
@@ -197,7 +210,7 @@ final class GuzzleHandler implements Handler
 
         if ($emulatorHost !== '') {
             // The emulator host requires an api key query parameter.
-            $url = \str_replace('{host}', $emulatorHost, 'http://{host}/securetoken.googleapis.com/v1/token?key=any');
+            $url = str_replace('{host}', $emulatorHost, 'http://{host}/securetoken.googleapis.com/v1/token?key=any');
         } else {
             $url = 'https://securetoken.googleapis.com/v1/token';
         }

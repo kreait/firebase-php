@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\RemoteConfig;
 
+use DateTimeImmutable;
 use Kreait\Firebase\Util\DT;
 
 final class Version
 {
     private VersionNumber $versionNumber;
     private User $user;
-    private \DateTimeImmutable $updatedAt;
+    private DateTimeImmutable $updatedAt;
     private string $description;
     private UpdateOrigin $updateOrigin;
     private UpdateType $updateType;
@@ -20,7 +21,7 @@ final class Version
         VersionNumber $versionNumber,
         User $user,
         string $description,
-        \DateTimeImmutable $updatedAt,
+        DateTimeImmutable $updatedAt,
         UpdateOrigin $updateOrigin,
         UpdateType $updateType,
         ?VersionNumber $rollbackSource
@@ -65,7 +66,7 @@ final class Version
             $updatedAt,
             $updateOrigin,
             $updateType,
-            $rollbackSource
+            $rollbackSource,
         );
     }
 
@@ -79,7 +80,7 @@ final class Version
         return $this->user;
     }
 
-    public function updatedAt(): \DateTimeImmutable
+    public function updatedAt(): DateTimeImmutable
     {
         return $this->updatedAt;
     }

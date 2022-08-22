@@ -9,6 +9,11 @@ use IteratorAggregate;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Traversable;
 
+use function array_map;
+use function count;
+use function is_array;
+use function is_string;
+
 /**
  * @implements IteratorAggregate<RegistrationToken>
  */
@@ -33,15 +38,15 @@ final class RegistrationTokens implements Countable, IteratorAggregate
             $tokens = $values->values();
         } elseif ($values instanceof RegistrationToken) {
             $tokens = [$values];
-        } elseif (\is_string($values)) {
+        } elseif (is_string($values)) {
             $tokens = [RegistrationToken::fromValue($values)];
-        } elseif (\is_array($values)) {
+        } elseif (is_array($values)) {
             $tokens = [];
 
             foreach ($values as $value) {
                 if ($value instanceof RegistrationToken) {
                     $tokens[] = $value;
-                } elseif (\is_string($value)) {
+                } elseif (is_string($value)) {
                     $tokens[] = RegistrationToken::fromValue($value);
                 }
             }
@@ -80,12 +85,12 @@ final class RegistrationTokens implements Countable, IteratorAggregate
      */
     public function asStrings(): array
     {
-        return \array_map('strval', $this->tokens);
+        return array_map('strval', $this->tokens);
     }
 
     public function count(): int
     {
-        return \count($this->tokens);
+        return count($this->tokens);
     }
 
     /**

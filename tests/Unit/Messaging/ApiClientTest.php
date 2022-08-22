@@ -30,7 +30,6 @@ use Throwable;
 final class ApiClientTest extends TestCase
 {
     private MockHandler $mock;
-
     private ApiClient $client;
 
     protected function setUp(): void

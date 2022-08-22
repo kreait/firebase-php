@@ -5,11 +5,18 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Http;
 
 use Beste\Json;
+use Exception;
 use GuzzleHttp;
 use GuzzleHttp\Psr7\Query;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+
+use function array_merge;
+use function ltrim;
+use function mb_stristr;
+use function preg_match_all;
+use function str_ends_with;
 
 /**
  * @internal
@@ -24,9 +31,9 @@ final class Middleware
         return static function (callable $handler) {
             return static function (RequestInterface $request, ?array $options = null) use ($handler) {
                 $uri = $request->getUri();
-                $path = '/'.\ltrim($uri->getPath(), '/');
+                $path = '/'.ltrim($uri->getPath(), '/');
 
-                if (!\str_ends_with($path, '.json')) {
+                if (!str_ends_with($path, '.json')) {
                     $uri = $uri->withPath($path.'.json');
                     $request = $request->withUri($uri);
                 }
@@ -46,7 +53,7 @@ final class Middleware
                 $uri = $request->getUri();
 
                 $uri = $uri->withQuery(Query::build(
-                    \array_merge(Query::parse($uri->getQuery()), ['auth_variable_override' => Json::encode($override)])
+                    array_merge(Query::parse($uri->getQuery()), ['auth_variable_override' => Json::encode($override)]),
                 ));
 
                 return $handler($request->withUri($uri), $options ?: []);
@@ -63,16 +70,15 @@ final class Middleware
             return static function (RequestInterface $request, ?array $options = null) use ($handler) {
                 return $handler($request, $options ?: [])
                     ->then(static function (ResponseInterface $response) {
-                        $isMultiPart = \mb_stristr($response->getHeaderLine('Content-Type'), 'multipart') !== false;
-                        $hasMultipleStartLines = ((int) \preg_match_all('@http/[\S]+\s@i', (string) $response->getBody())) >= 1;
+                        $isMultiPart = mb_stristr($response->getHeaderLine('Content-Type'), 'multipart') !== false;
+                        $hasMultipleStartLines = ((int) preg_match_all('@http/[\S]+\s@i', (string) $response->getBody())) >= 1;
 
                         if ($isMultiPart && $hasMultipleStartLines) {
                             return new ResponseWithSubResponses($response);
                         }
 
                         return $response;
-                    })
-                ;
+                    });
             };
         };
     }
@@ -90,14 +96,14 @@ final class Middleware
 
                         return $response;
                     },
-                    static function (\Exception $reason) use ($logger, $request, $formatter, $errorLogLevel) {
+                    static function (Exception $reason) use ($logger, $request, $formatter, $errorLogLevel) {
                         $response = $reason instanceof GuzzleHttp\Exception\RequestException ? $reason->getResponse() : null;
                         $message = $formatter->format($request, $response, $reason);
 
                         $logger->log($errorLogLevel, $message, ['request' => $request, 'response' => $response]);
 
                         return GuzzleHttp\Promise\Create::rejectionFor($reason);
-                    }
+                    },
                 );
             };
         };

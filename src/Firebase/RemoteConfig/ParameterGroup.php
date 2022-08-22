@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\RemoteConfig;
 
-final class ParameterGroup implements \JsonSerializable
+use JsonSerializable;
+
+final class ParameterGroup implements JsonSerializable
 {
     private string $name;
-
     private string $description = '';
 
     /** @var Parameter[] */

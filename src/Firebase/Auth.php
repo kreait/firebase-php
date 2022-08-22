@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase;
 
 use Beste\Json;
+use DateTimeImmutable;
 use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Auth\ApiClient;
@@ -45,12 +46,20 @@ use StellaMaris\Clock\ClockInterface;
 use Throwable;
 use Traversable;
 
+use function array_fill_keys;
+use function array_map;
+use function assert;
+use function is_string;
+use function mb_strtolower;
+use function trim;
+
 /**
  * @internal
  */
 final class Auth implements Contract\Auth
 {
     private ApiClient $client;
+
     /** @var CustomTokenGenerator|CustomTokenViaGoogleIam|null */
     private $tokenGenerator;
     private IdTokenVerifier $idTokenVerifier;
@@ -89,9 +98,9 @@ final class Auth implements Contract\Auth
 
     public function getUsers(array $uids): array
     {
-        $uids = \array_map(static fn ($uid) => (string) (new Uid((string) $uid)), $uids);
+        $uids = array_map(static fn ($uid) => (string) (new Uid((string) $uid)), $uids);
 
-        $users = \array_fill_keys($uids, null);
+        $users = array_fill_keys($uids, null);
 
         $response = $this->client->getAccountInfo($uids);
 
@@ -122,7 +131,6 @@ final class Auth implements Contract\Auth
 
         return $users;
     }
-
 
     public function listUsers(int $maxResults = 1000, int $batchSize = 1000): Traversable
     {
@@ -178,7 +186,7 @@ final class Auth implements Contract\Auth
         return $this->createUser(
             Request\CreateUser::new()
                 ->withUnverifiedEmail($email)
-                ->withClearTextPassword($password)
+                ->withClearTextPassword($password),
         );
     }
 
@@ -254,7 +262,7 @@ final class Auth implements Contract\Auth
 
         $response = $this->client->deleteUsers(
             $request->uids(),
-            $request->enabledUsersShouldBeForceDeleted()
+            $request->enabledUsersShouldBeForceDeleted(),
         );
 
         return DeleteUsersResult::fromRequestAndResponse($request, $response);
@@ -289,7 +297,7 @@ final class Auth implements Contract\Auth
 
         $idToken = null;
 
-        if (\mb_strtolower($type) === 'verify_email') {
+        if (mb_strtolower($type) === 'verify_email') {
             // The Firebase API expects an ID token for the user belonging to this email address
             // see https://github.com/firebase/firebase-js-sdk/issues/1958
             try {
@@ -377,7 +385,7 @@ final class Auth implements Contract\Auth
     {
         try {
             $parsedToken = Configuration::forUnsecuredSigner()->parser()->parse($tokenString);
-            \assert($parsedToken instanceof UnencryptedToken);
+            assert($parsedToken instanceof UnencryptedToken);
         } catch (Throwable $e) {
             throw new InvalidArgumentException('The given token could not be parsed: '.$e->getMessage());
         }
@@ -385,11 +393,11 @@ final class Auth implements Contract\Auth
         return $parsedToken;
     }
 
-    public function verifyIdToken($idToken, bool $checkIfRevoked = false, int $leewayInSeconds = null): UnencryptedToken
+    public function verifyIdToken($idToken, bool $checkIfRevoked = false, ?int $leewayInSeconds = null): UnencryptedToken
     {
         $verifier = $this->idTokenVerifier;
 
-        $idTokenString = \is_string($idToken) ? $idToken : $idToken->toString();
+        $idTokenString = is_string($idToken) ? $idToken : $idToken->toString();
 
         try {
             if ($leewayInSeconds !== null) {
@@ -485,7 +493,7 @@ final class Auth implements Contract\Auth
     public function unlinkProvider($uid, $provider): UserRecord
     {
         $uid = (string) (new Uid((string) $uid));
-        $provider = \array_map('strval', (array) $provider);
+        $provider = array_map('strval', (array) $provider);
 
         $response = $this->client->unlinkProvider($uid, $provider);
 
@@ -553,10 +561,10 @@ final class Auth implements Contract\Auth
     public function signInWithIdpAccessToken($provider, string $accessToken, $redirectUrl = null, ?string $oauthTokenSecret = null, ?string $linkingIdToken = null, ?string $rawNonce = null): SignInResult
     {
         $provider = (string) $provider;
-        $redirectUrl = \trim((string) ($redirectUrl ?? 'http://localhost'));
-        $linkingIdToken = \trim((string) $linkingIdToken);
-        $oauthTokenSecret = \trim((string) $oauthTokenSecret);
-        $rawNonce = \trim((string) $rawNonce);
+        $redirectUrl = trim((string) ($redirectUrl ?? 'http://localhost'));
+        $linkingIdToken = trim((string) $linkingIdToken);
+        $oauthTokenSecret = trim((string) $oauthTokenSecret);
+        $rawNonce = trim((string) $rawNonce);
 
         if ($oauthTokenSecret !== '') {
             $action = SignInWithIdpCredentials::withAccessTokenAndOauthTokenSecret($provider, $accessToken, $oauthTokenSecret);
@@ -581,10 +589,10 @@ final class Auth implements Contract\Auth
 
     public function signInWithIdpIdToken($provider, $idToken, $redirectUrl = null, ?string $linkingIdToken = null, ?string $rawNonce = null): SignInResult
     {
-        $provider = \trim((string) $provider);
-        $redirectUrl = \trim((string) ($redirectUrl ?? 'http://localhost'));
-        $linkingIdToken = \trim((string) $linkingIdToken);
-        $rawNonce = \trim((string) $rawNonce);
+        $provider = trim((string) $provider);
+        $redirectUrl = trim((string) ($redirectUrl ?? 'http://localhost'));
+        $linkingIdToken = trim((string) $linkingIdToken);
+        $rawNonce = trim((string) $rawNonce);
 
         if ($idToken instanceof Token) {
             $idToken = $idToken->toString();
@@ -634,7 +642,7 @@ final class Auth implements Contract\Auth
         // The timestamp, in seconds, which marks a boundary, before which Firebase ID token are considered revoked.
         $validSince = $user->tokensValidAfterTime ?? null;
 
-        if (!($validSince instanceof \DateTimeImmutable)) {
+        if (!$validSince instanceof DateTimeImmutable) {
             // The user hasn't logged in yet, so there's nothing to revoke
             return false;
         }

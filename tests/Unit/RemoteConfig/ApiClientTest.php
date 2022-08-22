@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\RemoteConfig;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\MockHandler;
@@ -23,7 +24,6 @@ use Throwable;
 final class ApiClientTest extends UnitTestCase
 {
     private MockHandler $mockHandler;
-
     private ApiClient $client;
 
     protected function setUp(): void
@@ -51,7 +51,7 @@ final class ApiClientTest extends UnitTestCase
 
     public function testCatchThrowable(): void
     {
-        $this->mockHandler->append(new \Exception());
+        $this->mockHandler->append(new Exception());
 
         $this->expectException(RemoteConfigException::class);
 

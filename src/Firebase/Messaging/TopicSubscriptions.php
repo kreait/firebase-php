@@ -8,6 +8,9 @@ use Countable;
 use IteratorAggregate;
 use Traversable;
 
+use function array_filter;
+use function count;
+
 /**
  * @implements IteratorAggregate<TopicSubscription>
  */
@@ -23,7 +26,7 @@ final class TopicSubscriptions implements Countable, IteratorAggregate
 
     public function filter(callable $filter): self
     {
-        return new self(...\array_filter($this->subscriptions, $filter));
+        return new self(...array_filter($this->subscriptions, $filter));
     }
 
     /**
@@ -38,6 +41,6 @@ final class TopicSubscriptions implements Countable, IteratorAggregate
 
     public function count(): int
     {
-        return \count($this->subscriptions);
+        return count($this->subscriptions);
     }
 }

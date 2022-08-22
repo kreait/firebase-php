@@ -6,6 +6,13 @@ namespace Kreait\Firebase\Auth;
 
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\UnencryptedToken;
+use stdClass;
+
+use function array_key_exists;
+use function assert;
+use function is_array;
+use function is_object;
+use function property_exists;
 
 final class SignInResult
 {
@@ -13,11 +20,11 @@ final class SignInResult
     private ?string $accessToken = null;
     private ?string $refreshToken = null;
     private ?int $ttl = null;
+
     /** @var array<string, mixed> */
     private array $data = [];
     private ?string $firebaseUserId = null;
     private ?string $tenantId = null;
-
     private Configuration $config;
 
     private function __construct()
@@ -59,7 +66,7 @@ final class SignInResult
 
         if ($this->idToken) {
             $idToken = $this->config->parser()->parse($this->idToken);
-            \assert($idToken instanceof UnencryptedToken);
+            assert($idToken instanceof UnencryptedToken);
 
             foreach (['sub', 'localId', 'user_id'] as $claim) {
                 if ($uid = $idToken->claims()->get($claim, false)) {
@@ -83,15 +90,15 @@ final class SignInResult
 
         if ($this->idToken) {
             $idToken = $this->config->parser()->parse($this->idToken);
-            \assert($idToken instanceof UnencryptedToken);
+            assert($idToken instanceof UnencryptedToken);
 
-            $firebaseClaims = $idToken->claims()->get('firebase', new \stdClass());
+            $firebaseClaims = $idToken->claims()->get('firebase', new stdClass());
 
-            if (\is_object($firebaseClaims) && \property_exists($firebaseClaims, 'tenant')) {
+            if (is_object($firebaseClaims) && property_exists($firebaseClaims, 'tenant')) {
                 return $this->tenantId = $firebaseClaims->tenant;
             }
 
-            if (\is_array($firebaseClaims) && \array_key_exists('tenant', $firebaseClaims)) {
+            if (is_array($firebaseClaims) && array_key_exists('tenant', $firebaseClaims)) {
                 return $this->tenantId = $firebaseClaims['tenant'];
             }
         }

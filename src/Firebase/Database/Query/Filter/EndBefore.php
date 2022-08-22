@@ -10,6 +10,8 @@ use Kreait\Firebase\Database\Query\ModifierTrait;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
+use function is_scalar;
+
 final class EndBefore implements Filter
 {
     use ModifierTrait;
@@ -22,7 +24,7 @@ final class EndBefore implements Filter
      */
     public function __construct($value)
     {
-        if (!\is_scalar($value)) {
+        if (!is_scalar($value)) {
             throw new InvalidArgumentException('Only scalar values are allowed for "endBefore" queries.');
         }
 

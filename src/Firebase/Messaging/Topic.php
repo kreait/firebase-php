@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging;
 
+use JsonSerializable;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 
-final class Topic implements \JsonSerializable
+use function preg_match;
+use function preg_replace;
+use function sprintf;
+use function trim;
+
+final class Topic implements JsonSerializable
 {
     private string $value;
 
@@ -15,23 +21,23 @@ final class Topic implements \JsonSerializable
         $this->value = $value;
     }
 
+    public function __toString(): string
+    {
+        return $this->value;
+    }
+
     public static function fromValue(string $value): self
     {
-        $value = \trim((string) \preg_replace('@^/topic/@', '', $value), '/');
+        $value = trim((string) preg_replace('@^/topic/@', '', $value), '/');
 
-        if (\preg_match('/[^a-zA-Z0-9-_.~]$/', $value)) {
-            throw new InvalidArgument(\sprintf('Malformed topic name "%s".', $value));
+        if (preg_match('/[^a-zA-Z0-9-_.~]$/', $value)) {
+            throw new InvalidArgument(sprintf('Malformed topic name "%s".', $value));
         }
 
         return new self($value);
     }
 
     public function value(): string
-    {
-        return $this->value;
-    }
-
-    public function __toString(): string
     {
         return $this->value;
     }

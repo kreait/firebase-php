@@ -14,6 +14,10 @@ use Kreait\Firebase\Auth\SendActionLink;
 use Kreait\Firebase\Auth\TenantAwareAuthResourceUrlBuilder;
 use Psr\Http\Message\RequestInterface;
 
+use const JSON_FORCE_OBJECT;
+
+use function array_filter;
+
 final class GuzzleApiClientHandler implements Handler
 {
     private ClientInterface $client;
@@ -42,7 +46,7 @@ final class GuzzleApiClientHandler implements Handler
 
     private function createRequest(SendActionLink $action): RequestInterface
     {
-        $data = \array_filter([
+        $data = array_filter([
             'requestType' => $action->type(),
             'email' => $action->email(),
         ]) + $action->settings()->toArray();
@@ -62,7 +66,7 @@ final class GuzzleApiClientHandler implements Handler
 
         $body = Utils::streamFor(Json::encode($data, JSON_FORCE_OBJECT));
 
-        $headers = \array_filter([
+        $headers = array_filter([
             'Content-Type' => 'application/json; charset=UTF-8',
             'Content-Length' => (string) $body->getSize(),
             'X-Firebase-Locale' => $action->locale(),

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use DateInterval;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Utils;
+use InvalidArgumentException;
 use Kreait\Firebase\Auth\CreateActionLink\FailedToCreateActionLink;
 use Kreait\Firebase\Auth\CreateSessionCookie\FailedToCreateSessionCookie;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
@@ -18,13 +20,25 @@ use Kreait\Firebase\Exception\Auth\RevokedSessionCookie;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
+use const PHP_URL_QUERY;
+
+use function assert;
+use function bin2hex;
+use function is_array;
+use function is_string;
+use function parse_str;
+use function parse_url;
+use function random_bytes;
+use function random_int;
+use function sleep;
+
 /**
  * @internal
  */
 abstract class AuthTestCase extends IntegrationTestCase
 {
-    /** @var Auth */
-    protected $auth;
+    /** @phpstan-ignore-next-line */
+    protected Auth $auth;
 
     public function testCreateAnonymousUser(): void
     {
@@ -156,7 +170,7 @@ abstract class AuthTestCase extends IntegrationTestCase
     public function testGetSignInWithEmailLink(): void
     {
         $user = $this->createUserWithEmailAndPassword();
-        \assert($user->email !== null);
+        assert($user->email !== null);
 
         try {
             $this->auth->getSignInWithEmailLink($user->email);
@@ -217,6 +231,7 @@ abstract class AuthTestCase extends IntegrationTestCase
         $userRecords = $this->auth->listUsers($maxResults = 2, 1);
 
         $count = 0;
+
         foreach ($userRecords as $userData) {
             $this->assertInstanceOf(UserRecord::class, $userData);
             ++$count;
@@ -256,11 +271,12 @@ abstract class AuthTestCase extends IntegrationTestCase
         $idToken = $this->auth->signInAnonymously()->idToken();
         $this->assertIsString($idToken);
 
-        $token = $this->auth->verifyIdToken($idToken, $checkIfRevoked = false);
+        $uid = $this->auth
+            ->verifyIdToken($idToken)
+            ->claims()
+            ->get('sub');
 
-        $uid = $token->claims()->get('sub');
-
-        \sleep(1);
+        sleep(1);
         $this->auth->revokeRefreshTokens($uid);
 
         $this->expectException(RevokedIdToken::class);
@@ -293,6 +309,7 @@ abstract class AuthTestCase extends IntegrationTestCase
     public function testCreateSessionCookie(): void
     {
         $signInResult = $this->auth->signInAnonymously();
+
         /** @var string $uid */
         $uid = $signInResult->firebaseUserId();
 
@@ -314,6 +331,7 @@ abstract class AuthTestCase extends IntegrationTestCase
     public function testCreateSessionCookieWithInvalidTTL(): void
     {
         $signInResult = $this->auth->signInAnonymously();
+
         /** @var string $uid */
         $uid = $signInResult->firebaseUserId();
 
@@ -321,7 +339,7 @@ abstract class AuthTestCase extends IntegrationTestCase
             $idToken = $signInResult->idToken();
             $this->assertIsString($idToken);
 
-            $this->expectException(\InvalidArgumentException::class);
+            $this->expectException(InvalidArgumentException::class);
             $this->auth->createSessionCookie($idToken, 5);
         } finally {
             $this->auth->deleteUser($uid);
@@ -341,12 +359,12 @@ abstract class AuthTestCase extends IntegrationTestCase
         $result = $this->auth->signInAnonymously();
 
         $uid = $result->firebaseUserId();
-        \assert(\is_string($uid));
+        assert(is_string($uid));
 
         $idToken = $result->idToken();
-        \assert(\is_string($idToken));
+        assert(is_string($idToken));
 
-        $sessionCookie = $this->auth->createSessionCookie($idToken, new \DateInterval('PT5M'));
+        $sessionCookie = $this->auth->createSessionCookie($idToken, new DateInterval('PT5M'));
 
         try {
             $verifiedCookie = $this->auth->verifySessionCookie($sessionCookie);
@@ -361,18 +379,18 @@ abstract class AuthTestCase extends IntegrationTestCase
         $result = $this->auth->signInAnonymously();
 
         $uid = $result->firebaseUserId();
-        \assert(\is_string($uid));
+        assert(is_string($uid));
 
         $idToken = $result->idToken();
-        \assert(\is_string($idToken));
+        assert(is_string($idToken));
 
-        $sessionCookie = $this->auth->createSessionCookie($idToken, new \DateInterval('PT5M'));
+        $sessionCookie = $this->auth->createSessionCookie($idToken, new DateInterval('PT5M'));
 
         $verifiedCookie = $this->auth->verifySessionCookie($sessionCookie, $checkIfRevoked = false);
 
         $uid = $verifiedCookie->claims()->get('sub');
 
-        \sleep(1);
+        sleep(1);
         $this->auth->revokeRefreshTokens($uid);
 
         $this->expectException(RevokedSessionCookie::class);
@@ -447,7 +465,7 @@ abstract class AuthTestCase extends IntegrationTestCase
 
     public function testGetUserByPhoneNumber(): void
     {
-        $phoneNumber = '+1234567'.\random_int(1000, 9999);
+        $phoneNumber = '+1234567'.random_int(1000, 9999);
 
         $user = $this->auth->createUser([
             'phoneNumber' => $phoneNumber,
@@ -462,7 +480,7 @@ abstract class AuthTestCase extends IntegrationTestCase
 
     public function testGetUserByNonExistingPhoneNumber(): void
     {
-        $phoneNumber = '+1234567'.\random_int(1000, 9999);
+        $phoneNumber = '+1234567'.random_int(1000, 9999);
 
         $user = $this->auth->createUser([
             'phoneNumber' => $phoneNumber,
@@ -475,7 +493,7 @@ abstract class AuthTestCase extends IntegrationTestCase
 
     public function testCreateUser(): void
     {
-        $uid = \bin2hex(\random_bytes(5));
+        $uid = bin2hex(random_bytes(5));
         $userRecord = $this->auth->createUser([
             'uid' => $uid,
             'displayName' => $displayName = self::randomString(__FUNCTION__),
@@ -566,7 +584,7 @@ abstract class AuthTestCase extends IntegrationTestCase
         $user = $this->auth->createUser([
             'uid' => $uid,
             'verifiedEmail' => self::randomEmail($uid),
-            'phone' => '+1234567'.\random_int(1000, 9999),
+            'phone' => '+1234567'.random_int(1000, 9999),
         ]);
 
         $updatedUser = $this->auth->unlinkProvider($user->uid, 'phone');
@@ -579,12 +597,12 @@ abstract class AuthTestCase extends IntegrationTestCase
     public function testVerifyPasswordResetCode(): void
     {
         $user = $this->createUserWithEmailAndPassword();
-        \assert(\is_string($user->email));
+        assert(is_string($user->email));
 
         try {
             $url = $this->auth->getPasswordResetLink($user->email);
 
-            \parse_str((string) \parse_url($url, PHP_URL_QUERY), $query);
+            parse_str((string) parse_url($url, PHP_URL_QUERY), $query);
 
             $email = $this->auth->verifyPasswordResetCode($query['oobCode']);
             $this->assertSame($email, $user->email);
@@ -605,7 +623,7 @@ abstract class AuthTestCase extends IntegrationTestCase
 
         $url = $this->auth->getPasswordResetLink($user->email);
 
-        \parse_str(\parse_url($url, PHP_URL_QUERY), $query);
+        parse_str(parse_url($url, PHP_URL_QUERY), $query);
 
         $email = $this->auth->confirmPasswordReset($query['oobCode'], 'newPassword123');
 
@@ -619,18 +637,18 @@ abstract class AuthTestCase extends IntegrationTestCase
     public function testConfirmPasswordResetAndInvalidateRefreshTokens(): void
     {
         $user = $this->createUserWithEmailAndPassword();
-        \assert(\is_string($user->email));
+        assert(is_string($user->email));
 
         $url = $this->auth->getPasswordResetLink($user->email);
 
-        $queryString = \parse_url($url, PHP_URL_QUERY);
-        \assert(\is_string($queryString));
+        $queryString = parse_url($url, PHP_URL_QUERY);
+        assert(is_string($queryString));
 
-        \parse_str($queryString, $query);
-        \assert(\is_array($query));
+        parse_str($queryString, $query);
+        assert(is_array($query));
 
         $email = $this->auth->confirmPasswordReset($query['oobCode'], 'newPassword123', true);
-        \sleep(1); // wait for a second
+        sleep(1); // wait for a second
 
         try {
             $this->assertSame($email, $user->email);
@@ -719,7 +737,7 @@ abstract class AuthTestCase extends IntegrationTestCase
         $user = $this->createUserWithEmailAndPassword($email, $password);
 
         $signInLink = $this->auth->getSignInWithEmailLink($email);
-        $query = (string) \parse_url($signInLink, PHP_URL_QUERY);
+        $query = (string) parse_url($signInLink, PHP_URL_QUERY);
         $oobCode = Query::parse($query)['oobCode'] ?? '';
 
         $result = $this->auth->signInWithEmailAndOobCode($email, $oobCode);
@@ -790,7 +808,7 @@ abstract class AuthTestCase extends IntegrationTestCase
     {
         $signInResult = $this->auth->signInAnonymously();
         $uid = $signInResult->firebaseUserId();
-        \assert(\is_string($uid));
+        assert(is_string($uid));
 
         try {
             $idToken = $signInResult->idToken();

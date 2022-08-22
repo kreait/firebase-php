@@ -51,14 +51,14 @@ final class RuleSetTest extends DatabaseTestCase
         $rules['rules'][self::$refPrefix.__FUNCTION__] = [
             'value1' => [
                 '.indexOn' => [
-                    'ab'
-                ]
+                    'ab',
+                ],
             ],
             'value2' => [
                 '.indexOn' => [
                     'cd',
-                    'ef'
-                ]
+                    'ef',
+                ],
             ],
         ];
 
@@ -68,7 +68,7 @@ final class RuleSetTest extends DatabaseTestCase
 
         $response = self::$apiClient
             ->get(
-                self::$db->getReference()->getUri()->withPath('/.settings/rules.json')
+                self::$db->getReference()->getUri()->withPath('/.settings/rules.json'),
             );
 
         $this->assertSame(200, $response->getStatusCode());

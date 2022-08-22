@@ -25,13 +25,14 @@ use Psr\Http\Message\RequestInterface;
 use RuntimeException;
 use Throwable;
 
+use const DATE_ATOM;
+
 /**
  * @internal
  */
 final class MessagingApiExceptionConverterTest extends TestCase
 {
     private MessagingApiExceptionConverter $converter;
-
     private FrozenClock $clock;
 
     protected function setUp(): void
@@ -44,7 +45,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
     {
         $connectException = new ConnectException(
             'curl error xx',
-            $this->createMock(RequestInterface::class)
+            $this->createMock(RequestInterface::class),
         );
 
         $this->assertInstanceOf(ApiConnectionFailed::class, $this->converter->convertException($connectException));
@@ -96,7 +97,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
                     'code' => $code,
                     'message' => 'Some error that might include the identifier "'.$identifier.'"',
                 ],
-            ]))
+            ])),
         );
     }
 

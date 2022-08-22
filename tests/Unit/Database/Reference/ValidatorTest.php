@@ -10,13 +10,15 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Http\Message\UriInterface;
 
+use function ltrim;
+use function str_pad;
+
 /**
  * @internal
  */
 final class ValidatorTest extends UnitTestCase
 {
     private UriInterface $uri;
-
     private Validator $validator;
 
     protected function setUp(): void
@@ -29,7 +31,7 @@ final class ValidatorTest extends UnitTestCase
 
     public function testValidateDepth(): void
     {
-        $uri = $this->uri->withPath('/'.\str_pad('', (Validator::MAX_DEPTH + 1) * 2, 'x/'));
+        $uri = $this->uri->withPath('/'.str_pad('', (Validator::MAX_DEPTH + 1) * 2, 'x/'));
 
         $this->expectException(InvalidArgumentException::class);
         $this->validator->validateUri($uri);
@@ -37,7 +39,7 @@ final class ValidatorTest extends UnitTestCase
 
     public function testValidateKeySize(): void
     {
-        $uri = $this->uri->withPath('/'.\str_pad('', Validator::MAX_KEY_SIZE + 1, 'x'));
+        $uri = $this->uri->withPath('/'.str_pad('', Validator::MAX_KEY_SIZE + 1, 'x'));
 
         $this->expectException(InvalidArgumentException::class);
         $this->validator->validateUri($uri);
@@ -48,7 +50,7 @@ final class ValidatorTest extends UnitTestCase
      */
     public function testValidateChars(string $value): void
     {
-        $uri = $this->uri->withPath('/'.\ltrim($value, '/'));
+        $uri = $this->uri->withPath('/'.ltrim($value, '/'));
 
         $this->expectException(InvalidArgumentException::class);
         $this->validator->validateUri($uri);

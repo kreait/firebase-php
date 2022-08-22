@@ -21,7 +21,6 @@ final class DatabaseTest extends UnitTestCase
     private $apiClient;
     private string $url;
     private Uri $uri;
-
     private Database $database;
 
     protected function setUp(): void
@@ -68,8 +67,7 @@ final class DatabaseTest extends UnitTestCase
         $this->apiClient
             ->method('get')
             ->with('/.settings/rules')
-            ->willReturn($expected = RuleSet::default()->getRules())
-        ;
+            ->willReturn($expected = RuleSet::default()->getRules());
 
         $ruleSet = $this->database->getRuleSet();
 

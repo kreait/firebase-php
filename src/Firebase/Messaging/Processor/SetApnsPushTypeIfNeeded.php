@@ -11,6 +11,9 @@ use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\MessageData;
 use Kreait\Firebase\Messaging\Notification;
 
+use function array_key_exists;
+use function is_array;
+
 /**
  * @phpstan-import-type ApnsConfigShape from ApnsConfig
  * @phpstan-import-type NotificationShape from Notification
@@ -87,6 +90,7 @@ final class SetApnsPushTypeIfNeeded
         } else {
             $messageData = MessageData::fromArray([]);
         }
+
         return $messageData;
     }
 }

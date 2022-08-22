@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Auth;
 
 use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Value\Email;
+use Stringable;
 
 final class CreateActionLink
 {
@@ -23,7 +24,7 @@ final class CreateActionLink
     }
 
     /**
-     * @param \Stringable|string $email
+     * @param Stringable|string $email
      */
     public static function new(string $type, $email, ActionCodeSettings $settings, ?string $tenantId = null, ?string $locale = null): self
     {

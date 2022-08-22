@@ -8,6 +8,8 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\Tests\UnitTestCase;
 use RuntimeException;
 
+use function putenv;
+
 /**
  * @internal
  */
@@ -22,11 +24,11 @@ final class FactoryTest extends UnitTestCase
 
     public function testItUsesTheCredentialsFromTheGooglaApplicationCredentialsEnvironmentVariable(): void
     {
-        \putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->serviceAccount);
+        putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->serviceAccount);
 
         $this->assertServices(new Factory());
 
-        \putenv('GOOGLE_APPLICATION_CREDENTIALS');
+        putenv('GOOGLE_APPLICATION_CREDENTIALS');
     }
 
     public function testItNeedsCredentials(): void
@@ -47,13 +49,13 @@ final class FactoryTest extends UnitTestCase
     public function testAProjectIdCanBeProvidedAsAGoogleCloudProjectEnvironmentVariable(): void
     {
         // The database component requires a project ID
-        \putenv('GOOGLE_CLOUD_PROJECT=project-id');
+        putenv('GOOGLE_CLOUD_PROJECT=project-id');
 
         (new Factory())->createDatabase();
 
         $this->addToAssertionCount(1);
 
-        \putenv('GOOGLE_CLOUD_PROJECT');
+        putenv('GOOGLE_CLOUD_PROJECT');
     }
 
     public function testItFailsWithoutAProjectId(): void

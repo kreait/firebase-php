@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
-class UserInfo implements \JsonSerializable
+use JsonSerializable;
+
+use function get_object_vars;
+
+class UserInfo implements JsonSerializable
 {
     public ?string $uid = null;
     public ?string $displayName = null;
@@ -36,6 +40,6 @@ class UserInfo implements \JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return \get_object_vars($this);
+        return get_object_vars($this);
     }
 }

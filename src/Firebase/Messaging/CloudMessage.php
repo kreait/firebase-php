@@ -8,6 +8,12 @@ use Beste\Json;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 
+use function array_filter;
+use function array_intersect;
+use function array_keys;
+use function count;
+use function implode;
+
 /**
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages
  *
@@ -72,10 +78,10 @@ final class CloudMessage implements Message
      */
     public static function fromArray(array $data): self
     {
-        if (\count(\array_intersect(\array_keys($data), MessageTarget::TYPES)) > 1) {
+        if (count(array_intersect(array_keys($data), MessageTarget::TYPES)) > 1) {
             throw new InvalidArgument(
                 'A message can only have one of the following targets: '
-                .\implode(', ', MessageTarget::TYPES)
+                .implode(', ', MessageTarget::TYPES),
             );
         }
 
@@ -256,12 +262,11 @@ final class CloudMessage implements Message
             $data[$this->target->type()] = $this->target->value();
         }
 
-        return \array_filter(
+        return array_filter(
             $data,
-            static fn ($value) => $value !== null && $value !== []
+            static fn ($value) => $value !== null && $value !== [],
         );
     }
-
 
     /**
      * @param array{

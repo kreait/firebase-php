@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\RemoteConfig;
 
+use JsonSerializable;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
-class Template implements \JsonSerializable
+use function array_key_exists;
+use function array_values;
+use function is_array;
+use function sprintf;
+
+class Template implements JsonSerializable
 {
     private string $etag = '*';
 
@@ -18,7 +24,6 @@ class Template implements \JsonSerializable
 
     /** @var Condition[] */
     private array $conditions = [];
-
     private ?Version $version = null;
 
     private function __construct()
@@ -50,58 +55,11 @@ class Template implements \JsonSerializable
             $template = $template->withParameterGroup(self::buildParameterGroup($name, $parameterGroupData));
         }
 
-        if (\is_array($data['version'] ?? null)) {
+        if (is_array($data['version'] ?? null)) {
             $template->version = Version::fromArray($data['version']);
         }
 
         return $template;
-    }
-
-    /**
-     * @param array<string, string> $data
-     */
-    private static function buildCondition(string $name, array $data): Condition
-    {
-        $condition = Condition::named($name)->withExpression($data['expression']);
-
-        if ($tagColor = $data['tagColor'] ?? null) {
-            $condition = $condition->withTagColor(new TagColor($tagColor));
-        }
-
-        return $condition;
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    private static function buildParameter(string $name, array $data): Parameter
-    {
-        $parameter = Parameter::named($name)
-            ->withDescription((string) ($data['description'] ?? ''))
-            ->withDefaultValue(DefaultValue::fromArray($data['defaultValue'] ?? []))
-        ;
-
-        foreach ((array) ($data['conditionalValues'] ?? []) as $key => $conditionalValueData) {
-            $parameter = $parameter->withConditionalValue(new ConditionalValue($key, $conditionalValueData['value']));
-        }
-
-        return $parameter;
-    }
-
-    /**
-     * @param array<string, mixed> $parameterGroupData
-     */
-    private static function buildParameterGroup(string $name, array $parameterGroupData): ParameterGroup
-    {
-        $group = ParameterGroup::named($name)
-            ->withDescription((string) ($parameterGroupData['description'] ?? ''))
-        ;
-
-        foreach ($parameterGroupData['parameters'] ?? [] as $parameterName => $parameterData) {
-            $group = $group->withParameter(self::buildParameter($parameterName, $parameterData));
-        }
-
-        return $group;
     }
 
     /**
@@ -167,26 +125,71 @@ class Template implements \JsonSerializable
         return $template;
     }
 
-    private function assertThatAllConditionalValuesAreValid(Parameter $parameter): void
-    {
-        foreach ($parameter->conditionalValues() as $conditionalValue) {
-            if (!\array_key_exists($conditionalValue->conditionName(), $this->conditions)) {
-                $message = 'The conditional value of the parameter named "%s" refers to a condition "%s" which does not exist.';
-
-                throw new InvalidArgumentException(\sprintf($message, $parameter->name(), $conditionalValue->conditionName()));
-            }
-        }
-    }
-
     /**
      * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {
         return [
-            'conditions' => empty($this->conditions) ? null : \array_values($this->conditions),
+            'conditions' => empty($this->conditions) ? null : array_values($this->conditions),
             'parameters' => empty($this->parameters) ? null : $this->parameters,
             'parameterGroups' => empty($this->parameterGroups) ? null : $this->parameterGroups,
         ];
+    }
+
+    /**
+     * @param array<string, string> $data
+     */
+    private static function buildCondition(string $name, array $data): Condition
+    {
+        $condition = Condition::named($name)->withExpression($data['expression']);
+
+        if ($tagColor = $data['tagColor'] ?? null) {
+            $condition = $condition->withTagColor(new TagColor($tagColor));
+        }
+
+        return $condition;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private static function buildParameter(string $name, array $data): Parameter
+    {
+        $parameter = Parameter::named($name)
+            ->withDescription((string) ($data['description'] ?? ''))
+            ->withDefaultValue(DefaultValue::fromArray($data['defaultValue'] ?? []));
+
+        foreach ((array) ($data['conditionalValues'] ?? []) as $key => $conditionalValueData) {
+            $parameter = $parameter->withConditionalValue(new ConditionalValue($key, $conditionalValueData['value']));
+        }
+
+        return $parameter;
+    }
+
+    /**
+     * @param array<string, mixed> $parameterGroupData
+     */
+    private static function buildParameterGroup(string $name, array $parameterGroupData): ParameterGroup
+    {
+        $group = ParameterGroup::named($name)
+            ->withDescription((string) ($parameterGroupData['description'] ?? ''));
+
+        foreach ($parameterGroupData['parameters'] ?? [] as $parameterName => $parameterData) {
+            $group = $group->withParameter(self::buildParameter($parameterName, $parameterData));
+        }
+
+        return $group;
+    }
+
+    private function assertThatAllConditionalValuesAreValid(Parameter $parameter): void
+    {
+        foreach ($parameter->conditionalValues() as $conditionalValue) {
+            if (!array_key_exists($conditionalValue->conditionName(), $this->conditions)) {
+                $message = 'The conditional value of the parameter named "%s" refers to a condition "%s" which does not exist.';
+
+                throw new InvalidArgumentException(sprintf($message, $parameter->name(), $conditionalValue->conditionName()));
+            }
+        }
     }
 }

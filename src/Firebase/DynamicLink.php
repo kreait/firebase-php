@@ -10,6 +10,8 @@ use JsonSerializable;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
+use function trim;
+
 final class DynamicLink implements JsonSerializable
 {
     /** @var array<string, mixed> */
@@ -17,6 +19,11 @@ final class DynamicLink implements JsonSerializable
 
     private function __construct()
     {
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->uri();
     }
 
     /**
@@ -47,7 +54,7 @@ final class DynamicLink implements JsonSerializable
 
     public function suffix(): string
     {
-        return \trim($this->uri()->getPath(), '/');
+        return trim($this->uri()->getPath(), '/');
     }
 
     /**
@@ -69,10 +76,5 @@ final class DynamicLink implements JsonSerializable
     public function jsonSerialize(): array
     {
         return $this->data;
-    }
-
-    public function __toString(): string
-    {
-        return (string) $this->uri();
     }
 }

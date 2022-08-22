@@ -68,6 +68,7 @@ and making sure that the Service Account has one of the following roles
 MSG;
 
                 break;
+
             default:
                 $message = <<<'MSG'
 Failed to get statistics for dynamic link. Please inspect the

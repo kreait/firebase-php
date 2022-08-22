@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Auth;
 
 use Beste\Json;
+use DateInterval;
+use DateTimeImmutable;
+use DateTimeInterface;
 use GuzzleHttp\ClientInterface;
 use InvalidArgumentException;
 use Kreait\Firebase\Exception\Auth\AuthError;
@@ -14,7 +17,10 @@ use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Util\DT;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Token;
+use Stringable;
 use Throwable;
+
+use function base64_encode;
 
 /**
  * @internal
@@ -22,11 +28,8 @@ use Throwable;
 final class CustomTokenViaGoogleIam
 {
     private string $clientEmail;
-
     private ClientInterface $client;
-
     private Configuration $config;
-
     private ?string $tenantId;
 
     public function __construct(string $clientEmail, ClientInterface $client, ?string $tenantId = null)
@@ -39,18 +42,18 @@ final class CustomTokenViaGoogleIam
     }
 
     /**
-     * @param \Stringable|string$uid
+     * @param Stringable|string $uid
      * @param array<string, mixed> $claims
      *
      * @throws AuthException
      * @throws FirebaseException
      */
-    public function createCustomToken($uid, array $claims = [], ?\DateTimeInterface $expiresAt = null): Token
+    public function createCustomToken($uid, array $claims = [], ?DateTimeInterface $expiresAt = null): Token
     {
-        $now = new \DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $expiresAt = ($expiresAt !== null)
             ? DT::toUTCDateTimeImmutable($expiresAt)
-            : $now->add(new \DateInterval('PT1H'));
+            : $now->add(new DateInterval('PT1H'));
 
         $builder = $this->config->builder()
             ->withClaim('uid', (string) $uid)
@@ -58,8 +61,7 @@ final class CustomTokenViaGoogleIam
             ->permittedFor('https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit')
             ->relatedTo($this->clientEmail)
             ->issuedAt($now)
-            ->expiresAt($expiresAt)
-        ;
+            ->expiresAt($expiresAt);
 
         if ($this->tenantId !== null) {
             $builder->withClaim('tenantId', $this->tenantId);
@@ -76,7 +78,7 @@ final class CustomTokenViaGoogleIam
         try {
             $response = $this->client->request('POST', $url, [
                 'json' => [
-                    'bytesToSign' => \base64_encode($token->payload()),
+                    'bytesToSign' => base64_encode($token->payload()),
                 ],
             ]);
         } catch (Throwable $e) {

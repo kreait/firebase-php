@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Database;
 
+use Exception;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
@@ -20,9 +21,7 @@ final class ApiClientTest extends UnitTestCase
 {
     /** @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $http;
-
     private ApiClient $client;
-
     private string $targetUrl;
 
     protected function setUp(): void
@@ -32,8 +31,7 @@ final class ApiClientTest extends UnitTestCase
         $this->http = $this->createMock(ClientInterface::class);
         $this->http
             ->method($this->anything())
-            ->willReturn(new Response(200, [], '{"name":"value"}'))
-        ;
+            ->willReturn(new Response(200, [], '{"name":"value"}'));
         $this->client = new ApiClient($this->http, UrlBuilder::create($this->targetUrl));
     }
 
@@ -70,8 +68,7 @@ final class ApiClientTest extends UnitTestCase
 
         $this->http
             ->method($this->anything())
-            ->willThrowException(new RequestException('foo', $request))
-        ;
+            ->willThrowException(new RequestException('foo', $request));
 
         $this->expectException(DatabaseException::class);
 
@@ -82,8 +79,7 @@ final class ApiClientTest extends UnitTestCase
     {
         $this->http
             ->method($this->anything())
-            ->willThrowException(new \Exception())
-        ;
+            ->willThrowException(new Exception());
 
         $this->expectException(DatabaseException::class);
 

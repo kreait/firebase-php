@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging;
 
-interface Message extends \JsonSerializable
+use JsonSerializable;
+
+interface Message extends JsonSerializable
 {
 }

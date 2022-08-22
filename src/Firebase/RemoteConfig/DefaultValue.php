@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\RemoteConfig;
 
-class DefaultValue implements \JsonSerializable
+use JsonSerializable;
+
+use function is_string;
+
+class DefaultValue implements JsonSerializable
 {
     public const IN_APP_DEFAULT_VALUE = true;
 
@@ -16,7 +20,7 @@ class DefaultValue implements \JsonSerializable
      */
     private function __construct($value)
     {
-        $this->value = \is_string($value) ? $value : true;
+        $this->value = is_string($value) ? $value : true;
     }
 
     public static function none(): self

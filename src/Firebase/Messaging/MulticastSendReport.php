@@ -13,6 +13,13 @@ use Kreait\Firebase\Http\Responses;
 use Kreait\Firebase\Messaging\Http\Request\MessageRequest;
 use Psr\Http\Message\RequestInterface;
 
+use function array_filter;
+use function array_map;
+use function array_pop;
+use function array_values;
+use function count;
+use function explode;
+
 final class MulticastSendReport implements Countable
 {
     /** @var SendReport[] */
@@ -43,15 +50,15 @@ final class MulticastSendReport implements Countable
 
         foreach ($responses as $response) {
             $contentIdHeader = $response->getHeaderLine('Content-ID');
-            $contentIdHeaderParts = \explode('-', $contentIdHeader);
+            $contentIdHeaderParts = explode('-', $contentIdHeader);
 
-            if (!($responseId = \array_pop($contentIdHeaderParts) ?: null)) {
+            if (!($responseId = array_pop($contentIdHeaderParts) ?: null)) {
                 continue;
             }
 
             $matchingRequest = $requests->findByContentId($responseId);
 
-            if (!($matchingRequest instanceof RequestInterface)) {
+            if (!$matchingRequest instanceof RequestInterface) {
                 continue;
             }
 
@@ -119,7 +126,7 @@ final class MulticastSendReport implements Countable
     {
         $items = $this->items;
 
-        return self::withItems(\array_values(\array_filter($items, $callback)));
+        return self::withItems(array_values(array_filter($items, $callback)));
     }
 
     /**
@@ -127,7 +134,7 @@ final class MulticastSendReport implements Countable
      */
     public function map(callable $callback): array
     {
-        return \array_map($callback, $this->items);
+        return array_map($callback, $this->items);
     }
 
     /**
@@ -137,8 +144,7 @@ final class MulticastSendReport implements Countable
     {
         return $this->successes()
             ->filter(static fn (SendReport $report) => $report->target()->type() === MessageTarget::TOKEN)
-            ->map(static fn (SendReport $report) => $report->target()->value())
-        ;
+            ->map(static fn (SendReport $report) => $report->target()->value());
     }
 
     /**
@@ -150,8 +156,7 @@ final class MulticastSendReport implements Countable
     {
         return $this
             ->filter(static fn (SendReport $report) => $report->messageWasSentToUnknownToken())
-            ->map(static fn (SendReport $report) => $report->target()->value())
-        ;
+            ->map(static fn (SendReport $report) => $report->target()->value());
     }
 
     /**
@@ -163,12 +168,11 @@ final class MulticastSendReport implements Countable
     {
         return $this
             ->filter(static fn (SendReport $report) => $report->messageTargetWasInvalid())
-            ->map(static fn (SendReport $report) => $report->target()->value())
-        ;
+            ->map(static fn (SendReport $report) => $report->target()->value());
     }
 
     public function count(): int
     {
-        return \count($this->items);
+        return count($this->items);
     }
 }

@@ -27,6 +27,11 @@ use Kreait\Firebase\Messaging\Processor\SetApnsPushTypeIfNeeded;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Messaging\RegistrationTokens;
 use Kreait\Firebase\Messaging\Topic;
+use Throwable;
+
+use function array_key_exists;
+use function array_keys;
+use function array_map;
 
 /**
  * @internal
@@ -34,9 +39,7 @@ use Kreait\Firebase\Messaging\Topic;
 final class Messaging implements Contract\Messaging
 {
     private string $projectId;
-
     private ApiClient $messagingApi;
-
     private AppInstanceApiClient $appInstanceApi;
 
     public function __construct(string $projectId, ApiClient $messagingApiClient, AppInstanceApiClient $appInstanceApiClient)
@@ -60,6 +63,7 @@ final class Messaging implements Contract\Messaging
             $response = $this->messagingApi->send($request);
         } catch (NotFound $e) {
             $token = $message->jsonSerialize()['token'] ?? null;
+
             if ($token) {
                 throw NotFound::becauseTokenNotFound($token);
             }
@@ -76,6 +80,7 @@ final class Messaging implements Contract\Messaging
         $registrationTokens = $this->ensureNonEmptyRegistrationTokens($registrationTokens);
 
         $request = new SendMessageToTokens($this->projectId, $message, $registrationTokens, $validateOnly);
+
         /** @var ResponseWithSubResponses $response */
         $response = $this->messagingApi->send($request);
 
@@ -91,6 +96,7 @@ final class Messaging implements Contract\Messaging
         }
 
         $request = new SendMessages($this->projectId, new Messages(...$ensuredMessages), $validateOnly);
+
         /** @var ResponseWithSubResponses $response */
         $response = $this->messagingApi->send($request);
 
@@ -140,9 +146,9 @@ final class Messaging implements Contract\Messaging
 
     public function unsubscribeFromTopics(array $topics, $registrationTokenOrTokens): array
     {
-        $topics = \array_map(
+        $topics = array_map(
             static fn ($topic) => $topic instanceof Topic ? $topic : Topic::fromValue($topic),
-            $topics
+            $topics,
         );
 
         $tokens = $this->ensureNonEmptyRegistrationTokens($registrationTokenOrTokens);
@@ -161,14 +167,14 @@ final class Messaging implements Contract\Messaging
                 ->getAppInstanceAsync($token)
                 ->then(function (AppInstance $appInstance) use ($token) {
                     $topics = [];
+
                     foreach ($appInstance->topicSubscriptions() as $subscription) {
                         $topics[] = $subscription->topic()->value();
                     }
 
-                    return \array_keys($this->unsubscribeFromTopics($topics, $token));
+                    return array_keys($this->unsubscribeFromTopics($topics, $token));
                 })
-                ->otherwise(static fn (\Throwable $e) => $e->getMessage())
-            ;
+                ->otherwise(static fn (Throwable $e) => $e->getMessage());
         }
 
         $responses = Utils::settle($promises)->wait();
@@ -216,9 +222,9 @@ final class Messaging implements Contract\Messaging
     {
         $check = Json::decode(Json::encode($message), true);
 
-        return \array_key_exists(MessageTarget::CONDITION, $check)
-            || \array_key_exists(MessageTarget::TOKEN, $check)
-            || \array_key_exists(MessageTarget::TOPIC, $check);
+        return array_key_exists(MessageTarget::CONDITION, $check)
+            || array_key_exists(MessageTarget::TOKEN, $check)
+            || array_key_exists(MessageTarget::TOPIC, $check);
     }
 
     /**

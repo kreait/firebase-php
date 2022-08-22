@@ -17,7 +17,6 @@ use Throwable;
 class AppInstanceApiClient
 {
     private ClientInterface $client;
-
     private MessagingApiExceptionConverter $errorHandler;
 
     public function __construct(ClientInterface $client, MessagingApiExceptionConverter $errorHandler)
@@ -48,8 +47,7 @@ class AppInstanceApiClient
                         'registration_tokens' => $tokenStrings,
                     ],
                 ])
-                ->then(static fn (ResponseInterface $response) => Json::decode((string) $response->getBody(), true))
-            ;
+                ->then(static fn (ResponseInterface $response) => Json::decode((string) $response->getBody(), true));
         }
 
         $responses = Promise\Utils::settle($promises)->wait();
@@ -84,6 +82,7 @@ class AppInstanceApiClient
                     $result[$topicName] = $topicResults;
 
                     break;
+
                 case 'rejected':
                     $result[$topicName] = $response['reason']->getMessage();
 
@@ -114,8 +113,7 @@ class AppInstanceApiClient
                         'registration_tokens' => $tokenStrings,
                     ],
                 ])
-                ->then(static fn (ResponseInterface $response) => Json::decode((string) $response->getBody(), true))
-            ;
+                ->then(static fn (ResponseInterface $response) => Json::decode((string) $response->getBody(), true));
         }
 
         $responses = Promise\Utils::settle($promises)->wait();
@@ -150,6 +148,7 @@ class AppInstanceApiClient
                     $result[$topicName] = $topicResults;
 
                     break;
+
                 case 'rejected':
                     $result[$topicName] = $response['reason']->getMessage();
 
@@ -169,7 +168,6 @@ class AppInstanceApiClient
 
                 return AppInstance::fromRawData($registrationToken, $data);
             })
-            ->otherwise(fn (Throwable $e) => Promise\Create::rejectionFor($this->errorHandler->convertException($e)))
-        ;
+            ->otherwise(fn (Throwable $e) => Promise\Create::rejectionFor($this->errorHandler->convertException($e)));
     }
 }

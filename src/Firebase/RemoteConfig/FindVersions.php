@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\RemoteConfig;
 
+use DateTimeImmutable;
 use DateTimeInterface;
 use Kreait\Firebase\Util\DT;
 
 class FindVersions
 {
-    private ?\DateTimeImmutable $since = null;
-    private ?\DateTimeImmutable $until = null;
+    private ?DateTimeImmutable $since = null;
+    private ?DateTimeImmutable $until = null;
     private ?VersionNumber $upToVersion = null;
     private ?int $limit = null;
     private ?int $pageSize = null;
@@ -63,7 +64,7 @@ class FindVersions
         return $query;
     }
 
-    public function since(): ?\DateTimeImmutable
+    public function since(): ?DateTimeImmutable
     {
         return $this->since;
     }
@@ -76,7 +77,7 @@ class FindVersions
         return $query;
     }
 
-    public function until(): ?\DateTimeImmutable
+    public function until(): ?DateTimeImmutable
     {
         return $this->until;
     }

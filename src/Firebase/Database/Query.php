@@ -28,6 +28,7 @@ class Query
 {
     private Reference $reference;
     private ApiClient $apiClient;
+
     /** @var Filter[] */
     private array $filters = [];
     private ?Sorter $sorter = null;
@@ -39,6 +40,16 @@ class Query
     {
         $this->reference = $reference;
         $this->apiClient = $apiClient;
+    }
+
+    /**
+     * Returns the absolute URL for this location.
+     *
+     * @see getUri()
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getUri();
     }
 
     /**
@@ -264,16 +275,6 @@ class Query
         }
 
         return $uri;
-    }
-
-    /**
-     * Returns the absolute URL for this location.
-     *
-     * @see getUri()
-     */
-    public function __toString(): string
-    {
-        return (string) $this->getUri();
     }
 
     private function withAddedFilter(Filter $filter): self

@@ -6,6 +6,7 @@ namespace Kreait\Firebase\DynamicLink;
 
 use JsonSerializable;
 use Kreait\Firebase\Value\Url;
+use Stringable;
 
 final class ShortenLongDynamicLink implements JsonSerializable
 {
@@ -24,7 +25,7 @@ final class ShortenLongDynamicLink implements JsonSerializable
     /**
      * The long dynamic link that has been created as described in {@see https://firebase.google.com/docs/dynamic-links/create-manually}.
      *
-     * @param \Stringable|string $url
+     * @param Stringable|string $url
      */
     public static function forLongDynamicLink($url): self
     {

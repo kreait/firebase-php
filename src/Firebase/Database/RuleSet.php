@@ -6,6 +6,8 @@ namespace Kreait\Firebase\Database;
 
 use JsonSerializable;
 
+use function array_key_exists;
+
 class RuleSet implements JsonSerializable
 {
     /** @var array<string, array<mixed>> */
@@ -16,7 +18,7 @@ class RuleSet implements JsonSerializable
      */
     private function __construct(array $rules)
     {
-        if (!\array_key_exists('rules', $rules)) {
+        if (!array_key_exists('rules', $rules)) {
             $rules = ['rules' => $rules];
         }
 
