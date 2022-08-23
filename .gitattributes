@@ -1,14 +1,15 @@
 *.php diff=php
 
+/.opensource export-ignore
 /docs export-ignore
 /tests export-ignore
 
 /.editorconfig export-ignore
-/firebase.json export-ignore
 /.gitattributes export-ignore
 /.github export-ignore
 /.gitignore export-ignore
-/.opensource export-ignore
+/.php-cs-fixer.dist.php export-ignore
 /codecov.yml export-ignore
+/firebase.json export-ignore
 /phpstan.neon.dist export-ignore
 /phpunit.xml.dist export-ignore
