@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit;
 
+use Beste\Json;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Tests\UnitTestCase;
@@ -11,7 +12,6 @@ use stdClass;
 
 use function chmod;
 use function file_get_contents;
-use function json_decode;
 
 /**
  * @internal
@@ -32,7 +32,7 @@ final class ServiceAccountTest extends UnitTestCase
 
         $this->pathToValidJson = self::$fixturesDir.'/ServiceAccount/valid.json';
         $this->validJson = (string) file_get_contents($this->pathToValidJson);
-        $this->validData = json_decode($this->validJson, true);
+        $this->validData = Json::decode($this->validJson, true);
     }
 
     protected function tearDown(): void

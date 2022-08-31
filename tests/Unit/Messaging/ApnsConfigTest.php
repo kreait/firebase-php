@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
+use Beste\Json;
 use Kreait\Firebase\Messaging\ApnsConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
-
-use function json_encode;
 
 /**
  * @internal
@@ -16,7 +15,7 @@ final class ApnsConfigTest extends UnitTestCase
 {
     public function testItIsEmptyWhenItIsEmpty(): void
     {
-        $this->assertSame('[]', json_encode(ApnsConfig::new()));
+        $this->assertSame('[]', Json::encode(ApnsConfig::new()));
     }
 
     public function testItHasADefaultSound(): void
@@ -30,8 +29,8 @@ final class ApnsConfigTest extends UnitTestCase
         ];
 
         $this->assertJsonStringEqualsJsonString(
-            json_encode($expected),
-            json_encode(ApnsConfig::new()->withDefaultSound()),
+            Json::encode($expected),
+            Json::encode(ApnsConfig::new()->withDefaultSound()),
         );
     }
 
@@ -46,8 +45,8 @@ final class ApnsConfigTest extends UnitTestCase
         ];
 
         $this->assertJsonStringEqualsJsonString(
-            json_encode($expected),
-            json_encode(ApnsConfig::new()->withBadge(123)),
+            Json::encode($expected),
+            Json::encode(ApnsConfig::new()->withBadge(123)),
         );
     }
 
@@ -83,8 +82,8 @@ final class ApnsConfigTest extends UnitTestCase
         ];
 
         $this->assertJsonStringEqualsJsonString(
-            json_encode($expected),
-            json_encode(ApnsConfig::new()->withSubtitle('i am a subtitle')),
+            Json::encode($expected),
+            Json::encode(ApnsConfig::new()->withSubtitle('i am a subtitle')),
         );
     }
 

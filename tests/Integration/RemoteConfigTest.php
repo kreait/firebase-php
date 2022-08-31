@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use Beste\Json;
 use Kreait\Firebase\Contract\RemoteConfig;
 use Kreait\Firebase\Exception\RemoteConfig\ValidationFailed;
 use Kreait\Firebase\Exception\RemoteConfig\VersionMismatch;
@@ -17,8 +18,6 @@ use Kreait\Firebase\RemoteConfig\Version;
 use Kreait\Firebase\RemoteConfig\VersionNumber;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use Throwable;
-
-use function json_decode;
 
 /**
  * @internal
@@ -99,7 +98,7 @@ final class RemoteConfigTest extends IntegrationTestCase
     protected function setUp(): void
     {
         $this->remoteConfig = self::$factory->createRemoteConfig();
-        $this->template = Template::fromArray(json_decode(self::TEMPLATE_CONFIG, true));
+        $this->template = Template::fromArray(Json::decode(self::TEMPLATE_CONFIG, true));
     }
 
     public function testForcePublishAndGet(): void

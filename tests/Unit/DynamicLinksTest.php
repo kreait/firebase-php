@@ -27,8 +27,6 @@ use Kreait\Firebase\DynamicLinks;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
-use function json_decode;
-
 /**
  * @internal
  */
@@ -71,7 +69,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, json_decode(Json::encode($dynamicLink), true));
+        $this->assertEquals($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
     public function testItCreatesADynamicLinkFromAnArrayOfParameters(): void
@@ -92,7 +90,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, json_decode(Json::encode($dynamicLink), true));
+        $this->assertEquals($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
     public function testCreationFailsIfNoConnectionIsAvailable(): void
@@ -147,7 +145,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, json_decode(Json::encode($dynamicLink), true));
+        $this->assertEquals($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
     public function testShorteningFailsIfNoConnectionIsAvailable(): void

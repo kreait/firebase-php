@@ -13,9 +13,6 @@ use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\Notification;
 use PHPUnit\Framework\TestCase;
 
-use function json_decode;
-use function json_encode;
-
 /**
  * @internal
  */
@@ -23,7 +20,7 @@ final class CloudMessageTest extends TestCase
 {
     public function testEmptyMessage(): void
     {
-        $this->assertSame('[]', json_encode(CloudMessage::new()));
+        $this->assertSame('[]', Json::encode(CloudMessage::new()));
     }
 
     public function testInvalidTargetCausesError(): void
@@ -40,10 +37,10 @@ final class CloudMessageTest extends TestCase
 
         $changed = $original->withChangedTarget(MessageTarget::TOKEN, 'baz');
 
-        $encodedOriginal = json_decode(Json::encode($original), true);
+        $encodedOriginal = Json::decode(Json::encode($original), true);
         $encodedOriginal[MessageTarget::TOKEN] = 'baz';
 
-        $encodedChanged = json_decode(Json::encode($changed), true);
+        $encodedChanged = Json::decode(Json::encode($changed), true);
 
         $this->assertSame($encodedOriginal, $encodedChanged);
     }
@@ -58,7 +55,7 @@ final class CloudMessageTest extends TestCase
         $options = FcmOptions::create()->withAnalyticsLabel($label = 'my-label');
         $message = CloudMessage::new()->withFcmOptions($options);
 
-        $messageData = json_decode(Json::encode($message), true);
+        $messageData = Json::decode(Json::encode($message), true);
 
         $this->assertArrayHasKey('fcm_options', $messageData);
         $this->assertArrayHasKey('analytics_label', $messageData['fcm_options']);
@@ -94,8 +91,8 @@ final class CloudMessageTest extends TestCase
         ];
 
         $this->assertJsonStringEqualsJsonString(
-            json_encode($expected),
-            json_encode(CloudMessage::new()->withDefaultSounds()->jsonSerialize()),
+            Json::encode($expected),
+            Json::encode(CloudMessage::new()->withDefaultSounds()->jsonSerialize()),
         );
     }
 
@@ -103,7 +100,7 @@ final class CloudMessageTest extends TestCase
     {
         $message = CloudMessage::new()->withLowestPossiblePriority();
 
-        $payload = json_decode(json_encode($message), true);
+        $payload = Json::decode(Json::encode($message), true);
 
         $this->assertArrayHasKey('android', $payload);
         $this->assertArrayHasKey('priority', $payload['android']);
@@ -124,7 +121,7 @@ final class CloudMessageTest extends TestCase
     {
         $message = CloudMessage::new()->withHighestPossiblePriority();
 
-        $payload = json_decode(json_encode($message), true);
+        $payload = Json::decode(Json::encode($message), true);
 
         $this->assertArrayHasKey('android', $payload);
         $this->assertArrayHasKey('priority', $payload['android']);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Auth;
 
+use Beste\Json;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ConnectException;
@@ -16,8 +17,6 @@ use Kreait\Firebase\Auth\SignInAnonymously;
 use Kreait\Firebase\Tests\UnitTestCase;
 
 use const JSON_FORCE_OBJECT;
-
-use function json_encode;
 
 /**
  * @internal
@@ -75,7 +74,7 @@ final class GuzzleHandlerTest extends UnitTestCase
 
     public function testItWorks(): void
     {
-        $this->httpResponses->append(new Response(200, [], (string) json_encode([
+        $this->httpResponses->append(new Response(200, [], Json::encode([
             'id_token' => 'id_token',
             'refresh_token' => 'refresh_token',
             'access_token' => 'access_token',
