@@ -7,13 +7,14 @@ namespace Kreait\Firebase\Tests\Unit\Database;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\Snapshot;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @internal
  */
 final class SnapshotTest extends UnitTestCase
 {
-    /** @var Reference|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Reference|MockObject */
     private $reference;
     private Snapshot $snapshotWithArrayValue;
     private Snapshot $snapshotWithScalarValue;

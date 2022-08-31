@@ -62,9 +62,14 @@ abstract class AuthTestCase extends IntegrationTestCase
             $this->assertSame($email, $check->email);
             $this->assertFalse($check->emailVerified);
         } finally {
-            if (isset($check) && $check instanceof UserRecord) {
-                $this->auth->deleteUser($check->uid);
+            if (!isset($check)) {
+                return;
             }
+
+            if (!$check instanceof UserRecord) {
+                return;
+            }
+            $this->auth->deleteUser($check->uid);
         }
     }
 

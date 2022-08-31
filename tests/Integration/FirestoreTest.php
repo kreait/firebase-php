@@ -24,7 +24,7 @@ final class FirestoreTest extends IntegrationTestCase
     protected function setUp(): void
     {
         $this->firestore = self::$factory->createFirestore();
-        $this->collectionName = str_replace('\\', '_', __CLASS__);
+        $this->collectionName = str_replace('\\', '_', self::class);
     }
 
     public function testItReturnsAWorkingFirestoreClient(): void

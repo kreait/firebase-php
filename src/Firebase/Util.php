@@ -19,7 +19,7 @@ final class Util
     {
         $value = $_SERVER[$name] ?? $_ENV[$name] ?? getenv($name);
 
-        if ($value !== false && $value !== null) {
+        if (!in_array($value, [false, null], true)) {
             return (string) $value;
         }
 

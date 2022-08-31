@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\RuleSet;
+use Kreait\Firebase\Database\UrlBuilder;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,7 +30,7 @@ final class DatabaseTest extends UnitTestCase
         $this->uri = new Uri($this->url);
         $this->apiClient = $this->createMock(ApiClient::class);
 
-        $this->database = new Database($this->uri, $this->apiClient, Database\UrlBuilder::create($this->url));
+        $this->database = new Database($this->uri, $this->apiClient, UrlBuilder::create($this->url));
     }
 
     public function testGetReference(): void

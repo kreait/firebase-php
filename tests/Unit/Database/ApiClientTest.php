@@ -13,13 +13,14 @@ use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\UrlBuilder;
 use Kreait\Firebase\Exception\DatabaseException;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @internal
  */
 final class ApiClientTest extends UnitTestCase
 {
-    /** @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ClientInterface|MockObject */
     private $http;
     private ApiClient $client;
     private string $targetUrl;

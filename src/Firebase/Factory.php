@@ -24,7 +24,10 @@ use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Psr7\Utils as GuzzleUtils;
 use GuzzleHttp\RequestOptions;
 use Kreait\Firebase;
+use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
+use Kreait\Firebase\Auth\SignIn\GuzzleHandler;
+use Kreait\Firebase\Database\UrlBuilder;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Exception\RuntimeException;
@@ -33,6 +36,7 @@ use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\JWT\CustomTokenGenerator;
 use Kreait\Firebase\JWT\IdTokenVerifier;
 use Kreait\Firebase\JWT\SessionCookieVerifier;
+use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Value\Email;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\UriInterface;
@@ -252,8 +256,8 @@ final class Factory
 
         $httpClient = $this->createApiClient();
 
-        $signInHandler = new Firebase\Auth\SignIn\GuzzleHandler($projectId, $httpClient);
-        $authApiClient = new Auth\ApiClient($projectId, $this->tenantId, $httpClient, $signInHandler, $this->clock);
+        $signInHandler = new GuzzleHandler($projectId, $httpClient);
+        $authApiClient = new ApiClient($projectId, $this->tenantId, $httpClient, $signInHandler, $this->clock);
         $customTokenGenerator = $this->createCustomTokenGenerator();
         $idTokenVerifier = $this->createIdTokenVerifier();
         $sessionCookieVerifier = $this->createSessionCookieVerifier();
@@ -264,13 +268,13 @@ final class Factory
     public function createDatabase(): Contract\Database
     {
         $middlewares = array_filter([
-            Firebase\Http\Middleware::ensureJsonSuffix(),
+            Middleware::ensureJsonSuffix(),
             $this->databaseAuthVariableOverrideMiddleware,
         ]);
 
         $http = $this->createApiClient(null, $middlewares);
         $databaseUrl = $this->getDatabaseUrl();
-        $resourceUrlBuilder = Firebase\Database\UrlBuilder::create($databaseUrl);
+        $resourceUrlBuilder = UrlBuilder::create($databaseUrl);
 
         return new Database(
             GuzzleUtils::uriFor($databaseUrl),
@@ -301,7 +305,7 @@ final class Factory
             $errorHandler,
         );
 
-        $appInstanceApiClient = new Messaging\AppInstanceApiClient(
+        $appInstanceApiClient = new AppInstanceApiClient(
             $this->createApiClient([
                 'base_uri' => 'https://iid.googleapis.com',
                 'headers' => [
@@ -628,11 +632,11 @@ final class Factory
         if ($clientEmail && $privateKey) {
             $generator = CustomTokenGenerator::withClientEmailAndPrivateKey($clientEmail, $privateKey);
 
-            if ($this->tenantId !== null) {
-                $generator = $generator->withTenantId($this->tenantId);
+            if ($this->tenantId === null) {
+                return $generator;
             }
 
-            return $generator;
+            return $generator->withTenantId($this->tenantId);
         }
 
         if ($clientEmail !== null) {
@@ -646,11 +650,11 @@ final class Factory
     {
         $verifier = IdTokenVerifier::createWithProjectIdAndCache($this->getProjectId(), $this->verifierCache);
 
-        if ($this->tenantId !== null) {
-            $verifier = $verifier->withExpectedTenantId($this->tenantId);
+        if ($this->tenantId === null) {
+            return $verifier;
         }
 
-        return $verifier;
+        return $verifier->withExpectedTenantId($this->tenantId);
     }
 
     private function createSessionCookieVerifier(): SessionCookieVerifier

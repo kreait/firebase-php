@@ -26,16 +26,21 @@ final class SetApnsContentAvailableIfNeeded
 
         $notification = $this->getNotification($payload);
         $apnsConfig = $this->getApnsConfig($payload);
+        $isAlert = $notification !== null || $apnsConfig->isAlert();
 
-        if ($notification !== null || $apnsConfig->isAlert()) {
-            // This is an alert, no 'content-available' field needed
+        if ($isAlert) {
             return $message;
         }
 
         $messageData = $this->getMessageData($payload);
         $apnsData = $apnsConfig->data();
 
-        if (($apnsData === []) || ($messageData->toArray() === [])) {
+        if ($apnsData === []) {
+            // No data, no 'content-available' field
+            return $message;
+        }
+
+        if ($messageData->toArray() === []) {
             // No data, no 'content-available' field
             return $message;
         }
@@ -80,12 +85,14 @@ final class SetApnsContentAvailableIfNeeded
      */
     public function getMessageData(array $payload): MessageData
     {
-        if (array_key_exists('data', $payload) && is_array($payload['data'])) {
-            $messageData = MessageData::fromArray($payload['data']);
-        } else {
-            $messageData = MessageData::fromArray([]);
+        if (!array_key_exists('data', $payload)) {
+            return MessageData::fromArray([]);
         }
 
-        return $messageData;
+        if (!is_array($payload['data'])) {
+            return MessageData::fromArray([]);
+        }
+
+        return MessageData::fromArray($payload['data']);
     }
 }

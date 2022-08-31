@@ -8,6 +8,7 @@ use Beste\Json;
 use Psr\Http\Message\ResponseInterface;
 
 use function count;
+use function is_countable;
 
 final class DeleteUsersResult
 {
@@ -42,7 +43,7 @@ final class DeleteUsersResult
         $data = Json::decode((string) $response->getBody(), true);
         $errors = $data['errors'] ?? [];
 
-        $failureCount = count($errors);
+        $failureCount = is_countable($errors) ? count($errors) : 0;
         $successCount = count($request->uids()) - $failureCount;
 
         return new self($successCount, $failureCount, $errors);

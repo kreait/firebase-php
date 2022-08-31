@@ -108,7 +108,7 @@ final class CloudMessage implements Message
         }
 
         if ($fcmOptions = ($data['fcm_options'] ?? null)) {
-            $new = $new->withFcmOptions($fcmOptions);
+            return $new->withFcmOptions($fcmOptions);
         }
 
         return $new;

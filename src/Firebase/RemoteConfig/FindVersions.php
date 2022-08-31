@@ -50,7 +50,7 @@ class FindVersions
         }
 
         if ($value = $params['limit'] ?? null) {
-            $query = $query->withLimit((int) $value);
+            return $query->withLimit((int) $value);
         }
 
         return $query;

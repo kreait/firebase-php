@@ -7,6 +7,7 @@ namespace Kreait\Firebase\Auth;
 use Beste\Json;
 use DateInterval;
 use GuzzleHttp\ClientInterface;
+use Kreait\Firebase\Auth\CreateSessionCookie\GuzzleApiClientHandler;
 use Kreait\Firebase\Auth\SignIn\Handler as SignInHandler;
 use Kreait\Firebase\Exception\Auth\EmailNotFound;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
@@ -15,7 +16,8 @@ use Kreait\Firebase\Exception\Auth\OperationNotAllowed;
 use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Exception\AuthException;
-use Kreait\Firebase\Request;
+use Kreait\Firebase\Request\CreateUser;
+use Kreait\Firebase\Request\UpdateUser;
 use Psr\Http\Message\ResponseInterface;
 use StellaMaris\Clock\ClockInterface;
 use Stringable;
@@ -67,7 +69,7 @@ class ApiClient
     /**
      * @throws AuthException
      */
-    public function createUser(Request\CreateUser $request): ResponseInterface
+    public function createUser(CreateUser $request): ResponseInterface
     {
         $url = $this->authResourceUrlBuilder->getUrl('/accounts:signUp');
 
@@ -77,7 +79,7 @@ class ApiClient
     /**
      * @throws AuthException
      */
-    public function updateUser(Request\UpdateUser $request): ResponseInterface
+    public function updateUser(UpdateUser $request): ResponseInterface
     {
         $url = $this->awareAuthResourceUrlBuilder->getUrl('/accounts:update');
 
@@ -256,7 +258,7 @@ class ApiClient
      */
     public function createSessionCookie(string $idToken, $ttl): string
     {
-        return (new CreateSessionCookie\GuzzleApiClientHandler($this->client, $this->projectId))
+        return (new GuzzleApiClientHandler($this->client, $this->projectId))
             ->handle(CreateSessionCookie::forIdToken($idToken, $this->tenantId, $ttl, $this->clock));
     }
 

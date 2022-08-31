@@ -12,6 +12,7 @@ use Kreait\Firebase\Exception\Database\DatabaseError;
 use Kreait\Firebase\Exception\Database\DatabaseNotFound;
 use Kreait\Firebase\Exception\Database\UnsupportedQuery;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Throwable;
 
 /**
@@ -21,10 +22,10 @@ final class QueryTest extends UnitTestCase
 {
     protected Uri $uri;
 
-    /** @var Reference|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Reference|MockObject */
     protected $reference;
 
-    /** @var ApiClient|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ApiClient|MockObject */
     protected $apiClient;
     protected Query $query;
 

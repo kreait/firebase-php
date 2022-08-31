@@ -178,7 +178,7 @@ final class UserQueryTest extends IntegrationTestCase
     public function testFilterByPhoneNumber(): void
     {
         $user = $this->auth->createUser([
-            'phoneNumber' => '+49'.random_int(90000000000, 99999999999),
+            'phoneNumber' => '+49'.random_int(90_000_000_000, 99_999_999_999),
         ]);
 
         $query = [

@@ -13,6 +13,7 @@ use Kreait\Firebase\Database\UrlBuilder;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -20,7 +21,7 @@ use Psr\Http\Message\UriInterface;
  */
 final class ReferenceTest extends UnitTestCase
 {
-    /** @var ApiClient|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ApiClient|MockObject */
     private $apiClient;
     private Reference $reference;
 

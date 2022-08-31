@@ -171,13 +171,17 @@ final class WebPushConfig implements JsonSerializable
             }
         }
 
-        if (array_key_exists('Urgency', $headers) && !in_array($headers['Urgency'], self::VALID_URGENCIES, true)) {
-            throw new InvalidArgument(sprintf(
-                'The Urgency in the WebPushConfig header must must be one of %s',
-                implode(',', self::VALID_URGENCIES),
-            ));
+        if (!array_key_exists('Urgency', $headers)) {
+            return $headers;
         }
 
-        return $headers;
+        if (in_array($headers['Urgency'], self::VALID_URGENCIES, true)) {
+            return $headers;
+        }
+
+        throw new InvalidArgument(sprintf(
+            'The Urgency in the WebPushConfig header must must be one of %s',
+            implode(',', self::VALID_URGENCIES),
+        ));
     }
 }

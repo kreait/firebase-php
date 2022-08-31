@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Http;
 
 use Closure;
-use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\Request;
 use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Psr\Http\Message\RequestInterface;
@@ -15,12 +15,12 @@ use Psr\Http\Message\RequestInterface;
  */
 final class MiddlewareTest extends UnitTestCase
 {
-    private Psr7\Request $request;
+    private Request $request;
     private Closure $handler;
 
     protected function setUp(): void
     {
-        $this->request = new Psr7\Request('GET', 'http://domain.tld');
+        $this->request = new Request('GET', 'http://domain.tld');
         $this->handler = static fn (RequestInterface $request) => $request;
     }
 

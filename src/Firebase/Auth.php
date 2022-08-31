@@ -34,6 +34,8 @@ use Kreait\Firebase\JWT\CustomTokenGenerator;
 use Kreait\Firebase\JWT\IdTokenVerifier;
 use Kreait\Firebase\JWT\SessionCookieVerifier;
 use Kreait\Firebase\JWT\Value\Duration;
+use Kreait\Firebase\Request\CreateUser;
+use Kreait\Firebase\Request\UpdateUser;
 use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Value\ClearTextPassword;
 use Kreait\Firebase\Value\Email;
@@ -159,9 +161,9 @@ final class Auth implements Contract\Auth
 
     public function createUser($properties): UserRecord
     {
-        $request = $properties instanceof Request\CreateUser
+        $request = $properties instanceof CreateUser
             ? $properties
-            : Request\CreateUser::withProperties($properties);
+            : CreateUser::withProperties($properties);
 
         $response = $this->client->createUser($request);
 
@@ -170,9 +172,9 @@ final class Auth implements Contract\Auth
 
     public function updateUser($uid, $properties): UserRecord
     {
-        $request = $properties instanceof Request\UpdateUser
+        $request = $properties instanceof UpdateUser
             ? $properties
-            : Request\UpdateUser::withProperties($properties);
+            : UpdateUser::withProperties($properties);
 
         $request = $request->withUid($uid);
 
@@ -184,7 +186,7 @@ final class Auth implements Contract\Auth
     public function createUserWithEmailAndPassword($email, $password): UserRecord
     {
         return $this->createUser(
-            Request\CreateUser::new()
+            CreateUser::new()
                 ->withUnverifiedEmail($email)
                 ->withClearTextPassword($password),
         );
@@ -222,27 +224,27 @@ final class Auth implements Contract\Auth
 
     public function createAnonymousUser(): UserRecord
     {
-        return $this->createUser(Request\CreateUser::new());
+        return $this->createUser(CreateUser::new());
     }
 
     public function changeUserPassword($uid, $newPassword): UserRecord
     {
-        return $this->updateUser($uid, Request\UpdateUser::new()->withClearTextPassword($newPassword));
+        return $this->updateUser($uid, UpdateUser::new()->withClearTextPassword($newPassword));
     }
 
     public function changeUserEmail($uid, $newEmail): UserRecord
     {
-        return $this->updateUser($uid, Request\UpdateUser::new()->withEmail($newEmail));
+        return $this->updateUser($uid, UpdateUser::new()->withEmail($newEmail));
     }
 
     public function enableUser($uid): UserRecord
     {
-        return $this->updateUser($uid, Request\UpdateUser::new()->markAsEnabled());
+        return $this->updateUser($uid, UpdateUser::new()->markAsEnabled());
     }
 
     public function disableUser($uid): UserRecord
     {
-        return $this->updateUser($uid, Request\UpdateUser::new()->markAsDisabled());
+        return $this->updateUser($uid, UpdateUser::new()->markAsDisabled());
     }
 
     public function deleteUser($uid): void

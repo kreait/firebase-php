@@ -85,12 +85,15 @@ final class SetApnsPushTypeIfNeeded
      */
     public function getMessageData(array $payload): MessageData
     {
-        if (array_key_exists('data', $payload) && is_array($payload['data'])) {
-            $messageData = MessageData::fromArray($payload['data']);
-        } else {
-            $messageData = MessageData::fromArray([]);
+        if (!array_key_exists('data', $payload)) {
+            return MessageData::fromArray([]);
         }
 
-        return $messageData;
+        if (!is_array($payload['data'])) {
+            return MessageData::fromArray([]);
+        }
+        MessageData::fromArray($payload['data']);
+
+        return MessageData::fromArray([]);
     }
 }
