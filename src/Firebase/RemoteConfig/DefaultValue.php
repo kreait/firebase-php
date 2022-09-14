@@ -6,60 +6,95 @@ namespace Kreait\Firebase\RemoteConfig;
 
 use JsonSerializable;
 
-use function is_string;
+use function array_key_exists;
 
+/**
+ * @phpstan-import-type RemoteConfigPersonalizationValueShape from PersonalizationValue
+ * @phpstan-import-type RemoteConfigExplicitValueShape from ExplicitValue
+ *
+ * @phpstan-type RemoteConfigInAppDefaultValueShape array{
+ *     useInAppDefault: bool
+ * }
+ */
 class DefaultValue implements JsonSerializable
 {
+    /** @deprecated 6.9.0 */
     public const IN_APP_DEFAULT_VALUE = true;
 
-    /** @var string|bool */
-    private $value;
+    /**
+     * @var RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape
+     */
+    private $data;
 
     /**
-     * @param string|bool $value
+     * @param RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape $data
      */
-    private function __construct($value)
+    private function __construct(array $data)
     {
-        $this->value = is_string($value) ? $value : true;
+        $this->data = $data;
     }
 
+    /**
+     * @deprecated 6.9.0 Use {@see useInAppDefault()} instead
+     */
     public static function none(): self
     {
-        return new self(self::IN_APP_DEFAULT_VALUE);
+        return self::useInAppDefault();
+    }
+
+    public static function useInAppDefault(): self
+    {
+        return new self(['useInAppDefault' => true]);
     }
 
     public static function with(string $value): self
     {
-        return new self($value);
+        return new self(['value' => $value]);
     }
 
     /**
-     * @return string|bool
+     * @deprecated 6.9.0 Use {@see toArray()} instead
+     *
+     * @return string|bool|null
      */
     public function value()
     {
-        return $this->value;
+        if (array_key_exists('value', $this->data)) {
+            return $this->data['value'];
+        }
+
+        if (array_key_exists('useInAppDefault', $this->data)) {
+            return $this->data['useInAppDefault'];
+        }
+
+        if (array_key_exists('personalizationId', $this->data)) {
+            return $this->data['personalizationId'];
+        }
+
+        return null;
     }
 
     /**
-     * @param array{
-     *     value: string|bool
-     * }|array{
-     *     useInAppDefault: bool
-     * } $data
+     * @return RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape
+     */
+    public function toArray(): array
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape $data
      */
     public static function fromArray(array $data): self
     {
-        return new self($data['value'] ?? $data['useInAppDefault'] ?? true);
+        return new self($data);
     }
 
     /**
-     * @return array<string, string|bool>
+     * @return RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape
      */
     public function jsonSerialize(): array
     {
-        $key = $this->value === true ? 'useInAppDefault' : 'value';
-
-        return [$key => $this->value];
+        return $this->data;
     }
 }

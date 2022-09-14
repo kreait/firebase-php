@@ -13,6 +13,8 @@ use Kreait\Firebase\RemoteConfig\TagColor;
 use Kreait\Firebase\RemoteConfig\Template;
 use Kreait\Firebase\Tests\UnitTestCase;
 
+use function array_map;
+
 /**
  * @internal
  */
@@ -49,7 +51,7 @@ final class TemplateTest extends UnitTestCase
 
         $template = $template->withParameter($parameter);
 
-        $condition = $template->conditions()['foo'];
+        $condition = $template->conditions()[0];
         $this->assertSame('foo', $condition->name());
         $this->assertSame('"true"', $condition->expression());
 
@@ -86,9 +88,87 @@ final class TemplateTest extends UnitTestCase
             ->withParameter($welcomeMessageParameter)
             ->withParameterGroup($uiColors);
 
-        $this->assertSame($german, $template->conditions()['lang_german']);
-        $this->assertSame($french, $template->conditions()['lang_french']);
+        $conditionNames = array_map(static fn (Condition $c) => $c->name(), $template->conditions());
+
+        $this->assertContains('lang_german', $conditionNames);
+        $this->assertContains('lang_french', $conditionNames);
         $this->assertSame($welcomeMessageParameter, $template->parameters()['welcome_message']);
         $this->assertSame($uiColors, $template->parameterGroups()['ui_colors']);
+    }
+
+    public function testParametersCanBeRemoved(): void
+    {
+        $template = Template::new()
+            ->withParameter(Parameter::named('foo'))
+            ->withRemovedParameter('foo');
+
+        $this->assertCount(0, $template->parameters());
+    }
+
+    public function testParameterGroupsCanBeRemoved(): void
+    {
+        $template = Template::new()
+            ->withParameterGroup(ParameterGroup::named('group'))
+            ->withRemovedParameterGroup('group');
+
+        $this->assertCount(0, $template->parameterGroups());
+    }
+
+    public function testPersonalizationValuesAreImportedInDefaultValues(): void
+    {
+        $data = [
+            'parameters' => [
+                'foo' => [
+                    'defaultValue' => [
+                        'personalizationValue' => [
+                            'personalizationId' => 'id',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $template = Template::fromArray($data);
+        $this->assertArrayHasKey('foo', $parameters = $template->parameters());
+        $this->assertNotNull($parameter = $parameters['foo']);
+        $this->assertNotNull($defaultValue = $parameter->defaultValue());
+
+        $this->assertArrayHasKey('personalizationValue', $array = $defaultValue->toArray());
+        $this->assertArrayHasKey('personalizationId', $personalizationIdArray = $array['personalizationValue']);
+        $this->assertSame('id', $personalizationIdArray['personalizationId']);
+    }
+
+    public function testPersonalizationValuesAreImportedInConditionalValues(): void
+    {
+        $data = [
+            'conditions' => [
+                [
+                    'name' => 'condition',
+                    'expression' => "device.language in ['de', 'de_AT', 'de_CH']",
+                ],
+            ],
+            'parameters' => [
+                'foo' => [
+                    'conditionalValues' => [
+                        'condition' => [
+                            'personalizationValue' => [
+                                'personalizationId' => 'id',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $template = Template::fromArray($data);
+        $this->assertArrayHasKey('foo', $parameters = $template->parameters());
+        $this->assertNotNull($parameter = $parameters['foo']);
+
+        $conditionalValues = $parameter->conditionalValues();
+        $this->assertArrayHasKey(0, $conditionalValues);
+
+        $this->assertArrayHasKey('personalizationValue', $array = $conditionalValues[0]->toArray());
+        $this->assertArrayHasKey('personalizationId', $personalizationIdArray = $array['personalizationValue']);
+        $this->assertSame('id', $personalizationIdArray['personalizationId']);
     }
 }

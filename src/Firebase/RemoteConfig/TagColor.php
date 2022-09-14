@@ -28,8 +28,15 @@ class TagColor
         self::BLUE, self::BROWN, self::CYAN, self::DEEP_ORANGE, self::GREEN, self::INDIGO, self::LIME,
         self::ORANGE, self::PINK, self::PURPLE, self::TEAL,
     ];
+
+    /**
+     * @var non-empty-string
+     */
     private string $value;
 
+    /**
+     * @param non-empty-string $value
+     */
     public function __construct(string $value)
     {
         $value = mb_strtoupper($value);
@@ -47,11 +54,17 @@ class TagColor
         $this->value = $value;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function __toString()
     {
         return $this->value;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function value(): string
     {
         return $this->value;

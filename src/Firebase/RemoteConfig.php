@@ -15,9 +15,12 @@ use Psr\Http\Message\ResponseInterface;
 use Traversable;
 
 use function array_shift;
+use function is_string;
 
 /**
  * @internal
+ *
+ * @phpstan-import-type RemoteConfigTemplateShape from Template
  */
 final class RemoteConfig implements Contract\RemoteConfig
 {
@@ -44,7 +47,13 @@ final class RemoteConfig implements Contract\RemoteConfig
             ->publishTemplate($this->ensureTemplate($template))
             ->getHeader('ETag');
 
-        return array_shift($etag) ?: '';
+        $etag = array_shift($etag);
+
+        if (is_string($etag) && $etag !== '') {
+            return $etag;
+        }
+
+        return '*';
     }
 
     public function getVersion($versionNumber): Version
@@ -93,7 +102,7 @@ final class RemoteConfig implements Contract\RemoteConfig
     }
 
     /**
-     * @param Template|array<string, mixed> $value
+     * @param Template|RemoteConfigTemplateShape $value
      */
     private function ensureTemplate($value): Template
     {

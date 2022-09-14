@@ -2,6 +2,28 @@
 
 ## [Unreleased]
 
+### Added
+
+* Added support for Remote Config Personalization
+  ([#731](https://github.com/kreait/firebase-php/pull/731)/[#733](https://github.com/kreait/firebase-php/pull/733))
+  * Note: Personalization (currently) can not be added programmatically. The values can only be read and removed from a
+    Remote Config Template. To add Personalization, use the Firebase Web Console.
+* Added `Kreait\Firebase\RemoteConfig\Template::withRemovedParameter(string $name)` to remove an existing parameter 
+  from a Remote Config Template
+* Added method `Kreait\Firebase\RemoteConfig\Template::withRemovedParameterGroup(string $name)` to remove an existing 
+  parameter group from a Remote Config Template
+
+### Changed
+
+* Added `Kreait\Firebase\RemoteConfig\DefaultValue::useInAppDefault()` and deprecated 
+  `\Kreait\Firebase\RemoteConfig\DefaultValue::none()`
+
+### Deprecated
+
+* `Kreait\Firebase\RemoteConfig\DefaultValue::IN_APP_DEFAULT_VALUE`
+* `Kreait\Firebase\RemoteConfig\DefaultValue::none()`
+* `Kreait\Firebase\RemoteConfig\DefaultValue::value()`
+
 ## [6.8.0] - 2022-08-20
 
 ### Added

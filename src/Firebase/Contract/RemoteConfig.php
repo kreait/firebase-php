@@ -18,6 +18,8 @@ use Traversable;
  *
  * @see https://firebase.google.com/docs/remote-config/use-config-rest
  * @see https://firebase.google.com/docs/remote-config/rest-reference
+ *
+ * @phpstan-import-type RemoteConfigTemplateShape from Template
  */
 interface RemoteConfig
 {
@@ -29,7 +31,7 @@ interface RemoteConfig
     /**
      * Validates the given template without publishing it.
      *
-     * @param Template|array<string, mixed> $template
+     * @param Template|RemoteConfigTemplateShape $template
      *
      * @throws ValidationFailed if the validation failed
      * @throws RemoteConfigException
@@ -37,11 +39,11 @@ interface RemoteConfig
     public function validate($template): void;
 
     /**
-     * @param Template|array<string, mixed> $template
+     * @param Template|RemoteConfigTemplateShape $template
      *
      * @throws RemoteConfigException
      *
-     * @return string The etag value of the published template that can be compared to in later calls
+     * @return non-empty-string The etag value of the published template that can be compared to in later calls
      */
     public function publish($template): string;
 

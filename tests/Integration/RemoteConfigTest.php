@@ -310,7 +310,7 @@ final class RemoteConfigTest extends IntegrationTestCase
         $template = Template::new();
 
         for ($i = 0; $i < 3001; ++$i) {
-            $template = $template->withParameter(Parameter::named('i_'.$i));
+            $template = $template->withParameter(Parameter::named('i_'.$i, 'v_'.$i));
         }
 
         return $template;
