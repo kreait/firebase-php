@@ -138,6 +138,21 @@ Parameter Groups
 
     $template = $template->withParameterGroup($parameterGroup);
 
+*******************************
+Removing Remote Config Elements
+*******************************
+
+You can remove elements from a Remote Config template with the following methods:
+
+.. code-block:: php
+
+    $template = Template::new()
+        ->withParameterGroup(ParameterGroup::named('group'))
+        ->withParameter(Parameter::named('parameter'))
+
+    $template = $template
+        ->withRemovedParameter('parameter')
+        ->withRemovedParameterGroup('group');
 
 **********
 Validation

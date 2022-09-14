@@ -6,24 +6,43 @@ namespace Kreait\Firebase\RemoteConfig;
 
 use JsonSerializable;
 
+/**
+ * @phpstan-import-type RemoteConfigParameterShape from Parameter
+ *
+ * @phpstan-type RemoteConfigParameterGroupShape array{
+ *     description?: string|null,
+ *     parameters: array<non-empty-string, RemoteConfigParameterShape>}
+ */
 final class ParameterGroup implements JsonSerializable
 {
+    /**
+     * @var non-empty-string
+     */
     private string $name;
     private string $description = '';
 
-    /** @var Parameter[] */
+    /** @var array<non-empty-string, Parameter> */
     private array $parameters = [];
 
+    /**
+     * @param non-empty-string $name
+     */
     private function __construct(string $name)
     {
         $this->name = $name;
     }
 
+    /**
+     * @param non-empty-string $name
+     */
     public static function named(string $name): self
     {
         return new self($name);
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function name(): string
     {
         return $this->name;
@@ -35,7 +54,7 @@ final class ParameterGroup implements JsonSerializable
     }
 
     /**
-     * @return Parameter[]
+     * @return array<non-empty-string, Parameter>
      */
     public function parameters(): array
     {
@@ -59,13 +78,27 @@ final class ParameterGroup implements JsonSerializable
     }
 
     /**
-     * @return array{description: string, parameters: Parameter[]}
+     * @return RemoteConfigParameterGroupShape
+     */
+    public function toArray(): array
+    {
+        $parameters = [];
+
+        foreach ($this->parameters as $parameter) {
+            $parameters[$parameter->name()] = $parameter->toArray();
+        }
+
+        return [
+            'description' => $this->description,
+            'parameters' => $parameters,
+        ];
+    }
+
+    /**
+     * @return RemoteConfigParameterGroupShape
      */
     public function jsonSerialize(): array
     {
-        return [
-            'description' => $this->description,
-            'parameters' => $this->parameters,
-        ];
+        return $this->toArray();
     }
 }

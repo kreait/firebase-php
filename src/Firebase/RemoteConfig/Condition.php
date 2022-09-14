@@ -6,14 +6,30 @@ namespace Kreait\Firebase\RemoteConfig;
 
 use JsonSerializable;
 
-use function array_filter;
-
+/**
+ * @phpstan-type RemoteConfigConditionShape array{
+ *     name: non-empty-string,
+ *     expression: non-empty-string,
+ *     tagColor?: ?non-empty-string
+ * }
+ */
 class Condition implements JsonSerializable
 {
+    /**
+     * @var non-empty-string
+     */
     private string $name;
+
+    /**
+     * @var non-empty-string
+     */
     private string $expression;
     private ?TagColor $tagColor;
 
+    /**
+     * @param non-empty-string $name
+     * @param non-empty-string $expression
+     */
     private function __construct(string $name, string $expression, ?TagColor $tagColor = null)
     {
         $this->name = $name;
@@ -22,11 +38,7 @@ class Condition implements JsonSerializable
     }
 
     /**
-     * @param array{
-     *     name: string,
-     *     expression: string,
-     *     tagColor?: ?string
-     * } $data
+     * @param RemoteConfigConditionShape $data
      */
     public static function fromArray(array $data): self
     {
@@ -37,21 +49,33 @@ class Condition implements JsonSerializable
         );
     }
 
+    /**
+     * @param non-empty-string $name
+     */
     public static function named(string $name): self
     {
         return new self($name, 'false', null);
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function name(): string
     {
         return $this->name;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function expression(): string
     {
         return $this->expression;
     }
 
+    /**
+     * @param non-empty-string $expression
+     */
     public function withExpression(string $expression): self
     {
         $condition = clone $this;
@@ -61,7 +85,7 @@ class Condition implements JsonSerializable
     }
 
     /**
-     * @param TagColor|string $tagColor
+     * @param TagColor|non-empty-string $tagColor
      */
     public function withTagColor($tagColor): self
     {
@@ -74,14 +98,27 @@ class Condition implements JsonSerializable
     }
 
     /**
-     * @return array<string, string>
+     * @return RemoteConfigConditionShape
+     */
+    public function toArray(): array
+    {
+        $array = [
+            'name' => $this->name,
+            'expression' => $this->expression,
+        ];
+
+        if ($this->tagColor !== null) {
+            $array['tagColor'] = $this->tagColor->value();
+        }
+
+        return $array;
+    }
+
+    /**
+     * @return RemoteConfigConditionShape
      */
     public function jsonSerialize(): array
     {
-        return array_filter([
-            'name' => $this->name,
-            'expression' => $this->expression,
-            'tagColor' => $this->tagColor !== null ? $this->tagColor->value() : null,
-        ], static fn ($value) => $value !== null);
+        return $this->toArray();
     }
 }

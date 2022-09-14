@@ -6,53 +6,88 @@ namespace Kreait\Firebase\RemoteConfig;
 
 use JsonSerializable;
 
+use function is_string;
+
+/**
+ * @phpstan-import-type RemoteConfigPersonalizationValueShape from PersonalizationValue
+ * @phpstan-import-type RemoteConfigExplicitValueShape from ExplicitValue
+ * @phpstan-import-type RemoteConfigInAppDefaultValueShape from DefaultValue
+ */
 class ConditionalValue implements JsonSerializable
 {
+    /**
+     * @var non-empty-string
+     */
     private string $conditionName;
-    private string $value;
+
+    /**
+     * @var RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape|string
+     */
+    private $data;
 
     /**
      * @internal
+     *
+     * @param non-empty-string $conditionName
+     * @param RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape|string $data
      */
-    public function __construct(string $conditionName, string $value)
+    public function __construct(string $conditionName, $data)
     {
         $this->conditionName = $conditionName;
-        $this->value = $value;
+        $this->data = $data;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function conditionName(): string
     {
         return $this->conditionName;
     }
 
     /**
-     * @param string|Condition $condition
+     * @param non-empty-string|Condition $condition
      */
     public static function basedOn($condition): self
     {
         $name = $condition instanceof Condition ? $condition->name() : $condition;
 
-        return new self($name, '');
-    }
-
-    public function value(): string
-    {
-        return $this->value;
-    }
-
-    public function withValue(string $value): self
-    {
-        $conditionalValue = clone $this;
-        $conditionalValue->value = $value;
-
-        return $conditionalValue;
+        return new self($name, ['value' => '']);
     }
 
     /**
-     * @return array<string, string>
+     * @return RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape|string
+     */
+    public function value()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape|string $value
+     */
+    public function withValue($value): self
+    {
+        return new self($this->conditionName, $value);
+    }
+
+    /**
+     * @return RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape
+     */
+    public function toArray(): array
+    {
+        if (is_string($this->data)) {
+            return ExplicitValue::fromString($this->data)->toArray();
+        }
+
+        return $this->data;
+    }
+
+    /**
+     * @return RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape
      */
     public function jsonSerialize(): array
     {
-        return ['value' => $this->value];
+        return $this->toArray();
     }
 }
