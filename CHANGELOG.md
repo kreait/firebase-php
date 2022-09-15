@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.9.0] - 2022-09-16
+
 ### Added
 
 * Added support for Remote Config Personalization
@@ -12,11 +14,7 @@
   from a Remote Config Template
 * Added method `Kreait\Firebase\RemoteConfig\Template::withRemovedParameterGroup(string $name)` to remove an existing 
   parameter group from a Remote Config Template
-
-### Changed
-
-* Added `Kreait\Firebase\RemoteConfig\DefaultValue::useInAppDefault()` and deprecated 
-  `\Kreait\Firebase\RemoteConfig\DefaultValue::none()`
+* Added `Kreait\Firebase\RemoteConfig\DefaultValue::useInAppDefault()`
 
 ### Deprecated
 
@@ -305,7 +303,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.8.0...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.9.0...6.x
+[6.9.0]: https://github.com/kreait/firebase-php/compare/6.8.0...6.9.0
 [6.8.0]: https://github.com/kreait/firebase-php/compare/6.7.1...6.8.0
 [6.7.1]: https://github.com/kreait/firebase-php/compare/6.7.0...6.7.1
 [6.7.0]: https://github.com/kreait/firebase-php/compare/6.6.1...6.7.0
