@@ -171,4 +171,29 @@ final class TemplateTest extends UnitTestCase
         $this->assertArrayHasKey('personalizationId', $personalizationIdArray = $array['personalizationValue']);
         $this->assertSame('id', $personalizationIdArray['personalizationId']);
     }
+
+    public function testItProvidesConditionNames(): void
+    {
+        $this->assertEquals(
+            ['first', 'second', 'third'],
+            Template::new()
+                ->withCondition(Condition::named('first'))
+                ->withCondition(Condition::named('second'))
+                ->withCondition(Condition::named('third'))
+                ->conditionNames(),
+        );
+    }
+
+    public function testConditionsCanBeRemoved(): void
+    {
+        $this->assertEquals(
+            ['first', 'third'],
+            Template::new()
+                ->withCondition(Condition::named('first'))
+                ->withCondition(Condition::named('second'))
+                ->withCondition(Condition::named('third'))
+                ->withRemovedCondition('second')
+                ->conditionNames(),
+        );
+    }
 }

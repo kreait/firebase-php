@@ -83,7 +83,18 @@ Add a condition
         ->withExpression("device.language in ['de', 'de_AT', 'de_CH']")
         ->withTagColor(TagColor::ORANGE); // The TagColor is optional
 
-    $template = $template->withCondition($germanLanguageCondition);
+    $frenchLanguageCondition = Condition::named('lang_french')
+        ->withExpression("device.language in ['fr', 'fr_CA', 'fr_CH']")
+        ->withTagColor(TagColor::GREEN);
+
+    $template = $template
+        ->withCondition($germanLanguageCondition)
+        ->withCondition($frenchLanguageCondition)
+    ;
+
+    $conditionNames = $template->conditionNames();
+    // Returns ['lang_german', 'lang_french']
+
 
 ***************
 Add a parameter
@@ -147,10 +158,12 @@ You can remove elements from a Remote Config template with the following methods
 .. code-block:: php
 
     $template = Template::new()
-        ->withParameterGroup(ParameterGroup::named('group'))
+        ->withCondition(Condition::named('condition'))
         ->withParameter(Parameter::named('parameter'))
+        ->withParameterGroup(ParameterGroup::named('group'))
 
     $template = $template
+        ->withRemovedCondition('condition')
         ->withRemovedParameter('parameter')
         ->withRemovedParameterGroup('group');
 

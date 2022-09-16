@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Added
+
+* Added `Kreait\Firebase\RemoteConfig\Template::conditionNames()` to return a list of condition names 
+  of a Remote Config template
+* Added `Kreait\Firebase\RemoteConfig\Template::withRemovedCondition(string $name)` to remove a condition from
+  a Remote Config template by name
+
 ## [6.9.0] - 2022-09-16
 
 ### Added

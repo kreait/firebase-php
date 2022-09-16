@@ -7,8 +7,10 @@ namespace Kreait\Firebase\RemoteConfig;
 use JsonSerializable;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
+use function array_filter;
 use function array_key_exists;
 use function array_map;
+use function array_unique;
 use function array_values;
 use function in_array;
 use function sprintf;
@@ -162,6 +164,29 @@ class Template implements JsonSerializable
     {
         $template = clone $this;
         $template->conditions[] = $condition;
+
+        return $template;
+    }
+
+    /**
+     * @return list<non-empty-string>
+     */
+    public function conditionNames(): array
+    {
+        return array_unique(
+            array_map(static fn (Condition $c) => $c->name(), $this->conditions),
+        );
+    }
+
+    /**
+     * @param non-empty-string $name
+     */
+    public function withRemovedCondition(string $name): self
+    {
+        $template = clone $this;
+        $template->conditions = array_values(
+            array_filter($this->conditions, static fn (Condition $c) => $c->name() !== $name),
+        );
 
         return $template;
     }
