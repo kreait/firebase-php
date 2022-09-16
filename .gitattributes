@@ -5,6 +5,7 @@
 /tests export-ignore
 
 /.editorconfig export-ignore
+/.git-blame-ignore-revs export-ignore
 /.gitattributes export-ignore
 /.github export-ignore
 /.gitignore export-ignore
