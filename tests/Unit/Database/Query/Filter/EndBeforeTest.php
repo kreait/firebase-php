@@ -30,7 +30,7 @@ final class EndBeforeTest extends UnitTestCase
     {
         $filter = new EndBefore($given);
 
-        $this->assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://domain.tld')));
+        self::assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://domain.tld')));
     }
 
     /**

@@ -20,7 +20,7 @@ use function mb_stripos;
 /**
  * @internal
  */
-class RemoteConfigApiExceptionConverter
+final class RemoteConfigApiExceptionConverter
 {
     private ErrorResponseParser $responseParser;
 
@@ -36,7 +36,7 @@ class RemoteConfigApiExceptionConverter
         }
 
         if ($exception instanceof ConnectException) {
-            return new ApiConnectionFailed('Unable to connect to the API: '.$exception->getMessage(), $exception->getCode(), $exception);
+            return new ApiConnectionFailed('Unable to connect to the API: ' . $exception->getMessage(), $exception->getCode(), $exception);
         }
 
         return new RemoteConfigError($exception->getMessage(), $exception->getCode(), $exception);

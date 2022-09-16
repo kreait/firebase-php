@@ -12,6 +12,7 @@ use Kreait\Firebase\Util\DT;
 
 /**
  * @internal
+ *
  * @group database-emulator
  * @group emulator
  */
@@ -31,10 +32,10 @@ final class ReferenceTest extends DatabaseTestCase
      */
     public function testSetAndGet(string $key, $value): void
     {
-        $ref = $this->ref->getChild(__FUNCTION__.'/'.$key);
+        $ref = $this->ref->getChild(__FUNCTION__ . '/' . $key);
         $ref->set($value);
 
-        $this->assertSame($value, $ref->getValue());
+        self::assertSame($value, $ref->getValue());
     }
 
     public function testUpdate(): void
@@ -56,7 +57,7 @@ final class ReferenceTest extends DatabaseTestCase
             'third' => 'new',
         ];
 
-        $this->assertEquals($expected, $ref->getValue());
+        self::assertEquals($expected, $ref->getValue());
     }
 
     public function testPush(): void
@@ -66,8 +67,8 @@ final class ReferenceTest extends DatabaseTestCase
 
         $newRef = $ref->push($value);
 
-        $this->assertSame(1, $ref->getSnapshot()->numChildren());
-        $this->assertSame($value, $newRef->getValue());
+        self::assertSame(1, $ref->getSnapshot()->numChildren());
+        self::assertSame($value, $newRef->getValue());
     }
 
     public function testRemove(): void
@@ -81,7 +82,7 @@ final class ReferenceTest extends DatabaseTestCase
 
         $ref->getChild('first')->remove();
 
-        $this->assertEquals(['second' => 'value'], $ref->getValue());
+        self::assertEquals(['second' => 'value'], $ref->getValue());
     }
 
     public function testRemoveChildren(): void
@@ -102,7 +103,7 @@ final class ReferenceTest extends DatabaseTestCase
             'second/first_nested',
         ]);
 
-        $this->assertEquals([
+        self::assertEquals([
             'second' => [
                 'second_nested' => 'value',
             ],
@@ -115,8 +116,8 @@ final class ReferenceTest extends DatabaseTestCase
         $ref = $this->ref->getChild(__FUNCTION__);
         $key = $ref->push()->getKey();
 
-        $this->assertIsString($key);
-        $this->assertSame(0, $ref->getSnapshot()->numChildren());
+        self::assertIsString($key);
+        self::assertSame(0, $ref->getSnapshot()->numChildren());
     }
 
     public function testSetWithNullIsSameAsRemove(): void
@@ -125,12 +126,12 @@ final class ReferenceTest extends DatabaseTestCase
 
         $key = $ref->push('foo')->getKey();
 
-        $this->assertSame(1, $ref->getSnapshot()->numChildren());
-        $this->assertNotNull($key);
+        self::assertSame(1, $ref->getSnapshot()->numChildren());
+        self::assertNotNull($key);
 
         $ref->getChild($key)->set(null);
 
-        $this->assertSame(0, $ref->getSnapshot()->numChildren());
+        self::assertSame(0, $ref->getSnapshot()->numChildren());
     }
 
     public function testSetServerTimestamp(): void
@@ -141,13 +142,13 @@ final class ReferenceTest extends DatabaseTestCase
             ->push(['updatedAt' => Database::SERVER_TIMESTAMP])
             ->getSnapshot()->getValue();
 
-        $this->assertIsArray($value);
-        $this->assertArrayHasKey('updatedAt', $value);
-        $this->assertIsInt($value['updatedAt']);
+        self::assertIsArray($value);
+        self::assertArrayHasKey('updatedAt', $value);
+        self::assertIsInt($value['updatedAt']);
 
         $check = DT::toUTCDateTimeImmutable($value['updatedAt']);
 
-        $this->assertTrue($check > $now);
+        self::assertTrue($check > $now);
     }
 
     /**

@@ -18,7 +18,7 @@ final class TopicTest extends TestCase
      */
     public function testFromValue(string $expected, string $value): void
     {
-        $this->assertSame($expected, Topic::fromValue($value)->value());
+        self::assertSame($expected, Topic::fromValue($value)->value());
     }
 
     /**

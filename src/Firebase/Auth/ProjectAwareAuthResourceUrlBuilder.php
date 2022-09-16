@@ -55,7 +55,7 @@ final class ProjectAwareAuthResourceUrlBuilder
         ]);
 
         if ($params !== null) {
-            $url .= '?'.http_build_query($params);
+            $url .= '?' . http_build_query($params);
         }
 
         return $url;

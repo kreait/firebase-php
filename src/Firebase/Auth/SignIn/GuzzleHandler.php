@@ -38,12 +38,16 @@ use function str_replace;
  */
 final class GuzzleHandler implements Handler
 {
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     private static array $defaultBody = [
         'returnSecureToken' => true,
     ];
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     private static array $defaultHeaders = [
         'Content-Type' => 'application/json; charset=UTF-8',
     ];
@@ -101,7 +105,7 @@ final class GuzzleHandler implements Handler
                 return $this->refreshToken($action);
 
             default:
-                throw new FailedToSignIn(self::class.' does not support '.get_class($action));
+                throw new FailedToSignIn(self::class . ' does not support ' . get_class($action));
         }
     }
 

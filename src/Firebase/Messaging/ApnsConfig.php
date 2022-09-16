@@ -29,10 +29,14 @@ final class ApnsConfig implements JsonSerializable
     private const PRIORITY_CONSERVE_POWER = '5';
     private const PRIORITY_IMMEDIATE = '10';
 
-    /** @var array<non-empty-string, non-empty-string> */
+    /**
+     * @var array<non-empty-string, non-empty-string>
+     */
     private array $headers;
 
-    /** @var array<non-empty-string, mixed> */
+    /**
+     * @var array<non-empty-string, mixed>
+     */
     private array $payload;
 
     /**

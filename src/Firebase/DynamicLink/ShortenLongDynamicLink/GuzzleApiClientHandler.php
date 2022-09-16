@@ -28,7 +28,7 @@ final class GuzzleApiClientHandler implements Handler
         try {
             $response = $this->apiClient->send($request, ['http_errors' => false]);
         } catch (GuzzleException $e) {
-            throw new FailedToShortenLongDynamicLink('Failed to shorten long dynamic link: '.$e->getMessage(), $e->getCode(), $e);
+            throw new FailedToShortenLongDynamicLink('Failed to shorten long dynamic link: ' . $e->getMessage(), $e->getCode(), $e);
         }
 
         if ($response->getStatusCode() === 200) {

@@ -18,7 +18,7 @@ final class AndroidConfigTest extends UnitTestCase
 {
     public function testItIsEmptyWhenItIsEmpty(): void
     {
-        $this->assertSame('[]', Json::encode(AndroidConfig::new()));
+        self::assertSame('[]', Json::encode(AndroidConfig::new()));
     }
 
     public function testItHasADefaultSound(): void
@@ -29,7 +29,7 @@ final class AndroidConfigTest extends UnitTestCase
             ],
         ];
 
-        $this->assertJsonStringEqualsJsonString(
+        self::assertJsonStringEqualsJsonString(
             Json::encode($expected),
             Json::encode(AndroidConfig::new()->withDefaultSound()),
         );
@@ -38,10 +38,10 @@ final class AndroidConfigTest extends UnitTestCase
     public function testItCanHaveAPriority(): void
     {
         $config = AndroidConfig::new()->withNormalMessagePriority();
-        $this->assertSame('normal', $config->jsonSerialize()['priority']);
+        self::assertSame('normal', $config->jsonSerialize()['priority']);
 
         $config = AndroidConfig::new()->withHighMessagePriority();
-        $this->assertSame('high', $config->jsonSerialize()['priority']);
+        self::assertSame('high', $config->jsonSerialize()['priority']);
     }
 
     /**
@@ -53,7 +53,7 @@ final class AndroidConfigTest extends UnitTestCase
     {
         $config = AndroidConfig::fromArray($data);
 
-        $this->assertEqualsCanonicalizing($data, $config->jsonSerialize());
+        self::assertEqualsCanonicalizing($data, $config->jsonSerialize());
     }
 
     /**

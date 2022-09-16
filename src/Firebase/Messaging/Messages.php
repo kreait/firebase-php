@@ -15,7 +15,9 @@ use function count;
  */
 final class Messages implements Countable, IteratorAggregate
 {
-    /** @var Message[] */
+    /**
+     * @var Message[]
+     */
     private array $messages;
 
     public function __construct(Message ...$messages)

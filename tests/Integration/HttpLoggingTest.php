@@ -16,10 +16,14 @@ use Throwable;
  */
 final class HttpLoggingTest extends IntegrationTestCase
 {
-    /** @var MockObject|LoggerInterface */
+    /**
+     * @var MockObject|LoggerInterface
+     */
     private $logger;
 
-    /** @var MockObject|LoggerInterface */
+    /**
+     * @var MockObject|LoggerInterface
+     */
     private $debugLogger;
     private Auth $auth;
     private Auth $authWithLogger;
@@ -42,7 +46,7 @@ final class HttpLoggingTest extends IntegrationTestCase
         $user = $this->auth->createAnonymousUser();
 
         try {
-            $this->logger->expects($this->atLeastOnce())->method('log');
+            $this->logger->expects(self::atLeastOnce())->method('log');
             $this->authWithLogger->getUser($user->uid);
         } finally {
             $this->auth->deleteUser($user->uid);
@@ -51,12 +55,12 @@ final class HttpLoggingTest extends IntegrationTestCase
 
     public function testItLogsFailures(): void
     {
-        $this->debugLogger->expects($this->atLeastOnce())->method('log');
+        $this->debugLogger->expects(self::atLeastOnce())->method('log');
 
         try {
             $this->authWithDebugLogger->updateUser('does-not-exist', []);
         } catch (Throwable $e) {
-            $this->assertInstanceOf(UserNotFound::class, $e);
+            self::assertInstanceOf(UserNotFound::class, $e);
         }
     }
 
@@ -65,7 +69,7 @@ final class HttpLoggingTest extends IntegrationTestCase
         $user = $this->auth->createAnonymousUser();
 
         try {
-            $this->debugLogger->expects($this->atLeastOnce())->method('log');
+            $this->debugLogger->expects(self::atLeastOnce())->method('log');
             $this->authWithDebugLogger->getUser($user->uid);
         } finally {
             $this->auth->deleteUser($user->uid);

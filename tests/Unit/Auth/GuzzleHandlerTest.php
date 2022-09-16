@@ -59,8 +59,8 @@ final class GuzzleHandlerTest extends UnitTestCase
         try {
             $this->handler->handle($this->action);
         } catch (FailedToSignIn $e) {
-            $this->assertSame($response, $e->response());
-            $this->assertSame($this->action, $e->action());
+            self::assertSame($response, $e->response());
+            self::assertSame($this->action, $e->action());
         }
     }
 

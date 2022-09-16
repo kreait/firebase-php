@@ -19,18 +19,21 @@ use function sprintf;
 
 /**
  * @see https://tools.ietf.org/html/rfc8030#section-5.3 Web Push Message Urgency
+ *
  * @phpstan-type WebPushHeadersShape array{
  *     TTL?: positive-int|numeric-string|null,
  *     Urgency?: self::URGENCY_*
  * }
  *
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushfcmoptions WebPush FCM Options
+ *
  * @phpstan-type WebPushFcmOptionsShape array{
  *     link?: non-empty-string,
  *     analytics_label?: non-empty-string
  * }
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification#syntax WebPush Notification Syntax
+ *
  * @phpstan-type WebPushNotificationShape array{
  *     title: non-empty-string,
  *     options?: array{
@@ -55,6 +58,7 @@ use function sprintf;
  * }
  *
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig WebPush Config Syntax
+ *
  * @phpstan-type WebPushConfigShape array{
  *     headers?: WebPushHeadersShape,
  *     data?: array<non-empty-string, non-empty-string>,

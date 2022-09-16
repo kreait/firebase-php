@@ -48,8 +48,8 @@ final class DynamicLinksTest extends TestCase
     {
         $this->httpHandler->append(
             new Response(200, [], Json::encode($responseData = [
-                'shortLink' => $shortLink = $this->dynamicLinksDomain.'/'.($suffix = 'short'),
-                'previewLink' => $previewLink = $shortLink.'?d=1',
+                'shortLink' => $shortLink = $this->dynamicLinksDomain . '/' . ($suffix = 'short'),
+                'previewLink' => $previewLink = $shortLink . '?d=1',
                 'warning' => $warnings = [
                     ['warningCode' => 'WARNING_CODE_1', 'warningMessage' => 'Warning Message 1'],
                     ['warningCode' => 'WARNING_CODE_2', 'warningMessage' => 'Warning Message 2'],
@@ -61,36 +61,36 @@ final class DynamicLinksTest extends TestCase
 
         $dynamicLink = $this->service->createDynamicLink($action);
 
-        $this->assertTrue($dynamicLink->hasWarnings());
-        $this->assertCount(2, $dynamicLink->warnings());
-        $this->assertEquals($warnings, $dynamicLink->warnings());
-        $this->assertSame($shortLink, (string) $dynamicLink->uri());
-        $this->assertSame($shortLink, (string) $dynamicLink);
-        $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
-        $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
-        $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, Json::decode(Json::encode($dynamicLink), true));
+        self::assertTrue($dynamicLink->hasWarnings());
+        self::assertCount(2, $dynamicLink->warnings());
+        self::assertEquals($warnings, $dynamicLink->warnings());
+        self::assertSame($shortLink, (string) $dynamicLink->uri());
+        self::assertSame($shortLink, (string) $dynamicLink);
+        self::assertSame($previewLink, (string) $dynamicLink->previewUri());
+        self::assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
+        self::assertSame($suffix, $dynamicLink->suffix());
+        self::assertEquals($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
     public function testItCreatesADynamicLinkFromAnArrayOfParameters(): void
     {
         $this->httpHandler->append(
             new Response(200, [], Json::encode($responseData = [
-                'shortLink' => $shortLink = $this->dynamicLinksDomain.'/'.($suffix = 'short'),
-                'previewLink' => $previewLink = $shortLink.'?d=1',
+                'shortLink' => $shortLink = $this->dynamicLinksDomain . '/' . ($suffix = 'short'),
+                'previewLink' => $previewLink = $shortLink . '?d=1',
             ])),
         );
 
         $dynamicLink = $this->service->createDynamicLink(['link' => 'https://domain.tld']);
 
-        $this->assertFalse($dynamicLink->hasWarnings());
-        $this->assertCount(0, $dynamicLink->warnings());
-        $this->assertSame($shortLink, (string) $dynamicLink->uri());
-        $this->assertSame($shortLink, (string) $dynamicLink);
-        $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
-        $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
-        $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, Json::decode(Json::encode($dynamicLink), true));
+        self::assertFalse($dynamicLink->hasWarnings());
+        self::assertCount(0, $dynamicLink->warnings());
+        self::assertSame($shortLink, (string) $dynamicLink->uri());
+        self::assertSame($shortLink, (string) $dynamicLink);
+        self::assertSame($previewLink, (string) $dynamicLink->previewUri());
+        self::assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
+        self::assertSame($suffix, $dynamicLink->suffix());
+        self::assertEquals($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
     public function testCreationFailsIfNoConnectionIsAvailable(): void
@@ -112,10 +112,10 @@ final class DynamicLinksTest extends TestCase
 
         try {
             $this->service->createDynamicLink($action);
-            $this->fail('An exception should have been thrown');
+            self::fail('An exception should have been thrown');
         } catch (FailedToCreateDynamicLink $e) {
-            $this->assertSame($action, $e->action());
-            $this->assertSame($response, $e->response());
+            self::assertSame($action, $e->action());
+            self::assertSame($response, $e->response());
         }
     }
 
@@ -131,21 +131,21 @@ final class DynamicLinksTest extends TestCase
     {
         $this->httpHandler->append(
             new Response(200, [], Json::encode($responseData = [
-                'shortLink' => $shortLink = $this->dynamicLinksDomain.'/'.($suffix = 'short'),
-                'previewLink' => $previewLink = $shortLink.'?d=1',
+                'shortLink' => $shortLink = $this->dynamicLinksDomain . '/' . ($suffix = 'short'),
+                'previewLink' => $previewLink = $shortLink . '?d=1',
             ])),
         );
 
         $dynamicLink = $this->service->shortenLongDynamicLink(['longDynamicLink' => 'https://domain.tld']);
 
-        $this->assertFalse($dynamicLink->hasWarnings());
-        $this->assertCount(0, $dynamicLink->warnings());
-        $this->assertSame($shortLink, (string) $dynamicLink->uri());
-        $this->assertSame($shortLink, (string) $dynamicLink);
-        $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
-        $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
-        $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, Json::decode(Json::encode($dynamicLink), true));
+        self::assertFalse($dynamicLink->hasWarnings());
+        self::assertCount(0, $dynamicLink->warnings());
+        self::assertSame($shortLink, (string) $dynamicLink->uri());
+        self::assertSame($shortLink, (string) $dynamicLink);
+        self::assertSame($previewLink, (string) $dynamicLink->previewUri());
+        self::assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
+        self::assertSame($suffix, $dynamicLink->suffix());
+        self::assertEquals($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
     public function testShorteningFailsIfNoConnectionIsAvailable(): void
@@ -165,10 +165,10 @@ final class DynamicLinksTest extends TestCase
 
         try {
             $this->service->shortenLongDynamicLink($action);
-            $this->fail('An exception should have been thrown');
+            self::fail('An exception should have been thrown');
         } catch (FailedToShortenLongDynamicLink $e) {
-            $this->assertJsonStringEqualsJsonString(Json::encode($action), Json::encode($e->action()));
-            $this->assertSame($response, $e->response());
+            self::assertJsonStringEqualsJsonString(Json::encode($action), Json::encode($e->action()));
+            self::assertSame($response, $e->response());
         }
     }
 
@@ -204,51 +204,51 @@ final class DynamicLinksTest extends TestCase
             ])),
         );
 
-        $stats = $this->service->getStatistics($this->dynamicLinksDomain.'/abcd');
+        $stats = $this->service->getStatistics($this->dynamicLinksDomain . '/abcd');
         $eventStats = $stats->eventStatistics();
 
-        $this->assertEquals($responseData, $stats->rawData());
-        $this->assertCount(180, $eventStats);
+        self::assertEquals($responseData, $stats->rawData());
+        self::assertCount(180, $eventStats);
 
-        $this->assertCount(60, $eventStats->clicks());
-        $this->assertCount(10, $eventStats->clicks()->onAndroid());
-        $this->assertCount(20, $eventStats->clicks()->onDesktop());
-        $this->assertCount(30, $eventStats->clicks()->onIOS());
-        $this->assertCount(10, $eventStats->onAndroid()->clicks());
-        $this->assertCount(20, $eventStats->onDesktop()->clicks());
-        $this->assertCount(30, $eventStats->onIOS()->clicks());
+        self::assertCount(60, $eventStats->clicks());
+        self::assertCount(10, $eventStats->clicks()->onAndroid());
+        self::assertCount(20, $eventStats->clicks()->onDesktop());
+        self::assertCount(30, $eventStats->clicks()->onIOS());
+        self::assertCount(10, $eventStats->onAndroid()->clicks());
+        self::assertCount(20, $eventStats->onDesktop()->clicks());
+        self::assertCount(30, $eventStats->onIOS()->clicks());
 
-        $this->assertCount(30, $eventStats->redirects());
-        $this->assertCount(10, $eventStats->redirects()->onAndroid());
-        $this->assertCount(0, $eventStats->redirects()->onDesktop());
-        $this->assertCount(20, $eventStats->redirects()->onIOS());
-        $this->assertCount(10, $eventStats->onAndroid()->redirects());
-        $this->assertCount(0, $eventStats->onDesktop()->redirects());
-        $this->assertCount(20, $eventStats->onIOS()->redirects());
+        self::assertCount(30, $eventStats->redirects());
+        self::assertCount(10, $eventStats->redirects()->onAndroid());
+        self::assertCount(0, $eventStats->redirects()->onDesktop());
+        self::assertCount(20, $eventStats->redirects()->onIOS());
+        self::assertCount(10, $eventStats->onAndroid()->redirects());
+        self::assertCount(0, $eventStats->onDesktop()->redirects());
+        self::assertCount(20, $eventStats->onIOS()->redirects());
 
-        $this->assertCount(30, $eventStats->appInstalls());
-        $this->assertCount(10, $eventStats->appInstalls()->onAndroid());
-        $this->assertCount(0, $eventStats->appInstalls()->onDesktop());
-        $this->assertCount(20, $eventStats->appInstalls()->onIOS());
-        $this->assertCount(10, $eventStats->onAndroid()->appInstalls());
-        $this->assertCount(0, $eventStats->onDesktop()->appInstalls());
-        $this->assertCount(20, $eventStats->onIOS()->appInstalls());
+        self::assertCount(30, $eventStats->appInstalls());
+        self::assertCount(10, $eventStats->appInstalls()->onAndroid());
+        self::assertCount(0, $eventStats->appInstalls()->onDesktop());
+        self::assertCount(20, $eventStats->appInstalls()->onIOS());
+        self::assertCount(10, $eventStats->onAndroid()->appInstalls());
+        self::assertCount(0, $eventStats->onDesktop()->appInstalls());
+        self::assertCount(20, $eventStats->onIOS()->appInstalls());
 
-        $this->assertCount(30, $eventStats->appFirstOpens());
-        $this->assertCount(10, $eventStats->appFirstOpens()->onAndroid());
-        $this->assertCount(0, $eventStats->appFirstOpens()->onDesktop());
-        $this->assertCount(20, $eventStats->appFirstOpens()->onIOS());
-        $this->assertCount(10, $eventStats->onAndroid()->appFirstOpens());
-        $this->assertCount(0, $eventStats->onDesktop()->appFirstOpens());
-        $this->assertCount(20, $eventStats->onIOS()->appFirstOpens());
+        self::assertCount(30, $eventStats->appFirstOpens());
+        self::assertCount(10, $eventStats->appFirstOpens()->onAndroid());
+        self::assertCount(0, $eventStats->appFirstOpens()->onDesktop());
+        self::assertCount(20, $eventStats->appFirstOpens()->onIOS());
+        self::assertCount(10, $eventStats->onAndroid()->appFirstOpens());
+        self::assertCount(0, $eventStats->onDesktop()->appFirstOpens());
+        self::assertCount(20, $eventStats->onIOS()->appFirstOpens());
 
-        $this->assertCount(30, $eventStats->appReOpens());
-        $this->assertCount(10, $eventStats->appReOpens()->onAndroid());
-        $this->assertCount(0, $eventStats->appReOpens()->onDesktop());
-        $this->assertCount(20, $eventStats->appReOpens()->onIOS());
-        $this->assertCount(10, $eventStats->onAndroid()->appReOpens());
-        $this->assertCount(0, $eventStats->onDesktop()->appReOpens());
-        $this->assertCount(20, $eventStats->onIOS()->appReOpens());
+        self::assertCount(30, $eventStats->appReOpens());
+        self::assertCount(10, $eventStats->appReOpens()->onAndroid());
+        self::assertCount(0, $eventStats->appReOpens()->onDesktop());
+        self::assertCount(20, $eventStats->appReOpens()->onIOS());
+        self::assertCount(10, $eventStats->onAndroid()->appReOpens());
+        self::assertCount(0, $eventStats->onDesktop()->appReOpens());
+        self::assertCount(20, $eventStats->onIOS()->appReOpens());
     }
 
     public function testLinkStatsFailIfNoConnectionIsAvailable(): void
@@ -285,40 +285,40 @@ final class DynamicLinksTest extends TestCase
 
         try {
             $this->service->getStatistics($action);
-            $this->fail('An exception should have been thrown');
+            self::fail('An exception should have been thrown');
         } catch (FailedToGetStatisticsForDynamicLink $e) {
-            $this->assertSame($action, $e->action());
-            $this->assertSame($response, $e->response());
+            self::assertSame($action, $e->action());
+            self::assertSame($response, $e->response());
         }
     }
 
     public function testDynamicLinkComponentsCanBeCreatedNewOrFromArrays(): void
     {
-        $this->assertNotEmpty(CreateDynamicLink::new()->jsonSerialize()); // has defaults
-        $this->assertEmpty(CreateDynamicLink::fromArray([])->jsonSerialize());
+        self::assertNotEmpty(CreateDynamicLink::new()->jsonSerialize()); // has defaults
+        self::assertEmpty(CreateDynamicLink::fromArray([])->jsonSerialize());
 
-        $this->assertEmpty(ShortenLongDynamicLink::fromArray([])->jsonSerialize());
+        self::assertEmpty(ShortenLongDynamicLink::fromArray([])->jsonSerialize());
 
-        $this->assertEmpty(AnalyticsInfo::fromArray([])->jsonSerialize());
-        $this->assertEmpty(AnalyticsInfo::new()->jsonSerialize());
+        self::assertEmpty(AnalyticsInfo::fromArray([])->jsonSerialize());
+        self::assertEmpty(AnalyticsInfo::new()->jsonSerialize());
 
-        $this->assertEmpty(GooglePlayAnalytics::fromArray([])->jsonSerialize());
-        $this->assertEmpty(GooglePlayAnalytics::new()->jsonSerialize());
+        self::assertEmpty(GooglePlayAnalytics::fromArray([])->jsonSerialize());
+        self::assertEmpty(GooglePlayAnalytics::new()->jsonSerialize());
 
-        $this->assertEmpty(ITunesConnectAnalytics::fromArray([])->jsonSerialize());
-        $this->assertEmpty(ITunesConnectAnalytics::new()->jsonSerialize());
+        self::assertEmpty(ITunesConnectAnalytics::fromArray([])->jsonSerialize());
+        self::assertEmpty(ITunesConnectAnalytics::new()->jsonSerialize());
 
-        $this->assertEmpty(NavigationInfo::fromArray([])->jsonSerialize());
-        $this->assertEmpty(NavigationInfo::new()->jsonSerialize());
+        self::assertEmpty(NavigationInfo::fromArray([])->jsonSerialize());
+        self::assertEmpty(NavigationInfo::new()->jsonSerialize());
 
-        $this->assertEmpty(IOSInfo::fromArray([])->jsonSerialize());
-        $this->assertEmpty(IOSInfo::new()->jsonSerialize());
+        self::assertEmpty(IOSInfo::fromArray([])->jsonSerialize());
+        self::assertEmpty(IOSInfo::new()->jsonSerialize());
 
-        $this->assertEmpty(AndroidInfo::fromArray([])->jsonSerialize());
-        $this->assertEmpty(AndroidInfo::new()->jsonSerialize());
+        self::assertEmpty(AndroidInfo::fromArray([])->jsonSerialize());
+        self::assertEmpty(AndroidInfo::new()->jsonSerialize());
 
-        $this->assertEmpty(SocialMetaTagInfo::fromArray([])->jsonSerialize());
-        $this->assertEmpty(SocialMetaTagInfo::new()->jsonSerialize());
+        self::assertEmpty(SocialMetaTagInfo::fromArray([])->jsonSerialize());
+        self::assertEmpty(SocialMetaTagInfo::new()->jsonSerialize());
     }
 
     /**

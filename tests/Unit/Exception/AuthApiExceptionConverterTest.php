@@ -52,8 +52,8 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
 
         $convertedError = $this->converter->convertException($requestExcpeption);
 
-        $this->assertInstanceOf(AuthError::class, $convertedError);
-        $this->assertSame($responseBody, $convertedError->getMessage());
+        self::assertInstanceOf(AuthError::class, $convertedError);
+        self::assertSame($responseBody, $convertedError->getMessage());
     }
 
     public function testItConvertsAConnectException(): void
@@ -63,12 +63,12 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
             $this->createMock(RequestInterface::class),
         );
 
-        $this->assertInstanceOf(ApiConnectionFailed::class, $this->converter->convertException($connectException));
+        self::assertInstanceOf(ApiConnectionFailed::class, $this->converter->convertException($connectException));
     }
 
     public function testItCanHandleUnknownExceptions(): void
     {
-        $this->assertInstanceOf(AuthError::class, $this->converter->convertException(new RuntimeException()));
+        self::assertInstanceOf(AuthError::class, $this->converter->convertException(new RuntimeException()));
     }
 
     /**
@@ -89,14 +89,14 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
                         'message' => $identifier,
                     ],
                     'code' => 400,
-                    'message' => 'Some error that might include the idenfier "'.$identifier.'"',
+                    'message' => 'Some error that might include the idenfier "' . $identifier . '"',
                 ],
             ])),
         );
 
         $convertedError = $this->converter->convertException($requestException);
 
-        $this->assertInstanceOf($expectedClass, $convertedError);
+        self::assertInstanceOf($expectedClass, $convertedError);
     }
 
     /**

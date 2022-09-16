@@ -25,7 +25,7 @@ final class GuzzleApiClientHandler implements Handler
         try {
             $response = $this->apiClient->send($request, ['http_errors' => false]);
         } catch (GuzzleException $e) {
-            throw new FailedToGetStatisticsForDynamicLink('Failed to get statistics for Dynamic Link: '.$e->getMessage(), $e->getCode(), $e);
+            throw new FailedToGetStatisticsForDynamicLink('Failed to get statistics for Dynamic Link: ' . $e->getMessage(), $e->getCode(), $e);
         }
 
         if ($response->getStatusCode() === 200) {

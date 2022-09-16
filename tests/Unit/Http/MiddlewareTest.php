@@ -32,7 +32,7 @@ final class MiddlewareTest extends UnitTestCase
         /** @var RequestInterface $request */
         $request = $handlerClosure($this->request);
 
-        $this->assertInstanceOf(RequestInterface::class, $request);
-        $this->assertStringEndsWith('.json', $request->getUri()->getPath());
+        self::assertInstanceOf(RequestInterface::class, $request);
+        self::assertStringEndsWith('.json', $request->getUri()->getPath());
     }
 }

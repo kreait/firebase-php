@@ -16,7 +16,7 @@ use function rawurldecode;
 use function sprintf;
 use function trim;
 
-class Validator
+final class Validator
 {
     public const MAX_DEPTH = 32;
     public const MAX_KEY_SIZE = 768;

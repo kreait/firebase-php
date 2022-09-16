@@ -20,7 +20,7 @@ abstract class DatabaseTestCase extends IntegrationTestCase
     protected static Database $db;
     protected static Client $apiClient;
 
-    public static function setUpBeforeClass(): void
+    final public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
@@ -31,7 +31,7 @@ abstract class DatabaseTestCase extends IntegrationTestCase
         self::$db = self::$factory->createDatabase();
         self::$apiClient = self::$factory->createApiClient(['http_errors' => false]);
 
-        self::$refPrefix = 'tests'.bin2hex(random_bytes(5));
+        self::$refPrefix = 'tests' . bin2hex(random_bytes(5));
         self::$db->getReference(self::$refPrefix)->remove();
     }
 }

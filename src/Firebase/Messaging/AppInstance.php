@@ -14,7 +14,9 @@ final class AppInstance implements JsonSerializable
 {
     private RegistrationToken $registrationToken;
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     private array $rawData;
     private TopicSubscriptions $topicSubscriptions;
 

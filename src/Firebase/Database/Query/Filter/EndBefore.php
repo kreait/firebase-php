@@ -16,7 +16,9 @@ final class EndBefore implements Filter
 {
     use ModifierTrait;
 
-    /** @var int|float|string|bool */
+    /**
+     * @var int|float|string|bool
+     */
     private $value;
 
     /**

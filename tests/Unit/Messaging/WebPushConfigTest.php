@@ -10,6 +10,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 
 /**
  * @internal
+ *
  * @phpstan-import-type WebPushConfigShape from WebPushConfig
  * @phpstan-import-type WebPushHeadersShape from WebPushConfig
  */
@@ -24,22 +25,22 @@ final class WebPushConfigTest extends UnitTestCase
     {
         $config = WebPushConfig::fromArray($data);
 
-        $this->assertEquals($data, $config->jsonSerialize());
+        self::assertEquals($data, $config->jsonSerialize());
     }
 
     public function testItCanHaveAPriority(): void
     {
         $config = WebPushConfig::new()->withVeryLowUrgency();
-        $this->assertSame('very-low', $config->jsonSerialize()['headers']['Urgency']);
+        self::assertSame('very-low', $config->jsonSerialize()['headers']['Urgency']);
 
         $config = WebPushConfig::new()->withLowUrgency();
-        $this->assertSame('low', $config->jsonSerialize()['headers']['Urgency']);
+        self::assertSame('low', $config->jsonSerialize()['headers']['Urgency']);
 
         $config = WebPushConfig::new()->withNormalUrgency();
-        $this->assertSame('normal', $config->jsonSerialize()['headers']['Urgency']);
+        self::assertSame('normal', $config->jsonSerialize()['headers']['Urgency']);
 
         $config = WebPushConfig::new()->withHighUrgency();
-        $this->assertSame('high', $config->jsonSerialize()['headers']['Urgency']);
+        self::assertSame('high', $config->jsonSerialize()['headers']['Urgency']);
     }
 
     /**

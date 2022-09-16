@@ -23,13 +23,19 @@ final class UpdateUser implements Request
     public const PHOTO_URL = 'PHOTO_URL';
     public const EMAIL = 'EMAIL';
 
-    /** @var array<string> */
+    /**
+     * @var array<string>
+     */
     private array $attributesToDelete = [];
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private array $providersToDelete = [];
 
-    /** @var array<string, mixed>|null */
+    /**
+     * @var array<string, mixed>|null
+     */
     private ?array $customAttributes = null;
 
     private function __construct()

@@ -26,12 +26,12 @@ final class OrderByChildTest extends UnitTestCase
     {
         $sut = new OrderByChild($childKey);
 
-        $this->assertStringContainsString(
-            'orderBy='.rawurlencode(sprintf('"%s"', $childKey)),
+        self::assertStringContainsString(
+            'orderBy=' . rawurlencode(sprintf('"%s"', $childKey)),
             (string) $sut->modifyUri(new Uri('http://domain.tld')),
         );
 
-        $this->assertSame($expected, $sut->modifyValue($given));
+        self::assertSame($expected, $sut->modifyValue($given));
     }
 
     /**

@@ -22,10 +22,14 @@ final class QueryTest extends UnitTestCase
 {
     protected Uri $uri;
 
-    /** @var Reference|MockObject */
+    /**
+     * @var Reference|MockObject
+     */
     protected $reference;
 
-    /** @var ApiClient|MockObject */
+    /**
+     * @var ApiClient|MockObject
+     */
     protected $apiClient;
     protected Query $query;
 
@@ -45,12 +49,12 @@ final class QueryTest extends UnitTestCase
 
     public function testGetReference(): void
     {
-        $this->assertSame($this->reference, $this->query->getReference());
+        self::assertSame($this->reference, $this->query->getReference());
     }
 
     public function testGetSnapshot(): void
     {
-        $this->apiClient->method('get')->with($this->anything())->willReturn('value');
+        $this->apiClient->method('get')->with(self::anything())->willReturn('value');
 
         $this->query->orderByKey()->equalTo(2)->getSnapshot();
 
@@ -59,31 +63,31 @@ final class QueryTest extends UnitTestCase
 
     public function testGetValue(): void
     {
-        $this->apiClient->method('get')->with($this->anything())->willReturn('value');
+        $this->apiClient->method('get')->with(self::anything())->willReturn('value');
 
-        $this->assertSame('value', $this->query->getValue());
+        self::assertSame('value', $this->query->getValue());
     }
 
     public function testGetUri(): void
     {
         $uri = $this->query->getUri();
 
-        $this->assertSame((string) $uri, (string) $this->query);
+        self::assertSame((string) $uri, (string) $this->query);
     }
 
     public function testModifiersReturnQueries(): void
     {
-        $this->assertInstanceOf(Query::class, $this->query->equalTo('x'));
-        $this->assertInstanceOf(Query::class, $this->query->endAt('x'));
-        $this->assertInstanceOf(Query::class, $this->query->endBefore('x'));
-        $this->assertInstanceOf(Query::class, $this->query->limitToFirst(1));
-        $this->assertInstanceOf(Query::class, $this->query->limitToLast(1));
-        $this->assertInstanceOf(Query::class, $this->query->orderByChild('child'));
-        $this->assertInstanceOf(Query::class, $this->query->orderByKey());
-        $this->assertInstanceOf(Query::class, $this->query->orderByValue());
-        $this->assertInstanceOf(Query::class, $this->query->shallow());
-        $this->assertInstanceOf(Query::class, $this->query->startAt('x'));
-        $this->assertInstanceOf(Query::class, $this->query->startAfter('x'));
+        self::assertInstanceOf(Query::class, $this->query->equalTo('x'));
+        self::assertInstanceOf(Query::class, $this->query->endAt('x'));
+        self::assertInstanceOf(Query::class, $this->query->endBefore('x'));
+        self::assertInstanceOf(Query::class, $this->query->limitToFirst(1));
+        self::assertInstanceOf(Query::class, $this->query->limitToLast(1));
+        self::assertInstanceOf(Query::class, $this->query->orderByChild('child'));
+        self::assertInstanceOf(Query::class, $this->query->orderByKey());
+        self::assertInstanceOf(Query::class, $this->query->orderByValue());
+        self::assertInstanceOf(Query::class, $this->query->shallow());
+        self::assertInstanceOf(Query::class, $this->query->startAt('x'));
+        self::assertInstanceOf(Query::class, $this->query->startAfter('x'));
     }
 
     public function testOnlyOneSorterIsAllowed(): void
@@ -91,7 +95,7 @@ final class QueryTest extends UnitTestCase
         try {
             $this->query->orderByKey()->orderByValue();
         } catch (Throwable $e) {
-            $this->assertInstanceOf(UnsupportedQuery::class, $e);
+            self::assertInstanceOf(UnsupportedQuery::class, $e);
         }
     }
 
@@ -100,7 +104,7 @@ final class QueryTest extends UnitTestCase
         $exception = new DatabaseError();
 
         $this->apiClient
-            ->method('get')->with($this->anything())
+            ->method('get')->with(self::anything())
             ->willThrowException($exception);
 
         $this->expectException(UnsupportedQuery::class);
@@ -111,7 +115,7 @@ final class QueryTest extends UnitTestCase
     public function testIndexNotDefined(): void
     {
         $this->apiClient
-            ->method('get')->with($this->anything())
+            ->method('get')->with(self::anything())
             ->willThrowException(new DatabaseError('foo index not defined bar'));
 
         $this->expectException(UnsupportedQuery::class);
@@ -122,7 +126,7 @@ final class QueryTest extends UnitTestCase
     public function testWithNonExistingDatabase(): void
     {
         $this->apiClient
-            ->method('get')->with($this->anything())
+            ->method('get')->with(self::anything())
             ->willThrowException(DatabaseNotFound::fromUri(new Uri('https://database-name.firebaseio.com')));
 
         $this->expectException(DatabaseNotFound::class);

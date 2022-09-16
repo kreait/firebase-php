@@ -16,7 +16,7 @@ use Throwable;
 /**
  * @internal
  */
-class AppInstanceApiClient
+final class AppInstanceApiClient
 {
     private ClientInterface $client;
     private MessagingApiExceptionConverter $errorHandler;
@@ -45,7 +45,7 @@ class AppInstanceApiClient
             $promises[$topicName] = $this->client
                 ->requestAsync('POST', '/iid/v1:batchAdd', [
                     'json' => [
-                        'to' => '/topics/'.$topicName,
+                        'to' => '/topics/' . $topicName,
                         'registration_tokens' => $tokenStrings,
                     ],
                 ])
@@ -111,7 +111,7 @@ class AppInstanceApiClient
             $promises[$topicName] = $this->client
                 ->requestAsync('POST', '/iid/v1:batchRemove', [
                     'json' => [
-                        'to' => '/topics/'.$topicName,
+                        'to' => '/topics/' . $topicName,
                         'registration_tokens' => $tokenStrings,
                     ],
                 ])
@@ -164,7 +164,7 @@ class AppInstanceApiClient
     public function getAppInstanceAsync(RegistrationToken $registrationToken): PromiseInterface
     {
         return $this->client
-            ->requestAsync('GET', '/iid/'.$registrationToken->value().'?details=true')
+            ->requestAsync('GET', '/iid/' . $registrationToken->value() . '?details=true')
             ->then(static function (ResponseInterface $response) use ($registrationToken) {
                 $data = Json::decode((string) $response->getBody(), true);
 

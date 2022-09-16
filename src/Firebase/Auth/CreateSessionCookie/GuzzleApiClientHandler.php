@@ -48,7 +48,7 @@ final class GuzzleApiClientHandler implements Handler
             /** @var array{sessionCookie?: string|null} $data */
             $data = Json::decode((string) $response->getBody(), true);
         } catch (InvalidArgumentException $e) {
-            throw new FailedToCreateSessionCookie($action, $response, 'Unable to parse the response data: '.$e->getMessage(), 0, $e);
+            throw new FailedToCreateSessionCookie($action, $response, 'Unable to parse the response data: ' . $e->getMessage(), 0, $e);
         }
 
         $sessionCookie = $data['sessionCookie'] ?? null;

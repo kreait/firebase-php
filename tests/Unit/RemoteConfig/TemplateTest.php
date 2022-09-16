@@ -22,12 +22,12 @@ final class TemplateTest extends UnitTestCase
 {
     public function testGetDefaultEtag(): void
     {
-        $this->assertSame('*', Template::new()->etag());
+        self::assertSame('*', Template::new()->etag());
     }
 
     public function testDefaultVersionIsNull(): void
     {
-        $this->assertNull(Template::new()->version());
+        self::assertNull(Template::new()->version());
     }
 
     public function testCreateWithInvalidConditionalValue(): void
@@ -52,10 +52,10 @@ final class TemplateTest extends UnitTestCase
         $template = $template->withParameter($parameter);
 
         $condition = $template->conditions()[0];
-        $this->assertSame('foo', $condition->name());
-        $this->assertSame('"true"', $condition->expression());
+        self::assertSame('foo', $condition->name());
+        self::assertSame('"true"', $condition->expression());
 
-        $this->assertSame('foo', $template->parameters()['param']->conditionalValues()[0]->conditionName());
+        self::assertSame('foo', $template->parameters()['param']->conditionalValues()[0]->conditionName());
     }
 
     public function testWithFluidConfiguration(): void
@@ -90,10 +90,10 @@ final class TemplateTest extends UnitTestCase
 
         $conditionNames = array_map(static fn (Condition $c) => $c->name(), $template->conditions());
 
-        $this->assertContains('lang_german', $conditionNames);
-        $this->assertContains('lang_french', $conditionNames);
-        $this->assertSame($welcomeMessageParameter, $template->parameters()['welcome_message']);
-        $this->assertSame($uiColors, $template->parameterGroups()['ui_colors']);
+        self::assertContains('lang_german', $conditionNames);
+        self::assertContains('lang_french', $conditionNames);
+        self::assertSame($welcomeMessageParameter, $template->parameters()['welcome_message']);
+        self::assertSame($uiColors, $template->parameterGroups()['ui_colors']);
     }
 
     public function testParametersCanBeRemoved(): void
@@ -102,7 +102,7 @@ final class TemplateTest extends UnitTestCase
             ->withParameter(Parameter::named('foo'))
             ->withRemovedParameter('foo');
 
-        $this->assertCount(0, $template->parameters());
+        self::assertCount(0, $template->parameters());
     }
 
     public function testParameterGroupsCanBeRemoved(): void
@@ -111,7 +111,7 @@ final class TemplateTest extends UnitTestCase
             ->withParameterGroup(ParameterGroup::named('group'))
             ->withRemovedParameterGroup('group');
 
-        $this->assertCount(0, $template->parameterGroups());
+        self::assertCount(0, $template->parameterGroups());
     }
 
     public function testPersonalizationValuesAreImportedInDefaultValues(): void
@@ -129,13 +129,13 @@ final class TemplateTest extends UnitTestCase
         ];
 
         $template = Template::fromArray($data);
-        $this->assertArrayHasKey('foo', $parameters = $template->parameters());
-        $this->assertNotNull($parameter = $parameters['foo']);
-        $this->assertNotNull($defaultValue = $parameter->defaultValue());
+        self::assertArrayHasKey('foo', $parameters = $template->parameters());
+        self::assertNotNull($parameter = $parameters['foo']);
+        self::assertNotNull($defaultValue = $parameter->defaultValue());
 
-        $this->assertArrayHasKey('personalizationValue', $array = $defaultValue->toArray());
-        $this->assertArrayHasKey('personalizationId', $personalizationIdArray = $array['personalizationValue']);
-        $this->assertSame('id', $personalizationIdArray['personalizationId']);
+        self::assertArrayHasKey('personalizationValue', $array = $defaultValue->toArray());
+        self::assertArrayHasKey('personalizationId', $personalizationIdArray = $array['personalizationValue']);
+        self::assertSame('id', $personalizationIdArray['personalizationId']);
     }
 
     public function testPersonalizationValuesAreImportedInConditionalValues(): void
@@ -161,20 +161,20 @@ final class TemplateTest extends UnitTestCase
         ];
 
         $template = Template::fromArray($data);
-        $this->assertArrayHasKey('foo', $parameters = $template->parameters());
-        $this->assertNotNull($parameter = $parameters['foo']);
+        self::assertArrayHasKey('foo', $parameters = $template->parameters());
+        self::assertNotNull($parameter = $parameters['foo']);
 
         $conditionalValues = $parameter->conditionalValues();
-        $this->assertArrayHasKey(0, $conditionalValues);
+        self::assertArrayHasKey(0, $conditionalValues);
 
-        $this->assertArrayHasKey('personalizationValue', $array = $conditionalValues[0]->toArray());
-        $this->assertArrayHasKey('personalizationId', $personalizationIdArray = $array['personalizationValue']);
-        $this->assertSame('id', $personalizationIdArray['personalizationId']);
+        self::assertArrayHasKey('personalizationValue', $array = $conditionalValues[0]->toArray());
+        self::assertArrayHasKey('personalizationId', $personalizationIdArray = $array['personalizationValue']);
+        self::assertSame('id', $personalizationIdArray['personalizationId']);
     }
 
     public function testItProvidesConditionNames(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             ['first', 'second', 'third'],
             Template::new()
                 ->withCondition(Condition::named('first'))
@@ -186,7 +186,7 @@ final class TemplateTest extends UnitTestCase
 
     public function testConditionsCanBeRemoved(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             ['first', 'third'],
             Template::new()
                 ->withCondition(Condition::named('first'))

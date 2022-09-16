@@ -21,7 +21,9 @@ use Psr\Http\Message\UriInterface;
  */
 final class ReferenceTest extends UnitTestCase
 {
-    /** @var ApiClient|MockObject */
+    /**
+     * @var ApiClient|MockObject
+     */
     private $apiClient;
     private Reference $reference;
 
@@ -41,17 +43,17 @@ final class ReferenceTest extends UnitTestCase
 
     public function testGetKey(): void
     {
-        $this->assertSame('key', $this->reference->getKey());
+        self::assertSame('key', $this->reference->getKey());
     }
 
     public function testGetPath(): void
     {
-        $this->assertSame('parent/key', $this->reference->getPath());
+        self::assertSame('parent/key', $this->reference->getPath());
     }
 
     public function testGetParent(): void
     {
-        $this->assertSame('parent', $this->reference->getParent()->getPath());
+        self::assertSame('parent', $this->reference->getParent()->getPath());
     }
 
     public function testGetParentOfRoot(): void
@@ -65,14 +67,14 @@ final class ReferenceTest extends UnitTestCase
     {
         $root = $this->reference->getRoot();
 
-        $this->assertSame('/', $root->getUri()->getPath());
+        self::assertSame('/', $root->getUri()->getPath());
     }
 
     public function testGetChild(): void
     {
         $child = $this->reference->getChild('child');
 
-        $this->assertSame('parent/key/child', $child->getPath());
+        self::assertSame('parent/key/child', $child->getPath());
     }
 
     public function testGetInvalidChild(): void
@@ -85,17 +87,17 @@ final class ReferenceTest extends UnitTestCase
     {
         $this->apiClient
             ->method('get')
-            ->with($this->anything())
+            ->with(self::anything())
             ->willReturn(['a' => true, 'b' => true, 'c' => true]);
 
-        $this->assertSame(['a', 'b', 'c'], $this->reference->getChildKeys());
+        self::assertSame(['a', 'b', 'c'], $this->reference->getChildKeys());
     }
 
     public function testGetChildKeysWhenNoChildrenAreSet(): void
     {
         $this->apiClient
             ->method('get')
-            ->with($this->anything())
+            ->with(self::anything())
             ->willReturn('scalar value');
 
         $this->expectException(OutOfRangeException::class);
@@ -105,67 +107,67 @@ final class ReferenceTest extends UnitTestCase
 
     public function testModifiersReturnQueries(): void
     {
-        $this->assertInstanceOf(Query::class, $this->reference->equalTo('x'));
-        $this->assertInstanceOf(Query::class, $this->reference->endAt('x'));
-        $this->assertInstanceOf(Query::class, $this->reference->endBefore('x'));
-        $this->assertInstanceOf(Query::class, $this->reference->limitToFirst(1));
-        $this->assertInstanceOf(Query::class, $this->reference->limitToLast(1));
-        $this->assertInstanceOf(Query::class, $this->reference->orderByChild('child'));
-        $this->assertInstanceOf(Query::class, $this->reference->orderByKey());
-        $this->assertInstanceOf(Query::class, $this->reference->orderByValue());
-        $this->assertInstanceOf(Query::class, $this->reference->shallow());
-        $this->assertInstanceOf(Query::class, $this->reference->startAt('x'));
-        $this->assertInstanceOf(Query::class, $this->reference->startAfter('x'));
+        self::assertInstanceOf(Query::class, $this->reference->equalTo('x'));
+        self::assertInstanceOf(Query::class, $this->reference->endAt('x'));
+        self::assertInstanceOf(Query::class, $this->reference->endBefore('x'));
+        self::assertInstanceOf(Query::class, $this->reference->limitToFirst(1));
+        self::assertInstanceOf(Query::class, $this->reference->limitToLast(1));
+        self::assertInstanceOf(Query::class, $this->reference->orderByChild('child'));
+        self::assertInstanceOf(Query::class, $this->reference->orderByKey());
+        self::assertInstanceOf(Query::class, $this->reference->orderByValue());
+        self::assertInstanceOf(Query::class, $this->reference->shallow());
+        self::assertInstanceOf(Query::class, $this->reference->startAt('x'));
+        self::assertInstanceOf(Query::class, $this->reference->startAfter('x'));
     }
 
     public function testGetSnapshot(): void
     {
-        $this->apiClient->method('get')->with($this->anything())->willReturn('value');
+        $this->apiClient->method('get')->with(self::anything())->willReturn('value');
 
-        $this->assertInstanceOf(Snapshot::class, $this->reference->getSnapshot());
+        self::assertInstanceOf(Snapshot::class, $this->reference->getSnapshot());
     }
 
     public function testGetValue(): void
     {
-        $this->apiClient->method('get')->with($this->anything())->willReturn('value');
+        $this->apiClient->method('get')->with(self::anything())->willReturn('value');
 
-        $this->assertSame('value', $this->reference->getValue());
+        self::assertSame('value', $this->reference->getValue());
     }
 
     public function testSet(): void
     {
-        $this->apiClient->expects($this->once())->method('set');
+        $this->apiClient->expects(self::once())->method('set');
 
-        $this->assertSame($this->reference, $this->reference->set('value'));
+        self::assertSame($this->reference, $this->reference->set('value'));
     }
 
     public function testRemove(): void
     {
-        $this->apiClient->expects($this->once())->method('remove');
+        $this->apiClient->expects(self::once())->method('remove');
 
-        $this->assertSame($this->reference, $this->reference->remove());
+        self::assertSame($this->reference, $this->reference->remove());
     }
 
     public function testUpdate(): void
     {
-        $this->apiClient->expects($this->once())->method('update');
+        $this->apiClient->expects(self::once())->method('update');
 
-        $this->assertSame($this->reference, $this->reference->update(['any' => 'thing']));
+        self::assertSame($this->reference, $this->reference->update(['any' => 'thing']));
     }
 
     public function testPush(): void
     {
-        $this->apiClient->expects($this->once())->method('push')->willReturn('newChild');
+        $this->apiClient->expects(self::once())->method('push')->willReturn('newChild');
 
         $childReference = $this->reference->push('value');
-        $this->assertSame('newChild', $childReference->getKey());
+        self::assertSame('newChild', $childReference->getKey());
     }
 
     public function testGetUri(): void
     {
         $uri = $this->reference->getUri();
 
-        $this->assertInstanceOf(UriInterface::class, $uri);
-        $this->assertSame((string) $uri, (string) $this->reference);
+        self::assertInstanceOf(UriInterface::class, $uri);
+        self::assertSame((string) $uri, (string) $this->reference);
     }
 }

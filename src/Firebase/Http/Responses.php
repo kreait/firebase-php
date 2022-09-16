@@ -10,11 +10,14 @@ use Traversable;
 
 /**
  * @internal
+ *
  * @implements IteratorAggregate<ResponseInterface>
  */
 final class Responses implements IteratorAggregate
 {
-    /** @var ResponseInterface[] */
+    /**
+     * @var ResponseInterface[]
+     */
     private array $responses;
 
     public function __construct(ResponseInterface ...$responses)

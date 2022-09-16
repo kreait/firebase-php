@@ -13,6 +13,7 @@ use Throwable;
 
 /**
  * @internal
+ *
  * @group auth-emulator
  * @group emulator
  */
@@ -40,13 +41,13 @@ final class CustomTokenViaGoogleIamTest extends IntegrationTestCase
 
         try {
             $generator->createCustomToken('some-uid', ['kid' => '$&§']);
-            $this->fail('An exception should have been thrown');
+            self::fail('An exception should have been thrown');
         } catch (AuthException $e) {
             $this->addToAssertionCount(1);
         } catch (AssertionFailedError $e) {
-            $this->fail($e->getMessage());
+            self::fail($e->getMessage());
         } catch (Throwable $e) {
-            $this->fail('An '.AuthException::class.' should have been thrown');
+            self::fail('An ' . AuthException::class . ' should have been thrown');
         }
     }
 
@@ -60,7 +61,7 @@ final class CustomTokenViaGoogleIamTest extends IntegrationTestCase
 
         $customToken = $generator->createCustomToken('some-uid');
 
-        $this->assertInstanceOf(UnencryptedToken::class, $customToken);
-        $this->assertSame($tenantId, $customToken->claims()->get('tenantId'));
+        self::assertInstanceOf(UnencryptedToken::class, $customToken);
+        self::assertSame($tenantId, $customToken->claims()->get('tenantId'));
     }
 }

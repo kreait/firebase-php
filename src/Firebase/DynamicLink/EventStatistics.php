@@ -15,6 +15,7 @@ use function assert;
 
 /**
  * @see https://firebase.google.com/docs/reference/dynamic-links/analytics#response_body
+ *
  * @implements IteratorAggregate<array>
  */
 final class EventStatistics implements Countable, IteratorAggregate
@@ -39,7 +40,9 @@ final class EventStatistics implements Countable, IteratorAggregate
     // Re-opens of an app
     public const TYPE_APP_RE_OPEN = 'APP_RE_OPEN';
 
-    /** @var array<int, array<string, string>> */
+    /**
+     * @var array<int, array<string, string>>
+     */
     private array $events;
 
     /**

@@ -21,7 +21,7 @@ final class DatabaseNotFound extends LogicException implements DatabaseException
         $databaseName = explode('.', $host, 2)[0] ?? '';
 
         $databaseUri = "{$scheme}://{$host}";
-        $suggestedDatabaseUri = str_replace($databaseName, $databaseName.'-default-rtdb', $databaseUri);
+        $suggestedDatabaseUri = str_replace($databaseName, $databaseName . '-default-rtdb', $databaseUri);
 
         $message = <<<MESSAGE
 

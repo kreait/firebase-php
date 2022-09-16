@@ -17,7 +17,7 @@ use Throwable;
 /**
  * @internal
  */
-class DatabaseApiExceptionConverter
+final class DatabaseApiExceptionConverter
 {
     private ErrorResponseParser $responseParser;
 
@@ -33,7 +33,7 @@ class DatabaseApiExceptionConverter
         }
 
         if ($exception instanceof NetworkExceptionInterface) {
-            return new ApiConnectionFailed('Unable to connect to the API: '.$exception->getMessage(), $exception->getCode(), $exception);
+            return new ApiConnectionFailed('Unable to connect to the API: ' . $exception->getMessage(), $exception->getCode(), $exception);
         }
 
         return new DatabaseError($exception->getMessage(), $exception->getCode(), $exception);

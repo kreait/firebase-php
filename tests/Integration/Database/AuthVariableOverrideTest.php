@@ -15,6 +15,7 @@ use function is_string;
 
 /**
  * @internal
+ *
  * @group database-emulator
  * @group emulator
  */
@@ -39,7 +40,7 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
         $uid = $this->auth->signInAnonymously()->firebaseUserId();
         assert(is_string($uid));
 
-        $this->publishRules(__FUNCTION__, ['.read' => 'auth.uid === "'.$uid.'"']);
+        $this->publishRules(__FUNCTION__, ['.read' => 'auth.uid === "' . $uid . '"']);
 
         try {
             $db = $this->databaseWithAuthOverride(['uid' => $uid]);

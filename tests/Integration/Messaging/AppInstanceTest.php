@@ -26,23 +26,23 @@ final class AppInstanceTest extends IntegrationTestCase
     {
         $token = $this->getTestRegistrationToken();
 
-        $firstTopic = bin2hex(random_bytes(5)).__FUNCTION__;
-        $secondTopic = bin2hex(random_bytes(5)).__FUNCTION__;
+        $firstTopic = bin2hex(random_bytes(5)) . __FUNCTION__;
+        $secondTopic = bin2hex(random_bytes(5)) . __FUNCTION__;
 
         $this->messaging->subscribeToTopic($firstTopic, $token);
         $this->messaging->subscribeToTopic($secondTopic, $token);
 
         $instance = $this->messaging->getAppInstance($token);
 
-        $this->assertTrue($instance->isSubscribedToTopic($firstTopic));
-        $this->assertTrue($instance->isSubscribedToTopic($secondTopic));
+        self::assertTrue($instance->isSubscribedToTopic($firstTopic));
+        self::assertTrue($instance->isSubscribedToTopic($secondTopic));
 
         $this->messaging->unsubscribeFromTopic($firstTopic, $token);
         $this->messaging->unsubscribeFromTopic($secondTopic, $token);
 
         $instance = $this->messaging->getAppInstance($token);
 
-        $this->assertFalse($instance->isSubscribedToTopic($firstTopic));
-        $this->assertFalse($instance->isSubscribedToTopic($secondTopic));
+        self::assertFalse($instance->isSubscribedToTopic($firstTopic));
+        self::assertFalse($instance->isSubscribedToTopic($secondTopic));
     }
 }

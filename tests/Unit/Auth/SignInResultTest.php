@@ -21,14 +21,14 @@ final class SignInResultTest extends UnitTestCase
     {
         $result = SignInResult::fromData($input);
 
-        $this->assertSame($input, $result->data());
+        self::assertSame($input, $result->data());
 
-        $this->assertSame('idToken', $result->idToken());
-        $this->assertSame('refreshToken', $result->refreshToken());
-        $this->assertSame('accessToken', $result->accessToken());
-        $this->assertSame(3600, $result->ttl());
+        self::assertSame('idToken', $result->idToken());
+        self::assertSame('refreshToken', $result->refreshToken());
+        self::assertSame('accessToken', $result->accessToken());
+        self::assertSame(3600, $result->ttl());
 
-        $this->assertSame([
+        self::assertSame([
             'token_type' => 'Bearer',
             'access_token' => 'accessToken',
             'id_token' => 'idToken',
@@ -41,7 +41,7 @@ final class SignInResultTest extends UnitTestCase
     {
         $result = SignInResult::fromData(['localId' => 'some-id']);
 
-        $this->assertSame('some-id', $result->firebaseUserId());
+        self::assertSame('some-id', $result->firebaseUserId());
     }
 
     /**

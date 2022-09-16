@@ -14,7 +14,9 @@ final class SendReport
 {
     private MessageTarget $target;
 
-    /** @var array<array-key, scalar>|null */
+    /**
+     * @var array<array-key, scalar>|null
+     */
     private ?array $result = null;
     private ?Message $message = null;
     private ?Throwable $error = null;

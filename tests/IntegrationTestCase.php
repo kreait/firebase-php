@@ -27,11 +27,13 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     protected static ServiceAccount $serviceAccount;
     protected static string $rtdbUrl;
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     protected static array $registrationTokens = [];
     protected static string $unknownToken = 'd_RTtLHR_JgI4r4tbYM9CA:APA91bEzb2Tb3WlKwddpEPYY2ZAx7AOmjOhiw-jVq6J9ekJGpBAefAgMb1muDJcKBMsrMq7zSCfBzl0Ll7JCZ0o8QI9zLVG1F18nqW9AOFKDXi8-MyT3R5Stt6GGKnq9rd9l5kopGEbO';
 
-    public static function setUpBeforeClass(): void
+    final public static function setUpBeforeClass(): void
     {
         $credentials = self::credentialsFromEnvironment() ?? self::credentialsFromFile();
 
@@ -52,7 +54,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     protected function getTestRegistrationToken(): string
     {
         if (empty(self::$registrationTokens)) {
-            $this->markTestSkipped('No registration token available');
+            self::markTestSkipped('No registration token available');
         }
 
         // @noinspection NonSecureArrayRandUsageInspection
@@ -61,12 +63,12 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
     protected static function randomString(string $suffix = ''): string
     {
-        return mb_strtolower(bin2hex(random_bytes(5)).$suffix);
+        return mb_strtolower(bin2hex(random_bytes(5)) . $suffix);
     }
 
     protected static function randomEmail(string $suffix = ''): string
     {
-        return self::randomString($suffix.'@domain.tld');
+        return self::randomString($suffix . '@domain.tld');
     }
 
     protected static function authIsEmulated(): bool
@@ -81,7 +83,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
     private static function credentialsFromFile(): ?ServiceAccount
     {
-        $credentialsPath = self::$fixturesDir.'/test_credentials.json';
+        $credentialsPath = self::$fixturesDir . '/test_credentials.json';
 
         if (!file_exists($credentialsPath)) {
             return null;
@@ -108,7 +110,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
      */
     private static function registrationTokensFromFile(): ?array
     {
-        $path = self::$fixturesDir.'/test_devices.json';
+        $path = self::$fixturesDir . '/test_devices.json';
 
         if (!file_exists($path)) {
             return null;
@@ -143,7 +145,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
     private static function rtdbUrlFromFile(): ?string
     {
-        $path = self::$fixturesDir.'/test_rtdb.json';
+        $path = self::$fixturesDir . '/test_rtdb.json';
 
         if (!file_exists($path)) {
             return null;

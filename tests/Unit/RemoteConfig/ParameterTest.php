@@ -17,20 +17,20 @@ final class ParameterTest extends UnitTestCase
     {
         $parameter = Parameter::named('empty');
 
-        $this->assertNull($parameter->defaultValue());
+        self::assertNull($parameter->defaultValue());
     }
 
     public function testCreateWithDefaultValue(): void
     {
         $parameter = Parameter::named('with_default_foo', 'foo');
 
-        $this->assertEquals(DefaultValue::with('foo'), $parameter->defaultValue());
+        self::assertEquals(DefaultValue::with('foo'), $parameter->defaultValue());
     }
 
     public function testCreateWithDescription(): void
     {
         $parameter = Parameter::named('something')->withDescription('description');
 
-        $this->assertSame('description', $parameter->description());
+        self::assertSame('description', $parameter->description());
     }
 }

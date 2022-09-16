@@ -65,10 +65,14 @@ final class Factory
         'https://www.googleapis.com/auth/securetoken',
     ];
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     private ?string $databaseUrl = null;
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     private ?string $defaultStorageBucket = null;
     private ?ServiceAccount $serviceAccount = null;
     private ?FetchAuthTokenInterface $googleAuthTokenCredentials = null;
@@ -79,13 +83,19 @@ final class Factory
     private bool $discoveryIsDisabled = false;
     private ClockInterface $clock;
 
-    /** @var callable|null */
+    /**
+     * @var callable|null
+     */
     private $httpLogMiddleware;
 
-    /** @var callable|null */
+    /**
+     * @var callable|null
+     */
     private $httpDebugLogMiddleware;
 
-    /** @var callable|null */
+    /**
+     * @var callable|null
+     */
     private $databaseAuthVariableOverrideMiddleware;
     private ?string $tenantId = null;
     private HttpClientOptions $httpClientOptions;
@@ -300,7 +310,7 @@ final class Factory
 
         $messagingApiClient = new Messaging\ApiClient(
             $this->createApiClient([
-                'base_uri' => 'https://fcm.googleapis.com/v1/projects/'.$projectId,
+                'base_uri' => 'https://fcm.googleapis.com/v1/projects/' . $projectId,
             ]),
             $errorHandler,
         );
@@ -349,7 +359,7 @@ final class Factory
         try {
             $firestoreClient = new FirestoreClient($config);
         } catch (Throwable $e) {
-            throw new RuntimeException('Unable to create a FirestoreClient: '.$e->getMessage(), $e->getCode(), $e);
+            throw new RuntimeException('Unable to create a FirestoreClient: ' . $e->getMessage(), $e->getCode(), $e);
         }
 
         return Firestore::withFirestoreClient($firestoreClient);
@@ -372,7 +382,7 @@ final class Factory
         try {
             $storageClient = new StorageClient($config);
         } catch (Throwable $e) {
-            throw new RuntimeException('Unable to create a Storage Client: '.$e->getMessage(), $e->getCode(), $e);
+            throw new RuntimeException('Unable to create a Storage Client: ' . $e->getMessage(), $e->getCode(), $e);
         }
 
         return new Storage($storageClient, $this->getStorageBucketName());
@@ -488,7 +498,7 @@ final class Factory
 
         if ($credentials !== null) {
             $projectId = $credentials instanceof ProjectIdProviderInterface ? $credentials->getProjectId() : $this->getProjectId();
-            $cachePrefix = 'kreait_firebase_'.$projectId;
+            $cachePrefix = 'kreait_firebase_' . $projectId;
 
             $credentials = new FetchAuthTokenCache($credentials, ['prefix' => $cachePrefix], $this->authTokenCache);
             $authTokenHandler = HttpHandlerFactory::build(new Client());

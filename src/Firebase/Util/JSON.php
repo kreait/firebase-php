@@ -18,6 +18,7 @@ use function json_encode;
  * @internal
  *
  * @deprecated 6.2
+ *
  * @codeCoverageIgnore
  */
 final class JSON
@@ -43,7 +44,7 @@ final class JSON
         try {
             return json_encode($value, JSON_THROW_ON_ERROR | $options, $depth);
         } catch (Throwable $e) {
-            throw new InvalidArgumentException('json_encode error: '.$e->getMessage());
+            throw new InvalidArgumentException('json_encode error: ' . $e->getMessage());
         }
     }
 
@@ -72,7 +73,7 @@ final class JSON
         try {
             return json_decode($json, $assoc, $depth, JSON_THROW_ON_ERROR | $options);
         } catch (Throwable $e) {
-            throw new InvalidArgumentException('json_decode error: '.$e->getMessage());
+            throw new InvalidArgumentException('json_decode error: ' . $e->getMessage());
         }
     }
 

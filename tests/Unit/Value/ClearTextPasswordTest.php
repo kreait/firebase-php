@@ -22,9 +22,9 @@ final class ClearTextPasswordTest extends TestCase
     {
         $password = new ClearTextPassword($value);
 
-        $this->assertSame($value, (string) $password);
-        $this->assertSame($value, $password->jsonSerialize());
-        $this->assertTrue($password->equalsTo($value));
+        self::assertSame($value, (string) $password);
+        self::assertSame($value, $password->jsonSerialize());
+        self::assertTrue($password->equalsTo($value));
     }
 
     /**

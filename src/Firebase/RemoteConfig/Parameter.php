@@ -20,7 +20,7 @@ use function is_string;
  *     description?: string
  * }
  */
-class Parameter implements JsonSerializable
+final class Parameter implements JsonSerializable
 {
     /**
      * @var non-empty-string
@@ -29,7 +29,9 @@ class Parameter implements JsonSerializable
     private ?string $description = '';
     private ?DefaultValue $defaultValue;
 
-    /** @var list<ConditionalValue> */
+    /**
+     * @var list<ConditionalValue>
+     */
     private array $conditionalValues = [];
 
     /**

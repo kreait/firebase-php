@@ -31,7 +31,7 @@ final class EqualToTest extends UnitTestCase
     {
         $filter = new EqualTo($given);
 
-        $this->assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://domain.tld')));
+        self::assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://domain.tld')));
     }
 
     /**

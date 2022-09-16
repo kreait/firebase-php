@@ -13,11 +13,14 @@ use function explode;
 
 /**
  * @internal
+ *
  * @implements IteratorAggregate<RequestInterface>
  */
 final class Requests implements IteratorAggregate
 {
-    /** @var RequestInterface[] */
+    /**
+     * @var RequestInterface[]
+     */
     private array $requests;
 
     public function __construct(RequestInterface ...$requests)

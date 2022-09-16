@@ -62,7 +62,9 @@ final class Auth implements Contract\Auth
 {
     private ApiClient $client;
 
-    /** @var CustomTokenGenerator|CustomTokenViaGoogleIam|null */
+    /**
+     * @var CustomTokenGenerator|CustomTokenViaGoogleIam|null
+     */
     private $tokenGenerator;
     private IdTokenVerifier $idTokenVerifier;
     private SessionCookieVerifier $sessionCookieVerifier;
@@ -389,7 +391,7 @@ final class Auth implements Contract\Auth
             $parsedToken = Configuration::forUnsecuredSigner()->parser()->parse($tokenString);
             assert($parsedToken instanceof UnencryptedToken);
         } catch (Throwable $e) {
-            throw new InvalidArgumentException('The given token could not be parsed: '.$e->getMessage());
+            throw new InvalidArgumentException('The given token could not be parsed: ' . $e->getMessage());
         }
 
         return $parsedToken;
@@ -652,7 +654,7 @@ final class Auth implements Contract\Auth
         $tokenAuthenticatedAt = DT::toUTCDateTimeImmutable($verifiedToken->claims()->get('auth_time'));
 
         if ($leewayInSeconds) {
-            $tokenAuthenticatedAt = $tokenAuthenticatedAt->modify('-'.$leewayInSeconds.' seconds');
+            $tokenAuthenticatedAt = $tokenAuthenticatedAt->modify('-' . $leewayInSeconds . ' seconds');
         }
 
         return $tokenAuthenticatedAt->getTimestamp() < $validSince->getTimestamp();

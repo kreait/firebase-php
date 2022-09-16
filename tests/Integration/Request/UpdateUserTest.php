@@ -31,11 +31,11 @@ final class UpdateUserTest extends IntegrationTestCase
         $photoUrl = 'http://example.com/a_photo.jpg';
 
         $user = $this->auth->createUser(CreateUser::new()->withPhotoUrl($photoUrl));
-        $this->assertSame($user->photoUrl, $photoUrl);
+        self::assertSame($user->photoUrl, $photoUrl);
 
         $updatedUser = $this->auth->updateUser($user->uid, UpdateUser::new()->withRemovedPhotoUrl());
 
-        $this->assertNull($updatedUser->photoUrl);
+        self::assertNull($updatedUser->photoUrl);
 
         $this->auth->deleteUser($user->uid);
     }
@@ -45,11 +45,11 @@ final class UpdateUserTest extends IntegrationTestCase
         $displayName = 'A display name';
 
         $user = $this->auth->createUser(CreateUser::new()->withDisplayName($displayName));
-        $this->assertSame($user->displayName, $displayName);
+        self::assertSame($user->displayName, $displayName);
 
         $updatedUser = $this->auth->updateUser($user->uid, UpdateUser::new()->withRemovedDisplayName());
 
-        $this->assertNull($updatedUser->displayName);
+        self::assertNull($updatedUser->displayName);
 
         $this->auth->deleteUser($user->uid);
     }
@@ -61,14 +61,14 @@ final class UpdateUserTest extends IntegrationTestCase
                 ->withUid($uid = bin2hex(random_bytes(5))),
         );
 
-        $this->assertNotTrue($user->emailVerified);
-        $this->assertNull($user->email);
+        self::assertNotTrue($user->emailVerified);
+        self::assertNull($user->email);
 
         $updatedUser = $this->auth->updateUser($uid, UpdateUser::new()->markEmailAsVerified());
 
-        $this->assertSame($user->uid, $updatedUser->uid);
-        $this->assertNull($updatedUser->email);
-        $this->assertTrue($updatedUser->emailVerified);
+        self::assertSame($user->uid, $updatedUser->uid);
+        self::assertNull($updatedUser->email);
+        self::assertTrue($updatedUser->emailVerified);
 
         $this->auth->deleteUser($updatedUser->uid);
     }
@@ -78,16 +78,16 @@ final class UpdateUserTest extends IntegrationTestCase
         $user = $this->auth->createUser(
             CreateUser::new()
                 ->withUid($uid = bin2hex(random_bytes(5)))
-                ->withUnverifiedEmail($uid.'@example.org'),
+                ->withUnverifiedEmail($uid . '@example.org'),
         );
 
-        $this->assertFalse($user->emailVerified);
+        self::assertFalse($user->emailVerified);
 
         $updatedUser = $this->auth->updateUser($user->uid, UpdateUser::new()->markEmailAsVerified());
 
-        $this->assertSame($user->uid, $updatedUser->uid);
-        $this->assertSame($user->email, $updatedUser->email);
-        $this->assertTrue($updatedUser->emailVerified);
+        self::assertSame($user->uid, $updatedUser->uid);
+        self::assertSame($user->email, $updatedUser->email);
+        self::assertTrue($updatedUser->emailVerified);
 
         $this->auth->deleteUser($updatedUser->uid);
     }
@@ -97,16 +97,16 @@ final class UpdateUserTest extends IntegrationTestCase
         $user = $this->auth->createUser(
             CreateUser::new()
                 ->withUid($uid = bin2hex(random_bytes(5)))
-                ->withVerifiedEmail($uid.'@example.org'),
+                ->withVerifiedEmail($uid . '@example.org'),
         );
 
-        $this->assertTrue($user->emailVerified);
+        self::assertTrue($user->emailVerified);
 
         $updatedUser = $this->auth->updateUser($uid, UpdateUser::new()->markEmailAsUnverified());
 
-        $this->assertSame($user->uid, $updatedUser->uid);
-        $this->assertSame($user->email, $updatedUser->email);
-        $this->assertFalse($updatedUser->emailVerified);
+        self::assertSame($user->uid, $updatedUser->uid);
+        self::assertSame($user->email, $updatedUser->email);
+        self::assertFalse($updatedUser->emailVerified);
 
         $this->auth->deleteUser($updatedUser->uid);
     }
@@ -125,15 +125,15 @@ final class UpdateUserTest extends IntegrationTestCase
             ]);
 
         $user = $this->auth->updateUser($uid, $request);
-        $this->assertEquals($claims, $user->customClaims);
+        self::assertEquals($claims, $user->customClaims);
 
         $idToken = $this->auth->signInAsUser($user)->idToken();
-        $this->assertNotNull($idToken);
+        self::assertNotNull($idToken);
 
         $verifiedToken = $this->auth->verifyIdToken($idToken);
 
-        $this->assertTrue($verifiedToken->claims()->get('admin'));
-        $this->assertSame('1234', $verifiedToken->claims()->get('groupId'));
+        self::assertTrue($verifiedToken->claims()->get('admin'));
+        self::assertSame('1234', $verifiedToken->claims()->get('groupId'));
 
         $this->auth->deleteUser($uid);
     }
@@ -143,18 +143,18 @@ final class UpdateUserTest extends IntegrationTestCase
         $user = $this->auth->createUser(
             CreateUser::new()
                 ->withUid($uid = bin2hex(random_bytes(5)))
-                ->withVerifiedEmail($uid.'@example.org')
-                ->withPhoneNumber($phoneNumber = '+1234567'.random_int(1000, 9999)),
+                ->withVerifiedEmail($uid . '@example.org')
+                ->withPhoneNumber($phoneNumber = '+1234567' . random_int(1000, 9999)),
         );
 
-        $this->assertSame($phoneNumber, $user->phoneNumber);
+        self::assertSame($phoneNumber, $user->phoneNumber);
 
         $updatedUser = $this->auth->updateUser(
             $user->uid,
             UpdateUser::new()->withRemovedPhoneNumber(),
         );
 
-        $this->assertNull($updatedUser->phoneNumber);
+        self::assertNull($updatedUser->phoneNumber);
 
         $this->auth->deleteUser($user->uid);
     }
@@ -172,7 +172,7 @@ final class UpdateUserTest extends IntegrationTestCase
             'disabled' => false,
         ]);
 
-        $this->assertFalse($check->disabled);
+        self::assertFalse($check->disabled);
 
         $this->auth->deleteUser($user->uid);
     }
@@ -182,11 +182,11 @@ final class UpdateUserTest extends IntegrationTestCase
         $user = $this->auth->createAnonymousUser();
 
         try {
-            $this->assertNull($user->metadata->passwordUpdatedAt);
+            self::assertNull($user->metadata->passwordUpdatedAt);
 
             $updatedUser = $this->auth->updateUser($user->uid, ['password' => 'new-password']);
 
-            $this->assertInstanceOf(DateTimeImmutable::class, $updatedUser->metadata->passwordUpdatedAt);
+            self::assertInstanceOf(DateTimeImmutable::class, $updatedUser->metadata->passwordUpdatedAt);
         } finally {
             $this->auth->deleteUser($user->uid);
         }

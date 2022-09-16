@@ -13,7 +13,9 @@ final class CreateDynamicLink implements JsonSerializable
     public const WITH_UNGUESSABLE_SUFFIX = 'UNGUESSABLE';
     public const WITH_SHORT_SUFFIX = 'SHORT';
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     private array $data = [
         'dynamicLinkInfo' => [],
         'suffix' => ['option' => self::WITH_UNGUESSABLE_SUFFIX],

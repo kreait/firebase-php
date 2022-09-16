@@ -48,7 +48,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
             $this->createMock(RequestInterface::class),
         );
 
-        $this->assertInstanceOf(ApiConnectionFailed::class, $this->converter->convertException($connectException));
+        self::assertInstanceOf(ApiConnectionFailed::class, $this->converter->convertException($connectException));
     }
 
     /**
@@ -60,7 +60,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
     {
         $converted = $this->converter->convertException($e);
 
-        $this->assertInstanceOf($expectedClass, $converted);
+        self::assertInstanceOf($expectedClass, $converted);
     }
 
     /**
@@ -95,7 +95,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
                         'message' => $identifier,
                     ],
                     'code' => $code,
-                    'message' => 'Some error that might include the identifier "'.$identifier.'"',
+                    'message' => 'Some error that might include the identifier "' . $identifier . '"',
                 ],
             ])),
         );
@@ -110,9 +110,9 @@ final class MessagingApiExceptionConverterTest extends TestCase
 
         $expected = $this->clock->now()->modify('+60 seconds');
 
-        $this->assertInstanceOf(QuotaExceeded::class, $converted);
-        $this->assertInstanceOf(DateTimeImmutable::class, $converted->retryAfter());
-        $this->assertSame($expected->getTimestamp(), $converted->retryAfter()->getTimestamp());
+        self::assertInstanceOf(QuotaExceeded::class, $converted);
+        self::assertInstanceOf(DateTimeImmutable::class, $converted->retryAfter());
+        self::assertSame($expected->getTimestamp(), $converted->retryAfter()->getTimestamp());
     }
 
     public function testItKnowsWhenToRetryAfterWithDateStrings(): void
@@ -124,9 +124,9 @@ final class MessagingApiExceptionConverterTest extends TestCase
         /** @var ServerUnavailable $converted */
         $converted = $this->converter->convertResponse($response);
 
-        $this->assertInstanceOf(ServerUnavailable::class, $converted);
-        $this->assertInstanceOf(DateTimeImmutable::class, $converted->retryAfter());
-        $this->assertSame($expected->getTimestamp(), $converted->retryAfter()->getTimestamp());
+        self::assertInstanceOf(ServerUnavailable::class, $converted);
+        self::assertInstanceOf(DateTimeImmutable::class, $converted->retryAfter());
+        self::assertSame($expected->getTimestamp(), $converted->retryAfter()->getTimestamp());
     }
 
     public function it_does_not_know_when_to_retry_when_it_does_not_have_to(): void
@@ -136,7 +136,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
         /** @var ServerUnavailable $converted */
         $converted = $this->converter->convertResponse($response);
 
-        $this->assertInstanceOf(ServerUnavailable::class, $converted);
-        $this->assertNull($converted->retryAfter());
+        self::assertInstanceOf(ServerUnavailable::class, $converted);
+        self::assertNull($converted->retryAfter());
     }
 }

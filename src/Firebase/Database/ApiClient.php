@@ -17,9 +17,9 @@ use Throwable;
 /**
  * @internal
  */
-class ApiClient
+final class ApiClient
 {
-    protected DatabaseApiExceptionConverter $errorHandler;
+    private DatabaseApiExceptionConverter $errorHandler;
     private ClientInterface $client;
     private UrlBuilder $resourceUrlBuilder;
 

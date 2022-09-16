@@ -28,7 +28,7 @@ final class ProjectAwareAuthResourceUrlBuilderTest extends TestCase
 
     public function testItUsesTheGivenProjectId(): void
     {
-        $this->assertStringContainsString($this->projectId, $this->builder->getUrl());
+        self::assertStringContainsString($this->projectId, $this->builder->getUrl());
     }
 
     public function testItUsesAnEmulatorHostIfProvidedByEnvironmentVariable(): void
@@ -37,7 +37,7 @@ final class ProjectAwareAuthResourceUrlBuilderTest extends TestCase
 
         $builder = ProjectAwareAuthResourceUrlBuilder::forProject($this->projectId);
 
-        $this->assertStringContainsString('localhost:1234', $builder->getUrl());
+        self::assertStringContainsString('localhost:1234', $builder->getUrl());
     }
 
     public function testItDoesNotUseTheEmulatorHostWhenItIsEmpty(): void
@@ -46,30 +46,30 @@ final class ProjectAwareAuthResourceUrlBuilderTest extends TestCase
 
         $builder = ProjectAwareAuthResourceUrlBuilder::forProject($this->projectId);
 
-        $this->assertStringNotContainsString('{host}', $builder->getUrl());
+        self::assertStringNotContainsString('{host}', $builder->getUrl());
     }
 
     public function testItReplacesTheApiWithAnEmptyStringWhenItIsNotProvided(): void
     {
-        $this->assertStringNotContainsString('{api}', $this->builder->getUrl());
+        self::assertStringNotContainsString('{api}', $this->builder->getUrl());
     }
 
     public function testItUsesTheRequestedApi(): void
     {
         $url = $this->builder->getUrl('foo');
-        $this->assertStringNotContainsString('{api}', $url);
-        $this->assertStringContainsString('foo', $url);
+        self::assertStringNotContainsString('{api}', $url);
+        self::assertStringContainsString('foo', $url);
     }
 
     public function testItUsesTheGivenParameters(): void
     {
         $url = $this->builder->getUrl('', ['first' => 'value', 'second' => 'value']);
-        $this->assertStringContainsString('?first=value&second=value', $url);
+        self::assertStringContainsString('?first=value&second=value', $url);
     }
 
     public function testItDoesNotHaveQueryParamsWhenNoneAreProvided(): void
     {
         $url = $this->builder->getUrl();
-        $this->assertStringNotContainsString('?', $url);
+        self::assertStringNotContainsString('?', $url);
     }
 }

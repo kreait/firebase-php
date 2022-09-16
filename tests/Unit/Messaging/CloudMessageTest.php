@@ -20,7 +20,7 @@ final class CloudMessageTest extends TestCase
 {
     public function testEmptyMessage(): void
     {
-        $this->assertSame('[]', Json::encode(CloudMessage::new()));
+        self::assertSame('[]', Json::encode(CloudMessage::new()));
     }
 
     public function testInvalidTargetCausesError(): void
@@ -42,12 +42,12 @@ final class CloudMessageTest extends TestCase
 
         $encodedChanged = Json::decode(Json::encode($changed), true);
 
-        $this->assertSame($encodedOriginal, $encodedChanged);
+        self::assertSame($encodedOriginal, $encodedChanged);
     }
 
     public function testAnEmptyMessageHasNotTarget(): void
     {
-        $this->assertFalse(CloudMessage::new()->hasTarget());
+        self::assertFalse(CloudMessage::new()->hasTarget());
     }
 
     public function testWithChangedFcmOptions(): void
@@ -57,9 +57,9 @@ final class CloudMessageTest extends TestCase
 
         $messageData = Json::decode(Json::encode($message), true);
 
-        $this->assertArrayHasKey('fcm_options', $messageData);
-        $this->assertArrayHasKey('analytics_label', $messageData['fcm_options']);
-        $this->assertSame($label, $messageData['fcm_options']['analytics_label']);
+        self::assertArrayHasKey('fcm_options', $messageData);
+        self::assertArrayHasKey('analytics_label', $messageData['fcm_options']);
+        self::assertSame($label, $messageData['fcm_options']['analytics_label']);
     }
 
     /**
@@ -90,7 +90,7 @@ final class CloudMessageTest extends TestCase
             ],
         ];
 
-        $this->assertJsonStringEqualsJsonString(
+        self::assertJsonStringEqualsJsonString(
             Json::encode($expected),
             Json::encode(CloudMessage::new()->withDefaultSounds()->jsonSerialize()),
         );
@@ -102,19 +102,19 @@ final class CloudMessageTest extends TestCase
 
         $payload = Json::decode(Json::encode($message), true);
 
-        $this->assertArrayHasKey('android', $payload);
-        $this->assertArrayHasKey('priority', $payload['android']);
-        $this->assertSame('normal', $payload['android']['priority']);
+        self::assertArrayHasKey('android', $payload);
+        self::assertArrayHasKey('priority', $payload['android']);
+        self::assertSame('normal', $payload['android']['priority']);
 
-        $this->assertArrayHasKey('apns', $payload);
-        $this->assertArrayHasKey('headers', $payload['apns']);
-        $this->assertArrayHasKey('apns-priority', $payload['apns']['headers']);
-        $this->assertSame('5', $payload['apns']['headers']['apns-priority']);
+        self::assertArrayHasKey('apns', $payload);
+        self::assertArrayHasKey('headers', $payload['apns']);
+        self::assertArrayHasKey('apns-priority', $payload['apns']['headers']);
+        self::assertSame('5', $payload['apns']['headers']['apns-priority']);
 
-        $this->assertArrayHasKey('webpush', $payload);
-        $this->assertArrayHasKey('headers', $payload['webpush']);
-        $this->assertArrayHasKey('Urgency', $payload['webpush']['headers']);
-        $this->assertSame('very-low', $payload['webpush']['headers']['Urgency']);
+        self::assertArrayHasKey('webpush', $payload);
+        self::assertArrayHasKey('headers', $payload['webpush']);
+        self::assertArrayHasKey('Urgency', $payload['webpush']['headers']);
+        self::assertSame('very-low', $payload['webpush']['headers']['Urgency']);
     }
 
     public function testWithHighesPossiblePriority(): void
@@ -123,19 +123,19 @@ final class CloudMessageTest extends TestCase
 
         $payload = Json::decode(Json::encode($message), true);
 
-        $this->assertArrayHasKey('android', $payload);
-        $this->assertArrayHasKey('priority', $payload['android']);
-        $this->assertSame('high', $payload['android']['priority']);
+        self::assertArrayHasKey('android', $payload);
+        self::assertArrayHasKey('priority', $payload['android']);
+        self::assertSame('high', $payload['android']['priority']);
 
-        $this->assertArrayHasKey('apns', $payload);
-        $this->assertArrayHasKey('headers', $payload['apns']);
-        $this->assertArrayHasKey('apns-priority', $payload['apns']['headers']);
-        $this->assertSame('10', $payload['apns']['headers']['apns-priority']);
+        self::assertArrayHasKey('apns', $payload);
+        self::assertArrayHasKey('headers', $payload['apns']);
+        self::assertArrayHasKey('apns-priority', $payload['apns']['headers']);
+        self::assertSame('10', $payload['apns']['headers']['apns-priority']);
 
-        $this->assertArrayHasKey('webpush', $payload);
-        $this->assertArrayHasKey('headers', $payload['webpush']);
-        $this->assertArrayHasKey('Urgency', $payload['webpush']['headers']);
-        $this->assertSame('high', $payload['webpush']['headers']['Urgency']);
+        self::assertArrayHasKey('webpush', $payload);
+        self::assertArrayHasKey('headers', $payload['webpush']);
+        self::assertArrayHasKey('Urgency', $payload['webpush']['headers']);
+        self::assertSame('high', $payload['webpush']['headers']['Urgency']);
     }
 
     /**

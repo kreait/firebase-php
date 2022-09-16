@@ -27,61 +27,61 @@ final class DynamicLinksTest extends IntegrationTestCase
     {
         $link = $this->service->createUnguessableLink('https://domain.tld');
 
-        $this->assertSame($this->domain, $link->domain());
-        $this->assertSame(17, mb_strlen($link->suffix()));
+        self::assertSame($this->domain, $link->domain());
+        self::assertSame(17, mb_strlen($link->suffix()));
     }
 
     public function testItCreatesAShortLink(): void
     {
         $link = $this->service->createShortLink('https://domain.tld');
 
-        $this->assertSame($this->domain, $link->domain());
-        $this->assertSame(4, mb_strlen($link->suffix()));
+        self::assertSame($this->domain, $link->domain());
+        self::assertSame(4, mb_strlen($link->suffix()));
     }
 
     public function testItCreatesAnUnguessableLinkByDefault(): void
     {
         $link = $this->service->createUnguessableLink('https://domain.tld');
 
-        $this->assertSame($this->domain, $link->domain());
-        $this->assertSame(17, mb_strlen($link->suffix()));
+        self::assertSame($this->domain, $link->domain());
+        self::assertSame(17, mb_strlen($link->suffix()));
     }
 
     public function testItShortensALongDynamicLinkToAnUnguessableLinkByDefault(): void
     {
-        $link = $this->service->shortenLongDynamicLink($this->domain.'/?link=https://domain.tld');
+        $link = $this->service->shortenLongDynamicLink($this->domain . '/?link=https://domain.tld');
 
-        $this->assertSame($this->domain, $link->domain());
-        $this->assertSame(17, mb_strlen($link->suffix()));
+        self::assertSame($this->domain, $link->domain());
+        self::assertSame(17, mb_strlen($link->suffix()));
     }
 
     public function testItShortensALongDynamicLinkToAShortLink(): void
     {
         $link = $this->service->shortenLongDynamicLink(
-            $this->domain.'/?link=https://domain.tld',
+            $this->domain . '/?link=https://domain.tld',
             ShortenLongDynamicLink::WITH_SHORT_SUFFIX,
         );
 
-        $this->assertSame($this->domain, $link->domain());
-        $this->assertSame(4, mb_strlen($link->suffix()));
+        self::assertSame($this->domain, $link->domain());
+        self::assertSame(4, mb_strlen($link->suffix()));
     }
 
     public function testItShortensALongDynamicLinkToAnUnguessableShortLink(): void
     {
         $link = $this->service->shortenLongDynamicLink(
-            $this->domain.'/?link=https://domain.tld',
+            $this->domain . '/?link=https://domain.tld',
             ShortenLongDynamicLink::WITH_UNGUESSABLE_SUFFIX,
         );
 
-        $this->assertSame($this->domain, $link->domain());
-        $this->assertSame(17, mb_strlen($link->suffix()));
+        self::assertSame($this->domain, $link->domain());
+        self::assertSame(17, mb_strlen($link->suffix()));
     }
 
     public function testItGetsLinkStatistics(): void
     {
         // It always returns at least an empty result. Unfortunately, we don't have "real" dynamic links
         // to test with, but we can at least test that the flow works
-        $this->service->getStatistics($this->domain.'/abcd', 13);
+        $this->service->getStatistics($this->domain . '/abcd', 13);
         $this->addToAssertionCount(1);
     }
 }

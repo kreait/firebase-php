@@ -15,7 +15,7 @@ final class ApnsConfigTest extends UnitTestCase
 {
     public function testItIsEmptyWhenItIsEmpty(): void
     {
-        $this->assertSame('[]', Json::encode(ApnsConfig::new()));
+        self::assertSame('[]', Json::encode(ApnsConfig::new()));
     }
 
     public function testItHasADefaultSound(): void
@@ -28,7 +28,7 @@ final class ApnsConfigTest extends UnitTestCase
             ],
         ];
 
-        $this->assertJsonStringEqualsJsonString(
+        self::assertJsonStringEqualsJsonString(
             Json::encode($expected),
             Json::encode(ApnsConfig::new()->withDefaultSound()),
         );
@@ -44,7 +44,7 @@ final class ApnsConfigTest extends UnitTestCase
             ],
         ];
 
-        $this->assertJsonStringEqualsJsonString(
+        self::assertJsonStringEqualsJsonString(
             Json::encode($expected),
             Json::encode(ApnsConfig::new()->withBadge(123)),
         );
@@ -59,16 +59,16 @@ final class ApnsConfigTest extends UnitTestCase
     {
         $config = ApnsConfig::fromArray($data);
 
-        $this->assertEquals($data, $config->jsonSerialize());
+        self::assertEquals($data, $config->jsonSerialize());
     }
 
     public function testItCanHaveAPriority(): void
     {
         $config = ApnsConfig::new()->withImmediatePriority();
-        $this->assertSame('10', $config->jsonSerialize()['headers']['apns-priority']);
+        self::assertSame('10', $config->jsonSerialize()['headers']['apns-priority']);
 
         $config = ApnsConfig::new()->withPowerConservingPriority();
-        $this->assertSame('5', $config->jsonSerialize()['headers']['apns-priority']);
+        self::assertSame('5', $config->jsonSerialize()['headers']['apns-priority']);
     }
 
     public function testItHasASubtitle(): void
@@ -81,7 +81,7 @@ final class ApnsConfigTest extends UnitTestCase
             ],
         ];
 
-        $this->assertJsonStringEqualsJsonString(
+        self::assertJsonStringEqualsJsonString(
             Json::encode($expected),
             Json::encode(ApnsConfig::new()->withSubtitle('i am a subtitle')),
         );

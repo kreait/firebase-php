@@ -12,7 +12,7 @@ use const DATE_ATOM;
 
 use function get_object_vars;
 
-class UserMetaData implements JsonSerializable
+final class UserMetaData implements JsonSerializable
 {
     public ?DateTimeImmutable $createdAt = null;
     public ?DateTimeImmutable $lastLoginAt = null;

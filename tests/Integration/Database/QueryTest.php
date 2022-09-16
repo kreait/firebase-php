@@ -13,6 +13,7 @@ use function current;
 
 /**
  * @internal
+ *
  * @group database-emulator
  * @group emulator
  */
@@ -43,6 +44,6 @@ final class QueryTest extends DatabaseTestCase
 
         $value = $ref->orderByChild('key')->limitToLast(1)->getValue();
 
-        $this->assertSame(['key' => 3], current($value));
+        self::assertSame(['key' => 3], current($value));
     }
 }

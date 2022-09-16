@@ -14,7 +14,7 @@ use const DATE_ATOM;
 use function array_map;
 use function get_object_vars;
 
-class UserRecord implements JsonSerializable
+final class UserRecord implements JsonSerializable
 {
     public string $uid = '';
     public bool $emailVerified = false;
@@ -25,12 +25,16 @@ class UserRecord implements JsonSerializable
     public ?string $photoUrl = null;
     public ?string $phoneNumber = null;
 
-    /** @var UserInfo[] */
+    /**
+     * @var UserInfo[]
+     */
     public array $providerData = [];
     public ?string $passwordHash = null;
     public ?string $passwordSalt = null;
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<string, mixed>
+     */
     public array $customClaims = [];
     public ?DateTimeImmutable $tokensValidAfterTime = null;
     public ?string $tenantId = null;

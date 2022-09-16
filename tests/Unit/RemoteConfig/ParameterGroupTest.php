@@ -20,10 +20,10 @@ final class ParameterGroupTest extends TestCase
             ->withParameter($first = Parameter::named('first'))
             ->withParameter($second = Parameter::named('second'));
 
-        $this->assertSame($name, $group->name());
-        $this->assertSame($description, $group->description());
+        self::assertSame($name, $group->name());
+        self::assertSame($description, $group->description());
 
-        $this->assertContains($first, $group->parameters());
-        $this->assertContains($second, $group->parameters());
+        self::assertContains($first, $group->parameters());
+        self::assertContains($second, $group->parameters());
     }
 }

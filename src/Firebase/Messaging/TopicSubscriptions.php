@@ -16,7 +16,9 @@ use function count;
  */
 final class TopicSubscriptions implements Countable, IteratorAggregate
 {
-    /** @var TopicSubscription[] */
+    /**
+     * @var TopicSubscription[]
+     */
     private array $subscriptions;
 
     public function __construct(TopicSubscription ...$subscriptions)

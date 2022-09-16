@@ -21,6 +21,6 @@ final class RuleSetTest extends UnitTestCase
 
         $ruleSet = RuleSet::fromArray($data['rules']);
 
-        $this->assertEquals($data, $ruleSet->getRules());
+        self::assertEquals($data, $ruleSet->getRules());
     }
 }

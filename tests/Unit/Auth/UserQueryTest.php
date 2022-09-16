@@ -29,7 +29,7 @@ final class UserQueryTest extends TestCase
             ->withOffset(1)
             ->withLimit(499);
 
-        $this->assertJsonStringEqualsJsonString(Json::encode($expected), Json::encode($query));
+        self::assertJsonStringEqualsJsonString(Json::encode($expected), Json::encode($query));
     }
 
     public function testItCanSortInAscendingOrder(): void
@@ -41,7 +41,7 @@ final class UserQueryTest extends TestCase
 
         $query = UserQuery::all()->inAscendingOrder();
 
-        $this->assertJsonStringEqualsJsonString(Json::encode($expected), Json::encode($query));
+        self::assertJsonStringEqualsJsonString(Json::encode($expected), Json::encode($query));
     }
 
     public function testItCanSortInDescendingOrder(): void
@@ -53,7 +53,7 @@ final class UserQueryTest extends TestCase
 
         $query = UserQuery::all()->inDescendingOrder();
 
-        $this->assertJsonStringEqualsJsonString(Json::encode($expected), Json::encode($query));
+        self::assertJsonStringEqualsJsonString(Json::encode($expected), Json::encode($query));
     }
 
     public function testItCanBeCreatedFromAnArray(): void
@@ -68,6 +68,6 @@ final class UserQueryTest extends TestCase
 
         $query = UserQuery::fromArray($data);
 
-        $this->assertJsonStringEqualsJsonString(Json::encode($data), Json::encode($query));
+        self::assertJsonStringEqualsJsonString(Json::encode($data), Json::encode($query));
     }
 }

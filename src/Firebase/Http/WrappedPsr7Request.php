@@ -10,6 +10,7 @@ use Psr\Http\Message\UriInterface;
 
 /**
  * @internal
+ *
  * @codeCoverageIgnore
  */
 trait WrappedPsr7Request

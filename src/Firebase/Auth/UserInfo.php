@@ -8,7 +8,7 @@ use JsonSerializable;
 
 use function get_object_vars;
 
-class UserInfo implements JsonSerializable
+final class UserInfo implements JsonSerializable
 {
     public ?string $uid = null;
     public ?string $displayName = null;

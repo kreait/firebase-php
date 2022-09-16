@@ -28,17 +28,23 @@ use function sprintf;
  *     parameterGroups?: array<non-empty-string, RemoteConfigParameterGroupShape>
  * }
  */
-class Template implements JsonSerializable
+final class Template implements JsonSerializable
 {
     private string $etag = '*';
 
-    /** @var array<non-empty-string, Parameter> */
+    /**
+     * @var array<non-empty-string, Parameter>
+     */
     private array $parameters = [];
 
-    /** @var array<non-empty-string, ParameterGroup> */
+    /**
+     * @var array<non-empty-string, ParameterGroup>
+     */
     private array $parameterGroups = [];
 
-    /** @var list<Condition> */
+    /**
+     * @var list<Condition>
+     */
     private array $conditions = [];
     private ?Version $version = null;
 

@@ -9,6 +9,7 @@ use Kreait\Firebase\Factory;
 
 /**
  * @internal
+ *
  * @group database-emulator
  * @group emulator
  */
@@ -17,7 +18,7 @@ final class DatabaseTest extends DatabaseTestCase
     public function testWithNonExistingDatabase(): void
     {
         if (self::databaseIsEmulated()) {
-            $this->markTestSkipped('The RTDB emulator creates databases if they don\'t exist');
+            self::markTestSkipped('The RTDB emulator creates databases if they don\'t exist');
         }
 
         $credentials = self::$serviceAccount->asArray();

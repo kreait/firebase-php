@@ -19,7 +19,9 @@ use function trim;
 
 final class MessageData implements JsonSerializable
 {
-    /** @var array<non-empty-string, string> */
+    /**
+     * @var array<non-empty-string, string>
+     */
     private array $data = [];
 
     private function __construct()
@@ -44,7 +46,7 @@ final class MessageData implements JsonSerializable
             if (self::isBinary($value)) {
                 throw new InvalidArgumentException(
                     "The message data field '{$key}' seems to contain binary data. As this can lead to broken messages, "
-                    .'please convert it to a string representation first, e.g. with bin2hex() or base64encode().',
+                    . 'please convert it to a string representation first, e.g. with bin2hex() or base64encode().',
                 );
             }
 

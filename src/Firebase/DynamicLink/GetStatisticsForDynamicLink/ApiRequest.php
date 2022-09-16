@@ -20,7 +20,7 @@ final class ApiRequest implements RequestInterface
     {
         $link = rawurlencode($action->dynamicLink());
 
-        $uri = Utils::uriFor('https://firebasedynamiclinks.googleapis.com/v1/'.$link.'/linkStats?durationDays='.$action->durationInDays());
+        $uri = Utils::uriFor('https://firebasedynamiclinks.googleapis.com/v1/' . $link . '/linkStats?durationDays=' . $action->durationInDays());
 
         $headers = [
             'Content-Type' => 'application/json; charset=UTF-8',

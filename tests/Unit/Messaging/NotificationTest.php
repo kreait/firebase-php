@@ -15,10 +15,10 @@ final class NotificationTest extends UnitTestCase
     public function testCreateWithEmptyStrings(): void
     {
         $notification = Notification::create('', '', '');
-        $this->assertSame('', $notification->title());
-        $this->assertSame('', $notification->body());
-        $this->assertSame('', $notification->imageUrl());
-        $this->assertEquals(['title' => '', 'body' => '', 'image' => ''], $notification->jsonSerialize());
+        self::assertSame('', $notification->title());
+        self::assertSame('', $notification->body());
+        self::assertSame('', $notification->imageUrl());
+        self::assertEquals(['title' => '', 'body' => '', 'image' => ''], $notification->jsonSerialize());
     }
 
     public function testCreateWithValidFields(): void
@@ -28,9 +28,9 @@ final class NotificationTest extends UnitTestCase
             ->withBody($body = 'My Body')
             ->withImageUrl($imageUrl = 'https://domain.tld/image.ext');
 
-        $this->assertSame($title, $notification->title());
-        $this->assertSame($body, $notification->body());
-        $this->assertSame($imageUrl, $notification->imageUrl());
+        self::assertSame($title, $notification->title());
+        self::assertSame($body, $notification->body());
+        self::assertSame($imageUrl, $notification->imageUrl());
     }
 
     public function testCreateFromValidArray(): void
@@ -41,10 +41,10 @@ final class NotificationTest extends UnitTestCase
             'image' => $imageUrl = 'https://domain.tld/image.ext',
         ]);
 
-        $this->assertSame($title, $notification->title());
-        $this->assertSame($body, $notification->body());
-        $this->assertSame($imageUrl, $notification->imageUrl());
-        $this->assertEquals($array, $notification->jsonSerialize());
+        self::assertSame($title, $notification->title());
+        self::assertSame($body, $notification->body());
+        self::assertSame($imageUrl, $notification->imageUrl());
+        self::assertEquals($array, $notification->jsonSerialize());
     }
 
     /**
