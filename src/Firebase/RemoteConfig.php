@@ -49,11 +49,15 @@ final class RemoteConfig implements Contract\RemoteConfig
 
         $etag = array_shift($etag);
 
-        if (is_string($etag) && $etag !== '') {
-            return $etag;
+        if (!is_string($etag)) {
+            return '*';
         }
 
-        return '*';
+        if ($etag === '') {
+            return '*';
+        }
+
+        return $etag;
     }
 
     public function getVersion($versionNumber): Version

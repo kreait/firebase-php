@@ -1,0 +1,14 @@
+parameters:
+	level: 8
+	paths:
+		- src/
+		- tests/
+	ignoreErrors:
+		-
+			message: '#Parameter .+ expects .+, .+ given#'
+			path: tests
+		-
+			message: '#Access to an uninitialized property.+RequestWithSubRequests::\$wrappedRequest#'
+			path: src/Firebase/Http/RequestWithSubRequests.php
+
+	checkUninitializedProperties: true

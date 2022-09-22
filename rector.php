@@ -27,5 +27,5 @@ return static function (RectorConfig $rectorConfig): void {
         LevelSetList::UP_TO_PHP_74,
     ]);
 
-    // $rectorConfig->phpstanConfig(__DIR__.'/phpstan.neon.dist');
+    $rectorConfig->phpstanConfig(__DIR__ . '/phpstan-for-rector.neon.dist');
 };

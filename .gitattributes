@@ -13,5 +13,6 @@
 /codecov.yml export-ignore
 /firebase.json export-ignore
 /phpstan.neon.dist export-ignore
+/phpstan-for-rector.neon.dist export-ignore
 /phpunit.xml.dist export-ignore
 /rector.php export-ignore
