@@ -9,6 +9,12 @@
 * Added `Kreait\Firebase\RemoteConfig\Template::withRemovedCondition(string $name)` to remove a condition from
   a Remote Config template by name
 
+### Fixed
+
+* HTTP Proxy settings were not applied to the Auth Token Handler. Because of this, outgoing, proxied requests couldn't
+  be authenticated, effectively breaking the SDK.
+  ([#735](https://github.com/kreait/firebase-php/pull/735)
+
 ## [6.9.0] - 2022-09-16
 
 ### Added
