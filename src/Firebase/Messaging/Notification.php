@@ -21,15 +21,17 @@ final class Notification implements JsonSerializable
     private ?string $title;
     private ?string $body;
     private ?string $imageUrl;
+    private ?string $sound;
 
     /**
      * @throws InvalidArgumentException if both title and body are null
      */
-    private function __construct(?string $title = null, ?string $body = null, ?string $imageUrl = null)
+    private function __construct(?string $title = null, ?string $body = null, ?string $imageUrl = null, ?string $sound = 'default')
     {
         $this->title = $title;
         $this->body = $body;
         $this->imageUrl = $imageUrl;
+        $this->sound = $sound;
     }
 
     /**
@@ -37,7 +39,7 @@ final class Notification implements JsonSerializable
      */
     public static function create(?string $title = null, ?string $body = null, ?string $imageUrl = null): self
     {
-        return new self($title, $body, $imageUrl);
+        return new self($title, $body, $imageUrl, 'default');
     }
 
     /**
@@ -45,6 +47,7 @@ final class Notification implements JsonSerializable
      *     title?: string,
      *     body?: string,
      *     image?: string
+     *     sound?: string
      * } $data
      *
      * @throws InvalidArgumentException if both title and body are null
@@ -55,6 +58,7 @@ final class Notification implements JsonSerializable
             $data['title'] ?? null,
             $data['body'] ?? null,
             $data['image'] ?? null,
+            $data['sound'] ?? 'default'
         );
     }
 
@@ -82,6 +86,14 @@ final class Notification implements JsonSerializable
         return $notification;
     }
 
+    public function withSound(string $sound): self
+    {
+        $notification = clone $this;
+        $notification->sound = $sound;
+
+        return $notification;
+    }
+
     public function title(): ?string
     {
         return $this->title;
@@ -97,6 +109,11 @@ final class Notification implements JsonSerializable
         return $this->imageUrl;
     }
 
+    public function sound(): ?string
+    {
+        return $this->sound;
+    }
+
     /**
      * @return array<string, string>
      */
@@ -106,6 +123,7 @@ final class Notification implements JsonSerializable
             'title' => $this->title,
             'body' => $this->body,
             'image' => $this->imageUrl,
-        ], static fn ($value) => $value !== null);
+            'sound' => $this->sound,
+        ], static fn($value) => $value !== null);
     }
 }
