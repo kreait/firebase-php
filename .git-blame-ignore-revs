@@ -2,6 +2,9 @@
 # - https://www.git-scm.com/docs/git-blame#Documentation/git-blame.txt---ignore-revs-fileltfilegt
 # - https://docs.github.com/en/repositories/working-with-files/using-files/viewing-a-file#ignore-commits-in-the-blame-view
 
+# Revert 145ce89a338e3206c24fbe9c051557644bfbb6dc and re-apply without code breakage
+6b9f0efbe13c3ee1bf7236940c73a25609e5b7a6
+
 # Replace ergebnis/php-cs-fixer-config with beste/php-cs-fixer-config
 145ce89a338e3206c24fbe9c051557644bfbb6dc
 
