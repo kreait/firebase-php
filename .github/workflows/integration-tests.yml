@@ -2,8 +2,6 @@ name: Integration Tests
 
 on:
   push:
-    tags-ignore:
-      - '**'
   pull_request:
   workflow_dispatch:
 
