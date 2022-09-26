@@ -9,6 +9,7 @@ use Kreait\Firebase\Factory;
 
 /**
  * @internal
+ *
  * @group database-emulator
  * @group emulator
  */

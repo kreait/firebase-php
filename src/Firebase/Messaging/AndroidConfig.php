@@ -19,11 +19,13 @@ use function sprintf;
  * @see https://firebase.google.com/docs/cloud-messaging/concept-options#setting-the-priority-of-a-message
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidmessagepriority Android Message Priorities
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidfcmoptions Android FCM Options Syntax
+ *
  * @phpstan-type AndroidFcmOptionsShape array{
  *     analytics_label?: non-empty-string
  * }
  *
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#LightSettings Android FCM Light Settings Syntax
+ *
  * @phpstan-type AndroidFcmLightSettingsShape array{
  *     color: array{
  *         red: float,
@@ -36,6 +38,7 @@ use function sprintf;
  * }
  *
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#AndroidNotification Android Notification Syntax
+ *
  * @phpstan-type AndroidNotificationShape array{
  *     title?: non-empty-string,
  *     body?: non-empty-string,
@@ -64,6 +67,7 @@ use function sprintf;
  * }
  *
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidconfig Android Config Syntax
+ *
  * @phpstan-type AndroidConfigShape array{
  *     collapse_key?: non-empty-string,
  *     priority?: self::MESSAGE_PRIORITY_*,

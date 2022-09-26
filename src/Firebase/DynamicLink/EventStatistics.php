@@ -15,6 +15,7 @@ use function assert;
 
 /**
  * @see https://firebase.google.com/docs/reference/dynamic-links/analytics#response_body
+ *
  * @implements IteratorAggregate<array>
  */
 final class EventStatistics implements Countable, IteratorAggregate

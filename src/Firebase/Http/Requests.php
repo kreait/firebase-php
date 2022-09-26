@@ -13,6 +13,7 @@ use function explode;
 
 /**
  * @internal
+ *
  * @implements IteratorAggregate<RequestInterface>
  */
 final class Requests implements IteratorAggregate

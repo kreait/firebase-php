@@ -12,6 +12,7 @@ use Kreait\Firebase\Util\DT;
 
 /**
  * @internal
+ *
  * @group database-emulator
  * @group emulator
  */

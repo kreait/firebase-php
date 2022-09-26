@@ -9,6 +9,7 @@ use Psr\Http\Message\StreamInterface;
 
 /**
  * @internal
+ *
  * @codeCoverageIgnore
  */
 trait WrappedPsr7Response

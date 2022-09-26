@@ -13,6 +13,7 @@ use Throwable;
 
 /**
  * @internal
+ *
  * @group auth-emulator
  * @group emulator
  */

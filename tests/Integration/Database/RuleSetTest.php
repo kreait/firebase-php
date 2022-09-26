@@ -10,6 +10,7 @@ use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
 
 /**
  * @internal
+ *
  * @group database-emulator
  * @group emulator
  */

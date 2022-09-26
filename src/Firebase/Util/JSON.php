@@ -18,6 +18,7 @@ use function json_encode;
  * @internal
  *
  * @deprecated 6.2
+ *
  * @codeCoverageIgnore
  */
 final class JSON

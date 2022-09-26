@@ -15,6 +15,7 @@ use function is_string;
 
 /**
  * @internal
+ *
  * @group database-emulator
  * @group emulator
  */

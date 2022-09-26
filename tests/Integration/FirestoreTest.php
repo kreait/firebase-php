@@ -12,6 +12,7 @@ use function str_replace;
 
 /**
  * @group Firestore
+ *
  * @requires PHP < 8.1
  *
  * @internal

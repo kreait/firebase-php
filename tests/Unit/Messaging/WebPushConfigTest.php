@@ -10,6 +10,7 @@ use Kreait\Firebase\Tests\UnitTestCase;
 
 /**
  * @internal
+ *
  * @phpstan-import-type WebPushConfigShape from WebPushConfig
  * @phpstan-import-type WebPushHeadersShape from WebPushConfig
  */

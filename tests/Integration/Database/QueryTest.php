@@ -13,6 +13,7 @@ use function current;
 
 /**
  * @internal
+ *
  * @group database-emulator
  * @group emulator
  */
