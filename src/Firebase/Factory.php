@@ -491,7 +491,7 @@ final class Factory
             $cachePrefix = 'kreait_firebase_'.$projectId;
 
             $credentials = new FetchAuthTokenCache($credentials, ['prefix' => $cachePrefix], $this->authTokenCache);
-            $authTokenHandler = HttpHandlerFactory::build(new Client());
+            $authTokenHandler = HttpHandlerFactory::build(new Client($config));
 
             $handler->push(new AuthTokenMiddleware($credentials, $authTokenHandler));
         }
