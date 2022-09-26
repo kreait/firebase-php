@@ -13,7 +13,7 @@ use JsonSerializable;
  *     tagColor?: ?non-empty-string
  * }
  */
-final class Condition implements JsonSerializable
+class Condition implements JsonSerializable
 {
     /**
      * @var non-empty-string

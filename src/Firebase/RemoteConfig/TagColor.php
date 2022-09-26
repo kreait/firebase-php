@@ -11,7 +11,7 @@ use function in_array;
 use function mb_strtoupper;
 use function sprintf;
 
-final class TagColor
+class TagColor
 {
     public const BLUE = 'BLUE';
     public const BROWN = 'BROWN';

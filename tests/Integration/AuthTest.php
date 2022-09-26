@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Tests\Integration;
 
 /**
  * @internal
- *
  * @group auth-emulator
  * @group emulator
  */

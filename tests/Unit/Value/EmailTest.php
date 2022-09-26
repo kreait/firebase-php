@@ -20,9 +20,9 @@ final class EmailTest extends TestCase
     {
         $email = new Email($value);
 
-        self::assertSame($value, (string) $email);
-        self::assertSame($value, $email->jsonSerialize());
-        self::assertTrue($email->equalsTo($value));
+        $this->assertSame($value, (string) $email);
+        $this->assertSame($value, $email->jsonSerialize());
+        $this->assertTrue($email->equalsTo($value));
     }
 
     /**

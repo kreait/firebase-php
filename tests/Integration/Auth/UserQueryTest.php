@@ -70,9 +70,9 @@ final class UserQueryTest extends IntegrationTestCase
         $secondCreatedAt = $lastUserRecord->metadata->createdAt;
 
         try {
-            self::assertNotNull($firstCreatedAt);
-            self::assertNotNull($secondCreatedAt);
-            self::assertTrue($firstCreatedAt->getTimestamp() < $secondCreatedAt->getTimestamp());
+            $this->assertNotNull($firstCreatedAt);
+            $this->assertNotNull($secondCreatedAt);
+            $this->assertTrue($firstCreatedAt->getTimestamp() < $secondCreatedAt->getTimestamp());
         } finally {
             $this->auth->deleteUser($firstUser->uid);
             $this->auth->deleteUser($secondUser->uid);
@@ -100,9 +100,9 @@ final class UserQueryTest extends IntegrationTestCase
         $secondCreatedAt = $lastUserRecord->metadata->createdAt;
 
         try {
-            self::assertNotNull($firstCreatedAt);
-            self::assertNotNull($secondCreatedAt);
-            self::assertTrue($firstCreatedAt->getTimestamp() > $secondCreatedAt->getTimestamp());
+            $this->assertNotNull($firstCreatedAt);
+            $this->assertNotNull($secondCreatedAt);
+            $this->assertTrue($firstCreatedAt->getTimestamp() > $secondCreatedAt->getTimestamp());
         } finally {
             $this->auth->deleteUser($firstUser->uid);
             $this->auth->deleteUser($secondUser->uid);
@@ -122,7 +122,7 @@ final class UserQueryTest extends IntegrationTestCase
         $result = $this->auth->queryUsers($query);
 
         try {
-            self::assertCount(1, $result);
+            $this->assertCount(1, $result);
         } finally {
             $this->auth->deleteUser($firstUser->uid);
             $this->auth->deleteUser($secondUser->uid);
@@ -144,9 +144,9 @@ final class UserQueryTest extends IntegrationTestCase
         $found = current($result);
 
         try {
-            self::assertCount(1, $result);
-            self::assertInstanceOf(UserRecord::class, $found);
-            self::assertSame($user->uid, $found->uid);
+            $this->assertCount(1, $result);
+            $this->assertInstanceOf(UserRecord::class, $found);
+            $this->assertSame($user->uid, $found->uid);
         } finally {
             $this->auth->deleteUser($user->uid);
         }
@@ -167,9 +167,9 @@ final class UserQueryTest extends IntegrationTestCase
         $found = current($result);
 
         try {
-            self::assertCount(1, $result);
-            self::assertInstanceOf(UserRecord::class, $found);
-            self::assertSame($user->email, $found->email);
+            $this->assertCount(1, $result);
+            $this->assertInstanceOf(UserRecord::class, $found);
+            $this->assertSame($user->email, $found->email);
         } finally {
             $this->auth->deleteUser($user->uid);
         }
@@ -178,7 +178,7 @@ final class UserQueryTest extends IntegrationTestCase
     public function testFilterByPhoneNumber(): void
     {
         $user = $this->auth->createUser([
-            'phoneNumber' => '+49' . random_int(90_000_000_000, 99_999_999_999),
+            'phoneNumber' => '+49'.random_int(90_000_000_000, 99_999_999_999),
         ]);
 
         $query = [
@@ -192,9 +192,9 @@ final class UserQueryTest extends IntegrationTestCase
         $found = current($result);
 
         try {
-            self::assertCount(1, $result);
-            self::assertInstanceOf(UserRecord::class, $found);
-            self::assertSame($user->phoneNumber, $found->phoneNumber);
+            $this->assertCount(1, $result);
+            $this->assertInstanceOf(UserRecord::class, $found);
+            $this->assertSame($user->phoneNumber, $found->phoneNumber);
         } finally {
             $this->auth->deleteUser($user->uid);
         }
@@ -224,6 +224,6 @@ final class UserQueryTest extends IntegrationTestCase
             }
         }
 
-        self::fail('Expected query result to contain a user with UID ' . $userRecord->uid);
+        $this->fail('Expected query result to contain a user with UID '.$userRecord->uid);
     }
 }

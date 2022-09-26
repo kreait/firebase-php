@@ -18,7 +18,7 @@ use function rtrim;
 /**
  * @internal
  */
-final class ApiClient
+class ApiClient
 {
     private ClientInterface $client;
     private RemoteConfigApiExceptionConverter $errorHandler;
@@ -75,7 +75,7 @@ final class ApiClient
      */
     public function listVersions(FindVersions $query, ?string $nextPageToken = null): ResponseInterface
     {
-        $uri = rtrim((string) $this->client->getConfig('base_uri'), '/') . ':listVersions';
+        $uri = rtrim((string) $this->client->getConfig('base_uri'), '/').':listVersions';
 
         $since = $query->since();
         $until = $query->until();
@@ -103,7 +103,7 @@ final class ApiClient
      */
     public function rollbackToVersion(VersionNumber $versionNumber): ResponseInterface
     {
-        $uri = rtrim((string) $this->client->getConfig('base_uri'), '/') . ':rollback';
+        $uri = rtrim((string) $this->client->getConfig('base_uri'), '/').':rollback';
 
         return $this->requestApi('POST', $uri, [
             'json' => [

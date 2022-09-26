@@ -52,7 +52,7 @@ final class UrlBuilderTest extends UnitTestCase
     {
         $url = UrlBuilder::create($baseUrl)->getUrl($path, $queryParams);
 
-        self::assertSame($expected, $url);
+        $this->assertSame($expected, $url);
     }
 
     /**
@@ -68,7 +68,7 @@ final class UrlBuilderTest extends UnitTestCase
         Util::putenv('FIREBASE_DATABASE_EMULATOR_HOST', $emulatorHost);
         $url = UrlBuilder::create($baseUrl)->getUrl($path, $queryParams);
 
-        self::assertSame($expected, $url);
+        $this->assertSame($expected, $url);
     }
 
     /**
@@ -83,37 +83,37 @@ final class UrlBuilderTest extends UnitTestCase
                 $baseUrl,
                 '',
                 [],
-                $baseUrl . '/',
+                $baseUrl.'/',
             ],
             'path without trailing slash, empty query' => [
                 $baseUrl,
                 '/path/to/child',
                 [],
-                $baseUrl . '/path/to/child',
+                $baseUrl.'/path/to/child',
             ],
             'path with trailing slash, empty query' => [
                 $baseUrl,
                 '/path/to/child/',
                 [],
-                $baseUrl . '/path/to/child',
+                $baseUrl.'/path/to/child',
             ],
             'path without trailing slash, non-empty query' => [
                 $baseUrl,
                 '/path/to/child',
                 ['one' => 'two', 'three' => 'four'],
-                $baseUrl . '/path/to/child?one=two&three=four',
+                $baseUrl.'/path/to/child?one=two&three=four',
             ],
             'path with trailing slash, non-empty query' => [
                 $baseUrl,
                 '/path/to/child/',
                 ['one' => 'two', 'three' => 'four'],
-                $baseUrl . '/path/to/child?one=two&three=four',
+                $baseUrl.'/path/to/child?one=two&three=four',
             ],
             'empty path, non-empty query' => [
                 $baseUrl,
                 '',
                 ['one' => 'two', 'three' => 'four'],
-                $baseUrl . '/?one=two&three=four',
+                $baseUrl.'/?one=two&three=four',
             ],
         ];
     }
@@ -124,7 +124,7 @@ final class UrlBuilderTest extends UnitTestCase
     public function emulatedUrls(): array
     {
         $namespace = 'namespace';
-        $baseUrl = 'https://' . $namespace . '.db.tld';
+        $baseUrl = 'https://'.$namespace.'.db.tld';
         $emulatorHost = 'localhost:9000';
 
         return [
@@ -133,42 +133,42 @@ final class UrlBuilderTest extends UnitTestCase
                 $baseUrl,
                 '',
                 [],
-                'http://' . $emulatorHost . '/?ns=namespace',
+                'http://'.$emulatorHost.'/?ns=namespace',
             ],
             'path without trailing slash, empty query' => [
                 $emulatorHost,
                 $baseUrl,
                 '/path/to/child',
                 [],
-                'http://' . $emulatorHost . '/path/to/child?ns=namespace',
+                'http://'.$emulatorHost.'/path/to/child?ns=namespace',
             ],
             'path with trailing slash, empty query' => [
                 $emulatorHost,
                 $baseUrl,
                 '/path/to/child/',
                 [],
-                'http://' . $emulatorHost . '/path/to/child?ns=namespace',
+                'http://'.$emulatorHost.'/path/to/child?ns=namespace',
             ],
             'path without trailing slash, non-empty query' => [
                 $emulatorHost,
                 $baseUrl,
                 '/path/to/child',
                 ['one' => 'two', 'three' => 'four'],
-                'http://' . $emulatorHost . '/path/to/child?ns=namespace&one=two&three=four',
+                'http://'.$emulatorHost.'/path/to/child?ns=namespace&one=two&three=four',
             ],
             'path with trailing slash, non-empty query' => [
                 $emulatorHost,
                 $baseUrl,
                 '/path/to/child/',
                 ['one' => 'two', 'three' => 'four'],
-                'http://' . $emulatorHost . '/path/to/child?ns=namespace&one=two&three=four',
+                'http://'.$emulatorHost.'/path/to/child?ns=namespace&one=two&three=four',
             ],
             'empty path, non-empty query' => [
                 $emulatorHost,
                 $baseUrl,
                 '',
                 ['one' => 'two', 'three' => 'four'],
-                'http://' . $emulatorHost . '/?ns=namespace&one=two&three=four',
+                'http://'.$emulatorHost.'/?ns=namespace&one=two&three=four',
             ],
         ];
     }

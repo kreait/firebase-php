@@ -31,19 +31,19 @@ final class CreateUserTest extends IntegrationTestCase
             ->withDisplayName($displayName = 'Some display name')
             ->withPhotoUrl($photoUrl = 'https://example.org/photo.jpg')
             ->withClearTextPassword('secret')
-            ->withPhoneNumber($phoneNumber = '+1234567' . random_int(1000, 9999))
-            ->withVerifiedEmail($email = $uid . '@example.org');
+            ->withPhoneNumber($phoneNumber = '+1234567'.random_int(1000, 9999))
+            ->withVerifiedEmail($email = $uid.'@example.org');
 
         $user = $this->auth->createUser($request);
 
-        self::assertSame($uid, $user->uid);
-        self::assertSame($displayName, $user->displayName);
-        self::assertSame($photoUrl, $user->photoUrl); // Firebase stores the photo url in the email provider info
-        self::assertNotNull($user->passwordHash);
-        self::assertSame($phoneNumber, $user->phoneNumber);
-        self::assertSame($email, $user->email);
-        self::assertTrue($user->emailVerified);
-        self::assertFalse($user->disabled);
+        $this->assertSame($uid, $user->uid);
+        $this->assertSame($displayName, $user->displayName);
+        $this->assertSame($photoUrl, $user->photoUrl); // Firebase stores the photo url in the email provider info
+        $this->assertNotNull($user->passwordHash);
+        $this->assertSame($phoneNumber, $user->phoneNumber);
+        $this->assertSame($email, $user->email);
+        $this->assertTrue($user->emailVerified);
+        $this->assertFalse($user->disabled);
 
         $this->auth->deleteUser($user->uid);
     }
@@ -56,9 +56,9 @@ final class CreateUserTest extends IntegrationTestCase
 
         $user = $this->auth->createUser($request);
 
-        self::assertSame($uid, $user->uid);
-        self::assertNull($user->email);
-        self::assertFalse($user->emailVerified);
+        $this->assertSame($uid, $user->uid);
+        $this->assertNull($user->email);
+        $this->assertFalse($user->emailVerified);
 
         $this->auth->deleteUser($user->uid);
     }

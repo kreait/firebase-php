@@ -27,10 +27,10 @@ final class UrlTest extends TestCase
 
         $check = (string) $value;
 
-        self::assertSame($check, (string) $url);
-        self::assertSame($check, (string) $url->toUri());
-        self::assertSame($check, $url->jsonSerialize());
-        self::assertTrue($url->equalsTo($check));
+        $this->assertSame($check, (string) $url);
+        $this->assertSame($check, (string) $url->toUri());
+        $this->assertSame($check, $url->jsonSerialize());
+        $this->assertTrue($url->equalsTo($check));
     }
 
     /**

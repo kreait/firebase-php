@@ -22,17 +22,15 @@ final class ServiceAccountTest extends UnitTestCase
     private string $pathToValidJson;
     private string $validJson;
 
-    /**
-     * @var array<string, string>
-     */
+    /** @var array<string, string> */
     private array $validData;
 
     protected function setUp(): void
     {
-        $this->pathToUnreadableJson = self::$fixturesDir . '/ServiceAccount/unreadable.json';
+        $this->pathToUnreadableJson = self::$fixturesDir.'/ServiceAccount/unreadable.json';
         chmod($this->pathToUnreadableJson, 0000);
 
-        $this->pathToValidJson = self::$fixturesDir . '/ServiceAccount/valid.json';
+        $this->pathToValidJson = self::$fixturesDir.'/ServiceAccount/valid.json';
         $this->validJson = (string) file_get_contents($this->pathToValidJson);
         $this->validData = Json::decode($this->validJson, true);
     }
@@ -45,13 +43,13 @@ final class ServiceAccountTest extends UnitTestCase
     public function testCreateFromJsonText(): void
     {
         $serviceAccount = ServiceAccount::fromValue($this->validJson);
-        self::assertSame($this->validData, $serviceAccount->asArray());
+        $this->assertSame($this->validData, $serviceAccount->asArray());
     }
 
     public function testCreateFromJsonFile(): void
     {
         $serviceAccount = ServiceAccount::fromValue($this->pathToValidJson);
-        self::assertSame($this->validData, $serviceAccount->asArray());
+        $this->assertSame($this->validData, $serviceAccount->asArray());
     }
 
     public function testCreateFromMissingFile(): void
@@ -75,7 +73,7 @@ final class ServiceAccountTest extends UnitTestCase
     public function testCreateFromArray(): void
     {
         $serviceAccount = ServiceAccount::fromValue($this->validData);
-        self::assertSame($this->validData, $serviceAccount->asArray());
+        $this->assertSame($this->validData, $serviceAccount->asArray());
     }
 
     public function testCreateFromArrayWithMissingTypeField(): void
@@ -91,7 +89,7 @@ final class ServiceAccountTest extends UnitTestCase
     {
         $serviceAccount = ServiceAccount::fromValue($this->validJson);
 
-        self::assertSame($serviceAccount, ServiceAccount::fromValue($serviceAccount));
+        $this->assertSame($serviceAccount, ServiceAccount::fromValue($serviceAccount));
     }
 
     /**

@@ -16,9 +16,7 @@ final class StartAt implements Filter
 {
     use ModifierTrait;
 
-    /**
-     * @var int|float|string|bool
-     */
+    /** @var int|float|string|bool */
     private $value;
 
     /**

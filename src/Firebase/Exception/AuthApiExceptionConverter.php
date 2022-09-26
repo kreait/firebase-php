@@ -30,7 +30,7 @@ use function mb_stripos;
 /**
  * @internal
  */
-final class AuthApiExceptionConverter
+class AuthApiExceptionConverter
 {
     private ErrorResponseParser $responseParser;
 
@@ -46,7 +46,7 @@ final class AuthApiExceptionConverter
         }
 
         if ($exception instanceof NetworkExceptionInterface) {
-            return new ApiConnectionFailed('Unable to connect to the API: ' . $exception->getMessage(), $exception->getCode(), $exception);
+            return new ApiConnectionFailed('Unable to connect to the API: '.$exception->getMessage(), $exception->getCode(), $exception);
         }
 
         return new AuthError($exception->getMessage(), $exception->getCode(), $exception);

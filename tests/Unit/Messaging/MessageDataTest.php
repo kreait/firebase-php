@@ -46,7 +46,7 @@ final class MessageDataTest extends TestCase
 
         $data = MessageData::fromArray($input);
 
-        self::assertSame($data->toArray(), $output);
+        $this->assertSame($data->toArray(), $output);
     }
 
     /**

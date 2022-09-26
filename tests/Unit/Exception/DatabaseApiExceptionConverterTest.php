@@ -41,8 +41,8 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
 
         $convertedError = $this->converter->convertException($requestExcpeption);
 
-        self::assertInstanceOf(DatabaseError::class, $convertedError);
-        self::assertSame($responseBody, $convertedError->getMessage());
+        $this->assertInstanceOf(DatabaseError::class, $convertedError);
+        $this->assertSame($responseBody, $convertedError->getMessage());
     }
 
     public function testItConvertsAConnectException(): void
@@ -52,7 +52,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
             $this->request,
         );
 
-        self::assertInstanceOf(ApiConnectionFailed::class, $this->converter->convertException($connectException));
+        $this->assertInstanceOf(ApiConnectionFailed::class, $this->converter->convertException($connectException));
     }
 
     /**
@@ -69,8 +69,8 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
 
         $result = $this->converter->convertException($e);
 
-        self::assertStringContainsString('Foo', $result->getMessage());
-        self::assertSame($e, $result->getPrevious());
+        $this->assertStringContainsString('Foo', $result->getMessage());
+        $this->assertSame($e, $result->getPrevious());
     }
 
     public function testItConvertsA401ResponseToAPermissionDeniedError(): void
@@ -83,7 +83,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
 
         $result = $this->converter->convertException($e);
 
-        self::assertInstanceOf(PermissionDenied::class, $result);
+        $this->assertInstanceOf(PermissionDenied::class, $result);
     }
 
     public function testItConvertsA403ResponseToAPermissionDeniedError(): void
@@ -96,7 +96,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
 
         $result = $this->converter->convertException($e);
 
-        self::assertInstanceOf(PermissionDenied::class, $result);
+        $this->assertInstanceOf(PermissionDenied::class, $result);
     }
 
     public function testItConvertsA404ResponseToADatabaseNotFoundError(): void
@@ -109,7 +109,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
 
         $result = $this->converter->convertException($e);
 
-        self::assertInstanceOf(DatabaseNotFound::class, $result);
+        $this->assertInstanceOf(DatabaseNotFound::class, $result);
     }
 
     public function testItUsesTheResponseBodyAsMessageWhenNoJsonIsPresent(): void
@@ -121,6 +121,6 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         );
         $result = $this->converter->convertException($e);
 
-        self::assertSame($body, $result->getMessage());
+        $this->assertSame($body, $result->getMessage());
     }
 }

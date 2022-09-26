@@ -28,7 +28,7 @@ final class SendMessages implements HasSubRequests, RequestInterface
     public function __construct(string $projectId, Messages $messages, bool $validateOnly = false)
     {
         if ($messages->count() > Messaging::BATCH_MESSAGE_LIMIT) {
-            throw new InvalidArgument('Only ' . Messaging::BATCH_MESSAGE_LIMIT . ' can be sent at a time.');
+            throw new InvalidArgument('Only '.Messaging::BATCH_MESSAGE_LIMIT.' can be sent at a time.');
         }
 
         $subRequests = [];

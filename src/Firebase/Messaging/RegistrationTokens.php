@@ -19,9 +19,7 @@ use function is_string;
  */
 final class RegistrationTokens implements Countable, IteratorAggregate
 {
-    /**
-     * @var RegistrationToken[]
-     */
+    /** @var RegistrationToken[] */
     private array $tokens;
 
     public function __construct(RegistrationToken ...$tokens)

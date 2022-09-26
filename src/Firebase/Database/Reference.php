@@ -26,7 +26,7 @@ use function trim;
  *
  * @see https://firebase.google.com/docs/reference/js/firebase.database.Reference
  */
-final class Reference
+class Reference
 {
     private UriInterface $uri;
     private ApiClient $apiClient;
@@ -102,7 +102,7 @@ final class Reference
         }
 
         return new self(
-            $this->uri->withPath('/' . ltrim($parentPath, '/')),
+            $this->uri->withPath('/'.ltrim($parentPath, '/')),
             $this->apiClient,
             $this->urlBuilder,
             $this->validator,

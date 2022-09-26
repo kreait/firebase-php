@@ -73,7 +73,7 @@ final class CustomTokenViaGoogleIam
 
         $token = $builder->getToken($this->config->signer(), $this->config->signingKey());
 
-        $url = 'https://iam.googleapis.com/v1/projects/-/serviceAccounts/' . $this->clientEmail . ':signBlob';
+        $url = 'https://iam.googleapis.com/v1/projects/-/serviceAccounts/'.$this->clientEmail.':signBlob';
 
         try {
             $response = $this->client->request('POST', $url, [
@@ -89,9 +89,9 @@ final class CustomTokenViaGoogleIam
 
         if ($base64EncodedSignature = $result['signature'] ?? null) {
             try {
-                return $this->config->parser()->parse($token->payload() . '.' . $base64EncodedSignature);
+                return $this->config->parser()->parse($token->payload().'.'.$base64EncodedSignature);
             } catch (InvalidArgumentException $e) {
-                throw new AuthError('The custom token API returned an unexpected value: ' . $e->getMessage(), $e->getCode(), $e);
+                throw new AuthError('The custom token API returned an unexpected value: '.$e->getMessage(), $e->getCode(), $e);
             }
         }
 

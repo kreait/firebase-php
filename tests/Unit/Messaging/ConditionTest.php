@@ -18,7 +18,7 @@ final class ConditionTest extends TestCase
      */
     public function testFromValue(string $expected, string $value): void
     {
-        self::assertSame($expected, Condition::fromValue($value)->value());
+        $this->assertSame($expected, Condition::fromValue($value)->value());
     }
 
     /**
@@ -33,7 +33,7 @@ final class ConditionTest extends TestCase
     public function testNoMoreThanFiveTopics(): void
     {
         $valid = "'a' in topics && 'b' in topics || 'c' in topics || 'd' in topics || 'e' in topics";
-        $invalid = $valid . " || 'f' in topics";
+        $invalid = $valid." || 'f' in topics";
 
         Condition::fromValue($valid);
         $this->addToAssertionCount(1);

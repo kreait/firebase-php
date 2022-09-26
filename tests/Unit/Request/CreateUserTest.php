@@ -16,7 +16,7 @@ final class CreateUserTest extends TestCase
     public function testCreateNew(): void
     {
         $request = CreateUser::new();
-        self::assertEmpty($request->jsonSerialize());
+        $this->assertEmpty($request->jsonSerialize());
     }
 
     /**
@@ -29,7 +29,7 @@ final class CreateUserTest extends TestCase
     {
         $request = CreateUser::withProperties($properties);
 
-        self::assertEquals($expected, $request->jsonSerialize());
+        $this->assertEquals($expected, $request->jsonSerialize());
     }
 
     /**

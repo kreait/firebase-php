@@ -21,10 +21,10 @@ final class HttpClientOptionsTest extends TestCase
             ->withTimeout(3.3)
             ->withProxy('https://proxy.tld');
 
-        self::assertSame(1.1, $options->connectTimeout());
-        self::assertSame(2.2, $options->readTimeout());
-        self::assertSame(3.3, $options->timeout());
-        self::assertSame('https://proxy.tld', $options->proxy());
+        $this->assertSame(1.1, $options->connectTimeout());
+        $this->assertSame(2.2, $options->readTimeout());
+        $this->assertSame(3.3, $options->timeout());
+        $this->assertSame('https://proxy.tld', $options->proxy());
     }
 
     public function testConnectTimeoutMustBePositive(): void

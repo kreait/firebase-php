@@ -81,7 +81,7 @@ final class CloudMessage implements Message
         if (count(array_intersect(array_keys($data), MessageTarget::TYPES)) > 1) {
             throw new InvalidArgument(
                 'A message can only have one of the following targets: '
-                . implode(', ', MessageTarget::TYPES),
+                .implode(', ', MessageTarget::TYPES),
             );
         }
 

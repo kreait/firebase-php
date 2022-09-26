@@ -19,9 +19,7 @@ use Throwable;
  */
 final class TransactionTest extends TestCase
 {
-    /**
-     * @var ApiClient|MockObject
-     */
+    /** @var ApiClient|MockObject */
     private $apiClient;
     private Transaction $transaction;
 
@@ -39,9 +37,9 @@ final class TransactionTest extends TestCase
         try {
             $this->transaction->set($reference, 'does not matter');
         } catch (ReferenceHasNotBeenSnapshotted $e) {
-            self::assertSame($reference, $e->getReference());
+            $this->assertSame($reference, $e->getReference());
         } catch (Throwable $e) {
-            self::fail('A ' . ReferenceHasNotBeenSnapshotted::class . ' should have been thrown');
+            $this->fail('A '.ReferenceHasNotBeenSnapshotted::class.' should have been thrown');
         }
     }
 

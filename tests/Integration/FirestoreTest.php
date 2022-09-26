@@ -12,7 +12,6 @@ use function str_replace;
 
 /**
  * @group Firestore
- *
  * @requires PHP < 8.1
  *
  * @internal
@@ -47,6 +46,6 @@ final class FirestoreTest extends IntegrationTestCase
             return $newCounter;
         });
 
-        self::assertSame(2, $newCounter);
+        $this->assertSame(2, $newCounter);
     }
 }

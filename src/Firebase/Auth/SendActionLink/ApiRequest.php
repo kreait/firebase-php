@@ -17,7 +17,6 @@ use function array_filter;
 
 /**
  * @deprecated 6.0.1
- *
  * @codeCoverageIgnore
  */
 final class ApiRequest implements RequestInterface

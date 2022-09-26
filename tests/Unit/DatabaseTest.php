@@ -18,9 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 final class DatabaseTest extends UnitTestCase
 {
-    /**
-     * @var ApiClient|MockObject
-     */
+    /** @var ApiClient|MockObject */
     private $apiClient;
     private string $url;
     private Uri $uri;
@@ -37,12 +35,12 @@ final class DatabaseTest extends UnitTestCase
 
     public function testGetReference(): void
     {
-        self::assertSame('any', $this->database->getReference('any')->getPath());
+        $this->assertSame('any', $this->database->getReference('any')->getPath());
     }
 
     public function testGetRootReference(): void
     {
-        self::assertSame('/', $this->database->getReference()->getUri()->getPath());
+        $this->assertSame('/', $this->database->getReference()->getUri()->getPath());
     }
 
     public function testGetReferenceWithInvalidPath(): void
@@ -53,9 +51,9 @@ final class DatabaseTest extends UnitTestCase
 
     public function testGetReferenceFromUrl(): void
     {
-        $url = $this->url . '/foo/bar';
+        $url = $this->url.'/foo/bar';
 
-        self::assertSame($url, (string) $this->database->getReferenceFromUrl($url)->getUri());
+        $this->assertSame($url, (string) $this->database->getReferenceFromUrl($url)->getUri());
     }
 
     public function testGetReferenceFromNonMatchingUrl(): void
@@ -74,6 +72,6 @@ final class DatabaseTest extends UnitTestCase
 
         $ruleSet = $this->database->getRuleSet();
 
-        self::assertEquals($expected, $ruleSet->getRules());
+        $this->assertEquals($expected, $ruleSet->getRules());
     }
 }

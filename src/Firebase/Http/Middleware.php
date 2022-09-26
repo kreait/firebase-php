@@ -32,10 +32,10 @@ final class Middleware
     {
         return static fn (callable $handler) => static function (RequestInterface $request, ?array $options = null) use ($handler) {
             $uri = $request->getUri();
-            $path = '/' . ltrim($uri->getPath(), '/');
+            $path = '/'.ltrim($uri->getPath(), '/');
 
             if (!str_ends_with($path, '.json')) {
-                $uri = $uri->withPath($path . '.json');
+                $uri = $uri->withPath($path.'.json');
                 $request = $request->withUri($uri);
             }
 

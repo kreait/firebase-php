@@ -21,7 +21,7 @@ final class ValidatedActionSettingsTest extends TestCase
      */
     public function testItWorksValidSettings(array $input, array $expected): void
     {
-        self::assertEquals($expected, ValidatedActionCodeSettings::fromArray($input)->toArray());
+        $this->assertEquals($expected, ValidatedActionCodeSettings::fromArray($input)->toArray());
     }
 
     public function testItRejectsInvalidSettings(): void
@@ -32,7 +32,7 @@ final class ValidatedActionSettingsTest extends TestCase
 
     public function testItCanBeEmpty(): void
     {
-        self::assertEmpty(ValidatedActionCodeSettings::empty()->toArray());
+        $this->assertEmpty(ValidatedActionCodeSettings::empty()->toArray());
     }
 
     /**

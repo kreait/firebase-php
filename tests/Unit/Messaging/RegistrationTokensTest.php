@@ -24,8 +24,8 @@ final class RegistrationTokensTest extends TestCase
     {
         $tokens = RegistrationTokens::fromValue($value);
 
-        self::assertCount($expectedCount, $tokens);
-        self::assertSame(!$expectedCount, $tokens->isEmpty());
+        $this->assertCount($expectedCount, $tokens);
+        $this->assertSame(!$expectedCount, $tokens->isEmpty());
     }
 
     /**
@@ -44,7 +44,7 @@ final class RegistrationTokensTest extends TestCase
         $token = RegistrationToken::fromValue('foo');
 
         $tokens = RegistrationTokens::fromValue([$token, $token]);
-        self::assertEquals(['foo', 'foo'], $tokens->asStrings());
+        $this->assertEquals(['foo', 'foo'], $tokens->asStrings());
     }
 
     /**

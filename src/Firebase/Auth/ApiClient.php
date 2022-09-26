@@ -32,14 +32,12 @@ use function time;
 /**
  * @internal
  */
-final class ApiClient
+class ApiClient
 {
     private string $projectId;
     private ?string $tenantId;
 
-    /**
-     * @var ProjectAwareAuthResourceUrlBuilder|TenantAwareAuthResourceUrlBuilder
-     */
+    /** @var ProjectAwareAuthResourceUrlBuilder|TenantAwareAuthResourceUrlBuilder */
     private $awareAuthResourceUrlBuilder;
     private AuthResourceUrlBuilder $authResourceUrlBuilder;
     private ClientInterface $client;

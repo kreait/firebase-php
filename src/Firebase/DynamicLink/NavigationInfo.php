@@ -8,9 +8,7 @@ use JsonSerializable;
 
 final class NavigationInfo implements JsonSerializable
 {
-    /**
-     * @var array<string, mixed>
-     */
+    /** @var array<string, mixed> */
     private array $data = [];
 
     private function __construct()

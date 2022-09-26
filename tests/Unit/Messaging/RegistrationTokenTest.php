@@ -20,8 +20,8 @@ final class RegistrationTokenTest extends TestCase
     {
         $token = RegistrationToken::fromValue($value);
 
-        self::assertSame($expected, $token->value());
-        self::assertSame('"' . $token . '"', Json::encode($token));
+        $this->assertSame($expected, $token->value());
+        $this->assertSame('"'.$token.'"', Json::encode($token));
     }
 
     /**

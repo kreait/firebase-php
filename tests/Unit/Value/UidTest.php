@@ -24,9 +24,9 @@ final class UidTest extends TestCase
     {
         $uid = new Uid($value);
 
-        self::assertSame($value, (string) $uid);
-        self::assertSame($value, $uid->jsonSerialize());
-        self::assertTrue($uid->equalsTo($value));
+        $this->assertSame($value, (string) $uid);
+        $this->assertSame($value, $uid->jsonSerialize());
+        $this->assertTrue($uid->equalsTo($value));
     }
 
     /**

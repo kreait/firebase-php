@@ -28,13 +28,13 @@ final class StorageTest extends IntegrationTestCase
 
     public function testGetBucket(): void
     {
-        self::assertInstanceOf(Bucket::class, $first = $this->storage->getBucket());
-        self::assertSame($first, $this->storage->getBucket());
+        $this->assertInstanceOf(Bucket::class, $first = $this->storage->getBucket());
+        $this->assertSame($first, $this->storage->getBucket());
     }
 
     public function testGetCustomBucket(): void
     {
-        self::assertInstanceOf(Bucket::class, $first = $this->storage->getBucket('custom'));
-        self::assertSame($first, $this->storage->getBucket('custom'));
+        $this->assertInstanceOf(Bucket::class, $first = $this->storage->getBucket('custom'));
+        $this->assertSame($first, $this->storage->getBucket('custom'));
     }
 }

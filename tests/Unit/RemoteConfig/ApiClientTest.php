@@ -44,8 +44,8 @@ final class ApiClientTest extends UnitTestCase
         try {
             $this->client->getTemplate();
         } catch (Throwable $e) {
-            self::assertInstanceOf(RemoteConfigException::class, $e);
-            self::assertInstanceOf($expectedClass, $e);
+            $this->assertInstanceOf(RemoteConfigException::class, $e);
+            $this->assertInstanceOf($expectedClass, $e);
         }
     }
 

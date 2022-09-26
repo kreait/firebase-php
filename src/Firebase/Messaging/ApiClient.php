@@ -16,7 +16,7 @@ use Throwable;
 /**
  * @internal
  */
-final class ApiClient
+class ApiClient
 {
     private ClientInterface $client;
     private MessagingApiExceptionConverter $errorHandler;

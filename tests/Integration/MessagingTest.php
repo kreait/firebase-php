@@ -112,7 +112,7 @@ final class MessagingTest extends IntegrationTestCase
 
         $result = $this->messaging->send($message);
 
-        self::assertArrayHasKey('name', $result);
+        $this->assertArrayHasKey('name', $result);
     }
 
     public function testSendRawMessage(): void
@@ -122,7 +122,7 @@ final class MessagingTest extends IntegrationTestCase
 
         $result = $this->messaging->send(new RawMessageFromArray($data));
 
-        self::assertArrayHasKey('name', $result);
+        $this->assertArrayHasKey('name', $result);
     }
 
     /**
@@ -166,7 +166,7 @@ final class MessagingTest extends IntegrationTestCase
 
         $result = $this->messaging->validate($message);
 
-        self::assertArrayHasKey('name', $result);
+        $this->assertArrayHasKey('name', $result);
     }
 
     public function testValidateInvalidMessage(): void
@@ -188,21 +188,21 @@ final class MessagingTest extends IntegrationTestCase
 
         $report = $this->messaging->sendMulticast($message, $tokens);
 
-        self::assertCount(2, $report);
-        self::assertTrue($report->hasFailures());
-        self::assertCount(1, $report->failures());
-        self::assertCount(1, $report->successes());
-        self::assertCount(1, $report->invalidTokens());
-        self::assertSame($invalid, $report->invalidTokens()[0]);
+        $this->assertCount(2, $report);
+        $this->assertTrue($report->hasFailures());
+        $this->assertCount(1, $report->failures());
+        $this->assertCount(1, $report->successes());
+        $this->assertCount(1, $report->invalidTokens());
+        $this->assertSame($invalid, $report->invalidTokens()[0]);
 
         $success = $report->successes()->getItems()[0];
-        self::assertSame($valid, $success->target()->value());
-        self::assertIsArray($success->result());
-        self::assertArrayHasKey('name', $success->result() ?: []);
+        $this->assertSame($valid, $success->target()->value());
+        $this->assertIsArray($success->result());
+        $this->assertArrayHasKey('name', $success->result() ?: []);
 
         $failure = $report->failures()->getItems()[0];
-        self::assertSame($invalid, $failure->target()->value());
-        self::assertInstanceOf(MessagingException::class, $failure->error());
+        $this->assertSame($invalid, $failure->target()->value());
+        $this->assertInstanceOf(MessagingException::class, $failure->error());
     }
 
     /**
@@ -218,14 +218,14 @@ final class MessagingTest extends IntegrationTestCase
 
         $report = $this->messaging->sendMulticast($message, $tokens);
 
-        self::assertTrue($report->hasFailures());
-        self::assertCount(2, $report->failures());
-        self::assertCount(0, $report->successes());
+        $this->assertTrue($report->hasFailures());
+        $this->assertCount(2, $report->failures());
+        $this->assertCount(0, $report->successes());
 
         $items = $report->failures()->getItems();
 
-        self::assertSame($first, $items[0]->target()->value());
-        self::assertSame($second, $items[1]->target()->value());
+        $this->assertSame($first, $items[0]->target()->value());
+        $this->assertSame($second, $items[1]->target()->value());
     }
 
     /**
@@ -235,7 +235,7 @@ final class MessagingTest extends IntegrationTestCase
     {
         $report = $this->messaging->sendMulticast(CloudMessage::new(), [$this->getTestRegistrationToken()]);
 
-        self::assertCount(1, $report->successes());
+        $this->assertCount(1, $report->successes());
     }
 
     public function testSendMessageToDifferentTargets(): void
@@ -259,8 +259,8 @@ final class MessagingTest extends IntegrationTestCase
 
         $report = $this->messaging->sendAll($messages);
 
-        self::assertCount(3, $report->successes());
-        self::assertCount(2, $report->failures());
+        $this->assertCount(3, $report->successes());
+        $this->assertCount(2, $report->failures());
     }
 
     public function testValidateRegistrationTokens(): void
@@ -273,8 +273,8 @@ final class MessagingTest extends IntegrationTestCase
 
         $result = $this->messaging->validateRegistrationTokens($tokens);
 
-        self::assertSame($valid, $result['valid'][0]);
-        self::assertSame($invalid, $result['invalid'][0]);
+        $this->assertSame($valid, $result['valid'][0]);
+        $this->assertSame($invalid, $result['invalid'][0]);
     }
 
     public function testSubscribeToTopic(): void
@@ -283,7 +283,7 @@ final class MessagingTest extends IntegrationTestCase
         $topicName = self::randomString(__FUNCTION__);
 
         try {
-            self::assertEquals([
+            $this->assertEquals([
                 $topicName => [$token => 'OK'],
             ], $this->messaging->subscribeToTopic($topicName, $token));
         } finally {
@@ -301,7 +301,7 @@ final class MessagingTest extends IntegrationTestCase
         ];
 
         try {
-            self::assertEquals([
+            $this->assertEquals([
                 $firstTopic => [$token => 'OK'],
                 $secondTopic => [$token => 'OK'],
             ], $this->messaging->subscribeToTopics($topics, $token));
@@ -316,7 +316,7 @@ final class MessagingTest extends IntegrationTestCase
         $topicName = self::randomString(__FUNCTION__);
         $this->messaging->subscribeToTopic($topicName, $token);
 
-        self::assertEquals([
+        $this->assertEquals([
             $topicName => [$token => 'OK'],
         ], $this->messaging->unsubscribeFromTopic($topicName, $token));
     }
@@ -326,11 +326,11 @@ final class MessagingTest extends IntegrationTestCase
         $token = $this->getTestRegistrationToken();
 
         $topics = [
-            $firstTopic = self::randomString(__FUNCTION__ . '_1'),
-            $secondTopic = self::randomString(__FUNCTION__ . '_2'),
+            $firstTopic = self::randomString(__FUNCTION__.'_1'),
+            $secondTopic = self::randomString(__FUNCTION__.'_2'),
         ];
 
-        self::assertEquals([
+        $this->assertEquals([
             $firstTopic => [$token => 'OK'],
             $secondTopic => [$token => 'OK'],
         ], $this->messaging->unsubscribeFromTopics($topics, $token));
@@ -341,7 +341,7 @@ final class MessagingTest extends IntegrationTestCase
         $token = $this->getTestRegistrationToken();
         $appInstance = $this->messaging->getAppInstance($token);
 
-        self::assertSame($token, $appInstance->registrationToken()->value());
+        $this->assertSame($token, $appInstance->registrationToken()->value());
     }
 
     public function testGetAppInstanceWithInvalidToken(): void

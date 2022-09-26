@@ -8,11 +8,9 @@ use JsonSerializable;
 
 use function array_key_exists;
 
-final class RuleSet implements JsonSerializable
+class RuleSet implements JsonSerializable
 {
-    /**
-     * @var array<string, array<mixed>>
-     */
+    /** @var array<string, array<mixed>> */
     private array $rules;
 
     /**

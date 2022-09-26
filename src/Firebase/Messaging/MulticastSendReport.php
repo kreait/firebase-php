@@ -22,9 +22,7 @@ use function explode;
 
 final class MulticastSendReport implements Countable
 {
-    /**
-     * @var SendReport[]
-     */
+    /** @var SendReport[] */
     private array $items = [];
 
     private function __construct()

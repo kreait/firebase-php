@@ -15,9 +15,7 @@ final class MessageTarget
     public const TOKEN = 'token';
     public const TOPIC = 'topic';
 
-    /**
-     * @internal
-     */
+    /** @internal */
     public const UNKNOWN = 'unknown';
     public const TYPES = [
         self::CONDITION, self::TOKEN, self::TOPIC, self::UNKNOWN,
@@ -62,7 +60,7 @@ final class MessageTarget
                 break;
 
             default:
-                throw new InvalidArgumentException("Invalid target type '{$type}', valid types: " . implode(', ', self::TYPES));
+                throw new InvalidArgumentException("Invalid target type '{$type}', valid types: ".implode(', ', self::TYPES));
         }
 
         return new self($targetType, $targetValue);

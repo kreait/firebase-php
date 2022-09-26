@@ -32,15 +32,15 @@ final class ConditionTest extends UnitTestCase
             $condition = $condition->withTagColor($tagColor);
         }
 
-        self::assertSame($name, $condition->name());
+        $this->assertSame($name, $condition->name());
         $expected = [
             'name' => $name,
             'expression' => $expression ?: 'false',
             'tagColor' => $tagColor ? (string) $tagColor : null,
         ];
 
-        self::assertEquals(array_filter($expected), $condition->jsonSerialize());
-        self::assertEquals($condition, Condition::fromArray($expected));
+        $this->assertEquals(array_filter($expected), $condition->jsonSerialize());
+        $this->assertEquals($condition, Condition::fromArray($expected));
     }
 
     /**

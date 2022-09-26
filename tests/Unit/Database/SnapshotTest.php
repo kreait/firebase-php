@@ -14,9 +14,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 final class SnapshotTest extends UnitTestCase
 {
-    /**
-     * @var Reference|MockObject
-     */
+    /** @var Reference|MockObject */
     private $reference;
     private Snapshot $snapshotWithArrayValue;
     private Snapshot $snapshotWithScalarValue;
@@ -33,67 +31,67 @@ final class SnapshotTest extends UnitTestCase
 
     public function testGetReference(): void
     {
-        self::assertSame($this->reference, $this->snapshotWithArrayValue->getReference());
+        $this->assertSame($this->reference, $this->snapshotWithArrayValue->getReference());
     }
 
     public function testGetKey(): void
     {
         $this->reference->method('getKey')->willReturn('key');
 
-        self::assertSame('key', $this->snapshotWithArrayValue->getKey());
+        $this->assertSame('key', $this->snapshotWithArrayValue->getKey());
     }
 
     public function testGetChildOnANonArrayValueReturnsAnEmptySnapshot(): void
     {
-        $this->reference->expects(self::once())
+        $this->reference->expects($this->once())
             ->method('getChild')->with('path/to/child')
             ->willReturn($this->createMock(Reference::class));
 
-        self::assertFalse($this->snapshotWithScalarValue->hasChild('path/to/child'));
+        $this->assertFalse($this->snapshotWithScalarValue->hasChild('path/to/child'));
         $childSnapshot = $this->snapshotWithScalarValue->getChild('path/to/child');
 
-        self::assertNull($childSnapshot->getValue());
+        $this->assertNull($childSnapshot->getValue());
     }
 
     public function testGetChildOnANonExistingChildReturnsAnEmptySnapshot(): void
     {
-        $this->reference->expects(self::once())
+        $this->reference->expects($this->once())
             ->method('getChild')->with('nonexisting/child')
             ->willReturn($this->createMock(Reference::class));
 
-        self::assertFalse($this->snapshotWithArrayValue->hasChild('nonexisting/child'));
-        self::assertNull($this->snapshotWithArrayValue->getChild('nonexisting/child')->getValue());
+        $this->assertFalse($this->snapshotWithArrayValue->hasChild('nonexisting/child'));
+        $this->assertNull($this->snapshotWithArrayValue->getChild('nonexisting/child')->getValue());
     }
 
     public function testGetChild(): void
     {
-        $this->reference->expects(self::once())
+        $this->reference->expects($this->once())
             ->method('getChild')->with('key/subkey')
             ->willReturn($this->createMock(Reference::class));
 
-        self::assertTrue($this->snapshotWithArrayValue->hasChild('key/subkey'));
-        self::assertSame('value', $this->snapshotWithArrayValue->getChild('key/subkey')->getValue());
+        $this->assertTrue($this->snapshotWithArrayValue->hasChild('key/subkey'));
+        $this->assertSame('value', $this->snapshotWithArrayValue->getChild('key/subkey')->getValue());
     }
 
     public function testExists(): void
     {
-        self::assertTrue($this->snapshotWithArrayValue->exists());
-        self::assertTrue($this->snapshotWithScalarValue->exists());
-        self::assertFalse($this->snapshotWithEmptyValue->exists());
+        $this->assertTrue($this->snapshotWithArrayValue->exists());
+        $this->assertTrue($this->snapshotWithScalarValue->exists());
+        $this->assertFalse($this->snapshotWithEmptyValue->exists());
     }
 
     public function testHasChildren(): void
     {
-        self::assertTrue($this->snapshotWithArrayValue->hasChildren());
-        self::assertFalse($this->snapshotWithScalarValue->hasChildren());
-        self::assertFalse($this->snapshotWithEmptyValue->hasChildren());
+        $this->assertTrue($this->snapshotWithArrayValue->hasChildren());
+        $this->assertFalse($this->snapshotWithScalarValue->hasChildren());
+        $this->assertFalse($this->snapshotWithEmptyValue->hasChildren());
     }
 
     public function testNumChildren(): void
     {
-        self::assertSame(1, $this->snapshotWithArrayValue->numChildren());
-        self::assertSame(0, $this->snapshotWithScalarValue->numChildren());
-        self::assertSame(0, $this->snapshotWithEmptyValue->numChildren());
+        $this->assertSame(1, $this->snapshotWithArrayValue->numChildren());
+        $this->assertSame(0, $this->snapshotWithScalarValue->numChildren());
+        $this->assertSame(0, $this->snapshotWithEmptyValue->numChildren());
     }
 
     /**
@@ -106,7 +104,7 @@ final class SnapshotTest extends UnitTestCase
             '-abc' => 'value',
         ]);
 
-        self::assertTrue($snapshot->hasChild('123'));
-        self::assertTrue($snapshot->hasChild('-abc'));
+        $this->assertTrue($snapshot->hasChild('123'));
+        $this->assertTrue($snapshot->hasChild('-abc'));
     }
 }

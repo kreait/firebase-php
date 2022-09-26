@@ -18,9 +18,7 @@ final class Storage implements Contract\Storage
     private StorageClient $storageClient;
     private ?string $defaultBucket;
 
-    /**
-     * @var Bucket[]
-     */
+    /** @var Bucket[] */
     private array $buckets = [];
 
     public function __construct(StorageClient $storageClient, ?string $defaultBucket = null)

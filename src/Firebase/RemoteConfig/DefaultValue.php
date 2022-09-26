@@ -16,11 +16,9 @@ use function array_key_exists;
  *     useInAppDefault: bool
  * }
  */
-final class DefaultValue implements JsonSerializable
+class DefaultValue implements JsonSerializable
 {
-    /**
-     * @deprecated 6.9.0
-     */
+    /** @deprecated 6.9.0 */
     public const IN_APP_DEFAULT_VALUE = true;
 
     /**

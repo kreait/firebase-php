@@ -17,6 +17,6 @@ final class ShallowTest extends UnitTestCase
     {
         $filter = new Shallow();
 
-        self::assertStringContainsString('shallow=true', (string) $filter->modifyUri(new Uri('http://domain.tld')));
+        $this->assertStringContainsString('shallow=true', (string) $filter->modifyUri(new Uri('http://domain.tld')));
     }
 }

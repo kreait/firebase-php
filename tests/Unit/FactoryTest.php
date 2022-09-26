@@ -19,12 +19,12 @@ final class FactoryTest extends UnitTestCase
 
     protected function setUp(): void
     {
-        $this->serviceAccount = self::$fixturesDir . '/ServiceAccount/valid.json';
+        $this->serviceAccount = self::$fixturesDir.'/ServiceAccount/valid.json';
     }
 
     public function testItUsesTheCredentialsFromTheGooglaApplicationCredentialsEnvironmentVariable(): void
     {
-        putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $this->serviceAccount);
+        putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->serviceAccount);
 
         $this->assertServices(new Factory());
 

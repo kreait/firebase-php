@@ -10,13 +10,11 @@ use Kreait\Firebase\Exception\DatabaseException;
 
 use function array_key_exists;
 
-final class Transaction
+class Transaction
 {
     private ApiClient $apiClient;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private array $etags;
 
     /**

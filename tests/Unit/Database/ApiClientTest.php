@@ -20,9 +20,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 final class ApiClientTest extends UnitTestCase
 {
-    /**
-     * @var ClientInterface|MockObject
-     */
+    /** @var ClientInterface|MockObject */
     private $http;
     private ApiClient $client;
     private string $targetUrl;
@@ -33,24 +31,24 @@ final class ApiClientTest extends UnitTestCase
 
         $this->http = $this->createMock(ClientInterface::class);
         $this->http
-            ->method(self::anything())
+            ->method($this->anything())
             ->willReturn(new Response(200, [], '{"name":"value"}'));
         $this->client = new ApiClient($this->http, UrlBuilder::create($this->targetUrl));
     }
 
     public function testGet(): void
     {
-        self::assertNotNull($this->client->get($this->targetUrl));
+        $this->assertNotNull($this->client->get($this->targetUrl));
     }
 
     public function testSet(): void
     {
-        self::assertNotNull($this->client->set($this->targetUrl, 'any'));
+        $this->assertNotNull($this->client->set($this->targetUrl, 'any'));
     }
 
     public function testPush(): void
     {
-        self::assertNotNull($this->client->push($this->targetUrl, 'any'));
+        $this->assertNotNull($this->client->push($this->targetUrl, 'any'));
     }
 
     public function testUpdate(): void
@@ -70,7 +68,7 @@ final class ApiClientTest extends UnitTestCase
         $request = new Request('GET', 'foo');
 
         $this->http
-            ->method(self::anything())
+            ->method($this->anything())
             ->willThrowException(new RequestException('foo', $request));
 
         $this->expectException(DatabaseException::class);
@@ -81,7 +79,7 @@ final class ApiClientTest extends UnitTestCase
     public function testCatchAnyException(): void
     {
         $this->http
-            ->method(self::anything())
+            ->method($this->anything())
             ->willThrowException(new Exception());
 
         $this->expectException(DatabaseException::class);

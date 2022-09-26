@@ -24,8 +24,8 @@ final class OrderByValueTest extends UnitTestCase
 
     public function testModifyUri(): void
     {
-        self::assertStringContainsString(
-            'orderBy=' . rawurlencode('"$value"'),
+        $this->assertStringContainsString(
+            'orderBy='.rawurlencode('"$value"'),
             (string) $this->sorter->modifyUri(new Uri('http://domain.tld')),
         );
     }
@@ -38,7 +38,7 @@ final class OrderByValueTest extends UnitTestCase
      */
     public function testModifyValue($expected, $value): void
     {
-        self::assertSame($expected, $this->sorter->modifyValue($value));
+        $this->assertSame($expected, $this->sorter->modifyValue($value));
     }
 
     /**

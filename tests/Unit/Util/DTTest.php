@@ -28,8 +28,8 @@ final class DTTest extends TestCase
     {
         $dt = DT::toUTCDateTimeImmutable($value);
 
-        self::assertEquals($expected, $dt->format('U.u'));
-        self::assertEquals('UTC', $dt->getTimezone()->getName());
+        $this->assertEquals($expected, $dt->format('U.u'));
+        $this->assertEquals('UTC', $dt->getTimezone()->getName());
     }
 
     /**
@@ -41,7 +41,7 @@ final class DTTest extends TestCase
     {
         $dt = DT::toUTCDateTimeImmutable($value);
 
-        self::assertEquals('UTC', $dt->getTimezone()->getName());
+        $this->assertEquals('UTC', $dt->getTimezone()->getName());
     }
 
     /**

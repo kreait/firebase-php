@@ -29,7 +29,7 @@ final class SendMessageToTokens implements HasSubRequests, RequestInterface
     public function __construct(string $projectId, Message $message, RegistrationTokens $registrationTokens, bool $validateOnly = false)
     {
         if ($registrationTokens->count() > Messaging::BATCH_MESSAGE_LIMIT) {
-            throw new InvalidArgument('A multicast message can be sent to a maximum amount of ' . Messaging::BATCH_MESSAGE_LIMIT . ' tokens.');
+            throw new InvalidArgument('A multicast message can be sent to a maximum amount of '.Messaging::BATCH_MESSAGE_LIMIT.' tokens.');
         }
 
         $messageData = $message->jsonSerialize();

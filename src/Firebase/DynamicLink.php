@@ -14,9 +14,7 @@ use function trim;
 
 final class DynamicLink implements JsonSerializable
 {
-    /**
-     * @var array<string, mixed>
-     */
+    /** @var array<string, mixed> */
     private array $data = [];
 
     private function __construct()
@@ -51,7 +49,7 @@ final class DynamicLink implements JsonSerializable
 
     public function domain(): string
     {
-        return $this->uri()->getScheme() . '://' . $this->uri()->getHost();
+        return $this->uri()->getScheme().'://'.$this->uri()->getHost();
     }
 
     public function suffix(): string

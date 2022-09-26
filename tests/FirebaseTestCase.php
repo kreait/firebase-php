@@ -11,5 +11,5 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class FirebaseTestCase extends TestCase
 {
-    protected static string $fixturesDir = __DIR__ . '/_fixtures';
+    protected static string $fixturesDir = __DIR__.'/_fixtures';
 }

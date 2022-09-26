@@ -22,16 +22,16 @@ final class DefaultValueTest extends TestCase
     {
         $defaultValue = DefaultValue::useInAppDefault();
 
-        self::assertTrue($defaultValue->value());
-        self::assertEquals(['useInAppDefault' => true], $defaultValue->jsonSerialize());
+        $this->assertTrue($defaultValue->value());
+        $this->assertEquals(['useInAppDefault' => true], $defaultValue->jsonSerialize());
     }
 
     public function testCreate(): void
     {
         $defaultValue = DefaultValue::with('foo');
 
-        self::assertSame('foo', $defaultValue->value());
-        self::assertEquals(['value' => 'foo'], $defaultValue->jsonSerialize());
+        $this->assertSame('foo', $defaultValue->value());
+        $this->assertEquals(['value' => 'foo'], $defaultValue->jsonSerialize());
     }
 
     /**
@@ -44,7 +44,7 @@ final class DefaultValueTest extends TestCase
     {
         $defaultValue = DefaultValue::fromArray($data);
 
-        self::assertSame($expected, $defaultValue->toArray());
+        $this->assertSame($expected, $defaultValue->toArray());
     }
 
     /**

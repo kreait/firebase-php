@@ -21,9 +21,7 @@ final class SignInResult
     private ?string $refreshToken = null;
     private ?int $ttl = null;
 
-    /**
-     * @var array<string, mixed>
-     */
+    /** @var array<string, mixed> */
     private array $data = [];
     private ?string $firebaseUserId = null;
     private ?string $tenantId = null;

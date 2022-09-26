@@ -37,7 +37,7 @@ final class GuzzleApiClientHandler implements Handler
         try {
             $response = $this->client->send($request, ['http_errors' => false]);
         } catch (GuzzleException $e) {
-            throw new FailedToCreateActionLink('Failed to create action link: ' . $e->getMessage(), $e->getCode(), $e);
+            throw new FailedToCreateActionLink('Failed to create action link: '.$e->getMessage(), $e->getCode(), $e);
         }
 
         if ($response->getStatusCode() !== 200) {
@@ -47,7 +47,7 @@ final class GuzzleApiClientHandler implements Handler
         try {
             $data = Json::decode((string) $response->getBody(), true);
         } catch (InvalidArgumentException $e) {
-            throw new FailedToCreateActionLink('Unable to parse the response data: ' . $e->getMessage(), $e->getCode(), $e);
+            throw new FailedToCreateActionLink('Unable to parse the response data: '.$e->getMessage(), $e->getCode(), $e);
         }
 
         if (!($actionCode = $data['oobLink'] ?? null)) {

@@ -8,7 +8,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Kreait\Firebase\Util\DT;
 
-final class FindVersions
+class FindVersions
 {
     private ?DateTimeImmutable $since = null;
     private ?DateTimeImmutable $until = null;

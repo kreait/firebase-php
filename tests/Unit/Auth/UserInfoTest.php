@@ -22,7 +22,7 @@ final class UserInfoTest extends UnitTestCase
 
         $decoded = Json::decode(Json::encode($info), false);
 
-        self::assertSame($info->uid, $decoded->uid);
-        self::assertSame($info->providerId, $decoded->providerId);
+        $this->assertSame($info->uid, $decoded->uid);
+        $this->assertSame($info->providerId, $decoded->providerId);
     }
 }

@@ -11,7 +11,6 @@ use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
 
 /**
  * @internal
- *
  * @group database-emulator
  * @group emulator
  */
@@ -34,7 +33,7 @@ final class TransactionTest extends DatabaseTestCase
             $transaction->set($ref, 'new value');
         });
 
-        self::assertSame('new value', $ref->getValue());
+        $this->assertSame('new value', $ref->getValue());
     }
 
     public function testATransactionPreventsAChangeWhenTheRemoteHasChanged(): void
@@ -58,8 +57,8 @@ final class TransactionTest extends DatabaseTestCase
 
     public function testATransactionKeepsTrackOfMultipleReferences(): void
     {
-        $firstRef = $this->ref->getChild(__FUNCTION__ . '_first');
-        $secondRef = $this->ref->getChild(__FUNCTION__ . '_second');
+        $firstRef = $this->ref->getChild(__FUNCTION__.'_first');
+        $secondRef = $this->ref->getChild(__FUNCTION__.'_second');
 
         $this->expectException(TransactionFailed::class);
 

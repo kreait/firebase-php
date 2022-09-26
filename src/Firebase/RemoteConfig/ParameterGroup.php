@@ -21,9 +21,7 @@ final class ParameterGroup implements JsonSerializable
     private string $name;
     private string $description = '';
 
-    /**
-     * @var array<non-empty-string, Parameter>
-     */
+    /** @var array<non-empty-string, Parameter> */
     private array $parameters = [];
 
     /**

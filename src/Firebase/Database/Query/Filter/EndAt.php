@@ -16,9 +16,7 @@ final class EndAt implements Filter
 {
     use ModifierTrait;
 
-    /**
-     * @var bool|float|int|string
-     */
+    /** @var bool|float|int|string */
     private $value;
 
     /**

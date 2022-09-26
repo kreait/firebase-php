@@ -10,7 +10,6 @@ use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
 
 /**
  * @internal
- *
  * @group database-emulator
  * @group emulator
  */
@@ -22,7 +21,7 @@ final class RuleSetTest extends DatabaseTestCase
 
         self::$db->updateRules($ruleSet);
 
-        self::assertEquals($ruleSet, self::$db->getRuleSet());
+        $this->assertEquals($ruleSet, self::$db->getRuleSet());
     }
 
     public function testPublic(): void
@@ -31,7 +30,7 @@ final class RuleSetTest extends DatabaseTestCase
 
         self::$db->updateRules($ruleSet);
 
-        self::assertEquals($ruleSet, self::$db->getRuleSet());
+        $this->assertEquals($ruleSet, self::$db->getRuleSet());
     }
 
     public function testPrivate(): void
@@ -40,7 +39,7 @@ final class RuleSetTest extends DatabaseTestCase
 
         self::$db->updateRules($ruleSet);
 
-        self::assertEquals($ruleSet, self::$db->getRuleSet());
+        $this->assertEquals($ruleSet, self::$db->getRuleSet());
     }
 
     /**
@@ -49,7 +48,7 @@ final class RuleSetTest extends DatabaseTestCase
     public function testRulesAreProperlyEncoded(): void
     {
         $rules = RuleSet::private()->getRules();
-        $rules['rules'][self::$refPrefix . __FUNCTION__] = [
+        $rules['rules'][self::$refPrefix.__FUNCTION__] = [
             'value1' => [
                 '.indexOn' => [
                     'ab',
@@ -72,8 +71,8 @@ final class RuleSetTest extends DatabaseTestCase
                 self::$db->getReference()->getUri()->withPath('/.settings/rules.json'),
             );
 
-        self::assertSame(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
         // Assert that the returned JSON doesn't contain objects with integer keys instead of lists
-        self::assertStringNotMatchesFormat('/\d:/', (string) $response->getBody());
+        $this->assertStringNotMatchesFormat('/\d:/', (string) $response->getBody());
     }
 }

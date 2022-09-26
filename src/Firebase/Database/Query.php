@@ -35,14 +35,12 @@ use Psr\Http\Message\UriInterface;
  *
  * @see https://firebase.google.com/docs/reference/js/firebase.database.Query
  */
-final class Query
+class Query
 {
     private Reference $reference;
     private ApiClient $apiClient;
 
-    /**
-     * @var Filter[]
-     */
+    /** @var Filter[] */
     private array $filters = [];
     private ?Sorter $sorter = null;
 
@@ -84,7 +82,7 @@ final class Query
     {
         $uri = $this->getUri();
 
-        $pathAndQuery = $uri->getPath() . '?' . $uri->getQuery();
+        $pathAndQuery = $uri->getPath().'?'.$uri->getQuery();
 
         try {
             $value = $this->apiClient->get($pathAndQuery);

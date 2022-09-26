@@ -24,9 +24,7 @@ use Throwable;
  */
 final class RemoteConfigTest extends IntegrationTestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private const TEMPLATE_CONFIG = <<<'CONFIG'
         {
             "conditions": [
@@ -109,16 +107,16 @@ final class RemoteConfigTest extends IntegrationTestCase
 
         $check = $this->remoteConfig->get();
 
-        self::assertEquals($this->template->jsonSerialize(), $check->jsonSerialize());
+        $this->assertEquals($this->template->jsonSerialize(), $check->jsonSerialize());
 
         $version = $check->version();
 
         if (!$version instanceof Version) {
-            self::fail('The template has no version');
+            $this->fail('The template has no version');
         }
 
-        self::assertTrue($version->updateType()->equalsTo(UpdateType::FORCED_UPDATE));
-        self::assertTrue($version->updateOrigin()->equalsTo(UpdateOrigin::REST_API));
+        $this->assertTrue($version->updateType()->equalsTo(UpdateType::FORCED_UPDATE));
+        $this->assertTrue($version->updateOrigin()->equalsTo(UpdateOrigin::REST_API));
     }
 
     public function testPublishOutdatedConfig(): void
@@ -154,7 +152,7 @@ final class RemoteConfigTest extends IntegrationTestCase
         $version = $this->remoteConfig->get()->version();
 
         if (!$version instanceof Version) {
-            self::fail('The template has no version');
+            $this->fail('The template has no version');
         }
 
         $currentVersionNumber = $version->versionNumber();
@@ -163,18 +161,18 @@ final class RemoteConfigTest extends IntegrationTestCase
 
         try {
             $this->remoteConfig->validate($template);
-            self::fail('A ' . ValidationFailed::class . ' should have been thrown');
+            $this->fail('A '.ValidationFailed::class.' should have been thrown');
         } catch (Throwable $e) {
-            self::assertInstanceOf(ValidationFailed::class, $e);
+            $this->assertInstanceOf(ValidationFailed::class, $e);
         }
 
         $refetchedVersion = $this->remoteConfig->get()->version();
 
         if (!$refetchedVersion instanceof Version) {
-            self::fail('The template has no version');
+            $this->fail('The template has no version');
         }
 
-        self::assertTrue(
+        $this->assertTrue(
             $currentVersionNumber->equalsTo($refetchedVersion->versionNumber()),
             "Expected the template version to be {$currentVersionNumber}, got {$refetchedVersion->versionNumber()}",
         );
@@ -185,7 +183,7 @@ final class RemoteConfigTest extends IntegrationTestCase
         $initialVersion = $this->remoteConfig->get()->version();
 
         if (!$initialVersion instanceof Version) {
-            self::fail('The template has no version');
+            $this->fail('The template has no version');
         }
 
         $initialVersionNumber = $initialVersion->versionNumber();
@@ -205,7 +203,7 @@ final class RemoteConfigTest extends IntegrationTestCase
         }
 
         if ($targetVersionNumber === null) {
-            self::fail('A previous version number should have been retrieved');
+            $this->fail('A previous version number should have been retrieved');
         }
 
         $this->remoteConfig->rollbackToVersion($targetVersionNumber);
@@ -213,18 +211,18 @@ final class RemoteConfigTest extends IntegrationTestCase
         $newVersion = $this->remoteConfig->get()->version();
 
         if (!$newVersion instanceof Version) {
-            self::fail('The new template has no version');
+            $this->fail('The new template has no version');
         }
 
         $newVersionNumber = $newVersion->versionNumber();
         $rollbackSource = $newVersion->rollbackSource();
 
         if (!$rollbackSource instanceof VersionNumber) {
-            self::fail('The new template version has no rollback source');
+            $this->fail('The new template version has no rollback source');
         }
 
-        self::assertFalse($newVersionNumber->equalsTo($initialVersionNumber));
-        self::assertTrue($rollbackSource->equalsTo($targetVersionNumber));
+        $this->assertFalse($newVersionNumber->equalsTo($initialVersionNumber));
+        $this->assertTrue($rollbackSource->equalsTo($targetVersionNumber));
     }
 
     public function testListVersionsWithoutFilters(): void
@@ -232,12 +230,12 @@ final class RemoteConfigTest extends IntegrationTestCase
         // We only need to know that the first returned value is a version,
         // no need to iterate through all of them
         foreach ($this->remoteConfig->listVersions() as $version) {
-            self::assertInstanceOf(Version::class, $version);
+            $this->assertInstanceOf(Version::class, $version);
 
             return;
         }
 
-        self::fail('Expected a version to be returned, but got none');
+        $this->fail('Expected a version to be returned, but got none');
     }
 
     public function testFindVersionsWithFilters(): void
@@ -245,7 +243,7 @@ final class RemoteConfigTest extends IntegrationTestCase
         $currentVersion = $this->remoteConfig->get()->version();
 
         if (!$currentVersion instanceof Version) {
-            self::fail('The new template has no version');
+            $this->fail('The new template has no version');
         }
 
         $currentVersionUpdateDate = $currentVersion->updatedAt();
@@ -265,11 +263,11 @@ final class RemoteConfigTest extends IntegrationTestCase
 
             // Protect us from an infinite loop
             if ($counter > $limit) {
-                self::fail('The query returned more values than expected');
+                $this->fail('The query returned more values than expected');
             }
         }
 
-        self::assertLessThanOrEqual($limit, $counter);
+        $this->assertLessThanOrEqual($limit, $counter);
     }
 
     public function testGetVersion(): void
@@ -277,14 +275,14 @@ final class RemoteConfigTest extends IntegrationTestCase
         $currentVersion = $this->remoteConfig->get()->version();
 
         if (!$currentVersion instanceof Version) {
-            self::fail('The template has no version');
+            $this->fail('The template has no version');
         }
 
         $currentVersionNumber = $currentVersion->versionNumber();
 
         $check = $this->remoteConfig->getVersion($currentVersionNumber);
 
-        self::assertTrue($check->versionNumber()->equalsTo($currentVersionNumber));
+        $this->assertTrue($check->versionNumber()->equalsTo($currentVersionNumber));
     }
 
     public function testGetNonExistingVersion(): void
@@ -292,7 +290,7 @@ final class RemoteConfigTest extends IntegrationTestCase
         $currentVersion = $this->remoteConfig->get()->version();
 
         if (!$currentVersion instanceof Version) {
-            self::fail('The template has no version');
+            $this->fail('The template has no version');
         }
 
         $nextButNonExisting = (int) (string) $currentVersion->versionNumber() + 100;
@@ -312,7 +310,7 @@ final class RemoteConfigTest extends IntegrationTestCase
         $template = Template::new();
 
         for ($i = 0; $i < 3001; ++$i) {
-            $template = $template->withParameter(Parameter::named('i_' . $i, 'v_' . $i));
+            $template = $template->withParameter(Parameter::named('i_'.$i, 'v_'.$i));
         }
 
         return $template;

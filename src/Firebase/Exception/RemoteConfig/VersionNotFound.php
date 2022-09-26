@@ -12,6 +12,6 @@ final class VersionNotFound extends RuntimeException implements RemoteConfigExce
 {
     public static function withVersionNumber(VersionNumber $versionNumber): self
     {
-        return new self('Version #' . $versionNumber . ' could not be found.');
+        return new self('Version #'.$versionNumber.' could not be found.');
     }
 }

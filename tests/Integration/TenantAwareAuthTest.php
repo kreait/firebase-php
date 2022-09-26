@@ -27,7 +27,7 @@ final class TenantAwareAuthTest extends AuthTestCase
         );
 
         try {
-            self::assertSame(self::TENANT_ID, $user->tenantId);
+            $this->assertSame(self::TENANT_ID, $user->tenantId);
         } finally {
             $this->auth->deleteUser($user->uid);
         }
@@ -42,7 +42,7 @@ final class TenantAwareAuthTest extends AuthTestCase
         $parsed = $this->auth->parseToken($token->toString());
 
         try {
-            self::assertSame(self::TENANT_ID, $parsed->claims()->get('tenant_id'));
+            $this->assertSame(self::TENANT_ID, $parsed->claims()->get('tenant_id'));
         } finally {
             $this->auth->deleteUser($user->uid);
         }
@@ -54,7 +54,7 @@ final class TenantAwareAuthTest extends AuthTestCase
         $result = $this->auth->signInAsUser($user);
 
         try {
-            self::assertSame(self::TENANT_ID, $result->firebaseTenantId());
+            $this->assertSame(self::TENANT_ID, $result->firebaseTenantId());
         } finally {
             $this->auth->deleteUser($user->uid);
         }
@@ -66,7 +66,7 @@ final class TenantAwareAuthTest extends AuthTestCase
         $result = $this->auth->signInAsUser($user);
 
         try {
-            self::assertSame(self::TENANT_ID, $result->firebaseTenantId());
+            $this->assertSame(self::TENANT_ID, $result->firebaseTenantId());
         } finally {
             $this->auth->deleteUser($user->uid);
         }

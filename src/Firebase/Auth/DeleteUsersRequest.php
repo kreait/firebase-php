@@ -12,9 +12,7 @@ final class DeleteUsersRequest
 {
     private const MAX_BATCH_SIZE = 1000;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private array $uids;
     private bool $enabledUsersShouldBeForceDeleted;
 
@@ -40,7 +38,7 @@ final class DeleteUsersRequest
             ++$count;
 
             if ($count > self::MAX_BATCH_SIZE) {
-                throw new InvalidArgumentException('Only ' . self::MAX_BATCH_SIZE . ' users can be deleted at a time');
+                throw new InvalidArgumentException('Only '.self::MAX_BATCH_SIZE.' users can be deleted at a time');
             }
         }
 

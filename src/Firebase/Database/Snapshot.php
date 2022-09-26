@@ -26,13 +26,11 @@ use function trim;
  *
  * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot
  */
-final class Snapshot
+class Snapshot
 {
     private Reference $reference;
 
-    /**
-     * @var mixed mixed
-     */
+    /** @var mixed mixed */
     private $value;
 
     /**
@@ -86,7 +84,7 @@ final class Snapshot
     public function getChild(string $path): self
     {
         $path = trim($path, '/');
-        $expression = '"' . str_replace('/', '"."', $path) . '"';
+        $expression = '"'.str_replace('/', '"."', $path).'"';
 
         $childValue = search($expression, $this->value);
 
@@ -113,7 +111,7 @@ final class Snapshot
     public function hasChild(string $path): bool
     {
         $path = trim($path, '/');
-        $expression = '"' . str_replace('/', '"."', $path) . '"';
+        $expression = '"'.str_replace('/', '"."', $path).'"';
 
         return search($expression, $this->value) !== null;
     }

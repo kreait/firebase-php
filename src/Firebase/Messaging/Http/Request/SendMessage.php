@@ -21,7 +21,7 @@ final class SendMessage implements MessageRequest, RequestInterface
 
     public function __construct(string $projectId, Message $message, bool $validateOnly = false)
     {
-        $uri = Utils::uriFor('https://fcm.googleapis.com/v1/projects/' . $projectId . '/messages:send');
+        $uri = Utils::uriFor('https://fcm.googleapis.com/v1/projects/'.$projectId.'/messages:send');
 
         $payload = ['message' => $message];
 

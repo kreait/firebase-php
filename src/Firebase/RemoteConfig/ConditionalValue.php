@@ -13,7 +13,7 @@ use function is_string;
  * @phpstan-import-type RemoteConfigExplicitValueShape from ExplicitValue
  * @phpstan-import-type RemoteConfigInAppDefaultValueShape from DefaultValue
  */
-final class ConditionalValue implements JsonSerializable
+class ConditionalValue implements JsonSerializable
 {
     /**
      * @var non-empty-string
