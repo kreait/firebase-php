@@ -69,6 +69,7 @@ final class CloudMessage implements Message
      *         title?: string,
      *         body?: string,
      *         image?: string
+     *         sound?: string
      *     },
      *     android?: AndroidConfigShape,
      *     apns?: ApnsConfig|ApnsConfigShape,
@@ -145,6 +146,7 @@ final class CloudMessage implements Message
      *     title?: string,
      *     body?: string,
      *     image?: string
+     *     sound?: string
      * } $notification
      *
      * @throws InvalidArgumentException
