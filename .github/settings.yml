@@ -1,15 +1,2 @@
 # https://probot.github.io/apps/settings/
-labels:
-  - name: 'bug 🐞'
-    color: '#FC2929'
-  - name: duplicate 👯
-    color: '#FBCA04'
-  - name: enhancement 🙏🏻
-    color: '#FBCA04'
-    oldname: feature-request 🙏🏻
-  - name: github-sponsor ❤️
-    color: '#815543'
-  - name: needs-more-info 🕵🏼
-    color: '#f3ffa8'
-  - name: wont-fix 🙅🏼
-    color: '##EDEDED'
+_extends: beste/.github
