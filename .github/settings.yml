@@ -10,9 +10,5 @@ labels:
     color: '#815543'
   - name: needs-more-info 🕵🏼
     color: '#f3ffa8'
-  - name: not-stale 🔒
-    color: '#BFDADC'
-  - name: stale 👻
-    color: '#BFD4F2'
   - name: wont-fix 🙅🏼
     color: '##EDEDED'
