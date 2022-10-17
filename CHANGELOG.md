@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.9.2] - 2022-10-17
+
 ### Fixed
 
 * Removed `"replace": {"symfony/polyfill-mbstring": "*"}` from `composer.json` because it made SDK updates
@@ -324,7 +326,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.9.1...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.9.2...6.x
+[6.9.2]: https://github.com/kreait/firebase-php/compare/6.9.1...6.9.2
 [6.9.1]: https://github.com/kreait/firebase-php/compare/6.9.0...6.9.1
 [6.9.0]: https://github.com/kreait/firebase-php/compare/6.8.0...6.9.0
 [6.8.0]: https://github.com/kreait/firebase-php/compare/6.7.1...6.8.0
