@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* Removed `"replace": {"symfony/polyfill-mbstring": "*"}` from `composer.json` because it made SDK updates
+  uninstallable in projects that require other libraries needing it.
+  ([#742](https://github.com/kreait/firebase-php/pull/742)
+
 ## [6.9.1] - 2022-09-26
 
 ### Added
