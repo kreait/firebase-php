@@ -24,6 +24,8 @@ use function base64_encode;
 
 /**
  * @internal
+ *
+ * @deprecated 6.9.3
  */
 final class CustomTokenViaGoogleIam
 {

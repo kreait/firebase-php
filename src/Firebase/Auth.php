@@ -9,7 +9,7 @@ use DateTimeImmutable;
 use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Auth\ApiClient;
-use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
+use Kreait\Firebase\Auth\CustomTokenViaGoogleCredentials;
 use Kreait\Firebase\Auth\DeleteUsersRequest;
 use Kreait\Firebase\Auth\DeleteUsersResult;
 use Kreait\Firebase\Auth\SendActionLink\FailedToSendActionLink;
@@ -62,14 +62,14 @@ final class Auth implements Contract\Auth
 {
     private ApiClient $client;
 
-    /** @var CustomTokenGenerator|CustomTokenViaGoogleIam|null */
+    /** @var CustomTokenGenerator|CustomTokenViaGoogleCredentials|null */
     private $tokenGenerator;
     private IdTokenVerifier $idTokenVerifier;
     private SessionCookieVerifier $sessionCookieVerifier;
     private ClockInterface $clock;
 
     /**
-     * @param CustomTokenGenerator|CustomTokenViaGoogleIam|null $tokenGenerator
+     * @param CustomTokenGenerator|CustomTokenViaGoogleCredentials|null $tokenGenerator
      */
     public function __construct(
         ApiClient $client,
@@ -372,7 +372,7 @@ final class Auth implements Contract\Auth
 
         if ($generator instanceof CustomTokenGenerator) {
             $tokenString = $generator->createCustomToken($uid, $claims, $ttl)->toString();
-        } elseif ($generator instanceof CustomTokenViaGoogleIam) {
+        } elseif ($generator instanceof CustomTokenViaGoogleCredentials) {
             $expiresAt = $this->clock->now()->add(Duration::make($ttl)->value());
 
             $tokenString = $generator->createCustomToken($uid, $claims, $expiresAt)->toString();

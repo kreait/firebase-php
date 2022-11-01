@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* When no Service Account was provided, custom token were generated with a direct call to the Google Identity Toolkit,
+  which could create invalid token signatures depending on the environment (e.g. GCE).
+  Now, the provided credentials are used to sign custom tokens via the 
+  `Kreait\Firebase\Auth\CustomTokenViaGoogleCredentials` class. This is an internal class and should not be used
+  directly.
+  ([#745](https://github.com/kreait/firebase-php/pull/745))
+
+### Deprecated
+
+* `Kreait\Firebase\Auth\CustomTokenViaGoogleIam` (internal)
+
 ## [6.9.2] - 2022-10-17
 
 ### Fixed
