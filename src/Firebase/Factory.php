@@ -23,9 +23,8 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Psr7\Utils as GuzzleUtils;
 use GuzzleHttp\RequestOptions;
-use Kreait\Firebase;
 use Kreait\Firebase\Auth\ApiClient;
-use Kreait\Firebase\Auth\CustomTokenViaGoogleIam;
+use Kreait\Firebase\Auth\CustomTokenViaGoogleCredentials;
 use Kreait\Firebase\Auth\SignIn\GuzzleHandler;
 use Kreait\Firebase\Database\UrlBuilder;
 use Kreait\Firebase\Exception\InvalidArgumentException;
@@ -621,10 +620,12 @@ final class Factory
     }
 
     /**
-     * @return CustomTokenGenerator|CustomTokenViaGoogleIam|null
+     * @return CustomTokenGenerator|CustomTokenViaGoogleCredentials|null
      */
     private function createCustomTokenGenerator()
     {
+        $credentials = $this->getGoogleAuthTokenCredentials();
+
         $serviceAccount = $this->getServiceAccount();
         $clientEmail = $this->getClientEmail();
         $privateKey = $serviceAccount !== null ? $serviceAccount->getPrivateKey() : null;
@@ -639,8 +640,8 @@ final class Factory
             return $generator->withTenantId($this->tenantId);
         }
 
-        if ($clientEmail !== null) {
-            return new CustomTokenViaGoogleIam($clientEmail, $this->createApiClient(), $this->tenantId);
+        if ($credentials instanceof SignBlobInterface) {
+            return new CustomTokenViaGoogleCredentials($credentials, $this->tenantId);
         }
 
         return null;
