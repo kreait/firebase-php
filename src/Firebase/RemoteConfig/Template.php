@@ -173,9 +173,9 @@ class Template implements JsonSerializable
      */
     public function conditionNames(): array
     {
-        return array_unique(
+        return array_values(array_unique(
             array_map(static fn (Condition $c) => $c->name(), $this->conditions),
-        );
+        ));
     }
 
     /**
