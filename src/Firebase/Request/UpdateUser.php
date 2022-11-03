@@ -12,6 +12,7 @@ use Stringable;
 use function array_reduce;
 use function array_unique;
 use function is_array;
+use function is_string;
 use function mb_strtolower;
 use function preg_replace;
 
@@ -75,7 +76,17 @@ final class UpdateUser implements Request
                 case 'deleteattribute':
                 case 'deleteattributes':
                     foreach ((array) $value as $deleteAttribute) {
-                        switch (mb_strtolower(preg_replace('/[^a-z]/i', '', $deleteAttribute))) {
+                        if (!is_string($deleteAttribute) || $deleteAttribute === '') {
+                            continue;
+                        }
+
+                        $deleteAttribute = preg_replace('/[^a-z]/i', '', $deleteAttribute);
+
+                        if ($deleteAttribute === null) {
+                            continue;
+                        }
+
+                        switch (mb_strtolower($deleteAttribute)) {
                             case 'displayname':
                                 $request = $request->withRemovedDisplayName();
 
