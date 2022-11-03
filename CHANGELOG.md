@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.9.3] - 2022-11-04
+
 ### Fixed
 
 * When no Service Account was provided, custom token were generated with a direct call to the Google Identity Toolkit,
@@ -339,7 +341,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.9.2...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.9.3...6.x
+[6.9.3]: https://github.com/kreait/firebase-php/compare/6.9.2...6.9.3
 [6.9.2]: https://github.com/kreait/firebase-php/compare/6.9.1...6.9.2
 [6.9.1]: https://github.com/kreait/firebase-php/compare/6.9.0...6.9.1
 [6.9.0]: https://github.com/kreait/firebase-php/compare/6.8.0...6.9.0
