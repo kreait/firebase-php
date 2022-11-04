@@ -16,7 +16,7 @@ jobs:
     if: (github.repository_owner == 'kreait' || github.repository_owner == 'beste-access') && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository)
 
     env:
-      php-version: '8.0'
+      php-version: '8.1'
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
       key: cache-integration-6x-${{ matrix.php }}-v1
 
