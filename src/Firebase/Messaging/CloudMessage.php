@@ -33,7 +33,7 @@ final class CloudMessage implements Message
     private FcmOptions $fcmOptions;
 
     private function __construct(
-        MessageTarget $messageTarget
+        MessageTarget $messageTarget,
     ) {
         $this->target = $messageTarget;
         $this->data = MessageData::fromArray([]);

@@ -403,7 +403,7 @@ final class Factory
             $credentials = $this->getGoogleAuthTokenCredentials();
 
             if ($credentials !== null) {
-                $credentials = get_class($credentials);
+                $credentials = $credentials::class;
             }
         } catch (Throwable $e) {
             $credentials = $e->getMessage();

@@ -39,7 +39,7 @@ final class Version
         DateTimeImmutable $updatedAt,
         UpdateOrigin $updateOrigin,
         UpdateType $updateType,
-        ?VersionNumber $rollbackSource
+        ?VersionNumber $rollbackSource,
     ) {
         $this->versionNumber = $versionNumber;
         $this->user = $user;

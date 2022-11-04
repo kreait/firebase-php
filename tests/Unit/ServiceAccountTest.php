@@ -28,7 +28,7 @@ final class ServiceAccountTest extends UnitTestCase
     protected function setUp(): void
     {
         $this->pathToUnreadableJson = self::$fixturesDir.'/ServiceAccount/unreadable.json';
-        chmod($this->pathToUnreadableJson, 0000);
+        chmod($this->pathToUnreadableJson, 0);
 
         $this->pathToValidJson = self::$fixturesDir.'/ServiceAccount/valid.json';
         $this->validJson = (string) file_get_contents($this->pathToValidJson);
@@ -37,7 +37,7 @@ final class ServiceAccountTest extends UnitTestCase
 
     protected function tearDown(): void
     {
-        chmod($this->pathToUnreadableJson, 0644);
+        chmod($this->pathToUnreadableJson, 0o644);
     }
 
     public function testCreateFromJsonText(): void

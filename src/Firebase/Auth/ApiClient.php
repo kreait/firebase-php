@@ -50,7 +50,7 @@ class ApiClient
         ?string $tenantId,
         ClientInterface $client,
         SignInHandler $signInHandler,
-        ClockInterface $clock
+        ClockInterface $clock,
     ) {
         $this->projectId = $projectId;
         $this->tenantId = $tenantId;
