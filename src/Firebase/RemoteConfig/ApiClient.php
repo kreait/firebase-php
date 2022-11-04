@@ -82,8 +82,8 @@ class ApiClient
         $lastVersionNumber = $query->lastVersionNumber();
         $pageSize = $query->pageSize();
 
-        $since = $since !== null ? $since->format('Y-m-d\TH:i:s.v\Z') : null;
-        $until = $until !== null ? $until->format('Y-m-d\TH:i:s.v\Z') : null;
+        $since = $since?->format('Y-m-d\TH:i:s.v\Z');
+        $until = $until?->format('Y-m-d\TH:i:s.v\Z');
         $lastVersionNumber = $lastVersionNumber !== null ? (string) $lastVersionNumber : null;
         $pageSize = $pageSize ? (string) $pageSize : null;
 

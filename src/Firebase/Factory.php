@@ -628,7 +628,7 @@ final class Factory
 
         $serviceAccount = $this->getServiceAccount();
         $clientEmail = $this->getClientEmail();
-        $privateKey = $serviceAccount !== null ? $serviceAccount->getPrivateKey() : null;
+        $privateKey = $serviceAccount?->getPrivateKey();
 
         if ($clientEmail && $privateKey) {
             $generator = CustomTokenGenerator::withClientEmailAndPrivateKey($clientEmail, $privateKey);

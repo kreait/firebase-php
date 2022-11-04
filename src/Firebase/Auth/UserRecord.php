@@ -85,9 +85,7 @@ class UserRecord implements JsonSerializable
     {
         $data = get_object_vars($this);
 
-        $data['tokensValidAfterTime'] = $this->tokensValidAfterTime !== null
-            ? $this->tokensValidAfterTime->format(DATE_ATOM)
-            : null;
+        $data['tokensValidAfterTime'] = $this->tokensValidAfterTime?->format(DATE_ATOM);
 
         return $data;
     }
