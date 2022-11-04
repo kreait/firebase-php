@@ -10,7 +10,6 @@ use Kreait\Firebase\Exception\AppCheck\InvalidAppCheckTokenOptions;
 use Kreait\Firebase\ServiceAccount;
 use StellaMaris\Clock\ClockInterface;
 
-use function is_null;
 use function is_numeric;
 
 /**
@@ -19,23 +18,21 @@ use function is_numeric;
 class AppCheckTokenGenerator
 {
     private const APP_CHECK_AUDIENCE = 'https://firebaseappcheck.googleapis.com/google.firebase.appcheck.v1.TokenExchangeService';
-
     private ServiceAccount $serviceAccount;
     private ClockInterface $clock;
 
-    public function __construct(ServiceAccount $serviceAccount, ClockInterface $clock = null)
+    public function __construct(ServiceAccount $serviceAccount, ?ClockInterface $clock = null)
     {
         $this->serviceAccount = $serviceAccount;
         $this->clock = $clock ?? SystemClock::create();
     }
 
     /**
-     * @param string $appId The Application Id to use for the generated token.
-     * @param AppCheckTokenOptions|null $options 
-     * 
-     * @return string The generated token.
+     * @param string $appId the Application Id to use for the generated token
+     *
+     * @return string the generated token
      */
-    public function createCustomToken(string $appId, AppCheckTokenOptions $options = null) : string
+    public function createCustomToken(string $appId, ?AppCheckTokenOptions $options = null): string
     {
         $now = $this->clock->now()->getTimestamp();
         $payload = [
@@ -47,7 +44,7 @@ class AppCheckTokenGenerator
             'exp' => $now + 300,
         ];
 
-        if (! is_null($options)) {
+        if (null !== $options) {
             $this->validateOptions($options);
 
             $payload = array_merge($payload, $options->toArray());
@@ -58,7 +55,7 @@ class AppCheckTokenGenerator
 
     private function validateOptions(AppCheckTokenOptions $options): void
     {
-        if (! is_numeric($options->ttl())) {
+        if (!is_numeric($options->ttl())) {
             throw new InvalidAppCheckTokenOptions('The ttl must be a number.');
         }
 

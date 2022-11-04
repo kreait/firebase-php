@@ -12,6 +12,7 @@ use LogicException;
 use UnexpectedValueException;
 
 use function in_array;
+use function is_string;
 use function str_starts_with;
 
 /**
@@ -20,7 +21,6 @@ use function str_starts_with;
 class AppCheckTokenVerifier
 {
     private const APP_CHECK_ISSUER_PREFIX = 'https://firebaseappcheck.googleapis.com/';
-
     private string $projectId;
     private CachedKeySet $keySet;
 
@@ -32,15 +32,13 @@ class AppCheckTokenVerifier
 
     /**
      * Verfies the format and signature of a Firebase App Check token.
-     * 
-     * @param string $token The Firebase Auth JWT token to verify.
-     * 
-     * @throws InvalidAppCheckToken If the token is invalid.
-     * @throws FailedToVerifyAppCheckToken If the token could not be verified.
-     * 
-     * @return DecodedAppCheckToken 
+     *
+     * @param string $token the Firebase Auth JWT token to verify
+     *
+     * @throws FailedToVerifyAppCheckToken if the token could not be verified
+     * @throws InvalidAppCheckToken if the token is invalid
      */
-    public function verifyToken(string $token): DecodedAppCheckToken 
+    public function verifyToken(string $token): DecodedAppCheckToken
     {
         $decodedToken = $this->decodeJwt($token);
 
@@ -50,12 +48,10 @@ class AppCheckTokenVerifier
     }
 
     /**
-     * @param string $token The Firebase App Check JWT token to decode.
-     * 
-     * @throws InvalidAppCheckToken If the token is invalid.
-     * @throws FailedToVerifyAppCheckToken If the token could not be verified.
-     * 
-     * @return DecodedAppCheckToken 
+     * @param string $token the Firebase App Check JWT token to decode
+     *
+     * @throws FailedToVerifyAppCheckToken if the token could not be verified
+     * @throws InvalidAppCheckToken if the token is invalid
      */
     private function decodeJwt(string $token): DecodedAppCheckToken
     {
@@ -72,22 +68,22 @@ class AppCheckTokenVerifier
 
     /**
      * Verifies the content of a Firebase App Check JWT.
-     * 
-     * @param DecodedAppCheckToken $token The decoded Firebase App Check token to verify.
-     * 
-     * @throws FailedToVerifyAppCheckToken If the token could not be verified.
+     *
+     * @param DecodedAppCheckToken $token the decoded Firebase App Check token to verify
+     *
+     * @throws FailedToVerifyAppCheckToken if the token could not be verified
      */
     private function verifyContent(DecodedAppCheckToken $token): void
     {
-        if (empty($token->aud()) || ! in_array($this->projectId, $token->aud())) {
+        if (empty($token->aud()) || !in_array($this->projectId, $token->aud(), true)) {
             throw new FailedToVerifyAppCheckToken('The "aud" claim must be set to the project ID.');
         }
 
-        if (! is_string($token->iss()) || ! str_starts_with($token->iss(), self::APP_CHECK_ISSUER_PREFIX)) {
+        if (!is_string($token->iss()) || !str_starts_with($token->iss(), self::APP_CHECK_ISSUER_PREFIX)) {
             throw new FailedToVerifyAppCheckToken('The provided App Check token has incorrect "iss" (issuer) claim.');
         }
 
-        if (! is_string($token->sub())) {
+        if (!is_string($token->sub())) {
             throw new FailedToVerifyAppCheckToken('The provided App Check token has no "sub" (subject) claim.');
         }
     }

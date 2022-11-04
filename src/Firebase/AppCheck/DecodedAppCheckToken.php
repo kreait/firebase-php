@@ -7,6 +7,8 @@ namespace Kreait\Firebase\AppCheck;
 use InvalidArgumentException;
 use JsonSerializable;
 
+use function array_key_exists;
+
 /**
  * @phpstan-type DecodedAppCheckTokenShape array{
  *     app_id: string,
@@ -23,7 +25,6 @@ final class DecodedAppCheckToken implements JsonSerializable
 
     /** @var array<string> */
     private array $aud;
-
     private string $exp;
     private string $iat;
     private string $iss;
@@ -33,7 +34,7 @@ final class DecodedAppCheckToken implements JsonSerializable
      * @param array<string> $aud
      */
     private function __construct(
-        string $app_id, 
+        string $app_id,
         array $aud,
         string $exp,
         string $iat,
@@ -53,27 +54,27 @@ final class DecodedAppCheckToken implements JsonSerializable
      */
     public static function fromArray(array $data): self
     {
-        if (! array_key_exists('app_id', $data)) {
+        if (!array_key_exists('app_id', $data)) {
             throw new InvalidArgumentException('The "app_id" key is missing from the token data.');
         }
 
-        if (! array_key_exists('aud', $data)) {
+        if (!array_key_exists('aud', $data)) {
             throw new InvalidArgumentException('The "app_id" key is missing from the token data.');
         }
 
-        if (! array_key_exists('exp', $data)) {
+        if (!array_key_exists('exp', $data)) {
             throw new InvalidArgumentException('The "app_id" key is missing from the token data.');
         }
 
-        if (! array_key_exists('iat', $data)) {
+        if (!array_key_exists('iat', $data)) {
             throw new InvalidArgumentException('The "app_id" key is missing from the token data.');
         }
 
-        if (! array_key_exists('iss', $data)) {
+        if (!array_key_exists('iss', $data)) {
             throw new InvalidArgumentException('The "app_id" key is missing from the token data.');
         }
 
-        if (! array_key_exists('sub', $data)) {
+        if (!array_key_exists('sub', $data)) {
             throw new InvalidArgumentException('The "app_id" key is missing from the token data.');
         }
 
@@ -118,7 +119,7 @@ final class DecodedAppCheckToken implements JsonSerializable
     public function sub(): string
     {
         return $this->sub;
-    }    
+    }
 
     /**
      * @return DecodedAppCheckTokenShape

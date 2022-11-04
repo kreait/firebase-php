@@ -44,7 +44,7 @@ final class AppCheck implements Contract\AppCheck
         return AppCheckToken::fromArray($result);
     }
 
-    public function verifyToken(string $appCheckToken): VerifyAppCheckTokenResponse 
+    public function verifyToken(string $appCheckToken): VerifyAppCheckTokenResponse
     {
         $decodedToken = $this->tokenVerifier->verifyToken($appCheckToken);
 

@@ -18,7 +18,6 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
 final class AppCheckTest extends IntegrationTestCase
 {
     public AppCheck $appCheck;
-
     public string $appId;
 
     protected function setUp(): void

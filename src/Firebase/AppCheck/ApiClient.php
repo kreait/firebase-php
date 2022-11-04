@@ -27,11 +27,8 @@ class ApiClient
     }
 
     /**
-     * @param string $appId
-     * @param string $customToken
-     * 
      * @throws AppCheckException
-     * 
+     *
      * @return array<string, mixed>
      */
     public function exchangeCustomToken(string $appId, string $customToken): array

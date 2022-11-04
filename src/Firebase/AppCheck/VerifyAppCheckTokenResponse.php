@@ -8,6 +8,7 @@ use JsonSerializable;
 
 /**
  * @phpstan-import-type DecodedAppCheckTokenShape from DecodedAppCheckToken
+ *
  * @phpstan-type VerifyAppCheckTokenResponseShape array{
  *     appId: string,
  *     token: DecodedAppCheckTokenShape,
@@ -15,9 +16,7 @@ use JsonSerializable;
  */
 final class VerifyAppCheckTokenResponse implements JsonSerializable
 {
-    /** @var string */
     private string $appId;
-
     private DecodedAppCheckToken $token;
 
     public function __construct(string $appId, DecodedAppCheckToken $token)
@@ -34,7 +33,7 @@ final class VerifyAppCheckTokenResponse implements JsonSerializable
     public function token(): DecodedAppCheckToken
     {
         return $this->token;
-    }    
+    }
 
     /**
      * @return VerifyAppCheckTokenResponseShape

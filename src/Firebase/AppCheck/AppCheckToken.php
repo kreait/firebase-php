@@ -7,6 +7,8 @@ namespace Kreait\Firebase\AppCheck;
 use InvalidArgumentException;
 use JsonSerializable;
 
+use function array_key_exists;
+
 /**
  * @phpstan-type AppCheckTokenShape array{
  *     token: string,
@@ -29,11 +31,11 @@ final class AppCheckToken implements JsonSerializable
      */
     public static function fromArray(array $data): self
     {
-        if (! array_key_exists('token', $data)) {
+        if (!array_key_exists('token', $data)) {
             throw new InvalidArgumentException('The "token" key is missing from the token data.');
         }
 
-        if (! array_key_exists('ttl', $data)) {
+        if (!array_key_exists('ttl', $data)) {
             throw new InvalidArgumentException('The "ttl" key is missing from the token data.');
         }
 

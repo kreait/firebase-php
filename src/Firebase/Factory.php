@@ -253,7 +253,7 @@ final class Factory
         $projectId = $this->getProjectId();
         $serviceAccount = $this->getServiceAccount();
 
-        if ($serviceAccount == null) {
+        if ($serviceAccount === null) {
             throw new RuntimeException('Unable to use AppCheck without credentials');
         }
 
@@ -262,12 +262,12 @@ final class Factory
         ]);
 
         $keySet = new CachedKeySet(
-            "https://firebase.google.com/docs/reference/appcheck/rest/v1/jwks#resource:-publicjwkset",
+            'https://firebase.google.com/docs/reference/appcheck/rest/v1/jwks#resource:-publicjwkset',
             new Client(),
             new HttpFactory(),
-            CacheManager::getInstance("files"),
+            CacheManager::getInstance('files'),
             21600,
-            true
+            true,
         );
 
         return new AppCheck(
