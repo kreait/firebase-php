@@ -6,6 +6,7 @@ namespace Kreait\Firebase;
 
 use Beste\Clock\SystemClock;
 use Beste\Clock\WrappingClock;
+use Firebase\JWT\CachedKeySet;
 use Google\Auth\ApplicationDefaultCredentials;
 use Google\Auth\Cache\MemoryCacheItemPool;
 use Google\Auth\Credentials\ServiceAccountCredentials;
@@ -21,6 +22,7 @@ use Google\Cloud\Storage\StorageClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Utils as GuzzleUtils;
 use GuzzleHttp\RequestOptions;
 use Kreait\Firebase\Auth\ApiClient;
@@ -37,6 +39,7 @@ use Kreait\Firebase\JWT\IdTokenVerifier;
 use Kreait\Firebase\JWT\SessionCookieVerifier;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Value\Email;
+use Phpfastcache\CacheManager;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\Log\LoggerInterface;
@@ -243,6 +246,35 @@ final class Factory
         $factory->clock = $clock;
 
         return $factory;
+    }
+
+    public function createAppCheck(): Contract\AppCheck
+    {
+        $projectId = $this->getProjectId();
+        $serviceAccount = $this->getServiceAccount();
+
+        if ($serviceAccount == null) {
+            throw new RuntimeException('Unable to use AppCheck without credentials');
+        }
+
+        $http = $this->createApiClient([
+            'base_uri' => 'https://firebaseappcheck.googleapis.com/v1/projects/'.$projectId,
+        ]);
+
+        $keySet = new CachedKeySet(
+            "https://firebase.google.com/docs/reference/appcheck/rest/v1/jwks#resource:-publicjwkset",
+            new Client(),
+            new HttpFactory(),
+            CacheManager::getInstance("files"),
+            21600,
+            true
+        );
+
+        return new AppCheck(
+            new AppCheck\ApiClient($http),
+            new AppCheck\AppCheckTokenGenerator($serviceAccount, $this->clock),
+            new AppCheck\AppCheckTokenVerifier($projectId, $keySet),
+        );
     }
 
     public function createAuth(): Contract\Auth

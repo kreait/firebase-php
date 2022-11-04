@@ -10,6 +10,10 @@ parameters:
 		-
 			message: '#Access to an uninitialized property.+RequestWithSubRequests::\$wrappedRequest#'
 			path: src/Firebase/Http/RequestWithSubRequests.php
+		-
+			message: "#^Parameter \\#2 \\$keyOrKeyArray of static method Firebase\\\\JWT\\\\JWT\\:\\:decode\\(\\) expects array\\<string, Firebase\\\\JWT\\\\Key\\>\\|Firebase\\\\JWT\\\\Key, Firebase\\\\JWT\\\\CachedKeySet given\\.$#"
+			count: 1
+			path: src/Firebase/AppCheck/AppCheckTokenVerifier.php
 
 	checkUninitializedProperties: true
 

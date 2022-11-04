@@ -38,6 +38,7 @@
         "kreait/firebase-tokens": "^3.0.3",
         "lcobucci/jwt": "^4.2.1",
         "mtdowling/jmespath.php": "^2.6.1",
+        "phpfastcache/phpfastcache": "^9.1",
         "psr/cache": "^1.0.1|^2.0|^3.0",
         "psr/http-message": "^1.0.1",
         "psr/log": "^1.1|^2.0|^3.0",
