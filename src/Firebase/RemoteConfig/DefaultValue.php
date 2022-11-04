@@ -6,8 +6,6 @@ namespace Kreait\Firebase\RemoteConfig;
 
 use JsonSerializable;
 
-use function array_key_exists;
-
 /**
  * @phpstan-import-type RemoteConfigPersonalizationValueShape from PersonalizationValue
  * @phpstan-import-type RemoteConfigExplicitValueShape from ExplicitValue
@@ -18,9 +16,6 @@ use function array_key_exists;
  */
 class DefaultValue implements JsonSerializable
 {
-    /** @deprecated 6.9.0 */
-    public const IN_APP_DEFAULT_VALUE = true;
-
     /**
      * @var RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape
      */
@@ -34,14 +29,6 @@ class DefaultValue implements JsonSerializable
         $this->data = $data;
     }
 
-    /**
-     * @deprecated 6.9.0 Use {@see useInAppDefault()} instead
-     */
-    public static function none(): self
-    {
-        return self::useInAppDefault();
-    }
-
     public static function useInAppDefault(): self
     {
         return new self(['useInAppDefault' => true]);
@@ -50,28 +37,6 @@ class DefaultValue implements JsonSerializable
     public static function with(string $value): self
     {
         return new self(['value' => $value]);
-    }
-
-    /**
-     * @deprecated 6.9.0 Use {@see toArray()} instead
-     *
-     * @return string|bool|null
-     */
-    public function value()
-    {
-        if (array_key_exists('value', $this->data)) {
-            return $this->data['value'];
-        }
-
-        if (array_key_exists('useInAppDefault', $this->data)) {
-            return $this->data['useInAppDefault'];
-        }
-
-        if (array_key_exists('personalizationId', $this->data)) {
-            return $this->data['personalizationId'];
-        }
-
-        return null;
     }
 
     /**
