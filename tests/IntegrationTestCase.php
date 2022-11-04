@@ -89,7 +89,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
         try {
             return ServiceAccount::fromValue($credentialsPath);
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return null;
         }
     }
@@ -120,7 +120,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
             }
 
             return null;
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return null;
         }
     }
@@ -136,7 +136,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 
         try {
             return Json::decode($tokens, true);
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return null;
         }
     }
@@ -155,7 +155,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
             }
 
             return null;
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return null;
         }
     }

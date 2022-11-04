@@ -41,7 +41,7 @@ final class ResponseWithSubResponses implements HasSubResponses, ResponseInterfa
     {
         try {
             $parser = PSR7::convert($response);
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return new Responses();
         }
 

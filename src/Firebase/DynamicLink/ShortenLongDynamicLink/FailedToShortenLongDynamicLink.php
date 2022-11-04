@@ -22,7 +22,7 @@ final class FailedToShortenLongDynamicLink extends RuntimeException implements F
 
         try {
             $message = Json::decode((string) $response->getBody(), true)['error']['message'] ?? $fallbackMessage;
-        } catch (UnexpectedValueException $e) {
+        } catch (UnexpectedValueException) {
             $message = $fallbackMessage;
         }
 

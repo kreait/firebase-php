@@ -22,7 +22,7 @@ final class FailedToCreateDynamicLink extends RuntimeException implements Fireba
 
         try {
             $message = Json::decode((string) $response->getBody(), true)['error']['message'] ?? $fallbackMessage;
-        } catch (UnexpectedValueException $e) {
+        } catch (UnexpectedValueException) {
             $message = $fallbackMessage;
         }
 

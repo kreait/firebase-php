@@ -64,7 +64,7 @@ final class MulticastSendReport implements Countable
 
             try {
                 $requestData = Json::decode((string) $matchingRequest->getBody(), true);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException) {
                 continue;
             }
 
@@ -85,7 +85,7 @@ final class MulticastSendReport implements Countable
             if ($response->getStatusCode() < 400) {
                 try {
                     $responseData = Json::decode((string) $response->getBody(), true);
-                } catch (InvalidArgumentException $e) {
+                } catch (InvalidArgumentException) {
                     $responseData = [];
                 }
 
