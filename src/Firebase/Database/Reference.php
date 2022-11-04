@@ -42,7 +42,7 @@ class Reference
         UriInterface $uri,
         ApiClient $apiClient,
         UrlBuilder $urlBuilder,
-        ?Validator $validator = null
+        ?Validator $validator = null,
     ) {
         $this->validator = $validator ?? new Validator();
         $this->validator->validateUri($uri);

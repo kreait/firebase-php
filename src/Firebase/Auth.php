@@ -76,7 +76,7 @@ final class Auth implements Contract\Auth
         $tokenGenerator,
         IdTokenVerifier $idTokenVerifier,
         SessionCookieVerifier $sessionCookieVerifier,
-        ClockInterface $clock
+        ClockInterface $clock,
     ) {
         $this->client = $client;
         $this->tokenGenerator = $tokenGenerator;

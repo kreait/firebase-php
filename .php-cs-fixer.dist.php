@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Beste\PhpCsFixer\Config\RuleSet\Php74;
+use Beste\PhpCsFixer\Config\RuleSet\Php81;
 use Ergebnis\PhpCsFixer\Config;
 
-$config = Config\Factory::fromRuleSet(new Php74(), [
+$config = Config\Factory::fromRuleSet(new Php81(), [
     'phpdoc_line_span' => false,
     'concat_space' => [
         'spacing' => 'none',
