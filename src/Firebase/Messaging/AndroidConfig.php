@@ -144,40 +144,14 @@ final class AndroidConfig implements JsonSerializable
         return $config;
     }
 
-    /**
-     * @deprecated 6.4.0 Use {@see withHighMessagePriority()} instead
-     */
-    public function withHighPriority(): self
-    {
-        return $this->withMessagePriority(self::MESSAGE_PRIORITY_HIGH);
-    }
-
     public function withHighMessagePriority(): self
     {
         return $this->withMessagePriority(self::MESSAGE_PRIORITY_HIGH);
     }
 
-    /**
-     * @deprecated 6.4.0 Use {@see withNormalMessagePriority()} instead
-     */
-    public function withNormalPriority(): self
-    {
-        return $this->withMessagePriority(self::MESSAGE_PRIORITY_NORMAL);
-    }
-
     public function withNormalMessagePriority(): self
     {
         return $this->withMessagePriority(self::MESSAGE_PRIORITY_NORMAL);
-    }
-
-    /**
-     * @deprecated 6.4.0 Use {@see withMessagePriority()} instead
-     *
-     * @param self::MESSAGE_PRIORITY_* $priority
-     */
-    public function withPriority(string $priority): self
-    {
-        return $this->withMessagePriority($priority);
     }
 
     /**

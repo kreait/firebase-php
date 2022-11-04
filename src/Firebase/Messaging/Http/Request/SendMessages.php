@@ -20,11 +20,6 @@ final class SendMessages implements HasSubRequests, RequestInterface
 {
     use WrappedPsr7Request;
 
-    /**
-     * @deprecated 6.6.0 Use {@see Messaging::BATCH_MESSAGE_LIMIT} instead
-     */
-    public const MAX_AMOUNT_OF_MESSAGES = Messaging::BATCH_MESSAGE_LIMIT;
-
     public function __construct(string $projectId, Messages $messages, bool $validateOnly = false)
     {
         if ($messages->count() > Messaging::BATCH_MESSAGE_LIMIT) {

@@ -21,11 +21,6 @@ final class SendMessageToTokens implements HasSubRequests, RequestInterface
 {
     use WrappedPsr7Request;
 
-    /**
-     * @deprecated 6.6.0 Use {@see Messaging::BATCH_MESSAGE_LIMIT} instead
-     */
-    public const MAX_AMOUNT_OF_TOKENS = Messaging::BATCH_MESSAGE_LIMIT;
-
     public function __construct(string $projectId, Message $message, RegistrationTokens $registrationTokens, bool $validateOnly = false)
     {
         if ($registrationTokens->count() > Messaging::BATCH_MESSAGE_LIMIT) {
