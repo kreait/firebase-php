@@ -44,9 +44,8 @@ final class FailedToGetStatisticsForDynamicLink extends RuntimeException impleme
      */
     private static function getCodeAndMessageFromResponse(ResponseInterface $response): array
     {
-        switch ($code = $response->getStatusCode()) {
-            case StatusCode::STATUS_FORBIDDEN:
-                $message = <<<'MSG'
+        $message = match ($code = $response->getStatusCode()) {
+            StatusCode::STATUS_FORBIDDEN => <<<'MSG'
 Firebase reported missing permissions to access the statistics
 for the requested Dynamic Link. Please make sure that the
 Google Dynamic Links API is enabled for your project at
@@ -65,12 +64,8 @@ and making sure that the Service Account has one of the following roles
     - Firebase Dynamic Links Viewer
     - Firebase Dynamic Links Admin
 
-MSG;
-
-                break;
-
-            default:
-                $message = <<<'MSG'
+MSG,
+            default => <<<'MSG'
 Failed to get statistics for dynamic link. Please inspect the
 response for further details.
 
@@ -79,8 +74,8 @@ a new issue in the SDK's GitHub repository and include the
 HTTP Status code (`$response->getStatusCode()`) and the
 message body (`$response->getBody()->getContents()`)
 
-MSG;
-        }
+MSG,
+        };
 
         return [
             'code' => $code,

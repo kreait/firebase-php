@@ -50,18 +50,11 @@ class DatabaseApiExceptionConverter
             $code = $response->getStatusCode();
         }
 
-        switch ($code) {
-            case 401:
-            case 403:
-                return new PermissionDenied($message, $code, $e);
-
-            case 412:
-                return new PreconditionFailed($message, $code, $e);
-
-            case 404:
-                return DatabaseNotFound::fromUri($e->getRequest()->getUri());
-        }
-
-        return new DatabaseError($message, $code, $e);
+        return match ($code) {
+            401, 403 => new PermissionDenied($message, $code, $e),
+            412 => new PreconditionFailed($message, $code, $e),
+            404 => DatabaseNotFound::fromUri($e->getRequest()->getUri()),
+            default => new DatabaseError($message, $code, $e),
+        };
     }
 }
