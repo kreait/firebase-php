@@ -13,7 +13,6 @@ use Psr\Http\Message\UriInterface;
 use Throwable;
 
 use function array_filter;
-use function rtrim;
 
 /**
  * @internal
@@ -22,10 +21,12 @@ class ApiClient
 {
     private ClientInterface $client;
     private RemoteConfigApiExceptionConverter $errorHandler;
+    private string $baseUri;
 
-    public function __construct(ClientInterface $client)
+    public function __construct(string $projectId, ClientInterface $client)
     {
         $this->client = $client;
+        $this->baseUri = "https://firebaseremoteconfig.googleapis.com/v1/projects/{$projectId}/remoteConfig";
         $this->errorHandler = new RemoteConfigApiExceptionConverter();
     }
 
@@ -75,7 +76,7 @@ class ApiClient
      */
     public function listVersions(FindVersions $query, ?string $nextPageToken = null): ResponseInterface
     {
-        $uri = rtrim((string) $this->client->getConfig('base_uri'), '/').':listVersions';
+        $uri = $this->baseUri.':listVersions';
 
         $since = $query->since();
         $until = $query->until();
@@ -103,7 +104,7 @@ class ApiClient
      */
     public function rollbackToVersion(VersionNumber $versionNumber): ResponseInterface
     {
-        $uri = rtrim((string) $this->client->getConfig('base_uri'), '/').':rollback';
+        $uri = $this->baseUri.':rollback';
 
         return $this->requestApi('POST', $uri, [
             'json' => [

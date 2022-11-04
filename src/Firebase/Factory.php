@@ -288,7 +288,7 @@ final class Factory
             'base_uri' => "https://firebaseremoteconfig.googleapis.com/v1/projects/{$this->getProjectId()}/remoteConfig",
         ]);
 
-        return new RemoteConfig(new RemoteConfig\ApiClient($http));
+        return new RemoteConfig(new RemoteConfig\ApiClient($this->getProjectId(), $http));
     }
 
     public function createMessaging(): Contract\Messaging
