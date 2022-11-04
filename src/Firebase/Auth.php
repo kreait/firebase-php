@@ -253,7 +253,7 @@ final class Auth implements Contract\Auth
 
         try {
             $this->client->deleteUser($uid);
-        } catch (UserNotFound $e) {
+        } catch (UserNotFound) {
             throw new UserNotFound("No user with uid '{$uid}' found.");
         }
     }

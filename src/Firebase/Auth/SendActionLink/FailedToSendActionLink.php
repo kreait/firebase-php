@@ -22,7 +22,7 @@ final class FailedToSendActionLink extends RuntimeException implements FirebaseE
 
         try {
             $message = Json::decode((string) $response->getBody(), true)['error']['message'] ?? $fallbackMessage;
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             $message = $fallbackMessage;
         }
 

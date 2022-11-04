@@ -196,7 +196,7 @@ final class Messaging implements Contract\Messaging
 
         try {
             return $this->appInstanceApi->getAppInstanceAsync($token)->wait();
-        } catch (NotFound $e) {
+        } catch (NotFound) {
             throw NotFound::becauseTokenNotFound($token->value());
         } catch (MessagingException $e) {
             // The token is invalid

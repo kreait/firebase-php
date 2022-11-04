@@ -140,7 +140,7 @@ class MessagingApiExceptionConverter
 
         try {
             return new DateTimeImmutable($retryAfter);
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             // We can't afford to throw exceptions in an exception handler :)
             // Here, if the Retry-After header doesn't have a numeric value
             // or a date that can be handled by DateTimeImmutable, we just

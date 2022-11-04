@@ -34,7 +34,7 @@ final class FailedToCreateSessionCookie extends RuntimeException implements Fire
 
         try {
             $message = Json::decode((string) $response->getBody(), true)['error']['message'] ?? $fallbackMessage;
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             $message = $fallbackMessage;
         }
 

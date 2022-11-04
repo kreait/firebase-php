@@ -512,7 +512,7 @@ final class Factory
         if ($credentials = Util::getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
             try {
                 return $this->serviceAccount = ServiceAccount::fromValue($credentials);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException) {
                 // Do nothing, continue trying
             }
         }
@@ -526,7 +526,7 @@ final class Factory
         if ($credentials = CredentialsLoader::fromWellKnownFile()) {
             try {
                 return $this->serviceAccount = ServiceAccount::fromValue($credentials);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException) {
                 // Do nothing, continue trying
             }
         }
@@ -591,7 +591,7 @@ final class Factory
             ) {
                 return $this->clientEmail = $clientEmail;
             }
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return null;
         }
 
@@ -681,7 +681,7 @@ final class Factory
 
         try {
             return $this->googleAuthTokenCredentials = ApplicationDefaultCredentials::getCredentials(self::API_CLIENT_SCOPES);
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return null;
         }
     }
