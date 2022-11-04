@@ -29,7 +29,7 @@ final class ApiClientTest extends UnitTestCase
     protected function setUp(): void
     {
         $this->mockHandler = new MockHandler();
-        $this->client = new ApiClient(new Client(['handler' => $this->mockHandler]));
+        $this->client = new ApiClient('project-id', new Client(['handler' => $this->mockHandler]));
     }
 
     /**
