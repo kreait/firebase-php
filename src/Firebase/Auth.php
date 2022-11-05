@@ -87,7 +87,7 @@ final class Auth implements Contract\Auth
 
     public function getUser($uid): UserRecord
     {
-        $uid = (string) (new Uid((string) $uid));
+        $uid = Uid::fromString($uid)->value;
 
         $userRecord = $this->getUsers([$uid])[$uid] ?? null;
 
@@ -100,7 +100,7 @@ final class Auth implements Contract\Auth
 
     public function getUsers(array $uids): array
     {
-        $uids = array_map(static fn ($uid) => (string) (new Uid((string) $uid)), $uids);
+        $uids = array_map(static fn ($uid) => Uid::fromString($uid)->value, $uids);
 
         $users = array_fill_keys($uids, null);
 
@@ -249,7 +249,7 @@ final class Auth implements Contract\Auth
 
     public function deleteUser($uid): void
     {
-        $uid = (string) (new Uid((string) $uid));
+        $uid = Uid::fromString($uid)->value;
 
         try {
             $this->client->deleteUser($uid);
@@ -358,7 +358,7 @@ final class Auth implements Contract\Auth
 
     public function setCustomUserClaims($uid, ?array $claims): void
     {
-        $uid = (string) (new Uid((string) $uid));
+        $uid = Uid::fromString($uid)->value;
         $claims ??= [];
 
         $this->client->setCustomUserClaims($uid, $claims);
@@ -366,7 +366,7 @@ final class Auth implements Contract\Auth
 
     public function createCustomToken($uid, array $claims = [], $ttl = 3600): UnencryptedToken
     {
-        $uid = (string) (new Uid((string) $uid));
+        $uid = Uid::fromString($uid)->value;
 
         $generator = $this->tokenGenerator;
 
@@ -487,14 +487,14 @@ final class Auth implements Contract\Auth
 
     public function revokeRefreshTokens($uid): void
     {
-        $uid = (string) (new Uid((string) $uid));
+        $uid = Uid::fromString($uid)->value;
 
         $this->client->revokeRefreshTokens($uid);
     }
 
     public function unlinkProvider($uid, $provider): UserRecord
     {
-        $uid = (string) (new Uid((string) $uid));
+        $uid = Uid::fromString($uid)->value;
         $provider = array_map('strval', (array) $provider);
 
         $response = $this->client->unlinkProvider($uid, $provider);

@@ -38,7 +38,7 @@ trait EditUserTrait
     public function withUid($uid): self
     {
         $request = clone $this;
-        $request->uid = (string) (new Uid((string) $uid));
+        $request->uid = Uid::fromString($uid)->value;
 
         return $request;
     }

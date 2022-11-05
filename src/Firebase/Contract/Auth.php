@@ -47,7 +47,7 @@ interface Auth
     public function getUser($uid): UserRecord;
 
     /**
-     * @param array<Stringable|string> $uids
+     * @param non-empty-list<Stringable|string> $uids
      *
      *@throws Exception\AuthException
      * @throws Exception\FirebaseException

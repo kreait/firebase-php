@@ -34,7 +34,7 @@ final class DeleteUsersRequest
         $count = 0;
 
         foreach ($uids as $uid) {
-            $validatedUids[] = (string) (new Uid((string) $uid));
+            $validatedUids[] = Uid::fromString($uid)->value;
             ++$count;
 
             if ($count > self::MAX_BATCH_SIZE) {
