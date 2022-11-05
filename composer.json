@@ -49,6 +49,7 @@
         "phpstan/phpstan": "^1.9.1",
         "phpstan/phpstan-phpunit": "^1.2.2",
         "phpunit/phpunit": "^9.5.26",
+        "roave/backward-compatibility-check": "^7.4",
         "symfony/var-dumper": "^5.4|^6.1.6"
     },
     "suggest": {
