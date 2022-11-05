@@ -23,7 +23,7 @@ final class GetStatisticsForDynamicLink
      */
     public static function forLink($link): self
     {
-        return new self((string) Url::fromValue((string) $link));
+        return new self(Url::fromString($link)->value);
     }
 
     public function withDurationInDays(int $durationInDays): self

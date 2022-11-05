@@ -30,7 +30,7 @@ final class ShortenLongDynamicLink implements JsonSerializable
     public static function forLongDynamicLink($url): self
     {
         $action = new self();
-        $action->data['longDynamicLink'] = (string) Url::fromValue((string) $url);
+        $action->data['longDynamicLink'] = Url::fromString($url)->value;
 
         return $action;
     }
