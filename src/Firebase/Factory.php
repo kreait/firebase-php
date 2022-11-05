@@ -121,7 +121,7 @@ final class Factory
     public function withClientEmail(string $clientEmail): self
     {
         $factory = clone $this;
-        $factory->clientEmail = (string) (new Email($clientEmail));
+        $factory->clientEmail = Email::fromString($clientEmail)->value;
 
         return $factory;
     }
@@ -576,7 +576,7 @@ final class Factory
         $serviceAccount = $this->getServiceAccount();
 
         if ($serviceAccount !== null) {
-            return $this->clientEmail = (string) (new Email($serviceAccount->getClientEmail()));
+            return $this->clientEmail = Email::fromString($serviceAccount->getClientEmail())->value;
         }
 
         if ($this->discoveryIsDisabled) {
