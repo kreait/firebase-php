@@ -18,11 +18,9 @@ final class EmailTest extends TestCase
      */
     public function testWithValidValue(string $value): void
     {
-        $email = new Email($value);
+        $email = Email::fromString($value)->value;
 
-        $this->assertSame($value, (string) $email);
-        $this->assertSame($value, $email->jsonSerialize());
-        $this->assertTrue($email->equalsTo($value));
+        $this->assertSame($value, $email);
     }
 
     /**
@@ -31,7 +29,7 @@ final class EmailTest extends TestCase
     public function testWithInvalidValue(string $value): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new EMail($value);
+        Email::fromString($value);
     }
 
     /**

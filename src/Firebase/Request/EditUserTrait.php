@@ -49,7 +49,7 @@ trait EditUserTrait
     public function withEmail($email): self
     {
         $request = clone $this;
-        $request->email = (string) (new Email((string) $email));
+        $request->email = Email::fromString((string) $email)->value;
 
         return $request;
     }
@@ -60,7 +60,7 @@ trait EditUserTrait
     public function withVerifiedEmail($email): self
     {
         $request = clone $this;
-        $request->email = (string) (new Email((string) $email));
+        $request->email = Email::fromString((string) $email)->value;
         $request->emailIsVerified = true;
 
         return $request;
@@ -72,7 +72,7 @@ trait EditUserTrait
     public function withUnverifiedEmail($email): self
     {
         $request = clone $this;
-        $request->email = (string) (new Email((string) $email));
+        $request->email = Email::fromString((string) $email)->value;
         $request->emailIsVerified = false;
 
         return $request;

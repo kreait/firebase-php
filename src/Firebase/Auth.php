@@ -194,7 +194,7 @@ final class Auth implements Contract\Auth
 
     public function getUserByEmail($email): UserRecord
     {
-        $email = (string) (new Email((string) $email));
+        $email = Email::fromString((string) $email)->value;
 
         $response = $this->client->getUserByEmail($email);
 
@@ -272,7 +272,7 @@ final class Auth implements Contract\Auth
 
     public function getEmailActionLink(string $type, $email, $actionCodeSettings = null, ?string $locale = null): string
     {
-        $email = (string) (new Email((string) $email));
+        $email = Email::fromString((string) $email)->value;
 
         if ($actionCodeSettings === null) {
             $actionCodeSettings = ValidatedActionCodeSettings::empty();
@@ -287,7 +287,7 @@ final class Auth implements Contract\Auth
 
     public function sendEmailActionLink(string $type, $email, $actionCodeSettings = null, ?string $locale = null): void
     {
-        $email = (string) (new Email((string) $email));
+        $email = Email::fromString((string) $email)->value;
 
         if ($actionCodeSettings === null) {
             $actionCodeSettings = ValidatedActionCodeSettings::empty();
@@ -532,7 +532,7 @@ final class Auth implements Contract\Auth
 
     public function signInWithEmailAndPassword($email, $clearTextPassword): SignInResult
     {
-        $email = (string) (new Email((string) $email));
+        $email = Email::fromString((string) $email)->value;
         $clearTextPassword = (string) (new ClearTextPassword((string) $clearTextPassword));
 
         return $this->client->handleSignIn(SignInWithEmailAndPassword::fromValues($email, $clearTextPassword));
@@ -540,7 +540,7 @@ final class Auth implements Contract\Auth
 
     public function signInWithEmailAndOobCode($email, string $oobCode): SignInResult
     {
-        $email = (string) (new Email((string) $email));
+        $email = Email::fromString((string) $email)->value;
 
         return $this->client->handleSignIn(SignInWithEmailAndOobCode::fromValues($email, $oobCode));
     }
