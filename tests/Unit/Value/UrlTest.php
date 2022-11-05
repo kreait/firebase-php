@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Value;
 
-use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\Url;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\UriInterface;
 use Stringable;
 
 /**
@@ -23,14 +21,11 @@ final class UrlTest extends TestCase
      */
     public function testWithValidValue($value): void
     {
-        $url = Url::fromValue($value);
+        $url = Url::fromString($value)->value;
 
         $check = (string) $value;
 
-        $this->assertSame($check, (string) $url);
-        $this->assertSame($check, (string) $url->toUri());
-        $this->assertSame($check, $url->jsonSerialize());
-        $this->assertTrue($url->equalsTo($check));
+        $this->assertSame($check, $url);
     }
 
     /**
@@ -39,18 +34,16 @@ final class UrlTest extends TestCase
     public function testWithInvalidValue(string $value): void
     {
         $this->expectException(InvalidArgumentException::class);
-        Url::fromValue($value);
+        Url::fromString($value);
     }
 
     /**
-     * @return array<string, array<string|Stringable|UriInterface|Url>>
+     * @return array<non-empty-string, array<string>>
      */
     public function validValues(): array
     {
         return [
             'string' => ['https://domain.tld'],
-            'Uri object' => [new Uri('https://domain.tld')],
-            'Url object' => [new Url(new Uri('https://domain.tld'))],
         ];
     }
 

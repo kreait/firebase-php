@@ -38,7 +38,7 @@ final class DynamicLinks implements Contract\DynamicLinks
      */
     public static function withApiClientAndDefaultDomain(ClientInterface $apiClient, $dynamicLinksDomain): self
     {
-        $domainUrl = (string) Url::fromValue((string) $dynamicLinksDomain);
+        $domainUrl = Url::fromString($dynamicLinksDomain)->value;
 
         $service = self::withApiClient($apiClient);
         $service->defaultDynamicLinksDomain = $domainUrl;

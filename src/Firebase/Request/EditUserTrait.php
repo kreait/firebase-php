@@ -105,7 +105,7 @@ trait EditUserTrait
     public function withPhotoUrl($url): self
     {
         $request = clone $this;
-        $request->photoUrl = (string) Url::fromValue((string) $url);
+        $request->photoUrl = Url::fromString($url)->value;
 
         return $request;
     }
