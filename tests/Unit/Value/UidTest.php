@@ -17,27 +17,19 @@ final class UidTest extends TestCase
 {
     /**
      * @dataProvider validValues
-     *
-     * @param mixed $value
      */
-    public function testWithValidValue($value): void
+    public function testWithValidValue(string $uid): void
     {
-        $uid = new Uid($value);
-
-        $this->assertSame($value, (string) $uid);
-        $this->assertSame($value, $uid->jsonSerialize());
-        $this->assertTrue($uid->equalsTo($value));
+        $this->assertSame($uid, Uid::fromString($uid)->value);
     }
 
     /**
      * @dataProvider invalidValues
-     *
-     * @param mixed $value
      */
-    public function testWithInvalidValue($value): void
+    public function testWithInvalidValue(string $uid): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new Uid($value);
+        Uid::fromString($uid);
     }
 
     /**
