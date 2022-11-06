@@ -23,10 +23,7 @@ final class CreateActionLink
         $this->settings = $settings;
     }
 
-    /**
-     * @param Stringable|string $email
-     */
-    public static function new(string $type, $email, ActionCodeSettings $settings, ?string $tenantId = null, ?string $locale = null): self
+    public static function new(string $type, Stringable|string $email, ActionCodeSettings $settings, ?string $tenantId = null, ?string $locale = null): self
     {
         $email = Email::fromString((string) $email)->value;
 

@@ -94,10 +94,8 @@ final class ServiceAccountTest extends UnitTestCase
 
     /**
      * @dataProvider invalidValues
-     *
-     * @param mixed $value
      */
-    public function testCreateFromInvalidValue($value): void
+    public function testCreateFromInvalidValue(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         ServiceAccount::fromValue($value);

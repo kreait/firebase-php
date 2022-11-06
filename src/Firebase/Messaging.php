@@ -49,7 +49,7 @@ final class Messaging implements Contract\Messaging
         $this->projectId = $projectId;
     }
 
-    public function send($message, bool $validateOnly = false): array
+    public function send(Message|array $message, bool $validateOnly = false): array
     {
         $message = $this->makeMessage($message);
 
@@ -121,7 +121,7 @@ final class Messaging implements Contract\Messaging
         ];
     }
 
-    public function subscribeToTopic($topic, $registrationTokenOrTokens): array
+    public function subscribeToTopic(string|Topic $topic, RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array
     {
         return $this->subscribeToTopics([$topic], $registrationTokenOrTokens);
     }
@@ -139,12 +139,12 @@ final class Messaging implements Contract\Messaging
         return $this->appInstanceApi->subscribeToTopics($topicObjects, $tokens);
     }
 
-    public function unsubscribeFromTopic($topic, $registrationTokenOrTokens): array
+    public function unsubscribeFromTopic(string|Topic $topic, RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array
     {
         return $this->unsubscribeFromTopics([$topic], $registrationTokenOrTokens);
     }
 
-    public function unsubscribeFromTopics(array $topics, $registrationTokenOrTokens): array
+    public function unsubscribeFromTopics(array $topics, RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array
     {
         $topics = array_map(
             static fn ($topic) => $topic instanceof Topic ? $topic : Topic::fromValue($topic),
@@ -188,7 +188,7 @@ final class Messaging implements Contract\Messaging
         return $result;
     }
 
-    public function getAppInstance($registrationToken): AppInstance
+    public function getAppInstance(RegistrationToken|string $registrationToken): AppInstance
     {
         $token = $registrationToken instanceof RegistrationToken
             ? $registrationToken

@@ -18,10 +18,7 @@ final class GetStatisticsForDynamicLink
         $this->dynamicLink = $dynamicLink;
     }
 
-    /**
-     * @param Stringable|string $link
-     */
-    public static function forLink($link): self
+    public static function forLink(Stringable|string $link): self
     {
         return new self(Url::fromString($link)->value);
     }

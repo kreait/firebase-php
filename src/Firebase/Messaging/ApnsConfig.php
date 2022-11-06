@@ -91,9 +91,8 @@ final class ApnsConfig implements JsonSerializable
 
     /**
      * @param non-empty-string $key
-     * @param mixed $value
      */
-    public function withApsField(string $key, $value): self
+    public function withApsField(string $key, mixed $value): self
     {
         $config = clone $this;
         $config->payload['aps'] ??= [];
@@ -104,9 +103,8 @@ final class ApnsConfig implements JsonSerializable
 
     /**
      * @param non-empty-string $name
-     * @param mixed $value
      */
-    public function withDataField(string $name, $value): self
+    public function withDataField(string $name, mixed $value): self
     {
         if ($name === 'aps') {
             throw new InvalidArgument('"aps" is a reserved field name');

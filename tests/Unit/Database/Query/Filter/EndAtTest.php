@@ -23,10 +23,8 @@ final class EndAtTest extends UnitTestCase
 
     /**
      * @dataProvider valueProvider
-     *
-     * @param mixed $given
      */
-    public function testModifyUri($given, string $expected): void
+    public function testModifyUri(mixed $given, string $expected): void
     {
         $filter = new EndAt($given);
 

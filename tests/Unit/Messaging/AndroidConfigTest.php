@@ -58,10 +58,8 @@ final class AndroidConfigTest extends UnitTestCase
 
     /**
      * @dataProvider validTtlValues
-     *
-     * @param int|string $ttl
      */
-    public function testItAcceptsValidTtls($ttl): void
+    public function testItAcceptsValidTtls(int|string $ttl): void
     {
         AndroidConfig::fromArray([
             'ttl' => $ttl,
@@ -72,10 +70,8 @@ final class AndroidConfigTest extends UnitTestCase
 
     /**
      * @dataProvider invalidTtlValues
-     *
-     * @param mixed $ttl
      */
-    public function testItRejectsInvalidTtls($ttl): void
+    public function testItRejectsInvalidTtls(mixed $ttl): void
     {
         $this->expectException(InvalidArgument::class);
 

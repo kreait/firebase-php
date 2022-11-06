@@ -23,11 +23,8 @@ final class StartAfterTest extends UnitTestCase
 
     /**
      * @dataProvider valueProvider
-     *
-     * @param mixed $given
-     * @param mixed $expected
      */
-    public function testModifyUri($given, $expected): void
+    public function testModifyUri(mixed $given, mixed $expected): void
     {
         $filter = new StartAfter($given);
 

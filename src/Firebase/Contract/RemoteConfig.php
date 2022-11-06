@@ -50,22 +50,18 @@ interface RemoteConfig
     /**
      * Returns a version with the given number.
      *
-     * @param VersionNumber|int|string $versionNumber
-     *
      * @throws VersionNotFound
      * @throws RemoteConfigException if something went wrong
      */
-    public function getVersion($versionNumber): Version;
+    public function getVersion(VersionNumber|int|string $versionNumber): Version;
 
     /**
      * Returns a version with the given number.
      *
-     * @param VersionNumber|int|string $versionNumber
-     *
      * @throws VersionNotFound
      * @throws RemoteConfigException if something went wrong
      */
-    public function rollbackToVersion($versionNumber): Template;
+    public function rollbackToVersion(VersionNumber|int|string $versionNumber): Template;
 
     /**
      * @param FindVersions|array<string, mixed>|null $query

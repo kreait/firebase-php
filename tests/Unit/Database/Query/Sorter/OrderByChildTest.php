@@ -18,11 +18,8 @@ final class OrderByChildTest extends UnitTestCase
 {
     /**
      * @dataProvider valueProvider
-     *
-     * @param mixed $expected
-     * @param mixed $given
      */
-    public function testOrderByChild(string $childKey, $expected, $given): void
+    public function testOrderByChild(string $childKey, mixed $expected, mixed $given): void
     {
         $sut = new OrderByChild($childKey);
 

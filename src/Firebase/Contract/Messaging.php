@@ -30,7 +30,7 @@ interface Messaging
      *
      * @return array<mixed>
      */
-    public function send($message, bool $validateOnly = false): array;
+    public function send(Message|array $message, bool $validateOnly = false): array;
 
     /**
      * @param Message|array<string, mixed> $message
@@ -40,16 +40,16 @@ interface Messaging
      * @throws MessagingException if the API request failed
      * @throws FirebaseException if something very unexpected happened (never :))
      */
-    public function sendMulticast($message, $registrationTokens, bool $validateOnly = false): MulticastSendReport;
+    public function sendMulticast(Message|array $message, RegistrationTokens|RegistrationToken|array|string $registrationTokens, bool $validateOnly = false): MulticastSendReport;
 
     /**
-     * @param Message[]|Messages $messages
+     * @param list<Message>|Messages $messages
      *
      * @throws InvalidArgumentException if the message is invalid
      * @throws MessagingException if the API request failed
      * @throws FirebaseException if something very unexpected happened (never :))
      */
-    public function sendAll($messages, bool $validateOnly = false): MulticastSendReport;
+    public function sendAll(array|Messages $messages, bool $validateOnly = false): MulticastSendReport;
 
     /**
      * @param Message|array<string, mixed> $message
@@ -61,7 +61,7 @@ interface Messaging
      *
      * @return array<mixed>
      */
-    public function validate($message): array;
+    public function validate(Message|array $message): array;
 
     /**
      * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $registrationTokenOrTokens
@@ -71,15 +71,14 @@ interface Messaging
      *
      * @return array<string, array<int, string>>
      */
-    public function validateRegistrationTokens($registrationTokenOrTokens): array;
+    public function validateRegistrationTokens(RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array;
 
     /**
-     * @param string|Topic $topic
      * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $registrationTokenOrTokens
      *
      * @return array<string, array<string, string>>
      */
-    public function subscribeToTopic($topic, $registrationTokenOrTokens): array;
+    public function subscribeToTopic(string|Topic $topic, RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array;
 
     /**
      * @param iterable<string|Topic> $topics
@@ -87,15 +86,14 @@ interface Messaging
      *
      * @return array<string, array<string, string>>
      */
-    public function subscribeToTopics(iterable $topics, $registrationTokenOrTokens): array;
+    public function subscribeToTopics(iterable $topics, RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array;
 
     /**
-     * @param string|Topic $topic
      * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $registrationTokenOrTokens
      *
      * @return array<string, array<string, string>>
      */
-    public function unsubscribeFromTopic($topic, $registrationTokenOrTokens): array;
+    public function unsubscribeFromTopic(string|Topic $topic, RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array;
 
     /**
      * @param array<string|Topic> $topics
@@ -103,22 +101,20 @@ interface Messaging
      *
      * @return array<string, array<string, string>>
      */
-    public function unsubscribeFromTopics(array $topics, $registrationTokenOrTokens): array;
+    public function unsubscribeFromTopics(array $topics, RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array;
 
     /**
      * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $registrationTokenOrTokens
      *
      * @return array<string, array<string, string>>
      */
-    public function unsubscribeFromAllTopics($registrationTokenOrTokens): array;
+    public function unsubscribeFromAllTopics(RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array;
 
     /**
      * @see https://developers.google.com/instance-id/reference/server#results
      *
-     * @param RegistrationToken|string $registrationToken
-     *
      * @throws InvalidArgument if the registration token is invalid
      * @throws FirebaseException
      */
-    public function getAppInstance($registrationToken): AppInstance;
+    public function getAppInstance(RegistrationToken|string $registrationToken): AppInstance;
 }

@@ -12,7 +12,7 @@ use Psr\Http\Message\UriInterface;
 final class LimitToFirst implements Filter
 {
     use ModifierTrait;
-    private int $limit;
+    private readonly int $limit;
 
     public function __construct(int $limit)
     {

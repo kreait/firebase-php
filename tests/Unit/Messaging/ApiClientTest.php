@@ -47,10 +47,9 @@ final class ApiClientTest extends TestCase
     /**
      * @dataProvider requestExceptions
      *
-     * @param mixed $requestException
-     * @param mixed $expectedClass
+     * @param class-string<Throwable> $expectedClass
      */
-    public function testCatchRequestException($requestException, $expectedClass): void
+    public function testCatchRequestException(Throwable $requestException, string $expectedClass): void
     {
         $this->mock->append($requestException);
 

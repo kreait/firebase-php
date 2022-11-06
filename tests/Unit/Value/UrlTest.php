@@ -16,10 +16,8 @@ final class UrlTest extends TestCase
 {
     /**
      * @dataProvider validValues
-     *
-     * @param Stringable|string $value
      */
-    public function testWithValidValue($value): void
+    public function testWithValidValue(Stringable|string $value): void
     {
         $url = Url::fromString($value)->value;
 

@@ -27,10 +27,8 @@ final class ReferenceTest extends DatabaseTestCase
 
     /**
      * @dataProvider validValues
-     *
-     * @param mixed $value
      */
-    public function testSetAndGet(string $key, $value): void
+    public function testSetAndGet(string $key, mixed $value): void
     {
         $ref = $this->ref->getChild(__FUNCTION__.'/'.$key);
         $ref->set($value);

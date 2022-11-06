@@ -17,10 +17,8 @@ final class RegistrationTokensTest extends TestCase
 {
     /**
      * @dataProvider validValuesWithExpectedCounts
-     *
-     * @param mixed $value
      */
-    public function testItCanBeCreatedFromValues(int $expectedCount, $value): void
+    public function testItCanBeCreatedFromValues(int $expectedCount, mixed $value): void
     {
         $tokens = RegistrationTokens::fromValue($value);
 
@@ -30,10 +28,8 @@ final class RegistrationTokensTest extends TestCase
 
     /**
      * @dataProvider invalidValues
-     *
-     * @param mixed $value
      */
-    public function testItRejectsInvalidValues($value): void
+    public function testItRejectsInvalidValues(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         RegistrationTokens::fromValue($value);
@@ -64,7 +60,7 @@ final class RegistrationTokensTest extends TestCase
     }
 
     /**
-     * @return array<string, array<int, mixed>>
+     * @return array<string, list<mixed>>
      */
     public function invalidValues(): array
     {

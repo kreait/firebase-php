@@ -47,7 +47,6 @@ use Throwable;
 
 use function array_filter;
 use function array_key_exists;
-use function get_class;
 use function sprintf;
 use function trim;
 
@@ -98,9 +97,9 @@ final class Factory
     }
 
     /**
-     * @param string|array<string, string>|ServiceAccount $value
+     * @param non-empty-string|array<string, string>|ServiceAccount $value
      */
-    public function withServiceAccount($value): self
+    public function withServiceAccount(string|array|ServiceAccount $value): self
     {
         $serviceAccount = ServiceAccount::fromValue($value);
 
@@ -142,10 +141,7 @@ final class Factory
         return $factory;
     }
 
-    /**
-     * @param UriInterface|string $uri
-     */
-    public function withDatabaseUri($uri): self
+    public function withDatabaseUri(UriInterface|string $uri): self
     {
         $url = trim($uri instanceof UriInterface ? $uri->__toString() : $uri);
 
@@ -434,8 +430,8 @@ final class Factory
             'projectId' => $projectId,
             'serviceAccount' => $serviceAccount,
             'tenantId' => $this->tenantId,
-            'tokenCacheType' => get_class($this->authTokenCache),
-            'verifierCacheType' => get_class($this->verifierCache),
+            'tokenCacheType' => $this->authTokenCache::class,
+            'verifierCacheType' => $this->verifierCache::class,
         ];
     }
 
