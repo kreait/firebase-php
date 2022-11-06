@@ -11,7 +11,6 @@ use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Tests\UnitTestCase;
-use stdClass;
 
 use function array_fill;
 
@@ -34,12 +33,6 @@ final class MessagingTest extends UnitTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->send([]);
-    }
-
-    public function testSubscribeToTopicWithInvalidTokens(): void
-    {
-        $this->expectException(InvalidArgument::class);
-        $this->messaging->subscribeToTopic('topic', new stdClass());
     }
 
     public function testSubscribeToTopicWithEmptyTokenList(): void
