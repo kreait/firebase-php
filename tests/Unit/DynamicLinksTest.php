@@ -257,7 +257,7 @@ final class DynamicLinksTest extends TestCase
         $this->httpHandler->append($connectionError);
 
         $this->expectException(FailedToGetStatisticsForDynamicLink::class);
-        $this->service->getStatistics('anything');
+        $this->service->getStatistics('https://domain.tld');
     }
 
     /**
@@ -272,13 +272,13 @@ final class DynamicLinksTest extends TestCase
         $this->expectExceptionMessageMatches($expectedMessageRegex);
 
         $this->service->getStatistics(
-            GetStatisticsForDynamicLink::forLink('anything'),
+            GetStatisticsForDynamicLink::forLink('https://domain.tld'),
         );
     }
 
     public function testLinkStatExceptionsProvideTheActionAndTheResponse(): void
     {
-        $action = GetStatisticsForDynamicLink::forLink('anything');
+        $action = GetStatisticsForDynamicLink::forLink('https://domain.tld');
         $response = new Response(418, [], '{"key": "value"}');
 
         $this->httpHandler->append($response);

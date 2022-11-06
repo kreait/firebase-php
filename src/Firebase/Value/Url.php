@@ -19,10 +19,10 @@ final class Url
 
     private function __construct(string $value)
     {
-        $startsWithHttps = str_starts_with($value, 'https://');
+        $startsWithHttp = str_starts_with($value, 'https://') || str_starts_with($value, 'http://');
         $parsedValue = parse_url($value);
 
-        if (!$startsWithHttps || $parsedValue === false) {
+        if (!$startsWithHttp || $parsedValue === false) {
             throw new InvalidArgumentException('The URL is invalid.');
         }
 

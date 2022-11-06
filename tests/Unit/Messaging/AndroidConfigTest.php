@@ -59,7 +59,7 @@ final class AndroidConfigTest extends UnitTestCase
     /**
      * @dataProvider validTtlValues
      */
-    public function testItAcceptsValidTtls(int|string $ttl): void
+    public function testItAcceptsValidTtls(int|string|null $ttl): void
     {
         AndroidConfig::fromArray([
             'ttl' => $ttl,
