@@ -72,10 +72,7 @@ final class MessageData implements JsonSerializable
         return $this->toArray();
     }
 
-    /**
-     * @param mixed $value
-     */
-    private static function isStringable($value): bool
+    private static function isStringable(mixed $value): bool
     {
         return null === $value || is_scalar($value) || (is_object($value) && method_exists($value, '__toString'));
     }

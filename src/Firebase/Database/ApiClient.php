@@ -65,13 +65,11 @@ class ApiClient
     }
 
     /**
-     * @param mixed $value
-     *
      * @throws DatabaseException
      *
      * @return mixed
      */
-    public function set(string $path, $value)
+    public function set(string $path, mixed $value)
     {
         $response = $this->requestApi('PUT', $path, ['json' => $value]);
 
@@ -79,13 +77,11 @@ class ApiClient
     }
 
     /**
-     * @param mixed $value
-     *
      * @throws DatabaseException
      *
      * @return mixed
      */
-    public function setWithEtag(string $path, $value, string $etag)
+    public function setWithEtag(string $path, mixed $value, string $etag)
     {
         $response = $this->requestApi('PUT', $path, [
             'headers' => [
@@ -127,11 +123,9 @@ class ApiClient
     }
 
     /**
-     * @param mixed $value
-     *
      * @throws DatabaseException
      */
-    public function push(string $path, $value): string
+    public function push(string $path, mixed $value): string
     {
         $response = $this->requestApi('POST', $path, ['json' => $value]);
 

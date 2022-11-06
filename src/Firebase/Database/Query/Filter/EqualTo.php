@@ -15,9 +15,7 @@ use function is_scalar;
 final class EqualTo implements Filter
 {
     use ModifierTrait;
-
-    /** @var bool|float|int|string */
-    private $value;
+    private readonly bool|float|int|string $value;
 
     /**
      * @param scalar $value

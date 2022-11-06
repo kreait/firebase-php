@@ -41,12 +41,10 @@ class Transaction
     }
 
     /**
-     * @param mixed $value
-     *
      * @throws ReferenceHasNotBeenSnapshotted
      * @throws TransactionFailed
      */
-    public function set(Reference $reference, $value): void
+    public function set(Reference $reference, mixed $value): void
     {
         $etag = $this->getEtagForReference($reference);
 

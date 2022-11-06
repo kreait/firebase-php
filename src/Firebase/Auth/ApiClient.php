@@ -173,7 +173,7 @@ class ApiClient
      *
      * @throws AuthException
      */
-    public function getAccountInfo($uids): ResponseInterface
+    public function getAccountInfo(string|array $uids): ResponseInterface
     {
         if (!is_array($uids)) {
             $uids = [$uids];
@@ -253,10 +253,7 @@ class ApiClient
         ]);
     }
 
-    /**
-     * @param int|DateInterval $ttl
-     */
-    public function createSessionCookie(string $idToken, $ttl): string
+    public function createSessionCookie(string $idToken, int|DateInterval $ttl): string
     {
         return (new GuzzleApiClientHandler($this->client, $this->projectId))
             ->handle(CreateSessionCookie::forIdToken($idToken, $this->tenantId, $ttl, $this->clock));

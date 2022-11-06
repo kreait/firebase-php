@@ -60,7 +60,7 @@ final class RemoteConfig implements Contract\RemoteConfig
         return $etag;
     }
 
-    public function getVersion($versionNumber): Version
+    public function getVersion(VersionNumber|int|string $versionNumber): Version
     {
         $versionNumber = $this->ensureVersionNumber($versionNumber);
 
@@ -73,7 +73,7 @@ final class RemoteConfig implements Contract\RemoteConfig
         throw VersionNotFound::withVersionNumber($versionNumber);
     }
 
-    public function rollbackToVersion($versionNumber): Template
+    public function rollbackToVersion(VersionNumber|int|string $versionNumber): Template
     {
         $versionNumber = $this->ensureVersionNumber($versionNumber);
 

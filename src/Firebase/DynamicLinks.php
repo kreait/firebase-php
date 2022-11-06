@@ -33,10 +33,7 @@ final class DynamicLinks implements Contract\DynamicLinks
         return new self($apiClient);
     }
 
-    /**
-     * @param Stringable|string $dynamicLinksDomain
-     */
-    public static function withApiClientAndDefaultDomain(ClientInterface $apiClient, $dynamicLinksDomain): self
+    public static function withApiClientAndDefaultDomain(ClientInterface $apiClient, Stringable|string $dynamicLinksDomain): self
     {
         $domainUrl = Url::fromString($dynamicLinksDomain)->value;
 
@@ -86,7 +83,7 @@ final class DynamicLinks implements Contract\DynamicLinks
         return (new ShortenLongDynamicLink\GuzzleApiClientHandler($this->apiClient))->handle($action);
     }
 
-    public function getStatistics($dynamicLinkOrAction, ?int $durationInDays = null): DynamicLinkStatistics
+    public function getStatistics(Stringable|string|GetStatisticsForDynamicLink $dynamicLinkOrAction, ?int $durationInDays = null): DynamicLinkStatistics
     {
         $action = $this->ensureGetStatisticsAction($dynamicLinkOrAction);
 
@@ -100,7 +97,7 @@ final class DynamicLinks implements Contract\DynamicLinks
     /**
      * @param Stringable|string|CreateDynamicLink|array<string, array<string, string>> $actionOrParametersOrUrl
      */
-    private function ensureCreateAction($actionOrParametersOrUrl): CreateDynamicLink
+    private function ensureCreateAction(Stringable|string|CreateDynamicLink|array $actionOrParametersOrUrl): CreateDynamicLink
     {
         if (is_array($actionOrParametersOrUrl)) {
             return CreateDynamicLink::fromArray($actionOrParametersOrUrl);
@@ -116,7 +113,7 @@ final class DynamicLinks implements Contract\DynamicLinks
     /**
      * @param Stringable|string|ShortenLongDynamicLink|array<string, array<string, string>> $actionOrParametersOrUrl
      */
-    private function ensureShortenAction($actionOrParametersOrUrl): ShortenLongDynamicLink
+    private function ensureShortenAction(Stringable|string|ShortenLongDynamicLink|array $actionOrParametersOrUrl): ShortenLongDynamicLink
     {
         if (is_array($actionOrParametersOrUrl)) {
             return ShortenLongDynamicLink::fromArray($actionOrParametersOrUrl);
@@ -129,10 +126,7 @@ final class DynamicLinks implements Contract\DynamicLinks
         return ShortenLongDynamicLink::forLongDynamicLink((string) $actionOrParametersOrUrl);
     }
 
-    /**
-     * @param Stringable|string|GetStatisticsForDynamicLink $actionOrUrl
-     */
-    private function ensureGetStatisticsAction($actionOrUrl): GetStatisticsForDynamicLink
+    private function ensureGetStatisticsAction(Stringable|string|GetStatisticsForDynamicLink $actionOrUrl): GetStatisticsForDynamicLink
     {
         if ($actionOrUrl instanceof GetStatisticsForDynamicLink) {
             return $actionOrUrl;

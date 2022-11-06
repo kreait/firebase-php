@@ -19,10 +19,7 @@ trait ModifierTrait
         return $value;
     }
 
-    /**
-     * @param mixed $value
-     */
-    protected function appendQueryParam(UriInterface $uri, string $key, $value): UriInterface
+    protected function appendQueryParam(UriInterface $uri, string $key, mixed $value): UriInterface
     {
         $queryParams = array_merge(Query::parse($uri->getQuery()), [$key => $value]);
 

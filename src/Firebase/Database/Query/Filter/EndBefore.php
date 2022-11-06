@@ -15,9 +15,7 @@ use function is_scalar;
 final class EndBefore implements Filter
 {
     use ModifierTrait;
-
-    /** @var int|float|string|bool */
-    private $value;
+    private readonly int|float|string|bool $value;
 
     /**
      * @param scalar $value

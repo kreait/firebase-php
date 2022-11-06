@@ -199,10 +199,8 @@ class Reference
      * Creates a Query with the specified starting point (inclusive).
      *
      * @see Query::startAt()
-     *
-     * @param scalar $value
      */
-    public function startAt($value): Query
+    public function startAt(bool|string|int|float $value): Query
     {
         return $this->query()->startAt($value);
     }
@@ -211,10 +209,8 @@ class Reference
      * Creates a Query with the specified starting point (exclusive).
      *
      * @see Query::startAfter()
-     *
-     * @param scalar $value
      */
-    public function startAfter($value): Query
+    public function startAfter(bool|string|int|float $value): Query
     {
         return $this->query()->startAfter($value);
     }
@@ -223,10 +219,8 @@ class Reference
      * Creates a Query with the specified ending point (inclusive).
      *
      * @see Query::endAt()
-     *
-     * @param scalar $value
      */
-    public function endAt($value): Query
+    public function endAt(bool|string|int|float $value): Query
     {
         return $this->query()->endAt($value);
     }
@@ -235,10 +229,8 @@ class Reference
      * Creates a Query with the specified ending point (exclusive).
      *
      * @see Query::endBefore()
-     *
-     * @param scalar $value
      */
-    public function endBefore($value): Query
+    public function endBefore(bool|string|int|float $value): Query
     {
         return $this->query()->endBefore($value);
     }
@@ -247,10 +239,8 @@ class Reference
      * Creates a Query which includes children which match the specified value.
      *
      * @see Query::equalTo()
-     *
-     * @param scalar $value
      */
-    public function equalTo($value): Query
+    public function equalTo(bool|string|int|float $value): Query
     {
         return $this->query()->equalTo($value);
     }
@@ -304,11 +294,9 @@ class Reference
      * Passing null for the new value is equivalent to calling {@see remove()}:
      * all data at this location or any child location will be deleted.
      *
-     * @param mixed $value
-     *
      * @throws DatabaseException if the API reported an error
      */
-    public function set($value): self
+    public function set(mixed $value): self
     {
         if ($value === null) {
             $this->apiClient->remove($this->uri->getPath());
