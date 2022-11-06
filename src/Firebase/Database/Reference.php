@@ -9,6 +9,7 @@ use Kreait\Firebase\Exception\DatabaseException;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
 use Psr\Http\Message\UriInterface;
+use Stringable;
 
 use function array_fill_keys;
 use function array_keys;
@@ -26,12 +27,9 @@ use function trim;
  *
  * @see https://firebase.google.com/docs/reference/js/firebase.database.Reference
  */
-class Reference
+class Reference implements Stringable
 {
-    private UriInterface $uri;
-    private ApiClient $apiClient;
-    private UrlBuilder $urlBuilder;
-    private Validator $validator;
+    private readonly UriInterface $uri;
 
     /**
      * @internal
@@ -40,16 +38,13 @@ class Reference
      */
     public function __construct(
         UriInterface $uri,
-        ApiClient $apiClient,
-        UrlBuilder $urlBuilder,
-        ?Validator $validator = null,
+        private readonly ApiClient $apiClient,
+        private readonly UrlBuilder $urlBuilder,
+        private readonly Validator $validator = new Validator(),
     ) {
-        $this->validator = $validator ?? new Validator();
         $this->validator->validateUri($uri);
 
         $this->uri = $uri;
-        $this->apiClient = $apiClient;
-        $this->urlBuilder = $urlBuilder;
     }
 
     /**

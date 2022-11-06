@@ -17,11 +17,9 @@ use function uasort;
 final class OrderByChild implements Sorter
 {
     use ModifierTrait;
-    private string $childKey;
 
-    public function __construct(string $childKey)
+    public function __construct(private readonly string $childKey)
     {
-        $this->childKey = $childKey;
     }
 
     public function modifyUri(UriInterface $uri): UriInterface

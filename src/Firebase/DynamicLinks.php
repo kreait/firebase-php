@@ -20,27 +20,22 @@ use function is_array;
  */
 final class DynamicLinks implements Contract\DynamicLinks
 {
-    private ClientInterface $apiClient;
-    private ?string $defaultDynamicLinksDomain = null;
-
-    private function __construct(ClientInterface $apiClient)
-    {
-        $this->apiClient = $apiClient;
+    private function __construct(
+        private readonly ?string $defaultDynamicLinksDomain,
+        private readonly ClientInterface $apiClient,
+    ) {
     }
 
     public static function withApiClient(ClientInterface $apiClient): self
     {
-        return new self($apiClient);
+        return new self(null, $apiClient);
     }
 
     public static function withApiClientAndDefaultDomain(ClientInterface $apiClient, Stringable|string $dynamicLinksDomain): self
     {
         $domainUrl = Url::fromString($dynamicLinksDomain)->value;
 
-        $service = self::withApiClient($apiClient);
-        $service->defaultDynamicLinksDomain = $domainUrl;
-
-        return $service;
+        return new self($domainUrl, $apiClient);
     }
 
     public function createUnguessableLink($url): DynamicLink

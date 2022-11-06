@@ -34,29 +34,17 @@ use function time;
  */
 class ApiClient
 {
-    private string $projectId;
-    private ?string $tenantId;
-
-    /** @var ProjectAwareAuthResourceUrlBuilder|TenantAwareAuthResourceUrlBuilder */
-    private $awareAuthResourceUrlBuilder;
-    private AuthResourceUrlBuilder $authResourceUrlBuilder;
-    private ClientInterface $client;
-    private SignInHandler $signInHandler;
-    private ClockInterface $clock;
-    private AuthApiExceptionConverter $errorHandler;
+    private readonly ProjectAwareAuthResourceUrlBuilder|TenantAwareAuthResourceUrlBuilder $awareAuthResourceUrlBuilder;
+    private readonly AuthResourceUrlBuilder $authResourceUrlBuilder;
+    private readonly AuthApiExceptionConverter $errorHandler;
 
     public function __construct(
-        string $projectId,
-        ?string $tenantId,
-        ClientInterface $client,
-        SignInHandler $signInHandler,
-        ClockInterface $clock,
+        private readonly string $projectId,
+        private readonly ?string $tenantId,
+        private readonly ClientInterface $client,
+        private readonly SignInHandler $signInHandler,
+        private readonly ClockInterface $clock,
     ) {
-        $this->projectId = $projectId;
-        $this->tenantId = $tenantId;
-        $this->client = $client;
-        $this->signInHandler = $signInHandler;
-        $this->clock = $clock;
         $this->errorHandler = new AuthApiExceptionConverter();
 
         $this->awareAuthResourceUrlBuilder = $tenantId !== null

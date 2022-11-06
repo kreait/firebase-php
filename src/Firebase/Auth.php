@@ -60,29 +60,16 @@ use function trim;
  */
 final class Auth implements Contract\Auth
 {
-    private ApiClient $client;
-
-    /** @var CustomTokenGenerator|CustomTokenViaGoogleCredentials|null */
-    private $tokenGenerator;
-    private IdTokenVerifier $idTokenVerifier;
-    private SessionCookieVerifier $sessionCookieVerifier;
-    private ClockInterface $clock;
-
     /**
      * @param CustomTokenGenerator|CustomTokenViaGoogleCredentials|null $tokenGenerator
      */
     public function __construct(
-        ApiClient $client,
-        $tokenGenerator,
-        IdTokenVerifier $idTokenVerifier,
-        SessionCookieVerifier $sessionCookieVerifier,
-        ClockInterface $clock,
+        private readonly ApiClient $client,
+        private $tokenGenerator,
+        private readonly IdTokenVerifier $idTokenVerifier,
+        private readonly SessionCookieVerifier $sessionCookieVerifier,
+        private readonly ClockInterface $clock,
     ) {
-        $this->client = $client;
-        $this->tokenGenerator = $tokenGenerator;
-        $this->idTokenVerifier = $idTokenVerifier;
-        $this->sessionCookieVerifier = $sessionCookieVerifier;
-        $this->clock = $clock;
     }
 
     public function getUser($uid): UserRecord

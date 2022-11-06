@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Tests\Unit\Database\Query\Filter;
 
 use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database\Query\Filter\StartAt;
-use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
 
 /**
@@ -14,13 +13,6 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 final class StartAtTest extends UnitTestCase
 {
-    public function testCreateWithInvalidValue(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        new StartAt(null);
-    }
-
     /**
      * @dataProvider valueProvider
      */

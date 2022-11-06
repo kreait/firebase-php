@@ -10,28 +10,20 @@ use Stringable;
 
 final class CreateActionLink
 {
-    private string $type;
-    private string $email;
-    private ActionCodeSettings $settings;
-    private ?string $tenantId = null;
-    private ?string $locale = null;
-
-    private function __construct(string $type, string $email, ActionCodeSettings $settings)
-    {
-        $this->type = $type;
-        $this->email = $email;
-        $this->settings = $settings;
+    private function __construct(
+        private readonly ?string $tenantId,
+        private readonly ?string $locale,
+        private readonly string $type,
+        private readonly string $email,
+        private readonly ActionCodeSettings $settings,
+    ) {
     }
 
     public static function new(string $type, Stringable|string $email, ActionCodeSettings $settings, ?string $tenantId = null, ?string $locale = null): self
     {
         $email = Email::fromString((string) $email)->value;
 
-        $instance = new self($type, $email, $settings);
-        $instance->tenantId = $tenantId;
-        $instance->locale = $locale;
-
-        return $instance;
+        return new self($tenantId, $locale, $type, $email, $settings);
     }
 
     public function type(): string

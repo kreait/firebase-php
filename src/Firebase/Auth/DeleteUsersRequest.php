@@ -12,17 +12,11 @@ final class DeleteUsersRequest
 {
     private const MAX_BATCH_SIZE = 1000;
 
-    /** @var string[] */
-    private array $uids;
-    private bool $enabledUsersShouldBeForceDeleted;
-
-    /**
-     * @param string[] $uids
-     */
-    private function __construct(array $uids, bool $enabledUsersShouldBeForceDeleted)
-    {
-        $this->uids = $uids;
-        $this->enabledUsersShouldBeForceDeleted = $enabledUsersShouldBeForceDeleted;
+    private function __construct(
+        /** @var list<string> $uids */
+        private readonly array $uids,
+        private readonly bool $enabledUsersShouldBeForceDeleted,
+    ) {
     }
 
     /**
