@@ -130,7 +130,7 @@ final class CreateUserTest extends TestCase
                 $expected + ['password' => 'secret'],
             ],
             'clearTextPasswordObject' => [
-                $given + ['clearTextPassword' => new ClearTextPassword('secret')],
+                $given + ['clearTextPassword' => ClearTextPassword::fromString('secret')->value],
                 $expected + ['password' => 'secret'],
             ],
         ];

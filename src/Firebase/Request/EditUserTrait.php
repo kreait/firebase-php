@@ -150,7 +150,7 @@ trait EditUserTrait
     public function withClearTextPassword($clearTextPassword): self
     {
         $request = clone $this;
-        $request->clearTextPassword = (string) (new ClearTextPassword((string) $clearTextPassword));
+        $request->clearTextPassword = ClearTextPassword::fromString($clearTextPassword)->value;
 
         return $request;
     }

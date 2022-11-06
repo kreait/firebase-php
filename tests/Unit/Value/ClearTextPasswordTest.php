@@ -20,11 +20,9 @@ final class ClearTextPasswordTest extends TestCase
      */
     public function testWithValidValue($value): void
     {
-        $password = new ClearTextPassword($value);
+        $password = ClearTextPassword::fromString($value)->value;
 
-        $this->assertSame($value, (string) $password);
-        $this->assertSame($value, $password->jsonSerialize());
-        $this->assertTrue($password->equalsTo($value));
+        $this->assertSame($value, $password);
     }
 
     /**
@@ -35,7 +33,7 @@ final class ClearTextPasswordTest extends TestCase
     public function testWithInvalidValue($value): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new ClearTextPassword($value);
+        ClearTextPassword::fromString($value);
     }
 
     /**
