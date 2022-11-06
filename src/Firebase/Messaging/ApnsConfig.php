@@ -29,30 +29,16 @@ final class ApnsConfig implements JsonSerializable
     private const PRIORITY_CONSERVE_POWER = '5';
     private const PRIORITY_IMMEDIATE = '10';
 
-    /** @var array<non-empty-string, non-empty-string> */
-    private array $headers;
-
-    /** @var array<non-empty-string, mixed> */
-    private array $payload;
-
-    /**
-     * @var array{
-     *     analytics_label?: string,
-     *     image?: string
-     * }
-     */
-    private array $fcmOptions;
-
     /**
      * @param array<non-empty-string, non-empty-string> $headers
      * @param array<non-empty-string, mixed> $payload
      * @param array<non-empty-string, string> $fcmOptions
      */
-    private function __construct(array $headers, array $payload, array $fcmOptions)
-    {
-        $this->headers = $headers;
-        $this->payload = $payload;
-        $this->fcmOptions = $fcmOptions;
+    private function __construct(
+        private array $headers,
+        private array $payload,
+        private readonly array $fcmOptions,
+    ) {
     }
 
     public static function new(): self

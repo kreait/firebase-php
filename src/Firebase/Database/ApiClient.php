@@ -20,14 +20,12 @@ use Throwable;
 class ApiClient
 {
     protected DatabaseApiExceptionConverter $errorHandler;
-    private ClientInterface $client;
-    private UrlBuilder $resourceUrlBuilder;
 
-    public function __construct(ClientInterface $httpClient, UrlBuilder $resourceUrlBuilder)
-    {
-        $this->client = $httpClient;
+    public function __construct(
+        private readonly ClientInterface $client,
+        private readonly UrlBuilder $resourceUrlBuilder,
+    ) {
         $this->errorHandler = new DatabaseApiExceptionConverter();
-        $this->resourceUrlBuilder = $resourceUrlBuilder;
     }
 
     /**
