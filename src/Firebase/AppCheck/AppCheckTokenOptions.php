@@ -29,7 +29,7 @@ final class AppCheckTokenOptions implements JsonSerializable
     public static function fromArray(array $data): self
     {
         if (!array_key_exists('ttl', $data)) {
-            throw new InvalidArgumentException('The "app_id" key is missing from the token data.');
+            throw new InvalidArgumentException('The "ttl" key is missing from the token data.');
         }
 
         return new self(
