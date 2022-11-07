@@ -68,7 +68,7 @@ The following list has been generated with [roave/backward-compatibility-check](
 ### Changes
 
 ```
-[BC] CHANGED: The parameter $value of Kreait\Firebase\Factory#withServiceAccount() changed from no type to a non-contravariant string|array|Kreait\Firebase\ServiceAccount
+[BC] CHANGED: The parameter $value of Kreait\Firebase\Factory#withServiceAccount() changed from no type to a non-contravariant string|array
 [BC] CHANGED: The parameter $uri of Kreait\Firebase\Factory#withDatabaseUri() changed from no type to a non-contravariant Psr\Http\Message\UriInterface|string
 [BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Transaction#set() changed from no type to mixed
 [BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#startAt() changed from no type to a non-contravariant bool|string|int|float

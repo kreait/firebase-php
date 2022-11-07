@@ -43,7 +43,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         self::$rtdbUrl = self::rtdbUrlFromEnvironment() ?? self::rtdbUrlFromFile() ?? '';
 
         self::$factory = (new Factory())
-            ->withServiceAccount(self::$serviceAccount)
+            ->withServiceAccount(self::$serviceAccount->asArray())
             ->withDatabaseUri(self::$rtdbUrl);
 
         self::$registrationTokens = self::registrationTokensFromEnvironment() ?? self::registrationTokensFromFile() ?? [];
