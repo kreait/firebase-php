@@ -39,7 +39,6 @@ use Kreait\Firebase\JWT\IdTokenVerifier;
 use Kreait\Firebase\JWT\SessionCookieVerifier;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Value\Email;
-use Phpfastcache\CacheManager;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\Log\LoggerInterface;
@@ -77,6 +76,7 @@ final class Factory
     private ?string $clientEmail = null;
     private CacheItemPoolInterface $verifierCache;
     private CacheItemPoolInterface $authTokenCache;
+    private CacheItemPoolInterface $keySetCache;
     private bool $discoveryIsDisabled = false;
     private ClockInterface $clock;
 
@@ -96,6 +96,7 @@ final class Factory
         $this->clock = SystemClock::create();
         $this->verifierCache = new MemoryCacheItemPool();
         $this->authTokenCache = new MemoryCacheItemPool();
+        $this->keySetCache = new MemoryCacheItemPool();
         $this->httpClientOptions = HttpClientOptions::default();
     }
 
@@ -204,6 +205,14 @@ final class Factory
         return $factory;
     }
 
+    public function withKeySetCache(CacheItemPoolInterface $cache): self
+    {
+        $factory = clone $this;
+        $factory->keySetCache = $cache;
+
+        return $factory;
+    }
+
     public function withHttpClientOptions(HttpClientOptions $options): self
     {
         $factory = clone $this;
@@ -265,7 +274,7 @@ final class Factory
             'https://firebase.google.com/docs/reference/appcheck/rest/v1/jwks#resource:-publicjwkset',
             new Client(),
             new HttpFactory(),
-            CacheManager::getInstance('files'),
+            $this->keySetCache,
             21600,
             true,
         );
