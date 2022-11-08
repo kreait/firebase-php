@@ -31,6 +31,7 @@
         "beste/clock": "^2.2",
         "beste/json": "^1.1",
         "fig/http-message-util": "^1.1.5",
+        "firebase/php-jwt": "^6.3",
         "google/auth": "^1.23.1",
         "google/cloud-core": "^1.47.4",
         "google/cloud-storage": "^1.29",
