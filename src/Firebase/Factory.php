@@ -262,6 +262,9 @@ final class Factory
         $projectId = $this->getProjectId();
         $serviceAccount = $this->getServiceAccount();
 
+        if ($projectId == "") {
+            throw new RuntimeException('Unable to determine the Firebase Project ID');
+        }
         if ($serviceAccount === null) {
             throw new RuntimeException('Unable to use AppCheck without credentials');
         }

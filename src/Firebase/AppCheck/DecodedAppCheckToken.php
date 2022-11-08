@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\AppCheck;
 
-use InvalidArgumentException;
 use JsonSerializable;
-
-use function array_key_exists;
 
 /**
  * @phpstan-type DecodedAppCheckTokenShape array{
@@ -50,34 +47,10 @@ final class DecodedAppCheckToken implements JsonSerializable
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param DecodedAppCheckTokenShape $data
      */
     public static function fromArray(array $data): self
     {
-        if (!array_key_exists('app_id', $data)) {
-            throw new InvalidArgumentException('The "app_id" key is missing from the token data.');
-        }
-
-        if (!array_key_exists('aud', $data)) {
-            throw new InvalidArgumentException('The "app_id" key is missing from the token data.');
-        }
-
-        if (!array_key_exists('exp', $data)) {
-            throw new InvalidArgumentException('The "app_id" key is missing from the token data.');
-        }
-
-        if (!array_key_exists('iat', $data)) {
-            throw new InvalidArgumentException('The "app_id" key is missing from the token data.');
-        }
-
-        if (!array_key_exists('iss', $data)) {
-            throw new InvalidArgumentException('The "app_id" key is missing from the token data.');
-        }
-
-        if (!array_key_exists('sub', $data)) {
-            throw new InvalidArgumentException('The "app_id" key is missing from the token data.');
-        }
-
         return new self(
             $data['app_id'],
             $data['aud'],

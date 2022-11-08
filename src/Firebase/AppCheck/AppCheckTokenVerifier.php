@@ -17,6 +17,7 @@ use function str_starts_with;
 
 /**
  * @internal
+ * @phpstan-import-type DecodedAppCheckTokenShape from DecodedAppCheckToken
  */
 class AppCheckTokenVerifier
 {
@@ -24,6 +25,9 @@ class AppCheckTokenVerifier
     private string $projectId;
     private CachedKeySet $keySet;
 
+    /**
+     * @param non-empty-string $projectId 
+     */
     public function __construct(string $projectId, CachedKeySet $keySet)
     {
         $this->projectId = $projectId;
@@ -56,6 +60,7 @@ class AppCheckTokenVerifier
     private function decodeJwt(string $token): DecodedAppCheckToken
     {
         try {
+            /** @var DecodedAppCheckTokenShape $payload */
             $payload = (array) JWT::decode($token, $this->keySet);
         } catch (LogicException $e) {
             throw new InvalidAppCheckToken($e->getMessage(), $e->getCode(), $e);

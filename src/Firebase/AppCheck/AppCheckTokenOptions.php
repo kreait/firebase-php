@@ -24,7 +24,7 @@ final class AppCheckTokenOptions implements JsonSerializable
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param AppCheckTokenOptionsShape $data
      */
     public static function fromArray(array $data): self
     {
