@@ -15,6 +15,7 @@ use Kreait\Firebase\Exception;
 interface AppCheck
 {
     /**
+     * @param non-empty-string $appId
      * @param AppCheckTokenOptions|AppCheckTokenOptionsShape|null $options
      *
      * @throws Exception\AppCheckException
@@ -23,6 +24,8 @@ interface AppCheck
     public function createToken(string $appId, $options = null): AppCheckToken;
 
     /**
+     * @param non-empty-string $appCheckToken
+     *
      * @throws Exception\AppCheck\InvalidAppCheckToken
      * @throws Exception\AppCheck\FailedToVerifyAppCheckToken
      * @throws Exception\AppCheckException

@@ -25,7 +25,7 @@ final class AppCheck implements Contract\AppCheck
     public function __construct(
         ApiClient $client,
         AppCheckTokenGenerator $tokenGenerator,
-        AppCheckTokenVerifier $tokenVerifier
+        AppCheckTokenVerifier $tokenVerifier,
     ) {
         $this->client = $client;
         $this->tokenGenerator = $tokenGenerator;

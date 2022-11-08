@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\AppCheck;
 
-use InvalidArgumentException;
 use JsonSerializable;
+use Kreait\Firebase\Exception\AppCheck\InvalidAppCheckTokenOptions;
 
-use function array_key_exists;
+use function is_numeric;
 
 /**
  * @phpstan-type AppCheckTokenOptionsShape array{
@@ -25,21 +25,31 @@ final class AppCheckTokenOptions implements JsonSerializable
 
     /**
      * @param AppCheckTokenOptionsShape $data
+     *
+     * @throws InvalidAppCheckTokenOptions
      */
     public static function fromArray(array $data): self
     {
-        if (!array_key_exists('ttl', $data)) {
-            throw new InvalidArgumentException('The "ttl" key is missing from the token data.');
+        $ttl = $data['ttl'] ?? null;
+
+        if (null === $ttl) {
+            return new self();
         }
 
-        return new self(
-            $data['ttl'],
-        );
+        if (!is_numeric($ttl)) {
+            throw new InvalidAppCheckTokenOptions('The ttl must be a number.');
+        }
+
+        if ($ttl < 1800 || $ttl > 604800) {
+            throw new InvalidAppCheckTokenOptions('The ttl must be a duration between 30 minutes and 7 days.');
+        }
+
+        return new self($ttl);
     }
 
     public function ttl(): ?string
     {
-        return $this->ttl();
+        return $this->ttl;
     }
 
     /**

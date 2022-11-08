@@ -14,6 +14,11 @@ use Throwable;
 
 /**
  * @internal
+ *
+ * @phpstan-type AppCheckTokenShape array{
+ *     token: string,
+ *     ttl: string
+ * }
  */
 class ApiClient
 {
@@ -29,7 +34,7 @@ class ApiClient
     /**
      * @throws AppCheckException
      *
-     * @return array<string, mixed>
+     * @return AppCheckTokenShape
      */
     public function exchangeCustomToken(string $appId, string $customToken): array
     {

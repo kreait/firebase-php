@@ -10,8 +10,6 @@ use Kreait\Firebase\Exception\AppCheck\InvalidAppCheckTokenOptions;
 use Kreait\Firebase\ServiceAccount;
 use StellaMaris\Clock\ClockInterface;
 
-use function is_numeric;
-
 /**
  * @internal
  */
@@ -28,7 +26,9 @@ class AppCheckTokenGenerator
     }
 
     /**
-     * @param string $appId the Application Id to use for the generated token
+     * @param non-empty-string $appId the Application Id to use for the generated token
+     *
+     * @throws InvalidAppCheckTokenOptions
      *
      * @return string the generated token
      */
@@ -44,23 +44,10 @@ class AppCheckTokenGenerator
             'exp' => $now + 300,
         ];
 
-        if (null !== $options) {
-            $this->validateOptions($options);
-
-            $payload = array_merge($payload, $options->toArray());
+        if (null !== $options && $options->ttl()) {
+            $payload['ttl'] = $options->ttl();
         }
 
         return JWT::encode($payload, $this->serviceAccount->getPrivateKey(), 'RS256');
-    }
-
-    private function validateOptions(AppCheckTokenOptions $options): void
-    {
-        if (!is_numeric($options->ttl())) {
-            throw new InvalidAppCheckTokenOptions('The ttl must be a number.');
-        }
-
-        if ($options->ttl() < 1800 || $options->ttl() > 604800) {
-            throw new InvalidAppCheckTokenOptions('The ttl must be a duration between 30 minutes and 7 days.');
-        }
     }
 }

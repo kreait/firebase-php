@@ -17,6 +17,7 @@ use function str_starts_with;
 
 /**
  * @internal
+ *
  * @phpstan-import-type DecodedAppCheckTokenShape from DecodedAppCheckToken
  */
 class AppCheckTokenVerifier
@@ -26,7 +27,7 @@ class AppCheckTokenVerifier
     private CachedKeySet $keySet;
 
     /**
-     * @param non-empty-string $projectId 
+     * @param non-empty-string $projectId
      */
     public function __construct(string $projectId, CachedKeySet $keySet)
     {

@@ -10,10 +10,7 @@ use JsonSerializable;
 use function array_key_exists;
 
 /**
- * @phpstan-type AppCheckTokenShape array{
- *     token: string,
- *     ttl: string
- * }
+ * @phpstan-import-type AppCheckTokenShape from ApiClient
  */
 final class AppCheckToken implements JsonSerializable
 {
@@ -27,7 +24,7 @@ final class AppCheckToken implements JsonSerializable
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param AppCheckTokenShape $data
      */
     public static function fromArray(array $data): self
     {
