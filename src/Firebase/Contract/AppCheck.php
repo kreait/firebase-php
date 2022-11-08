@@ -18,6 +18,7 @@ interface AppCheck
      * @param non-empty-string $appId
      * @param AppCheckTokenOptions|AppCheckTokenOptionsShape|null $options
      *
+     * @throws Exception\AppCheck\InvalidAppCheckTokenOptions
      * @throws Exception\AppCheckException
      * @throws Exception\FirebaseException
      */
