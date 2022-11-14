@@ -36,7 +36,7 @@ class AppCheckTokenVerifier
     }
 
     /**
-     * Verfies the format and signature of a Firebase App Check token.
+     * Verifies the format and signature of a Firebase App Check token.
      *
      * @param string $token the Firebase Auth JWT token to verify
      *
