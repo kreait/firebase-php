@@ -271,7 +271,7 @@ final class Factory
         }
 
         $http = $this->createApiClient([
-            'base_uri' => 'https://firebaseappcheck.googleapis.com/v1/projects/'.$projectId,
+            'base_uri' => 'https://firebaseappcheck.googleapis.com/v1/projects/'.$projectId.'/',
         ]);
 
         $keySet = new CachedKeySet(
