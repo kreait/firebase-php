@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\AppCheck;
 
-use JsonSerializable;
-
 /**
  * @phpstan-type DecodedAppCheckTokenShape array{
  *     app_id: non-empty-string,
@@ -16,7 +14,7 @@ use JsonSerializable;
  *     sub: string,
  * }
  */
-final class DecodedAppCheckToken implements JsonSerializable
+final class DecodedAppCheckToken
 {
     /**
      * @param non-empty-string $app_id
@@ -94,13 +92,5 @@ final class DecodedAppCheckToken implements JsonSerializable
             'iss' => $this->iss,
             'sub' => $this->sub,
         ];
-    }
-
-    /**
-     * @return DecodedAppCheckTokenShape
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

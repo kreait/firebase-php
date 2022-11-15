@@ -28,13 +28,5 @@ final class DecodedAppCheckTokenTest extends UnitTestCase
         $this->assertSame($exp, $options->exp());
         $this->assertSame($iat, $options->iat());
         $this->assertSame($iss, $options->iss());
-        $this->assertEquals([
-            'app_id' => $appId,
-            'aud' => $aud,
-            'exp' => $exp,
-            'iat' => $iat,
-            'iss' => $iss,
-            'sub' => $appId,
-        ], $options->jsonSerialize());
     }
 }
