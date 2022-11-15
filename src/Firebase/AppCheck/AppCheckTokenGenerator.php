@@ -16,12 +16,11 @@ use StellaMaris\Clock\ClockInterface;
 class AppCheckTokenGenerator
 {
     private const APP_CHECK_AUDIENCE = 'https://firebaseappcheck.googleapis.com/google.firebase.appcheck.v1.TokenExchangeService';
-
     private ClockInterface $clock;
 
     public function __construct(
         private ServiceAccount $serviceAccount,
-        ClockInterface $clock = null,
+        ?ClockInterface $clock = null,
     ) {
         $this->clock = $clock ?? SystemClock::create();
     }
