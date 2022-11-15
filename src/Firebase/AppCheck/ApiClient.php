@@ -22,12 +22,11 @@ use Throwable;
  */
 class ApiClient
 {
-    private ClientInterface $client;
     private AppCheckApiExceptionConverter $errorHandler;
 
-    public function __construct(ClientInterface $client)
-    {
-        $this->client = $client;
+    public function __construct(
+        private ClientInterface $client,
+    ) {
         $this->errorHandler = new AppCheckApiExceptionConverter();
     }
 

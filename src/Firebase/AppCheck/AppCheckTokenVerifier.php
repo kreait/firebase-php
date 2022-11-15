@@ -23,16 +23,14 @@ use function str_starts_with;
 class AppCheckTokenVerifier
 {
     private const APP_CHECK_ISSUER_PREFIX = 'https://firebaseappcheck.googleapis.com/';
-    private string $projectId;
-    private CachedKeySet $keySet;
 
     /**
      * @param non-empty-string $projectId
      */
-    public function __construct(string $projectId, CachedKeySet $keySet)
-    {
-        $this->projectId = $projectId;
-        $this->keySet = $keySet;
+    public function __construct(
+        private string $projectId, 
+        private CachedKeySet $keySet
+    ) {
     }
 
     /**

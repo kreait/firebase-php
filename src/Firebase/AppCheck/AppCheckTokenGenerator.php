@@ -16,13 +16,11 @@ use StellaMaris\Clock\ClockInterface;
 class AppCheckTokenGenerator
 {
     private const APP_CHECK_AUDIENCE = 'https://firebaseappcheck.googleapis.com/google.firebase.appcheck.v1.TokenExchangeService';
-    private ServiceAccount $serviceAccount;
-    private ClockInterface $clock;
 
-    public function __construct(ServiceAccount $serviceAccount, ?ClockInterface $clock = null)
-    {
-        $this->serviceAccount = $serviceAccount;
-        $this->clock = $clock ?? SystemClock::create();
+    public function __construct(
+        private ServiceAccount $serviceAccount,
+        private ClockInterface $clock = SystemClock::create(),
+    ){
     }
 
     /**
@@ -45,7 +43,7 @@ class AppCheckTokenGenerator
         ];
 
         if (null !== $options && $options->ttl()) {
-            $payload['ttl'] = $options->ttl();
+            $payload['ttl'] = $options->ttl().'s';
         }
 
         return JWT::encode($payload, $this->serviceAccount->getPrivateKey(), 'RS256');

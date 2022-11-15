@@ -14,13 +14,10 @@ use function array_key_exists;
  */
 final class AppCheckToken implements JsonSerializable
 {
-    private string $token;
-    private string $ttl;
-
-    private function __construct(string $token, string $ttl)
-    {
-        $this->token = $token;
-        $this->ttl = $ttl;
+    private function __construct(
+        private string $token,
+        private string $ttl,
+    ) {
     }
 
     /**

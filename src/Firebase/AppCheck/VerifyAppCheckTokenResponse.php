@@ -10,17 +10,19 @@ use JsonSerializable;
  * @phpstan-import-type DecodedAppCheckTokenShape from DecodedAppCheckToken
  *
  * @phpstan-type VerifyAppCheckTokenResponseShape array{
- *     appId: string,
+ *     appId: non-empty-string,
  *     token: DecodedAppCheckTokenShape,
  * }
  */
 final class VerifyAppCheckTokenResponse implements JsonSerializable
 {
-    private string $appId;
-    private DecodedAppCheckToken $token;
-
-    public function __construct(string $appId, DecodedAppCheckToken $token)
-    {
+    /**
+     * @param non-empty string $appId 
+     */
+    public function __construct(
+        private string $appId,
+        private DecodedAppCheckToken $token,
+    ) {
         $this->appId = $appId;
         $this->token = $token;
     }

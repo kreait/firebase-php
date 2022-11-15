@@ -7,20 +7,16 @@ namespace Kreait\Firebase\AppCheck;
 use JsonSerializable;
 use Kreait\Firebase\Exception\AppCheck\InvalidAppCheckTokenOptions;
 
-use function is_numeric;
-
 /**
  * @phpstan-type AppCheckTokenOptionsShape array{
- *     ttl: string|null,
+ *     ttl int|null,
  * }
  */
 final class AppCheckTokenOptions implements JsonSerializable
 {
-    private ?string $ttl;
-
-    private function __construct(?string $ttl = null)
-    {
-        $this->ttl = $ttl;
+    private function __construct(
+        private ?int $ttl = null
+    ) {
     }
 
     /**
@@ -36,10 +32,6 @@ final class AppCheckTokenOptions implements JsonSerializable
             return new self();
         }
 
-        if (!is_numeric($ttl)) {
-            throw new InvalidAppCheckTokenOptions('The ttl must be a number.');
-        }
-
         if ($ttl < 1800 || $ttl > 604800) {
             throw new InvalidAppCheckTokenOptions('The ttl must be a duration between 30 minutes and 7 days.');
         }
@@ -47,7 +39,7 @@ final class AppCheckTokenOptions implements JsonSerializable
         return new self($ttl);
     }
 
-    public function ttl(): ?string
+    public function ttl(): ?int
     {
         return $this->ttl;
     }

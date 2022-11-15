@@ -26,7 +26,7 @@ final class AppCheckTokenOptionsTest extends UnitTestCase
      *
      * @param string $ttl
      */
-    public function testFromArrayWithValidOptions(?string $ttl): void
+    public function testFromArrayWithValidOptions(?int $ttl): void
     {
         $options = AppCheckTokenOptions::fromArray([
             'ttl' => $ttl,
@@ -39,7 +39,7 @@ final class AppCheckTokenOptionsTest extends UnitTestCase
     /**
      * @dataProvider invalidOptions
      */
-    public function testFromArrayWithInvalidOptions(string $ttl): void
+    public function testFromArrayWithInvalidOptions(int $ttl): void
     {
         $this->expectException(InvalidAppCheckTokenOptions::class);
 
@@ -55,9 +55,9 @@ final class AppCheckTokenOptionsTest extends UnitTestCase
     {
         return [
             'null' => [null],
-            'min-boundary' => ['1800'],
-            'max-boundary' => ['60480'],
-            'valid-nano-seconds' => ['1800.1'],
+            'min-boundary' => [1800],
+            'mid-range' => [30240],
+            'max-boundary' => [60480],
         ];
     }
 
@@ -67,11 +67,8 @@ final class AppCheckTokenOptionsTest extends UnitTestCase
     public function invalidOptions(): array
     {
         return [
-            'empty-string' => [''],
-            'alpha-text' => ['abc'],
-            'too-small' => ['1799'],
-            'too-large' => ['604801'],
-            'too-large-nano-seconds' => ['604800.1'],
+            'too-small' => [1799],
+            'too-large' => [604801],
         ];
     }
 }

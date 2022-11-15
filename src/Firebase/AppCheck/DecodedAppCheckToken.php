@@ -18,32 +18,18 @@ use JsonSerializable;
  */
 final class DecodedAppCheckToken implements JsonSerializable
 {
-    private string $app_id;
-
-    /** @var array<string> */
-    private array $aud;
-    private string $exp;
-    private string $iat;
-    private string $iss;
-    private string $sub;
-
     /**
+     * @var non-empty-string $app_id
      * @param array<string> $aud
      */
     private function __construct(
-        string $app_id,
-        array $aud,
-        string $exp,
-        string $iat,
-        string $iss,
-        string $sub,
+        private string $app_id,
+        private array $aud,
+        private string $exp,
+        private string $iat,
+        private string $iss,
+        private string $sub,
     ) {
-        $this->app_id = $app_id;
-        $this->aud = $aud;
-        $this->exp = $exp;
-        $this->iat = $iat;
-        $this->iss = $iss;
-        $this->sub = $sub;
     }
 
     /**
