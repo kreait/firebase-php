@@ -10,7 +10,10 @@ use JsonSerializable;
 use function array_key_exists;
 
 /**
- * @phpstan-import-type AppCheckTokenShape from ApiClient
+ * @phpstan-type AppCheckTokenShape array{
+ *     token: string,
+ *     ttl: string
+ * }
  */
 final class AppCheckToken implements JsonSerializable
 {

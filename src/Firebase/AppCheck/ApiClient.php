@@ -15,10 +15,7 @@ use Throwable;
 /**
  * @internal
  *
- * @phpstan-type AppCheckTokenShape array{
- *     token: string,
- *     ttl: string
- * }
+ * @phpstan-import-type AppCheckTokenShape from AppCheckToken
  */
 class ApiClient
 {
