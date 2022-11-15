@@ -19,8 +19,11 @@ class AppCheckTokenGenerator
 
     public function __construct(
         private ServiceAccount $serviceAccount,
-        private ClockInterface $clock = SystemClock::create(),
+        private ?ClockInterface $clock = null,
     ) {
+        if (null == $this->clock) {
+            $this->clock = new SystemClock();
+        }
     }
 
     /**
