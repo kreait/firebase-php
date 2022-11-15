@@ -18,8 +18,8 @@ use function array_key_exists;
 final class AppCheckToken
 {
     private function __construct(
-        private string $token,
-        private string $ttl,
+        public readonly string $token,
+        public readonly string $ttl,
     ) {
     }
 
@@ -40,15 +40,5 @@ final class AppCheckToken
             $data['token'],
             $data['ttl'],
         );
-    }
-
-    public function token(): string
-    {
-        return $this->token;
-    }
-
-    public function ttl(): string
-    {
-        return $this->ttl;
     }
 }

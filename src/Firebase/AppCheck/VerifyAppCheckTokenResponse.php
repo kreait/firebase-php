@@ -20,21 +20,9 @@ final class VerifyAppCheckTokenResponse implements JsonSerializable
      * @param non-empty-string $appId
      */
     public function __construct(
-        private string $appId,
-        private DecodedAppCheckToken $token,
+        public readonly string $appId,
+        public readonly DecodedAppCheckToken $token,
     ) {
-        $this->appId = $appId;
-        $this->token = $token;
-    }
-
-    public function appId(): string
-    {
-        return $this->appId;
-    }
-
-    public function token(): DecodedAppCheckToken
-    {
-        return $this->token;
     }
 
     /**

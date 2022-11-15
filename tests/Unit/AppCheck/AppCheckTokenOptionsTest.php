@@ -17,7 +17,7 @@ final class AppCheckTokenOptionsTest extends UnitTestCase
     {
         $options = AppCheckTokenOptions::fromArray([]);
 
-        $this->assertNull($options->ttl());
+        $this->assertNull($options->ttl);
         $this->assertEquals(['ttl' => null], $options->jsonSerialize());
     }
 
@@ -30,7 +30,7 @@ final class AppCheckTokenOptionsTest extends UnitTestCase
             'ttl' => $ttl,
         ]);
 
-        $this->assertSame($ttl, $options->ttl());
+        $this->assertSame($ttl, $options->ttl);
         $this->assertEquals(['ttl' => $ttl], $options->jsonSerialize());
     }
 

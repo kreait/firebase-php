@@ -45,8 +45,8 @@ class AppCheckTokenGenerator
             'exp' => $now + 300,
         ];
 
-        if (null !== $options && $options->ttl()) {
-            $payload['ttl'] = $options->ttl().'s';
+        if (null !== $options && $options->ttl) {
+            $payload['ttl'] = $options->ttl.'s';
         }
 
         return JWT::encode($payload, $this->serviceAccount->getPrivateKey(), 'RS256');

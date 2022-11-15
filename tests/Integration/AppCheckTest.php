@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
-use Kreait\Firebase\AppCheck\AppCheckToken;
-use Kreait\Firebase\AppCheck\VerifyAppCheckTokenResponse;
 use Kreait\Firebase\Contract\AppCheck;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
@@ -30,9 +28,9 @@ final class AppCheckTest extends IntegrationTestCase
     {
         $token = $this->appCheck->createToken($this->appId);
 
-        $this->assertIsString($token->token());
-        $this->assertIsNumeric($token->ttl());
-        $this->assertEquals(3600, $token->ttl());
+        $this->assertIsString($token->token);
+        $this->assertIsNumeric($token->ttl);
+        $this->assertEquals(3600, $token->ttl);
     }
 
     public function testCreateTokenWithCustomTtl(): void
@@ -41,18 +39,20 @@ final class AppCheckTest extends IntegrationTestCase
             'ttl' => 1800,
         ]);
 
-        $this->assertIsString($token->token());
-        $this->assertIsNumeric($token->ttl());
-        $this->assertEquals(1800, $token->ttl());
+        $this->assertIsString($token->token);
+        $this->assertIsNumeric($token->ttl);
+        $this->assertEquals(1800, $token->ttl);
     }
 
     public function testVerifyToken(): void
     {
         $token = $this->appCheck->createToken($this->appId);
 
-        $response = $this->appCheck->verifyToken($token->token());
+        $response = $this->appCheck->verifyToken($token->token);
 
-        $this->assertIsString($response->token()->app_id());
-        $this->assertEquals($this->appId, $response->token()->app_id());
+        $this->assertIsString($response->appId);
+        $this->assertEquals($this->appId, $response->appId);
+        $this->assertIsString($response->token->app_id());
+        $this->assertEquals($this->appId, $response->token->app_id());
     }
 }

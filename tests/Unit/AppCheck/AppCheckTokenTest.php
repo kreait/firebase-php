@@ -19,7 +19,7 @@ final class AppCheckTokenTest extends UnitTestCase
             'token' => $token = 'jwtToken',
         ]);
 
-        $this->assertSame($ttl, $options->ttl());
-        $this->assertSame($token, $options->token());
+        $this->assertSame($ttl, $options->ttl);
+        $this->assertSame($token, $options->token);
     }
 }
