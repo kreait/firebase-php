@@ -275,7 +275,7 @@ final class Factory
         ]);
 
         $keySet = new CachedKeySet(
-            'https://firebase.google.com/docs/reference/appcheck/rest/v1/jwks#resource:-publicjwkset',
+            'https://firebaseappcheck.googleapis.com/v1/jwks',
             new Client(),
             new HttpFactory(),
             $this->keySetCache,
