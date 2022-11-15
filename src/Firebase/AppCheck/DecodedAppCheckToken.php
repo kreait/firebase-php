@@ -19,7 +19,8 @@ use JsonSerializable;
 final class DecodedAppCheckToken implements JsonSerializable
 {
     /**
-     * @var non-empty-string $app_id
+     * @var non-empty-string
+     *
      * @param array<string> $aud
      */
     private function __construct(

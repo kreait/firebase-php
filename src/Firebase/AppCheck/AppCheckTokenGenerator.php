@@ -20,7 +20,7 @@ class AppCheckTokenGenerator
     public function __construct(
         private ServiceAccount $serviceAccount,
         private ClockInterface $clock = SystemClock::create(),
-    ){
+    ) {
     }
 
     /**

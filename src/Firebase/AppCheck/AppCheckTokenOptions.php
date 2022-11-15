@@ -15,7 +15,7 @@ use Kreait\Firebase\Exception\AppCheck\InvalidAppCheckTokenOptions;
 final class AppCheckTokenOptions implements JsonSerializable
 {
     private function __construct(
-        private ?int $ttl = null
+        private ?int $ttl = null,
     ) {
     }
 
