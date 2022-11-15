@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kreait\Firebase\AppCheck;
 
 use InvalidArgumentException;
-use JsonSerializable;
 
 use function array_key_exists;
 
