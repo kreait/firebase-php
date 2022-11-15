@@ -48,6 +48,6 @@ final class AppCheck implements Contract\AppCheck
     {
         $decodedToken = $this->tokenVerifier->verifyToken($appCheckToken);
 
-        return new VerifyAppCheckTokenResponse($decodedToken->app_id(), $decodedToken);
+        return new VerifyAppCheckTokenResponse($decodedToken->app_id, $decodedToken);
     }
 }

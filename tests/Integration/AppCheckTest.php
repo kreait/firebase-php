@@ -52,7 +52,7 @@ final class AppCheckTest extends IntegrationTestCase
 
         $this->assertIsString($response->appId);
         $this->assertEquals($this->appId, $response->appId);
-        $this->assertIsString($response->token->app_id());
-        $this->assertEquals($this->appId, $response->token->app_id());
+        $this->assertIsString($response->token->app_id);
+        $this->assertEquals($this->appId, $response->token->app_id);
     }
 }

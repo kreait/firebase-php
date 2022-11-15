@@ -23,10 +23,10 @@ final class DecodedAppCheckTokenTest extends UnitTestCase
             'sub' => $appId,
         ]);
 
-        $this->assertSame($appId, $options->app_id());
-        $this->assertSame($aud, $options->aud());
-        $this->assertSame($exp, $options->exp());
-        $this->assertSame($iat, $options->iat());
-        $this->assertSame($iss, $options->iss());
+        $this->assertSame($appId, $options->app_id);
+        $this->assertSame($aud, $options->aud);
+        $this->assertSame($exp, $options->exp);
+        $this->assertSame($iat, $options->iat);
+        $this->assertSame($iss, $options->iss);
     }
 }

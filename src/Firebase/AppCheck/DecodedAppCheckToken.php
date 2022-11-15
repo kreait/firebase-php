@@ -21,12 +21,12 @@ final class DecodedAppCheckToken
      * @param array<string> $aud
      */
     private function __construct(
-        private string $app_id,
-        private array $aud,
-        private string $exp,
-        private string $iat,
-        private string $iss,
-        private string $sub,
+        public readonly string $app_id,
+        public readonly array $aud,
+        public readonly string $exp,
+        public readonly string $iat,
+        public readonly string $iss,
+        public readonly string $sub,
     ) {
     }
 
@@ -43,40 +43,6 @@ final class DecodedAppCheckToken
             $data['iss'],
             $data['sub'],
         );
-    }
-
-    /** @return non-empty-string */
-    public function app_id(): string
-    {
-        return $this->app_id;
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function aud(): array
-    {
-        return $this->aud;
-    }
-
-    public function exp(): string
-    {
-        return $this->exp;
-    }
-
-    public function iat(): string
-    {
-        return $this->iat;
-    }
-
-    public function iss(): string
-    {
-        return $this->iss;
-    }
-
-    public function sub(): string
-    {
-        return $this->sub;
     }
 
     /**
