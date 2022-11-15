@@ -23,8 +23,6 @@ final class AppCheckTokenOptionsTest extends UnitTestCase
 
     /**
      * @dataProvider validOptions
-     *
-     * @param string $ttl
      */
     public function testFromArrayWithValidOptions(?int $ttl): void
     {

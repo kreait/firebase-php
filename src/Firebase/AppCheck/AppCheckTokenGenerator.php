@@ -17,13 +17,13 @@ class AppCheckTokenGenerator
 {
     private const APP_CHECK_AUDIENCE = 'https://firebaseappcheck.googleapis.com/google.firebase.appcheck.v1.TokenExchangeService';
 
+    private ClockInterface $clock;
+
     public function __construct(
         private ServiceAccount $serviceAccount,
-        private ?ClockInterface $clock = null,
+        ClockInterface $clock = null,
     ) {
-        if (null == $this->clock) {
-            $this->clock = new SystemClock();
-        }
+        $this->clock = $clock ?? SystemClock::create();
     }
 
     /**

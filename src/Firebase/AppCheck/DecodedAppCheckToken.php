@@ -8,7 +8,7 @@ use JsonSerializable;
 
 /**
  * @phpstan-type DecodedAppCheckTokenShape array{
- *     app_id: string,
+ *     app_id: non-empty-string,
  *     aud: array<string>,
  *     exp: string,
  *     iat: string,
@@ -19,8 +19,7 @@ use JsonSerializable;
 final class DecodedAppCheckToken implements JsonSerializable
 {
     /**
-     * @var non-empty-string
-     *
+     * @param non-empty-string $app_id
      * @param array<string> $aud
      */
     private function __construct(
@@ -48,6 +47,7 @@ final class DecodedAppCheckToken implements JsonSerializable
         );
     }
 
+    /** @return non-empty-string */
     public function app_id(): string
     {
         return $this->app_id;

@@ -17,7 +17,7 @@ use JsonSerializable;
 final class VerifyAppCheckTokenResponse implements JsonSerializable
 {
     /**
-     * @param non-empty string $appId
+     * @param non-empty-string $appId
      */
     public function __construct(
         private string $appId,
