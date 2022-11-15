@@ -15,7 +15,7 @@ use function array_key_exists;
  *     ttl: string
  * }
  */
-final class AppCheckToken implements JsonSerializable
+final class AppCheckToken
 {
     private function __construct(
         private string $token,
@@ -50,24 +50,5 @@ final class AppCheckToken implements JsonSerializable
     public function ttl(): string
     {
         return $this->ttl;
-    }
-
-    /**
-     * @return AppCheckTokenShape
-     */
-    public function toArray(): array
-    {
-        return [
-            'token' => $this->token,
-            'ttl' => $this->ttl,
-        ];
-    }
-
-    /**
-     * @return AppCheckTokenShape
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

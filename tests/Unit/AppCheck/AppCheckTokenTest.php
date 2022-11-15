@@ -21,6 +21,5 @@ final class AppCheckTokenTest extends UnitTestCase
 
         $this->assertSame($ttl, $options->ttl());
         $this->assertSame($token, $options->token());
-        $this->assertEquals(['ttl' => $ttl, 'token' => $token], $options->jsonSerialize());
     }
 }
