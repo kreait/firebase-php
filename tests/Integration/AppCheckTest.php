@@ -30,7 +30,6 @@ final class AppCheckTest extends IntegrationTestCase
     {
         $token = $this->appCheck->createToken($this->appId);
 
-        $this->assertInstanceOf(AppCheckToken::class, $token);
         $this->assertIsString($token->token());
         $this->assertIsNumeric($token->ttl());
         $this->assertEquals(3600, $token->ttl());
@@ -42,7 +41,6 @@ final class AppCheckTest extends IntegrationTestCase
             'ttl' => 1800,
         ]);
 
-        $this->assertInstanceOf(AppCheckToken::class, $token);
         $this->assertIsString($token->token());
         $this->assertIsNumeric($token->ttl());
         $this->assertEquals(1800, $token->ttl());
@@ -54,7 +52,6 @@ final class AppCheckTest extends IntegrationTestCase
 
         $response = $this->appCheck->verifyToken($token->token());
 
-        $this->assertInstanceOf(VerifyAppCheckTokenResponse::class, $response);
         $this->assertIsString($response->token()->app_id());
         $this->assertEquals($this->appId, $response->token()->app_id());
     }
