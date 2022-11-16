@@ -79,7 +79,7 @@ class AppCheckTokenVerifier
      */
     private function verifyContent(DecodedAppCheckToken $token): void
     {
-        if (empty($token->aud) || !in_array($this->projectId, $token->aud, true)) {
+        if (empty($token->aud) || !in_array('projects/'.$this->projectId, $token->aud, true)) {
             throw new FailedToVerifyAppCheckToken('The "aud" claim must be set to the project ID.');
         }
 

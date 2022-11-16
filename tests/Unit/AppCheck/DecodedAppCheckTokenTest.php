@@ -15,15 +15,14 @@ final class DecodedAppCheckTokenTest extends UnitTestCase
     public function testCreateFromValidArray(): void
     {
         $options = DecodedAppCheckToken::fromArray([
-            'app_id' => $appId = '1:111111111111:android:0000000000000000000000',
             'aud' => $aud = ['111111111111', 'project-id'],
-            'exp' => $exp = '1667915200',
-            'iat' => $iat = '1667915500',
+            'exp' => $exp = 1667915200,
+            'iat' => $iat = 1667915500,
             'iss' => $iss = 'https://firebaseappcheck.googleapis.com/111111111111',
-            'sub' => $appId,
+            'sub' => $sub = '1:111111111111:android:0000000000000000000000',
         ]);
 
-        $this->assertSame($appId, $options->app_id);
+        $this->assertSame($sub, $options->app_id);
         $this->assertSame($aud, $options->aud);
         $this->assertSame($exp, $options->exp);
         $this->assertSame($iat, $options->iat);
