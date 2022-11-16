@@ -34,7 +34,7 @@ class ApiClient
      */
     public function exchangeCustomToken(string $appId, string $customToken): array
     {
-        $response = $this->requestApi('POST', 'apps/'.$appId, [
+        $response = $this->requestApi('POST', 'apps/'.$appId.':exchangeCustomToken', [
             'headers' => [
                 'Content-Type' => 'application/json; UTF-8',
             ],
