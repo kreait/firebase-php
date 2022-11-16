@@ -18,18 +18,11 @@ use function is_array;
  */
 final class AppCheck implements Contract\AppCheck
 {
-    private ApiClient $client;
-    private AppCheckTokenGenerator $tokenGenerator;
-    private AppCheckTokenVerifier $tokenVerifier;
-
     public function __construct(
-        ApiClient $client,
-        AppCheckTokenGenerator $tokenGenerator,
-        AppCheckTokenVerifier $tokenVerifier,
+        private ApiClient $client,
+        private AppCheckTokenGenerator $tokenGenerator,
+        private AppCheckTokenVerifier $tokenVerifier,
     ) {
-        $this->client = $client;
-        $this->tokenGenerator = $tokenGenerator;
-        $this->tokenVerifier = $tokenVerifier;
     }
 
     public function createToken(string $appId, $options = null): AppCheckToken
