@@ -22,10 +22,12 @@ use function random_bytes;
  */
 abstract class IntegrationTestCase extends FirebaseTestCase
 {
-    public const TENANT_ID = 'Test-bs38l';
+    private const DEFAULT_TENANT_ID = 'Test-bs38l';
     protected static Factory $factory;
     protected static ServiceAccount $serviceAccount;
     protected static string $rtdbUrl;
+    protected static string $tenantId;
+    protected static string $appId;
 
     /** @var string[] */
     protected static array $registrationTokens = [];
@@ -40,13 +42,16 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         }
 
         self::$serviceAccount = $credentials;
-        self::$rtdbUrl = self::rtdbUrlFromEnvironment() ?? self::rtdbUrlFromFile() ?? '';
+        self::$rtdbUrl = self::rtdbUrl();
 
         self::$factory = (new Factory())
             ->withServiceAccount(self::$serviceAccount->asArray())
             ->withDatabaseUri(self::$rtdbUrl);
 
         self::$registrationTokens = self::registrationTokensFromEnvironment() ?? self::registrationTokensFromFile() ?? [];
+
+        self::$tenantId = self::tenantId();
+        self::$appId = self::appId();
     }
 
     protected function getTestRegistrationToken(): string
@@ -141,9 +146,29 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         }
     }
 
-    private static function rtdbUrlFromFile(): ?string
+    private static function rtdbUrl(): string
     {
-        $path = self::$fixturesDir.'/test_rtdb.json';
+        return self::setting('TEST_FIREBASE_RTDB_URI', 'test_rtdb.json', '');
+    }
+
+    private static function tenantId(): string
+    {
+        return self::setting('TEST_FIREBASE_TENANT_ID', 'test_tenant.json', self::DEFAULT_TENANT_ID);
+    }
+
+    private static function appId(): string
+    {
+        return self::setting('TEST_FIREBASE_APP_ID', 'test_app.json', '');
+    }
+
+    private static function setting(string $envName, string $envFile, string $default): string
+    {
+        return self::settingFromEnv($envName) ?? self::settingFromFile($envFile) ?? $default;
+    }
+
+    private static function settingFromFile(string $envFile): ?string
+    {
+        $path = self::$fixturesDir.'/'.$envFile;
 
         if (!file_exists($path)) {
             return null;
@@ -160,8 +185,8 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         }
     }
 
-    private static function rtdbUrlFromEnvironment(): ?string
+    private static function settingFromEnv(string $envKey): ?string
     {
-        return Util::getenv('TEST_FIREBASE_RTDB_URI');
+        return Util::getenv($envKey);
     }
 }
