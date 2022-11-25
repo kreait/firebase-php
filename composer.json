@@ -28,7 +28,7 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
-        "beste/clock": "^2.2",
+        "beste/clock": "^2.3.1",
         "beste/json": "^1.1",
         "fig/http-message-util": "^1.1.5",
         "google/auth": "^1.23.1",
