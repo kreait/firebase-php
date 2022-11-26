@@ -7,6 +7,7 @@ namespace Kreait\Firebase;
 use Beste\Clock\SystemClock;
 use Beste\Clock\WrappingClock;
 use Beste\Json;
+use Firebase\JWT\CachedKeySet;
 use Google\Auth\ApplicationDefaultCredentials;
 use Google\Auth\Cache\MemoryCacheItemPool;
 use Google\Auth\Credentials\ServiceAccountCredentials;
@@ -21,6 +22,7 @@ use Google\Cloud\Storage\StorageClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Utils as GuzzleUtils;
 use GuzzleHttp\RequestOptions;
 use Kreait\Firebase\Auth\ApiClient;
@@ -52,9 +54,9 @@ use function trim;
 
 /**
  * @phpstan-type ServiceAccountShape array{
- *     project_id?: string,
- *     client_email?: string,
- *     private_key?: string,
+ *     project_id: non-empty-string,
+ *     client_email: non-empty-string,
+ *     private_key: non-empty-string,
  *     type: 'service_account'
  * }
  */
@@ -89,6 +91,7 @@ final class Factory
     private ?string $projectId = null;
     private CacheItemPoolInterface $verifierCache;
     private CacheItemPoolInterface $authTokenCache;
+    private CacheItemPoolInterface $keySetCache;
     private ClockInterface $clock;
 
     /** @var callable|null */
@@ -109,6 +112,7 @@ final class Factory
         $this->clock = SystemClock::create();
         $this->verifierCache = new MemoryCacheItemPool();
         $this->authTokenCache = new MemoryCacheItemPool();
+        $this->keySetCache = new MemoryCacheItemPool();
         $this->httpClientOptions = HttpClientOptions::default();
     }
 
@@ -224,6 +228,14 @@ final class Factory
         return $factory;
     }
 
+    public function withKeySetCache(CacheItemPoolInterface $cache): self
+    {
+        $factory = clone $this;
+        $factory->keySetCache = $cache;
+
+        return $factory;
+    }
+
     public function withHttpClientOptions(HttpClientOptions $options): self
     {
         $factory = clone $this;
@@ -274,6 +286,38 @@ final class Factory
         $factory->clock = $clock;
 
         return $factory;
+    }
+
+    public function createAppCheck(): Contract\AppCheck
+    {
+        $projectId = $this->getProjectId();
+
+        if ($this->serviceAccount === null) {
+            throw new RuntimeException('Unable to use AppCheck without credentials');
+        }
+
+        $http = $this->createApiClient([
+            'base_uri' => 'https://firebaseappcheck.googleapis.com/v1/projects/'.$projectId.'/',
+        ]);
+
+        $keySet = new CachedKeySet(
+            'https://firebaseappcheck.googleapis.com/v1/jwks',
+            new Client(),
+            new HttpFactory(),
+            $this->keySetCache,
+            21600,
+            true,
+        );
+
+        return new AppCheck(
+            new AppCheck\ApiClient($http),
+            new AppCheck\AppCheckTokenGenerator(
+                $this->serviceAccount['client_email'],
+                $this->serviceAccount['private_key'],
+                $this->clock,
+            ),
+            new AppCheck\AppCheckTokenVerifier($projectId, $keySet),
+        );
     }
 
     public function createAuth(): Contract\Auth

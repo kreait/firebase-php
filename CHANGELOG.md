@@ -11,6 +11,10 @@ This release adds many more PHPDoc annotations to support the usage of Static An
 and Psalm and moves away from doing runtime checks. It is strongly recommended to use a Static Analysis
 Tool and ensure that input values are validated before handing them over to the SDK.
 
+## Added features
+
+* Added support for verifying Firebase App Check Tokens. ([#747](https://github.com/kreait/firebase-php/pull/747))
+
 ### Notable changes
 
 * The ability to disable credentials auto-discovery has been removed. If you don't want a service account to be

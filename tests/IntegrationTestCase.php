@@ -35,6 +35,9 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     /** @var non-empty-string|null */
     protected static ?string $tenantId;
 
+    /** @var non-empty-string|null */
+    protected static ?string $appId;
+
     /** @var list<string> */
     protected static array $registrationTokens = [];
     protected static string $unknownToken = 'd_RTtLHR_JgI4r4tbYM9CA:APA91bEzb2Tb3WlKwddpEPYY2ZAx7AOmjOhiw-jVq6J9ekJGpBAefAgMb1muDJcKBMsrMq7zSCfBzl0Ll7JCZ0o8QI9zLVG1F18nqW9AOFKDXi8-MyT3R5Stt6GGKnq9rd9l5kopGEbO';
@@ -57,6 +60,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         self::$registrationTokens = self::registrationTokens();
         self::$rtdbUrl = self::rtdbUrl();
         self::$tenantId = self::tenantId();
+        self::$appId = self::appId();
     }
 
     protected function getTestRegistrationToken(): string
@@ -193,6 +197,17 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     /**
      * @return non-empty-string|null
      */
+    private static function appId(): ?string
+    {
+        return self::setting('TEST_FIREBASE_APP_ID', 'test_app.json');
+    }
+
+    /**
+     * @param non-empty-string $envName
+     * @param non-empty-string $envFile
+     *
+     * @return non-empty-string|null
+     */
     private static function setting(string $envName, string $envFile): ?string
     {
         return self::settingFromEnv($envName) ?? self::settingFromFile($envFile);
@@ -221,6 +236,8 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     }
 
     /**
+     * @param non-empty-string $envKey
+     *
      * @return non-empty-string|null
      */
     private static function settingFromEnv(string $envKey): ?string
