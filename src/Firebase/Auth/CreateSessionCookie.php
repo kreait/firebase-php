@@ -9,7 +9,7 @@ use Beste\Clock\WrappingClock;
 use DateInterval;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Lcobucci\JWT\Token;
-use StellaMaris\Clock\ClockInterface;
+use Psr\Clock\ClockInterface;
 
 use function is_int;
 

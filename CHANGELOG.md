@@ -4,8 +4,8 @@
 
 The most notable change is that you need PHP 8.1/8.2 to use the new version. The language migration of
 the SDK introduces breaking changes concerning the strictness of parameter types almost everywhere in
-the SDK - however, this should not affect your project in most cases (unless you have used the SDK's 
-internal classes directly or extended them).
+the SDK - however, this should not affect your project in most cases (unless you have used internal classes
+directly or by extension).
 
 This release adds many more PHPDoc annotations to support the usage of Static Analysis Tools like PHPStan
 and Psalm and moves away from doing runtime checks. It is strongly recommended to use a Static Analysis

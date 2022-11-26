@@ -44,7 +44,7 @@ use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Token;
 use Lcobucci\JWT\UnencryptedToken;
 use Psr\Http\Message\ResponseInterface;
-use StellaMaris\Clock\ClockInterface;
+use Psr\Clock\ClockInterface;
 use Stringable;
 use Throwable;
 use Traversable;

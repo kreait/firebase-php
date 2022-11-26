@@ -41,7 +41,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use StellaMaris\Clock\ClockInterface;
+use Psr\Clock\ClockInterface;
 use Stringable;
 use Throwable;
 

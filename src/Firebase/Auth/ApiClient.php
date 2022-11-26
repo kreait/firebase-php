@@ -19,7 +19,7 @@ use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Request\UpdateUser;
 use Psr\Http\Message\ResponseInterface;
-use StellaMaris\Clock\ClockInterface;
+use Psr\Clock\ClockInterface;
 use Stringable;
 use Throwable;
 

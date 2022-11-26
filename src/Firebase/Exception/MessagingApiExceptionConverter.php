@@ -18,7 +18,7 @@ use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
 use Kreait\Firebase\Http\ErrorResponseParser;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
-use StellaMaris\Clock\ClockInterface;
+use Psr\Clock\ClockInterface;
 use Throwable;
 
 use function is_numeric;
