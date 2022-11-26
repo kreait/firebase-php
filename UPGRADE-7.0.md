@@ -54,27 +54,198 @@ The following list has been generated with [roave/backward-compatibility-check](
 ### Removals
 
 ```
-[BC] REMOVED: Class Kreait\Firebase\Auth\SendActionLink\ApiRequest has been deleted
 [BC] REMOVED: Class Kreait\Firebase\Auth\CreateActionLink\ApiRequest has been deleted
 [BC] REMOVED: Class Kreait\Firebase\Auth\CreateSessionCookie\ApiRequest has been deleted
+[BC] REMOVED: Class Kreait\Firebase\Auth\SendActionLink\ApiRequest has been deleted
 [BC] REMOVED: Constant Kreait\Firebase\RemoteConfig\DefaultValue::IN_APP_DEFAULT_VALUE was removed
-[BC] REMOVED: Method Kreait\Firebase\RemoteConfig\DefaultValue::none() was removed
-[BC] REMOVED: Method Kreait\Firebase\RemoteConfig\DefaultValue#value() was removed
+[BC] REMOVED: Method Kreait\Firebase\Auth\UserInfo#jsonSerialize() was removed
+[BC] REMOVED: Method Kreait\Firebase\Auth\UserMetaData#jsonSerialize() was removed
+[BC] REMOVED: Method Kreait\Firebase\Auth\UserMetaData::fromResponseData() was removed
+[BC] REMOVED: Method Kreait\Firebase\Auth\UserRecord#__get() was removed
+[BC] REMOVED: Method Kreait\Firebase\Auth\UserRecord#jsonSerialize() was removed
 [BC] REMOVED: Method Kreait\Firebase\Messaging\AndroidConfig#withHighPriority() was removed
 [BC] REMOVED: Method Kreait\Firebase\Messaging\AndroidConfig#withNormalPriority() was removed
 [BC] REMOVED: Method Kreait\Firebase\Messaging\AndroidConfig#withPriority() was removed
+[BC] REMOVED: Method Kreait\Firebase\RemoteConfig\DefaultValue#value() was removed
+[BC] REMOVED: Method Kreait\Firebase\RemoteConfig\DefaultValue::none() was removed
+[BC] REMOVED: Property Kreait\Firebase\Auth\UserInfo#$screenName was removed
+[BC] REMOVED: These ancestors of Kreait\Firebase\Auth\UserInfo have been removed: ["JsonSerializable"]
+[BC] REMOVED: These ancestors of Kreait\Firebase\Auth\UserMetaData have been removed: ["JsonSerializable"]
+[BC] REMOVED: These ancestors of Kreait\Firebase\Auth\UserRecord have been removed: ["JsonSerializable"]
 ```
 
 ### Changes
 
 ```
-[BC] CHANGED: The parameter $value of Kreait\Firebase\Factory#withServiceAccount() changed from no type to a non-contravariant string|array
+[BC] CHANGED: Class Kreait\Firebase\Auth\UserInfo became final
+[BC] CHANGED: Class Kreait\Firebase\Auth\UserMetaData became final
+[BC] CHANGED: Class Kreait\Firebase\Auth\UserRecord became final
+[BC] CHANGED: Kreait\Firebase\Auth\UserMetaData::fromResponseData() was marked "@internal"
+[BC] CHANGED: Property Kreait\Firebase\Auth\UserRecord#$customClaims changed default value from array () to NULL
+[BC] CHANGED: Property Kreait\Firebase\Auth\UserRecord#$disabled changed default value from false to NULL
+[BC] CHANGED: Property Kreait\Firebase\Auth\UserRecord#$emailVerified changed default value from false to NULL
+[BC] CHANGED: Property Kreait\Firebase\Auth\UserRecord#$providerData changed default value from array () to NULL
+[BC] CHANGED: Property Kreait\Firebase\Auth\UserRecord#$uid changed default value from '' to NULL
+[BC] CHANGED: The number of required arguments for Kreait\Firebase\Auth\UserRecord#__construct() increased from 0 to 15
+[BC] CHANGED: The parameter $actionOrParametersOrUrl of Kreait\Firebase\Contract\DynamicLinks#createDynamicLink() changed from no type to Stringable|string|Kreait\Firebase\DynamicLink\CreateDynamicLink|array
+[BC] CHANGED: The parameter $actionOrParametersOrUrl of Kreait\Firebase\Contract\DynamicLinks#createDynamicLink() changed from no type to a non-contravariant Stringable|string|Kreait\Firebase\DynamicLink\CreateDynamicLink|array
+[BC] CHANGED: The parameter $clearTextPassword of Kreait\Firebase\Contract\Auth#signInWithEmailAndPassword() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $clearTextPassword of Kreait\Firebase\Contract\Auth#signInWithEmailAndPassword() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $clearTextPassword of Kreait\Firebase\Request\EditUserTrait#withClearTextPassword() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $clearTextPassword of Kreait\Firebase\Request\EditUserTrait#withClearTextPassword() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $clearTextPassword of Kreait\Firebase\Request\EditUserTrait#withClearTextPassword() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $clearTextPassword of Kreait\Firebase\Request\EditUserTrait#withClearTextPassword() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $data of Kreait\Firebase\DynamicLink\CreateDynamicLink#withAnalyticsInfo() changed from no type to a non-contravariant Kreait\Firebase\DynamicLink\AnalyticsInfo|array
+[BC] CHANGED: The parameter $data of Kreait\Firebase\DynamicLink\CreateDynamicLink#withAndroidInfo() changed from no type to a non-contravariant Kreait\Firebase\DynamicLink\AndroidInfo|array
+[BC] CHANGED: The parameter $data of Kreait\Firebase\DynamicLink\CreateDynamicLink#withIOSInfo() changed from no type to a non-contravariant Kreait\Firebase\DynamicLink\IOSInfo|array
+[BC] CHANGED: The parameter $data of Kreait\Firebase\DynamicLink\CreateDynamicLink#withNavigationInfo() changed from no type to a non-contravariant Kreait\Firebase\DynamicLink\NavigationInfo|array
+[BC] CHANGED: The parameter $data of Kreait\Firebase\DynamicLink\CreateDynamicLink#withSocialMetaTagInfo() changed from no type to a non-contravariant Kreait\Firebase\DynamicLink\SocialMetaTagInfo|array
+[BC] CHANGED: The parameter $dynamicLinkDomain of Kreait\Firebase\DynamicLink\CreateDynamicLink#withDynamicLinkDomain() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $dynamicLinkOrAction of Kreait\Firebase\Contract\DynamicLinks#getStatistics() changed from no type to Stringable|string|Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink
+[BC] CHANGED: The parameter $dynamicLinkOrAction of Kreait\Firebase\Contract\DynamicLinks#getStatistics() changed from no type to a non-contravariant Stringable|string|Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Auth\CreateActionLink::new() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#createUserWithEmailAndPassword() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#createUserWithEmailAndPassword() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#getEmailActionLink() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#getEmailActionLink() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#getEmailVerificationLink() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#getEmailVerificationLink() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#getPasswordResetLink() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#getPasswordResetLink() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#getSignInWithEmailLink() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#getSignInWithEmailLink() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#getUserByEmail() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#getUserByEmail() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#sendEmailActionLink() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#sendEmailActionLink() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#sendEmailVerificationLink() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#sendEmailVerificationLink() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#sendPasswordResetLink() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#sendPasswordResetLink() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#sendSignInWithEmailLink() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#sendSignInWithEmailLink() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#signInWithEmailAndOobCode() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#signInWithEmailAndOobCode() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#signInWithEmailAndPassword() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Contract\Auth#signInWithEmailAndPassword() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withEmail() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withEmail() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withEmail() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withEmail() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withUnverifiedEmail() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withUnverifiedEmail() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withUnverifiedEmail() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withUnverifiedEmail() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withVerifiedEmail() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withVerifiedEmail() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withVerifiedEmail() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withVerifiedEmail() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $idToken of Kreait\Firebase\Contract\Auth#createSessionCookie() changed from no type to Lcobucci\JWT\Token|string
+[BC] CHANGED: The parameter $idToken of Kreait\Firebase\Contract\Auth#createSessionCookie() changed from no type to a non-contravariant Lcobucci\JWT\Token|string
+[BC] CHANGED: The parameter $idToken of Kreait\Firebase\Contract\Auth#signInWithIdpIdToken() changed from no type to Lcobucci\JWT\Token|string
+[BC] CHANGED: The parameter $idToken of Kreait\Firebase\Contract\Auth#signInWithIdpIdToken() changed from no type to a non-contravariant Lcobucci\JWT\Token|string
+[BC] CHANGED: The parameter $idToken of Kreait\Firebase\Contract\Auth#verifyIdToken() changed from no type to Lcobucci\JWT\Token|string
+[BC] CHANGED: The parameter $idToken of Kreait\Firebase\Contract\Auth#verifyIdToken() changed from no type to a non-contravariant Lcobucci\JWT\Token|string
+[BC] CHANGED: The parameter $link of Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink::forLink() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $longDynamicLinkOrAction of Kreait\Firebase\Contract\DynamicLinks#shortenLongDynamicLink() changed from no type to Stringable|string|Kreait\Firebase\DynamicLink\ShortenLongDynamicLink|array
+[BC] CHANGED: The parameter $longDynamicLinkOrAction of Kreait\Firebase\Contract\DynamicLinks#shortenLongDynamicLink() changed from no type to a non-contravariant Stringable|string|Kreait\Firebase\DynamicLink\ShortenLongDynamicLink|array
+[BC] CHANGED: The parameter $message of Kreait\Firebase\Contract\Messaging#send() changed from no type to Kreait\Firebase\Messaging\Message|array
+[BC] CHANGED: The parameter $message of Kreait\Firebase\Contract\Messaging#send() changed from no type to a non-contravariant Kreait\Firebase\Messaging\Message|array
+[BC] CHANGED: The parameter $message of Kreait\Firebase\Contract\Messaging#sendMulticast() changed from no type to Kreait\Firebase\Messaging\Message|array
+[BC] CHANGED: The parameter $message of Kreait\Firebase\Contract\Messaging#sendMulticast() changed from no type to a non-contravariant Kreait\Firebase\Messaging\Message|array
+[BC] CHANGED: The parameter $message of Kreait\Firebase\Contract\Messaging#validate() changed from no type to Kreait\Firebase\Messaging\Message|array
+[BC] CHANGED: The parameter $message of Kreait\Firebase\Contract\Messaging#validate() changed from no type to a non-contravariant Kreait\Firebase\Messaging\Message|array
+[BC] CHANGED: The parameter $messages of Kreait\Firebase\Contract\Messaging#sendAll() changed from no type to a non-contravariant array|Kreait\Firebase\Messaging\Messages
+[BC] CHANGED: The parameter $messages of Kreait\Firebase\Contract\Messaging#sendAll() changed from no type to array|Kreait\Firebase\Messaging\Messages
+[BC] CHANGED: The parameter $newEmail of Kreait\Firebase\Contract\Auth#changeUserEmail() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $newEmail of Kreait\Firebase\Contract\Auth#changeUserEmail() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $newPassword of Kreait\Firebase\Contract\Auth#changeUserPassword() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $newPassword of Kreait\Firebase\Contract\Auth#changeUserPassword() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $newPassword of Kreait\Firebase\Contract\Auth#confirmPasswordReset() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $newPassword of Kreait\Firebase\Contract\Auth#confirmPasswordReset() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $password of Kreait\Firebase\Contract\Auth#createUserWithEmailAndPassword() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $password of Kreait\Firebase\Contract\Auth#createUserWithEmailAndPassword() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $phoneNumber of Kreait\Firebase\Contract\Auth#getUserByPhoneNumber() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $phoneNumber of Kreait\Firebase\Contract\Auth#getUserByPhoneNumber() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $properties of Kreait\Firebase\Contract\Auth#createUser() changed from no type to a non-contravariant array|Kreait\Firebase\Request\CreateUser
+[BC] CHANGED: The parameter $properties of Kreait\Firebase\Contract\Auth#createUser() changed from no type to array|Kreait\Firebase\Request\CreateUser
+[BC] CHANGED: The parameter $properties of Kreait\Firebase\Contract\Auth#updateUser() changed from no type to a non-contravariant array|Kreait\Firebase\Request\UpdateUser
+[BC] CHANGED: The parameter $properties of Kreait\Firebase\Contract\Auth#updateUser() changed from no type to array|Kreait\Firebase\Request\UpdateUser
+[BC] CHANGED: The parameter $provider of Kreait\Firebase\Contract\Auth#signInWithIdpAccessToken() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $provider of Kreait\Firebase\Contract\Auth#signInWithIdpAccessToken() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $provider of Kreait\Firebase\Contract\Auth#signInWithIdpIdToken() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $provider of Kreait\Firebase\Contract\Auth#signInWithIdpIdToken() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $provider of Kreait\Firebase\Contract\Auth#unlinkProvider() changed from no type to a non-contravariant array|Stringable|string
+[BC] CHANGED: The parameter $provider of Kreait\Firebase\Contract\Auth#unlinkProvider() changed from no type to array|Stringable|string
+[BC] CHANGED: The parameter $query of Kreait\Firebase\Contract\Auth#queryUsers() changed from no type to Kreait\Firebase\Auth\UserQuery|array
+[BC] CHANGED: The parameter $query of Kreait\Firebase\Contract\Auth#queryUsers() changed from no type to a non-contravariant Kreait\Firebase\Auth\UserQuery|array
+[BC] CHANGED: The parameter $registrationToken of Kreait\Firebase\Contract\Messaging#getAppInstance() changed from no type to Kreait\Firebase\Messaging\RegistrationToken|string
+[BC] CHANGED: The parameter $registrationToken of Kreait\Firebase\Contract\Messaging#getAppInstance() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationToken|string
+[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#subscribeToTopic() changed from no type to Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
+[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#subscribeToTopic() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
+[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#subscribeToTopics() changed from no type to Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
+[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#subscribeToTopics() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
+[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#unsubscribeFromAllTopics() changed from no type to Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
+[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#unsubscribeFromAllTopics() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
+[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#unsubscribeFromTopic() changed from no type to Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
+[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#unsubscribeFromTopic() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
+[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#unsubscribeFromTopics() changed from no type to Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
+[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#unsubscribeFromTopics() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
+[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#validateRegistrationTokens() changed from no type to Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
+[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#validateRegistrationTokens() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
+[BC] CHANGED: The parameter $registrationTokens of Kreait\Firebase\Contract\Messaging#sendMulticast() changed from no type to Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
+[BC] CHANGED: The parameter $registrationTokens of Kreait\Firebase\Contract\Messaging#sendMulticast() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
+[BC] CHANGED: The parameter $token of Kreait\Firebase\Contract\Auth#signInWithCustomToken() changed from no type to Lcobucci\JWT\Token|string
+[BC] CHANGED: The parameter $token of Kreait\Firebase\Contract\Auth#signInWithCustomToken() changed from no type to a non-contravariant Lcobucci\JWT\Token|string
+[BC] CHANGED: The parameter $topic of Kreait\Firebase\Contract\Messaging#subscribeToTopic() changed from no type to a non-contravariant string|Kreait\Firebase\Messaging\Topic
+[BC] CHANGED: The parameter $topic of Kreait\Firebase\Contract\Messaging#subscribeToTopic() changed from no type to string|Kreait\Firebase\Messaging\Topic
+[BC] CHANGED: The parameter $topic of Kreait\Firebase\Contract\Messaging#unsubscribeFromTopic() changed from no type to a non-contravariant string|Kreait\Firebase\Messaging\Topic
+[BC] CHANGED: The parameter $topic of Kreait\Firebase\Contract\Messaging#unsubscribeFromTopic() changed from no type to string|Kreait\Firebase\Messaging\Topic
+[BC] CHANGED: The parameter $ttl of Kreait\Firebase\Contract\Auth#createCustomToken() changed from no type to a non-contravariant int|DateInterval|string
+[BC] CHANGED: The parameter $ttl of Kreait\Firebase\Contract\Auth#createCustomToken() changed from no type to int|DateInterval|string
+[BC] CHANGED: The parameter $ttl of Kreait\Firebase\Contract\Auth#createSessionCookie() changed from no type to DateInterval|int
+[BC] CHANGED: The parameter $ttl of Kreait\Firebase\Contract\Auth#createSessionCookie() changed from no type to a non-contravariant DateInterval|int
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#changeUserEmail() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#changeUserEmail() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#changeUserPassword() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#changeUserPassword() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#createCustomToken() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#createCustomToken() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#deleteUser() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#deleteUser() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#disableUser() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#disableUser() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#enableUser() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#enableUser() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#getUser() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#getUser() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#revokeRefreshTokens() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#revokeRefreshTokens() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#setCustomUserClaims() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#setCustomUserClaims() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#unlinkProvider() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#unlinkProvider() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#updateUser() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $uid of Kreait\Firebase\Contract\Auth#updateUser() changed from no type to a non-contravariant Stringable|string
 [BC] CHANGED: The parameter $uri of Kreait\Firebase\Factory#withDatabaseUri() changed from no type to a non-contravariant Psr\Http\Message\UriInterface|string
-[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Transaction#set() changed from no type to mixed
-[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#startAt() changed from no type to a non-contravariant bool|string|int|float
-[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#startAt() changed from no type to bool|string|int|float
-[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#startAfter() changed from no type to a non-contravariant bool|string|int|float
-[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#startAfter() changed from no type to bool|string|int|float
+[BC] CHANGED: The parameter $url of Kreait\Firebase\Contract\DynamicLinks#createShortLink() changed from no type to Stringable|string|Kreait\Firebase\DynamicLink\CreateDynamicLink|array
+[BC] CHANGED: The parameter $url of Kreait\Firebase\Contract\DynamicLinks#createShortLink() changed from no type to a non-contravariant Stringable|string|Kreait\Firebase\DynamicLink\CreateDynamicLink|array
+[BC] CHANGED: The parameter $url of Kreait\Firebase\Contract\DynamicLinks#createUnguessableLink() changed from no type to Stringable|string|Kreait\Firebase\DynamicLink\CreateDynamicLink|array
+[BC] CHANGED: The parameter $url of Kreait\Firebase\Contract\DynamicLinks#createUnguessableLink() changed from no type to a non-contravariant Stringable|string|Kreait\Firebase\DynamicLink\CreateDynamicLink|array
+[BC] CHANGED: The parameter $url of Kreait\Firebase\DynamicLink\CreateDynamicLink::forUrl() changed from no type to a non-contravariant string|Stringable
+[BC] CHANGED: The parameter $url of Kreait\Firebase\DynamicLink\ShortenLongDynamicLink::forLongDynamicLink() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $url of Kreait\Firebase\Request\EditUserTrait#withPhotoUrl() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $url of Kreait\Firebase\Request\EditUserTrait#withPhotoUrl() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $url of Kreait\Firebase\Request\EditUserTrait#withPhotoUrl() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $url of Kreait\Firebase\Request\EditUserTrait#withPhotoUrl() changed from no type to a non-contravariant Stringable|string
+[BC] CHANGED: The parameter $user of Kreait\Firebase\Contract\Auth#signInAsUser() changed from no type to Kreait\Firebase\Auth\UserRecord|Stringable|string
+[BC] CHANGED: The parameter $user of Kreait\Firebase\Contract\Auth#signInAsUser() changed from no type to a non-contravariant Kreait\Firebase\Auth\UserRecord|Stringable|string
+[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Query\Filter\EndAt#__construct() changed from no type to a non-contravariant bool|float|int|string
+[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Query\Filter\EndBefore#__construct() changed from no type to a non-contravariant int|float|string|bool
+[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Query\Filter\EqualTo#__construct() changed from no type to a non-contravariant bool|float|int|string
+[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Query\Filter\StartAfter#__construct() changed from no type to a non-contravariant int|float|string|bool
+[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Query\Filter\StartAt#__construct() changed from no type to a non-contravariant int|float|string|bool
+[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Query\ModifierTrait#appendQueryParam() changed from no type to mixed
 [BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#endAt() changed from no type to a non-contravariant bool|string|int|float
 [BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#endAt() changed from no type to bool|string|int|float
 [BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#endBefore() changed from no type to a non-contravariant bool|string|int|float
@@ -82,82 +253,17 @@ The following list has been generated with [roave/backward-compatibility-check](
 [BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#equalTo() changed from no type to a non-contravariant bool|string|int|float
 [BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#equalTo() changed from no type to bool|string|int|float
 [BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#set() changed from no type to mixed
-[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Query\ModifierTrait#appendQueryParam() changed from no type to mixed
-[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Query\Filter\StartAfter#__construct() changed from no type to a non-contravariant int|float|string|bool
-[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Query\Filter\EndAt#__construct() changed from no type to a non-contravariant bool|float|int|string
-[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Query\Filter\StartAt#__construct() changed from no type to a non-contravariant int|float|string|bool
-[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Query\Filter\EndBefore#__construct() changed from no type to a non-contravariant int|float|string|bool
-[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Query\Filter\EqualTo#__construct() changed from no type to a non-contravariant bool|float|int|string
-[BC] CHANGED: The parameter $message of Kreait\Firebase\Contract\Messaging#send() changed from no type to a non-contravariant Kreait\Firebase\Messaging\Message|array
-[BC] CHANGED: The parameter $message of Kreait\Firebase\Contract\Messaging#send() changed from no type to Kreait\Firebase\Messaging\Message|array
-[BC] CHANGED: The parameter $message of Kreait\Firebase\Contract\Messaging#sendMulticast() changed from no type to a non-contravariant Kreait\Firebase\Messaging\Message|array
-[BC] CHANGED: The parameter $registrationTokens of Kreait\Firebase\Contract\Messaging#sendMulticast() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
-[BC] CHANGED: The parameter $message of Kreait\Firebase\Contract\Messaging#sendMulticast() changed from no type to Kreait\Firebase\Messaging\Message|array
-[BC] CHANGED: The parameter $registrationTokens of Kreait\Firebase\Contract\Messaging#sendMulticast() changed from no type to Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
-[BC] CHANGED: The parameter $messages of Kreait\Firebase\Contract\Messaging#sendAll() changed from no type to a non-contravariant array|Kreait\Firebase\Messaging\Messages
-[BC] CHANGED: The parameter $messages of Kreait\Firebase\Contract\Messaging#sendAll() changed from no type to array|Kreait\Firebase\Messaging\Messages
-[BC] CHANGED: The parameter $message of Kreait\Firebase\Contract\Messaging#validate() changed from no type to a non-contravariant Kreait\Firebase\Messaging\Message|array
-[BC] CHANGED: The parameter $message of Kreait\Firebase\Contract\Messaging#validate() changed from no type to Kreait\Firebase\Messaging\Message|array
-[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#validateRegistrationTokens() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
-[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#validateRegistrationTokens() changed from no type to Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
-[BC] CHANGED: The parameter $topic of Kreait\Firebase\Contract\Messaging#subscribeToTopic() changed from no type to a non-contravariant string|Kreait\Firebase\Messaging\Topic
-[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#subscribeToTopic() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
-[BC] CHANGED: The parameter $topic of Kreait\Firebase\Contract\Messaging#subscribeToTopic() changed from no type to string|Kreait\Firebase\Messaging\Topic
-[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#subscribeToTopic() changed from no type to Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
-[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#subscribeToTopics() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
-[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#subscribeToTopics() changed from no type to Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
-[BC] CHANGED: The parameter $topic of Kreait\Firebase\Contract\Messaging#unsubscribeFromTopic() changed from no type to a non-contravariant string|Kreait\Firebase\Messaging\Topic
-[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#unsubscribeFromTopic() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
-[BC] CHANGED: The parameter $topic of Kreait\Firebase\Contract\Messaging#unsubscribeFromTopic() changed from no type to string|Kreait\Firebase\Messaging\Topic
-[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#unsubscribeFromTopic() changed from no type to Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
-[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#unsubscribeFromTopics() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
-[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#unsubscribeFromTopics() changed from no type to Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
-[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#unsubscribeFromAllTopics() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
-[BC] CHANGED: The parameter $registrationTokenOrTokens of Kreait\Firebase\Contract\Messaging#unsubscribeFromAllTopics() changed from no type to Kreait\Firebase\Messaging\RegistrationTokens|Kreait\Firebase\Messaging\RegistrationToken|array|string
-[BC] CHANGED: The parameter $registrationToken of Kreait\Firebase\Contract\Messaging#getAppInstance() changed from no type to a non-contravariant Kreait\Firebase\Messaging\RegistrationToken|string
-[BC] CHANGED: The parameter $registrationToken of Kreait\Firebase\Contract\Messaging#getAppInstance() changed from no type to Kreait\Firebase\Messaging\RegistrationToken|string
-[BC] CHANGED: The parameter $url of Kreait\Firebase\Contract\DynamicLinks#createUnguessableLink() changed from no type to a non-contravariant Stringable|string|Kreait\Firebase\DynamicLink\CreateDynamicLink|array
-[BC] CHANGED: The parameter $url of Kreait\Firebase\Contract\DynamicLinks#createUnguessableLink() changed from no type to Stringable|string|Kreait\Firebase\DynamicLink\CreateDynamicLink|array
-[BC] CHANGED: The parameter $url of Kreait\Firebase\Contract\DynamicLinks#createShortLink() changed from no type to a non-contravariant Stringable|string|Kreait\Firebase\DynamicLink\CreateDynamicLink|array
-[BC] CHANGED: The parameter $url of Kreait\Firebase\Contract\DynamicLinks#createShortLink() changed from no type to Stringable|string|Kreait\Firebase\DynamicLink\CreateDynamicLink|array
-[BC] CHANGED: The parameter $actionOrParametersOrUrl of Kreait\Firebase\Contract\DynamicLinks#createDynamicLink() changed from no type to a non-contravariant Stringable|string|Kreait\Firebase\DynamicLink\CreateDynamicLink|array
-[BC] CHANGED: The parameter $actionOrParametersOrUrl of Kreait\Firebase\Contract\DynamicLinks#createDynamicLink() changed from no type to Stringable|string|Kreait\Firebase\DynamicLink\CreateDynamicLink|array
-[BC] CHANGED: The parameter $longDynamicLinkOrAction of Kreait\Firebase\Contract\DynamicLinks#shortenLongDynamicLink() changed from no type to a non-contravariant Stringable|string|Kreait\Firebase\DynamicLink\ShortenLongDynamicLink|array
-[BC] CHANGED: The parameter $longDynamicLinkOrAction of Kreait\Firebase\Contract\DynamicLinks#shortenLongDynamicLink() changed from no type to Stringable|string|Kreait\Firebase\DynamicLink\ShortenLongDynamicLink|array
-[BC] CHANGED: The parameter $dynamicLinkOrAction of Kreait\Firebase\Contract\DynamicLinks#getStatistics() changed from no type to a non-contravariant Stringable|string|Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink
-[BC] CHANGED: The parameter $dynamicLinkOrAction of Kreait\Firebase\Contract\DynamicLinks#getStatistics() changed from no type to Stringable|string|Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink
-[BC] CHANGED: The parameter $versionNumber of Kreait\Firebase\Contract\RemoteConfig#getVersion() changed from no type to a non-contravariant Kreait\Firebase\RemoteConfig\VersionNumber|int|string
+[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#startAfter() changed from no type to a non-contravariant bool|string|int|float
+[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#startAfter() changed from no type to bool|string|int|float
+[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#startAt() changed from no type to a non-contravariant bool|string|int|float
+[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Reference#startAt() changed from no type to bool|string|int|float
+[BC] CHANGED: The parameter $value of Kreait\Firebase\Database\Transaction#set() changed from no type to mixed
+[BC] CHANGED: The parameter $value of Kreait\Firebase\Factory#withServiceAccount() changed from no type to a non-contravariant string|array
 [BC] CHANGED: The parameter $versionNumber of Kreait\Firebase\Contract\RemoteConfig#getVersion() changed from no type to Kreait\Firebase\RemoteConfig\VersionNumber|int|string
-[BC] CHANGED: The parameter $versionNumber of Kreait\Firebase\Contract\RemoteConfig#rollbackToVersion() changed from no type to a non-contravariant Kreait\Firebase\RemoteConfig\VersionNumber|int|string
+[BC] CHANGED: The parameter $versionNumber of Kreait\Firebase\Contract\RemoteConfig#getVersion() changed from no type to a non-contravariant Kreait\Firebase\RemoteConfig\VersionNumber|int|string
 [BC] CHANGED: The parameter $versionNumber of Kreait\Firebase\Contract\RemoteConfig#rollbackToVersion() changed from no type to Kreait\Firebase\RemoteConfig\VersionNumber|int|string
-[BC] CHANGED: The parameter $email of Kreait\Firebase\Auth\CreateActionLink::new() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $url of Kreait\Firebase\DynamicLink\CreateDynamicLink::forUrl() changed from no type to a non-contravariant string|Stringable
-[BC] CHANGED: The parameter $dynamicLinkDomain of Kreait\Firebase\DynamicLink\CreateDynamicLink#withDynamicLinkDomain() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $data of Kreait\Firebase\DynamicLink\CreateDynamicLink#withAnalyticsInfo() changed from no type to a non-contravariant Kreait\Firebase\DynamicLink\AnalyticsInfo|array
-[BC] CHANGED: The parameter $data of Kreait\Firebase\DynamicLink\CreateDynamicLink#withAndroidInfo() changed from no type to a non-contravariant Kreait\Firebase\DynamicLink\AndroidInfo|array
-[BC] CHANGED: The parameter $data of Kreait\Firebase\DynamicLink\CreateDynamicLink#withIOSInfo() changed from no type to a non-contravariant Kreait\Firebase\DynamicLink\IOSInfo|array
-[BC] CHANGED: The parameter $data of Kreait\Firebase\DynamicLink\CreateDynamicLink#withNavigationInfo() changed from no type to a non-contravariant Kreait\Firebase\DynamicLink\NavigationInfo|array
-[BC] CHANGED: The parameter $data of Kreait\Firebase\DynamicLink\CreateDynamicLink#withSocialMetaTagInfo() changed from no type to a non-contravariant Kreait\Firebase\DynamicLink\SocialMetaTagInfo|array
-[BC] CHANGED: The parameter $url of Kreait\Firebase\DynamicLink\ShortenLongDynamicLink::forLongDynamicLink() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $link of Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink::forLink() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withEmail() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withVerifiedEmail() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withUnverifiedEmail() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $url of Kreait\Firebase\Request\EditUserTrait#withPhotoUrl() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $clearTextPassword of Kreait\Firebase\Request\EditUserTrait#withClearTextPassword() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withEmail() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withVerifiedEmail() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withUnverifiedEmail() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $url of Kreait\Firebase\Request\EditUserTrait#withPhotoUrl() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $clearTextPassword of Kreait\Firebase\Request\EditUserTrait#withClearTextPassword() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withEmail() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withEmail() changed from no type to Stringable|string
-[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withVerifiedEmail() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withVerifiedEmail() changed from no type to Stringable|string
-[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withUnverifiedEmail() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $email of Kreait\Firebase\Request\EditUserTrait#withUnverifiedEmail() changed from no type to Stringable|string
-[BC] CHANGED: The parameter $url of Kreait\Firebase\Request\EditUserTrait#withPhotoUrl() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $url of Kreait\Firebase\Request\EditUserTrait#withPhotoUrl() changed from no type to Stringable|string
-[BC] CHANGED: The parameter $clearTextPassword of Kreait\Firebase\Request\EditUserTrait#withClearTextPassword() changed from no type to a non-contravariant Stringable|string
-[BC] CHANGED: The parameter $clearTextPassword of Kreait\Firebase\Request\EditUserTrait#withClearTextPassword() changed from no type to Stringable|string
+[BC] CHANGED: The parameter $versionNumber of Kreait\Firebase\Contract\RemoteConfig#rollbackToVersion() changed from no type to a non-contravariant Kreait\Firebase\RemoteConfig\VersionNumber|int|string
+[BC] CHANGED: Type type of property Kreait\Firebase\Auth\UserInfo#$providerId changed from string|null to string
+[BC] CHANGED: Type type of property Kreait\Firebase\Auth\UserInfo#$uid changed from string|null to string
+[BC] CHANGED: Type type of property Kreait\Firebase\Auth\UserMetaData#$createdAt changed from DateTimeImmutable|null to DateTimeImmutable
 ```
