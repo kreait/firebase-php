@@ -22,7 +22,7 @@ use function random_bytes;
  */
 abstract class IntegrationTestCase extends FirebaseTestCase
 {
-    public const TENANT_ID = 'Test-bs38l';
+    final public const TENANT_ID = 'Test-bs38l';
     protected static Factory $factory;
     protected static ServiceAccount $serviceAccount;
     protected static string $rtdbUrl;

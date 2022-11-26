@@ -24,11 +24,8 @@ use function is_string;
  */
 final class RemoteConfig implements Contract\RemoteConfig
 {
-    private ApiClient $client;
-
-    public function __construct(ApiClient $client)
+    public function __construct(private readonly ApiClient $client)
     {
-        $this->client = $client;
     }
 
     public function get(): Template
@@ -113,10 +110,7 @@ final class RemoteConfig implements Contract\RemoteConfig
         return $value instanceof Template ? $value : Template::fromArray($value);
     }
 
-    /**
-     * @param VersionNumber|int|string $value
-     */
-    private function ensureVersionNumber($value): VersionNumber
+    private function ensureVersionNumber(VersionNumber|int|string $value): VersionNumber
     {
         return $value instanceof VersionNumber ? $value : VersionNumber::fromValue($value);
     }

@@ -38,15 +38,8 @@ use function array_map;
  */
 final class Messaging implements Contract\Messaging
 {
-    private string $projectId;
-    private ApiClient $messagingApi;
-    private AppInstanceApiClient $appInstanceApi;
-
-    public function __construct(string $projectId, ApiClient $messagingApiClient, AppInstanceApiClient $appInstanceApiClient)
+    public function __construct(private readonly string $projectId, private readonly ApiClient $messagingApi, private readonly AppInstanceApiClient $appInstanceApi)
     {
-        $this->messagingApi = $messagingApiClient;
-        $this->appInstanceApi = $appInstanceApiClient;
-        $this->projectId = $projectId;
     }
 
     public function send(Message|array $message, bool $validateOnly = false): array
@@ -209,7 +202,7 @@ final class Messaging implements Contract\Messaging
      *
      * @throws InvalidArgumentException
      */
-    private function makeMessage($message): Message
+    private function makeMessage(Message|array $message): Message
     {
         $message = $message instanceof Message ? $message : CloudMessage::fromArray($message);
 
@@ -232,7 +225,7 @@ final class Messaging implements Contract\Messaging
      *
      * @throws InvalidArgument
      */
-    private function ensureNonEmptyRegistrationTokens($value): RegistrationTokens
+    private function ensureNonEmptyRegistrationTokens(RegistrationTokens|RegistrationToken|array|string $value): RegistrationTokens
     {
         try {
             $tokens = RegistrationTokens::fromValue($value);
