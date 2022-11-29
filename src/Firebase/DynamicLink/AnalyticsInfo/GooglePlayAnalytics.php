@@ -6,29 +6,36 @@ namespace Kreait\Firebase\DynamicLink\AnalyticsInfo;
 
 use JsonSerializable;
 
+/**
+ * @phpstan-type GooglePlayAnalyticsShape array{
+ *     utmSource?: non-empty-string,
+ *     utmMedium?: non-empty-string,
+ *     utmCampaign?: non-empty-string,
+ *     utmTerm?: non-empty-string,
+ *     utmContent?: non-empty-string,
+ *     gclid?: non-empty-string
+ * }
+ */
 final class GooglePlayAnalytics implements JsonSerializable
 {
-    /** @var array<string, string> */
-    private array $data = [];
-
-    private function __construct()
+    /**
+     * @param GooglePlayAnalyticsShape $data
+     */
+    private function __construct(private readonly array $data)
     {
     }
 
     /**
-     * @param array<string, string> $data
+     * @param GooglePlayAnalyticsShape $data
      */
     public static function fromArray(array $data): self
     {
-        $info = new self();
-        $info->data = $data;
-
-        return $info;
+        return new self($data);
     }
 
     public static function new(): self
     {
-        return new self();
+        return new self([]);
     }
 
     /**
@@ -36,39 +43,45 @@ final class GooglePlayAnalytics implements JsonSerializable
      * for example: google, newsletter4, billboard.
      *
      * @see https://support.google.com/analytics/answer/1033863#parameters
+     *
+     * @param non-empty-string $utmSource
      */
     public function withUtmSource(string $utmSource): self
     {
-        $info = clone $this;
-        $info->data['utmSource'] = $utmSource;
+        $data = $this->data;
+        $data['utmSource'] = $utmSource;
 
-        return $info;
+        return new self($data);
     }
 
     /**
      * The advertising or marketing medium, for example: cpc, banner, email newsletter.
      *
      * @see https://support.google.com/analytics/answer/1033863#parameters
+     *
+     * @param non-empty-string $utmMedium
      */
     public function withUtmMedium(string $utmMedium): self
     {
-        $info = clone $this;
-        $info->data['utmMedium'] = $utmMedium;
+        $data = $this->data;
+        $data['utmMedium'] = $utmMedium;
 
-        return $info;
+        return new self($data);
     }
 
     /**
      * The individual campaign name, slogan, promo code, etc. for a product.
      *
      * @see https://support.google.com/analytics/answer/1033863#parameters
+     *
+     * @param non-empty-string $utmCampaign
      */
-    public function withUtmCampaign(string $utmCampaing): self
+    public function withUtmCampaign(string $utmCampaign): self
     {
-        $info = clone $this;
-        $info->data['utmCampaign'] = $utmCampaing;
+        $data = $this->data;
+        $data['utmCampaign'] = $utmCampaign;
 
-        return $info;
+        return new self($data);
     }
 
     /**
@@ -76,13 +89,15 @@ final class GooglePlayAnalytics implements JsonSerializable
      * utm_term to specify the keyword.
      *
      * @see https://support.google.com/analytics/answer/1033863#parameters
+     *
+     * @param non-empty-string $utmTerm
      */
     public function withUtmTerm(string $utmTerm): self
     {
-        $info = clone $this;
-        $info->data['utmTerm'] = $utmTerm;
+        $data = $this->data;
+        $data['utmTerm'] = $utmTerm;
 
-        return $info;
+        return new self($data);
     }
 
     /**
@@ -91,30 +106,34 @@ final class GooglePlayAnalytics implements JsonSerializable
      * which version is more effective.
      *
      * @see https://support.google.com/analytics/answer/1033863#parameters
+     *
+     * @param non-empty-string $utmContent
      */
     public function withUtmContent(string $utmContent): self
     {
-        $info = clone $this;
-        $info->data['utmContent'] = $utmContent;
+        $data = $this->data;
+        $data['utmContent'] = $utmContent;
 
-        return $info;
+        return new self($data);
     }
 
     /**
      * The Google Click ID.
      *
      * @see https://support.google.com/analytics/answer/2938246?hl=en
+     *
+     * @param non-empty-string $gclid
      */
     public function withGclid(string $gclid): self
     {
-        $info = clone $this;
-        $info->data['gclid'] = $gclid;
+        $data = $this->data;
+        $data['gclid'] = $gclid;
 
-        return $info;
+        return new self($data);
     }
 
     /**
-     * @return array<string, string>
+     * @return GooglePlayAnalyticsShape
      */
     public function jsonSerialize(): array
     {

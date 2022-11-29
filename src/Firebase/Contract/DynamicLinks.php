@@ -14,10 +14,13 @@ use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink\FailedToShortenLongDynamicLink;
 use Stringable;
 
+/**
+ * @phpstan-import-type CreateDynamicLinkShape from CreateDynamicLink
+ */
 interface DynamicLinks
 {
     /**
-     * @param Stringable|string|CreateDynamicLink|array<string, array<string, string>> $url
+     * @param Stringable|string|CreateDynamicLink|CreateDynamicLinkShape $url
      *
      * @throws InvalidArgumentException
      * @throws FailedToCreateDynamicLink
@@ -25,7 +28,7 @@ interface DynamicLinks
     public function createUnguessableLink(Stringable|string|CreateDynamicLink|array $url): DynamicLink;
 
     /**
-     * @param Stringable|string|CreateDynamicLink|array<string, array<string, string>> $url
+     * @param Stringable|string|CreateDynamicLink|CreateDynamicLinkShape $url
      *
      * @throws InvalidArgumentException
      * @throws FailedToCreateDynamicLink
@@ -33,7 +36,7 @@ interface DynamicLinks
     public function createShortLink(Stringable|string|CreateDynamicLink|array $url): DynamicLink;
 
     /**
-     * @param Stringable|string|CreateDynamicLink|array<string, array<string, string>> $actionOrParametersOrUrl
+     * @param Stringable|string|CreateDynamicLink|CreateDynamicLinkShape $actionOrParametersOrUrl
      *
      * @throws InvalidArgumentException
      * @throws FailedToCreateDynamicLink

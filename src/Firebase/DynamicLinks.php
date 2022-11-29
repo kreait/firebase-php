@@ -17,6 +17,8 @@ use function is_array;
 
 /**
  * @internal
+ *
+ * @phpstan-import-type CreateDynamicLinkShape from CreateDynamicLink
  */
 final class DynamicLinks implements Contract\DynamicLinks
 {
@@ -90,7 +92,7 @@ final class DynamicLinks implements Contract\DynamicLinks
     }
 
     /**
-     * @param Stringable|string|CreateDynamicLink|array<string, array<string, string>> $actionOrParametersOrUrl
+     * @param Stringable|string|CreateDynamicLink|CreateDynamicLinkShape $actionOrParametersOrUrl
      */
     private function ensureCreateAction(Stringable|string|CreateDynamicLink|array $actionOrParametersOrUrl): CreateDynamicLink
     {

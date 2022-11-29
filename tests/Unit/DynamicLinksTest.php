@@ -295,7 +295,6 @@ final class DynamicLinksTest extends TestCase
     public function testDynamicLinkComponentsCanBeCreatedNewOrFromArrays(): void
     {
         $this->assertNotEmpty(CreateDynamicLink::new()->jsonSerialize()); // has defaults
-        $this->assertEmpty(CreateDynamicLink::fromArray([])->jsonSerialize());
 
         $this->assertEmpty(ShortenLongDynamicLink::fromArray([])->jsonSerialize());
 

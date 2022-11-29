@@ -6,54 +6,62 @@ namespace Kreait\Firebase\DynamicLink;
 
 use JsonSerializable;
 
+/**
+ * @phpstan-type AndroidInfoShape array{
+ *     androidPackageName?: non-empty-string,
+ *     androidFallbackLink?: non-empty-string,
+ *     androidMinPackageVersionCode?: non-empty-string
+ * }
+ */
 final class AndroidInfo implements JsonSerializable
 {
-    /** @var array<string, string> */
-    private array $data = [];
-
-    private function __construct()
+    /**
+     * @param AndroidInfoShape $data
+     */
+    private function __construct(private readonly array $data)
     {
     }
 
     /**
-     * @param array<string, string> $data
+     * @param AndroidInfoShape $data
      */
     public static function fromArray(array $data): self
     {
-        $info = new self();
-        $info->data = $data;
-
-        return $info;
+        return new self($data);
     }
 
     public static function new(): self
     {
-        return new self();
+        return new self([]);
     }
 
     /**
      * The package name of the Android app to use to open the link. The app must be connected to your project from the
      * Overview page of the Firebase console. Required for the Dynamic Link to open an Android app.
+     *
+     * @param non-empty-string $packageName
      */
     public function withPackageName(string $packageName): self
     {
-        $info = clone $this;
-        $info->data['androidPackageName'] = $packageName;
+        $data = $this->data;
+        $data['androidPackageName'] = $packageName;
 
-        return $info;
+        return new self($data);
     }
 
     /**
      * The link to open when the app isn't installed. Specify this to do something other than install your app
      * from the Play Store when the app isn't installed, such as open the mobile web version of the content,
      * or display a promotional page for your app.
+     *
+     * @param non-empty-string $fallbackLink
      */
     public function withFallbackLink(string $fallbackLink): self
     {
-        $info = clone $this;
-        $info->data['androidFallbackLink'] = $fallbackLink;
+        $data = $this->data;
+        $data['androidFallbackLink'] = $fallbackLink;
 
-        return $info;
+        return new self($data);
     }
 
     /**
@@ -61,17 +69,19 @@ final class AndroidInfo implements JsonSerializable
      * version, the user is taken to the Play Store to upgrade the app.
      *
      * @see https://developer.android.com/studio/publish/versioning#appversioning
+     *
+     * @param non-empty-string $minPackageVersionCode
      */
     public function withMinPackageVersionCode(string $minPackageVersionCode): self
     {
-        $info = clone $this;
-        $info->data['androidMinPackageVersionCode'] = $minPackageVersionCode;
+        $data = $this->data;
+        $data['androidMinPackageVersionCode'] = $minPackageVersionCode;
 
-        return $info;
+        return new self($data);
     }
 
     /**
-     * @return array<string, string>
+     * @return AndroidInfoShape
      */
     public function jsonSerialize(): array
     {
