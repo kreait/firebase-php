@@ -110,6 +110,9 @@ final class RemoteConfig implements Contract\RemoteConfig
         return $value instanceof Template ? $value : Template::fromArray($value);
     }
 
+    /**
+     * @param VersionNumber|positive-int|non-empty-string $value
+     */
     private function ensureVersionNumber(VersionNumber|int|string $value): VersionNumber
     {
         return $value instanceof VersionNumber ? $value : VersionNumber::fromValue($value);

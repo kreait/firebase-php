@@ -11,11 +11,11 @@ use function ctype_digit;
 
 final class VersionNumber implements JsonSerializable
 {
-    private string $value;
-
-    private function __construct(string $value)
+    /**
+     * @param non-empty-string $value
+     */
+    private function __construct(private readonly string $value)
     {
-        $this->value = $value;
     }
 
     public function __toString()
@@ -24,7 +24,7 @@ final class VersionNumber implements JsonSerializable
     }
 
     /**
-     * @param int|string $value
+     * @param positive-int|non-empty-string $value
      */
     public static function fromValue($value): self
     {
@@ -37,13 +37,16 @@ final class VersionNumber implements JsonSerializable
         return new self($valueString);
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function jsonSerialize(): string
     {
         return $this->value;
     }
 
     /**
-     * @param self|string $other
+     * @param self|non-empty-string $other
      */
     public function equalsTo($other): bool
     {

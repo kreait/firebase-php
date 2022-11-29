@@ -8,12 +8,36 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Kreait\Firebase\Util\DT;
 
+/**
+ * @phpstan-type FindVersionsShape array{
+ *     startingAt?: non-empty-string,
+ *     startTime?: non-empty-string,
+ *     since?: non-empty-string,
+ *     endingAt?: non-empty-string,
+ *     endTime?: non-empty-string,
+ *     until?: non-empty-string,
+ *     lastVersionBeing?: VersionNumber|positive-int|non-empty-string,
+ *     endVersionNumber?: VersionNumber|positive-int|non-empty-string,
+ *     up_to_version?: VersionNumber|positive-int|non-empty-string,
+ *     pageSize?: positive-int|non-empty-string,
+ *     page_size?: positive-int|non-empty-string,
+ *     limit?: positive-int|non-empty-string
+ * }
+ */
 class FindVersions
 {
     private ?DateTimeImmutable $since = null;
     private ?DateTimeImmutable $until = null;
     private ?VersionNumber $upToVersion = null;
+
+    /**
+     * @var positive-int|null
+     */
     private ?int $limit = null;
+
+    /**
+     * @var positive-int|null
+     */
     private ?int $pageSize = null;
 
     private function __construct()
@@ -26,7 +50,7 @@ class FindVersions
     }
 
     /**
-     * @param array<string, mixed> $params
+     * @param FindVersionsShape $params
      */
     public static function fromArray(array $params): self
     {
@@ -46,11 +70,21 @@ class FindVersions
         }
 
         if ($value = $params['pageSize'] ?? $params['page_size'] ?? null) {
-            $query = $query->withPageSize((int) $value);
+            $value = (int) $value;
+
+            if ($value >= 1) {
+                // We can't throw an exception here, although we shouldn't because of backward compatibility
+                $query = $query->withPageSize($value);
+            }
         }
 
         if ($value = $params['limit'] ?? null) {
-            return $query->withLimit((int) $value);
+            $value = (int) $value;
+
+            if ($value >= 1) {
+                // We can't throw an exception here, although we shouldn't because of backward compatibility
+                $query = $query->withLimit($value);
+            }
         }
 
         return $query;
@@ -95,6 +129,9 @@ class FindVersions
         return $this->upToVersion;
     }
 
+    /**
+     * @param positive-int $pageSize
+     */
     public function withPageSize(int $pageSize): self
     {
         $query = clone $this;
@@ -103,11 +140,17 @@ class FindVersions
         return $query;
     }
 
+    /**
+     * @return positive-int|null $pageSize
+     */
     public function pageSize(): ?int
     {
         return $this->pageSize;
     }
 
+    /**
+     * @param positive-int $limit
+     */
     public function withLimit(int $limit): self
     {
         $query = clone $this;
@@ -116,6 +159,9 @@ class FindVersions
         return $query;
     }
 
+    /**
+     * @return positive-int|null
+     */
     public function limit(): ?int
     {
         return $this->limit;

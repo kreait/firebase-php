@@ -20,6 +20,7 @@ use Traversable;
  * @see https://firebase.google.com/docs/remote-config/rest-reference
  *
  * @phpstan-import-type RemoteConfigTemplateShape from Template
+ * @phpstan-import-type FindVersionsShape from FindVersions
  */
 interface RemoteConfig
 {
@@ -50,6 +51,8 @@ interface RemoteConfig
     /**
      * Returns a version with the given number.
      *
+     * @param VersionNumber|positive-int|non-empty-string $versionNumber
+     *
      * @throws VersionNotFound
      * @throws RemoteConfigException if something went wrong
      */
@@ -58,17 +61,19 @@ interface RemoteConfig
     /**
      * Returns a version with the given number.
      *
+     * @param VersionNumber|positive-int|non-empty-string $versionNumber
+     *
      * @throws VersionNotFound
      * @throws RemoteConfigException if something went wrong
      */
     public function rollbackToVersion(VersionNumber|int|string $versionNumber): Template;
 
     /**
-     * @param FindVersions|array<string, mixed>|null $query
+     * @param FindVersions|FindVersionsShape|null $query
      *
      * @throws RemoteConfigException if something went wrong
      *
-     * @return Traversable<Version>|Version[]
+     * @return Traversable<Version>
      */
     public function listVersions($query = null): Traversable;
 }
