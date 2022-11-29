@@ -53,6 +53,7 @@ final class UrlTest extends TestCase
         return [
             'https:///domain.tld' => ['https:///domain.tld'],
             'http://:80' => ['http://:80'],
+            '(empty)' => [''],
         ];
     }
 }

@@ -17,6 +17,9 @@ final class Url
      */
     public readonly string $value;
 
+    /**
+     * @param non-empty-string $value
+     */
     private function __construct(string $value)
     {
         $startsWithHttp = str_starts_with($value, 'https://') || str_starts_with($value, 'http://');
@@ -31,6 +34,12 @@ final class Url
 
     public static function fromString(Stringable|string $value): self
     {
-        return new self((string) $value);
+        $value = (string) $value;
+
+        if ($value === '') {
+            throw new InvalidArgumentException('The URL cannot be empty.');
+        }
+
+        return new self($value);
     }
 }
