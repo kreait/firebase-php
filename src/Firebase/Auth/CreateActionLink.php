@@ -8,6 +8,9 @@ use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use Kreait\Firebase\Value\Email;
 use Stringable;
 
+/**
+ * @internal
+ */
 final class CreateActionLink
 {
     private function __construct(

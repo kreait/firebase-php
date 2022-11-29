@@ -16,6 +16,9 @@ use function rtrim;
 use function strtr;
 use function trim;
 
+/**
+ * @internal
+ */
 final class UrlBuilder
 {
     private const EXPECTED_URL_FORMAT = '@^https://(?P<namespace>[^.]+)\.(?P<host>.+)$@';

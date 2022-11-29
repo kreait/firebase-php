@@ -13,6 +13,9 @@ use Psr\Http\Message\RequestInterface;
 
 use const JSON_FORCE_OBJECT;
 
+/**
+ * @internal
+ */
 final class ApiRequest implements RequestInterface
 {
     use WrappedPsr7Request;

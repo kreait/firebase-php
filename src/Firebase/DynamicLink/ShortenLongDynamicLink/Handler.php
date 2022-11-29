@@ -7,6 +7,9 @@ namespace Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 use Kreait\Firebase\DynamicLink;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 
+/**
+ * @internal
+ */
 interface Handler
 {
     /**

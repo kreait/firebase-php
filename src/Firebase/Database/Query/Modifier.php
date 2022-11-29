@@ -6,6 +6,9 @@ namespace Kreait\Firebase\Database\Query;
 
 use Psr\Http\Message\UriInterface;
 
+/**
+ * @internal
+ */
 interface Modifier
 {
     /**

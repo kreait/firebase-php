@@ -7,6 +7,9 @@ namespace Kreait\Firebase\DynamicLink\CreateDynamicLink;
 use Kreait\Firebase\DynamicLink;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink;
 
+/**
+ * @internal
+ */
 interface Handler
 {
     /**

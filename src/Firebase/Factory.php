@@ -38,10 +38,10 @@ use Kreait\Firebase\JWT\SessionCookieVerifier;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Value\Email;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Clock\ClockInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Psr\Clock\ClockInterface;
 use Stringable;
 use Throwable;
 

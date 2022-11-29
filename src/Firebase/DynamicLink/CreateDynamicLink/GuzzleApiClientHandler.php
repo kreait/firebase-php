@@ -9,6 +9,9 @@ use GuzzleHttp\Exception\GuzzleException;
 use Kreait\Firebase\DynamicLink;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink;
 
+/**
+ * @internal
+ */
 final class GuzzleApiClientHandler implements Handler
 {
     private ClientInterface $apiClient;

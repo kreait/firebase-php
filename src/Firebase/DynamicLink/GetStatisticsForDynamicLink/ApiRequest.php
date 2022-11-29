@@ -12,6 +12,9 @@ use Psr\Http\Message\RequestInterface;
 
 use function rawurlencode;
 
+/**
+ * @internal
+ */
 final class ApiRequest implements RequestInterface
 {
     use WrappedPsr7Request;

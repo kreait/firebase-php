@@ -13,6 +13,9 @@ use Psr\Clock\ClockInterface;
 
 use function is_int;
 
+/**
+ * @internal
+ */
 final class CreateSessionCookie
 {
     private const FIVE_MINUTES = 'PT5M';

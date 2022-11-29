@@ -14,6 +14,9 @@ use function sprintf;
 use function str_replace;
 use function uasort;
 
+/**
+ * @internal
+ */
 final class OrderByChild implements Sorter
 {
     use ModifierTrait;

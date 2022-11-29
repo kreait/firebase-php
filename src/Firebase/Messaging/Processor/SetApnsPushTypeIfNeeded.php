@@ -15,6 +15,8 @@ use function array_key_exists;
 use function is_array;
 
 /**
+ * @internal
+ *
  * @phpstan-import-type ApnsConfigShape from ApnsConfig
  * @phpstan-import-type NotificationShape from Notification
  */

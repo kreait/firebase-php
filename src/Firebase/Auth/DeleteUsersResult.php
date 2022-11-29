@@ -38,6 +38,9 @@ final class DeleteUsersResult
         $this->rawErrors = $rawErrors;
     }
 
+    /**
+     * @internal
+     */
     public static function fromRequestAndResponse(DeleteUsersRequest $request, ResponseInterface $response): self
     {
         $data = Json::decode((string) $response->getBody(), true);

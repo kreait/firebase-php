@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
+/**
+ * @internal
+ */
 final class SignInAnonymously implements SignIn
 {
     private ?string $tenantId = null;

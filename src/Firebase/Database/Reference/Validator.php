@@ -16,6 +16,9 @@ use function rawurldecode;
 use function sprintf;
 use function trim;
 
+/**
+ * @internal
+ */
 class Validator
 {
     public const MAX_DEPTH = 32;

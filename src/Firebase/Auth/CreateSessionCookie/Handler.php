@@ -6,6 +6,9 @@ namespace Kreait\Firebase\Auth\CreateSessionCookie;
 
 use Kreait\Firebase\Auth\CreateSessionCookie;
 
+/**
+ * @internal
+ */
 interface Handler
 {
     /**

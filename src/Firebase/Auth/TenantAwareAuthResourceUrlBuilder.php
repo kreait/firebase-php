@@ -10,6 +10,9 @@ use function http_build_query;
 use function str_replace;
 use function strtr;
 
+/**
+ * @internal
+ */
 final class TenantAwareAuthResourceUrlBuilder
 {
     private const URL_FORMAT = 'https://identitytoolkit.googleapis.com/{version}/projects/{projectId}/tenants/{tenantId}{api}';

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
+/**
+ * @internal
+ */
 final class SignInWithEmailAndOobCode implements IsTenantAware, SignIn
 {
     private string $email;

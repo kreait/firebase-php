@@ -9,6 +9,9 @@ use Kreait\Firebase\Database\Query\ModifierTrait;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
+/**
+ * @internal
+ */
 final class LimitToLast implements Filter
 {
     use ModifierTrait;

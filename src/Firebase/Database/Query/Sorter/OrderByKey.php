@@ -11,6 +11,9 @@ use Psr\Http\Message\UriInterface;
 use function is_array;
 use function ksort;
 
+/**
+ * @internal
+ */
 final class OrderByKey implements Sorter
 {
     use ModifierTrait;

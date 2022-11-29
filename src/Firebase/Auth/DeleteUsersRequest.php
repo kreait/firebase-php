@@ -8,6 +8,9 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\Uid;
 use Stringable;
 
+/**
+ * @internal
+ */
 final class DeleteUsersRequest
 {
     private const MAX_BATCH_SIZE = 1000;

@@ -6,6 +6,9 @@ namespace Kreait\Firebase\Auth\CreateActionLink;
 
 use Kreait\Firebase\Auth\CreateActionLink;
 
+/**
+ * @internal
+ */
 interface Handler
 {
     /**

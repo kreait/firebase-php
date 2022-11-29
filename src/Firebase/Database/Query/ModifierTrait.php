@@ -10,6 +10,8 @@ use Psr\Http\Message\UriInterface;
 use function array_merge;
 
 /**
+ * @internal
+ *
  * @codeCoverageIgnore
  */
 trait ModifierTrait

@@ -18,8 +18,8 @@ use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Exception\AuthException;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Request\UpdateUser;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Clock\ClockInterface;
+use Psr\Http\Message\ResponseInterface;
 use Stringable;
 use Throwable;
 

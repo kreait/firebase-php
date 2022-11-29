@@ -18,6 +18,9 @@ use const JSON_FORCE_OBJECT;
 
 use function array_filter;
 
+/**
+ * @internal
+ */
 final class GuzzleApiClientHandler implements Handler
 {
     private ClientInterface $client;
