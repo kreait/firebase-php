@@ -7,6 +7,7 @@ namespace Kreait\Firebase\Tests\Unit\Messaging;
 use InvalidArgumentException;
 use Kreait\Firebase\Messaging\MessageData;
 use PHPUnit\Framework\TestCase;
+use Stringable;
 
 use function hex2bin;
 
@@ -18,7 +19,7 @@ final class MessageDataTest extends TestCase
     /**
      * @dataProvider validData
      *
-     * @param array<string, mixed> $data
+     * @param array<non-empty-string, Stringable|string> $data
      */
     public function testItAcceptsValidData(array $data): void
     {
@@ -29,7 +30,7 @@ final class MessageDataTest extends TestCase
     /**
      * @dataProvider invalidData
      *
-     * @param array<string, mixed> $data
+     * @param array<non-empty-string, Stringable|string> $data
      */
     public function testItRejectsInvalidData(array $data): void
     {
@@ -90,9 +91,6 @@ final class MessageDataTest extends TestCase
     public function invalidData(): array
     {
         return [
-            'nested array' => [
-                ['key' => ['sub_key' => 'sub_value']],
-            ],
             // @see https://github.com/kreait/firebase-php/issues/441
             'binary data' => [
                 ['key' => hex2bin('81612bcffb')], // generated with \openssl_random_pseudo_bytes(5)

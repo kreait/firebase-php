@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
 use Beste\Json;
-use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\FcmOptions;
@@ -21,12 +20,6 @@ final class CloudMessageTest extends TestCase
     public function testEmptyMessage(): void
     {
         $this->assertSame('[]', Json::encode(CloudMessage::new()));
-    }
-
-    public function testInvalidTargetCausesError(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        CloudMessage::withTarget('invalid_target', 'foo');
     }
 
     public function testWithChangedTarget(): void

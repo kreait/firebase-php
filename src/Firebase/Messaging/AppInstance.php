@@ -31,7 +31,13 @@ final class AppInstance implements JsonSerializable
     /**
      * @internal
      *
-     * @param array<string, mixed> $rawData
+     * @param array{
+     *     rel?: array{
+     *         topics?: array<non-empty-string, array{
+     *             addDate?: non-empty-string
+     *         }>
+     *     }
+     * } $rawData
      */
     public static function fromRawData(RegistrationToken $registrationToken, array $rawData): self
     {
@@ -57,9 +63,9 @@ final class AppInstance implements JsonSerializable
     }
 
     /**
-     * @param Topic|string $topic
+     * @param Topic|non-empty-string $topic
      */
-    public function isSubscribedToTopic($topic): bool
+    public function isSubscribedToTopic(Topic|string $topic): bool
     {
         $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
 

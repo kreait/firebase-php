@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Messaging;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
-use function implode;
 use function mb_strtolower;
 
 final class MessageTarget
@@ -20,17 +19,22 @@ final class MessageTarget
     public const TYPES = [
         self::CONDITION, self::TOKEN, self::TOPIC, self::UNKNOWN,
     ];
-    private string $type;
-    private string $value;
 
-    private function __construct(string $type, string $value)
-    {
-        $this->type = $type;
-        $this->value = $value;
+    /**
+     * @param non-empty-string $type
+     * @param non-empty-string $value
+     */
+    private function __construct(
+        private readonly string $type,
+        private readonly string $value,
+    ) {
     }
 
     /**
      * Create a new message target with the given type and value.
+     *
+     * @param self::CONDITION|self::TOKEN|self::TOPIC|self::UNKNOWN $type
+     * @param non-empty-string $value
      *
      * @throws InvalidArgumentException
      */
@@ -39,21 +43,26 @@ final class MessageTarget
         $targetType = mb_strtolower($type);
 
         $targetValue = match ($targetType) {
-            self::CONDITION => (string) Condition::fromValue($value),
-            self::TOKEN => (string) RegistrationToken::fromValue($value),
-            self::TOPIC => (string) Topic::fromValue($value),
+            self::CONDITION => Condition::fromValue($value)->value(),
+            self::TOKEN => RegistrationToken::fromValue($value)->value(),
+            self::TOPIC => Topic::fromValue($value)->value(),
             self::UNKNOWN => $value,
-            default => throw new InvalidArgumentException("Invalid target type '{$type}', valid types: ".implode(', ', self::TYPES)),
         };
 
         return new self($targetType, $targetValue);
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function type(): string
     {
         return $this->type;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function value(): string
     {
         return $this->value;

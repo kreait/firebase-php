@@ -34,9 +34,9 @@ interface Messaging
 
     /**
      * @param Message|array<string, mixed> $message
-     * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $registrationTokens
+     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $registrationTokens
      *
-     * @throws InvalidArgumentException if the message is invalid
+     * @throws InvalidArgumentException if the message is invalid or the list of registration tokens is empty
      * @throws MessagingException if the API request failed
      * @throws FirebaseException if something very unexpected happened (never :))
      */
@@ -64,7 +64,7 @@ interface Messaging
     public function validate(Message|array $message): array;
 
     /**
-     * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $registrationTokenOrTokens
+     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $registrationTokenOrTokens
      *
      * @throws MessagingException
      * @throws FirebaseException
@@ -74,37 +74,39 @@ interface Messaging
     public function validateRegistrationTokens(RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array;
 
     /**
-     * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $registrationTokenOrTokens
+     * @param Topic|non-empty-string $topic
+     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $registrationTokenOrTokens
      *
      * @return array<string, array<string, string>>
      */
     public function subscribeToTopic(string|Topic $topic, RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array;
 
     /**
-     * @param iterable<string|Topic> $topics
-     * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $registrationTokenOrTokens
+     * @param iterable<non-empty-string|Topic> $topics
+     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $registrationTokenOrTokens
      *
      * @return array<string, array<string, string>>
      */
     public function subscribeToTopics(iterable $topics, RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array;
 
     /**
-     * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $registrationTokenOrTokens
+     * @param Topic|non-empty-string $topic
+     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $registrationTokenOrTokens
      *
      * @return array<string, array<string, string>>
      */
     public function unsubscribeFromTopic(string|Topic $topic, RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array;
 
     /**
-     * @param array<string|Topic> $topics
-     * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $registrationTokenOrTokens
+     * @param array<non-empty-string|Topic> $topics
+     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $registrationTokenOrTokens
      *
      * @return array<string, array<string, string>>
      */
     public function unsubscribeFromTopics(array $topics, RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array;
 
     /**
-     * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $registrationTokenOrTokens
+     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $registrationTokenOrTokens
      *
      * @return array<string, array<string, string>>
      */
@@ -112,6 +114,8 @@ interface Messaging
 
     /**
      * @see https://developers.google.com/instance-id/reference/server#results
+     *
+     * @param RegistrationToken|non-empty-string $registrationToken
      *
      * @throws InvalidArgument if the registration token is invalid
      * @throws FirebaseException

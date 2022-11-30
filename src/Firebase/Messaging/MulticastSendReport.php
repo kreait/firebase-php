@@ -22,7 +22,7 @@ use function explode;
 
 final class MulticastSendReport implements Countable
 {
-    /** @var SendReport[] */
+    /** @var array<SendReport> */
     private array $items = [];
 
     private function __construct()
@@ -68,15 +68,25 @@ final class MulticastSendReport implements Countable
                 continue;
             }
 
+            $messageTargetType = MessageTarget::UNKNOWN;
+            $messageTargetValue = 'unknown';
+
             if ($token = $requestData['message']['token'] ?? null) {
-                $target = MessageTarget::with(MessageTarget::TOKEN, (string) $token);
+                $messageTargetType = MessageTarget::TOKEN;
+                $messageTargetValue = (string) $token;
             } elseif ($topic = $requestData['message']['topic'] ?? null) {
-                $target = MessageTarget::with(MessageTarget::TOPIC, (string) $topic);
+                $messageTargetType = MessageTarget::TOPIC;
+                $messageTargetValue = (string) $topic;
             } elseif ($condition = $requestData['message']['condition'] ?? null) {
-                $target = MessageTarget::with(MessageTarget::CONDITION, (string) $condition);
-            } else {
-                $target = MessageTarget::with(MessageTarget::UNKNOWN, 'unknown');
+                $messageTargetType = MessageTarget::CONDITION;
+                $messageTargetValue = (string) $condition;
             }
+
+            if ($messageTargetValue === '') {
+                continue;
+            }
+
+            $target = MessageTarget::with($messageTargetType, $messageTargetValue);
 
             $message = $matchingRequest instanceof MessageRequest
                 ? $matchingRequest->message()

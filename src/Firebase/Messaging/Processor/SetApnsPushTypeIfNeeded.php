@@ -83,7 +83,9 @@ final class SetApnsPushTypeIfNeeded
     }
 
     /**
-     * @param array<string, array<string, string>> $payload
+     * @param array{
+     *     data?: array<non-empty-string, string>
+     * } $payload
      */
     public function getMessageData(array $payload): MessageData
     {
@@ -94,8 +96,7 @@ final class SetApnsPushTypeIfNeeded
         if (!is_array($payload['data'])) {
             return MessageData::fromArray([]);
         }
-        MessageData::fromArray($payload['data']);
 
-        return MessageData::fromArray([]);
+        return MessageData::fromArray($payload['data']);
     }
 }

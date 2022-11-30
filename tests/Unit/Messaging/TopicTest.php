@@ -52,6 +52,7 @@ final class TopicTest extends TestCase
             '$' => ['$'],
             'ä' => ['ä'],
             'é' => ['é'],
+            '(empty)' => [''],
         ];
     }
 }

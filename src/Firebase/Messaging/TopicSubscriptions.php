@@ -16,23 +16,23 @@ use function count;
  */
 final class TopicSubscriptions implements Countable, IteratorAggregate
 {
-    /** @var TopicSubscription[] */
+    /** @var list<TopicSubscription> */
     private array $subscriptions;
 
     public function __construct(TopicSubscription ...$subscriptions)
     {
-        $this->subscriptions = $subscriptions;
+        $this->subscriptions = array_values($subscriptions);
     }
 
     public function filter(callable $filter): self
     {
-        return new self(...array_filter($this->subscriptions, $filter));
+        return new self(...array_values(array_filter($this->subscriptions, $filter)));
     }
 
     /**
      * @codeCoverageIgnore
      *
-     * @return Traversable<TopicSubscription>|TopicSubscription[]
+     * @return Traversable<TopicSubscription>
      */
     public function getIterator(): Traversable
     {

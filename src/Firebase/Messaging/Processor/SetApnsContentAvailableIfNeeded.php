@@ -83,7 +83,9 @@ final class SetApnsContentAvailableIfNeeded
     }
 
     /**
-     * @param array<string, array<string, string>> $payload
+     * @param array{
+     *     data?: array<non-empty-string, string>
+     * } $payload
      */
     public function getMessageData(array $payload): MessageData
     {

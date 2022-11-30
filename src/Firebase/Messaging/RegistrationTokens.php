@@ -6,7 +6,7 @@ namespace Kreait\Firebase\Messaging;
 
 use Countable;
 use IteratorAggregate;
-use Kreait\Firebase\Exception\InvalidArgumentException;
+use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Traversable;
 
 use function array_map;
@@ -19,21 +19,26 @@ use function is_string;
  */
 final class RegistrationTokens implements Countable, IteratorAggregate
 {
-    /** @var RegistrationToken[] */
+    /** @var array<RegistrationToken> */
     private array $tokens;
 
+    /**
+     * @internal
+     */
     public function __construct(RegistrationToken ...$tokens)
     {
         $this->tokens = $tokens;
     }
 
     /**
-     * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $values
+     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $values
      *
-     * @throws InvalidArgumentException
+     * @throws InvalidArgument
      */
     public static function fromValue($values): self
     {
+        $tokens = [];
+
         if ($values instanceof self) {
             $tokens = $values->values();
         } elseif ($values instanceof RegistrationToken) {
@@ -41,17 +46,17 @@ final class RegistrationTokens implements Countable, IteratorAggregate
         } elseif (is_string($values)) {
             $tokens = [RegistrationToken::fromValue($values)];
         } elseif (is_array($values)) {
-            $tokens = [];
-
             foreach ($values as $value) {
                 if ($value instanceof RegistrationToken) {
                     $tokens[] = $value;
-                } elseif (is_string($value)) {
+                } elseif (is_string($value) && $value !== '') {
                     $tokens[] = RegistrationToken::fromValue($value);
                 }
             }
-        } else {
-            throw new InvalidArgumentException('Unsupported value(s)');
+        }
+
+        if (count($tokens) === 0) {
+            throw new InvalidArgument('No registration tokens provided');
         }
 
         return new self(...$tokens);
@@ -60,7 +65,7 @@ final class RegistrationTokens implements Countable, IteratorAggregate
     /**
      * @codeCoverageIgnore
      *
-     * @return Traversable<RegistrationToken>|RegistrationToken[]
+     * @return Traversable<RegistrationToken>
      */
     public function getIterator(): Traversable
     {
@@ -81,11 +86,11 @@ final class RegistrationTokens implements Countable, IteratorAggregate
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function asStrings(): array
     {
-        return array_map('strval', $this->tokens);
+        return array_map(strval(...), $this->tokens);
     }
 
     public function count(): int
@@ -94,7 +99,7 @@ final class RegistrationTokens implements Countable, IteratorAggregate
     }
 
     /**
-     * @param RegistrationToken|string $token
+     * @param RegistrationToken|non-empty-string $token
      */
     public function has($token): bool
     {

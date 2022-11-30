@@ -70,7 +70,7 @@ final class Messaging implements Contract\Messaging
     public function sendMulticast($message, $registrationTokens, bool $validateOnly = false): MulticastSendReport
     {
         $message = $this->makeMessage($message);
-        $registrationTokens = $this->ensureNonEmptyRegistrationTokens($registrationTokens);
+        $registrationTokens = RegistrationTokens::fromValue($registrationTokens);
 
         $request = new SendMessageToTokens($this->projectId, $message, $registrationTokens, $validateOnly);
 
@@ -103,9 +103,9 @@ final class Messaging implements Contract\Messaging
 
     public function validateRegistrationTokens($registrationTokenOrTokens): array
     {
-        $registrationTokenOrTokens = $this->ensureNonEmptyRegistrationTokens($registrationTokenOrTokens);
+        $tokens = RegistrationTokens::fromValue($registrationTokenOrTokens);
 
-        $report = $this->sendMulticast(CloudMessage::new(), $registrationTokenOrTokens, true);
+        $report = $this->sendMulticast(CloudMessage::new(), $tokens, true);
 
         return [
             'valid' => $report->validTokens(),
@@ -127,7 +127,7 @@ final class Messaging implements Contract\Messaging
             $topicObjects[] = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
         }
 
-        $tokens = $this->ensureNonEmptyRegistrationTokens($registrationTokenOrTokens);
+        $tokens = RegistrationTokens::fromValue($registrationTokenOrTokens);
 
         return $this->appInstanceApi->subscribeToTopics($topicObjects, $tokens);
     }
@@ -144,14 +144,14 @@ final class Messaging implements Contract\Messaging
             $topics,
         );
 
-        $tokens = $this->ensureNonEmptyRegistrationTokens($registrationTokenOrTokens);
+        $tokens = RegistrationTokens::fromValue($registrationTokenOrTokens);
 
         return $this->appInstanceApi->unsubscribeFromTopics($topics, $tokens);
     }
 
     public function unsubscribeFromAllTopics($registrationTokenOrTokens): array
     {
-        $tokens = $this->ensureNonEmptyRegistrationTokens($registrationTokenOrTokens);
+        $tokens = RegistrationTokens::fromValue($registrationTokenOrTokens);
 
         $promises = [];
 
@@ -218,26 +218,5 @@ final class Messaging implements Contract\Messaging
         return array_key_exists(MessageTarget::CONDITION, $check)
             || array_key_exists(MessageTarget::TOKEN, $check)
             || array_key_exists(MessageTarget::TOPIC, $check);
-    }
-
-    /**
-     * @param RegistrationTokens|RegistrationToken|RegistrationToken[]|string[]|string $value
-     *
-     * @throws InvalidArgument
-     */
-    private function ensureNonEmptyRegistrationTokens(RegistrationTokens|RegistrationToken|array|string $value): RegistrationTokens
-    {
-        try {
-            $tokens = RegistrationTokens::fromValue($value);
-        } catch (InvalidArgumentException $e) {
-            // We have to wrap the exception for BC reasons
-            throw new InvalidArgument($e->getMessage());
-        }
-
-        if ($tokens->isEmpty()) {
-            throw new InvalidArgument('Empty list of registration tokens.');
-        }
-
-        return $tokens;
     }
 }
