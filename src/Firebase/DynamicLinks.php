@@ -19,6 +19,7 @@ use function is_array;
  * @internal
  *
  * @phpstan-import-type CreateDynamicLinkShape from CreateDynamicLink
+ * @phpstan-import-type ShortenLongDynamicLinkShape from ShortenLongDynamicLink
  */
 final class DynamicLinks implements Contract\DynamicLinks
 {
@@ -108,7 +109,7 @@ final class DynamicLinks implements Contract\DynamicLinks
     }
 
     /**
-     * @param Stringable|string|ShortenLongDynamicLink|array<string, array<string, string>> $actionOrParametersOrUrl
+     * @param Stringable|string|ShortenLongDynamicLink|ShortenLongDynamicLinkShape $actionOrParametersOrUrl
      */
     private function ensureShortenAction(Stringable|string|ShortenLongDynamicLink|array $actionOrParametersOrUrl): ShortenLongDynamicLink
     {

@@ -16,6 +16,7 @@ use Stringable;
 
 /**
  * @phpstan-import-type CreateDynamicLinkShape from CreateDynamicLink
+ * @phpstan-import-type ShortenLongDynamicLinkShape from ShortenLongDynamicLink
  */
 interface DynamicLinks
 {
@@ -44,7 +45,7 @@ interface DynamicLinks
     public function createDynamicLink(Stringable|string|CreateDynamicLink|array $actionOrParametersOrUrl, ?string $suffixType = null): DynamicLink;
 
     /**
-     * @param Stringable|string|ShortenLongDynamicLink|array<string, array<string, string>> $longDynamicLinkOrAction
+     * @param Stringable|string|ShortenLongDynamicLink|ShortenLongDynamicLinkShape $longDynamicLinkOrAction
      *
      * @throws InvalidArgumentException
      * @throws FailedToShortenLongDynamicLink

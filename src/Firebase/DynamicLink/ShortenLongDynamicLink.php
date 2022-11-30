@@ -8,17 +8,23 @@ use JsonSerializable;
 use Kreait\Firebase\Value\Url;
 use Stringable;
 
+/**
+ * @phpstan-type ShortenLongDynamicLinkShape array{
+ *     longDynamicLink: non-empty-string,
+ *     suffix: array{
+ *         option: self::WITH*
+ *     }
+ * }
+ */
 final class ShortenLongDynamicLink implements JsonSerializable
 {
     public const WITH_UNGUESSABLE_SUFFIX = 'UNGUESSABLE';
     public const WITH_SHORT_SUFFIX = 'SHORT';
 
-    /** @var array<string, mixed> */
-    private array $data = [
-        'suffix' => ['option' => self::WITH_UNGUESSABLE_SUFFIX],
-    ];
-
-    private function __construct()
+    /**
+     * @param ShortenLongDynamicLinkShape $data
+     */
+    private function __construct(private readonly array $data)
     {
     }
 
@@ -27,41 +33,38 @@ final class ShortenLongDynamicLink implements JsonSerializable
      */
     public static function forLongDynamicLink(Stringable|string $url): self
     {
-        $action = new self();
-        $action->data['longDynamicLink'] = Url::fromString($url)->value;
-
-        return $action;
+        return new self([
+            'longDynamicLink' => Url::fromString($url)->value,
+            'suffix' => ['option' => self::WITH_UNGUESSABLE_SUFFIX],
+        ]);
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param ShortenLongDynamicLinkShape $data
      */
     public static function fromArray(array $data): self
     {
-        $action = new self();
-        $action->data = $data;
-
-        return $action;
+        return new self($data);
     }
 
     public function withUnguessableSuffix(): self
     {
-        $action = clone $this;
-        $action->data['suffix']['option'] = self::WITH_UNGUESSABLE_SUFFIX;
+        $data = $this->data;
+        $data['suffix']['option'] = self::WITH_UNGUESSABLE_SUFFIX;
 
-        return $action;
+        return new self($data);
     }
 
     public function withShortSuffix(): self
     {
-        $action = clone $this;
-        $action->data['suffix']['option'] = self::WITH_SHORT_SUFFIX;
+        $data = $this->data;
+        $data['suffix']['option'] = self::WITH_SHORT_SUFFIX;
 
-        return $action;
+        return new self($data);
     }
 
     /**
-     * @return array<string, mixed>
+     * @return ShortenLongDynamicLinkShape
      */
     public function jsonSerialize(): array
     {

@@ -8,13 +8,20 @@ use Countable;
 use IteratorAggregate;
 use Traversable;
 
-use function array_column;
 use function array_filter;
-use function array_sum;
-use function assert;
+use function count;
 
 /**
  * @see https://firebase.google.com/docs/reference/dynamic-links/analytics#response_body
+ * @see https://github.com/googleapis/google-api-nodejs-client/blob/main/src/apis/firebasedynamiclinks/v1.ts
+ *
+ * @phpstan-type EventStatisticsShape array{
+ *     linkEventStats: array{
+ *         count?: non-empty-string,
+ *         event?: non-empty-string,
+ *         platform?: non-empty-string
+ *     }
+ * }
  *
  * @implements IteratorAggregate<array>
  */
@@ -40,11 +47,11 @@ final class EventStatistics implements Countable, IteratorAggregate
     // Re-opens of an app
     public const TYPE_APP_RE_OPEN = 'APP_RE_OPEN';
 
-    /** @var array<int, array<string, string>> */
+    /** @var list<EventStatisticsShape> */
     private array $events;
 
     /**
-     * @param array<int, array<string, string>> $events
+     * @param list<EventStatisticsShape> $events
      */
     private function __construct(array $events)
     {
@@ -52,7 +59,7 @@ final class EventStatistics implements Countable, IteratorAggregate
     }
 
     /**
-     * @param array<int, array<string, string>> $events
+     * @param list<EventStatisticsShape> $events
      */
     public static function fromArray(array $events): self
     {
@@ -111,13 +118,13 @@ final class EventStatistics implements Countable, IteratorAggregate
 
     public function filter(callable $filter): self
     {
-        return new self(array_filter($this->events, $filter));
+        return new self(array_values(array_filter($this->events, $filter)));
     }
 
     /**
      * @codeCoverageIgnore
      *
-     * @return Traversable<array<string, string>>
+     * @return Traversable<EventStatisticsShape>
      */
     public function getIterator(): Traversable
     {
@@ -126,10 +133,6 @@ final class EventStatistics implements Countable, IteratorAggregate
 
     public function count(): int
     {
-        $result = (int) array_sum(array_column($this->events, 'count'));
-
-        assert($result >= 0);
-
-        return $result;
+        return (int) array_sum(array_column($this->events, 'count'));
     }
 }

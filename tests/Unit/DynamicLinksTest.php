@@ -296,8 +296,6 @@ final class DynamicLinksTest extends TestCase
     {
         $this->assertNotEmpty(CreateDynamicLink::new()->jsonSerialize()); // has defaults
 
-        $this->assertEmpty(ShortenLongDynamicLink::fromArray([])->jsonSerialize());
-
         $this->assertEmpty(AnalyticsInfo::fromArray([])->jsonSerialize());
         $this->assertEmpty(AnalyticsInfo::new()->jsonSerialize());
 
