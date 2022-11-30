@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
-use Google\Cloud\Storage\Bucket;
 use Kreait\Firebase\Contract\Storage;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
@@ -20,21 +19,27 @@ final class StorageTest extends IntegrationTestCase
         $this->storage = self::$factory->createStorage();
     }
 
-    public function testGetStorageClient(): void
+    public function testItIsConfiguredWithADefaultBucket(): void
     {
-        $this->storage->getStorageClient();
-        $this->addToAssertionCount(1);
+        $bucket = $this->storage->getBucket();
+
+        $this->assertTrue($bucket->exists());
     }
 
-    public function testGetBucket(): void
+    public function testItReturnsANamedBucket(): void
     {
-        $this->assertInstanceOf(Bucket::class, $first = $this->storage->getBucket());
-        $this->assertSame($first, $this->storage->getBucket());
+        $bucketName = $this->randomString(__FUNCTION__);
+        $bucket = $this->storage->getBucket($bucketName);
+
+        $this->assertSame($bucketName, $bucket->name());
     }
 
-    public function testGetCustomBucket(): void
+    public function testItCachesBuckets(): void
     {
-        $this->assertInstanceOf(Bucket::class, $first = $this->storage->getBucket('custom'));
-        $this->assertSame($first, $this->storage->getBucket('custom'));
+        $bucketName = $this->randomString(__FUNCTION__);
+        $first = $this->storage->getBucket($bucketName);
+        $second = $this->storage->getBucket($bucketName);
+
+        $this->assertSame($first, $second);
     }
 }
