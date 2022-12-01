@@ -107,10 +107,8 @@ class Query
      * Convenience method for {@see getSnapshot()}->getValue().
      *
      * @throws UnsupportedQuery if an error occurred
-     *
-     * @return mixed
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->getSnapshot()->getValue();
     }

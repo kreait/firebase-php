@@ -30,10 +30,8 @@ class ApiClient
 
     /**
      * @throws DatabaseException
-     *
-     * @return mixed
      */
-    public function get(string $path)
+    public function get(string $path): mixed
     {
         $response = $this->requestApi('GET', $path);
 
@@ -64,10 +62,8 @@ class ApiClient
 
     /**
      * @throws DatabaseException
-     *
-     * @return mixed
      */
-    public function set(string $path, mixed $value)
+    public function set(string $path, mixed $value): mixed
     {
         $response = $this->requestApi('PUT', $path, ['json' => $value]);
 
@@ -76,10 +72,8 @@ class ApiClient
 
     /**
      * @throws DatabaseException
-     *
-     * @return mixed
      */
-    public function setWithEtag(string $path, mixed $value, string $etag)
+    public function setWithEtag(string $path, mixed $value, string $etag): mixed
     {
         $response = $this->requestApi('PUT', $path, [
             'headers' => [
@@ -105,10 +99,8 @@ class ApiClient
 
     /**
      * @throws DatabaseException
-     *
-     * @return mixed
      */
-    public function updateRules(string $path, RuleSet $ruleSet)
+    public function updateRules(string $path, RuleSet $ruleSet): mixed
     {
         $rules = $ruleSet->getRules();
         $encodedRules = Json::encode((object) $rules);

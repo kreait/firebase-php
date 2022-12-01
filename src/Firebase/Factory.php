@@ -42,8 +42,8 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Stringable;
 use Throwable;
-
 use UnexpectedValueException;
+
 use function array_filter;
 use function is_array;
 use function is_string;
@@ -80,7 +80,7 @@ final class Factory
     /**
      * @var non-empty-string|ServiceAccountShape|null
      */
-    private $serviceAccount;
+    private string|array|null $serviceAccount = null;
     private ?FetchAuthTokenInterface $googleAuthTokenCredentials = null;
 
     /**

@@ -118,7 +118,7 @@ interface Messaging
      * @param RegistrationToken|non-empty-string $registrationToken
      *
      * @throws InvalidArgument if the registration token is invalid
-     * @throws FirebaseException
+     * @throws MessagingException
      */
     public function getAppInstance(RegistrationToken|string $registrationToken): AppInstance;
 }

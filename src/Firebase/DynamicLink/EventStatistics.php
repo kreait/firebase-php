@@ -9,7 +9,6 @@ use IteratorAggregate;
 use Traversable;
 
 use function array_filter;
-use function count;
 
 /**
  * @see https://firebase.google.com/docs/reference/dynamic-links/analytics#response_body

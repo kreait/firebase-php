@@ -62,8 +62,6 @@ interface Database
 
     /**
      * @param callable(Transaction $transaction):mixed $callable
-     *
-     * @return mixed
      */
-    public function runTransaction(callable $callable);
+    public function runTransaction(callable $callable): mixed;
 }

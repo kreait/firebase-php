@@ -273,10 +273,8 @@ class Reference implements Stringable
      * Convenience method for {@see getSnapshot()}->getValue().
      *
      * @throws DatabaseException if the API reported an error
-     *
-     * @return mixed
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->getSnapshot()->getValue();
     }

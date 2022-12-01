@@ -75,7 +75,7 @@ final class Database implements Contract\Database
         $this->client->updateRules('/.settings/rules', $ruleSet);
     }
 
-    public function runTransaction(callable $callable)
+    public function runTransaction(callable $callable): mixed
     {
         $transaction = new Transaction($this->client);
 

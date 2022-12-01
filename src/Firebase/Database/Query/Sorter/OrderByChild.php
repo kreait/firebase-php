@@ -30,7 +30,7 @@ final class OrderByChild implements Sorter
         return $this->appendQueryParam($uri, 'orderBy', sprintf('"%s"', $this->childKey));
     }
 
-    public function modifyValue($value)
+    public function modifyValue($value): mixed
     {
         if (!is_array($value)) {
             return $value;

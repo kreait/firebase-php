@@ -18,6 +18,8 @@ use function random_bytes;
 
 /**
  * @internal
+ *
+ * @phpstan-import-type ServiceAccountShape from Factory
  */
 abstract class IntegrationTestCase extends FirebaseTestCase
 {
@@ -73,11 +75,17 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         return self::$registrationTokens[array_rand(self::$registrationTokens)];
     }
 
+    /**
+     * @return non-empty-string
+     */
     protected static function randomString(string $suffix = ''): string
     {
         return mb_strtolower(bin2hex(random_bytes(5)).$suffix);
     }
 
+    /**
+     * @return non-empty-string
+     */
     protected static function randomEmail(string $suffix = ''): string
     {
         return self::randomString($suffix.'@domain.tld');

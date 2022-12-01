@@ -29,16 +29,12 @@ use function trim;
 class Snapshot
 {
     private Reference $reference;
-
-    /** @var mixed mixed */
-    private $value;
+    private mixed $value;
 
     /**
      * @internal
-     *
-     * @param mixed $value
      */
-    public function __construct(Reference $reference, $value)
+    public function __construct(Reference $reference, mixed $value)
     {
         $this->reference = $reference;
         $this->value = $value;
@@ -143,10 +139,8 @@ class Snapshot
 
     /**
      * Returns the data contained in this Snapshot.
-     *
-     * @return mixed
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }

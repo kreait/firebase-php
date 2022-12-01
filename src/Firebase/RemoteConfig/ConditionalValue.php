@@ -23,7 +23,7 @@ class ConditionalValue implements JsonSerializable
     /**
      * @var RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape|string
      */
-    private $data;
+    private string|array $data;
 
     /**
      * @internal
@@ -31,7 +31,7 @@ class ConditionalValue implements JsonSerializable
      * @param non-empty-string $conditionName
      * @param RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape|string $data
      */
-    public function __construct(string $conditionName, $data)
+    public function __construct(string $conditionName, array|string $data)
     {
         $this->conditionName = $conditionName;
         $this->data = $data;

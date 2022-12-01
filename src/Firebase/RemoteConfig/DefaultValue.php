@@ -19,7 +19,7 @@ class DefaultValue implements JsonSerializable
     /**
      * @var RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape
      */
-    private $data;
+    private array $data;
 
     /**
      * @param RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape $data
