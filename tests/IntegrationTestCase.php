@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Tests;
 
 use Beste\Json;
 use Kreait\Firebase\Factory;
-use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Util;
 use Throwable;
 
@@ -24,7 +23,12 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 {
     private const DEFAULT_TENANT_ID = 'Test-bs38l';
     protected static Factory $factory;
-    protected static ServiceAccount $serviceAccount;
+
+    /** @var non-empty-string */
+    protected static string $serviceAccount;
+
+    /** @var ServiceAccountShape */
+    protected static array $serviceAccountAsArray;
     protected static string $rtdbUrl;
     protected static string $tenantId;
 
@@ -36,15 +40,22 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     {
         $credentials = self::credentialsFromEnvironment() ?? self::credentialsFromFile();
 
-        if (!$credentials instanceof ServiceAccount) {
+        if (!$credentials) {
             self::markTestSkipped('The integration tests require credentials');
         }
 
         self::$serviceAccount = $credentials;
+
+        if (str_starts_with($credentials, '{')) {
+            self::$serviceAccountAsArray = Json::decode($credentials, true);
+        } else {
+            self::$serviceAccountAsArray = Json::decodeFile($credentials, true);
+        }
+
         self::$rtdbUrl = self::rtdbUrl();
 
         self::$factory = (new Factory())
-            ->withServiceAccount(self::$serviceAccount->asArray())
+            ->withServiceAccount(self::$serviceAccount)
             ->withDatabaseUri(self::$rtdbUrl);
 
         self::$registrationTokens = self::registrationTokensFromEnvironment() ?? self::registrationTokensFromFile() ?? [];
@@ -82,28 +93,26 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         return Util::rtdbEmulatorHost() !== '';
     }
 
-    private static function credentialsFromFile(): ?ServiceAccount
+    /**
+     * @return non-empty-string|null
+     */
+    private static function credentialsFromFile(): ?string
     {
         $credentialsPath = self::$fixturesDir.'/test_credentials.json';
 
-        if (!file_exists($credentialsPath)) {
-            return null;
-        }
-
-        try {
-            return ServiceAccount::fromValue($credentialsPath);
-        } catch (Throwable) {
-            return null;
-        }
+        return file_exists($credentialsPath)
+            ? $credentialsPath
+            : null;
     }
 
-    private static function credentialsFromEnvironment(): ?ServiceAccount
+    /**
+     * @return non-empty-string|null
+     */
+    private static function credentialsFromEnvironment(): ?string
     {
-        if ($credentials = Util::getenv('GOOGLE_APPLICATION_CREDENTIALS')) {
-            return ServiceAccount::fromValue($credentials);
-        }
-
-        return null;
+        return ($credentials = Util::getenv('GOOGLE_APPLICATION_CREDENTIALS'))
+            ? $credentials
+            : null;
     }
 
     /**

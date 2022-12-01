@@ -5,8 +5,8 @@
 This is a major release, but its aim is to provide as much backward compatibility as possible to ease upgrades
 from 6.x to 7.0.
 
-The most notable change between 6.x and 7.0 is that the minimum required PHP version has been changed from 
-`^7.4` to `~8.1.0 || ~8.2.0`, the two PHP versions that are [actively supported since 2022-11-26](https://www.php.net/supported-versions.php).
+The minimum required PHP version has been changed from `^7.4` to `~8.1.0 || ~8.2.0`, the two PHP versions that
+are [actively supported since 2022-11-26](https://www.php.net/supported-versions.php).
 
 If you're using version 6.x of the SDK in the documented way, an upgrade to 7.x should be as simple as updating the
 version constraint in your project's `composer.json` file.
@@ -21,6 +21,10 @@ version constraint in your project's `composer.json` file.
 
 ## Notable changes
 
+* The ability to disable credentials auto-discovery has been removed. If you don't want a service account to be
+  auto-discovered, provide it by using the `withServiceAccount()` method of the Factory or by setting the
+  `GOOGLE_APPLICATION_CREDENTIALS` environment variable. Depending on the environment in which the SDK is running,
+  credentials could be auto-discovered otherwise, for example on GCP or GCE.
 * Classes, Methods and Constants marked as `@deprecated` have been removed.
 * Classes, Methods and Constants marked as `@internal` have been removed or refactored.
 * `@param` annotations in PHPDoc blocks have been moved to typed parameters, for example:

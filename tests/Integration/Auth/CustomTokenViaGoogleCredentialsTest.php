@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration\Auth;
 
-use Google\Auth\CredentialsLoader;
-use Google\Auth\SignBlobInterface;
+use Google\Auth\Credentials\ServiceAccountCredentials;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleCredentials;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Factory;
@@ -25,11 +24,7 @@ final class CustomTokenViaGoogleCredentialsTest extends IntegrationTestCase
 
     protected function setUp(): void
     {
-        $credentials = CredentialsLoader::makeCredentials(Factory::API_CLIENT_SCOPES, self::$serviceAccount->asArray());
-
-        if (!$credentials instanceof SignBlobInterface) {
-            $this->markTestSkipped('No credential capable of signing custom tokens found');
-        }
+        $credentials = new ServiceAccountCredentials(Factory::API_CLIENT_SCOPES, self::$serviceAccountAsArray);
 
         $this->generator = new CustomTokenViaGoogleCredentials($credentials);
         $this->auth = self::$factory->createAuth();

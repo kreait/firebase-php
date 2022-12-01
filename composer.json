@@ -29,7 +29,7 @@
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "beste/clock": "^3.0",
-        "beste/json": "^1.1",
+        "beste/json": "^1.2",
         "fig/http-message-util": "^1.1.5",
         "google/auth": "^1.23.1",
         "google/cloud-core": "^1.47.4",

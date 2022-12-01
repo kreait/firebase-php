@@ -11,6 +11,13 @@ This release adds many more PHPDoc annotations to support the usage of Static An
 and Psalm and moves away from doing runtime checks. It is strongly recommended to use a Static Analysis
 Tool and ensure that input values are validated before handing them over to the SDK.
 
+### Notable changes
+
+* The ability to disable credentials auto-discovery has been removed. If you don't want a service account to be
+  auto-discovered, provide it by using the `withServiceAccount()` method of the Factory or by setting the
+  `GOOGLE_APPLICATION_CREDENTIALS` environment variable. Depending on the environment in which the SDK is running,
+  credentials could be auto-discovered otherwise, for example on GCP or GCE.
+
 See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x and 7.0.**
 
 ## 6.x Changelog

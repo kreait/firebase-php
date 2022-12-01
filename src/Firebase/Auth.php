@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase;
 
 use Beste\Json;
+use DateInterval;
 use DateTimeImmutable;
 use Kreait\Firebase\Auth\ActionCodeSettings;
 use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
@@ -30,10 +31,8 @@ use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\RevokedSessionCookie;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Kreait\Firebase\JWT\CustomTokenGenerator;
 use Kreait\Firebase\JWT\IdTokenVerifier;
 use Kreait\Firebase\JWT\SessionCookieVerifier;
-use Kreait\Firebase\JWT\Value\Duration;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Request\UpdateUser;
 use Kreait\Firebase\Util\DT;
@@ -61,12 +60,9 @@ use function trim;
  */
 final class Auth implements Contract\Auth
 {
-    /**
-     * @param CustomTokenGenerator|CustomTokenViaGoogleCredentials|null $tokenGenerator
-     */
     public function __construct(
         private readonly ApiClient $client,
-        private $tokenGenerator,
+        private readonly ?CustomTokenViaGoogleCredentials $tokenGenerator,
         private readonly IdTokenVerifier $idTokenVerifier,
         private readonly SessionCookieVerifier $sessionCookieVerifier,
         private readonly ClockInterface $clock,
@@ -354,23 +350,23 @@ final class Auth implements Contract\Auth
 
     public function createCustomToken(Stringable|string $uid, array $claims = [], $ttl = 3600): UnencryptedToken
     {
-        $uid = Uid::fromString($uid)->value;
-
-        $generator = $this->tokenGenerator;
-
-        if ($generator instanceof CustomTokenGenerator) {
-            $tokenString = $generator->createCustomToken($uid, $claims, $ttl)->toString();
-        } elseif ($generator instanceof CustomTokenViaGoogleCredentials) {
-            $expiresAt = $this->clock->now()->add(Duration::make($ttl)->value());
-
-            $tokenString = $generator->createCustomToken($uid, $claims, $expiresAt)->toString();
-        } else {
+        if (!$this->tokenGenerator) {
             throw new AuthError('Custom Token Generation is disabled because the current credentials do not permit it');
         }
 
-        assert($tokenString !== '');
+        $uid = Uid::fromString($uid)->value;
 
-        return $this->parseToken($tokenString);
+        if (!$ttl instanceof DateInterval) {
+            $ttl = new DateInterval(sprintf('PT%sS', $ttl));
+        }
+
+        $expiresAt = $this->clock->now()->add($ttl);
+
+        $token = $this->tokenGenerator->createCustomToken($uid, $claims, $expiresAt);
+
+        assert($token instanceof UnencryptedToken);
+
+        return $token;
     }
 
     public function parseToken(string $tokenString): UnencryptedToken

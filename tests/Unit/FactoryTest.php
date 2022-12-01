@@ -4,66 +4,54 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit;
 
+use Beste\Json;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Tests\UnitTestCase;
-use RuntimeException;
 
 use function putenv;
 
 /**
  * @internal
+ *
+ * @phpstan-import-type ServiceAccountShape from Factory
  */
 final class FactoryTest extends UnitTestCase
 {
-    private string $serviceAccount;
+    /** @var non-empty-string */
+    private string $serviceAccountFilePath;
+
+    /**
+     * @var ServiceAccountShape
+     */
+    private array $serviceAccountArray;
 
     protected function setUp(): void
     {
-        $this->serviceAccount = self::$fixturesDir.'/ServiceAccount/valid.json';
+        $this->serviceAccountFilePath = self::$fixturesDir.'/ServiceAccount/valid.json';
+        $this->serviceAccountArray = Json::decodeFile($this->serviceAccountFilePath, true);
     }
 
-    public function testItUsesTheCredentialsFromTheGooglaApplicationCredentialsEnvironmentVariable(): void
+    public function testItUsesTheCredentialsFromTheGoogleApplicationCredentialsEnvironmentVariable(): void
     {
-        putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->serviceAccount);
+        putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->serviceAccountFilePath);
 
         $this->assertServices(new Factory());
 
         putenv('GOOGLE_APPLICATION_CREDENTIALS');
     }
 
-    public function testItNeedsCredentials(): void
+    public function testItCanBeConfiguredWithThePathToAServiceAccount(): void
     {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageMatches('/credential/');
-
-        (new Factory())->withDisabledAutoDiscovery()->createApiClient();
-    }
-
-    public function testItUsesAServiceAccount(): void
-    {
-        $factory = (new Factory())->withServiceAccount($this->serviceAccount);
+        $factory = (new Factory())->withServiceAccount($this->serviceAccountFilePath);
 
         $this->assertServices($factory);
     }
 
-    public function testAProjectIdCanBeProvidedAsAGoogleCloudProjectEnvironmentVariable(): void
+    public function testItCanBeConfiguredWithAServiceAccountArray(): void
     {
-        // The database component requires a project ID
-        putenv('GOOGLE_CLOUD_PROJECT=project-id');
+        $factory = (new Factory())->withServiceAccount($this->serviceAccountArray);
 
-        (new Factory())->createDatabase();
-
-        $this->addToAssertionCount(1);
-
-        putenv('GOOGLE_CLOUD_PROJECT');
-    }
-
-    public function testItFailsWithoutAProjectId(): void
-    {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageMatches('/Unable to/');
-
-        (new Factory())->withDisabledAutoDiscovery()->createApiClient();
+        $this->assertServices($factory);
     }
 
     private function assertServices(Factory $factory): void
