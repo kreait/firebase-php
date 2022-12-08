@@ -78,9 +78,9 @@ final class Factory
     private ?string $defaultStorageBucket = null;
 
     /**
-     * @var non-empty-string|ServiceAccountShape|null
+     * @var ServiceAccountShape|null
      */
-    private string|array|null $serviceAccount = null;
+    private ?array $serviceAccount = null;
     private ?FetchAuthTokenInterface $googleAuthTokenCredentials = null;
 
     /**
@@ -122,6 +122,12 @@ final class Factory
         if (is_string($value) && str_starts_with($value, '{')) {
             try {
                 $serviceAccount = Json::decode($value, true);
+            } catch (UnexpectedValueException $e) {
+                throw new InvalidArgumentException('Invalid service account: '.$e->getMessage(), $e->getCode(), $e);
+            }
+        } elseif (is_string($value)) {
+            try {
+                $serviceAccount = Json::decodeFile($value, true);
             } catch (UnexpectedValueException $e) {
                 throw new InvalidArgumentException('Invalid service account: '.$e->getMessage(), $e->getCode(), $e);
             }
@@ -510,8 +516,6 @@ final class Factory
 
         if (is_array($this->serviceAccount)) {
             $config['keyFile'] = $this->serviceAccount;
-        } elseif (is_string($this->serviceAccount)) {
-            $config['keyFilePath'] = $this->serviceAccount;
         }
 
         return $config;

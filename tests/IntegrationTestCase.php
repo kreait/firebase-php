@@ -26,11 +26,8 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 {
     protected static Factory $factory;
 
-    /** @var non-empty-string */
-    protected static string $serviceAccount;
-
     /** @var ServiceAccountShape */
-    protected static array $serviceAccountAsArray;
+    protected static array $serviceAccount;
 
     /** @var non-empty-string|null */
     protected static ?string $rtdbUrl;
@@ -50,21 +47,15 @@ abstract class IntegrationTestCase extends FirebaseTestCase
             self::markTestSkipped('The integration tests require credentials');
         }
 
-        self::$serviceAccount = $credentials;
-
         if (str_starts_with($credentials, '{')) {
-            self::$serviceAccountAsArray = Json::decode($credentials, true);
+            self::$serviceAccount = Json::decode($credentials, true);
         } else {
-            self::$serviceAccountAsArray = Json::decodeFile($credentials, true);
+            self::$serviceAccount = Json::decodeFile($credentials, true);
         }
 
-        self::$rtdbUrl = self::rtdbUrl();
-
-        self::$factory = (new Factory())
-            ->withServiceAccount(self::$serviceAccount);
-
+        self::$factory = (new Factory())->withServiceAccount(self::$serviceAccount);
         self::$registrationTokens = self::registrationTokens();
-
+        self::$rtdbUrl = self::rtdbUrl();
         self::$tenantId = self::tenantId();
     }
 

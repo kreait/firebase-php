@@ -24,7 +24,7 @@ final class CustomTokenViaGoogleCredentialsTest extends IntegrationTestCase
 
     protected function setUp(): void
     {
-        $credentials = new ServiceAccountCredentials(Factory::API_CLIENT_SCOPES, self::$serviceAccountAsArray);
+        $credentials = new ServiceAccountCredentials(Factory::API_CLIENT_SCOPES, self::$serviceAccount);
 
         $this->generator = new CustomTokenViaGoogleCredentials($credentials);
         $this->auth = self::$factory->createAuth();
