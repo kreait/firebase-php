@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
-use Beste\Json;
 use Kreait\Firebase\Exception\Database\DatabaseNotFound;
 use Kreait\Firebase\Factory;
 
@@ -22,7 +21,7 @@ final class DatabaseTest extends DatabaseTestCase
             $this->markTestSkipped('The RTDB emulator creates databases if they don\'t exist');
         }
 
-        $credentials = Json::decode(self::$serviceAccount, true);
+        $credentials = self::$serviceAccountAsArray;
         $credentials['project_id'] = 'non-existing';
 
         $this->expectException(DatabaseNotFound::class);

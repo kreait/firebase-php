@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\DynamicLink;
 
+use Beste\Json;
 use JsonSerializable;
 use Kreait\Firebase\Value\Url;
 use Stringable;
@@ -95,7 +96,7 @@ final class CreateDynamicLink implements JsonSerializable
         $info = $data instanceof AnalyticsInfo ? $data : AnalyticsInfo::fromArray($data);
 
         $data = $this->data;
-        $data['dynamicLinkInfo']['analyticsInfo'] = $info->jsonSerialize();
+        $data['dynamicLinkInfo']['analyticsInfo'] = Json::decode(Json::encode($info), true);
 
         return new self($data);
     }
@@ -108,7 +109,7 @@ final class CreateDynamicLink implements JsonSerializable
         $info = $data instanceof AndroidInfo ? $data : AndroidInfo::fromArray($data);
 
         $data = $this->data;
-        $data['dynamicLinkInfo']['androidInfo'] = $info->jsonSerialize();
+        $data['dynamicLinkInfo']['androidInfo'] = Json::decode(Json::encode($info), true);
 
         return new self($data);
     }
@@ -121,7 +122,7 @@ final class CreateDynamicLink implements JsonSerializable
         $info = $data instanceof IOSInfo ? $data : IOSInfo::fromArray($data);
 
         $data = $this->data;
-        $data['dynamicLinkInfo']['iosInfo'] = $info->jsonSerialize();
+        $data['dynamicLinkInfo']['iosInfo'] = Json::decode(Json::encode($info), true);
 
         return new self($data);
     }
@@ -134,7 +135,7 @@ final class CreateDynamicLink implements JsonSerializable
         $info = $data instanceof NavigationInfo ? $data : NavigationInfo::fromArray($data);
 
         $data = $this->data;
-        $data['dynamicLinkInfo']['navigationInfo'] = $info->jsonSerialize();
+        $data['dynamicLinkInfo']['navigationInfo'] = Json::decode(Json::encode($info), true);
 
         return new self($data);
     }
@@ -147,7 +148,7 @@ final class CreateDynamicLink implements JsonSerializable
         $info = $data instanceof SocialMetaTagInfo ? $data : SocialMetaTagInfo::fromArray($data);
 
         $data = $this->data;
-        $data['dynamicLinkInfo']['socialMetaTagInfo'] = $info->jsonSerialize();
+        $data['dynamicLinkInfo']['socialMetaTagInfo'] = Json::decode(Json::encode($info), true);
 
         return new self($data);
     }
@@ -168,9 +169,6 @@ final class CreateDynamicLink implements JsonSerializable
         return new self($data);
     }
 
-    /**
-     * @return CreateDynamicLinkShape
-     */
     public function jsonSerialize(): array
     {
         return $this->data;

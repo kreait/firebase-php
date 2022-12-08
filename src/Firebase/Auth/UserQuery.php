@@ -128,16 +128,6 @@ class UserQuery implements JsonSerializable
         return $query;
     }
 
-    /**
-     * @return array{
-     *     returnUserInfo: bool,
-     *     sortBy?: self::FIELD_*,
-     *     order?: self::ORDER_*,
-     *     offset?: int<0, max>,
-     *     limit?: int<1, self::MAX_LIMIT>,
-     *     expression?: array<self::FILTER_*, non-empty-string>
-     * }
-     */
     public function jsonSerialize(): array
     {
         $data = array_filter([

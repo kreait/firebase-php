@@ -23,26 +23,16 @@ final class UrlBuilder
 {
     private const EXPECTED_URL_FORMAT = '@^https://(?P<namespace>[^.]+)\.(?P<host>.+)$@';
 
-    /** @phpstan-var 'http'|'https' */
-    private string $scheme;
-
-    /** @var non-empty-string */
-    private string $host;
-
-    /** @var array<string, string> */
-    private array $defaultQueryParams;
-
     /**
-     * @phpstan-param 'http'|'https' $scheme
-     *
+     * @param 'http'|'https' $scheme
      * @param non-empty-string $host
      * @param array<string, string> $defaultQueryParams
      */
-    private function __construct(string $scheme, string $host, array $defaultQueryParams)
-    {
-        $this->scheme = $scheme;
-        $this->host = $host;
-        $this->defaultQueryParams = $defaultQueryParams;
+    private function __construct(
+        private readonly string $scheme,
+        private readonly string $host,
+        private readonly array $defaultQueryParams,
+    ) {
     }
 
     /**
@@ -98,7 +88,7 @@ final class UrlBuilder
 
         $emulatorHost = Util::rtdbEmulatorHost();
 
-        if (!in_array($emulatorHost, ['', '0'], true)) {
+        if (!in_array($emulatorHost, ['', '0', null], true)) {
             return [
                 'scheme' => 'http',
                 'host' => $emulatorHost,

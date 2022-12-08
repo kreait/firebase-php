@@ -80,9 +80,6 @@ final class AndroidInfo implements JsonSerializable
         return new self($data);
     }
 
-    /**
-     * @return AndroidInfoShape
-     */
     public function jsonSerialize(): array
     {
         return $this->data;

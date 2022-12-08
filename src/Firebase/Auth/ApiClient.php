@@ -38,6 +38,10 @@ class ApiClient
     private readonly AuthResourceUrlBuilder $authResourceUrlBuilder;
     private readonly AuthApiExceptionConverter $errorHandler;
 
+    /**
+     * @param non-empty-string $projectId
+     * @param non-empty-string|null $tenantId
+     */
     public function __construct(
         private readonly string $projectId,
         private readonly ?string $tenantId,
@@ -61,7 +65,7 @@ class ApiClient
     {
         $url = $this->authResourceUrlBuilder->getUrl('/accounts:signUp');
 
-        return $this->requestApi($url, $request->jsonSerialize());
+        return $this->requestApi($url, Json::decode(Json::encode($request), true));
     }
 
     /**
@@ -71,11 +75,11 @@ class ApiClient
     {
         $url = $this->awareAuthResourceUrlBuilder->getUrl('/accounts:update');
 
-        return $this->requestApi($url, $request->jsonSerialize());
+        return $this->requestApi($url, Json::decode(Json::encode($request), true));
     }
 
     /**
-     * @param array<string, mixed> $claims
+     * @param array<non-empty-string, mixed> $claims
      *
      * @throws AuthException
      */
@@ -157,7 +161,7 @@ class ApiClient
     }
 
     /**
-     * @param string|array<string> $uids
+     * @param string|list<non-empty-string> $uids
      *
      * @throws AuthException
      */
@@ -179,7 +183,7 @@ class ApiClient
     {
         $url = $this->awareAuthResourceUrlBuilder->getUrl('/accounts:query');
 
-        return $this->requestApi($url, $query->jsonSerialize());
+        return $this->requestApi($url, Json::decode(Json::encode($query), true));
     }
 
     /**
@@ -226,7 +230,7 @@ class ApiClient
     }
 
     /**
-     * @param array<int, Stringable|string> $providers
+     * @param list<Stringable|non-empty-string> $providers
      *
      * @throws AuthException
      */
@@ -281,7 +285,7 @@ class ApiClient
     }
 
     /**
-     * @param array<mixed> $data
+     * @param array<string, mixed> $data
      *
      * @throws AuthException
      */

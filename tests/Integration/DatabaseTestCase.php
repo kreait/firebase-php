@@ -24,11 +24,14 @@ abstract class DatabaseTestCase extends IntegrationTestCase
     {
         parent::setUpBeforeClass();
 
-        if (self::$rtdbUrl === '') {
-            self::markTestSkipped('The database tests require a database uri');
+        if (self::$rtdbUrl === null) {
+            self::markTestSkipped('Database tests require a database URL');
         }
 
-        self::$db = self::$factory->createDatabase();
+        self::$db = self::$factory
+            ->withDatabaseUri(self::$rtdbUrl)
+            ->createDatabase();
+
         self::$apiClient = self::$factory->createApiClient(['http_errors' => false]);
 
         self::$refPrefix = 'tests'.bin2hex(random_bytes(5));

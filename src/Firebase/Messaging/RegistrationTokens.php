@@ -19,7 +19,7 @@ use function is_string;
  */
 final class RegistrationTokens implements Countable, IteratorAggregate
 {
-    /** @var array<RegistrationToken> */
+    /** @var list<RegistrationToken> */
     private array $tokens;
 
     /**
@@ -27,11 +27,11 @@ final class RegistrationTokens implements Countable, IteratorAggregate
      */
     public function __construct(RegistrationToken ...$tokens)
     {
-        $this->tokens = $tokens;
+        $this->tokens = array_values($tokens);
     }
 
     /**
-     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $values
+     * @param RegistrationTokens|RegistrationToken|list<RegistrationToken|string>|non-empty-string $values
      *
      * @throws InvalidArgument
      */
@@ -78,7 +78,7 @@ final class RegistrationTokens implements Countable, IteratorAggregate
     }
 
     /**
-     * @return array<RegistrationToken>
+     * @return list<RegistrationToken>
      */
     public function values(): array
     {
@@ -86,11 +86,15 @@ final class RegistrationTokens implements Countable, IteratorAggregate
     }
 
     /**
-     * @return array<string>
+     * @return list<non-empty-string>
      */
     public function asStrings(): array
     {
-        return array_map(strval(...), $this->tokens);
+        return array_values(
+            array_filter(
+                array_map(strval(...), $this->tokens),
+            ),
+        );
     }
 
     public function count(): int

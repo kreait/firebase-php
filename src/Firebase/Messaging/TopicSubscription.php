@@ -37,9 +37,6 @@ final class TopicSubscription implements JsonSerializable
         return $this->subscribedAt;
     }
 
-    /**
-     * @return array<string, string>
-     */
     public function jsonSerialize(): array
     {
         return [

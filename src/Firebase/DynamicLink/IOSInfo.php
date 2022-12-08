@@ -122,9 +122,6 @@ final class IOSInfo implements JsonSerializable
         return new self($data);
     }
 
-    /**
-     * @return IOSInfoShape
-     */
     public function jsonSerialize(): array
     {
         return $this->data;

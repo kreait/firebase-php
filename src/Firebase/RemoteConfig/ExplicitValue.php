@@ -39,9 +39,6 @@ final class ExplicitValue implements JsonSerializable
         return $this->data;
     }
 
-    /**
-     * @return RemoteConfigExplicitValueShape
-     */
     public function jsonSerialize(): array
     {
         return $this->data;

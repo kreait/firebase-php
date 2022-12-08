@@ -48,7 +48,7 @@ final class UserRecord
      * @param list<UserInfo> $providerData
      * @param non-empty-string|null $passwordHash
      * @param non-empty-string|null $passwordSalt
-     * @param array<string, mixed> $customClaims
+     * @param array<non-empty-string, mixed> $customClaims
      * @param non-empty-string|null $tenantId
      */
     public function __construct(

@@ -184,9 +184,6 @@ final class ApnsConfig implements JsonSerializable
         ], $filter);
     }
 
-    /**
-     * @return array<non-empty-string, mixed>
-     */
     public function jsonSerialize(): array
     {
         return $this->toArray();

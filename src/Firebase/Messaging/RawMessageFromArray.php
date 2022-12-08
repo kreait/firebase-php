@@ -19,9 +19,6 @@ final class RawMessageFromArray implements Message
     {
     }
 
-    /**
-     * @return MessageOutputShape
-     */
     public function jsonSerialize(): array
     {
         return Json::decode(Json::encode($this->data), true);

@@ -132,9 +132,6 @@ final class GooglePlayAnalytics implements JsonSerializable
         return new self($data);
     }
 
-    /**
-     * @return GooglePlayAnalyticsShape
-     */
     public function jsonSerialize(): array
     {
         return $this->data;

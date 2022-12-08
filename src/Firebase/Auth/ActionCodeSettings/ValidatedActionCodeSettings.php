@@ -10,6 +10,8 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
 use function array_filter;
+use function is_bool;
+use function is_string;
 use function mb_strtolower;
 
 final class ValidatedActionCodeSettings implements ActionCodeSettings
@@ -17,9 +19,15 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
     private ?UriInterface $continueUrl = null;
     private ?bool $canHandleCodeInApp = null;
     private ?UriInterface $dynamicLinkDomain = null;
+
+    /** @var non-empty-string|null */
     private ?string $androidPackageName = null;
+
+    /** @var non-empty-string|null */
     private ?string $androidMinimumVersion = null;
     private ?bool $androidInstallApp = null;
+
+    /** @var non-empty-string|null */
     private ?string $iOSBundleId = null;
 
     private function __construct()
@@ -32,7 +40,7 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
     }
 
     /**
-     * @param array<string, mixed> $settings
+     * @param array<non-empty-string, mixed> $settings
      */
     public static function fromArray(array $settings): self
     {
@@ -59,12 +67,12 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
                     break;
 
                 case 'androidpackagename':
-                    $instance->androidPackageName = (string) $value;
+                    $instance->androidPackageName = $value;
 
                     break;
 
                 case 'androidminimumversion':
-                    $instance->androidMinimumVersion = (string) $value;
+                    $instance->androidMinimumVersion = $value;
 
                     break;
 
@@ -74,7 +82,7 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
                     break;
 
                 case 'iosbundleid':
-                    $instance->iOSBundleId = (string) $value;
+                    $instance->iOSBundleId = $value;
 
                     break;
 
@@ -87,7 +95,7 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
     }
 
     /**
-     * @return array<string, bool|string>
+     * @return array<non-empty-string, bool|non-empty-string>
      */
     public function toArray(): array
     {
@@ -102,6 +110,6 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
             'androidMinimumVersion' => $this->androidMinimumVersion,
             'androidInstallApp' => $this->androidInstallApp,
             'iOSBundleId' => $this->iOSBundleId,
-        ], static fn ($value) => $value !== null);
+        ], static fn ($value) => is_bool($value) || (is_string($value) && $value !== ''));
     }
 }

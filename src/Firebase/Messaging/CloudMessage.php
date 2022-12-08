@@ -228,9 +228,6 @@ final class CloudMessage implements Message
         return $this->target->type() !== MessageTarget::UNKNOWN;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function jsonSerialize(): array
     {
         $data = [

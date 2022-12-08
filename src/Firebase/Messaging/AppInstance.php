@@ -82,9 +82,6 @@ final class AppInstance implements JsonSerializable
         return $this->rawData;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function jsonSerialize(): array
     {
         return $this->rawData;

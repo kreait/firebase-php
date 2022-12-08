@@ -56,9 +56,6 @@ final class MessageData implements JsonSerializable
         return $this->data;
     }
 
-    /**
-     * @return array<non-empty-string, string>
-     */
     public function jsonSerialize(): array
     {
         return $this->toArray();

@@ -45,9 +45,6 @@ final class FcmOptions implements JsonSerializable
         return $options;
     }
 
-    /**
-     * @return FcmOptionsShape
-     */
     public function jsonSerialize(): array
     {
         return $this->data;

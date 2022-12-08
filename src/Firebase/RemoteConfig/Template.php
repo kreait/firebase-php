@@ -191,9 +191,6 @@ class Template implements JsonSerializable
         return $template;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function jsonSerialize(): array
     {
         return [

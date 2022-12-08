@@ -97,9 +97,6 @@ final class Notification implements JsonSerializable
         return $this->imageUrl;
     }
 
-    /**
-     * @return array<string, string>
-     */
     public function jsonSerialize(): array
     {
         return array_filter([

@@ -100,9 +100,6 @@ final class ITunesConnectAnalytics implements JsonSerializable
         return new self($data);
     }
 
-    /**
-     * @return ITunesConnectAnalyticsShape
-     */
     public function jsonSerialize(): array
     {
         return $this->data;

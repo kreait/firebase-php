@@ -17,24 +17,27 @@ use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Messaging\RegistrationTokens;
 use Kreait\Firebase\Messaging\Topic;
 
+/**
+ * @phpstan-import-type MessageInputShape from Message
+ */
 interface Messaging
 {
     public const BATCH_MESSAGE_LIMIT = 500;
 
     /**
-     * @param Message|array<string, mixed> $message
+     * @param Message|MessageInputShape $message
      *
      * @throws MessagingException
      * @throws FirebaseException
      * @throws InvalidArgumentException
      *
-     * @return array<mixed>
+     * @return array<non-empty-string, mixed>
      */
     public function send(Message|array $message, bool $validateOnly = false): array;
 
     /**
-     * @param Message|array<string, mixed> $message
-     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $registrationTokens
+     * @param Message|MessageInputShape $message
+     * @param RegistrationTokens|RegistrationToken|list<RegistrationToken|string>|non-empty-string $registrationTokens
      *
      * @throws InvalidArgumentException if the message is invalid or the list of registration tokens is empty
      * @throws MessagingException if the API request failed
@@ -43,7 +46,7 @@ interface Messaging
     public function sendMulticast(Message|array $message, RegistrationTokens|RegistrationToken|array|string $registrationTokens, bool $validateOnly = false): MulticastSendReport;
 
     /**
-     * @param list<Message>|Messages $messages
+     * @param list<Message|MessageInputShape>|Messages $messages
      *
      * @throws InvalidArgumentException if the message is invalid
      * @throws MessagingException if the API request failed
@@ -52,30 +55,34 @@ interface Messaging
     public function sendAll(array|Messages $messages, bool $validateOnly = false): MulticastSendReport;
 
     /**
-     * @param Message|array<string, mixed> $message
+     * @param Message|MessageInputShape $message
      *
      * @throws InvalidMessage
      * @throws MessagingException
      * @throws FirebaseException
      * @throws InvalidArgumentException
      *
-     * @return array<mixed>
+     * @return array<non-empty-string, mixed>
      */
     public function validate(Message|array $message): array;
 
     /**
-     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $registrationTokenOrTokens
+     * @param RegistrationTokens|RegistrationToken|list<RegistrationToken|non-empty-string>|non-empty-string $registrationTokenOrTokens
      *
      * @throws MessagingException
      * @throws FirebaseException
      *
-     * @return array<string, array<int, string>>
+     * @return array{
+     *     valid: list<non-empty-string>,
+     *     unknown: list<non-empty-string>,
+     *     invalid: list<non-empty-string>
+     * }
      */
     public function validateRegistrationTokens(RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array;
 
     /**
      * @param Topic|non-empty-string $topic
-     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $registrationTokenOrTokens
+     * @param RegistrationTokens|RegistrationToken|list<RegistrationToken|non-empty-string>|non-empty-string $registrationTokenOrTokens
      *
      * @return array<string, array<string, string>>
      */
@@ -83,7 +90,7 @@ interface Messaging
 
     /**
      * @param iterable<non-empty-string|Topic> $topics
-     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $registrationTokenOrTokens
+     * @param RegistrationTokens|RegistrationToken|list<RegistrationToken|non-empty-string>|non-empty-string $registrationTokenOrTokens
      *
      * @return array<string, array<string, string>>
      */
@@ -91,7 +98,7 @@ interface Messaging
 
     /**
      * @param Topic|non-empty-string $topic
-     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $registrationTokenOrTokens
+     * @param RegistrationTokens|RegistrationToken|list<RegistrationToken|non-empty-string>|non-empty-string $registrationTokenOrTokens
      *
      * @return array<string, array<string, string>>
      */
@@ -99,14 +106,14 @@ interface Messaging
 
     /**
      * @param array<non-empty-string|Topic> $topics
-     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $registrationTokenOrTokens
+     * @param RegistrationTokens|RegistrationToken|list<RegistrationToken|non-empty-string>|non-empty-string $registrationTokenOrTokens
      *
      * @return array<string, array<string, string>>
      */
     public function unsubscribeFromTopics(array $topics, RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array;
 
     /**
-     * @param RegistrationTokens|RegistrationToken|non-empty-array<RegistrationToken|string>|non-empty-string $registrationTokenOrTokens
+     * @param RegistrationTokens|RegistrationToken|list<RegistrationToken|non-empty-string>|non-empty-string $registrationTokenOrTokens
      *
      * @return array<string, array<string, string>>
      */

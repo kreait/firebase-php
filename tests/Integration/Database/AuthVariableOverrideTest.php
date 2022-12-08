@@ -119,10 +119,13 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
     }
 
     /**
-     * @param array<string, mixed>|null $override
+     * @param array<non-empty-string, mixed>|null $override
      */
     private function databaseWithAuthOverride(?array $override): Database
     {
+        // If the RTDB Url is not set, the database tests are already skipped
+        assert(self::$rtdbUrl !== null);
+
         return self::$factory
             ->withDatabaseUri(self::$rtdbUrl)
             ->withDatabaseAuthVariableOverride($override)

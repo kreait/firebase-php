@@ -30,7 +30,7 @@ class AppInstanceApiClient
     /**
      * @see https://developers.google.com/instance-id/reference/server#manage_relationship_maps_for_multiple_app_instances
      *
-     * @param array<Topic> $topics
+     * @param list<Topic> $topics
      *
      * @return array<string, array<string, string>>
      */

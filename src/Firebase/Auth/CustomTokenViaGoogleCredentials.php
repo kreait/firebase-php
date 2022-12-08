@@ -35,7 +35,7 @@ final class CustomTokenViaGoogleCredentials
 
     /**
      * @param Stringable|string $uid
-     * @param array<string, mixed> $claims
+     * @param array<non-empty-string, mixed> $claims
      *
      * @throws AuthError
      */

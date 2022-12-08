@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging\Http\Request;
 
+use Beste\Json;
 use Kreait\Firebase\Contract\Messaging;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Http\HasSubRequests;
@@ -27,7 +28,7 @@ final class SendMessageToTokens implements HasSubRequests, RequestInterface
             throw new InvalidArgument('A multicast message can be sent to a maximum amount of '.Messaging::BATCH_MESSAGE_LIMIT.' tokens.');
         }
 
-        $messageData = $message->jsonSerialize();
+        $messageData = Json::decode(Json::encode($message), true);
         unset($messageData['topic'], $messageData['condition']);
 
         $messages = [];

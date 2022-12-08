@@ -484,7 +484,13 @@ final class Auth implements Contract\Auth
     public function unlinkProvider($uid, $provider): UserRecord
     {
         $uid = Uid::fromString($uid)->value;
-        $provider = array_map('strval', (array) $provider);
+
+        $provider = array_values(
+            array_filter(
+                array_map('strval', (array) $provider),
+                static fn (string $value) => $value !== '',
+            ),
+        );
 
         $response = $this->client->unlinkProvider($uid, $provider);
 

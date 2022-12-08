@@ -63,9 +63,6 @@ final class ShortenLongDynamicLink implements JsonSerializable
         return new self($data);
     }
 
-    /**
-     * @return ShortenLongDynamicLinkShape
-     */
     public function jsonSerialize(): array
     {
         return $this->data;

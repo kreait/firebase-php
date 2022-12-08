@@ -21,7 +21,7 @@ use Stringable;
 interface DynamicLinks
 {
     /**
-     * @param Stringable|string|CreateDynamicLink|CreateDynamicLinkShape $url
+     * @param Stringable|non-empty-string|CreateDynamicLink|CreateDynamicLinkShape $url
      *
      * @throws InvalidArgumentException
      * @throws FailedToCreateDynamicLink
@@ -29,7 +29,7 @@ interface DynamicLinks
     public function createUnguessableLink(Stringable|string|CreateDynamicLink|array $url): DynamicLink;
 
     /**
-     * @param Stringable|string|CreateDynamicLink|CreateDynamicLinkShape $url
+     * @param Stringable|non-empty-string|CreateDynamicLink|CreateDynamicLinkShape $url
      *
      * @throws InvalidArgumentException
      * @throws FailedToCreateDynamicLink
@@ -37,7 +37,7 @@ interface DynamicLinks
     public function createShortLink(Stringable|string|CreateDynamicLink|array $url): DynamicLink;
 
     /**
-     * @param Stringable|string|CreateDynamicLink|CreateDynamicLinkShape $actionOrParametersOrUrl
+     * @param Stringable|non-empty-string|CreateDynamicLink|CreateDynamicLinkShape $actionOrParametersOrUrl
      *
      * @throws InvalidArgumentException
      * @throws FailedToCreateDynamicLink
@@ -45,7 +45,7 @@ interface DynamicLinks
     public function createDynamicLink(Stringable|string|CreateDynamicLink|array $actionOrParametersOrUrl, ?string $suffixType = null): DynamicLink;
 
     /**
-     * @param Stringable|string|ShortenLongDynamicLink|ShortenLongDynamicLinkShape $longDynamicLinkOrAction
+     * @param Stringable|non-empty-string|ShortenLongDynamicLink|ShortenLongDynamicLinkShape $longDynamicLinkOrAction
      *
      * @throws InvalidArgumentException
      * @throws FailedToShortenLongDynamicLink

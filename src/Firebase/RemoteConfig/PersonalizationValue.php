@@ -34,9 +34,6 @@ final class PersonalizationValue implements JsonSerializable
         return new self($data);
     }
 
-    /**
-     * @return RemoteConfigPersonalizationValueShape
-     */
     public function jsonSerialize(): array
     {
         return $this->data;

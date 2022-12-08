@@ -99,6 +99,8 @@ final class Factory
 
     /** @var callable|null */
     private $databaseAuthVariableOverrideMiddleware;
+
+    /** @var non-empty-string|null */
     private ?string $tenantId = null;
     private HttpClientOptions $httpClientOptions;
 
@@ -142,6 +144,9 @@ final class Factory
         return $factory;
     }
 
+    /**
+     * @param non-empty-string $tenantId
+     */
     public function withTenantId(string $tenantId): self
     {
         $factory = clone $this;
@@ -150,6 +155,9 @@ final class Factory
         return $factory;
     }
 
+    /**
+     * @param UriInterface|non-empty-string $uri
+     */
     public function withDatabaseUri(UriInterface|string $uri): self
     {
         $url = trim($uri instanceof UriInterface ? $uri->__toString() : $uri);
@@ -173,7 +181,7 @@ final class Factory
      *
      * @see https://firebase.google.com/docs/database/admin/start#authenticate-with-limited-privileges
      *
-     * @param array<string, mixed>|null $override
+     * @param array<non-empty-string, mixed>|null $override
      */
     public function withDatabaseAuthVariableOverride(?array $override): self
     {
@@ -218,6 +226,10 @@ final class Factory
         return $factory;
     }
 
+    /**
+     * @param non-empty-string|null $logLevel
+     * @param non-empty-string|null $errorLogLevel
+     */
     public function withHttpLogger(LoggerInterface $logger, ?MessageFormatter $formatter = null, ?string $logLevel = null, ?string $errorLogLevel = null): self
     {
         $formatter = $formatter ?: new MessageFormatter();
@@ -230,6 +242,10 @@ final class Factory
         return $factory;
     }
 
+    /**
+     * @param non-empty-string|null $logLevel
+     * @param non-empty-string|null $errorLogLevel
+     */
     public function withHttpDebugLogger(LoggerInterface $logger, ?MessageFormatter $formatter = null, ?string $logLevel = null, ?string $errorLogLevel = null): self
     {
         $formatter = $formatter ?: new MessageFormatter(MessageFormatter::DEBUG);
@@ -323,13 +339,15 @@ final class Factory
     }
 
     /**
-     * @param Stringable|string|null $defaultDynamicLinksDomain
+     * @param Stringable|non-empty-string|null $defaultDynamicLinksDomain
      */
     public function createDynamicLinksService($defaultDynamicLinksDomain = null): Contract\DynamicLinks
     {
         $apiClient = $this->createApiClient();
 
-        if ($defaultDynamicLinksDomain !== null) {
+        $defaultDynamicLinksDomain = trim((string) $defaultDynamicLinksDomain);
+
+        if ($defaultDynamicLinksDomain !== '') {
             return DynamicLinks::withApiClientAndDefaultDomain($apiClient, $defaultDynamicLinksDomain);
         }
 
@@ -365,9 +383,9 @@ final class Factory
      *     credentialsType: string|null,
      *     databaseUrl: string,
      *     defaultStorageBucket: string|null,
-     *     serviceAccount: null|string|array<string, string>,
+     *     serviceAccount: string|array<string, string>|null,
      *     projectId: string,
-     *     tenantId: string|null,
+     *     tenantId: non-empty-string|null,
      *     tokenCacheType: class-string,
      *     verifierCacheType: class-string,
      * }
@@ -409,7 +427,7 @@ final class Factory
     }
 
     /**
-     * @param array<string, mixed>|null $config
+     * @param array<non-empty-string, mixed>|null $config
      * @param array<callable(callable): callable>|null $middlewares
      */
     public function createApiClient(?array $config = null, ?array $middlewares = null): Client
@@ -535,6 +553,9 @@ final class Factory
         return $this->databaseUrl;
     }
 
+    /**
+     * @return non-empty-string
+     */
     private function getStorageBucketName(): string
     {
         if ($this->defaultStorageBucket === null) {

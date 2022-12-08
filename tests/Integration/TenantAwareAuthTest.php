@@ -16,7 +16,13 @@ final class TenantAwareAuthTest extends AuthTestCase
 {
     protected function setUp(): void
     {
-        $this->auth = self::$factory->withTenantId(self::$tenantId)->createAuth();
+        if (self::$tenantId === null) {
+            $this->markTestSkipped('Tenant aware tests require a tenant ID');
+        }
+
+        $this->auth = self::$factory
+            ->withTenantId(self::$tenantId)
+            ->createAuth();
     }
 
     public function testNewUsersAreScopedToATenant(): void

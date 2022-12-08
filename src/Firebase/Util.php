@@ -15,17 +15,22 @@ use function putenv;
  */
 final class Util
 {
+    /**
+     * @param non-empty-string $name
+     *
+     * @return non-empty-string|null
+     */
     public static function getenv(string $name): ?string
     {
-        $value = $_SERVER[$name] ?? $_ENV[$name] ?? getenv($name);
+        $value = trim((string) ($_SERVER[$name] ?? $_ENV[$name] ?? getenv($name)));
 
-        if (!in_array($value, [false, null], true)) {
-            return (string) $value;
-        }
-
-        return null;
+        return $value !== '' ? $value : null;
     }
 
+    /**
+     * @param non-empty-string $name
+     * @param non-empty-string $value
+     */
     public static function putenv(string $name, string $value): void
     {
         $_ENV[$name] = $value;
@@ -33,13 +38,19 @@ final class Util
         putenv("{$name}={$value}");
     }
 
+    /**
+     * @param non-empty-string $name
+     */
     public static function rmenv(string $name): void
     {
         unset($_ENV[$name], $_SERVER[$name]);
         putenv($name);
     }
 
-    public static function authEmulatorHost(): string
+    /**
+     * @return non-empty-string|null
+     */
+    public static function authEmulatorHost(): ?string
     {
         $emulatorHost = self::getenv('FIREBASE_AUTH_EMULATOR_HOST');
 
@@ -47,10 +58,13 @@ final class Util
             return $emulatorHost;
         }
 
-        return '';
+        return null;
     }
 
-    public static function rtdbEmulatorHost(): string
+    /**
+     * @return non-empty-string|null
+     */
+    public static function rtdbEmulatorHost(): ?string
     {
         $emulatorHost = self::getenv('FIREBASE_DATABASE_EMULATOR_HOST');
 
@@ -58,6 +72,6 @@ final class Util
             return $emulatorHost;
         }
 
-        return '';
+        return null;
     }
 }

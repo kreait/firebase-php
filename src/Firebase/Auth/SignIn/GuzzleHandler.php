@@ -37,12 +37,12 @@ use function str_replace;
  */
 final class GuzzleHandler implements Handler
 {
-    /** @var array<string, mixed> */
+    /** @var array<non-empty-string, mixed> */
     private static array $defaultBody = [
         'returnSecureToken' => true,
     ];
 
-    /** @var array<string, mixed> */
+    /** @var array<non-empty-string, mixed> */
     private static array $defaultHeaders = [
         'Content-Type' => 'application/json; charset=UTF-8',
     ];
@@ -194,7 +194,7 @@ final class GuzzleHandler implements Handler
 
         $emulatorHost = Util::authEmulatorHost();
 
-        if ($emulatorHost !== '') {
+        if ($emulatorHost !== null) {
             // The emulator host requires an api key query parameter.
             $url = str_replace('{host}', $emulatorHost, 'http://{host}/securetoken.googleapis.com/v1/token?key=any');
         } else {
@@ -205,7 +205,7 @@ final class GuzzleHandler implements Handler
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<non-empty-string, mixed>
      */
     private function prepareBody(SignIn $action): array
     {

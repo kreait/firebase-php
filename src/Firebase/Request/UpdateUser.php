@@ -203,9 +203,6 @@ final class UpdateUser implements Request
         return $request;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function jsonSerialize(): array
     {
         if (!$this->hasUid()) {

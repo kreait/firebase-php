@@ -149,9 +149,6 @@ class Parameter implements JsonSerializable
         return $array;
     }
 
-    /**
-     * @return RemoteConfigParameterShape
-     */
     public function jsonSerialize(): array
     {
         return $this->toArray();

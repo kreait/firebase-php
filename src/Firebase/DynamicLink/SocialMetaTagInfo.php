@@ -74,9 +74,6 @@ final class SocialMetaTagInfo implements JsonSerializable
         return new self($data);
     }
 
-    /**
-     * @return SocialMetaTagInfoShape
-     */
     public function jsonSerialize(): array
     {
         return $this->data;

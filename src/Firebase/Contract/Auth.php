@@ -54,7 +54,7 @@ interface Auth
      * @throws Exception\AuthException
      * @throws Exception\FirebaseException
      *
-     * @return array<string, UserRecord|null>
+     * @return array<non-empty-string, UserRecord|null>
      */
     public function getUsers(array $uids): array;
 
@@ -64,7 +64,7 @@ interface Auth
      * @throws Exception\FirebaseException
      * @throws Exception\AuthException
      *
-     * @return array<string, UserRecord>
+     * @return array<non-empty-string, UserRecord>
      */
     public function queryUsers(UserQuery|array $query): array;
 

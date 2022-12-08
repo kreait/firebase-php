@@ -140,15 +140,15 @@ final class MulticastSendReport implements Countable
     }
 
     /**
-     * @return array<int, mixed>
+     * @return list<mixed>
      */
     public function map(callable $callback): array
     {
-        return array_map($callback, $this->items);
+        return array_values(array_map($callback, $this->items));
     }
 
     /**
-     * @return string[]
+     * @return list<non-empty-string>
      */
     public function validTokens(): array
     {
@@ -160,7 +160,7 @@ final class MulticastSendReport implements Countable
     /**
      * Returns all provided registration tokens that were not reachable.
      *
-     * @return string[]
+     * @return list<non-empty-string>
      */
     public function unknownTokens(): array
     {
@@ -172,7 +172,7 @@ final class MulticastSendReport implements Countable
     /**
      * Returns all provided registration tokens that were invalid.
      *
-     * @return string[]
+     * @return list<non-empty-string>
      */
     public function invalidTokens(): array
     {

@@ -55,9 +55,6 @@ final class Condition implements JsonSerializable
         return $this->value;
     }
 
-    /**
-     * @return non-empty-string
-     */
     public function jsonSerialize(): string
     {
         return $this->value;

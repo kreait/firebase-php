@@ -55,9 +55,6 @@ class DefaultValue implements JsonSerializable
         return new self($data);
     }
 
-    /**
-     * @return RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape
-     */
     public function jsonSerialize(): array
     {
         return $this->data;

@@ -83,9 +83,6 @@ class ConditionalValue implements JsonSerializable
         return $this->data;
     }
 
-    /**
-     * @return RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape
-     */
     public function jsonSerialize(): array
     {
         return $this->toArray();

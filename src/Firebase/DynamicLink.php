@@ -88,9 +88,6 @@ final class DynamicLink implements JsonSerializable
         return !empty($this->warnings());
     }
 
-    /**
-     * @return DynamicLinkShape
-     */
     public function jsonSerialize(): array
     {
         return $this->data;

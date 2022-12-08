@@ -55,7 +55,7 @@ final class Messaging implements Contract\Messaging
         try {
             $response = $this->messagingApi->send($request);
         } catch (NotFound $e) {
-            $token = $message->jsonSerialize()['token'] ?? null;
+            $token = Json::decode(Json::encode($message), true)['token'] ?? null;
 
             if ($token) {
                 throw NotFound::becauseTokenNotFound($token);
@@ -198,7 +198,7 @@ final class Messaging implements Contract\Messaging
     }
 
     /**
-     * @param Message|array<string, mixed> $message
+     * @param Message|array<non-empty-string, mixed> $message
      *
      * @throws InvalidArgumentException
      */

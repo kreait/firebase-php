@@ -24,13 +24,13 @@ use function array_filter;
  */
 final class GuzzleApiClientHandler implements Handler
 {
-    private ClientInterface $client;
-    private string $projectId;
-
-    public function __construct(ClientInterface $client, string $projectId)
-    {
-        $this->client = $client;
-        $this->projectId = $projectId;
+    /**
+     * @param non-empty-string $projectId
+     */
+    public function __construct(
+        private readonly ClientInterface $client,
+        private readonly string $projectId,
+    ) {
     }
 
     public function handle(CreateSessionCookie $action): string

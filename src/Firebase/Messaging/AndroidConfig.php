@@ -236,9 +236,6 @@ final class AndroidConfig implements JsonSerializable
         return $config;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function jsonSerialize(): array
     {
         return array_filter($this->config, static fn ($value) => $value !== null && $value !== []);
