@@ -10,7 +10,7 @@ jobs:
     # Don't run the tests on internal PRs
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
 
-    name: PHP ${{ matrix.php }} (${{ matrix.dependencies }})
+    name: PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -18,13 +18,10 @@ jobs:
         php:
           - "8.1"
           - "8.2"
-        dependencies:
-          - "lowest"
-          - "highest"
 
     env:
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
-      key: cache-unit-7x-${{ matrix.php }}-${{ matrix.dependencies }}-v1
+      key: cache-unit-7x-${{ matrix.php }}-v1
 
     steps:
       - name: Checkout code
@@ -55,7 +52,6 @@ jobs:
 
       - uses: "ramsey/composer-install@v2"
         with:
-          dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "${{ matrix.composer-options }}"
 
       - name: Setup problem matchers for PHP
