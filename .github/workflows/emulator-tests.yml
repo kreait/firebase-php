@@ -64,8 +64,10 @@ jobs:
       - name: Run emulated Integration Tests
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
-          TEST_REGISTRATION_TOKENS: ${{secrets.TEST_REGISTRATION_TOKENS}}
+          TEST_FIREBASE_APP_ID: ${{secrets.TEST_FIREBASE_APP_ID}}
           TEST_FIREBASE_RTDB_URI: ${{secrets.TEST_FIREBASE_RTDB_URI}}
+          TEST_FIREBASE_TENANT_ID: ${{secrets.TEST_FIREBASE_TENANT_ID}}
+          TEST_REGISTRATION_TOKENS: ${{secrets.TEST_REGISTRATION_TOKENS}}
           FIREBASE_AUTH_EMULATOR_HOST: localhost:9099
           FIREBASE_DATABASE_EMULATOR_HOST: localhost:9100
           XDEBUG_MODE: coverage
