@@ -19,9 +19,9 @@ use function is_array;
 final class AppCheck implements Contract\AppCheck
 {
     public function __construct(
-        private ApiClient $client,
-        private AppCheckTokenGenerator $tokenGenerator,
-        private AppCheckTokenVerifier $tokenVerifier,
+        private readonly ApiClient $client,
+        private readonly AppCheckTokenGenerator $tokenGenerator,
+        private readonly AppCheckTokenVerifier $tokenVerifier,
     ) {
     }
 

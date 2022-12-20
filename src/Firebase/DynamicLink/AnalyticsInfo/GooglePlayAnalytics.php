@@ -102,7 +102,7 @@ final class GooglePlayAnalytics implements JsonSerializable
 
     /**
      * Used to differentiate similar content, or links within the same ad. For example, if you have two call-to-action
-     * links within the same email message, you can use utm_content and set different values for each so you can tell
+     * links within the same email message, you can use utm_content and set different values for each, so you can tell
      * which version is more effective.
      *
      * @see https://support.google.com/analytics/answer/1033863#parameters

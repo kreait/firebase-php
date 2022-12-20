@@ -48,12 +48,9 @@ final class AppCheckApiExceptionConverter
             $code = $response->getStatusCode();
         }
 
-        switch ($code) {
-            case 401:
-            case 403:
-                return new PermissionDenied($message, $code, $e);
-        }
-
-        return new AppCheckError($message, $code, $e);
+        return match ($code) {
+            401, 403 => new PermissionDenied($message, $code, $e),
+            default => new AppCheckError($message, $code, $e),
+        };
     }
 }
