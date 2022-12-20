@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [7.0.0] (Unreleased)
+## [7.0.0]
 
 The most notable change is that you need PHP 8.1/8.2 to use the new version. The language migration of
 the SDK introduces breaking changes concerning the strictness of parameter types almost everywhere in
@@ -11,7 +11,7 @@ This release adds many more PHPDoc annotations to support the usage of Static An
 and Psalm and moves away from doing runtime checks. It is strongly recommended to use a Static Analysis
 Tool and ensure that input values are validated before handing them over to the SDK.
 
-## Added features
+### Added features
 
 * Added support for verifying Firebase App Check Tokens. ([#747](https://github.com/kreait/firebase-php/pull/747))
 
@@ -28,6 +28,5 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.x/CHANGELOG.md
 
-<!-- [Unreleased]: https://github.com/kreait/firebase-php/tree/7.x -->
-<!-- [7.0.0]: https://github.com/kreait/firebase-php/releases/tag/7.0.0 -->
-[7.0.0]: https://github.com/kreait/firebase-php/tree/7.x
+[Unreleased]: https://github.com/kreait/firebase-php/tree/7.x
+[7.0.0]: https://github.com/kreait/firebase-php/releases/tag/7.0.0
