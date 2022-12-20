@@ -8,10 +8,10 @@ from 6.x to 7.0.
 The minimum required PHP version has been changed from `^7.4` to `~8.1.0 || ~8.2.0`, the two PHP versions that
 are [actively supported since 2022-11-26](https://www.php.net/supported-versions.php).
 
-If you're using version 6.x of the SDK in the documented way, an upgrade to 7.x should be as simple as updating the
+If you're using version 6.x of the SDK as documented, an upgrade to 7.x should hopefully be as simple as updating the
 version constraint in your project's `composer.json` file.
 
-"In the documented way" means:
+"As documented" means:
 
 * When injecting SDK dependencies in your project's controllers and services, you use the interfaces in the 
   `Kreait\Firebase\Contract` namespace, not the (internal) implementations.
@@ -298,10 +298,18 @@ The following list has been generated with [roave/backward-compatibility-check](
 [BC] CHANGED: The parameter $versionNumber of Kreait\Firebase\Contract\RemoteConfig#getVersion() changed from no type to a non-contravariant Kreait\Firebase\RemoteConfig\VersionNumber|int|string
 [BC] CHANGED: The parameter $versionNumber of Kreait\Firebase\Contract\RemoteConfig#rollbackToVersion() changed from no type to Kreait\Firebase\RemoteConfig\VersionNumber|int|string
 [BC] CHANGED: The parameter $versionNumber of Kreait\Firebase\Contract\RemoteConfig#rollbackToVersion() changed from no type to a non-contravariant Kreait\Firebase\RemoteConfig\VersionNumber|int|string
+[BC] CHANGED: The return type of Kreait\Firebase\Contract\Database#runTransaction() changed from no type to mixed
+[BC] CHANGED: The return type of Kreait\Firebase\Database\Query#getValue() changed from no type to mixed
+[BC] CHANGED: The return type of Kreait\Firebase\Database\Query\Modifier#modifyValue() changed from no type to mixed
+[BC] CHANGED: The return type of Kreait\Firebase\Database\Query\Modifier#modifyValue() changed from no type to mixed
+[BC] CHANGED: The return type of Kreait\Firebase\Database\Query\Modifier#modifyValue() changed from no type to mixed
+[BC] CHANGED: The return type of Kreait\Firebase\Database\Query\ModifierTrait#modifyValue() changed from no type to mixed
+[BC] CHANGED: The return type of Kreait\Firebase\Database\Reference#getValue() changed from no type to mixed
+[BC] CHANGED: The return type of Kreait\Firebase\Database\Snapshot#getValue() changed from no type to mixed
 [BC] CHANGED: The return type of Kreait\Firebase\DynamicLink#previewUri() changed from Psr\Http\Message\UriInterface to the non-covariant Psr\Http\Message\UriInterface|null
-[BC] CHANGED: Type type of property Kreait\Firebase\Auth\UserInfo#$providerId changed from string|null to string
-[BC] CHANGED: Type type of property Kreait\Firebase\Auth\UserInfo#$uid changed from string|null to string
-[BC] CHANGED: Type type of property Kreait\Firebase\Auth\UserMetaData#$createdAt changed from DateTimeImmutable|null to DateTimeImmutable
+[BC] CHANGED: Type of property Kreait\Firebase\Auth\UserInfo#$providerId changed from string|null to string
+[BC] CHANGED: Type of property Kreait\Firebase\Auth\UserInfo#$uid changed from string|null to string
+[BC] CHANGED: Type of property Kreait\Firebase\Auth\UserMetaData#$createdAt changed from DateTimeImmutable|null to DateTimeImmutable
 [BC] REMOVED: Class Kreait\Firebase\Auth\CreateActionLink\ApiRequest has been deleted
 [BC] REMOVED: Class Kreait\Firebase\Auth\CreateSessionCookie\ApiRequest has been deleted
 [BC] REMOVED: Class Kreait\Firebase\Auth\SendActionLink\ApiRequest has been deleted
