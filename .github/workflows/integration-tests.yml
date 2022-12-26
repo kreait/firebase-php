@@ -33,7 +33,7 @@ jobs:
           key: ${{ env.key }}
 
       - name: Cache extensions
-        uses: actions/cache@v3.2.0
+        uses: actions/cache@v3.2.1
         with:
           path: ${{ steps.extcache.outputs.dir }}
           key: ${{ steps.extcache.outputs.key }}
