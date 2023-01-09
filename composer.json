@@ -1,5 +1,5 @@
 {
-    "name": "heja0007/firebase-php",
+    "name": "kreait/firebase-php",
     "description": "Firebase Admin SDK",
     "keywords": ["firebase", "google", "sdk", "api", "database"],
     "type": "library",
