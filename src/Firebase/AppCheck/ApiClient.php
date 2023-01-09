@@ -22,7 +22,7 @@ final class ApiClient
     private AppCheckApiExceptionConverter $errorHandler;
 
     public function __construct(
-        private readonly ClientInterface $client,
+        private ClientInterface $client,
     ) {
         $this->errorHandler = new AppCheckApiExceptionConverter();
     }
