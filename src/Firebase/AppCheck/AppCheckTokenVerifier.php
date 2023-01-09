@@ -28,8 +28,8 @@ final class AppCheckTokenVerifier
      * @param non-empty-string $projectId
      */
     public function __construct(
-        private readonly string $projectId,
-        private readonly CachedKeySet $keySet,
+        private string $projectId,
+        private CachedKeySet $keySet,
     ) {
     }
 
