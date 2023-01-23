@@ -58,7 +58,7 @@ final class Messaging implements Contract\Messaging
             $token = Json::decode(Json::encode($message), true)['token'] ?? null;
 
             if ($token) {
-                throw NotFound::becauseTokenNotFound($token);
+                throw NotFound::becauseTokenNotFound($token, $e->errors());
             }
 
             throw $e;
@@ -189,8 +189,8 @@ final class Messaging implements Contract\Messaging
 
         try {
             return $this->appInstanceApi->getAppInstanceAsync($token)->wait();
-        } catch (NotFound) {
-            throw NotFound::becauseTokenNotFound($token->value());
+        } catch (NotFound $e) {
+            throw NotFound::becauseTokenNotFound($token->value(), $e->errors());
         } catch (MessagingException $e) {
             // The token is invalid
             throw new InvalidArgument("The registration token '{$token}' is invalid or not available", $e->getCode(), $e);
