@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [Unreleased]
+
+### Fixed
+
+* When trying to work with unknown FCM tokens, errors returned from the Messaging REST API were not passed to
+  the `NotFound` exception, which prevented the inspection of further details.
+  ([#760](https://github.com/kreait/firebase-php/pull/760))
+
 ## [7.0.0]
 
 The most notable change is that you need PHP 8.1/8.2 to use the new version. The language migration of

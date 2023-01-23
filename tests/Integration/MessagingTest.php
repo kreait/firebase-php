@@ -352,12 +352,26 @@ final class MessagingTest extends IntegrationTestCase
     public function testSendMessageToUnknownToken(): void
     {
         $this->expectException(NotFound::class);
-        $this->messaging->send(['token' => self::$unknownToken]);
+
+        try {
+            $this->messaging->send(['token' => self::$unknownToken]);
+        } catch (NotFound $e) {
+            $this->assertNotEmpty($e->errors());
+
+            throw $e;
+        }
     }
 
     public function testGetAppInstanceForUnknownToken(): void
     {
         $this->expectException(NotFound::class);
-        $this->messaging->getAppInstance(self::$unknownToken);
+
+        try {
+            $this->messaging->getAppInstance(self::$unknownToken);
+        } catch (NotFound $e) {
+            $this->assertNotEmpty($e->errors());
+
+            throw $e;
+        }
     }
 }
