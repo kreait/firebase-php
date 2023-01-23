@@ -41,6 +41,7 @@ Integrations for Laravel, Lumen and Symfony are available:
 
 - [App Check Guide](https://firebase-php.readthedocs.io/en/stable/app-check.html)
 - [Authentication Guide](https://firebase-php.readthedocs.io/en/stable/authentication.html)
+- [Firestore Guide](https://firebase-php.readthedocs.io/en/stable/cloud-firestore.html)
 - [Cloud Messaging Guide](https://firebase-php.readthedocs.io/en/stable/cloud-messaging.html)
 - [Cloud Storage Guide](https://firebase-php.readthedocs.io/en/stable/cloud-storage.html)
 - [Dynamic Links Guide](https://firebase-php.readthedocs.io/en/stable/dynamic-links.html)
