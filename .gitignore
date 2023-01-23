@@ -1,10 +1,12 @@
 *.log
 
+/.build
 /build
 /vendor
 /docs/_build
 /docs/*.pyc
 /tests/_fixtures/test_*
+/tools
 
 /.firebaserc
 /.phpunit.result.cache
