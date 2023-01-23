@@ -55,7 +55,7 @@ class Messaging implements Contract\Messaging
         } catch (NotFound $e) {
             $token = $message->jsonSerialize()['token'] ?? null;
             if ($token) {
-                throw NotFound::becauseTokenNotFound($token);
+                throw NotFound::becauseTokenNotFound($token, $e->errors());
             }
 
             throw $e;
@@ -185,7 +185,7 @@ class Messaging implements Contract\Messaging
         try {
             return $this->appInstanceApi->getAppInstanceAsync($token)->wait();
         } catch (NotFound $e) {
-            throw NotFound::becauseTokenNotFound($token->value());
+            throw NotFound::becauseTokenNotFound($token->value(), $e->errors());
         } catch (MessagingException $e) {
             // The token is invalid
             throw new InvalidArgument("The registration token '{$token}' is invalid or not available", $e->getCode(), $e);

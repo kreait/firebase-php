@@ -1,6 +1,10 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Fixed
+* When trying to work with unknown FCM tokens, errors returned from the Messaging REST API were not passed to the
+  `NotFound` exception, which prevented the inspection of further details.
+  (backported from [#760](https://github.com/kreait/firebase-php/pull/760))
 
 ## [5.26.3]
 ### Fixed
