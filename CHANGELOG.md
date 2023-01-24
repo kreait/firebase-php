@@ -2,13 +2,15 @@
 
 ## [Unreleased]
 
+## [7.0.1] - 2023-01-24
+
 ### Fixed
 
 * When trying to work with unknown FCM tokens, errors returned from the Messaging REST API were not passed to
   the `NotFound` exception, which prevented the inspection of further details.
   ([#760](https://github.com/kreait/firebase-php/pull/760))
 
-## [7.0.0]
+## [7.0.0] - 2022-12-20
 
 The most notable change is that you need PHP 8.1/8.2 to use the new version. The language migration of
 the SDK introduces breaking changes concerning the strictness of parameter types almost everywhere in
@@ -36,5 +38,6 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.x/CHANGELOG.md
 
-[Unreleased]: https://github.com/kreait/firebase-php/tree/7.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/7.0.1...7.x
+[7.0.1]: https://github.com/kreait/firebase-php/compare/7.0.0...7.0.1
 [7.0.0]: https://github.com/kreait/firebase-php/releases/tag/7.0.0
