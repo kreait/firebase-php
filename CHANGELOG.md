@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.9.4] - 2023-01-24
+
 ### Fixed
 
 * When trying to work with unknown FCM tokens, errors returned from the Messaging REST API were not passed to the
@@ -347,7 +349,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.9.3...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.9.4...6.x
+[6.9.4]: https://github.com/kreait/firebase-php/compare/6.9.3...6.9.4
 [6.9.3]: https://github.com/kreait/firebase-php/compare/6.9.2...6.9.3
 [6.9.2]: https://github.com/kreait/firebase-php/compare/6.9.1...6.9.2
 [6.9.1]: https://github.com/kreait/firebase-php/compare/6.9.0...6.9.1
