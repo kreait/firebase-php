@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* Cloud Messaging: The APNS `content-available` payload field was not set correctly when a message contained
+  message data at the root level, but not at the APNS config level.
+  ([#762](https://github.com/kreait/firebase-php/pull/762))
+
 ## [7.0.1] - 2023-01-24
 
 ### Fixed
