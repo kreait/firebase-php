@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.9.5] - 2023-01-27
+
 ### Fixed
 
 * Cloud Messaging: The APNS `apns-push-type` header and `content-available` payload field were not set correctly
@@ -355,7 +357,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.9.4...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.9.5...6.x
+[6.9.5]: https://github.com/kreait/firebase-php/compare/6.9.4...6.9.5
 [6.9.4]: https://github.com/kreait/firebase-php/compare/6.9.3...6.9.4
 [6.9.3]: https://github.com/kreait/firebase-php/compare/6.9.2...6.9.3
 [6.9.2]: https://github.com/kreait/firebase-php/compare/6.9.1...6.9.2
