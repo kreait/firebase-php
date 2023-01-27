@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* Cloud Messaging: The APNS `apns-push-type` header and `content-available` payload field were not set correctly
+  when a message contained message data at the root level, but not at the APNS config level.
+  ([#762](https://github.com/kreait/firebase-php/pull/762))
+
 ## [6.9.4] - 2023-01-24
 
 ### Fixed
