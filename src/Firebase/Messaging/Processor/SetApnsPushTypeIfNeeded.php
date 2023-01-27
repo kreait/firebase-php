@@ -92,8 +92,7 @@ final class SetApnsPushTypeIfNeeded
         if (!is_array($payload['data'])) {
             return MessageData::fromArray([]);
         }
-        MessageData::fromArray($payload['data']);
 
-        return MessageData::fromArray([]);
+        return MessageData::fromArray($payload['data']);
     }
 }

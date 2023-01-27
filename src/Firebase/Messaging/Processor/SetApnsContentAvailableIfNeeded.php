@@ -35,12 +35,9 @@ final class SetApnsContentAvailableIfNeeded
         $messageData = $this->getMessageData($payload);
         $apnsData = $apnsConfig->data();
 
-        if ($apnsData === []) {
-            // No data, no 'content-available' field
-            return $message;
-        }
+        $hasData = $messageData->toArray() !== [] || $apnsData !== [];
 
-        if ($messageData->toArray() === []) {
+        if (!$hasData) {
             // No data, no 'content-available' field
             return $message;
         }
