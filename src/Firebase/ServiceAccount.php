@@ -80,7 +80,7 @@ final class ServiceAccount
             return $value;
         }
 
-        if (is_string($value)) {
+        if (is_string($value) && $value !== '') {
             try {
                 if (str_starts_with($value, '{')) {
                     return self::fromArray(Json::decode($value, true));
