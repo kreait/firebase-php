@@ -396,6 +396,45 @@ This method always returns an instance of ``Kreait\Firebase\Auth\DeleteUsersResu
     Cloud Functions for Firebase. This is because batch deletes do not trigger a user deletion event on each user.
     Delete users one at a time if you want user deletion events to fire for each deleted user.
 
+**************************************
+Duplicate/Unregistered email addresses
+**************************************
+
+Some Firebase Authentication methods that take email addresses as parameters throw specific errors if the email address
+is unregistered when it must be registered (for example, when signing in with an email address and password), or
+registered when it must be unused (for example, when changing a user's email address).
+
+If you try to create a new user, but the given email address has already been used before, the Firebase API returns
+an ``EMAIL_EXISTS`` error. On the other hand, if you try to sign in a user with an email address that hasn't been
+registered, the API returns an ``EMAIL_NOT_FOUND`` error.
+
+You can handle both cases with the SDK:
+
+.. code-block:: php
+
+    try {
+        $user = $auth->createUser([
+            'email' => $email,
+        ]);
+    } catch (\Kreait\Firebase\Exception\Auth\EmailExists $e) {
+        echo $e->getMessage(); // "The email address is already in use by another account"
+    }
+
+    try {
+        $signInResult = $auth->signInWithEmailAndPassword($email, $password);
+    } catch (\Kreait\Firebase\Exception\Auth\EmailNotFound $e) {
+        echo $e->getMessage(); // "There is no user record corresponding to this identifier. The user may have been deleted."
+    }
+
+.. note::
+    Checking for existing/non-existing email addresses can be helpful for suggesting specific remedies to users, but
+    it can also be abused by malicious actors to discover the email addresses registered by your users.
+
+    To mitigate this risk, Firebase recommends you
+    `enable email enumeration protection <https://cloud.google.com/identity-platform/docs/admin/email-enumeration-protection>`_
+    for your project using the Google Cloud ``gcloud`` tool. Note that enabling this feature changes
+    Firebase Authentication's error reporting behavior: be sure your app doesn't rely on the more specific errors.
+
 
 ************************
 Using Email Action Codes
