@@ -63,6 +63,7 @@ User Guide
     user-management
     dynamic-links
     remote-config
+    app-check
     framework-integrations
     testing
     tutorials
