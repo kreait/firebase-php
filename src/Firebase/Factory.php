@@ -114,6 +114,12 @@ final class Factory
         $this->authTokenCache = new MemoryCacheItemPool();
         $this->keySetCache = new MemoryCacheItemPool();
         $this->httpClientOptions = HttpClientOptions::default();
+
+        $googleApplicationCredentials = Util::getenv('GOOGLE_APPLICATION_CREDENTIALS');
+
+        if ($googleApplicationCredentials !== null && str_starts_with($googleApplicationCredentials, '{')) {
+            $this->serviceAccount = Json::decode($googleApplicationCredentials, true);
+        }
     }
 
     /**

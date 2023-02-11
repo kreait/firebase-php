@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* Restored support for using a JSON string in the `GOOGLE_APPLICATION_CREDENTIALS` environment variable.
+  ([#767](https://github.com/kreait/firebase-php/pull/767))
+
 ## [7.0.2] - 2023-01-27
 
 ### Fixed
