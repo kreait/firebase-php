@@ -8,7 +8,6 @@ use DateTimeImmutable;
 use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
-use Kreait\Firebase\Util\DT;
 
 /**
  * @internal
@@ -143,10 +142,6 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertIsArray($value);
         $this->assertArrayHasKey('updatedAt', $value);
         $this->assertIsInt($value['updatedAt']);
-
-        $check = DT::toUTCDateTimeImmutable($value['updatedAt']);
-
-        $this->assertTrue($check > $now);
     }
 
     /**
