@@ -75,7 +75,7 @@ final class ApiClientTest extends UnitTestCase
                 PermissionDenied::class,
             ],
             [
-                new RequestException('Forbidden', $request, new Response(403, [], '{"error":{"message":"UNKOWN"}}')),
+                new RequestException('Forbidden', $request, new Response(403, [], '{"error":{"message":"UNKNOWN"}}')),
                 RemoteConfigError::class,
             ],
         ];

@@ -115,7 +115,7 @@ class Snapshot
     /**
      * Returns true if the Snapshot has any child properties.
      *
-     * You can use {@see hasChildren()} to determine if a Snappshot has any children. If it does,
+     * You can use {@see hasChildren()} to determine if a Snapshot has any children. If it does,
      * you can enumerate them using foreach(). If it does not, then either this snapshot
      * contains a primitive value (which can be retrieved with {@see getValue()}) or
      * it is empty (in which case {@see getValue()} will return null).

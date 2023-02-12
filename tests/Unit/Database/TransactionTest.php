@@ -30,7 +30,7 @@ final class TransactionTest extends TestCase
         $this->transaction = new Transaction($this->apiClient);
     }
 
-    public function testAReferenceCanNotBeChangedIfItHasNotBeenSnapshotted(): void
+    public function testAReferenceCanOnlyBeChangedIfItHasBeenSnapshotted(): void
     {
         $reference = $this->createMock(Reference::class);
 

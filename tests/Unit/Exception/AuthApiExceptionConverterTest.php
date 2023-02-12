@@ -44,13 +44,13 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
 
     public function testItConvertsARequestExceptionThatDoesNotIncludeValidJson(): void
     {
-        $requestExcpeption = new RequestException(
+        $requestException = new RequestException(
             'Error without valid json',
             new Request('GET', 'https://domain.tld'),
             new Response(400, [], $responseBody = '{"what is this"'),
         );
 
-        $convertedError = $this->converter->convertException($requestExcpeption);
+        $convertedError = $this->converter->convertException($requestException);
 
         $this->assertInstanceOf(AuthError::class, $convertedError);
         $this->assertSame($responseBody, $convertedError->getMessage());
@@ -89,7 +89,7 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
                         'message' => $identifier,
                     ],
                     'code' => 400,
-                    'message' => 'Some error that might include the idenfier "'.$identifier.'"',
+                    'message' => 'Some error that might include the identifier "'.$identifier.'"',
                 ],
             ])),
         );

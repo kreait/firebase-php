@@ -60,8 +60,8 @@ final class DTTest extends TestCase
             'milliseconds_1' => ['1234567890.000000', 1_234_567_890_000],
             'milliseconds_2' => ['1234567890.123000', 1_234_567_890_123],
             'date_string' => ['345254400.000000', '10.12.1980'],
-            'timezoned_1' => ['345328496.789012', '10.12.1980 12:34:56.789012 -08:00'],
-            'timezoned_2' => ['345328496.789012', new DateTimeImmutable('10.12.1980 12:34:56.789012', new DateTimeZone('America/Los_Angeles'))],
+            'timezone_1' => ['345328496.789012', '10.12.1980 12:34:56.789012 -08:00'],
+            'timezone_2' => ['345328496.789012', new DateTimeImmutable('10.12.1980 12:34:56.789012', new DateTimeZone('America/Los_Angeles'))],
         ];
     }
 

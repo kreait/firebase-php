@@ -96,8 +96,8 @@ abstract class AuthTestCase extends IntegrationTestCase
         $check = $this->auth->changeUserEmail($user->uid, $newEmail);
         $this->assertSame($newEmail, $check->email);
 
-        $refetchedUser = $this->auth->getUserByEmail($newEmail);
-        $this->assertSame($newEmail, $refetchedUser->email);
+        $userWithNewEmail = $this->auth->getUserByEmail($newEmail);
+        $this->assertSame($newEmail, $userWithNewEmail->email);
 
         $this->auth->deleteUser($user->uid);
     }
@@ -777,7 +777,7 @@ abstract class AuthTestCase extends IntegrationTestCase
 
     public function testSignInWithIdpAccessToken(): void
     {
-        // I don't know how to retrieve a current user access token programatically, so we'll
+        // I don't know how to retrieve a current user access token programmatically, so we'll
         // test the failure case only here
         $this->expectException(FailedToSignIn::class);
         $this->auth->signInWithIdpAccessToken('google.com', 'invalid', Utils::uriFor('http://localhost'));
@@ -785,7 +785,7 @@ abstract class AuthTestCase extends IntegrationTestCase
 
     public function testSignInWithIdpIdToken(): void
     {
-        // I don't know how to retrieve a current user access token programatically, so we'll
+        // I don't know how to retrieve a current user access token programmatically, so we'll
         // test the failure case only here
         $this->expectException(FailedToSignIn::class);
         $this->auth->signInWithIdpIdToken('google.com', 'invalid', 'http://localhost');

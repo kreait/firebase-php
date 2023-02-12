@@ -59,7 +59,7 @@ final class AndroidConfigTest extends UnitTestCase
     /**
      * @dataProvider validTtlValues
      */
-    public function testItAcceptsValidTtls(int|string|null $ttl): void
+    public function testItAcceptsValidTTLs(int|string|null $ttl): void
     {
         AndroidConfig::fromArray([
             'ttl' => $ttl,
@@ -71,7 +71,7 @@ final class AndroidConfigTest extends UnitTestCase
     /**
      * @dataProvider invalidTtlValues
      */
-    public function testItRejectsInvalidTtls(mixed $ttl): void
+    public function testItRejectsInvalidTTLs(mixed $ttl): void
     {
         $this->expectException(InvalidArgument::class);
 
@@ -91,8 +91,8 @@ final class AndroidConfigTest extends UnitTestCase
                 'ttl' => '3600s',
                 'priority' => 'normal',
                 'notification' => [
-                    'title' => '$GOOG up 1.43% on the day',
-                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                    'title' => '$GOOGLE up 1.43% on the day',
+                    'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
                     'icon' => 'stock_ticker_update',
                     'color' => '#f45342',
                     'sound' => 'default',

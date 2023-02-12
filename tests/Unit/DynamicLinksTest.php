@@ -127,7 +127,7 @@ final class DynamicLinksTest extends TestCase
         $this->service->createDynamicLink('https://domain.tld/irrelevant');
     }
 
-    public function testItShortensALonkLinkFromAnArrayOfParameters(): void
+    public function testItShortensALongLinkFromAnArrayOfParameters(): void
     {
         $this->httpHandler->append(
             new Response(200, [], Json::encode($responseData = [

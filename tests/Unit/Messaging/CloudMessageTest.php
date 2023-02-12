@@ -110,7 +110,7 @@ final class CloudMessageTest extends TestCase
         $this->assertSame('very-low', $payload['webpush']['headers']['Urgency']);
     }
 
-    public function testWithHighesPossiblePriority(): void
+    public function testWithHighestPossiblePriority(): void
     {
         $message = CloudMessage::new()->withHighestPossiblePriority();
 
@@ -152,7 +152,7 @@ final class CloudMessageTest extends TestCase
             'all of them' => [[
                 MessageTarget::CONDITION => 'something',
                 MessageTarget::TOKEN => 'something else',
-                MessageTarget::TOPIC => 'something even elser',
+                MessageTarget::TOPIC => 'something different',
             ]],
         ];
     }

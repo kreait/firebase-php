@@ -50,8 +50,8 @@ final class MessagingTest extends IntegrationTestCase
                 'ttl' => '3600s',
                 'priority' => 'normal',
                 'notification' => [
-                    'title' => '$GOOG up 1.43% on the day',
-                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                    'title' => '$GOOGLE up 1.43% on the day',
+                    'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
                     'icon' => 'stock_ticker_update',
                     'color' => '#f45342',
                     'sound' => 'default',
@@ -70,8 +70,8 @@ final class MessagingTest extends IntegrationTestCase
                 'payload' => [
                     'aps' => [
                         'alert' => [
-                            'title' => '$GOOG up 1.43% on the day',
-                            'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                            'title' => '$GOOGLE up 1.43% on the day',
+                            'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
                         ],
                         'sound' => 'default',
                         'badge' => 42,
@@ -88,8 +88,8 @@ final class MessagingTest extends IntegrationTestCase
                     'Urgency' => 'normal',
                 ],
                 'notification' => [
-                    'title' => '$GOOG up 1.43% on the day',
-                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                    'title' => '$GOOGLE up 1.43% on the day',
+                    'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
                     'icon' => 'https://my-server/icon.png',
                 ],
                 'fcm_options' => [

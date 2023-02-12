@@ -101,8 +101,8 @@ final class ApnsConfigTest extends UnitTestCase
                 'payload' => [
                     'aps' => [
                         'alert' => [
-                            'title' => '$GOOG up 1.43% on the day',
-                            'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                            'title' => '$GOOGLE up 1.43% on the day',
+                            'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
                         ],
                         'badge' => 42,
                         'sound' => 'default',

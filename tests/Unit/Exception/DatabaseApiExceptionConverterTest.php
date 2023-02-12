@@ -33,13 +33,13 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
 
     public function testItConvertsARequestExceptionThatDoesNotIncludeValidJson(): void
     {
-        $requestExcpeption = new RequestException(
+        $requestException = new RequestException(
             'Error without valid json',
             $this->request,
             new Response(400, [], $responseBody = '{"what is this"'),
         );
 
-        $convertedError = $this->converter->convertException($requestExcpeption);
+        $convertedError = $this->converter->convertException($requestException);
 
         $this->assertInstanceOf(DatabaseError::class, $convertedError);
         $this->assertSame($responseBody, $convertedError->getMessage());
