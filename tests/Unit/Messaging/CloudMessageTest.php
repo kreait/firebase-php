@@ -8,6 +8,7 @@ use Beste\Json;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\FcmOptions;
+use Kreait\Firebase\Messaging\MessageData;
 use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\Notification;
 use PHPUnit\Framework\TestCase;
@@ -129,6 +130,24 @@ final class CloudMessageTest extends TestCase
         $this->assertArrayHasKey('headers', $payload['webpush']);
         $this->assertArrayHasKey('Urgency', $payload['webpush']['headers']);
         $this->assertSame('high', $payload['webpush']['headers']['Urgency']);
+    }
+
+    /**
+     * @see https://github.com/kreait/firebase-php/issues/768
+     */
+    public function testMessageDataCanBeSetWithAnObjectOrAnArray(): void
+    {
+        $data = ['key' => 'value'];
+
+        $fromObject = CloudMessage::new()->withData(MessageData::fromArray($data));
+        $serializedFromObject = Json::decode(Json::encode($fromObject), true);
+        $this->assertSame('value', $serializedFromObject['data']['key']);
+
+        $fromArray = CloudMessage::new()->withData($data);
+        $serializedFromArray = Json::decode(Json::encode($fromArray), true);
+        $this->assertSame('value', $serializedFromArray['data']['key']);
+
+        $this->assertSame($serializedFromObject, $serializedFromArray);
     }
 
     /**
