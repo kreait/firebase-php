@@ -17,7 +17,7 @@
         </testsuite>
     </testsuites>
 
-    <coverage ignoreDeprecatedCodeUnits="true" processUncoveredFiles="true" cacheDirectory=".build/coverage-cache">
+    <coverage ignoreDeprecatedCodeUnits="true" processUncoveredFiles="true">
         <include>
             <directory suffix=".php">src/Firebase</directory>
         </include>
