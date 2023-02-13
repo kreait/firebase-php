@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [7.0.3] - 2023-02-13
+
 ### Fixed
 
 * Restored support for using a JSON string in the `GOOGLE_APPLICATION_CREDENTIALS` environment variable.
@@ -51,7 +53,8 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.x/CHANGELOG.md
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/7.0.2...7.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/7.0.3...7.x
+[7.0.3]: https://github.com/kreait/firebase-php/compare/7.0.2...7.0.3
 [7.0.2]: https://github.com/kreait/firebase-php/compare/7.0.1...7.0.2
 [7.0.1]: https://github.com/kreait/firebase-php/compare/7.0.0...7.0.1
 [7.0.0]: https://github.com/kreait/firebase-php/releases/tag/7.0.0
