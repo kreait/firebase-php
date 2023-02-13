@@ -45,7 +45,7 @@ final class ConditionTest extends TestCase
     /**
      * @return array<string, array<int, string>>
      */
-    public function valueProvider(): array
+    public static function valueProvider(): array
     {
         return [
             'single quotes' => ["'dogs' in topics || 'cats' in topics", "'dogs' in topics || 'cats' in topics"],
@@ -56,7 +56,7 @@ final class ConditionTest extends TestCase
     /**
      * @return array<string, array<int, string>>
      */
-    public function invalidValueProvider(): array
+    public static function invalidValueProvider(): array
     {
         return [
             'single quotes' => ["'dogs in Topics"],

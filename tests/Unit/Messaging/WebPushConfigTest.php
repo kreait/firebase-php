@@ -70,7 +70,7 @@ final class WebPushConfigTest extends UnitTestCase
     /**
      * @return array<string, array<WebPushConfigShape>>
      */
-    public function validDataProvider(): array
+    public static function validDataProvider(): array
     {
         return [
             'full_config' => [
@@ -90,7 +90,7 @@ final class WebPushConfigTest extends UnitTestCase
     /**
      * @return array<string, array<WebPushHeadersShape>>
      */
-    public function validHeaders(): array
+    public static function validHeaders(): array
     {
         return [
             'positive int ttl' => [['TTL' => 1]],
@@ -102,7 +102,7 @@ final class WebPushConfigTest extends UnitTestCase
     /**
      * @return array<string, array<array<string, mixed>>>
      */
-    public function invalidHeaders(): array
+    public static function invalidHeaders(): array
     {
         return [
             'negative int ttl' => [['TTL' => -1]],

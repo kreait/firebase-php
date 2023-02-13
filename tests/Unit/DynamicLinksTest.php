@@ -321,7 +321,7 @@ final class DynamicLinksTest extends TestCase
     /**
      * @return iterable<string, array{0: int, 1: string}>
      */
-    public function provideCodeAndExpectedMessageRegExForFailingStatisticsRetrieval(): iterable
+    public static function provideCodeAndExpectedMessageRegExForFailingStatisticsRetrieval(): iterable
     {
         yield '403' => [403, '/missing permissions/i'];
 

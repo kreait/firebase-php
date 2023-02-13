@@ -47,7 +47,7 @@ final class AppCheckTokenOptionsTest extends UnitTestCase
     /**
      * @return array<string, array<int, mixed>>
      */
-    public function validOptions(): array
+    public static function validOptions(): array
     {
         return [
             'null' => [null],
@@ -60,7 +60,7 @@ final class AppCheckTokenOptionsTest extends UnitTestCase
     /**
      * @return array<string, array<int, mixed>>
      */
-    public function invalidOptions(): array
+    public static function invalidOptions(): array
     {
         return [
             'too-small' => [1799],

@@ -102,7 +102,7 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
     /**
      * @return array<string, array<int, string>>
      */
-    public function requestErrors(): array
+    public static function requestErrors(): array
     {
         return [
             'credentials mismatch' => ['CREDENTIALS_MISMATCH', CredentialsMismatch::class],

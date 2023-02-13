@@ -66,23 +66,23 @@ final class MessagingApiExceptionConverterTest extends TestCase
     /**
      * @return array<array<Throwable|class-string>>
      */
-    public function exceptions(): array
+    public static function exceptions(): array
     {
         return [
             'connection error' => [new ConnectException('Connection Failed', new Request('GET', 'https://domain.tld')), ApiConnectionFailed::class],
-            '400' => [$this->createRequestException(400, 'Bad request'), InvalidMessage::class],
-            '401' => [$this->createRequestException(401, 'Unauthenticated'), AuthenticationError::class],
-            '403' => [$this->createRequestException(403, 'Unauthorized'), AuthenticationError::class],
-            '404' => [$this->createRequestException(404, 'Not Found'), NotFound::class],
-            '429' => [$this->createRequestException(429, 'Too Many Requests'), QuotaExceeded::class],
-            '500' => [$this->createRequestException(500, 'Server broken'), ServerError::class],
-            '503' => [$this->createRequestException(503, 'Server unavailable'), ServerUnavailable::class],
-            '418' => [$this->createRequestException(418, 'Some tea'), MessagingError::class],
+            '400' => [self::createRequestException(400, 'Bad request'), InvalidMessage::class],
+            '401' => [self::createRequestException(401, 'Unauthenticated'), AuthenticationError::class],
+            '403' => [self::createRequestException(403, 'Unauthorized'), AuthenticationError::class],
+            '404' => [self::createRequestException(404, 'Not Found'), NotFound::class],
+            '429' => [self::createRequestException(429, 'Too Many Requests'), QuotaExceeded::class],
+            '500' => [self::createRequestException(500, 'Server broken'), ServerError::class],
+            '503' => [self::createRequestException(503, 'Server unavailable'), ServerUnavailable::class],
+            '418' => [self::createRequestException(418, 'Some tea'), MessagingError::class],
             'runtime error' => [new RuntimeException('Something else'), MessagingError::class],
         ];
     }
 
-    public function createRequestException(int $code, string $identifier): RequestException
+    public static function createRequestException(int $code, string $identifier): RequestException
     {
         return new RequestException(
             'Firebase Error Test',

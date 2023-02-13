@@ -33,7 +33,7 @@ final class TopicTest extends TestCase
     /**
      * @return array<string, array<int, string>>
      */
-    public function valueProvider(): array
+    public static function valueProvider(): array
     {
         return [
             'no slashes' => ['foo', 'foo'],
@@ -46,7 +46,7 @@ final class TopicTest extends TestCase
     /**
      * @return array<string, array<int, string>>
      */
-    public function invalidValueProvider(): array
+    public static function invalidValueProvider(): array
     {
         return [
             '$' => ['$'],

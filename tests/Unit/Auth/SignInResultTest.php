@@ -47,7 +47,7 @@ final class SignInResultTest extends UnitTestCase
     /**
      * @return array<string, array<int, array<string, mixed>>>
      */
-    public function fullResponse(): array
+    public static function fullResponse(): array
     {
         return [
             'snake_cased' => [[

@@ -147,7 +147,7 @@ final class ReferenceTest extends DatabaseTestCase
     /**
      * @return array<string, array<int, mixed>>
      */
-    public function validValues()
+    public static function validValues()
     {
         return [
             'string' => ['string', 'value'],

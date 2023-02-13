@@ -42,7 +42,7 @@ final class SetApnsPushTypeIfNeededTest extends TestCase
     /**
      * @return iterable<string, array{0: non-empty-string|null, 1: array<mixed>}>
      */
-    public function provideMessagesWithExpectedPushType(): iterable
+    public static function provideMessagesWithExpectedPushType(): iterable
     {
         yield 'message data at root level -> background' => [
             'background',

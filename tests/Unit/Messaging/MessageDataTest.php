@@ -53,7 +53,7 @@ final class MessageDataTest extends TestCase
     /**
      * @return array<string, array<int, array<string, mixed>>>
      */
-    public function validData(): array
+    public static function validData(): array
     {
         return [
             'integer' => [
@@ -88,7 +88,7 @@ final class MessageDataTest extends TestCase
     /**
      * @return array<string, array<int, array<string, mixed>>>
      */
-    public function invalidData(): array
+    public static function invalidData(): array
     {
         return [
             // @see https://github.com/kreait/firebase-php/issues/441

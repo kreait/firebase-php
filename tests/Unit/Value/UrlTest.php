@@ -38,7 +38,7 @@ final class UrlTest extends TestCase
     /**
      * @return array<non-empty-string, array<string>>
      */
-    public function validValues(): array
+    public static function validValues(): array
     {
         return [
             'string' => ['https://domain.tld'],
@@ -48,7 +48,7 @@ final class UrlTest extends TestCase
     /**
      * @return array<string, array<string>>
      */
-    public function invalidValues(): array
+    public static function invalidValues(): array
     {
         return [
             'https:///domain.tld' => ['https:///domain.tld'],

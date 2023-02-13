@@ -69,7 +69,7 @@ final class ApiClientTest extends TestCase
     /**
      * @return array<array<Throwable|class-string>>
      */
-    public function requestExceptions(): array
+    public static function requestExceptions(): array
     {
         $request = new Request('GET', 'https://example.com');
         $responseBody = '{}';

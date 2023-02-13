@@ -26,7 +26,7 @@ final class EqualToTest extends UnitTestCase
     /**
      * @return array<string, array<int, int|string>>
      */
-    public function valueProvider()
+    public static function valueProvider()
     {
         return [
             'int' => [1, 'equalTo=1'],

@@ -53,7 +53,7 @@ final class DTTest extends TestCase
     /**
      * @return array<string, array<int, mixed>>
      */
-    public function validFixedValues(): array
+    public static function validFixedValues(): array
     {
         return [
             'seconds' => ['1234567890.000000', 1_234_567_890],
@@ -68,7 +68,7 @@ final class DTTest extends TestCase
     /**
      * @return array<string, array<int, mixed>>
      */
-    public function validVariableValues(): array
+    public static function validVariableValues(): array
     {
         return [
             'null' => [null],
@@ -86,7 +86,7 @@ final class DTTest extends TestCase
     /**
      * @return array<string, array<int, mixed>>
      */
-    public function invalidValues(): array
+    public static function invalidValues(): array
     {
         return [
             'string' => ['foo'],

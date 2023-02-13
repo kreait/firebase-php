@@ -35,7 +35,7 @@ final class CreateUserTest extends TestCase
     /**
      * @return array<string, array<array<string|mixed>>>
      */
-    public function propertiesProvider(): array
+    public static function propertiesProvider(): array
     {
         $given = ['uid' => 'some-uid'];
         $expected = ['localId' => 'some-uid'];

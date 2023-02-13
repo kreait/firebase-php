@@ -63,7 +63,7 @@ jobs:
           TEST_FIREBASE_TENANT_ID: ${{secrets.TEST_FIREBASE_TENANT_ID}}
           TEST_REGISTRATION_TOKENS: ${{secrets.TEST_REGISTRATION_TOKENS}}
           XDEBUG_MODE: coverage
-        run: vendor/bin/phpunit --testsuite=integration --coverage-clover=coverage.xml --log-junit=test-report.xml --testdox --verbose
+        run: vendor/bin/phpunit --testsuite=integration --coverage-clover=coverage.xml --log-junit=test-report.xml --testdox
 
       - name: Upload code coverage
         uses: codecov/codecov-action@v3

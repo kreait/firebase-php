@@ -83,7 +83,7 @@ final class AndroidConfigTest extends UnitTestCase
     /**
      * @return array<array-key, list<AndroidConfigShape>>
      */
-    public function validDataProvider(): array
+    public static function validDataProvider(): array
     {
         return [
             'full_config' => [[
@@ -104,7 +104,7 @@ final class AndroidConfigTest extends UnitTestCase
     /**
      * @return array<string, list<int|string|null>>
      */
-    public function validTtlValues(): array
+    public static function validTtlValues(): array
     {
         return [
             'positive int' => [1],
@@ -120,7 +120,7 @@ final class AndroidConfigTest extends UnitTestCase
     /**
      * @return array<string, list<mixed>>
      */
-    public function invalidTtlValues(): array
+    public static function invalidTtlValues(): array
     {
         return [
             'float' => [1.2],

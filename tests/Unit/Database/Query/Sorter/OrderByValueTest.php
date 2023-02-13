@@ -41,7 +41,7 @@ final class OrderByValueTest extends UnitTestCase
     /**
      * @return array<string, array<string, mixed>>
      */
-    public function valueProvider()
+    public static function valueProvider()
     {
         return [
             'scalar' => [

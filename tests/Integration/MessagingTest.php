@@ -151,7 +151,7 @@ final class MessagingTest extends IntegrationTestCase
     /**
      * @return array<string, string[]>
      */
-    public function reservedKeywordsThatStillAreAccepted(): array
+    public static function reservedKeywordsThatStillAreAccepted(): array
     {
         return [
             'notification' => ['notification'],

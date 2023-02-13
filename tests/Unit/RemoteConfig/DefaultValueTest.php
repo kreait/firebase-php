@@ -48,7 +48,7 @@ final class DefaultValueTest extends TestCase
     /**
      * @return iterable<non-empty-string, array<RemoteConfigInAppDefaultValueShape|RemoteConfigExplicitValueShape|RemoteConfigPersonalizationValueShape>>
      */
-    public function arrayValueProvider(): iterable
+    public static function arrayValueProvider(): iterable
     {
         yield 'inAppDefault' => [
             ['useInAppDefault' => true],

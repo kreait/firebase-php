@@ -26,7 +26,7 @@ final class EndAtTest extends UnitTestCase
     /**
      * @return array<string, array<int, int|string>>
      */
-    public function valueProvider(): array
+    public static function valueProvider(): array
     {
         return [
             'int' => [1, 'endAt=1'],

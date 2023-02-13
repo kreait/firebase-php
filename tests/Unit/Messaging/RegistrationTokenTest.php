@@ -27,7 +27,7 @@ final class RegistrationTokenTest extends TestCase
     /**
      * @return array<string, array<int, string>>
      */
-    public function valueProvider(): array
+    public static function valueProvider(): array
     {
         return [
             'foo' => ['foo', 'foo'],

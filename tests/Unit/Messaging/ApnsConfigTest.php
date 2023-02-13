@@ -90,7 +90,7 @@ final class ApnsConfigTest extends UnitTestCase
     /**
      * @return array<string, array<int, array<string, mixed>>>
      */
-    public function validDataProvider()
+    public static function validDataProvider()
     {
         return [
             'full_config' => [[

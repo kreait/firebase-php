@@ -153,7 +153,7 @@ final class CloudMessageTest extends TestCase
     /**
      * @return array<string, array<int, array<string, string>>>
      */
-    public function multipleTargets(): array
+    public static function multipleTargets(): array
     {
         return [
             'condition and token' => [[

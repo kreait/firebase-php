@@ -46,7 +46,7 @@ final class SetApnsContentAvailableIfNeededTest extends TestCase
     /**
      * @return iterable<string, array{0: bool, 1: array<mixed>}>
      */
-    public function provideMessagesWithExpectedContentAvailable(): iterable
+    public static function provideMessagesWithExpectedContentAvailable(): iterable
     {
         yield 'message data at root level -> true' => [
             true,

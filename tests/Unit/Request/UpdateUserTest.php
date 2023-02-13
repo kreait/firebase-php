@@ -36,7 +36,7 @@ final class UpdateUserTest extends TestCase
     /**
      * @return array<string, array<array<string|mixed>>>
      */
-    public function propertiesProvider(): array
+    public static function propertiesProvider(): array
     {
         // All non-mentioned attributes are already tested through the CreateUserTest
         $given = ['uid' => 'some-uid'];

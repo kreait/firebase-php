@@ -46,7 +46,7 @@ final class ConditionTest extends UnitTestCase
     /**
      * @return array<string, array<int, mixed>>
      */
-    public function valueProvider(): array
+    public static function valueProvider(): array
     {
         return [
             'color as string' => ['name', 'expression', TagColor::GREEN],

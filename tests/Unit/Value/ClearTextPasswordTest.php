@@ -35,7 +35,7 @@ final class ClearTextPasswordTest extends TestCase
     /**
      * @return array<string, array<string>>
      */
-    public function validValues(): array
+    public static function validValues(): array
     {
         return [
             'long enough' => ['long enough'],
@@ -45,7 +45,7 @@ final class ClearTextPasswordTest extends TestCase
     /**
      * @return array<string, array<string>>
      */
-    public function invalidValues(): array
+    public static function invalidValues(): array
     {
         return [
             'empty string' => [''],

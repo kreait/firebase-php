@@ -38,7 +38,7 @@ final class ValidatedActionSettingsTest extends TestCase
     /**
      * @return array<string, array<int, array<string, mixed>>>
      */
-    public function validInputs(): array
+    public static function validInputs(): array
     {
         $continueUrl = 'https://domain.tld';
 

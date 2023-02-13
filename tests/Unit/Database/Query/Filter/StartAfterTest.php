@@ -26,7 +26,7 @@ final class StartAfterTest extends UnitTestCase
     /**
      * @return array<string, array<int, int|string>>
      */
-    public function valueProvider()
+    public static function valueProvider()
     {
         return [
             'int' => [1, 'startAfter=1'],

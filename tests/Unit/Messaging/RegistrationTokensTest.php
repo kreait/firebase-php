@@ -46,7 +46,7 @@ final class RegistrationTokensTest extends TestCase
     /**
      * @return array<string, array<int, int|mixed>>
      */
-    public function validValuesWithExpectedCounts(): array
+    public static function validValuesWithExpectedCounts(): array
     {
         $foo = RegistrationToken::fromValue('foo');
 
@@ -62,7 +62,7 @@ final class RegistrationTokensTest extends TestCase
     /**
      * @return array<string, list<mixed>>
      */
-    public function invalidValues(): array
+    public static function invalidValues(): array
     {
         return [
             'invalid object' => [new stdClass()],

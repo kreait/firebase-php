@@ -33,7 +33,7 @@ final class UrlBuilderTest extends UnitTestCase
     /**
      * @return array<non-empty-string, array<non-empty-string>>
      */
-    public function invalidUrls(): array
+    public static function invalidUrls(): array
     {
         return [
             'wrong scheme' => ['http://domain.tld'],
@@ -74,7 +74,7 @@ final class UrlBuilderTest extends UnitTestCase
     /**
      * @return array<array-key, array<array-key, string|array<string, string>>>
      */
-    public function realUrls(): array
+    public static function realUrls(): array
     {
         $baseUrl = 'https://project.region.db.tld';
 
@@ -121,7 +121,7 @@ final class UrlBuilderTest extends UnitTestCase
     /**
      * @return array<array-key, array<array-key, string|array<string, string>>>
      */
-    public function emulatedUrls(): array
+    public static function emulatedUrls(): array
     {
         $namespace = 'namespace';
         $baseUrl = 'https://'.$namespace.'.db.tld';
