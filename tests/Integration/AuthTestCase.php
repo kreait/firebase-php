@@ -836,7 +836,7 @@ abstract class AuthTestCase extends IntegrationTestCase
 
         try {
             $users = $this->auth->listUsers(2, 99);
-            $this->assertCount(2, $users);
+            $this->assertCount(2, iterator_to_array($users));
         } finally {
             $this->auth->deleteUser($first->uid);
             $this->auth->deleteUser($second->uid);
