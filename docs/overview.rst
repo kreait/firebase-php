@@ -50,9 +50,7 @@ Please continue to the :ref:`Setup section <setup>` to learn more about connecti
 Usage examples
 **************
 
-You can find usage examples at
-`https://github.com/jeromegamez/firebase-php-examples <https://github.com/jeromegamez/firebase-php-examples>`_
-and in the `tests directory <https://github.com/kreait/firebase-php/tree/master/tests>`_
+You can find usage examples in the `tests directory <https://github.com/kreait/firebase-php/tree/master/tests>`_
 of this project's `GitHub repository <https://github.com/kreait/firebase-php/>`_.
 
 

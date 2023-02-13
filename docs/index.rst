@@ -66,5 +66,4 @@ User Guide
     app-check
     framework-integrations
     testing
-    tutorials
     troubleshooting
