@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [7.1.0] - 2023-03-01
+
 ### Added
 
 * Added support for `lcobucci/jwt` 5.*
@@ -57,7 +59,8 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.x/CHANGELOG.md
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/7.0.3...7.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/7.1.0...7.x
+[7.1.0]: https://github.com/kreait/firebase-php/compare/7.0.3...7.1.0
 [7.0.3]: https://github.com/kreait/firebase-php/compare/7.0.2...7.0.3
 [7.0.2]: https://github.com/kreait/firebase-php/compare/7.0.1...7.0.2
 [7.0.1]: https://github.com/kreait/firebase-php/compare/7.0.0...7.0.1
