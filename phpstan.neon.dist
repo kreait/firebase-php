@@ -18,6 +18,7 @@ parameters:
 			path: src/Firebase/AppCheck/AppCheckTokenVerifier.php
 
 	checkUninitializedProperties: true
+	reportUnmatchedIgnoredErrors: false
 
 includes:
 	- vendor/phpstan/phpstan/conf/bleedingEdge.neon

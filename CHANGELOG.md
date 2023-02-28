@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+* Added support for `lcobucci/jwt` 5.*
+
 ## [7.0.3] - 2023-02-13
 
 ### Fixed

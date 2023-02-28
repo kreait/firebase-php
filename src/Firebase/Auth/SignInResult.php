@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
-use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Encoding\JoseEncoder;
+use Lcobucci\JWT\Token\Parser;
 use Lcobucci\JWT\UnencryptedToken;
 use stdClass;
 
@@ -36,11 +37,11 @@ final class SignInResult
 
     /** @var non-empty-string|null */
     private ?string $tenantId = null;
-    private Configuration $config;
+    private Parser $parser;
 
     private function __construct()
     {
-        $this->config = Configuration::forUnsecuredSigner();
+        $this->parser = new Parser(new JoseEncoder());
     }
 
     /**
@@ -84,7 +85,7 @@ final class SignInResult
         // @codeCoverageIgnoreEnd
 
         if ($this->idToken) {
-            $idToken = $this->config->parser()->parse($this->idToken);
+            $idToken = $this->parser->parse($this->idToken);
             assert($idToken instanceof UnencryptedToken);
 
             foreach (['sub', 'localId', 'user_id'] as $claim) {
@@ -111,7 +112,7 @@ final class SignInResult
         }
 
         if ($this->idToken) {
-            $idToken = $this->config->parser()->parse($this->idToken);
+            $idToken = $this->parser->parse($this->idToken);
             assert($idToken instanceof UnencryptedToken);
 
             $firebaseClaims = $idToken->claims()->get('firebase', new stdClass());

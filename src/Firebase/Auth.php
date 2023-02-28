@@ -39,7 +39,7 @@ use Kreait\Firebase\Util\DT;
 use Kreait\Firebase\Value\ClearTextPassword;
 use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\Uid;
-use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Encoding\JoseEncoder;
 use Lcobucci\JWT\Token;
 use Lcobucci\JWT\UnencryptedToken;
 use Psr\Clock\ClockInterface;
@@ -60,6 +60,8 @@ use function trim;
  */
 final class Auth implements Contract\Auth
 {
+    private Token\Parser $jwtParser;
+
     public function __construct(
         private readonly ApiClient $client,
         private readonly ?CustomTokenViaGoogleCredentials $tokenGenerator,
@@ -67,6 +69,7 @@ final class Auth implements Contract\Auth
         private readonly SessionCookieVerifier $sessionCookieVerifier,
         private readonly ClockInterface $clock,
     ) {
+        $this->jwtParser = new Token\Parser(new JoseEncoder());
     }
 
     public function getUser(Stringable|string $uid): UserRecord
@@ -372,7 +375,7 @@ final class Auth implements Contract\Auth
     public function parseToken(string $tokenString): UnencryptedToken
     {
         try {
-            $parsedToken = Configuration::forUnsecuredSigner()->parser()->parse($tokenString);
+            $parsedToken = $this->jwtParser->parse($tokenString);
             assert($parsedToken instanceof UnencryptedToken);
         } catch (Throwable $e) {
             throw new InvalidArgumentException('The given token could not be parsed: '.$e->getMessage());
@@ -388,6 +391,8 @@ final class Auth implements Contract\Auth
         $idTokenString = is_string($idToken) ? $idToken : $idToken->toString();
         // The ID Token is annotated as non-empty-string or a valid Token, so it cannot be empty
         // Static analysis are not always sure about that, so we'll help them here.
+        // The assertion is necessary for lcobucci/jwt 4.* but not needed for 5.*
+        // @phpstan-ignore-next-line
         assert($idTokenString !== '');
 
         try {
