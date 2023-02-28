@@ -63,7 +63,7 @@ final class UserQueryTest extends IntegrationTestCase
 
         try {
             $this->assertCount(2, $result);
-            $this->assertGreaterThanOrEqual($result[0]->metadata->createdAt, $result[1]->metadata->createdAt);
+            $this->assertTrue($result[1]->metadata->createdAt >= $result[0]->metadata->createdAt);
         } finally {
             $this->auth->deleteUser($first->uid);
             $this->auth->deleteUser($second->uid);
@@ -87,7 +87,7 @@ final class UserQueryTest extends IntegrationTestCase
 
         try {
             $this->assertCount(2, $result);
-            $this->assertGreaterThanOrEqual($result[1]->metadata->createdAt, $result[0]->metadata->createdAt);
+            $this->assertTrue($result[1]->metadata->createdAt <= $result[0]->metadata->createdAt);
         } finally {
             $this->auth->deleteUser($first->uid);
             $this->auth->deleteUser($second->uid);
