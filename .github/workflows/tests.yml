@@ -58,7 +58,7 @@ jobs:
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
       - name: Run PHPStan
-        run: vendor/bin/phpstan analyse --no-progress
+        run: XDEBUG_MODE=off vendor/bin/phpstan analyse --no-progress
 
       - name: Setup Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
