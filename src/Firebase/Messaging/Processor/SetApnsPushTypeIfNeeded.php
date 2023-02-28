@@ -57,6 +57,7 @@ final class SetApnsPushTypeIfNeeded
      */
     public function getNotification(array $payload): ?Notification
     {
+        // @phpstan-ignore-next-line
         if (array_key_exists('notification', $payload) && is_array($payload['notification'])) {
             /** @var NotificationShape $notification */
             $notification = $payload['notification'];
@@ -93,6 +94,7 @@ final class SetApnsPushTypeIfNeeded
             return MessageData::fromArray([]);
         }
 
+        // @phpstan-ignore-next-line
         if (!is_array($payload['data'])) {
             return MessageData::fromArray([]);
         }

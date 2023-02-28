@@ -29,7 +29,6 @@ final class MiddlewareTest extends UnitTestCase
         $middleware = Middleware::ensureJsonSuffix();
         $handlerClosure = $middleware($this->handler);
 
-        /** @var RequestInterface $request */
         $request = $handlerClosure($this->request);
 
         $this->assertInstanceOf(RequestInterface::class, $request);

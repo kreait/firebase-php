@@ -6,15 +6,12 @@ namespace Kreait\Firebase\Tests\Unit\Database;
 
 use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database\ApiClient;
-use Kreait\Firebase\Database\Query;
 use Kreait\Firebase\Database\Reference;
-use Kreait\Firebase\Database\Snapshot;
 use Kreait\Firebase\Database\UrlBuilder;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
 use Kreait\Firebase\Tests\UnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Psr\Http\Message\UriInterface;
 
 /**
  * @internal
@@ -107,7 +104,7 @@ final class ReferenceTest extends UnitTestCase
     {
         $this->apiClient->method('get')->with($this->anything())->willReturn('value');
 
-        $this->assertInstanceOf(Snapshot::class, $this->reference->getSnapshot());
+        $this->assertSame('value', $this->reference->getSnapshot()->getValue());
     }
 
     public function testGetValue(): void
@@ -150,7 +147,6 @@ final class ReferenceTest extends UnitTestCase
     {
         $uri = $this->reference->getUri();
 
-        $this->assertInstanceOf(UriInterface::class, $uri);
         $this->assertSame((string) $uri, (string) $this->reference);
     }
 }

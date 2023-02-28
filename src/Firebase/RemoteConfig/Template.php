@@ -223,6 +223,7 @@ class Template implements JsonSerializable
     {
         $parameter = Parameter::named($name)->withDescription((string) ($data['description'] ?? ''));
 
+        // @phpstan-ignore-next-line
         if (array_key_exists('defaultValue', $data) && $data['defaultValue'] !== null) {
             $parameter = $parameter->withDefaultValue(DefaultValue::fromArray($data['defaultValue']));
         }

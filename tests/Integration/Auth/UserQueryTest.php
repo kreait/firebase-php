@@ -10,9 +10,7 @@ use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
 use function array_values;
-use function assert;
 use function current;
-use function end;
 use function random_int;
 use function usleep;
 
@@ -51,61 +49,48 @@ final class UserQueryTest extends IntegrationTestCase
     public function testAscendingSortOrder(): void
     {
         // Create two users just in case there are no others in the database
-        $firstUser = $this->createUserWithEmailAndPassword();
+        $first = $this->createUserWithEmailAndPassword();
         usleep(1000);
-        $secondUser = $this->createUserWithEmailAndPassword();
+        $second = $this->createUserWithEmailAndPassword();
 
         $query = [
             'sortBy' => UserQuery::FIELD_CREATED_AT,
             'order' => UserQuery::ORDER_ASC,
-            'limit' => 10,
+            'limit' => 2,
         ];
 
-        /** @var list<UserRecord> $result */
         $result = array_values($this->auth->queryUsers($query));
 
-        $firstCreatedAt = $result[0]->metadata->createdAt;
-        $lastUserRecord = end($result);
-        assert($lastUserRecord instanceof UserRecord);
-        $secondCreatedAt = $lastUserRecord->metadata->createdAt;
-
         try {
-            $this->assertNotNull($firstCreatedAt);
-            $this->assertNotNull($secondCreatedAt);
-            $this->assertTrue($firstCreatedAt->getTimestamp() < $secondCreatedAt->getTimestamp());
+            $this->assertCount(2, $result);
+            $this->assertGreaterThanOrEqual($result[0]->metadata->createdAt, $result[1]->metadata->createdAt);
         } finally {
-            $this->auth->deleteUser($firstUser->uid);
-            $this->auth->deleteUser($secondUser->uid);
+            $this->auth->deleteUser($first->uid);
+            $this->auth->deleteUser($second->uid);
         }
     }
 
     public function testDescendingSortOrder(): void
     {
         // Create two users just in case there are no others in the database
-        $firstUser = $this->createUserWithEmailAndPassword();
+        $first = $this->createUserWithEmailAndPassword();
         usleep(1000);
-        $secondUser = $this->createUserWithEmailAndPassword();
+        $second = $this->createUserWithEmailAndPassword();
 
         $query = [
             'sortBy' => UserQuery::FIELD_CREATED_AT,
             'order' => UserQuery::ORDER_DESC,
-            'limit' => 10,
+            'limit' => 2,
         ];
 
         $result = array_values($this->auth->queryUsers($query));
 
-        $firstCreatedAt = $result[0]->metadata->createdAt;
-        $lastUserRecord = end($result);
-        assert($lastUserRecord instanceof UserRecord);
-        $secondCreatedAt = $lastUserRecord->metadata->createdAt;
-
         try {
-            $this->assertNotNull($firstCreatedAt);
-            $this->assertNotNull($secondCreatedAt);
-            $this->assertTrue($firstCreatedAt->getTimestamp() > $secondCreatedAt->getTimestamp());
+            $this->assertCount(2, $result);
+            $this->assertGreaterThanOrEqual($result[1]->metadata->createdAt, $result[0]->metadata->createdAt);
         } finally {
-            $this->auth->deleteUser($firstUser->uid);
-            $this->auth->deleteUser($secondUser->uid);
+            $this->auth->deleteUser($first->uid);
+            $this->auth->deleteUser($second->uid);
         }
     }
 

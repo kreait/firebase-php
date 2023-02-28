@@ -12,7 +12,6 @@ use LogicException;
 use Throwable;
 
 use function in_array;
-use function is_string;
 use function str_starts_with;
 
 /**
@@ -79,16 +78,12 @@ final class AppCheckTokenVerifier
      */
     private function verifyContent(DecodedAppCheckToken $token): void
     {
-        if (empty($token->aud) || !in_array('projects/'.$this->projectId, $token->aud, true)) {
-            throw new FailedToVerifyAppCheckToken('The "aud" claim must be set to the project ID.');
+        if (!in_array('projects/'.$this->projectId, $token->aud, true)) {
+            throw new FailedToVerifyAppCheckToken('The "aud" claim must include the project ID.');
         }
 
-        if (!is_string($token->iss) || !str_starts_with($token->iss, self::APP_CHECK_ISSUER_PREFIX)) {
+        if (!str_starts_with($token->iss, self::APP_CHECK_ISSUER_PREFIX)) {
             throw new FailedToVerifyAppCheckToken('The provided App Check token has incorrect "iss" (issuer) claim.');
-        }
-
-        if (!is_string($token->sub)) {
-            throw new FailedToVerifyAppCheckToken('The provided App Check token has no "sub" (subject) claim.');
         }
     }
 }

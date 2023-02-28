@@ -105,9 +105,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
     {
         $response = new Response(429, ['Retry-After' => 60]);
 
-        /** @var QuotaExceeded $converted */
         $converted = $this->converter->convertResponse($response);
-
         $expected = $this->clock->now()->modify('+60 seconds');
 
         $this->assertInstanceOf(QuotaExceeded::class, $converted);
@@ -121,7 +119,6 @@ final class MessagingApiExceptionConverterTest extends TestCase
 
         $response = new Response(503, ['Retry-After' => $expected->format(DATE_ATOM)]);
 
-        /** @var ServerUnavailable $converted */
         $converted = $this->converter->convertResponse($response);
 
         $this->assertInstanceOf(ServerUnavailable::class, $converted);
@@ -133,7 +130,6 @@ final class MessagingApiExceptionConverterTest extends TestCase
     {
         $response = new Response(503); // no Retry-After
 
-        /** @var ServerUnavailable $converted */
         $converted = $this->converter->convertResponse($response);
 
         $this->assertInstanceOf(ServerUnavailable::class, $converted);

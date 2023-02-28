@@ -18,24 +18,24 @@ final class AppCheckTest extends IntegrationTestCase
     {
         parent::setUp();
 
+        if (self::$appId === null) {
+            $this->markTestSkipped('AppCheck tests require an App ID');
+        }
+
         $this->appCheck = self::$factory->createAppCheck();
     }
 
-    public function testCreateToken(): void
+    public function testCreateTokenWithDefaultTtl(): void
     {
         $token = $this->appCheck->createToken(self::$appId);
 
-        $this->assertIsString($token->token);
         $this->assertSame('3600s', $token->ttl);
     }
 
     public function testCreateTokenWithCustomTtl(): void
     {
-        $token = $this->appCheck->createToken(self::$appId, [
-            'ttl' => 1800,
-        ]);
+        $token = $this->appCheck->createToken(self::$appId, ['ttl' => 1800]);
 
-        $this->assertIsString($token->token);
         $this->assertSame('1800s', $token->ttl);
     }
 
@@ -45,9 +45,7 @@ final class AppCheckTest extends IntegrationTestCase
 
         $response = $this->appCheck->verifyToken($token->token);
 
-        $this->assertIsString($response->appId);
         $this->assertEquals(self::$appId, $response->appId);
-        $this->assertIsString($response->token->app_id);
         $this->assertEquals(self::$appId, $response->token->app_id);
     }
 }

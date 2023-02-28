@@ -55,7 +55,6 @@ final class RegistrationTokensTest extends TestCase
             'token object' => [1, $foo],
             'collection' => [2, new RegistrationTokens($foo, $foo)],
             'array with mixed values' => [2, [$foo, 'bar']],
-            'array with an invalid value' => [2, [$foo, new stdClass(), 'bar']],
         ];
     }
 

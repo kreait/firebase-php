@@ -6,7 +6,6 @@ namespace Kreait\Firebase\Tests\Unit\Messaging\Processor;
 
 use Beste\Json;
 use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\Processor\SetApnsContentAvailableIfNeeded;
 use PHPUnit\Framework\TestCase;
 
@@ -96,23 +95,5 @@ final class SetApnsContentAvailableIfNeededTest extends TestCase
                 ],
             ],
         ];
-    }
-
-    /**
-     * @param non-empty-string $type
-     */
-    private function assertMessageHasPushType(Message $message, string $type): void
-    {
-        $processed = Json::decode(Json::encode(($this->processor)($message)), true);
-
-        $this->assertTrue(isset($processed['apns']['headers']['apns-push-type']));
-        $this->assertSame($type, $processed['apns']['headers']['apns-push-type']);
-    }
-
-    private function assertMessageHasNoPushType(Message $message): void
-    {
-        $processed = Json::decode(Json::encode(($this->processor)($message)), true);
-
-        $this->assertFalse(isset($processed['apns']['headers']['apns-push-type']));
     }
 }

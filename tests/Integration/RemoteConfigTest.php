@@ -230,6 +230,7 @@ final class RemoteConfigTest extends IntegrationTestCase
         // We only need to know that the first returned value is a version,
         // no need to iterate through all of them
         foreach ($this->remoteConfig->listVersions() as $version) {
+            // @phpstan-ignore-next-line
             $this->assertInstanceOf(Version::class, $version);
 
             return;

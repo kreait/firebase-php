@@ -24,7 +24,6 @@ use const PHP_URL_QUERY;
 
 use function assert;
 use function bin2hex;
-use function is_array;
 use function is_string;
 use function parse_str;
 use function parse_url;
@@ -56,20 +55,13 @@ abstract class AuthTestCase extends IntegrationTestCase
         $email = self::randomEmail(__FUNCTION__);
         $password = 'foobar';
 
+        $user = $this->auth->createUserWithEmailAndPassword($email, $password);
+
         try {
-            $check = $this->auth->createUserWithEmailAndPassword($email, $password);
-
-            $this->assertSame($email, $check->email);
-            $this->assertFalse($check->emailVerified);
+            $this->assertSame($email, $user->email);
+            $this->assertFalse($user->emailVerified);
         } finally {
-            if (!isset($check)) {
-                return;
-            }
-
-            if (!$check instanceof UserRecord) {
-                return;
-            }
-            $this->auth->deleteUser($check->uid);
+            $this->auth->deleteUser($user->uid);
         }
     }
 
@@ -233,19 +225,13 @@ abstract class AuthTestCase extends IntegrationTestCase
             $this->auth->createUser([]),
         ];
 
-        $userRecords = $this->auth->listUsers($maxResults = 2, 1);
-
-        $count = 0;
-
-        foreach ($userRecords as $userData) {
-            $this->assertInstanceOf(UserRecord::class, $userData);
-            ++$count;
-        }
-
-        $this->assertSame($maxResults, $count);
-
-        foreach ($createdUsers as $createdUser) {
-            $this->auth->deleteUser($createdUser->uid);
+        try {
+            $userRecords = [...$this->auth->listUsers($maxResults = 2, 1)];
+            $this->assertCount($maxResults, $userRecords);
+        } finally {
+            foreach ($createdUsers as $createdUser) {
+                $this->auth->deleteUser($createdUser->uid);
+            }
         }
     }
 
@@ -323,7 +309,6 @@ abstract class AuthTestCase extends IntegrationTestCase
             $this->assertIsString($idToken);
 
             $sessionCookie = $this->auth->createSessionCookie($idToken, 3600);
-            $this->assertIsString($sessionCookie);
 
             $parsed = $this->auth->parseToken($sessionCookie);
 
@@ -647,10 +632,8 @@ abstract class AuthTestCase extends IntegrationTestCase
         $url = $this->auth->getPasswordResetLink($user->email);
 
         $queryString = parse_url($url, PHP_URL_QUERY);
-        assert(is_string($queryString));
 
         parse_str($queryString, $query);
-        assert(is_array($query));
 
         $email = $this->auth->confirmPasswordReset($query['oobCode'], 'newPassword123', true);
         sleep(1); // wait for a second
