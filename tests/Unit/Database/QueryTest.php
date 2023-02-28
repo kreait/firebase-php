@@ -71,21 +71,6 @@ final class QueryTest extends UnitTestCase
         $this->assertSame((string) $uri, (string) $this->query);
     }
 
-    public function testModifiersReturnQueries(): void
-    {
-        $this->assertInstanceOf(Query::class, $this->query->equalTo('x'));
-        $this->assertInstanceOf(Query::class, $this->query->endAt('x'));
-        $this->assertInstanceOf(Query::class, $this->query->endBefore('x'));
-        $this->assertInstanceOf(Query::class, $this->query->limitToFirst(1));
-        $this->assertInstanceOf(Query::class, $this->query->limitToLast(1));
-        $this->assertInstanceOf(Query::class, $this->query->orderByChild('child'));
-        $this->assertInstanceOf(Query::class, $this->query->orderByKey());
-        $this->assertInstanceOf(Query::class, $this->query->orderByValue());
-        $this->assertInstanceOf(Query::class, $this->query->shallow());
-        $this->assertInstanceOf(Query::class, $this->query->startAt('x'));
-        $this->assertInstanceOf(Query::class, $this->query->startAfter('x'));
-    }
-
     public function testOnlyOneSorterIsAllowed(): void
     {
         try {

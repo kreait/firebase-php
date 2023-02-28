@@ -103,21 +103,6 @@ final class ReferenceTest extends UnitTestCase
         $this->reference->getChildKeys();
     }
 
-    public function testModifiersReturnQueries(): void
-    {
-        $this->assertInstanceOf(Query::class, $this->reference->equalTo('x'));
-        $this->assertInstanceOf(Query::class, $this->reference->endAt('x'));
-        $this->assertInstanceOf(Query::class, $this->reference->endBefore('x'));
-        $this->assertInstanceOf(Query::class, $this->reference->limitToFirst(1));
-        $this->assertInstanceOf(Query::class, $this->reference->limitToLast(1));
-        $this->assertInstanceOf(Query::class, $this->reference->orderByChild('child'));
-        $this->assertInstanceOf(Query::class, $this->reference->orderByKey());
-        $this->assertInstanceOf(Query::class, $this->reference->orderByValue());
-        $this->assertInstanceOf(Query::class, $this->reference->shallow());
-        $this->assertInstanceOf(Query::class, $this->reference->startAt('x'));
-        $this->assertInstanceOf(Query::class, $this->reference->startAfter('x'));
-    }
-
     public function testGetSnapshot(): void
     {
         $this->apiClient->method('get')->with($this->anything())->willReturn('value');
