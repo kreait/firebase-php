@@ -271,7 +271,6 @@ a user to link to as an additional parameter:
 .. code-block:: php
 
     $signInResult = $auth->signInWithIdpAccessToken($provider, $accessToken, $redirectUrl = null, $oauthTokenSecret = null, $linkingIdToken);
-    $signInResult = $auth->signInWithGoogleIdToken($idToken, $redirectUrl = null, $linkingIdToken);
 
 You can unlink a provider from a given user with the ``unlinkProvider()`` method:
 
