@@ -15,7 +15,7 @@ package. You can enable the component in the SDK by adding the package to your p
     projects aim to provide support for Firestore without the need to install the gRPC PHP extension, but have to
     be set up separately:
 
-    - `ahsankhatri/firestore-php <https://github.com/ahsankhatri/firestore-php>`_
+    - `bensontrent/firestore-php <https://github.com/bensontrent/firestore-php>`_
     - `morrislaptop/firestore-php <https://github.com/morrislaptop/firestore-php>`_
 
 Before you start, please read about Firestore in the official documentation:
