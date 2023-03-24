@@ -218,8 +218,4 @@ final class GuzzleHandler implements Handler
 
         return $body;
     }
-
-    /**
-     * @return AuthResourceUrlBuilder|ProjectAwareAuthResourceUrlBuilder|TenantAwareAuthResourceUrlBuilder
-     */
 }
