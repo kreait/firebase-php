@@ -6,6 +6,8 @@ namespace Kreait\Firebase\Tests\Integration;
 
 /**
  * @internal
+ *
+ * @group emulator
  */
 final class AuthTest extends AuthTestCase
 {

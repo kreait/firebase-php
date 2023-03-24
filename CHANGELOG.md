@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+* Added support for the Firebase Auth Emulator when using `lcobucci/jwt` 5.*
+
 ## [7.1.0] - 2023-03-01
 
 ### Added

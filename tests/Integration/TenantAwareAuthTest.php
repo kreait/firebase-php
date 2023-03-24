@@ -6,6 +6,8 @@ namespace Kreait\Firebase\Tests\Integration;
 
 /**
  * @internal
+ *
+ * @group emulator
  */
 final class TenantAwareAuthTest extends AuthTestCase
 {

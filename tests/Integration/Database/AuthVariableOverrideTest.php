@@ -16,7 +16,7 @@ use function is_string;
 /**
  * @internal
  *
- * @group database-emulator
+ * @group emulator
  */
 final class AuthVariableOverrideTest extends DatabaseTestCase
 {

@@ -69,8 +69,9 @@ jobs:
           TEST_FIREBASE_TENANT_ID: ${{secrets.TEST_FIREBASE_TENANT_ID}}
           TEST_REGISTRATION_TOKENS: ${{secrets.TEST_REGISTRATION_TOKENS}}
           FIREBASE_DATABASE_EMULATOR_HOST: localhost:9100
+          FIREBASE_AUTH_EMULATOR_HOST: localhost:9099
           XDEBUG_MODE: coverage
-        run: firebase emulators:exec --only database --project beste-firebase 'XDEBUG_MODE=coverage vendor/bin/phpunit --group=emulator --coverage-clover=coverage.xml --log-junit=test-report.xml'
+        run: firebase emulators:exec --only auth,database --project beste-firebase 'XDEBUG_MODE=coverage vendor/bin/phpunit --group=emulator --coverage-clover=coverage.xml --log-junit=test-report.xml'
 
       - name: Upload code coverage
         uses: codecov/codecov-action@v3

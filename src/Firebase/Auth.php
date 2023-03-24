@@ -33,6 +33,7 @@ use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\JWT\IdTokenVerifier;
 use Kreait\Firebase\JWT\SessionCookieVerifier;
+use Kreait\Firebase\JWT\Token\Parser;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Request\UpdateUser;
 use Kreait\Firebase\Util\DT;
@@ -60,7 +61,7 @@ use function trim;
  */
 final class Auth implements Contract\Auth
 {
-    private Token\Parser $jwtParser;
+    private Parser $jwtParser;
 
     public function __construct(
         private readonly ApiClient $client,
@@ -69,7 +70,7 @@ final class Auth implements Contract\Auth
         private readonly SessionCookieVerifier $sessionCookieVerifier,
         private readonly ClockInterface $clock,
     ) {
-        $this->jwtParser = new Token\Parser(new JoseEncoder());
+        $this->jwtParser = new Parser(new JoseEncoder());
     }
 
     public function getUser(Stringable|string $uid): UserRecord
