@@ -38,7 +38,7 @@ Initializing the App Check component
 
 .. code-block:: php
 
-    $auth = app('firebase.app_check');
+    $appCheck = app('firebase.app_check');
 
 
 .. _verify-app-check-tokens:
