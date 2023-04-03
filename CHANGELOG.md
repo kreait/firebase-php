@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [7.2.1] - 2023-04-04
+
 ### Fixed
 
 * Fixed a user's MFA information not being correctly parsed
@@ -70,7 +72,8 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.x/CHANGELOG.md
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/7.2.0...7.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/7.2.1...7.x
+[7.2.1]: https://github.com/kreait/firebase-php/compare/7.2.0...7.2.1
 [7.2.0]: https://github.com/kreait/firebase-php/compare/7.1.0...7.2.0
 [7.1.0]: https://github.com/kreait/firebase-php/compare/7.0.3...7.1.0
 [7.0.3]: https://github.com/kreait/firebase-php/compare/7.0.2...7.0.3
