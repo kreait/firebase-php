@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # We want integration tests only to run on the original repo and not on internal PRs
-    if: (github.repository_owner == 'kreait' || github.repository_owner == 'beste-access') && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository)
+    if: (github.repository_owner == 'kreait') && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository)
 
     env:
       php-version: '8.1'
