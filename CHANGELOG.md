@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* Fixed a user's MFA information not being correctly parsed
+  ([#783](https://github.com/kreait/firebase-php/pull/783))
+
 ## [7.2.0] - 2023-03-24
 
 ### Added
