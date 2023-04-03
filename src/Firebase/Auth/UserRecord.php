@@ -29,7 +29,7 @@ use function array_map;
  *     customAttributes?: non-empty-string,
  *     tenantId?: non-empty-string,
  *     providerUserInfo?: list<ProviderUserInfoResponseShape>,
- *     mfaInfo?: MfaInfoResponseShape,
+ *     mfaInfo?: list<MfaInfoResponseShape>,
  *     createdAt: non-empty-string,
  *     lastLoginAt?: non-empty-string,
  *     passwordUpdatedAt?: non-empty-string,
@@ -89,10 +89,6 @@ final class UserRecord
             ? self::userInfoFromResponseData($data)
             : [];
 
-        $mfaInfo = array_key_exists('mfaInfo', $data)
-            ? self::mfaInfoFromResponseData($data)
-            : null;
-
         return new self(
             $data['localId'],
             $data['email'] ?? null,
@@ -103,7 +99,7 @@ final class UserRecord
             $data['disabled'] ?? false,
             self::userMetaDataFromResponseData($data),
             $providerUserInfo,
-            $mfaInfo,
+            self::mfaInfoFromResponseData($data),
             $data['passwordHash'] ?? null,
             $data['salt'] ?? null,
             $customClaims,
@@ -121,11 +117,23 @@ final class UserRecord
     }
 
     /**
-     * @param array{mfaInfo: MfaInfoResponseShape} $data
+     * @param array{
+     *     mfaInfo?: list<MfaInfoResponseShape>
+     * } $data
      */
-    private static function mfaInfoFromResponseData(array $data): MfaInfo
+    private static function mfaInfoFromResponseData(array $data): ?MfaInfo
     {
-        return MfaInfo::fromResponseData($data['mfaInfo']);
+        if (!array_key_exists('mfaInfo', $data)) {
+            return null;
+        }
+
+        $mfaInfo = array_shift($data['mfaInfo']);
+
+        if ($mfaInfo === null) {
+            return null;
+        }
+
+        return MfaInfo::fromResponseData($mfaInfo);
     }
 
     /**
