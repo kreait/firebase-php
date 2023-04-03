@@ -9,8 +9,6 @@ on:
 
 jobs:
   integration-tests:
-
-
     name: Integration Tests
     runs-on: ubuntu-latest
 

@@ -9,9 +9,6 @@ on:
 
 jobs:
   tests:
-    # Don't run the tests on internal PRs
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
-
     name: PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
 
