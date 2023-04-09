@@ -84,6 +84,11 @@ class Condition implements JsonSerializable
         return $condition;
     }
 
+    public function tagColor(): ?TagColor
+    {
+        return $this->tagColor;
+    }
+
     /**
      * @param TagColor|non-empty-string $tagColor
      */
