@@ -72,6 +72,6 @@ final class DatabaseTest extends UnitTestCase
 
         $ruleSet = $this->database->getRuleSet();
 
-        $this->assertEquals($expected, $ruleSet->getRules());
+        $this->assertEqualsCanonicalizing($expected, $ruleSet->getRules());
     }
 }

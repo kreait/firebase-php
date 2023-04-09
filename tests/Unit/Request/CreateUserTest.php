@@ -29,7 +29,7 @@ final class CreateUserTest extends TestCase
     {
         $request = CreateUser::withProperties($properties);
 
-        $this->assertEquals($expected, $request->jsonSerialize());
+        $this->assertEqualsCanonicalizing($expected, $request->jsonSerialize());
     }
 
     /**

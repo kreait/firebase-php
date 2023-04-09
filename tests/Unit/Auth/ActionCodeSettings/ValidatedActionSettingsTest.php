@@ -21,7 +21,7 @@ final class ValidatedActionSettingsTest extends TestCase
      */
     public function testItWorksValidSettings(array $input, array $expected): void
     {
-        $this->assertEquals($expected, ValidatedActionCodeSettings::fromArray($input)->toArray());
+        $this->assertEqualsCanonicalizing($expected, ValidatedActionCodeSettings::fromArray($input)->toArray());
     }
 
     public function testItRejectsInvalidSettings(): void

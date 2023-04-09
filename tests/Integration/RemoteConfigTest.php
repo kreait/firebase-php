@@ -24,7 +24,9 @@ use Throwable;
  */
 final class RemoteConfigTest extends IntegrationTestCase
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private const TEMPLATE_CONFIG = <<<'CONFIG'
         {
             "conditions": [
@@ -107,7 +109,7 @@ final class RemoteConfigTest extends IntegrationTestCase
 
         $check = $this->remoteConfig->get();
 
-        $this->assertEquals($this->template->jsonSerialize(), $check->jsonSerialize());
+        $this->assertEqualsCanonicalizing($this->template->jsonSerialize(), $check->jsonSerialize());
 
         $version = $check->version();
 
@@ -190,7 +192,8 @@ final class RemoteConfigTest extends IntegrationTestCase
 
         $query = FindVersions::all()
             ->withLimit(2)
-            ->upToVersion($initialVersionNumber);
+            ->upToVersion($initialVersionNumber)
+        ;
 
         $targetVersionNumber = null;
 

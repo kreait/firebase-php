@@ -130,7 +130,8 @@ final class MessagingTest extends IntegrationTestCase
     public function testSendingAMessageWithEmptyMessageDataShouldNotFail(): void
     {
         $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
-            ->withData([]);
+            ->withData([])
+        ;
 
         $this->messaging->send($message);
         $this->addToAssertionCount(1);
@@ -142,7 +143,8 @@ final class MessagingTest extends IntegrationTestCase
     public function testSendMessageWithReservedKeywordInMessageDataThatIsStillAccepted(string $keyword): void
     {
         $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
-            ->withData([$keyword => 'value']);
+            ->withData([$keyword => 'value'])
+        ;
 
         $this->messaging->send($message);
         $this->addToAssertionCount(1);
@@ -282,7 +284,7 @@ final class MessagingTest extends IntegrationTestCase
         $topicName = self::randomString(__FUNCTION__);
 
         try {
-            $this->assertEquals([
+            $this->assertSame([
                 $topicName => [$token => 'OK'],
             ], $this->messaging->subscribeToTopic($topicName, $token));
         } finally {
@@ -300,7 +302,7 @@ final class MessagingTest extends IntegrationTestCase
         ];
 
         try {
-            $this->assertEquals([
+            $this->assertEqualsCanonicalizing([
                 $firstTopic => [$token => 'OK'],
                 $secondTopic => [$token => 'OK'],
             ], $this->messaging->subscribeToTopics($topics, $token));
@@ -315,7 +317,7 @@ final class MessagingTest extends IntegrationTestCase
         $topicName = self::randomString(__FUNCTION__);
         $this->messaging->subscribeToTopic($topicName, $token);
 
-        $this->assertEquals([
+        $this->assertSame([
             $topicName => [$token => 'OK'],
         ], $this->messaging->unsubscribeFromTopic($topicName, $token));
     }
@@ -329,7 +331,7 @@ final class MessagingTest extends IntegrationTestCase
             $secondTopic = self::randomString(__FUNCTION__.'_2'),
         ];
 
-        $this->assertEquals([
+        $this->assertEqualsCanonicalizing([
             $firstTopic => [$token => 'OK'],
             $secondTopic => [$token => 'OK'],
         ], $this->messaging->unsubscribeFromTopics($topics, $token));

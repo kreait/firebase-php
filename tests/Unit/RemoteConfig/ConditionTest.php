@@ -42,6 +42,8 @@ final class ConditionTest extends UnitTestCase
 
     /**
      * @dataProvider valueProvider
+     *
+     * @param array<mixed> $conditionData
      */
     public function testItCanBeCreatedFromAnArray(string $expectedName, string $expectedExpression, ?TagColor $expectedTagColor, array $conditionData): void
     {
@@ -52,6 +54,9 @@ final class ConditionTest extends UnitTestCase
         $this->assertSame($expectedTagColor?->value(), $condition->tagColor()?->value());
     }
 
+    /**
+     * @return iterable<string, mixed>
+     */
     public static function valueProvider(): iterable
     {
         yield 'color string' => [

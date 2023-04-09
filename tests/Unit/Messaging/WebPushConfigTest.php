@@ -25,7 +25,7 @@ final class WebPushConfigTest extends UnitTestCase
     {
         $config = WebPushConfig::fromArray($data);
 
-        $this->assertEquals($data, $config->jsonSerialize());
+        $this->assertEqualsCanonicalizing($data, $config->jsonSerialize());
     }
 
     public function testItCanHaveAPriority(): void

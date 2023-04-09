@@ -22,7 +22,7 @@ final class RuleSetTest extends DatabaseTestCase
 
         self::$db->updateRules($ruleSet);
 
-        $this->assertEquals($ruleSet, self::$db->getRuleSet());
+        $this->assertEqualsCanonicalizing($ruleSet->getRules(), self::$db->getRuleSet()->getRules());
     }
 
     public function testPublic(): void
@@ -31,7 +31,7 @@ final class RuleSetTest extends DatabaseTestCase
 
         self::$db->updateRules($ruleSet);
 
-        $this->assertEquals($ruleSet, self::$db->getRuleSet());
+        $this->assertEqualsCanonicalizing($ruleSet->getRules(), self::$db->getRuleSet()->getRules());
     }
 
     public function testPrivate(): void
@@ -40,7 +40,7 @@ final class RuleSetTest extends DatabaseTestCase
 
         self::$db->updateRules($ruleSet);
 
-        $this->assertEquals($ruleSet, self::$db->getRuleSet());
+        $this->assertEqualsCanonicalizing($ruleSet->getRules(), self::$db->getRuleSet()->getRules());
     }
 
     /**

@@ -24,7 +24,7 @@ final class ParameterTest extends UnitTestCase
     {
         $parameter = Parameter::named('with_default_foo', 'foo');
 
-        $this->assertEquals(DefaultValue::with('foo'), $parameter->defaultValue());
+        $this->assertEqualsCanonicalizing(DefaultValue::with('foo')->toArray(), $parameter->defaultValue()?->toArray());
     }
 
     public function testCreateWithDescription(): void

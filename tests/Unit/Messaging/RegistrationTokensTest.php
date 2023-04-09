@@ -40,7 +40,7 @@ final class RegistrationTokensTest extends TestCase
         $token = RegistrationToken::fromValue('foo');
 
         $tokens = RegistrationTokens::fromValue([$token, $token]);
-        $this->assertEquals(['foo', 'foo'], $tokens->asStrings());
+        $this->assertEqualsCanonicalizing(['foo', 'foo'], $tokens->asStrings());
     }
 
     /**

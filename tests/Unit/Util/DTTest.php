@@ -26,8 +26,8 @@ final class DTTest extends TestCase
     {
         $dt = DT::toUTCDateTimeImmutable($value);
 
-        $this->assertEquals($expected, $dt->format('U.u'));
-        $this->assertEquals('UTC', $dt->getTimezone()->getName());
+        $this->assertSame($expected, $dt->format('U.u'));
+        $this->assertSame('UTC', $dt->getTimezone()->getName());
     }
 
     /**
@@ -37,7 +37,7 @@ final class DTTest extends TestCase
     {
         $dt = DT::toUTCDateTimeImmutable($value);
 
-        $this->assertEquals('UTC', $dt->getTimezone()->getName());
+        $this->assertSame('UTC', $dt->getTimezone()->getName());
     }
 
     /**

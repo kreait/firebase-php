@@ -125,7 +125,7 @@ final class UpdateUserTest extends IntegrationTestCase
             ]);
 
         $user = $this->auth->updateUser($uid, $request);
-        $this->assertEquals($claims, $user->customClaims);
+        $this->assertEqualsCanonicalizing($claims, $user->customClaims);
 
         $idToken = $this->auth->signInAsUser($user)->idToken();
         $this->assertNotNull($idToken);

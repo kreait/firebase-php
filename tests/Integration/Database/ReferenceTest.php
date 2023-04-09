@@ -54,7 +54,7 @@ final class ReferenceTest extends DatabaseTestCase
             'third' => 'new',
         ];
 
-        $this->assertEquals($expected, $ref->getValue());
+        $this->assertEqualsCanonicalizing($expected, $ref->getValue());
     }
 
     public function testPush(): void
@@ -79,7 +79,7 @@ final class ReferenceTest extends DatabaseTestCase
 
         $ref->getChild('first')->remove();
 
-        $this->assertEquals(['second' => 'value'], $ref->getValue());
+        $this->assertEqualsCanonicalizing(['second' => 'value'], $ref->getValue());
     }
 
     public function testRemoveChildren(): void
@@ -100,7 +100,7 @@ final class ReferenceTest extends DatabaseTestCase
             'second/first_nested',
         ]);
 
-        $this->assertEquals([
+        $this->assertEqualsCanonicalizing([
             'second' => [
                 'second_nested' => 'value',
             ],

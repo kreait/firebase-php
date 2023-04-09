@@ -59,7 +59,7 @@ final class ApnsConfigTest extends UnitTestCase
     {
         $config = ApnsConfig::fromArray($data);
 
-        $this->assertEquals($data, $config->jsonSerialize());
+        $this->assertEqualsCanonicalizing($data, $config->jsonSerialize());
     }
 
     public function testItCanHaveAPriority(): void

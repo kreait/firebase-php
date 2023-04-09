@@ -18,7 +18,7 @@ final class NotificationTest extends UnitTestCase
         $this->assertSame('', $notification->title());
         $this->assertSame('', $notification->body());
         $this->assertSame('', $notification->imageUrl());
-        $this->assertEquals(['title' => '', 'body' => '', 'image' => ''], $notification->jsonSerialize());
+        $this->assertEqualsCanonicalizing(['title' => '', 'body' => '', 'image' => ''], $notification->jsonSerialize());
     }
 
     public function testCreateWithValidFields(): void
@@ -44,7 +44,7 @@ final class NotificationTest extends UnitTestCase
         $this->assertSame($title, $notification->title());
         $this->assertSame($body, $notification->body());
         $this->assertSame($imageUrl, $notification->imageUrl());
-        $this->assertEquals($array, $notification->jsonSerialize());
+        $this->assertEqualsCanonicalizing($array, $notification->jsonSerialize());
     }
 
     /**

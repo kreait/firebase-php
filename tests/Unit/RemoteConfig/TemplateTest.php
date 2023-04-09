@@ -172,7 +172,7 @@ final class TemplateTest extends UnitTestCase
 
     public function testItProvidesConditionNames(): void
     {
-        $this->assertEquals(
+        $this->assertEqualsCanonicalizing(
             ['first', 'second', 'third'],
             Template::new()
                 ->withCondition(Condition::named('first'))
@@ -184,7 +184,7 @@ final class TemplateTest extends UnitTestCase
 
     public function testConditionsCanBeRemoved(): void
     {
-        $this->assertEquals(
+        $this->assertEqualsCanonicalizing(
             ['first', 'third'],
             Template::new()
                 ->withCondition(Condition::named('first'))

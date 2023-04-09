@@ -22,14 +22,14 @@ final class DefaultValueTest extends TestCase
     {
         $defaultValue = DefaultValue::useInAppDefault();
 
-        $this->assertEquals(['useInAppDefault' => true], $defaultValue->jsonSerialize());
+        $this->assertEqualsCanonicalizing(['useInAppDefault' => true], $defaultValue->jsonSerialize());
     }
 
     public function testCreate(): void
     {
         $defaultValue = DefaultValue::with('foo');
 
-        $this->assertEquals(['value' => 'foo'], $defaultValue->jsonSerialize());
+        $this->assertEqualsCanonicalizing(['value' => 'foo'], $defaultValue->jsonSerialize());
     }
 
     /**

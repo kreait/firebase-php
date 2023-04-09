@@ -63,13 +63,13 @@ final class DynamicLinksTest extends TestCase
 
         $this->assertTrue($dynamicLink->hasWarnings());
         $this->assertCount(2, $dynamicLink->warnings());
-        $this->assertEquals($warnings, $dynamicLink->warnings());
+        $this->assertSame($warnings, $dynamicLink->warnings());
         $this->assertSame($shortLink, (string) $dynamicLink->uri());
         $this->assertSame($shortLink, (string) $dynamicLink);
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, Json::decode(Json::encode($dynamicLink), true));
+        $this->assertEqualsCanonicalizing($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
     public function testItCreatesADynamicLinkFromAnArrayOfParameters(): void
@@ -90,7 +90,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, Json::decode(Json::encode($dynamicLink), true));
+        $this->assertEqualsCanonicalizing($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
     public function testCreationFailsIfNoConnectionIsAvailable(): void
@@ -145,7 +145,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, Json::decode(Json::encode($dynamicLink), true));
+        $this->assertEqualsCanonicalizing($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
     public function testShorteningFailsIfNoConnectionIsAvailable(): void
@@ -207,7 +207,7 @@ final class DynamicLinksTest extends TestCase
         $stats = $this->service->getStatistics($this->dynamicLinksDomain.'/abcd');
         $eventStats = $stats->eventStatistics();
 
-        $this->assertEquals($responseData, $stats->rawData());
+        $this->assertEqualsCanonicalizing($responseData, $stats->rawData());
         $this->assertCount(180, $eventStats);
 
         $this->assertCount(60, $eventStats->clicks());
