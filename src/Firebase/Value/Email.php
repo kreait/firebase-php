@@ -7,16 +7,18 @@ namespace Kreait\Firebase\Value;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Stringable;
 
-use const FILTER_VALIDATE_EMAIL;
-
 use function filter_var;
+
+use const FILTER_VALIDATE_EMAIL;
 
 /**
  * @internal
  */
 final class Email
 {
-    /** @var non-empty-string */
+    /**
+     * @var non-empty-string
+     */
     public readonly string $value;
 
     private function __construct(string $value)

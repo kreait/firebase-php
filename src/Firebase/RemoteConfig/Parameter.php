@@ -29,7 +29,9 @@ class Parameter implements JsonSerializable
     private ?string $description = '';
     private ?DefaultValue $defaultValue;
 
-    /** @var list<ConditionalValue> */
+    /**
+     * @var list<ConditionalValue>
+     */
     private array $conditionalValues = [];
 
     /**

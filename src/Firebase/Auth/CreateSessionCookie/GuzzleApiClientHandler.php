@@ -15,9 +15,9 @@ use Kreait\Firebase\Auth\ProjectAwareAuthResourceUrlBuilder;
 use Kreait\Firebase\Auth\TenantAwareAuthResourceUrlBuilder;
 use Psr\Http\Message\RequestInterface;
 
-use const JSON_FORCE_OBJECT;
-
 use function array_filter;
+
+use const JSON_FORCE_OBJECT;
 
 /**
  * @internal

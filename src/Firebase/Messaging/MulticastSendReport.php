@@ -22,7 +22,9 @@ use function explode;
 
 final class MulticastSendReport implements Countable
 {
-    /** @var array<SendReport> */
+    /**
+     * @var array<SendReport>
+     */
     private array $items = [];
 
     private function __construct()
@@ -154,7 +156,8 @@ final class MulticastSendReport implements Countable
     {
         return $this->successes()
             ->filter(static fn (SendReport $report) => $report->target()->type() === MessageTarget::TOKEN)
-            ->map(static fn (SendReport $report) => $report->target()->value());
+            ->map(static fn (SendReport $report) => $report->target()->value())
+        ;
     }
 
     /**
@@ -166,7 +169,8 @@ final class MulticastSendReport implements Countable
     {
         return $this
             ->filter(static fn (SendReport $report) => $report->messageWasSentToUnknownToken())
-            ->map(static fn (SendReport $report) => $report->target()->value());
+            ->map(static fn (SendReport $report) => $report->target()->value())
+        ;
     }
 
     /**
@@ -178,7 +182,8 @@ final class MulticastSendReport implements Countable
     {
         return $this
             ->filter(static fn (SendReport $report) => $report->messageTargetWasInvalid())
-            ->map(static fn (SendReport $report) => $report->target()->value());
+            ->map(static fn (SendReport $report) => $report->target()->value())
+        ;
     }
 
     public function count(): int

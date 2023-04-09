@@ -167,7 +167,8 @@ final class Messaging implements Contract\Messaging
 
                     return array_keys($this->unsubscribeFromTopics($topics, $token));
                 })
-                ->otherwise(static fn (Throwable $e) => $e->getMessage());
+                ->otherwise(static fn (Throwable $e) => $e->getMessage())
+            ;
         }
 
         $responses = Utils::settle($promises)->wait();

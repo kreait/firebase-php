@@ -18,7 +18,9 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 final class DatabaseTest extends UnitTestCase
 {
-    /** @var ApiClient|MockObject */
+    /**
+     * @var ApiClient|MockObject
+     */
     private $apiClient;
     private string $url;
     private Uri $uri;
@@ -68,7 +70,8 @@ final class DatabaseTest extends UnitTestCase
         $this->apiClient
             ->method('get')
             ->with('/.settings/rules')
-            ->willReturn($expected = RuleSet::default()->getRules());
+            ->willReturn($expected = RuleSet::default()->getRules())
+        ;
 
         $ruleSet = $this->database->getRuleSet();
 

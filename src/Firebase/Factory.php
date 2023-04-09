@@ -73,10 +73,14 @@ final class Factory
         'https://www.googleapis.com/auth/securetoken',
     ];
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     private ?string $databaseUrl = null;
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     private ?string $defaultStorageBucket = null;
 
     /**
@@ -94,16 +98,24 @@ final class Factory
     private CacheItemPoolInterface $keySetCache;
     private ClockInterface $clock;
 
-    /** @var callable|null */
+    /**
+     * @var callable|null
+     */
     private $httpLogMiddleware;
 
-    /** @var callable|null */
+    /**
+     * @var callable|null
+     */
     private $httpDebugLogMiddleware;
 
-    /** @var callable|null */
+    /**
+     * @var callable|null
+     */
     private $databaseAuthVariableOverrideMiddleware;
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     private ?string $tenantId = null;
     private HttpClientOptions $httpClientOptions;
 

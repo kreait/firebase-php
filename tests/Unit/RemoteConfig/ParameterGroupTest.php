@@ -18,7 +18,8 @@ final class ParameterGroupTest extends TestCase
         $group = ParameterGroup::named($name = 'name')
             ->withDescription($description = 'description')
             ->withParameter($first = Parameter::named('first'))
-            ->withParameter($second = Parameter::named('second'));
+            ->withParameter($second = Parameter::named('second'))
+        ;
 
         $this->assertSame($name, $group->name());
         $this->assertSame($description, $group->description());

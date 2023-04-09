@@ -27,7 +27,8 @@ final class UserQueryTest extends TestCase
             ->sortedBy(UserQuery::FIELD_USER_EMAIL)
             ->inDescendingOrder()
             ->withOffset(1)
-            ->withLimit(499);
+            ->withLimit(499)
+        ;
 
         $this->assertJsonStringEqualsJsonString(Json::encode($expected), Json::encode($query));
     }

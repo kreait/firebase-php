@@ -19,7 +19,9 @@ use Throwable;
  */
 final class TransactionTest extends TestCase
 {
-    /** @var ApiClient|MockObject */
+    /**
+     * @var ApiClient|MockObject
+     */
     private $apiClient;
     private Transaction $transaction;
 
@@ -51,12 +53,14 @@ final class TransactionTest extends TestCase
         $this->apiClient
             ->method('getWithETag')
             ->with('/foo')
-            ->willReturn(['etag' => 'etag', 'value' => 'old value']);
+            ->willReturn(['etag' => 'etag', 'value' => 'old value'])
+        ;
 
         $this->apiClient
             ->method('setWithEtag')
             ->with('/foo')
-            ->willThrowException(new DatabaseError());
+            ->willThrowException(new DatabaseError())
+        ;
 
         $this->transaction->snapshot($reference);
 

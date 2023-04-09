@@ -32,8 +32,8 @@ final class QueryTest extends DatabaseTestCase
 
         $rules = self::$db->getRuleSet()->getRules();
 
-        $rules['rules'][$this->ref->getPath()] =
-            [__FUNCTION__ => ['.indexOn' => ['key']],
+        $rules['rules'][$this->ref->getPath()]
+            = [__FUNCTION__ => ['.indexOn' => ['key']],
             ];
 
         self::$db->updateRules(RuleSet::fromArray($rules));

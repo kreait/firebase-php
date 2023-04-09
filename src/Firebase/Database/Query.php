@@ -40,7 +40,9 @@ class Query
     private Reference $reference;
     private ApiClient $apiClient;
 
-    /** @var Filter[] */
+    /**
+     * @var Filter[]
+     */
     private array $filters = [];
     private ?Sorter $sorter = null;
 

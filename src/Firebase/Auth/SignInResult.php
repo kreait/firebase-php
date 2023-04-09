@@ -17,25 +17,39 @@ use function property_exists;
 
 final class SignInResult
 {
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     private ?string $idToken = null;
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     private ?string $accessToken = null;
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     private ?string $refreshToken = null;
 
-    /** @var positive-int|null */
+    /**
+     * @var positive-int|null
+     */
     private ?int $ttl = null;
 
-    /** @var array<non-empty-string, mixed> */
+    /**
+     * @var array<non-empty-string, mixed>
+     */
     private array $data = [];
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     private ?string $firebaseUserId = null;
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     private ?string $tenantId = null;
     private Parser $parser;
 

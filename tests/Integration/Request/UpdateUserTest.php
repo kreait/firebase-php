@@ -114,7 +114,8 @@ final class UpdateUserTest extends IntegrationTestCase
     public function testUpdateUserWithCustomAttributes(): void
     {
         $request = CreateUser::new()
-            ->withUid($uid = bin2hex(random_bytes(5)));
+            ->withUid($uid = bin2hex(random_bytes(5)))
+        ;
 
         $this->auth->createUser($request);
 
@@ -122,7 +123,8 @@ final class UpdateUserTest extends IntegrationTestCase
             ->withCustomAttributes($claims = [
                 'admin' => true,
                 'groupId' => '1234',
-            ]);
+            ])
+        ;
 
         $user = $this->auth->updateUser($uid, $request);
         $this->assertEqualsCanonicalizing($claims, $user->customClaims);

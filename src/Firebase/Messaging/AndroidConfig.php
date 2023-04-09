@@ -93,7 +93,9 @@ final class AndroidConfig implements JsonSerializable
     private const NOTIFICATION_VISIBILITY_PUBLIC = 'PUBLIC';
     private const NOTIFICATION_VISIBILITY_SECRET = 'SECRET';
 
-    /** @var AndroidConfigShape */
+    /**
+     * @var AndroidConfigShape
+     */
     private array $config;
 
     /**

@@ -26,7 +26,8 @@ final class NotificationTest extends UnitTestCase
         $notification = Notification::create('title', 'body')
             ->withTitle($title = 'My Title')
             ->withBody($body = 'My Body')
-            ->withImageUrl($imageUrl = 'https://domain.tld/image.ext');
+            ->withImageUrl($imageUrl = 'https://domain.tld/image.ext')
+        ;
 
         $this->assertSame($title, $notification->title());
         $this->assertSame($body, $notification->body());

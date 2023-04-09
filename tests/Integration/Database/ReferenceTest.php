@@ -137,7 +137,8 @@ final class ReferenceTest extends DatabaseTestCase
 
         $value = $this->ref->getChild(__FUNCTION__)
             ->push(['updatedAt' => Database::SERVER_TIMESTAMP])
-            ->getSnapshot()->getValue();
+            ->getSnapshot()->getValue()
+        ;
 
         $this->assertIsArray($value);
         $this->assertArrayHasKey('updatedAt', $value);

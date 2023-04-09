@@ -26,19 +26,29 @@ abstract class IntegrationTestCase extends FirebaseTestCase
 {
     protected static Factory $factory;
 
-    /** @var ServiceAccountShape */
+    /**
+     * @var ServiceAccountShape
+     */
     protected static array $serviceAccount;
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     protected static ?string $rtdbUrl;
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     protected static ?string $tenantId;
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     protected static ?string $appId;
 
-    /** @var list<string> */
+    /**
+     * @var list<string>
+     */
     protected static array $registrationTokens = [];
     protected static string $unknownToken = 'd_RTtLHR_JgI4r4tbYM9CA:APA91bEzb2Tb3WlKwddpEPYY2ZAx7AOmjOhiw-jVq6J9ekJGpBAefAgMb1muDJcKBMsrMq7zSCfBzl0Ll7JCZ0o8QI9zLVG1F18nqW9AOFKDXi8-MyT3R5Stt6GGKnq9rd9l5kopGEbO';
 

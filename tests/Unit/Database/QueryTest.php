@@ -22,10 +22,14 @@ final class QueryTest extends UnitTestCase
 {
     protected Uri $uri;
 
-    /** @var Reference|MockObject */
+    /**
+     * @var Reference|MockObject
+     */
     protected $reference;
 
-    /** @var ApiClient|MockObject */
+    /**
+     * @var ApiClient|MockObject
+     */
     protected $apiClient;
     protected Query $query;
 
@@ -86,7 +90,8 @@ final class QueryTest extends UnitTestCase
 
         $this->apiClient
             ->method('get')->with($this->anything())
-            ->willThrowException($exception);
+            ->willThrowException($exception)
+        ;
 
         $this->expectException(UnsupportedQuery::class);
 
@@ -97,7 +102,8 @@ final class QueryTest extends UnitTestCase
     {
         $this->apiClient
             ->method('get')->with($this->anything())
-            ->willThrowException(new DatabaseError('foo index not defined bar'));
+            ->willThrowException(new DatabaseError('foo index not defined bar'))
+        ;
 
         $this->expectException(UnsupportedQuery::class);
 
@@ -108,7 +114,8 @@ final class QueryTest extends UnitTestCase
     {
         $this->apiClient
             ->method('get')->with($this->anything())
-            ->willThrowException(DatabaseNotFound::fromUri(new Uri('https://database-name.firebaseio.com')));
+            ->willThrowException(DatabaseNotFound::fromUri(new Uri('https://database-name.firebaseio.com')))
+        ;
 
         $this->expectException(DatabaseNotFound::class);
 

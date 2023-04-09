@@ -79,7 +79,8 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
             $this->databaseWithAuthOverride(null)
                 ->getReference(self::$refPrefix)
                 ->getChild(__FUNCTION__)
-                ->getValue();
+                ->getValue()
+            ;
 
             $this->addToAssertionCount(1);
         } finally {

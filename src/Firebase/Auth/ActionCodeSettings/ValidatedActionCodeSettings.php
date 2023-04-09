@@ -20,14 +20,20 @@ final class ValidatedActionCodeSettings implements ActionCodeSettings
     private ?bool $canHandleCodeInApp = null;
     private ?UriInterface $dynamicLinkDomain = null;
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     private ?string $androidPackageName = null;
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     private ?string $androidMinimumVersion = null;
     private ?bool $androidInstallApp = null;
 
-    /** @var non-empty-string|null */
+    /**
+     * @var non-empty-string|null
+     */
     private ?string $iOSBundleId = null;
 
     private function __construct()

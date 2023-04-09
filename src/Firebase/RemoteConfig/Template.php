@@ -32,13 +32,19 @@ class Template implements JsonSerializable
 {
     private string $etag = '*';
 
-    /** @var array<non-empty-string, Parameter> */
+    /**
+     * @var array<non-empty-string, Parameter>
+     */
     private array $parameters = [];
 
-    /** @var array<non-empty-string, ParameterGroup> */
+    /**
+     * @var array<non-empty-string, ParameterGroup>
+     */
     private array $parameterGroups = [];
 
-    /** @var list<Condition> */
+    /**
+     * @var list<Condition>
+     */
     private array $conditions = [];
     private ?Version $version = null;
 
@@ -242,7 +248,8 @@ class Template implements JsonSerializable
     private static function buildParameterGroup(string $name, array $parameterGroupData): ParameterGroup
     {
         $group = ParameterGroup::named($name)
-            ->withDescription((string) ($parameterGroupData['description'] ?? ''));
+            ->withDescription((string) ($parameterGroupData['description'] ?? ''))
+        ;
 
         foreach ($parameterGroupData['parameters'] as $parameterName => $parameterData) {
             $group = $group->withParameter(self::buildParameter($parameterName, $parameterData));

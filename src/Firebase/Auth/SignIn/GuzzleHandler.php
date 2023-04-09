@@ -24,23 +24,27 @@ use Kreait\Firebase\Util;
 use Psr\Http\Message\RequestInterface;
 use UnexpectedValueException;
 
-use const JSON_FORCE_OBJECT;
-
 use function array_merge;
 use function http_build_query;
 use function str_replace;
+
+use const JSON_FORCE_OBJECT;
 
 /**
  * @internal
  */
 final class GuzzleHandler implements Handler
 {
-    /** @var array<non-empty-string, mixed> */
+    /**
+     * @var array<non-empty-string, mixed>
+     */
     private static array $defaultBody = [
         'returnSecureToken' => true,
     ];
 
-    /** @var array<non-empty-string, mixed> */
+    /**
+     * @var array<non-empty-string, mixed>
+     */
     private static array $defaultHeaders = [
         'Content-Type' => 'application/json; charset=UTF-8',
     ];

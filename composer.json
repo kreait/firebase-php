@@ -79,14 +79,17 @@
         ],
         "install-php-cs-fixer": [
             "mkdir --parents tools/php-cs-fixer",
-            "composer require --dev --working-dir=tools/php-cs-fixer beste/php-cs-fixer-config"
+            "composer require --dev --working-dir=tools/php-cs-fixer friendsofphp/php-cs-fixer:~3.16.0 beste/php-cs-fixer-config:~2.0.0"
         ],
         "install-rector": [
             "mkdir --parents tools/rector",
-            "composer require --working-dir=tools/rector rector/rector"
+            "composer require --dev --working-dir=tools/rector rector/rector"
         ],
         "cs": [
-            "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff"
+            "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff --verbose"
+        ],
+        "lint": [
+            "XDEBUG_MODE=off vendor/bin/phpstan"
         ],
         "rector": [
             "tools/rector/vendor/bin/rector --dry-run"
@@ -95,12 +98,18 @@
             "tools/rector/vendor/bin/rector"
         ],
         "test": [
-            "XDEBUG_MODE=off vendor/bin/phpstan",
-            "vendor/bin/phpunit --testsuite=unit"
+            "@lint",
+            "vendor/bin/phpunit"
         ],
         "test-coverage": [
             "Composer\\Config::disableProcessTimeout",
             "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html=.build/coverage"
+        ],
+        "test-units": [
+            "vendor/bin/phpunit --testsuite=unit"
+        ],
+        "test-integration": [
+            "vendor/bin/phpunit --testsuite=integration"
         ]
     },
     "extra": {

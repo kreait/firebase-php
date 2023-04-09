@@ -376,6 +376,7 @@ final class DynamicLinksTest extends TestCase
                     ->withDescription('Social Meta Tag description')
                     ->withTitle('Social Meta Tag title')
                     ->withImageLink('https://domain.tld/image.jpg'),
-            );
+            )
+        ;
     }
 }

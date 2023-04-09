@@ -12,7 +12,9 @@ use function array_key_exists;
 
 class Transaction
 {
-    /** @var array<string, string> */
+    /**
+     * @var array<string, string>
+     */
     private array $etags;
 
     /**

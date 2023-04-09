@@ -33,19 +33,29 @@ class UserQuery implements JsonSerializable
     public const ORDER_DESC = 'DESC';
     public const MAX_LIMIT = 500;
 
-    /** @var int<1, self::MAX_LIMIT>|null */
+    /**
+     * @var int<1, self::MAX_LIMIT>|null
+     */
     private ?int $limit = null;
 
-    /** @var int<0, max>|null */
+    /**
+     * @var int<0, max>|null
+     */
     private ?int $offset = null;
 
-    /** @var self::FIELD_*|null */
+    /**
+     * @var self::FIELD_*|null
+     */
     private ?string $sortBy = null;
 
-    /** @var self::ORDER_*|null */
+    /**
+     * @var self::ORDER_*|null
+     */
     private ?string $order = null;
 
-    /** @var array<self::FILTER_*, non-empty-string>|null */
+    /**
+     * @var array<self::FILTER_*, non-empty-string>|null
+     */
     private ?array $filter = null;
 
     private function __construct()

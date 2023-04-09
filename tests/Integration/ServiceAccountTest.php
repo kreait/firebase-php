@@ -16,7 +16,9 @@ use function assert;
  */
 final class ServiceAccountTest extends TestCase
 {
-    /** @var non-empty-string */
+    /**
+     * @var non-empty-string
+     */
     private static string $credentialsPath;
     private static bool $credentialsPathIsTemporary = false;
 

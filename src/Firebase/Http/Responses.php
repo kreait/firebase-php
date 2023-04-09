@@ -15,7 +15,9 @@ use Traversable;
  */
 final class Responses implements IteratorAggregate
 {
-    /** @var ResponseInterface[] */
+    /**
+     * @var ResponseInterface[]
+     */
     private array $responses;
 
     public function __construct(ResponseInterface ...$responses)

@@ -20,8 +20,6 @@ use Kreait\Firebase\Exception\Auth\RevokedSessionCookie;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 
-use const PHP_URL_QUERY;
-
 use function assert;
 use function bin2hex;
 use function is_string;
@@ -31,12 +29,16 @@ use function random_bytes;
 use function random_int;
 use function sleep;
 
+use const PHP_URL_QUERY;
+
 /**
  * @internal
  */
 abstract class AuthTestCase extends IntegrationTestCase
 {
-    /** @phpstan-ignore-next-line */
+    /**
+     * @phpstan-ignore-next-line
+     */
     protected Auth $auth;
 
     public function testCreateAnonymousUser(): void
@@ -265,7 +267,8 @@ abstract class AuthTestCase extends IntegrationTestCase
         $uid = $this->auth
             ->verifyIdToken($idToken)
             ->claims()
-            ->get('sub');
+            ->get('sub')
+        ;
 
         sleep(1);
         $this->auth->revokeRefreshTokens($uid);
@@ -557,7 +560,7 @@ abstract class AuthTestCase extends IntegrationTestCase
         try {
             $this->auth->setCustomUserClaims($user->uid, $claims = ['a' => 'b']);
 
-            $this->assertEquals($claims, $this->auth->getUser($user->uid)->customClaims);
+            $this->assertSame($claims, $this->auth->getUser($user->uid)->customClaims);
 
             $this->auth->setCustomUserClaims($user->uid, null);
 

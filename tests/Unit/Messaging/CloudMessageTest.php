@@ -27,7 +27,8 @@ final class CloudMessageTest extends TestCase
     {
         $original = CloudMessage::withTarget(MessageTarget::TOKEN, 'bar')
             ->withData(['foo' => 'bar'])
-            ->withNotification(Notification::create('title', 'body'));
+            ->withNotification(Notification::create('title', 'body'))
+        ;
 
         $changed = $original->withChangedTarget(MessageTarget::TOKEN, 'baz');
 

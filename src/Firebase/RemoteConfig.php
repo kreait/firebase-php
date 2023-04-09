@@ -42,7 +42,8 @@ final class RemoteConfig implements Contract\RemoteConfig
     {
         $etag = $this->client
             ->publishTemplate($this->ensureTemplate($template))
-            ->getHeader('ETag');
+            ->getHeader('ETag')
+        ;
 
         $etag = array_shift($etag);
 

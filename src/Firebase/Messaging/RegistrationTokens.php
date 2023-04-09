@@ -19,7 +19,9 @@ use function is_string;
  */
 final class RegistrationTokens implements Countable, IteratorAggregate
 {
-    /** @var list<RegistrationToken> */
+    /**
+     * @var list<RegistrationToken>
+     */
     private array $tokens;
 
     /**

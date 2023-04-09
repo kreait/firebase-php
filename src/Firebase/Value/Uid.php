@@ -14,7 +14,9 @@ use function mb_strlen;
  */
 final class Uid
 {
-    /** @var non-empty-string */
+    /**
+     * @var non-empty-string
+     */
     public readonly string $value;
 
     private function __construct(string $value)

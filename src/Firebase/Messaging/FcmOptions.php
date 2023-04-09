@@ -15,10 +15,14 @@ use JsonSerializable;
  */
 final class FcmOptions implements JsonSerializable
 {
-    /** @var FcmOptionsShape */
+    /**
+     * @var FcmOptionsShape
+     */
     private array $data;
 
-    /** @param FcmOptionsShape $data */
+    /**
+     * @param FcmOptionsShape $data
+     */
     private function __construct(array $data)
     {
         $this->data = $data;

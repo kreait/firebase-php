@@ -17,7 +17,9 @@ use function putenv;
  */
 final class FactoryTest extends UnitTestCase
 {
-    /** @var non-empty-string */
+    /**
+     * @var non-empty-string
+     */
     private string $serviceAccountFilePath;
 
     /**

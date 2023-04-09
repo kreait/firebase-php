@@ -45,7 +45,7 @@ final class AppCheckTest extends IntegrationTestCase
 
         $response = $this->appCheck->verifyToken($token->token);
 
-        $this->assertEquals(self::$appId, $response->appId);
-        $this->assertEquals(self::$appId, $response->token->app_id);
+        $this->assertSame(self::$appId, $response->appId);
+        $this->assertSame(self::$appId, $response->token->app_id);
     }
 }
