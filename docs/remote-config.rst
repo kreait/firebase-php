@@ -120,7 +120,7 @@ Conditional values
     $germanLanguageCondition = RemoteConfig\Condition::named('lang_german')
         ->withExpression("device.language in ['de', 'de_AT', 'de_CH']");
 
-    $germanWelcomeMessage = RemoteConfig\ConditionalValue::basedOn($germanLanguageCondition, 'Willkommen!');
+    $germanWelcomeMessage = RemoteConfig\ConditionalValue::basedOn($germanLanguageCondition)->withValue('Willkommen!');
 
     $welcomeMessageParameter = RemoteConfig\Parameter::named('welcome_message')
             ->withDefaultValue('Welcome!')
