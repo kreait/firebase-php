@@ -189,7 +189,7 @@ final class Messaging implements Contract\Messaging
             : RegistrationToken::fromValue($registrationToken);
 
         try {
-            return $this->appInstanceApi->getAppInstanceAsync($token)->wait();
+            return $this->appInstanceApi->getAppInstance($token);
         } catch (NotFound $e) {
             throw NotFound::becauseTokenNotFound($token->value(), $e->errors());
         } catch (MessagingException $e) {

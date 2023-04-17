@@ -10,6 +10,7 @@ use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\Utils;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
+use Kreait\Firebase\Exception\MessagingException;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -174,5 +175,25 @@ class AppInstanceApiClient
             })
             ->otherwise(fn (Throwable $e) => Create::rejectionFor($this->errorHandler->convertException($e)))
         ;
+    }
+
+    /**
+     * @throws MessagingException
+     */
+    public function getAppInstance(RegistrationToken $registrationToken): AppInstance
+    {
+        try {
+            $response = $this->client->request('GET', '/iid/'.$registrationToken->value().'?details=true');
+        } catch (Throwable $e) {
+            throw $this->errorHandler->convertException($e);
+        }
+
+        try {
+            $data = Json::decode((string) $response->getBody(), true);
+        } catch (Throwable $e) {
+            throw $this->errorHandler->convertException($e);
+        }
+
+        return AppInstance::fromRawData($registrationToken, $data);
     }
 }
