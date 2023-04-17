@@ -252,11 +252,7 @@ final class CloudMessage implements Message
     }
 
     /**
-     * @param array{
-     *     token?: string,
-     *     topic?: string,
-     *     condition?: string
-     * } $data
+     * @param array<mixed> $data
      */
     private static function determineTargetFromArray(array $data): MessageTarget
     {
