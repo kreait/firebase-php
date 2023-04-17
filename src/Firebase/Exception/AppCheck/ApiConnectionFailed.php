@@ -6,7 +6,7 @@ namespace Kreait\Firebase\Exception\AppCheck;
 
 use Kreait\Firebase\Exception\AppCheckException;
 use Kreait\Firebase\Exception\HasErrors;
-use RuntimeException;
+use Kreait\Firebase\Exception\RuntimeException;
 
 final class ApiConnectionFailed extends RuntimeException implements AppCheckException
 {

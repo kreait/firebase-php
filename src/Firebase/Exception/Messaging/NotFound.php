@@ -6,7 +6,7 @@ namespace Kreait\Firebase\Exception\Messaging;
 
 use Kreait\Firebase\Exception\HasErrors;
 use Kreait\Firebase\Exception\MessagingException;
-use RuntimeException;
+use Kreait\Firebase\Exception\RuntimeException;
 
 final class NotFound extends RuntimeException implements MessagingException
 {

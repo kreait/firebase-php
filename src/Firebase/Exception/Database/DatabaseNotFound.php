@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Exception\Database;
 
 use Kreait\Firebase\Exception\DatabaseException;
-use LogicException;
+use Kreait\Firebase\Exception\LogicException;
 use Psr\Http\Message\UriInterface;
 
 use function explode;

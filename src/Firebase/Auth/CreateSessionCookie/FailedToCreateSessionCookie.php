@@ -7,12 +7,12 @@ namespace Kreait\Firebase\Auth\CreateSessionCookie;
 use Beste\Json;
 use InvalidArgumentException;
 use Kreait\Firebase\Auth\CreateSessionCookie;
-use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Exception\AuthException;
+use Kreait\Firebase\Exception\RuntimeException;
 use Psr\Http\Message\ResponseInterface;
-use RuntimeException;
 use Throwable;
 
-final class FailedToCreateSessionCookie extends RuntimeException implements FirebaseException
+final class FailedToCreateSessionCookie extends RuntimeException implements AuthException
 {
     private CreateSessionCookie $action;
     private ?ResponseInterface $response;

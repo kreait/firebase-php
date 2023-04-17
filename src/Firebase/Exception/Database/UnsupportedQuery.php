@@ -6,7 +6,7 @@ namespace Kreait\Firebase\Exception\Database;
 
 use Kreait\Firebase\Database\Query;
 use Kreait\Firebase\Exception\DatabaseException;
-use RuntimeException;
+use Kreait\Firebase\Exception\RuntimeException;
 use Throwable;
 
 final class UnsupportedQuery extends RuntimeException implements DatabaseException

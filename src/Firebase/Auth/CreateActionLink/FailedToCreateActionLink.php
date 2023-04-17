@@ -7,11 +7,11 @@ namespace Kreait\Firebase\Auth\CreateActionLink;
 use Beste\Json;
 use InvalidArgumentException;
 use Kreait\Firebase\Auth\CreateActionLink;
-use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Exception\AuthException;
+use Kreait\Firebase\Exception\RuntimeException;
 use Psr\Http\Message\ResponseInterface;
-use RuntimeException;
 
-final class FailedToCreateActionLink extends RuntimeException implements FirebaseException
+final class FailedToCreateActionLink extends RuntimeException implements AuthException
 {
     private ?CreateActionLink $action = null;
     private ?ResponseInterface $response = null;

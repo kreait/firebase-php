@@ -6,12 +6,11 @@ namespace Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 
 use Beste\Json;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
-use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Exception\RuntimeException;
 use Psr\Http\Message\ResponseInterface;
-use RuntimeException;
 use UnexpectedValueException;
 
-final class FailedToShortenLongDynamicLink extends RuntimeException implements FirebaseException
+final class FailedToShortenLongDynamicLink extends RuntimeException
 {
     private ?ShortenLongDynamicLink $action = null;
     private ?ResponseInterface $response = null;

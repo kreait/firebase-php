@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Exception\RemoteConfig;
 
 use Kreait\Firebase\Exception\RemoteConfigException;
+use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\RemoteConfig\VersionNumber;
-use RuntimeException;
 
 final class VersionNotFound extends RuntimeException implements RemoteConfigException
 {

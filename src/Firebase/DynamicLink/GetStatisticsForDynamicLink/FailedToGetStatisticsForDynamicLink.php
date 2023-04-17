@@ -6,11 +6,10 @@ namespace Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink;
 
 use Fig\Http\Message\StatusCodeInterface as StatusCode;
 use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink;
-use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Exception\RuntimeException;
 use Psr\Http\Message\ResponseInterface;
-use RuntimeException;
 
-final class FailedToGetStatisticsForDynamicLink extends RuntimeException implements FirebaseException
+final class FailedToGetStatisticsForDynamicLink extends RuntimeException
 {
     private ?GetStatisticsForDynamicLink $action = null;
     private ?ResponseInterface $response = null;

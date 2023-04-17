@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Exception\Auth;
 
 use Kreait\Firebase\Exception\AuthException;
+use Kreait\Firebase\Exception\RuntimeException;
 use Kreait\Firebase\Factory;
-use RuntimeException;
 
 final class AuthError extends RuntimeException implements AuthException
 {

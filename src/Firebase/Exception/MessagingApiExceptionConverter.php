@@ -37,10 +37,7 @@ class MessagingApiExceptionConverter
         $this->clock = $clock ?? SystemClock::create();
     }
 
-    /**
-     * @return MessagingException
-     */
-    public function convertException(Throwable $exception): FirebaseException
+    public function convertException(Throwable $exception): MessagingException
     {
         if ($exception instanceof RequestException) {
             return $this->convertGuzzleRequestException($exception);
