@@ -45,13 +45,13 @@
         "riverline/multipart-parser": "^2.0.9"
     },
     "require-dev": {
-        "google/cloud-firestore": "^1.29.0",
-        "phpstan/extension-installer": "^1.2",
-        "phpstan/phpstan": "^1.10.13",
+        "google/cloud-firestore": "^1.31.0",
+        "phpstan/extension-installer": "^1.3",
+        "phpstan/phpstan": "^1.10.14",
         "phpstan/phpstan-phpunit": "^1.3.11",
-        "phpunit/phpunit": "^10.1.1",
+        "phpunit/phpunit": "^10.1.2",
         "roave/backward-compatibility-check": "^8.3",
-        "symfony/var-dumper": "^6.2.8"
+        "symfony/var-dumper": "^6.2.10"
     },
     "suggest": {
         "google/cloud-firestore": "^1.0 to use the Firestore component"
