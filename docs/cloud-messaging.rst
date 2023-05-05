@@ -530,12 +530,14 @@ Firebase Messaging supports Emojis in Messages.
     $text = "This is an emoji \u{1F600}";
 
 
-**************************************
-Sending a fully configured raw message
-**************************************
+*****************************
+Sending a raw/custom messages
+*****************************
 
-.. note::
-    The message will be parsed and validated by the SDK.
+Instead of composing messages with the help of the ``CloudMessage`` builder, you can use
+``RawMessageFromArray`` as a wrapper for a pre-compiled message payload. Alternatively,
+you can implement custom messages by implementing the ``Kreait\Firebase\Messaging\Message``
+interface.
 
 .. code-block:: php
 
@@ -544,49 +546,35 @@ Sending a fully configured raw message
     $message = new RawMessageFromArray([
             'notification' => [
                 // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#notification
-                'title' => 'Notification title',
-                'body' => 'Notification body',
-                'image' => 'http://lorempixel.com/400/200/',
+                'title' => 'Default title',
+                'body' => 'Default body',
             ],
             'data' => [
-                'key_1' => 'Value 1',
-                'key_2' => 'Value 2',
+                'key' => 'Value',
             ],
             'android' => [
                 // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidconfig
-                'ttl' => '3600s',
-                'priority' => 'normal',
                 'notification' => [
-                    'title' => '$GOOG up 1.43% on the day',
-                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
-                    'icon' => 'stock_ticker_update',
-                    'color' => '#f45342',
+                    'title' => 'Android Title',
+                    'body' => 'Android Body',
                 ],
             ],
             'apns' => [
                 // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#apnsconfig
-                'headers' => [
-                    'apns-priority' => '10',
-                ],
                 'payload' => [
                     'aps' => [
                         'alert' => [
-                            'title' => '$GOOG up 1.43% on the day',
-                            'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                            'title' => 'iOS Title',
+                            'body' => 'iOS Body',
                         ],
-                        'badge' => 42,
                     ],
                 ],
             ],
             'webpush' => [
                 // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
-                'headers' => [
-                    'Urgency' => 'normal',
-                ],
                 'notification' => [
-                    'title' => '$GOOG up 1.43% on the day',
-                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
-                    'icon' => 'https://my-server/icon.png',
+                    'title' => 'Webpush Title',
+                    'body' => 'Webpush Body'
                 ],
             ],
             'fcm_options' => [
