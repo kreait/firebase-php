@@ -69,3 +69,23 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           flags: unit
+
+  bc-checks:
+    name: Backward Compatibility Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          extensions: grpc
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Check for BC breaks
+        run: vendor/bin/roave-backward-compatibility-check --format=github-actions
