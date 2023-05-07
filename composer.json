@@ -74,15 +74,16 @@
     },
     "scripts": {
         "install-tools": [
+            "rm -rf tools",
             "@install-php-cs-fixer",
             "@install-rector"
         ],
         "install-php-cs-fixer": [
-            "mkdir --parents tools/php-cs-fixer",
+            "mkdir -p tools/php-cs-fixer",
             "composer require --dev --working-dir=tools/php-cs-fixer friendsofphp/php-cs-fixer:~3.16.0 beste/php-cs-fixer-config:~2.0.0"
         ],
         "install-rector": [
-            "mkdir --parents tools/rector",
+            "mkdir -p tools/rector",
             "composer require --dev --working-dir=tools/rector rector/rector"
         ],
         "cs": [
