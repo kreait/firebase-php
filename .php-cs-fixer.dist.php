@@ -26,10 +26,11 @@ $config = Factory::fromRuleSet(new Php81(), [
 
 $config
     ->getFinder()
-    ->in(__DIR__)
+    ->in([
+        'src',
+        'tests',
+    ])
     ->ignoreDotFiles(false)
 ;
-
-$config->setCacheFile(__DIR__.'/tools/.php-cs-fixer.cache');
 
 return $config;

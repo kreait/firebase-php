@@ -5,9 +5,9 @@
 /docs/_build
 /docs/*.pyc
 /tests/_fixtures/test_*
-/tools
 
 /.firebaserc
+/.php-cs-fixer.cache
 /.phpunit.result.cache
 /composer.lock
 /phpstan.neon

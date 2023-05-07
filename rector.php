@@ -14,9 +14,7 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__.'/tests',
     ]);
 
-    $rectorConfig->cacheDirectory(__DIR__.'/tools/.rector-cache');
-
-    $rectorConfig->importNames();
+    // $rectorConfig->importNames();
 
     // register a single rule
     // $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
@@ -26,6 +24,4 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::EARLY_RETURN,
         LevelSetList::UP_TO_PHP_81,
     ]);
-
-    $rectorConfig->phpstanConfig(__DIR__.'/phpstan-for-rector.neon.dist');
 };
