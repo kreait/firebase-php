@@ -16,6 +16,9 @@ parameters:
 		-
 			message: '#JWT::decode.+expects.+CachedKeySet given#'
 			path: src/Firebase/AppCheck/AppCheckTokenVerifier.php
+		-
+			message: '#Call to method.+assertIsCallable.+will always evaluate to true#'
+			path: tests
 
 	checkUninitializedProperties: true
 	reportUnmatchedIgnoredErrors: false

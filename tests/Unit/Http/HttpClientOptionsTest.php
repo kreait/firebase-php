@@ -45,4 +45,74 @@ final class HttpClientOptionsTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         HttpClientOptions::default()->withTimeout(-0.1);
     }
+
+    public function testItAcceptsSingleGuzzleClientConfigOptions(): void
+    {
+        $options = HttpClientOptions::default()->withGuzzleConfigOption('foo', 'bar');
+
+        $this->assertEqualsCanonicalizing(['foo' => 'bar'], $options->guzzleConfig());
+    }
+
+    public function testItAcceptsMultipleGuzzleClientConfigOptions(): void
+    {
+        $options = HttpClientOptions::default()->withGuzzleConfigOptions([
+            'first' => 'first value',
+            'second' => 'second value',
+        ]);
+
+        $this->assertEqualsCanonicalizing(
+            [
+                'first' => 'first value',
+                'second' => 'second value',
+            ],
+            $options->guzzleConfig(),
+        );
+    }
+
+    public function testItRetainsPreviouslySetGuzzleConfigOptions(): void
+    {
+        $options = HttpClientOptions::default()
+            ->withGuzzleConfigOption('existing', 'existing')
+            ->withGuzzleConfigOptions(['new' => 'new'])
+        ;
+
+        $this->assertEqualsCanonicalizing(
+            [
+                'existing' => 'existing',
+                'new' => 'new',
+            ],
+            $options->guzzleConfig(),
+        );
+    }
+
+    public function testItAcceptsSingleCallableMiddlewares(): void
+    {
+        $options = HttpClientOptions::default()->withGuzzleMiddleware(static fn () => 'Foo', 'name');
+
+        $middlewares = $options->guzzleMiddlewares();
+
+        $this->assertCount(1, $middlewares);
+        $this->assertIsCallable($middlewares[0]['middleware']);
+        $this->assertSame('name', $middlewares[0]['name']);
+    }
+
+    public function testItAcceptsMultipleMiddlewares(): void
+    {
+        $options = HttpClientOptions::default()
+            ->withGuzzleMiddlewares([
+                static fn () => 'Foo',
+                ['middleware' => static fn () => 'Foo', 'name' => 'Foo'],
+            ])
+        ;
+
+        $middlewares = $options->guzzleMiddlewares();
+
+        $this->assertCount(2, $middlewares);
+
+        $this->assertIsCallable($middlewares[0]['middleware']);
+        $this->assertSame('', $middlewares[0]['name']);
+
+        $this->assertIsCallable($middlewares[1]['middleware']);
+        $this->assertSame('Foo', $middlewares[1]['name']);
+    }
 }

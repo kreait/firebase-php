@@ -177,7 +177,7 @@ want to access directly and suppress warnings triggered by the Google Auth Compo
 HTTP Client Options
 *******************
 
-You can configure the behavior of the HTTP Client performing the API requests by passing an
+You can configure the behavior of the Guzzle HTTP Client performing the API requests by passing an
 instance of `Kreait\Firebase\Http\HttpClientOptions` to the factory before creating a
 service.
 
@@ -201,6 +201,53 @@ service.
     // Newly created services will now use the new HTTP options
     $realtimeDatabase = $factory->createDatabase();
 
+Setting Guzzle Config Options
+=============================
+
+In addition to the explicit settings above, you can fully customize the configuration of the Guzzle HTTP Client:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Http\HttpClientOptions;
+
+    $options = HttpClientOptions::default()
+        ->withGuzzleConfigOption('single', 'value')
+        ->withGuzzleConfigOptions([
+            'first' => 'value',
+            'second' => 'value,
+        ]);
+
+.. note::
+    You can find all Guzzle Config Options at
+    `Guzzle: Request Options <https://docs.guzzlephp.org/en/stable/request-options.html>`_
+
+Adding Guzzle Middlewares
+=========================
+
+You can also add middlewares to the Guzzle HTTP Client:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Http\HttpClientOptions;
+
+    $options = HttpClientOptions::default();
+
+    # Adding a single middleware
+    $options = $options->withGuzzleMiddleware($myMiddleware, 'my_middleware'); // The name can be omitted
+
+    # Adding multiple middlewares
+    $options = $options->withGuzzleMiddlewares([
+        # Just providing the middleware
+        $myMiddleware,
+        # Alternative notation:
+        ['middleware' => $myMiddleware]
+        # Providing a named middleware
+        ['middleware' => $myMiddleware, 'name' => 'my_middleware],
+    ]);
+
+.. note::
+    You can find more information about Guzzle Middlewares at
+    `Guzzle: Handlers and Middleware <https://docs.guzzlephp.org/en/stable/handlers-and-middleware.html>`_
 
 *******
 Logging
