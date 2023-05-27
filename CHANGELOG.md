@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Added
+
+* It is now possible to add config options and middlewares to the Guzzle HTTP Client performing the HTTP Requests
+  to the Firebase APIs through the `HttpClientOptions` class.
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/setup.html#http-client-options))
+
 ## [7.2.1] - 2023-04-04
 
 ### Fixed
