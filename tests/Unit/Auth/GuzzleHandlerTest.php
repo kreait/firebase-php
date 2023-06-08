@@ -15,6 +15,7 @@ use Kreait\Firebase\Auth\SignIn\FailedToSignIn;
 use Kreait\Firebase\Auth\SignIn\GuzzleHandler;
 use Kreait\Firebase\Auth\SignInAnonymously;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use const JSON_FORCE_OBJECT;
 
@@ -35,18 +36,14 @@ final class GuzzleHandlerTest extends UnitTestCase
         $this->handler = new GuzzleHandler('my-project', new Client(['handler' => $this->httpResponses]));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itFailsOnAnUnsupportedAction(): void
     {
         $this->expectException(FailedToSignIn::class);
         $this->handler->handle($this->createMock(SignIn::class));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itFailsWhenGuzzleFails(): void
     {
         $client = $this->createMock(ClientInterface::class);
@@ -58,9 +55,7 @@ final class GuzzleHandlerTest extends UnitTestCase
         $handler->handle($this->action);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itFailsOnAnUnsuccessfulResponse(): void
     {
         $this->httpResponses->append($response = new Response(400, [], '""'));
@@ -73,9 +68,7 @@ final class GuzzleHandlerTest extends UnitTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itFailsOnASuccessfulResponseWithInvalidJson(): void
     {
         $this->httpResponses->append(new Response(200, [], '{'));
@@ -84,9 +77,7 @@ final class GuzzleHandlerTest extends UnitTestCase
         $this->handler->handle($this->action);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itWorks(): void
     {
         $this->httpResponses->append(new Response(200, [], Json::encode([

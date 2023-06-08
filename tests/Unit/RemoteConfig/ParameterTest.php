@@ -7,15 +7,14 @@ namespace Kreait\Firebase\Tests\Unit\RemoteConfig;
 use Kreait\Firebase\RemoteConfig\DefaultValue;
 use Kreait\Firebase\RemoteConfig\Parameter;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class ParameterTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function createWithImplicitDefaultValue(): void
     {
         $parameter = Parameter::named('empty');
@@ -23,9 +22,7 @@ final class ParameterTest extends UnitTestCase
         $this->assertNull($parameter->defaultValue());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createWithDefaultValue(): void
     {
         $parameter = Parameter::named('with_default_foo', 'foo');
@@ -33,9 +30,7 @@ final class ParameterTest extends UnitTestCase
         $this->assertEqualsCanonicalizing(DefaultValue::with('foo')->toArray(), $parameter->defaultValue()?->toArray());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createWithDescription(): void
     {
         $parameter = Parameter::named('something')->withDescription('description');

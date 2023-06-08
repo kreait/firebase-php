@@ -12,6 +12,7 @@ use Kreait\Firebase\RemoteConfig\ParameterGroup;
 use Kreait\Firebase\RemoteConfig\TagColor;
 use Kreait\Firebase\RemoteConfig\Template;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function array_map;
 
@@ -20,25 +21,19 @@ use function array_map;
  */
 final class TemplateTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function getDefaultEtag(): void
     {
         $this->assertSame('*', Template::new()->etag());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function defaultVersionIsNull(): void
     {
         $this->assertNull(Template::new()->version());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createWithInvalidConditionalValue(): void
     {
         $parameter = Parameter::named('foo')->withConditionalValue(new ConditionalValue('non_existing_condition', 'false'));
@@ -49,9 +44,8 @@ final class TemplateTest extends UnitTestCase
 
     /**
      * @see https://github.com/kreait/firebase-php/issues/218
-     *
-     * @test
      */
+    #[Test]
     public function conditionNamesAreImportedCorrectlyWhenUsingFromArray(): void
     {
         $given = ['conditions' => [['name' => 'foo', 'expression' => '"true"']]];
@@ -69,9 +63,7 @@ final class TemplateTest extends UnitTestCase
         $this->assertSame('foo', $template->parameters()['param']->conditionalValues()[0]->conditionName());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function withFluidConfiguration(): void
     {
         $german = Condition::named('lang_german')
@@ -115,9 +107,7 @@ final class TemplateTest extends UnitTestCase
         $this->assertSame($uiColors, $template->parameterGroups()['ui_colors']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function parametersCanBeRemoved(): void
     {
         $template = Template::new()
@@ -128,9 +118,7 @@ final class TemplateTest extends UnitTestCase
         $this->assertCount(0, $template->parameters());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function parameterGroupsCanBeRemoved(): void
     {
         $template = Template::new()
@@ -141,9 +129,7 @@ final class TemplateTest extends UnitTestCase
         $this->assertCount(0, $template->parameterGroups());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function personalizationValuesAreImportedInDefaultValues(): void
     {
         $data = [
@@ -167,9 +153,7 @@ final class TemplateTest extends UnitTestCase
         $this->assertSame('id', $personalizationIdArray['personalizationId']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function personalizationValuesAreImportedInConditionalValues(): void
     {
         $data = [
@@ -203,9 +187,7 @@ final class TemplateTest extends UnitTestCase
         $this->assertSame('id', $personalizationIdArray['personalizationId']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itProvidesConditionNames(): void
     {
         $this->assertEqualsCanonicalizing(
@@ -218,9 +200,7 @@ final class TemplateTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function conditionsCanBeRemoved(): void
     {
         $this->assertEqualsCanonicalizing(

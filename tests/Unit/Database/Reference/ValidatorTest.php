@@ -8,6 +8,8 @@ use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database\Reference\Validator;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Psr\Http\Message\UriInterface;
 
 use function ltrim;
@@ -29,9 +31,7 @@ final class ValidatorTest extends UnitTestCase
         $this->validator = new Validator();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateDepth(): void
     {
         $uri = $this->uri->withPath('/'.str_pad('', (Validator::MAX_DEPTH + 1) * 2, 'x/'));
@@ -40,9 +40,7 @@ final class ValidatorTest extends UnitTestCase
         $this->validator->validateUri($uri);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateKeySize(): void
     {
         $uri = $this->uri->withPath('/'.str_pad('', Validator::MAX_KEY_SIZE + 1, 'x'));
@@ -51,11 +49,8 @@ final class ValidatorTest extends UnitTestCase
         $this->validator->validateUri($uri);
     }
 
-    /**
-     * @dataProvider invalidChars
-     *
-     * @test
-     */
+    #[DataProvider('invalidChars')]
+    #[Test]
     public function validateChars(string $value): void
     {
         $uri = $this->uri->withPath('/'.ltrim($value, '/'));

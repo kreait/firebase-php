@@ -14,6 +14,8 @@ use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\RawMessageFromArray;
 use Kreait\Firebase\Messaging\WebPushConfig;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -104,9 +106,7 @@ final class MessagingTest extends IntegrationTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function sendMessage(): void
     {
         $message = self::createFullMessageData();
@@ -117,9 +117,7 @@ final class MessagingTest extends IntegrationTestCase
         $this->assertArrayHasKey('name', $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function sendRawMessage(): void
     {
         $data = self::createFullMessageData();
@@ -132,9 +130,8 @@ final class MessagingTest extends IntegrationTestCase
 
     /**
      * @see https://github.com/kreait/firebase-php/issues/591
-     *
-     * @test
      */
+    #[Test]
     public function sendingAMessageWithEmptyMessageDataShouldNotFail(): void
     {
         $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
@@ -145,11 +142,8 @@ final class MessagingTest extends IntegrationTestCase
         $this->addToAssertionCount(1);
     }
 
-    /**
-     * @dataProvider reservedKeywordsThatStillAreAccepted
-     *
-     * @test
-     */
+    #[DataProvider('reservedKeywordsThatStillAreAccepted')]
+    #[Test]
     public function sendMessageWithReservedKeywordInMessageDataThatIsStillAccepted(string $keyword): void
     {
         $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
@@ -170,9 +164,7 @@ final class MessagingTest extends IntegrationTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateValidMessage(): void
     {
         $message = self::createFullMessageData();
@@ -183,9 +175,7 @@ final class MessagingTest extends IntegrationTestCase
         $this->assertArrayHasKey('name', $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateInvalidMessage(): void
     {
         $message = self::createFullMessageData();
@@ -195,9 +185,7 @@ final class MessagingTest extends IntegrationTestCase
         $this->messaging->validate($message);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function sendMulticastWithValidAndInvalidTarget(): void
     {
         $message = CloudMessage::fromArray([]);
@@ -227,9 +215,8 @@ final class MessagingTest extends IntegrationTestCase
 
     /**
      * @see https://github.com/kreait/firebase-php/issues/436
-     *
-     * @test
      */
+    #[Test]
     public function sendMulticastMessageToTwoInvalidRecipients(): void
     {
         $message = CloudMessage::fromArray([]);
@@ -252,9 +239,8 @@ final class MessagingTest extends IntegrationTestCase
 
     /**
      * @see https://github.com/kreait/firebase-php/issues/317
-     *
-     * @test
      */
+    #[Test]
     public function sendMulticastMessageToOneRecipientOnly(): void
     {
         $report = $this->messaging->sendMulticast(CloudMessage::new(), [$this->getTestRegistrationToken()]);
@@ -262,9 +248,7 @@ final class MessagingTest extends IntegrationTestCase
         $this->assertCount(1, $report->successes());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function sendMessageToDifferentTargets(): void
     {
         $token = $this->getTestRegistrationToken();
@@ -290,9 +274,7 @@ final class MessagingTest extends IntegrationTestCase
         $this->assertCount(2, $report->failures());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validateRegistrationTokens(): void
     {
         $tokens = [
@@ -307,9 +289,7 @@ final class MessagingTest extends IntegrationTestCase
         $this->assertSame($invalid, $result['invalid'][0]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function subscribeToTopic(): void
     {
         $token = $this->getTestRegistrationToken();
@@ -324,9 +304,7 @@ final class MessagingTest extends IntegrationTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function subscribeToTopics(): void
     {
         $token = $this->getTestRegistrationToken();
@@ -346,9 +324,7 @@ final class MessagingTest extends IntegrationTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function unsubscribeFromTopic(): void
     {
         $token = $this->getTestRegistrationToken();
@@ -360,9 +336,7 @@ final class MessagingTest extends IntegrationTestCase
         ], $this->messaging->unsubscribeFromTopic($topicName, $token));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function unsubscribeFromTopics(): void
     {
         $token = $this->getTestRegistrationToken();
@@ -378,9 +352,7 @@ final class MessagingTest extends IntegrationTestCase
         ], $this->messaging->unsubscribeFromTopics($topics, $token));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAppInstance(): void
     {
         $token = $this->getTestRegistrationToken();
@@ -389,18 +361,14 @@ final class MessagingTest extends IntegrationTestCase
         $this->assertSame($token, $appInstance->registrationToken()->value());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAppInstanceWithInvalidToken(): void
     {
         $this->expectException(InvalidArgument::class);
         $this->messaging->getAppInstance('foo');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function sendMessageToUnknownToken(): void
     {
         $this->expectException(NotFound::class);
@@ -414,9 +382,7 @@ final class MessagingTest extends IntegrationTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAppInstanceForUnknownToken(): void
     {
         $this->expectException(NotFound::class);

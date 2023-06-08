@@ -24,6 +24,8 @@ use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink\FailedToShortenLongDynamicLink;
 use Kreait\Firebase\DynamicLink\SocialMetaTagInfo;
 use Kreait\Firebase\DynamicLinks;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
@@ -44,9 +46,7 @@ final class DynamicLinksTest extends TestCase
         $this->service = DynamicLinks::withApiClientAndDefaultDomain($httpClient, $this->dynamicLinksDomain);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itCreatesADynamicLink(): void
     {
         $this->httpHandler->append(
@@ -75,9 +75,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertEqualsCanonicalizing($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itCreatesADynamicLinkFromAnArrayOfParameters(): void
     {
         $this->httpHandler->append(
@@ -99,9 +97,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertEqualsCanonicalizing($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function creationFailsIfNoConnectionIsAvailable(): void
     {
         $connectionError = new ConnectException('Connection error', $this->createMock(RequestInterface::class));
@@ -111,9 +107,7 @@ final class DynamicLinksTest extends TestCase
         $this->service->createDynamicLink('https://domain.tld/irrelevant');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function creationFailsOnUnsuccessfulResponse(): void
     {
         $this->httpHandler->append($response = new Response(400, [], '{}'));
@@ -131,9 +125,7 @@ final class DynamicLinksTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function creationFailsGracefullyIfAnUnsuccessfulResponseCannotBeParsed(): void
     {
         $this->httpHandler->append(new Response(400, [], 'probably html'));
@@ -142,9 +134,7 @@ final class DynamicLinksTest extends TestCase
         $this->service->createDynamicLink('https://domain.tld/irrelevant');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itShortensALongLinkFromAnArrayOfParameters(): void
     {
         $this->httpHandler->append(
@@ -166,9 +156,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertEqualsCanonicalizing($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shorteningFailsIfNoConnectionIsAvailable(): void
     {
         $connectionError = new ConnectException('Connection error', $this->createMock(RequestInterface::class));
@@ -178,9 +166,7 @@ final class DynamicLinksTest extends TestCase
         $this->service->shortenLongDynamicLink('https://domain.tld/irrelevant');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shorteningFailsOnUnsuccessfulResponse(): void
     {
         $this->httpHandler->append($response = new Response(400, [], '{}'));
@@ -196,9 +182,7 @@ final class DynamicLinksTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shorteningFailsGracefullyIfAnUnsuccessfulResponseCannotBeParsed(): void
     {
         $this->httpHandler->append(new Response(400, [], 'probably html'));
@@ -207,9 +191,7 @@ final class DynamicLinksTest extends TestCase
         $this->service->shortenLongDynamicLink('https://domain.tld/irrelevant');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itGetsLinkStatistics(): void
     {
         $this->httpHandler->append(
@@ -281,9 +263,7 @@ final class DynamicLinksTest extends TestCase
         $this->assertCount(20, $eventStats->onIOS()->appReOpens());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function linkStatsFailIfNoConnectionIsAvailable(): void
     {
         $connectionError = new ConnectException('Connection error', $this->createMock(RequestInterface::class));
@@ -293,11 +273,8 @@ final class DynamicLinksTest extends TestCase
         $this->service->getStatistics('https://domain.tld');
     }
 
-    /**
-     * @dataProvider provideCodeAndExpectedMessageRegExForFailingStatisticsRetrieval
-     *
-     * @test
-     */
+    #[DataProvider('provideCodeAndExpectedMessageRegExForFailingStatisticsRetrieval')]
+    #[Test]
     public function linkStatsFailOnUnsuccessfulResponse(int $code, string $expectedMessageRegex): void
     {
         $this->httpHandler->append(new Response($code, [], '{"the body does": "not matter here"}'));
@@ -311,9 +288,7 @@ final class DynamicLinksTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function linkStatExceptionsProvideTheActionAndTheResponse(): void
     {
         $action = GetStatisticsForDynamicLink::forLink('https://domain.tld');
@@ -330,9 +305,7 @@ final class DynamicLinksTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function dynamicLinkComponentsCanBeCreatedNewOrFromArrays(): void
     {
         $this->assertNotEmpty(CreateDynamicLink::new()->jsonSerialize()); // has defaults

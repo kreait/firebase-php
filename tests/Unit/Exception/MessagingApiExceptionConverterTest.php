@@ -20,6 +20,8 @@ use Kreait\Firebase\Exception\Messaging\QuotaExceeded;
 use Kreait\Firebase\Exception\Messaging\ServerError;
 use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
 use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use RuntimeException;
@@ -41,9 +43,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
         $this->converter = new MessagingApiExceptionConverter($this->clock);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itConvertsAConnectException(): void
     {
         $connectException = new ConnectException(
@@ -55,12 +55,10 @@ final class MessagingApiExceptionConverterTest extends TestCase
     }
 
     /**
-     * @dataProvider exceptions
-     *
      * @param class-string<object> $expectedClass
-     *
-     * @test
      */
+    #[DataProvider('exceptions')]
+    #[Test]
     public function itConvertsExceptions(Throwable $e, string $expectedClass): void
     {
         $converted = $this->converter->convertException($e);
@@ -106,9 +104,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itKnowsWhenToRetryAfterWithSeconds(): void
     {
         $response = new Response(429, ['Retry-After' => 60]);
@@ -121,9 +117,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
         $this->assertSame($expected->getTimestamp(), $converted->retryAfter()->getTimestamp());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itKnowsWhenToRetryAfterWithDateStrings(): void
     {
         $expected = $this->clock->now()->modify('+60 seconds');

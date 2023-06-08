@@ -6,6 +6,8 @@ namespace Kreait\Firebase\Tests\Unit\Auth;
 
 use Kreait\Firebase\Auth\SignInResult;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -13,12 +15,10 @@ use Kreait\Firebase\Tests\UnitTestCase;
 final class SignInResultTest extends UnitTestCase
 {
     /**
-     * @dataProvider fullResponse
-     *
      * @param array<string, mixed> $input
-     *
-     * @test
      */
+    #[DataProvider('fullResponse')]
+    #[Test]
     public function itCanBeCreated(array $input): void
     {
         $result = SignInResult::fromData($input);
@@ -39,9 +39,7 @@ final class SignInResultTest extends UnitTestCase
         ], $result->asTokenResponse());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itUsesTheLocalIdWhenTheFirebaseUidIsNotPresent(): void
     {
         $result = SignInResult::fromData(['localId' => 'some-id']);

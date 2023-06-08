@@ -11,6 +11,8 @@ use Kreait\Firebase\Messaging\FcmOptions;
 use Kreait\Firebase\Messaging\MessageData;
 use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\Notification;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,17 +20,13 @@ use PHPUnit\Framework\TestCase;
  */
 final class CloudMessageTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function emptyMessage(): void
     {
         $this->assertSame('[]', Json::encode(CloudMessage::new()));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function withChangedTarget(): void
     {
         $original = CloudMessage::withTarget(MessageTarget::TOKEN, 'bar')
@@ -46,17 +44,13 @@ final class CloudMessageTest extends TestCase
         $this->assertSame($encodedOriginal, $encodedChanged);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function anEmptyMessageHasNotTarget(): void
     {
         $this->assertFalse(CloudMessage::new()->hasTarget());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function withChangedFcmOptions(): void
     {
         $options = FcmOptions::create()->withAnalyticsLabel($label = 'my-label');
@@ -70,21 +64,17 @@ final class CloudMessageTest extends TestCase
     }
 
     /**
-     * @dataProvider multipleTargets
-     *
      * @param array<string, string> $data
-     *
-     * @test
      */
+    #[DataProvider('multipleTargets')]
+    #[Test]
     public function aMessageCanOnlyHaveOneTarget(array $data): void
     {
         $this->expectException(InvalidArgument::class);
         CloudMessage::fromArray($data);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function withDefaultSounds(): void
     {
         $expected = [
@@ -108,9 +98,7 @@ final class CloudMessageTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function withLowestPossiblePriority(): void
     {
         $message = CloudMessage::new()->withLowestPossiblePriority();
@@ -132,9 +120,7 @@ final class CloudMessageTest extends TestCase
         $this->assertSame('very-low', $payload['webpush']['headers']['Urgency']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function withHighestPossiblePriority(): void
     {
         $message = CloudMessage::new()->withHighestPossiblePriority();
@@ -158,9 +144,8 @@ final class CloudMessageTest extends TestCase
 
     /**
      * @see https://github.com/kreait/firebase-php/issues/768
-     *
-     * @test
      */
+    #[Test]
     public function messageDataCanBeSetWithAnObjectOrAnArray(): void
     {
         $data = ['key' => 'value'];

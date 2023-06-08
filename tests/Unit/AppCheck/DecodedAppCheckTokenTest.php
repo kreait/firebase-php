@@ -6,15 +6,14 @@ namespace Kreait\Firebase\Tests\Unit\AppCheck;
 
 use Kreait\Firebase\AppCheck\DecodedAppCheckToken;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class DecodedAppCheckTokenTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function createFromValidArray(): void
     {
         $options = DecodedAppCheckToken::fromArray([

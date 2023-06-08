@@ -8,6 +8,7 @@ use Kreait\Firebase\Auth\UserQuery;
 use Kreait\Firebase\Auth\UserRecord;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function array_values;
 use function current;
@@ -28,9 +29,7 @@ final class UserQueryTest extends IntegrationTestCase
         $this->auth = self::$factory->createAuth();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function sortByField(): void
     {
         $user = $this->createUserWithEmailAndPassword();
@@ -49,9 +48,7 @@ final class UserQueryTest extends IntegrationTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function ascendingSortOrder(): void
     {
         // Create two users just in case there are no others in the database
@@ -76,9 +73,7 @@ final class UserQueryTest extends IntegrationTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function descendingSortOrder(): void
     {
         // Create two users just in case there are no others in the database
@@ -103,9 +98,7 @@ final class UserQueryTest extends IntegrationTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function limit(): void
     {
         // Create two users just in case there are no others in the database
@@ -126,9 +119,7 @@ final class UserQueryTest extends IntegrationTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function filterByUid(): void
     {
         $user = $this->createUserWithEmailAndPassword();
@@ -152,9 +143,7 @@ final class UserQueryTest extends IntegrationTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function filterByEmail(): void
     {
         $user = $this->createUserWithEmailAndPassword();
@@ -178,9 +167,7 @@ final class UserQueryTest extends IntegrationTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function filterByPhoneNumber(): void
     {
         $user = $this->auth->createUser([

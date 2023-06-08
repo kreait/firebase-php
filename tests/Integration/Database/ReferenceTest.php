@@ -8,13 +8,15 @@ use DateTimeImmutable;
 use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
- *
- * @group database-emulator
- * @group emulator
  */
+#[Group('database-emulator')]
+#[Group('emulator')]
 final class ReferenceTest extends DatabaseTestCase
 {
     private Reference $ref;
@@ -24,11 +26,8 @@ final class ReferenceTest extends DatabaseTestCase
         $this->ref = self::$db->getReference(self::$refPrefix);
     }
 
-    /**
-     * @dataProvider validValues
-     *
-     * @test
-     */
+    #[DataProvider('validValues')]
+    #[Test]
     public function setAndGet(string $key, mixed $value): void
     {
         $ref = $this->ref->getChild(__FUNCTION__.'/'.$key);
@@ -37,9 +36,7 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertSame($value, $ref->getValue());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function update(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
@@ -62,9 +59,7 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertEqualsCanonicalizing($expected, $ref->getValue());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function push(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
@@ -76,9 +71,7 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertSame($value, $newRef->getValue());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function remove(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
@@ -93,9 +86,7 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertEqualsCanonicalizing(['second' => 'value'], $ref->getValue());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeChildren(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
@@ -122,9 +113,7 @@ final class ReferenceTest extends DatabaseTestCase
         ], $ref->getValue());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function pushToGetKey(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
@@ -134,9 +123,7 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertSame(0, $ref->getSnapshot()->numChildren());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setWithNullIsSameAsRemove(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
@@ -151,9 +138,7 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertSame(0, $ref->getSnapshot()->numChildren());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setServerTimestamp(): void
     {
         $now = new DateTimeImmutable();

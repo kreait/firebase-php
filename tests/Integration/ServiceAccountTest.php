@@ -7,6 +7,7 @@ namespace Kreait\Firebase\Tests\Integration;
 use Beste\Json;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Util;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 use function assert;
@@ -52,9 +53,7 @@ final class ServiceAccountTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function withPathToServiceAccount(): void
     {
         $factory = (new Factory())->withServiceAccount(self::$credentialsPath);
@@ -62,9 +61,7 @@ final class ServiceAccountTest extends TestCase
         $this->assertFunctioningConnection($factory);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function withJsonString(): void
     {
         $json = file_get_contents(self::$credentialsPath);
@@ -75,9 +72,7 @@ final class ServiceAccountTest extends TestCase
         $this->assertFunctioningConnection($factory);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function withArray(): void
     {
         $json = file_get_contents(self::$credentialsPath);
@@ -90,9 +85,7 @@ final class ServiceAccountTest extends TestCase
         $this->assertFunctioningConnection($factory);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function withGoogleApplicationCredentialsAsFilePath(): void
     {
         Util::putenv('GOOGLE_APPLICATION_CREDENTIALS', self::$credentialsPath);
@@ -100,9 +93,7 @@ final class ServiceAccountTest extends TestCase
         $this->assertFunctioningConnection(new Factory());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function withGoogleApplicationCredentialsAsJsonString(): void
     {
         $json = file_get_contents(self::$credentialsPath);

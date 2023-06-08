@@ -8,13 +8,14 @@ use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\Transaction;
 use Kreait\Firebase\Exception\Database\TransactionFailed;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
- *
- * @group database-emulator
- * @group emulator
  */
+#[Group('database-emulator')]
+#[Group('emulator')]
 final class TransactionTest extends DatabaseTestCase
 {
     private Reference $ref;
@@ -24,9 +25,7 @@ final class TransactionTest extends DatabaseTestCase
         $this->ref = self::$db->getReference(self::$refPrefix);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function aValueCanBeWritten(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
@@ -40,9 +39,7 @@ final class TransactionTest extends DatabaseTestCase
         $this->assertSame('new value', $ref->getValue());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function aTransactionPreventsAChangeWhenTheRemoteHasChanged(): void
     {
         $firstRef = $this->ref->getChild(__FUNCTION__);
@@ -62,9 +59,7 @@ final class TransactionTest extends DatabaseTestCase
         });
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function aTransactionKeepsTrackOfMultipleReferences(): void
     {
         $firstRef = $this->ref->getChild(__FUNCTION__.'_first');
@@ -99,9 +94,7 @@ final class TransactionTest extends DatabaseTestCase
         });
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function aValueCanBeDeleted(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
@@ -115,9 +108,7 @@ final class TransactionTest extends DatabaseTestCase
         $this->addToAssertionCount(1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function aTransactionPreventsADeletionWhenTheRemoteHasChanged(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);

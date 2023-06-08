@@ -6,6 +6,8 @@ namespace Kreait\Firebase\Tests\Unit\Messaging;
 
 use Beste\Json;
 use Kreait\Firebase\Messaging\RegistrationToken;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -13,11 +15,8 @@ use PHPUnit\Framework\TestCase;
  */
 final class RegistrationTokenTest extends TestCase
 {
-    /**
-     * @dataProvider valueProvider
-     *
-     * @test
-     */
+    #[DataProvider('valueProvider')]
+    #[Test]
     public function fromValue(string $expected, string $value): void
     {
         $token = RegistrationToken::fromValue($value);

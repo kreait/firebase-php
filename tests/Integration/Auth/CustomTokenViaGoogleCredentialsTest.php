@@ -12,6 +12,7 @@ use Kreait\Firebase\Tests\IntegrationTestCase;
 use Lcobucci\JWT\Encoding\JoseEncoder;
 use Lcobucci\JWT\Token\Parser;
 use Lcobucci\JWT\UnencryptedToken;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -30,9 +31,7 @@ final class CustomTokenViaGoogleCredentialsTest extends IntegrationTestCase
         $this->auth = self::$factory->createAuth();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createCustomToken(): void
     {
         $token = $this->generator->createCustomToken($this->uid, ['a-claim' => 'a-value']);
@@ -42,9 +41,7 @@ final class CustomTokenViaGoogleCredentialsTest extends IntegrationTestCase
         $this->assertSame($this->uid, $check->firebaseUserId());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function aGeneratedCustomTokenCanBeParsed(): void
     {
         $token = $this->generator->createCustomToken($this->uid, ['a-claim' => 'a-value']);

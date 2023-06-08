@@ -11,6 +11,7 @@ use Kreait\Firebase\Database\UrlBuilder;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\OutOfRangeException;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -35,33 +36,25 @@ final class ReferenceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getKey(): void
     {
         $this->assertSame('key', $this->reference->getKey());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getPath(): void
     {
         $this->assertSame('parent/key', $this->reference->getPath());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getParent(): void
     {
         $this->assertSame('parent', $this->reference->getParent()->getPath());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getParentOfRoot(): void
     {
         $this->expectException(OutOfRangeException::class);
@@ -69,9 +62,7 @@ final class ReferenceTest extends UnitTestCase
         $this->reference->getParent()->getParent();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRoot(): void
     {
         $root = $this->reference->getRoot();
@@ -79,9 +70,7 @@ final class ReferenceTest extends UnitTestCase
         $this->assertSame('/', $root->getUri()->getPath());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getChild(): void
     {
         $child = $this->reference->getChild('child');
@@ -89,18 +78,14 @@ final class ReferenceTest extends UnitTestCase
         $this->assertSame('parent/key/child', $child->getPath());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getInvalidChild(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->reference->getChild('#');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getChildKeys(): void
     {
         $this->apiClient
@@ -112,9 +97,7 @@ final class ReferenceTest extends UnitTestCase
         $this->assertSame(['a', 'b', 'c'], $this->reference->getChildKeys());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getChildKeysWhenNoChildrenAreSet(): void
     {
         $this->apiClient
@@ -128,9 +111,7 @@ final class ReferenceTest extends UnitTestCase
         $this->reference->getChildKeys();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getSnapshot(): void
     {
         $this->apiClient->method('get')->with($this->anything())->willReturn('value');
@@ -138,9 +119,7 @@ final class ReferenceTest extends UnitTestCase
         $this->assertSame('value', $this->reference->getSnapshot()->getValue());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getValue(): void
     {
         $this->apiClient->method('get')->with($this->anything())->willReturn('value');
@@ -148,9 +127,7 @@ final class ReferenceTest extends UnitTestCase
         $this->assertSame('value', $this->reference->getValue());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function set(): void
     {
         $this->apiClient->expects($this->once())->method('set');
@@ -158,9 +135,7 @@ final class ReferenceTest extends UnitTestCase
         $this->assertSame($this->reference, $this->reference->set('value'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function remove(): void
     {
         $this->apiClient->expects($this->once())->method('remove');
@@ -168,9 +143,7 @@ final class ReferenceTest extends UnitTestCase
         $this->assertSame($this->reference, $this->reference->remove());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function update(): void
     {
         $this->apiClient->expects($this->once())->method('update');
@@ -178,9 +151,7 @@ final class ReferenceTest extends UnitTestCase
         $this->assertSame($this->reference, $this->reference->update(['any' => 'thing']));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function push(): void
     {
         $this->apiClient->expects($this->once())->method('push')->willReturn('newChild');
@@ -189,9 +160,7 @@ final class ReferenceTest extends UnitTestCase
         $this->assertSame('newChild', $childReference->getKey());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getUri(): void
     {
         $uri = $this->reference->getUri();

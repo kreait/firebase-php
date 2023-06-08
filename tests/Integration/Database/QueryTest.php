@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration\Database;
 
-use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 use function current;
 
 /**
  * @internal
- *
- * @group database-emulator
- * @group emulator
  */
+#[Group('database-emulator')]
+#[Group('emulator')]
 final class QueryTest extends DatabaseTestCase
 {
     private Reference $ref;
@@ -26,9 +26,7 @@ final class QueryTest extends DatabaseTestCase
         $this->ref = self::$db->getReference(self::$refPrefix);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function limitToLast(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);

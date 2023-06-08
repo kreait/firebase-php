@@ -8,6 +8,8 @@ use Beste\Json;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\Processor\SetApnsPushTypeIfNeeded;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,13 +25,11 @@ final class SetApnsPushTypeIfNeededTest extends TestCase
     }
 
     /**
-     * @dataProvider provideMessagesWithExpectedPushType
-     *
      * @param non-empty-string|null $expected
      * @param array<mixed> $messageData
-     *
-     * @test
      */
+    #[DataProvider('provideMessagesWithExpectedPushType')]
+    #[Test]
     public function itSetsTheExpectedPushType(?string $expected, array $messageData): void
     {
         $message = CloudMessage::fromArray($messageData);

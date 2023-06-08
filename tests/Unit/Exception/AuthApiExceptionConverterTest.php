@@ -27,6 +27,8 @@ use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Exception\Auth\WeakPassword;
 use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Psr\Http\Message\RequestInterface;
 use RuntimeException;
 
@@ -42,9 +44,7 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $this->converter = new AuthApiExceptionConverter();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itConvertsARequestExceptionThatDoesNotIncludeValidJson(): void
     {
         $requestException = new RequestException(
@@ -59,9 +59,7 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $this->assertSame($responseBody, $convertedError->getMessage());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itConvertsAConnectException(): void
     {
         $connectException = new ConnectException(
@@ -72,21 +70,17 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf(ApiConnectionFailed::class, $this->converter->convertException($connectException));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itCanHandleUnknownExceptions(): void
     {
         $this->assertInstanceOf(AuthError::class, $this->converter->convertException(new RuntimeException()));
     }
 
     /**
-     * @dataProvider requestErrors
-     *
      * @param class-string<object> $expectedClass
-     *
-     * @test
      */
+    #[DataProvider('requestErrors')]
+    #[Test]
     public function itConvertsRequestExceptionsBecause(string $identifier, string $expectedClass): void
     {
         $requestException = new RequestException(

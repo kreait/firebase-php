@@ -7,15 +7,15 @@ namespace Kreait\Firebase\Tests\Unit\AppCheck;
 use Kreait\Firebase\AppCheck\AppCheckTokenOptions;
 use Kreait\Firebase\Exception\AppCheck\InvalidAppCheckTokenOptions;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class AppCheckTokenOptionsTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function fromArrayWithOmittedOptions(): void
     {
         $options = AppCheckTokenOptions::fromArray([]);
@@ -23,11 +23,8 @@ final class AppCheckTokenOptionsTest extends UnitTestCase
         $this->assertNull($options->ttl);
     }
 
-    /**
-     * @dataProvider validOptions
-     *
-     * @test
-     */
+    #[DataProvider('validOptions')]
+    #[Test]
     public function fromArrayWithValidOptions(?int $ttl): void
     {
         $options = AppCheckTokenOptions::fromArray([
@@ -37,11 +34,8 @@ final class AppCheckTokenOptionsTest extends UnitTestCase
         $this->assertSame($ttl, $options->ttl);
     }
 
-    /**
-     * @dataProvider invalidOptions
-     *
-     * @test
-     */
+    #[DataProvider('invalidOptions')]
+    #[Test]
     public function fromArrayWithInvalidOptions(int $ttl): void
     {
         $this->expectException(InvalidAppCheckTokenOptions::class);

@@ -6,6 +6,8 @@ namespace Kreait\Firebase\Tests\Unit\Request;
 
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Value\ClearTextPassword;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -13,9 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class CreateUserTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function createNew(): void
     {
         $request = CreateUser::new();
@@ -23,13 +23,11 @@ final class CreateUserTest extends TestCase
     }
 
     /**
-     * @dataProvider propertiesProvider
-     *
      * @param array<array<string|mixed>> $properties
      * @param array<array<string|mixed>> $expected
-     *
-     * @test
      */
+    #[DataProvider('propertiesProvider')]
+    #[Test]
     public function withProperties(array $properties, array $expected): void
     {
         $request = CreateUser::withProperties($properties);

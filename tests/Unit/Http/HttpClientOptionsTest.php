@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Tests\Unit\Http;
 
 use InvalidArgumentException;
 use Kreait\Firebase\Http\HttpClientOptions;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -13,9 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class HttpClientOptionsTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function optionsCanBeSet(): void
     {
         $options = HttpClientOptions::default()
@@ -31,36 +30,28 @@ final class HttpClientOptionsTest extends TestCase
         $this->assertSame('https://proxy.tld', $options->proxy());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function connectTimeoutMustBePositive(): void
     {
         $this->expectException(InvalidArgumentException::class);
         HttpClientOptions::default()->withConnectTimeout(-0.1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function readTimeoutMustBePositive(): void
     {
         $this->expectException(InvalidArgumentException::class);
         HttpClientOptions::default()->withReadTimeout(-0.1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function timeoutMustBePositive(): void
     {
         $this->expectException(InvalidArgumentException::class);
         HttpClientOptions::default()->withTimeout(-0.1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itAcceptsSingleGuzzleClientConfigOptions(): void
     {
         $options = HttpClientOptions::default()->withGuzzleConfigOption('foo', 'bar');
@@ -68,9 +59,7 @@ final class HttpClientOptionsTest extends TestCase
         $this->assertEqualsCanonicalizing(['foo' => 'bar'], $options->guzzleConfig());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itAcceptsMultipleGuzzleClientConfigOptions(): void
     {
         $options = HttpClientOptions::default()->withGuzzleConfigOptions([
@@ -87,9 +76,7 @@ final class HttpClientOptionsTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itRetainsPreviouslySetGuzzleConfigOptions(): void
     {
         $options = HttpClientOptions::default()
@@ -106,9 +93,7 @@ final class HttpClientOptionsTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itAcceptsSingleCallableMiddlewares(): void
     {
         $options = HttpClientOptions::default()->withGuzzleMiddleware(static fn () => 'Foo', 'name');
@@ -120,9 +105,7 @@ final class HttpClientOptionsTest extends TestCase
         $this->assertSame('name', $middlewares[0]['name']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itAcceptsMultipleMiddlewares(): void
     {
         $options = HttpClientOptions::default()

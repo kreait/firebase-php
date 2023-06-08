@@ -6,15 +6,14 @@ namespace Kreait\Firebase\Tests\Unit\Database;
 
 use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class RuleSetTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function customWithMissingRulesKey(): void
     {
         $data = ['rules' => [

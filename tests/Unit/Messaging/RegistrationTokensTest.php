@@ -7,6 +7,8 @@ namespace Kreait\Firebase\Tests\Unit\Messaging;
 use InvalidArgumentException;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Messaging\RegistrationTokens;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -15,11 +17,8 @@ use stdClass;
  */
 final class RegistrationTokensTest extends TestCase
 {
-    /**
-     * @dataProvider validValuesWithExpectedCounts
-     *
-     * @test
-     */
+    #[DataProvider('validValuesWithExpectedCounts')]
+    #[Test]
     public function itCanBeCreatedFromValues(int $expectedCount, mixed $value): void
     {
         $tokens = RegistrationTokens::fromValue($value);
@@ -28,20 +27,15 @@ final class RegistrationTokensTest extends TestCase
         $this->assertSame(!$expectedCount, $tokens->isEmpty());
     }
 
-    /**
-     * @dataProvider invalidValues
-     *
-     * @test
-     */
+    #[DataProvider('invalidValues')]
+    #[Test]
     public function itRejectsInvalidValues(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         RegistrationTokens::fromValue($value);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itReturnsStrings(): void
     {
         $token = RegistrationToken::fromValue('foo');

@@ -16,6 +16,7 @@ use Kreait\Firebase\Exception\Database\DatabaseNotFound;
 use Kreait\Firebase\Exception\Database\PermissionDenied;
 use Kreait\Firebase\Exception\DatabaseApiExceptionConverter;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -31,9 +32,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->request = new Request('GET', 'https://my-project.firebaseio.com');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itConvertsARequestExceptionThatDoesNotIncludeValidJson(): void
     {
         $requestException = new RequestException(
@@ -48,9 +47,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->assertSame($responseBody, $convertedError->getMessage());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itConvertsAConnectException(): void
     {
         $connectException = new ConnectException(
@@ -63,9 +60,8 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
 
     /**
      * @see https://github.com/kreait/firebase-php/issues/295
-     *
-     * @test
      */
+    #[Test]
     public function itHandlesAnExtendedErrorFormatInAResponse(): void
     {
         // see https://firebase.google.com/docs/reference/rest/auth/#section-error-response
@@ -81,9 +77,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->assertSame($e, $result->getPrevious());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itConvertsA401ResponseToAPermissionDeniedError(): void
     {
         $e = new ClientException(
@@ -97,9 +91,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf(PermissionDenied::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itConvertsA403ResponseToAPermissionDeniedError(): void
     {
         $e = new ClientException(
@@ -113,9 +105,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf(PermissionDenied::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itConvertsA404ResponseToADatabaseNotFoundError(): void
     {
         $e = new ClientException(
@@ -129,9 +119,7 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf(DatabaseNotFound::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itUsesTheResponseBodyAsMessageWhenNoJsonIsPresent(): void
     {
         $e = new ClientException(

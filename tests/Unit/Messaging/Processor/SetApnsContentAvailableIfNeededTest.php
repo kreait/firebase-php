@@ -7,6 +7,8 @@ namespace Kreait\Firebase\Tests\Unit\Messaging\Processor;
 use Beste\Json;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Processor\SetApnsContentAvailableIfNeeded;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,14 +24,12 @@ final class SetApnsContentAvailableIfNeededTest extends TestCase
     }
 
     /**
-     * @dataProvider provideMessagesWithExpectedContentAvailable
-     *
      * @param array<mixed> $messageData
      *
      * @see https://github.com/kreait/firebase-php/pull/762
-     *
-     * @test
      */
+    #[DataProvider('provideMessagesWithExpectedContentAvailable')]
+    #[Test]
     public function itSetsTheExpectedPushType(bool $expected, array $messageData): void
     {
         $message = CloudMessage::fromArray($messageData);

@@ -9,15 +9,16 @@ use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Exception\Database\PermissionDenied;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 use function assert;
 use function is_string;
 
 /**
  * @internal
- *
- * @group emulator
  */
+#[Group('emulator')]
 final class AuthVariableOverrideTest extends DatabaseTestCase
 {
     private Auth $auth;
@@ -34,9 +35,7 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itCanAccessAReferenceThatBelongsToTheSameUser(): void
     {
         $uid = $this->auth->signInAnonymously()->firebaseUserId();
@@ -54,9 +53,7 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itCanNotAccessAReferenceThatRequiresAnotherUser(): void
     {
         $uid = $this->auth->signInAnonymously()->firebaseUserId();
@@ -74,9 +71,7 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itCanAccessAPublicReferenceWhenAuthOverrideIsSetToBeUnauthenticated(): void
     {
         $uid = $this->auth->signInAnonymously()->firebaseUserId();
@@ -97,9 +92,7 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function whenUnauthenticatedItCanNotAccessAReferenceThatRequiresAuthentication(): void
     {
         $uid = $this->auth->signInAnonymously()->firebaseUserId();

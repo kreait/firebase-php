@@ -10,6 +10,7 @@ use Kreait\Firebase\Database\Transaction;
 use Kreait\Firebase\Exception\Database\DatabaseError;
 use Kreait\Firebase\Exception\Database\ReferenceHasNotBeenSnapshotted;
 use Kreait\Firebase\Exception\Database\TransactionFailed;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Throwable;
@@ -29,9 +30,7 @@ final class TransactionTest extends TestCase
         $this->transaction = new Transaction($this->apiClient);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function aReferenceCanOnlyBeChangedIfItHasBeenSnapshotted(): void
     {
         $reference = $this->createMock(Reference::class);
@@ -45,9 +44,7 @@ final class TransactionTest extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function aTransactionCanFail(): void
     {
         $reference = $this->createMock(Reference::class);

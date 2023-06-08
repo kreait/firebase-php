@@ -7,6 +7,7 @@ namespace Kreait\Firebase\Tests\Unit;
 use Beste\Json;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function putenv;
 
@@ -33,9 +34,7 @@ final class FactoryTest extends UnitTestCase
         $this->serviceAccountArray = Json::decodeFile($this->serviceAccountFilePath, true);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itUsesTheCredentialsFromTheGoogleApplicationCredentialsEnvironmentVariable(): void
     {
         putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->serviceAccountFilePath);
@@ -45,9 +44,7 @@ final class FactoryTest extends UnitTestCase
         putenv('GOOGLE_APPLICATION_CREDENTIALS');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itCanBeConfiguredWithThePathToAServiceAccount(): void
     {
         $factory = (new Factory())->withServiceAccount($this->serviceAccountFilePath);
@@ -55,9 +52,7 @@ final class FactoryTest extends UnitTestCase
         $this->assertServices($factory);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itCanBeConfiguredWithAServiceAccountArray(): void
     {
         $factory = (new Factory())->withServiceAccount($this->serviceAccountArray);

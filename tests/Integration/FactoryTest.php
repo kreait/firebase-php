@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Http\HttpClientOptions;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Psr\Http\Message\RequestInterface;
 
 use function assert;
@@ -15,9 +16,7 @@ use function assert;
  */
 final class FactoryTest extends IntegrationTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function itSupportsExtendingTheHttpClientConfig(): void
     {
         if (self::$rtdbUrl === null) {
@@ -46,9 +45,7 @@ final class FactoryTest extends IntegrationTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itSupportsAddingAdditionalHttpClientMiddlewares(): void
     {
         if (self::$rtdbUrl === null) {

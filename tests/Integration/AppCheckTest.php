@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Tests\Integration;
 
 use Kreait\Firebase\Contract\AppCheck;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -25,9 +26,7 @@ final class AppCheckTest extends IntegrationTestCase
         $this->appCheck = self::$factory->createAppCheck();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createTokenWithDefaultTtl(): void
     {
         $token = $this->appCheck->createToken(self::$appId);
@@ -35,9 +34,7 @@ final class AppCheckTest extends IntegrationTestCase
         $this->assertSame('3600s', $token->ttl);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createTokenWithCustomTtl(): void
     {
         $token = $this->appCheck->createToken(self::$appId, ['ttl' => 1800]);
@@ -45,9 +42,7 @@ final class AppCheckTest extends IntegrationTestCase
         $this->assertSame('1800s', $token->ttl);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function verifyToken(): void
     {
         $token = $this->appCheck->createToken(self::$appId);

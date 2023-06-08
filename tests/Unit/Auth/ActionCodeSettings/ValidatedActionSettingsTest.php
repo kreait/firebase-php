@@ -6,6 +6,8 @@ namespace Kreait\Firebase\Tests\Unit\Auth\ActionCodeSettings;
 
 use InvalidArgumentException;
 use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,30 +16,24 @@ use PHPUnit\Framework\TestCase;
 final class ValidatedActionSettingsTest extends TestCase
 {
     /**
-     * @dataProvider validInputs
-     *
      * @param array<string, mixed> $input
      * @param array<string, mixed> $expected
-     *
-     * @test
      */
+    #[DataProvider('validInputs')]
+    #[Test]
     public function itWorksValidSettings(array $input, array $expected): void
     {
         $this->assertEqualsCanonicalizing($expected, ValidatedActionCodeSettings::fromArray($input)->toArray());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itRejectsInvalidSettings(): void
     {
         $this->expectException(InvalidArgumentException::class);
         ValidatedActionCodeSettings::fromArray(['foo' => 'bar']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itCanBeEmpty(): void
     {
         $this->assertEmpty(ValidatedActionCodeSettings::empty()->toArray());

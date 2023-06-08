@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
+
 /**
  * @internal
- *
- * @group emulator
  */
+#[Group('emulator')]
 final class TenantAwareAuthTest extends AuthTestCase
 {
     protected function setUp(): void
@@ -23,9 +25,7 @@ final class TenantAwareAuthTest extends AuthTestCase
         ;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function newUsersAreScopedToATenant(): void
     {
         $user = $this->auth->createUserWithEmailAndPassword(
@@ -40,9 +40,7 @@ final class TenantAwareAuthTest extends AuthTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function customTokensIncludeTheTenant(): void
     {
         $user = $this->auth->createAnonymousUser();
@@ -70,9 +68,7 @@ final class TenantAwareAuthTest extends AuthTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itCanSignInWithACustomToken(): void
     {
         $user = $this->auth->createAnonymousUser();

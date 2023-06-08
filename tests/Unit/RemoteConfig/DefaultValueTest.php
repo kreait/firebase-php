@@ -7,6 +7,8 @@ namespace Kreait\Firebase\Tests\Unit\RemoteConfig;
 use Kreait\Firebase\RemoteConfig\DefaultValue;
 use Kreait\Firebase\RemoteConfig\ExplicitValue;
 use Kreait\Firebase\RemoteConfig\PersonalizationValue;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,9 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class DefaultValueTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function createInAppDefaultValue(): void
     {
         $defaultValue = DefaultValue::useInAppDefault();
@@ -28,9 +28,7 @@ final class DefaultValueTest extends TestCase
         $this->assertEqualsCanonicalizing(['useInAppDefault' => true], $defaultValue->jsonSerialize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function create(): void
     {
         $defaultValue = DefaultValue::with('foo');
@@ -39,13 +37,11 @@ final class DefaultValueTest extends TestCase
     }
 
     /**
-     * @dataProvider arrayValueProvider
-     *
      * @param RemoteConfigInAppDefaultValueShape $expected
      * @param RemoteConfigInAppDefaultValueShape $data
-     *
-     * @test
      */
+    #[DataProvider('arrayValueProvider')]
+    #[Test]
     public function createFromArray(array $expected, array $data): void
     {
         $defaultValue = DefaultValue::fromArray($data);

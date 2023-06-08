@@ -7,15 +7,14 @@ namespace Kreait\Firebase\Tests\Unit\RemoteConfig;
 use Kreait\Firebase\RemoteConfig\Condition;
 use Kreait\Firebase\RemoteConfig\ConditionalValue;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class ConditionalValueTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function create(): void
     {
         $condition = Condition::named('my_condition');
@@ -29,9 +28,7 @@ final class ConditionalValueTest extends UnitTestCase
         $this->assertEqualsCanonicalizing(['value' => 'foo'], $conditionalValue->jsonSerialize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createWithString(): void
     {
         $value = ConditionalValue::basedOn('foo');

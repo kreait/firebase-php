@@ -12,6 +12,7 @@ use Kreait\Firebase\Exception\Database\DatabaseError;
 use Kreait\Firebase\Exception\Database\DatabaseNotFound;
 use Kreait\Firebase\Exception\Database\UnsupportedQuery;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Throwable;
 
@@ -39,17 +40,13 @@ final class QueryTest extends UnitTestCase
         $this->query = new Query($this->reference, $this->apiClient);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getReference(): void
     {
         $this->assertSame($this->reference, $this->query->getReference());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getSnapshot(): void
     {
         $this->apiClient->method('get')->with($this->anything())->willReturn('value');
@@ -59,9 +56,7 @@ final class QueryTest extends UnitTestCase
         $this->addToAssertionCount(1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getValue(): void
     {
         $this->apiClient->method('get')->with($this->anything())->willReturn('value');
@@ -69,9 +64,7 @@ final class QueryTest extends UnitTestCase
         $this->assertSame('value', $this->query->getValue());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getUri(): void
     {
         $uri = $this->query->getUri();
@@ -79,9 +72,7 @@ final class QueryTest extends UnitTestCase
         $this->assertSame((string) $uri, (string) $this->query);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function onlyOneSorterIsAllowed(): void
     {
         try {
@@ -91,9 +82,7 @@ final class QueryTest extends UnitTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function wrapsApiExceptions(): void
     {
         $exception = new DatabaseError();
@@ -108,9 +97,7 @@ final class QueryTest extends UnitTestCase
         $this->query->getSnapshot();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexNotDefined(): void
     {
         $this->apiClient
@@ -123,9 +110,7 @@ final class QueryTest extends UnitTestCase
         $this->query->getSnapshot();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function withNonExistingDatabase(): void
     {
         $this->apiClient

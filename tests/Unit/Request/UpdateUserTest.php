@@ -7,6 +7,8 @@ namespace Kreait\Firebase\Tests\Unit\Request;
 use Beste\Json;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Request\UpdateUser;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,13 +17,11 @@ use PHPUnit\Framework\TestCase;
 final class UpdateUserTest extends TestCase
 {
     /**
-     * @dataProvider propertiesProvider
-     *
      * @param array<array<string|mixed>> $properties
      * @param array<array<string|mixed>> $expected
-     *
-     * @test
      */
+    #[DataProvider('propertiesProvider')]
+    #[Test]
     public function withProperties(array $properties, array $expected): void
     {
         $request = UpdateUser::withProperties($properties);
@@ -29,9 +29,7 @@ final class UpdateUserTest extends TestCase
         $this->assertEqualsCanonicalizing($expected, $request->jsonSerialize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function withMissingUid(): void
     {
         $this->expectException(InvalidArgumentException::class);

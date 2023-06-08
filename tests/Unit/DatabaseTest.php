@@ -11,6 +11,7 @@ use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Database\UrlBuilder;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -32,34 +33,26 @@ final class DatabaseTest extends UnitTestCase
         $this->database = new Database($this->uri, $this->apiClient, UrlBuilder::create($this->url));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getReference(): void
     {
         $this->assertSame('any', $this->database->getReference('any')->getPath());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRootReference(): void
     {
         $this->assertSame('/', $this->database->getReference()->getUri()->getPath());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getReferenceWithInvalidPath(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->database->getReference('#');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getReferenceFromUrl(): void
     {
         $url = $this->url.'/foo/bar';
@@ -67,9 +60,7 @@ final class DatabaseTest extends UnitTestCase
         $this->assertSame($url, (string) $this->database->getReferenceFromUrl($url)->getUri());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getReferenceFromNonMatchingUrl(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -77,9 +68,7 @@ final class DatabaseTest extends UnitTestCase
         $this->database->getReferenceFromUrl('http://non-matching.tld');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRuleSet(): void
     {
         $this->apiClient

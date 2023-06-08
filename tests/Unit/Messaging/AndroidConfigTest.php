@@ -8,6 +8,8 @@ use Beste\Json;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -16,17 +18,13 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 final class AndroidConfigTest extends UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function itIsEmptyWhenItIsEmpty(): void
     {
         $this->assertSame('[]', Json::encode(AndroidConfig::new()));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itHasADefaultSound(): void
     {
         $expected = [
@@ -41,9 +39,7 @@ final class AndroidConfigTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itCanHaveAPriority(): void
     {
         $config = AndroidConfig::new()->withNormalMessagePriority();
@@ -54,12 +50,10 @@ final class AndroidConfigTest extends UnitTestCase
     }
 
     /**
-     * @dataProvider validDataProvider
-     *
      * @param AndroidConfigShape $data
-     *
-     * @test
      */
+    #[DataProvider('validDataProvider')]
+    #[Test]
     public function itCanBeCreatedFromAnArray(array $data): void
     {
         $config = AndroidConfig::fromArray($data);
@@ -67,11 +61,8 @@ final class AndroidConfigTest extends UnitTestCase
         $this->assertEqualsCanonicalizing($data, $config->jsonSerialize());
     }
 
-    /**
-     * @dataProvider validTtlValues
-     *
-     * @test
-     */
+    #[DataProvider('validTtlValues')]
+    #[Test]
     public function itAcceptsValidTTLs(int|string|null $ttl): void
     {
         AndroidConfig::fromArray([
@@ -81,11 +72,8 @@ final class AndroidConfigTest extends UnitTestCase
         $this->addToAssertionCount(1);
     }
 
-    /**
-     * @dataProvider invalidTtlValues
-     *
-     * @test
-     */
+    #[DataProvider('invalidTtlValues')]
+    #[Test]
     public function itRejectsInvalidTTLs(mixed $ttl): void
     {
         $this->expectException(InvalidArgument::class);

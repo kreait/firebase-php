@@ -7,6 +7,8 @@ namespace Kreait\Firebase\Tests\Unit\Database\Query\Sorter;
 use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database\Query\Sorter\OrderByChild;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 use function rawurlencode;
 use function sprintf;
@@ -16,11 +18,8 @@ use function sprintf;
  */
 final class OrderByChildTest extends UnitTestCase
 {
-    /**
-     * @dataProvider valueProvider
-     *
-     * @test
-     */
+    #[DataProvider('valueProvider')]
+    #[Test]
     public function orderByChild(string $childKey, mixed $expected, mixed $given): void
     {
         $sut = new OrderByChild($childKey);

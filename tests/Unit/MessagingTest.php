@@ -11,6 +11,7 @@ use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 use function array_fill;
 
@@ -29,36 +30,28 @@ final class MessagingTest extends UnitTestCase
         $this->messaging = new Messaging('project-id', $messagingApi, $appInstanceApi);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function sendInvalidArray(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->send([]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function subscribeToTopicWithEmptyTokenList(): void
     {
         $this->expectException(InvalidArgument::class);
         $this->messaging->subscribeToTopic('topic', []);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function unsubscribeFromTopicWithEmptyTokenList(): void
     {
         $this->expectException(InvalidArgument::class);
         $this->messaging->unsubscribeFromTopic('topic', []);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itWillNotSendAMessageWithoutATarget(): void
     {
         $message = CloudMessage::new();
@@ -69,9 +62,7 @@ final class MessagingTest extends UnitTestCase
         $this->messaging->send($message);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function aMulticastMessageCannotBeTooLarge(): void
     {
         $tokens = array_fill(0, 501, 'token');
@@ -80,9 +71,7 @@ final class MessagingTest extends UnitTestCase
         $this->messaging->sendMulticast(CloudMessage::new(), $tokens);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function sendAllCannotBeTooLarge(): void
     {
         $messages = array_fill(0, 501, CloudMessage::new());

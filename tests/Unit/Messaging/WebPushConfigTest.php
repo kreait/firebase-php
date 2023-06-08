@@ -7,6 +7,8 @@ namespace Kreait\Firebase\Tests\Unit\Messaging;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\WebPushConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -17,12 +19,10 @@ use Kreait\Firebase\Tests\UnitTestCase;
 final class WebPushConfigTest extends UnitTestCase
 {
     /**
-     * @dataProvider validDataProvider
-     *
      * @param array<string, mixed> $data
-     *
-     * @test
      */
+    #[DataProvider('validDataProvider')]
+    #[Test]
     public function createFromValidPayload(array $data): void
     {
         $config = WebPushConfig::fromArray($data);
@@ -30,9 +30,7 @@ final class WebPushConfigTest extends UnitTestCase
         $this->assertEqualsCanonicalizing($data, $config->jsonSerialize());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itCanHaveAPriority(): void
     {
         $config = WebPushConfig::new()->withVeryLowUrgency();
@@ -49,12 +47,10 @@ final class WebPushConfigTest extends UnitTestCase
     }
 
     /**
-     * @dataProvider validHeaders
-     *
      * @param WebPushHeadersShape $headers
-     *
-     * @test
      */
+    #[DataProvider('validHeaders')]
+    #[Test]
     public function itAcceptsValidHeaders(array $headers): void
     {
         WebPushConfig::fromArray(['headers' => $headers]);
@@ -63,12 +59,10 @@ final class WebPushConfigTest extends UnitTestCase
     }
 
     /**
-     * @dataProvider invalidHeaders
-     *
      * @param WebPushHeadersShape $headers
-     *
-     * @test
      */
+    #[DataProvider('invalidHeaders')]
+    #[Test]
     public function itRejectsInvalidHeaders(array $headers): void
     {
         $this->expectException(InvalidArgument::class);
