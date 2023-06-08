@@ -91,7 +91,7 @@ final class TransactionTest extends DatabaseTestCase
             try {
                 $transaction->set($firstRef, $newFirstValue);
                 $this->fail('An exception should have been thrown');
-            } catch (TransactionFailed $e) {
+            } catch (TransactionFailed) {
                 // this is expected
             }
 
