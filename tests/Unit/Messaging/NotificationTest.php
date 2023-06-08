@@ -12,7 +12,10 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 final class NotificationTest extends UnitTestCase
 {
-    public function testCreateWithEmptyStrings(): void
+    /**
+     * @test
+     */
+    public function createWithEmptyStrings(): void
     {
         $notification = Notification::create('', '', '');
         $this->assertSame('', $notification->title());
@@ -21,7 +24,10 @@ final class NotificationTest extends UnitTestCase
         $this->assertEqualsCanonicalizing(['title' => '', 'body' => '', 'image' => ''], $notification->jsonSerialize());
     }
 
-    public function testCreateWithValidFields(): void
+    /**
+     * @test
+     */
+    public function createWithValidFields(): void
     {
         $notification = Notification::create('title', 'body')
             ->withTitle($title = 'My Title')
@@ -34,7 +40,10 @@ final class NotificationTest extends UnitTestCase
         $this->assertSame($imageUrl, $notification->imageUrl());
     }
 
-    public function testCreateFromValidArray(): void
+    /**
+     * @test
+     */
+    public function createFromValidArray(): void
     {
         $notification = Notification::fromArray($array = [
             'title' => $title = 'My Title',

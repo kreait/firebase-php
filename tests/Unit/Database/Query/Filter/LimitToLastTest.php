@@ -14,14 +14,20 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 final class LimitToLastTest extends UnitTestCase
 {
-    public function testCreateWithInvalidValue(): void
+    /**
+     * @test
+     */
+    public function createWithInvalidValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         new LimitToLast(0);
     }
 
-    public function testModifyUri(): void
+    /**
+     * @test
+     */
+    public function modifyUri(): void
     {
         $filter = new LimitToLast(3);
 

@@ -103,7 +103,10 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->template = Template::fromArray(Json::decode(self::TEMPLATE_CONFIG, true));
     }
 
-    public function testForcePublishAndGet(): void
+    /**
+     * @test
+     */
+    public function forcePublishAndGet(): void
     {
         $this->remoteConfig->publish($this->template);
 
@@ -121,7 +124,10 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->assertTrue($version->updateOrigin()->equalsTo(UpdateOrigin::REST_API));
     }
 
-    public function testPublishOutdatedConfig(): void
+    /**
+     * @test
+     */
+    public function publishOutdatedConfig(): void
     {
         $this->remoteConfig->publish($this->template);
 
@@ -135,13 +141,19 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->remoteConfig->publish($published);
     }
 
-    public function testValidateValidTemplate(): void
+    /**
+     * @test
+     */
+    public function validateValidTemplate(): void
     {
         $this->remoteConfig->validate($this->template);
         $this->addToAssertionCount(1);
     }
 
-    public function testValidateInvalidTemplate(): void
+    /**
+     * @test
+     */
+    public function validateInvalidTemplate(): void
     {
         $template = $this->templateWithTooManyParameters();
 
@@ -149,7 +161,10 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->remoteConfig->validate($template);
     }
 
-    public function testPublishInvalidTemplate(): void
+    /**
+     * @test
+     */
+    public function publishInvalidTemplate(): void
     {
         $version = $this->remoteConfig->get()->version();
 
@@ -180,7 +195,10 @@ final class RemoteConfigTest extends IntegrationTestCase
         );
     }
 
-    public function testRollback(): void
+    /**
+     * @test
+     */
+    public function rollback(): void
     {
         $initialVersion = $this->remoteConfig->get()->version();
 
@@ -228,7 +246,10 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->assertTrue($rollbackSource->equalsTo($targetVersionNumber));
     }
 
-    public function testListVersionsWithoutFilters(): void
+    /**
+     * @test
+     */
+    public function listVersionsWithoutFilters(): void
     {
         // We only need to know that the first returned value is a version,
         // no need to iterate through all of them
@@ -242,7 +263,10 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->fail('Expected a version to be returned, but got none');
     }
 
-    public function testFindVersionsWithFilters(): void
+    /**
+     * @test
+     */
+    public function findVersionsWithFilters(): void
     {
         $currentVersion = $this->remoteConfig->get()->version();
 
@@ -274,7 +298,10 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->assertLessThanOrEqual($limit, $counter);
     }
 
-    public function testGetVersion(): void
+    /**
+     * @test
+     */
+    public function getVersion(): void
     {
         $currentVersion = $this->remoteConfig->get()->version();
 
@@ -289,7 +316,10 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->assertTrue($check->versionNumber()->equalsTo($currentVersionNumber));
     }
 
-    public function testGetNonExistingVersion(): void
+    /**
+     * @test
+     */
+    public function getNonExistingVersion(): void
     {
         $currentVersion = $this->remoteConfig->get()->version();
 
@@ -303,7 +333,10 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->remoteConfig->getVersion($nextButNonExisting);
     }
 
-    public function testValidateEmptyTemplate(): void
+    /**
+     * @test
+     */
+    public function validateEmptyTemplate(): void
     {
         $this->remoteConfig->validate(Template::new());
         $this->addToAssertionCount(1);

@@ -30,7 +30,8 @@ abstract class DatabaseTestCase extends IntegrationTestCase
 
         self::$db = self::$factory
             ->withDatabaseUri(self::$rtdbUrl)
-            ->createDatabase();
+            ->createDatabase()
+        ;
 
         self::$apiClient = self::$factory->createApiClient(['http_errors' => false]);
 

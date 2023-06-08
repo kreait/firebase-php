@@ -38,49 +38,73 @@ final class ReferenceTest extends UnitTestCase
         );
     }
 
-    public function testGetKey(): void
+    /**
+     * @test
+     */
+    public function getKey(): void
     {
         $this->assertSame('key', $this->reference->getKey());
     }
 
-    public function testGetPath(): void
+    /**
+     * @test
+     */
+    public function getPath(): void
     {
         $this->assertSame('parent/key', $this->reference->getPath());
     }
 
-    public function testGetParent(): void
+    /**
+     * @test
+     */
+    public function getParent(): void
     {
         $this->assertSame('parent', $this->reference->getParent()->getPath());
     }
 
-    public function testGetParentOfRoot(): void
+    /**
+     * @test
+     */
+    public function getParentOfRoot(): void
     {
         $this->expectException(OutOfRangeException::class);
 
         $this->reference->getParent()->getParent();
     }
 
-    public function testGetRoot(): void
+    /**
+     * @test
+     */
+    public function getRoot(): void
     {
         $root = $this->reference->getRoot();
 
         $this->assertSame('/', $root->getUri()->getPath());
     }
 
-    public function testGetChild(): void
+    /**
+     * @test
+     */
+    public function getChild(): void
     {
         $child = $this->reference->getChild('child');
 
         $this->assertSame('parent/key/child', $child->getPath());
     }
 
-    public function testGetInvalidChild(): void
+    /**
+     * @test
+     */
+    public function getInvalidChild(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->reference->getChild('#');
     }
 
-    public function testGetChildKeys(): void
+    /**
+     * @test
+     */
+    public function getChildKeys(): void
     {
         $this->apiClient
             ->method('get')
@@ -91,7 +115,10 @@ final class ReferenceTest extends UnitTestCase
         $this->assertSame(['a', 'b', 'c'], $this->reference->getChildKeys());
     }
 
-    public function testGetChildKeysWhenNoChildrenAreSet(): void
+    /**
+     * @test
+     */
+    public function getChildKeysWhenNoChildrenAreSet(): void
     {
         $this->apiClient
             ->method('get')
@@ -104,42 +131,60 @@ final class ReferenceTest extends UnitTestCase
         $this->reference->getChildKeys();
     }
 
-    public function testGetSnapshot(): void
+    /**
+     * @test
+     */
+    public function getSnapshot(): void
     {
         $this->apiClient->method('get')->with($this->anything())->willReturn('value');
 
         $this->assertSame('value', $this->reference->getSnapshot()->getValue());
     }
 
-    public function testGetValue(): void
+    /**
+     * @test
+     */
+    public function getValue(): void
     {
         $this->apiClient->method('get')->with($this->anything())->willReturn('value');
 
         $this->assertSame('value', $this->reference->getValue());
     }
 
-    public function testSet(): void
+    /**
+     * @test
+     */
+    public function set(): void
     {
         $this->apiClient->expects($this->once())->method('set');
 
         $this->assertSame($this->reference, $this->reference->set('value'));
     }
 
-    public function testRemove(): void
+    /**
+     * @test
+     */
+    public function remove(): void
     {
         $this->apiClient->expects($this->once())->method('remove');
 
         $this->assertSame($this->reference, $this->reference->remove());
     }
 
-    public function testUpdate(): void
+    /**
+     * @test
+     */
+    public function update(): void
     {
         $this->apiClient->expects($this->once())->method('update');
 
         $this->assertSame($this->reference, $this->reference->update(['any' => 'thing']));
     }
 
-    public function testPush(): void
+    /**
+     * @test
+     */
+    public function push(): void
     {
         $this->apiClient->expects($this->once())->method('push')->willReturn('newChild');
 
@@ -147,7 +192,10 @@ final class ReferenceTest extends UnitTestCase
         $this->assertSame('newChild', $childReference->getKey());
     }
 
-    public function testGetUri(): void
+    /**
+     * @test
+     */
+    public function getUri(): void
     {
         $uri = $this->reference->getUri();
 

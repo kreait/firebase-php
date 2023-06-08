@@ -73,7 +73,8 @@ final class AppInstance implements JsonSerializable
 
         return $this->topicSubscriptions
             ->filter(static fn (TopicSubscription $subscription) => $topic->value() === $subscription->topic()->value())
-            ->count() > 0;
+            ->count() > 0
+        ;
     }
 
     /**

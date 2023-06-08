@@ -27,8 +27,10 @@ final class SetApnsPushTypeIfNeededTest extends TestCase
      *
      * @param non-empty-string|null $expected
      * @param array<mixed> $messageData
+     *
+     * @test
      */
-    public function testItSetsTheExpectedPushType(?string $expected, array $messageData): void
+    public function itSetsTheExpectedPushType(?string $expected, array $messageData): void
     {
         $message = CloudMessage::fromArray($messageData);
 

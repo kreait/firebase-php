@@ -30,7 +30,10 @@ final class CustomTokenViaGoogleCredentialsTest extends IntegrationTestCase
         $this->auth = self::$factory->createAuth();
     }
 
-    public function testCreateCustomToken(): void
+    /**
+     * @test
+     */
+    public function createCustomToken(): void
     {
         $token = $this->generator->createCustomToken($this->uid, ['a-claim' => 'a-value']);
 
@@ -39,7 +42,10 @@ final class CustomTokenViaGoogleCredentialsTest extends IntegrationTestCase
         $this->assertSame($this->uid, $check->firebaseUserId());
     }
 
-    public function testAGeneratedCustomTokenCanBeParsed(): void
+    /**
+     * @test
+     */
+    public function aGeneratedCustomTokenCanBeParsed(): void
     {
         $token = $this->generator->createCustomToken($this->uid, ['a-claim' => 'a-value']);
 

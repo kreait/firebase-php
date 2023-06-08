@@ -52,14 +52,20 @@ final class ServiceAccountTest extends TestCase
         }
     }
 
-    public function testWithPathToServiceAccount(): void
+    /**
+     * @test
+     */
+    public function withPathToServiceAccount(): void
     {
         $factory = (new Factory())->withServiceAccount(self::$credentialsPath);
 
         $this->assertFunctioningConnection($factory);
     }
 
-    public function testWithJsonString(): void
+    /**
+     * @test
+     */
+    public function withJsonString(): void
     {
         $json = file_get_contents(self::$credentialsPath);
         assert($json !== false && $json !== '');
@@ -69,7 +75,10 @@ final class ServiceAccountTest extends TestCase
         $this->assertFunctioningConnection($factory);
     }
 
-    public function testWithArray(): void
+    /**
+     * @test
+     */
+    public function withArray(): void
     {
         $json = file_get_contents(self::$credentialsPath);
         assert($json !== false && $json !== '');
@@ -81,14 +90,20 @@ final class ServiceAccountTest extends TestCase
         $this->assertFunctioningConnection($factory);
     }
 
-    public function testWithGoogleApplicationCredentialsAsFilePath(): void
+    /**
+     * @test
+     */
+    public function withGoogleApplicationCredentialsAsFilePath(): void
     {
         Util::putenv('GOOGLE_APPLICATION_CREDENTIALS', self::$credentialsPath);
 
         $this->assertFunctioningConnection(new Factory());
     }
 
-    public function testWithGoogleApplicationCredentialsAsJsonString(): void
+    /**
+     * @test
+     */
+    public function withGoogleApplicationCredentialsAsJsonString(): void
     {
         $json = file_get_contents(self::$credentialsPath);
         assert($json !== false && $json !== '');

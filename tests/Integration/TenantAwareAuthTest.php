@@ -19,10 +19,14 @@ final class TenantAwareAuthTest extends AuthTestCase
 
         $this->auth = self::$factory
             ->withTenantId(self::$tenantId)
-            ->createAuth();
+            ->createAuth()
+        ;
     }
 
-    public function testNewUsersAreScopedToATenant(): void
+    /**
+     * @test
+     */
+    public function newUsersAreScopedToATenant(): void
     {
         $user = $this->auth->createUserWithEmailAndPassword(
             self::randomEmail(__FUNCTION__),
@@ -36,7 +40,10 @@ final class TenantAwareAuthTest extends AuthTestCase
         }
     }
 
-    public function testCustomTokensIncludeTheTenant(): void
+    /**
+     * @test
+     */
+    public function customTokensIncludeTheTenant(): void
     {
         $user = $this->auth->createAnonymousUser();
 
@@ -63,7 +70,10 @@ final class TenantAwareAuthTest extends AuthTestCase
         }
     }
 
-    public function testItCanSignInWithACustomToken(): void
+    /**
+     * @test
+     */
+    public function itCanSignInWithACustomToken(): void
     {
         $user = $this->auth->createAnonymousUser();
         $result = $this->auth->signInAsUser($user);

@@ -15,8 +15,10 @@ final class EmailTest extends TestCase
 {
     /**
      * @dataProvider validValues
+     *
+     * @test
      */
-    public function testWithValidValue(string $value): void
+    public function withValidValue(string $value): void
     {
         $email = Email::fromString($value)->value;
 
@@ -25,8 +27,10 @@ final class EmailTest extends TestCase
 
     /**
      * @dataProvider invalidValues
+     *
+     * @test
      */
-    public function testWithInvalidValue(string $value): void
+    public function withInvalidValue(string $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         Email::fromString($value);

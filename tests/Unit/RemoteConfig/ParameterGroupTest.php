@@ -13,7 +13,10 @@ use PHPUnit\Framework\TestCase;
  */
 final class ParameterGroupTest extends TestCase
 {
-    public function testItCanBeCreated(): void
+    /**
+     * @test
+     */
+    public function itCanBeCreated(): void
     {
         $group = ParameterGroup::named($name = 'name')
             ->withDescription($description = 'description')

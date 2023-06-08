@@ -21,8 +21,10 @@ final class DTTest extends TestCase
 {
     /**
      * @dataProvider validFixedValues
+     *
+     * @test
      */
-    public function testConvertWithFixedValues(string $expected, mixed $value): void
+    public function convertWithFixedValues(string $expected, mixed $value): void
     {
         $dt = DT::toUTCDateTimeImmutable($value);
 
@@ -32,8 +34,10 @@ final class DTTest extends TestCase
 
     /**
      * @dataProvider validVariableValues
+     *
+     * @test
      */
-    public function testConvertWithVariableValues(mixed $value): void
+    public function convertWithVariableValues(mixed $value): void
     {
         $dt = DT::toUTCDateTimeImmutable($value);
 
@@ -42,8 +46,10 @@ final class DTTest extends TestCase
 
     /**
      * @dataProvider invalidValues
+     *
+     * @test
      */
-    public function testConvertInvalid(mixed $value): void
+    public function convertInvalid(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
 

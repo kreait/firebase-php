@@ -18,19 +18,27 @@ final class ValidatedActionSettingsTest extends TestCase
      *
      * @param array<string, mixed> $input
      * @param array<string, mixed> $expected
+     *
+     * @test
      */
-    public function testItWorksValidSettings(array $input, array $expected): void
+    public function itWorksValidSettings(array $input, array $expected): void
     {
         $this->assertEqualsCanonicalizing($expected, ValidatedActionCodeSettings::fromArray($input)->toArray());
     }
 
-    public function testItRejectsInvalidSettings(): void
+    /**
+     * @test
+     */
+    public function itRejectsInvalidSettings(): void
     {
         $this->expectException(InvalidArgumentException::class);
         ValidatedActionCodeSettings::fromArray(['foo' => 'bar']);
     }
 
-    public function testItCanBeEmpty(): void
+    /**
+     * @test
+     */
+    public function itCanBeEmpty(): void
     {
         $this->assertEmpty(ValidatedActionCodeSettings::empty()->toArray());
     }

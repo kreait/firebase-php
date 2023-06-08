@@ -35,37 +35,55 @@ final class DatabaseTest extends UnitTestCase
         $this->database = new Database($this->uri, $this->apiClient, UrlBuilder::create($this->url));
     }
 
-    public function testGetReference(): void
+    /**
+     * @test
+     */
+    public function getReference(): void
     {
         $this->assertSame('any', $this->database->getReference('any')->getPath());
     }
 
-    public function testGetRootReference(): void
+    /**
+     * @test
+     */
+    public function getRootReference(): void
     {
         $this->assertSame('/', $this->database->getReference()->getUri()->getPath());
     }
 
-    public function testGetReferenceWithInvalidPath(): void
+    /**
+     * @test
+     */
+    public function getReferenceWithInvalidPath(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->database->getReference('#');
     }
 
-    public function testGetReferenceFromUrl(): void
+    /**
+     * @test
+     */
+    public function getReferenceFromUrl(): void
     {
         $url = $this->url.'/foo/bar';
 
         $this->assertSame($url, (string) $this->database->getReferenceFromUrl($url)->getUri());
     }
 
-    public function testGetReferenceFromNonMatchingUrl(): void
+    /**
+     * @test
+     */
+    public function getReferenceFromNonMatchingUrl(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         $this->database->getReferenceFromUrl('http://non-matching.tld');
     }
 
-    public function testGetRuleSet(): void
+    /**
+     * @test
+     */
+    public function getRuleSet(): void
     {
         $this->apiClient
             ->method('get')

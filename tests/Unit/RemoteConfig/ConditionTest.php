@@ -13,25 +13,37 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 final class ConditionTest extends UnitTestCase
 {
-    public function testItCanBeNamed(): void
+    /**
+     * @test
+     */
+    public function itCanBeNamed(): void
     {
         $condition = Condition::named('name');
         $this->assertSame('name', $condition->name());
     }
 
-    public function testItsDefaultExpressionIsFalseAsString(): void
+    /**
+     * @test
+     */
+    public function itsDefaultExpressionIsFalseAsString(): void
     {
         $condition = Condition::named('name');
         $this->assertSame('false', $condition->expression());
     }
 
-    public function testItsDefaultTagColorIsNotSet(): void
+    /**
+     * @test
+     */
+    public function itsDefaultTagColorIsNotSet(): void
     {
         $condition = Condition::named('name');
         $this->assertNull($condition->tagColor());
     }
 
-    public function testItsTagColorCanBeSetWithAString(): void
+    /**
+     * @test
+     */
+    public function itsTagColorCanBeSetWithAString(): void
     {
         $condition = Condition::named('name')->withTagColor('ORANGE');
         $expectedColor = new TagColor('ORANGE');
@@ -44,8 +56,10 @@ final class ConditionTest extends UnitTestCase
      * @dataProvider valueProvider
      *
      * @param array<mixed> $conditionData
+     *
+     * @test
      */
-    public function testItCanBeCreatedFromAnArray(string $expectedName, string $expectedExpression, ?TagColor $expectedTagColor, array $conditionData): void
+    public function itCanBeCreatedFromAnArray(string $expectedName, string $expectedExpression, ?TagColor $expectedTagColor, array $conditionData): void
     {
         $condition = Condition::fromArray($conditionData);
 

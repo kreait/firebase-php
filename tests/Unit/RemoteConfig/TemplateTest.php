@@ -20,17 +20,26 @@ use function array_map;
  */
 final class TemplateTest extends UnitTestCase
 {
-    public function testGetDefaultEtag(): void
+    /**
+     * @test
+     */
+    public function getDefaultEtag(): void
     {
         $this->assertSame('*', Template::new()->etag());
     }
 
-    public function testDefaultVersionIsNull(): void
+    /**
+     * @test
+     */
+    public function defaultVersionIsNull(): void
     {
         $this->assertNull(Template::new()->version());
     }
 
-    public function testCreateWithInvalidConditionalValue(): void
+    /**
+     * @test
+     */
+    public function createWithInvalidConditionalValue(): void
     {
         $parameter = Parameter::named('foo')->withConditionalValue(new ConditionalValue('non_existing_condition', 'false'));
 
@@ -40,8 +49,10 @@ final class TemplateTest extends UnitTestCase
 
     /**
      * @see https://github.com/kreait/firebase-php/issues/218
+     *
+     * @test
      */
-    public function testConditionNamesAreImportedCorrectlyWhenUsingFromArray(): void
+    public function conditionNamesAreImportedCorrectlyWhenUsingFromArray(): void
     {
         $given = ['conditions' => [['name' => 'foo', 'expression' => '"true"']]];
 
@@ -58,7 +69,10 @@ final class TemplateTest extends UnitTestCase
         $this->assertSame('foo', $template->parameters()['param']->conditionalValues()[0]->conditionName());
     }
 
-    public function testWithFluidConfiguration(): void
+    /**
+     * @test
+     */
+    public function withFluidConfiguration(): void
     {
         $german = Condition::named('lang_german')
             ->withExpression("device.language in ['de', 'de_AT', 'de_CH']")
@@ -101,7 +115,10 @@ final class TemplateTest extends UnitTestCase
         $this->assertSame($uiColors, $template->parameterGroups()['ui_colors']);
     }
 
-    public function testParametersCanBeRemoved(): void
+    /**
+     * @test
+     */
+    public function parametersCanBeRemoved(): void
     {
         $template = Template::new()
             ->withParameter(Parameter::named('foo'))
@@ -111,7 +128,10 @@ final class TemplateTest extends UnitTestCase
         $this->assertCount(0, $template->parameters());
     }
 
-    public function testParameterGroupsCanBeRemoved(): void
+    /**
+     * @test
+     */
+    public function parameterGroupsCanBeRemoved(): void
     {
         $template = Template::new()
             ->withParameterGroup(ParameterGroup::named('group'))
@@ -121,7 +141,10 @@ final class TemplateTest extends UnitTestCase
         $this->assertCount(0, $template->parameterGroups());
     }
 
-    public function testPersonalizationValuesAreImportedInDefaultValues(): void
+    /**
+     * @test
+     */
+    public function personalizationValuesAreImportedInDefaultValues(): void
     {
         $data = [
             'parameters' => [
@@ -144,7 +167,10 @@ final class TemplateTest extends UnitTestCase
         $this->assertSame('id', $personalizationIdArray['personalizationId']);
     }
 
-    public function testPersonalizationValuesAreImportedInConditionalValues(): void
+    /**
+     * @test
+     */
+    public function personalizationValuesAreImportedInConditionalValues(): void
     {
         $data = [
             'conditions' => [
@@ -177,7 +203,10 @@ final class TemplateTest extends UnitTestCase
         $this->assertSame('id', $personalizationIdArray['personalizationId']);
     }
 
-    public function testItProvidesConditionNames(): void
+    /**
+     * @test
+     */
+    public function itProvidesConditionNames(): void
     {
         $this->assertEqualsCanonicalizing(
             ['first', 'second', 'third'],
@@ -189,7 +218,10 @@ final class TemplateTest extends UnitTestCase
         );
     }
 
-    public function testConditionsCanBeRemoved(): void
+    /**
+     * @test
+     */
+    public function conditionsCanBeRemoved(): void
     {
         $this->assertEqualsCanonicalizing(
             ['first', 'third'],

@@ -20,8 +20,10 @@ final class MessageDataTest extends TestCase
      * @dataProvider validData
      *
      * @param array<non-empty-string, Stringable|string> $data
+     *
+     * @test
      */
-    public function testItAcceptsValidData(array $data): void
+    public function itAcceptsValidData(array $data): void
     {
         MessageData::fromArray($data);
         $this->addToAssertionCount(1);
@@ -31,8 +33,10 @@ final class MessageDataTest extends TestCase
      * @dataProvider invalidData
      *
      * @param array<non-empty-string, Stringable|string> $data
+     *
+     * @test
      */
-    public function testItRejectsInvalidData(array $data): void
+    public function itRejectsInvalidData(array $data): void
     {
         $this->expectException(InvalidArgumentException::class);
         MessageData::fromArray($data);
@@ -40,8 +44,10 @@ final class MessageDataTest extends TestCase
 
     /**
      * @see https://github.com/kreait/firebase-php/issues/709
+     *
+     * @test
      */
-    public function testItDoesNotLowerCaseKeys(): void
+    public function itDoesNotLowerCaseKeys(): void
     {
         $input = $output = ['notificationType' => 'email'];
 

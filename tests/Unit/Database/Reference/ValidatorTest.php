@@ -29,7 +29,10 @@ final class ValidatorTest extends UnitTestCase
         $this->validator = new Validator();
     }
 
-    public function testValidateDepth(): void
+    /**
+     * @test
+     */
+    public function validateDepth(): void
     {
         $uri = $this->uri->withPath('/'.str_pad('', (Validator::MAX_DEPTH + 1) * 2, 'x/'));
 
@@ -37,7 +40,10 @@ final class ValidatorTest extends UnitTestCase
         $this->validator->validateUri($uri);
     }
 
-    public function testValidateKeySize(): void
+    /**
+     * @test
+     */
+    public function validateKeySize(): void
     {
         $uri = $this->uri->withPath('/'.str_pad('', Validator::MAX_KEY_SIZE + 1, 'x'));
 
@@ -47,8 +53,10 @@ final class ValidatorTest extends UnitTestCase
 
     /**
      * @dataProvider invalidChars
+     *
+     * @test
      */
-    public function testValidateChars(string $value): void
+    public function validateChars(string $value): void
     {
         $uri = $this->uri->withPath('/'.ltrim($value, '/'));
 

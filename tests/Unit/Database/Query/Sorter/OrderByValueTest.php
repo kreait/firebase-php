@@ -22,7 +22,10 @@ final class OrderByValueTest extends UnitTestCase
         $this->sorter = new OrderByValue();
     }
 
-    public function testModifyUri(): void
+    /**
+     * @test
+     */
+    public function modifyUri(): void
     {
         $this->assertStringContainsString(
             'orderBy='.rawurlencode('"$value"'),
@@ -32,8 +35,10 @@ final class OrderByValueTest extends UnitTestCase
 
     /**
      * @dataProvider valueProvider
+     *
+     * @test
      */
-    public function testModifyValue(mixed $expected, mixed $value): void
+    public function modifyValue(mixed $expected, mixed $value): void
     {
         $this->assertSame($expected, $this->sorter->modifyValue($value));
     }

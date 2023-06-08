@@ -16,12 +16,18 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 final class AndroidConfigTest extends UnitTestCase
 {
-    public function testItIsEmptyWhenItIsEmpty(): void
+    /**
+     * @test
+     */
+    public function itIsEmptyWhenItIsEmpty(): void
     {
         $this->assertSame('[]', Json::encode(AndroidConfig::new()));
     }
 
-    public function testItHasADefaultSound(): void
+    /**
+     * @test
+     */
+    public function itHasADefaultSound(): void
     {
         $expected = [
             'notification' => [
@@ -35,7 +41,10 @@ final class AndroidConfigTest extends UnitTestCase
         );
     }
 
-    public function testItCanHaveAPriority(): void
+    /**
+     * @test
+     */
+    public function itCanHaveAPriority(): void
     {
         $config = AndroidConfig::new()->withNormalMessagePriority();
         $this->assertSame('normal', $config->jsonSerialize()['priority']);
@@ -48,8 +57,10 @@ final class AndroidConfigTest extends UnitTestCase
      * @dataProvider validDataProvider
      *
      * @param AndroidConfigShape $data
+     *
+     * @test
      */
-    public function testItCanBeCreatedFromAnArray(array $data): void
+    public function itCanBeCreatedFromAnArray(array $data): void
     {
         $config = AndroidConfig::fromArray($data);
 
@@ -58,8 +69,10 @@ final class AndroidConfigTest extends UnitTestCase
 
     /**
      * @dataProvider validTtlValues
+     *
+     * @test
      */
-    public function testItAcceptsValidTTLs(int|string|null $ttl): void
+    public function itAcceptsValidTTLs(int|string|null $ttl): void
     {
         AndroidConfig::fromArray([
             'ttl' => $ttl,
@@ -70,8 +83,10 @@ final class AndroidConfigTest extends UnitTestCase
 
     /**
      * @dataProvider invalidTtlValues
+     *
+     * @test
      */
-    public function testItRejectsInvalidTTLs(mixed $ttl): void
+    public function itRejectsInvalidTTLs(mixed $ttl): void
     {
         $this->expectException(InvalidArgument::class);
 

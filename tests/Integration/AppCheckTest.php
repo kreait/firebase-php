@@ -25,21 +25,30 @@ final class AppCheckTest extends IntegrationTestCase
         $this->appCheck = self::$factory->createAppCheck();
     }
 
-    public function testCreateTokenWithDefaultTtl(): void
+    /**
+     * @test
+     */
+    public function createTokenWithDefaultTtl(): void
     {
         $token = $this->appCheck->createToken(self::$appId);
 
         $this->assertSame('3600s', $token->ttl);
     }
 
-    public function testCreateTokenWithCustomTtl(): void
+    /**
+     * @test
+     */
+    public function createTokenWithCustomTtl(): void
     {
         $token = $this->appCheck->createToken(self::$appId, ['ttl' => 1800]);
 
         $this->assertSame('1800s', $token->ttl);
     }
 
-    public function testVerifyToken(): void
+    /**
+     * @test
+     */
+    public function verifyToken(): void
     {
         $token = $this->appCheck->createToken(self::$appId);
 

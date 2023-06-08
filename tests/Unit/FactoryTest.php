@@ -33,7 +33,10 @@ final class FactoryTest extends UnitTestCase
         $this->serviceAccountArray = Json::decodeFile($this->serviceAccountFilePath, true);
     }
 
-    public function testItUsesTheCredentialsFromTheGoogleApplicationCredentialsEnvironmentVariable(): void
+    /**
+     * @test
+     */
+    public function itUsesTheCredentialsFromTheGoogleApplicationCredentialsEnvironmentVariable(): void
     {
         putenv('GOOGLE_APPLICATION_CREDENTIALS='.$this->serviceAccountFilePath);
 
@@ -42,14 +45,20 @@ final class FactoryTest extends UnitTestCase
         putenv('GOOGLE_APPLICATION_CREDENTIALS');
     }
 
-    public function testItCanBeConfiguredWithThePathToAServiceAccount(): void
+    /**
+     * @test
+     */
+    public function itCanBeConfiguredWithThePathToAServiceAccount(): void
     {
         $factory = (new Factory())->withServiceAccount($this->serviceAccountFilePath);
 
         $this->assertServices($factory);
     }
 
-    public function testItCanBeConfiguredWithAServiceAccountArray(): void
+    /**
+     * @test
+     */
+    public function itCanBeConfiguredWithAServiceAccountArray(): void
     {
         $factory = (new Factory())->withServiceAccount($this->serviceAccountArray);
 

@@ -17,16 +17,20 @@ final class UidTest extends TestCase
 {
     /**
      * @dataProvider validValues
+     *
+     * @test
      */
-    public function testWithValidValue(string $uid): void
+    public function withValidValue(string $uid): void
     {
         $this->assertSame($uid, Uid::fromString($uid)->value);
     }
 
     /**
      * @dataProvider invalidValues
+     *
+     * @test
      */
-    public function testWithInvalidValue(string $uid): void
+    public function withInvalidValue(string $uid): void
     {
         $this->expectException(InvalidArgumentException::class);
         Uid::fromString($uid);

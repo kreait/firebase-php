@@ -19,15 +19,20 @@ final class UpdateUserTest extends TestCase
      *
      * @param array<array<string|mixed>> $properties
      * @param array<array<string|mixed>> $expected
+     *
+     * @test
      */
-    public function testWithProperties(array $properties, array $expected): void
+    public function withProperties(array $properties, array $expected): void
     {
         $request = UpdateUser::withProperties($properties);
 
         $this->assertEqualsCanonicalizing($expected, $request->jsonSerialize());
     }
 
-    public function testWithMissingUid(): void
+    /**
+     * @test
+     */
+    public function withMissingUid(): void
     {
         $this->expectException(InvalidArgumentException::class);
         UpdateUser::withProperties([])->jsonSerialize();

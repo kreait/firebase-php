@@ -24,7 +24,10 @@ final class CreateUserTest extends IntegrationTestCase
         $this->auth = self::$factory->createAuth();
     }
 
-    public function testCreateUser(): void
+    /**
+     * @test
+     */
+    public function createUser(): void
     {
         $request = CreateUser::new()
             ->withUid($uid = bin2hex(random_bytes(5)))
@@ -49,7 +52,10 @@ final class CreateUserTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testCreateUserWithoutEmailButMarkTheEmailAsUnverified(): void
+    /**
+     * @test
+     */
+    public function createUserWithoutEmailButMarkTheEmailAsUnverified(): void
     {
         $request = CreateUser::new()
             ->withUid($uid = bin2hex(random_bytes(5)))

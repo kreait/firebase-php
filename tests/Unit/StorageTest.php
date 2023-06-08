@@ -14,7 +14,10 @@ use RuntimeException;
  */
 final class StorageTest extends TestCase
 {
-    public function testItReturnsTheSameClientItWasGiven(): void
+    /**
+     * @test
+     */
+    public function itReturnsTheSameClientItWasGiven(): void
     {
         $client = $this->createMock(StorageClient::class);
         $storage = new Storage($client);
@@ -22,7 +25,10 @@ final class StorageTest extends TestCase
         $this->assertSame($client, $storage->getStorageClient());
     }
 
-    public function testItComplainsWhenNoDefaultBucketWasProvided(): void
+    /**
+     * @test
+     */
+    public function itComplainsWhenNoDefaultBucketWasProvided(): void
     {
         $client = $this->createMock(StorageClient::class);
         $storage = new Storage($client);

@@ -32,7 +32,10 @@ final class TransactionTest extends TestCase
         $this->transaction = new Transaction($this->apiClient);
     }
 
-    public function testAReferenceCanOnlyBeChangedIfItHasBeenSnapshotted(): void
+    /**
+     * @test
+     */
+    public function aReferenceCanOnlyBeChangedIfItHasBeenSnapshotted(): void
     {
         $reference = $this->createMock(Reference::class);
 
@@ -45,7 +48,10 @@ final class TransactionTest extends TestCase
         }
     }
 
-    public function testATransactionCanFail(): void
+    /**
+     * @test
+     */
+    public function aTransactionCanFail(): void
     {
         $reference = $this->createMock(Reference::class);
         $reference->method('getPath')->willReturn('/foo');

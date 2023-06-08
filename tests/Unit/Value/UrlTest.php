@@ -16,8 +16,10 @@ final class UrlTest extends TestCase
 {
     /**
      * @dataProvider validValues
+     *
+     * @test
      */
-    public function testWithValidValue(Stringable|string $value): void
+    public function withValidValue(Stringable|string $value): void
     {
         $url = Url::fromString($value)->value;
 
@@ -28,8 +30,10 @@ final class UrlTest extends TestCase
 
     /**
      * @dataProvider invalidValues
+     *
+     * @test
      */
-    public function testWithInvalidValue(string $value): void
+    public function withInvalidValue(string $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         Url::fromString($value);

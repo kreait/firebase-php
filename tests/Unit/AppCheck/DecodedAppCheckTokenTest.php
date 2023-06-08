@@ -12,7 +12,10 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 final class DecodedAppCheckTokenTest extends UnitTestCase
 {
-    public function testCreateFromValidArray(): void
+    /**
+     * @test
+     */
+    public function createFromValidArray(): void
     {
         $options = DecodedAppCheckToken::fromArray([
             'aud' => $aud = ['111111111111', 'project-id'],

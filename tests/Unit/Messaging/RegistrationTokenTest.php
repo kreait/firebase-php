@@ -15,8 +15,10 @@ final class RegistrationTokenTest extends TestCase
 {
     /**
      * @dataProvider valueProvider
+     *
+     * @test
      */
-    public function testFromValue(string $expected, string $value): void
+    public function fromValue(string $expected, string $value): void
     {
         $token = RegistrationToken::fromValue($value);
 

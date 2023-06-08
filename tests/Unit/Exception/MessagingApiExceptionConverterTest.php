@@ -41,7 +41,10 @@ final class MessagingApiExceptionConverterTest extends TestCase
         $this->converter = new MessagingApiExceptionConverter($this->clock);
     }
 
-    public function testItConvertsAConnectException(): void
+    /**
+     * @test
+     */
+    public function itConvertsAConnectException(): void
     {
         $connectException = new ConnectException(
             'curl error xx',
@@ -55,8 +58,10 @@ final class MessagingApiExceptionConverterTest extends TestCase
      * @dataProvider exceptions
      *
      * @param class-string<object> $expectedClass
+     *
+     * @test
      */
-    public function testItConvertsExceptions(Throwable $e, string $expectedClass): void
+    public function itConvertsExceptions(Throwable $e, string $expectedClass): void
     {
         $converted = $this->converter->convertException($e);
 
@@ -101,7 +106,10 @@ final class MessagingApiExceptionConverterTest extends TestCase
         );
     }
 
-    public function testItKnowsWhenToRetryAfterWithSeconds(): void
+    /**
+     * @test
+     */
+    public function itKnowsWhenToRetryAfterWithSeconds(): void
     {
         $response = new Response(429, ['Retry-After' => 60]);
 
@@ -113,7 +121,10 @@ final class MessagingApiExceptionConverterTest extends TestCase
         $this->assertSame($expected->getTimestamp(), $converted->retryAfter()->getTimestamp());
     }
 
-    public function testItKnowsWhenToRetryAfterWithDateStrings(): void
+    /**
+     * @test
+     */
+    public function itKnowsWhenToRetryAfterWithDateStrings(): void
     {
         $expected = $this->clock->now()->modify('+60 seconds');
 

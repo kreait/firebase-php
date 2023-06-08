@@ -13,7 +13,10 @@ use PHPUnit\Framework\TestCase;
  */
 final class FirestoreTest extends TestCase
 {
-    public function testItReturnsTheSameClientItWasGiven(): void
+    /**
+     * @test
+     */
+    public function itReturnsTheSameClientItWasGiven(): void
     {
         $client = $this->createMock(FirestoreClient::class);
         $firestore = Firestore::withFirestoreClient($client);

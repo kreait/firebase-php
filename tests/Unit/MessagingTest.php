@@ -29,25 +29,37 @@ final class MessagingTest extends UnitTestCase
         $this->messaging = new Messaging('project-id', $messagingApi, $appInstanceApi);
     }
 
-    public function testSendInvalidArray(): void
+    /**
+     * @test
+     */
+    public function sendInvalidArray(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->messaging->send([]);
     }
 
-    public function testSubscribeToTopicWithEmptyTokenList(): void
+    /**
+     * @test
+     */
+    public function subscribeToTopicWithEmptyTokenList(): void
     {
         $this->expectException(InvalidArgument::class);
         $this->messaging->subscribeToTopic('topic', []);
     }
 
-    public function testUnsubscribeFromTopicWithEmptyTokenList(): void
+    /**
+     * @test
+     */
+    public function unsubscribeFromTopicWithEmptyTokenList(): void
     {
         $this->expectException(InvalidArgument::class);
         $this->messaging->unsubscribeFromTopic('topic', []);
     }
 
-    public function testItWillNotSendAMessageWithoutATarget(): void
+    /**
+     * @test
+     */
+    public function itWillNotSendAMessageWithoutATarget(): void
     {
         $message = CloudMessage::new();
 
@@ -57,7 +69,10 @@ final class MessagingTest extends UnitTestCase
         $this->messaging->send($message);
     }
 
-    public function testAMulticastMessageCannotBeTooLarge(): void
+    /**
+     * @test
+     */
+    public function aMulticastMessageCannotBeTooLarge(): void
     {
         $tokens = array_fill(0, 501, 'token');
 
@@ -65,7 +80,10 @@ final class MessagingTest extends UnitTestCase
         $this->messaging->sendMulticast(CloudMessage::new(), $tokens);
     }
 
-    public function testSendAllCannotBeTooLarge(): void
+    /**
+     * @test
+     */
+    public function sendAllCannotBeTooLarge(): void
     {
         $messages = array_fill(0, 501, CloudMessage::new());
 

@@ -26,8 +26,10 @@ final class ReferenceTest extends DatabaseTestCase
 
     /**
      * @dataProvider validValues
+     *
+     * @test
      */
-    public function testSetAndGet(string $key, mixed $value): void
+    public function setAndGet(string $key, mixed $value): void
     {
         $ref = $this->ref->getChild(__FUNCTION__.'/'.$key);
         $ref->set($value);
@@ -35,7 +37,10 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertSame($value, $ref->getValue());
     }
 
-    public function testUpdate(): void
+    /**
+     * @test
+     */
+    public function update(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
         $ref->set([
@@ -57,7 +62,10 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertEqualsCanonicalizing($expected, $ref->getValue());
     }
 
-    public function testPush(): void
+    /**
+     * @test
+     */
+    public function push(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
         $value = 'a value';
@@ -68,7 +76,10 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertSame($value, $newRef->getValue());
     }
 
-    public function testRemove(): void
+    /**
+     * @test
+     */
+    public function remove(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
 
@@ -82,7 +93,10 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertEqualsCanonicalizing(['second' => 'value'], $ref->getValue());
     }
 
-    public function testRemoveChildren(): void
+    /**
+     * @test
+     */
+    public function removeChildren(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
 
@@ -108,7 +122,10 @@ final class ReferenceTest extends DatabaseTestCase
         ], $ref->getValue());
     }
 
-    public function testPushToGetKey(): void
+    /**
+     * @test
+     */
+    public function pushToGetKey(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
         $key = $ref->push()->getKey();
@@ -117,7 +134,10 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertSame(0, $ref->getSnapshot()->numChildren());
     }
 
-    public function testSetWithNullIsSameAsRemove(): void
+    /**
+     * @test
+     */
+    public function setWithNullIsSameAsRemove(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
 
@@ -131,7 +151,10 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertSame(0, $ref->getSnapshot()->numChildren());
     }
 
-    public function testSetServerTimestamp(): void
+    /**
+     * @test
+     */
+    public function setServerTimestamp(): void
     {
         $now = new DateTimeImmutable();
 

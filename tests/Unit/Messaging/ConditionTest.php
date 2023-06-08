@@ -15,22 +15,29 @@ final class ConditionTest extends TestCase
 {
     /**
      * @dataProvider valueProvider
+     *
+     * @test
      */
-    public function testFromValue(string $expected, string $value): void
+    public function fromValue(string $expected, string $value): void
     {
         $this->assertSame($expected, Condition::fromValue($value)->value());
     }
 
     /**
      * @dataProvider invalidValueProvider
+     *
+     * @test
      */
-    public function testFromInvalidValue(string $value): void
+    public function fromInvalidValue(string $value): void
     {
         $this->expectException(InvalidArgument::class);
         Condition::fromValue($value);
     }
 
-    public function testNoMoreThanFiveTopics(): void
+    /**
+     * @test
+     */
+    public function noMoreThanFiveTopics(): void
     {
         $valid = "'a' in topics && 'b' in topics || 'c' in topics || 'd' in topics || 'e' in topics";
         $invalid = $valid." || 'f' in topics";

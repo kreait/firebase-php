@@ -16,7 +16,10 @@ use function range;
  */
 final class DeleteUsersRequestTest extends TestCase
 {
-    public function testItRejectsTooManyUids(): void
+    /**
+     * @test
+     */
+    public function itRejectsTooManyUids(): void
     {
         $uids = array_map('strval', range(0, 1001));
 
@@ -24,7 +27,10 @@ final class DeleteUsersRequestTest extends TestCase
         DeleteUsersRequest::withUids($uids);
     }
 
-    public function testItRejectsInvalidUids(): void
+    /**
+     * @test
+     */
+    public function itRejectsInvalidUids(): void
     {
         $this->expectException(InvalidArgumentException::class);
         DeleteUsersRequest::withUids(['']);

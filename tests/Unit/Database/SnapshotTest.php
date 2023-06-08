@@ -31,19 +31,28 @@ final class SnapshotTest extends UnitTestCase
         $this->snapshotWithEmptyValue = new Snapshot($this->reference, null);
     }
 
-    public function testGetReference(): void
+    /**
+     * @test
+     */
+    public function getReference(): void
     {
         $this->assertSame($this->reference, $this->snapshotWithArrayValue->getReference());
     }
 
-    public function testGetKey(): void
+    /**
+     * @test
+     */
+    public function getKey(): void
     {
         $this->reference->method('getKey')->willReturn('key');
 
         $this->assertSame('key', $this->snapshotWithArrayValue->getKey());
     }
 
-    public function testGetChildOnANonArrayValueReturnsAnEmptySnapshot(): void
+    /**
+     * @test
+     */
+    public function getChildOnANonArrayValueReturnsAnEmptySnapshot(): void
     {
         $this->reference->expects($this->once())
             ->method('getChild')->with('path/to/child')
@@ -56,7 +65,10 @@ final class SnapshotTest extends UnitTestCase
         $this->assertNull($childSnapshot->getValue());
     }
 
-    public function testGetChildOnANonExistingChildReturnsAnEmptySnapshot(): void
+    /**
+     * @test
+     */
+    public function getChildOnANonExistingChildReturnsAnEmptySnapshot(): void
     {
         $this->reference->expects($this->once())
             ->method('getChild')->with('nonexisting/child')
@@ -67,7 +79,10 @@ final class SnapshotTest extends UnitTestCase
         $this->assertNull($this->snapshotWithArrayValue->getChild('nonexisting/child')->getValue());
     }
 
-    public function testGetChild(): void
+    /**
+     * @test
+     */
+    public function getChild(): void
     {
         $this->reference->expects($this->once())
             ->method('getChild')->with('key/subkey')
@@ -78,21 +93,30 @@ final class SnapshotTest extends UnitTestCase
         $this->assertSame('value', $this->snapshotWithArrayValue->getChild('key/subkey')->getValue());
     }
 
-    public function testExists(): void
+    /**
+     * @test
+     */
+    public function exists(): void
     {
         $this->assertTrue($this->snapshotWithArrayValue->exists());
         $this->assertTrue($this->snapshotWithScalarValue->exists());
         $this->assertFalse($this->snapshotWithEmptyValue->exists());
     }
 
-    public function testHasChildren(): void
+    /**
+     * @test
+     */
+    public function hasChildren(): void
     {
         $this->assertTrue($this->snapshotWithArrayValue->hasChildren());
         $this->assertFalse($this->snapshotWithScalarValue->hasChildren());
         $this->assertFalse($this->snapshotWithEmptyValue->hasChildren());
     }
 
-    public function testNumChildren(): void
+    /**
+     * @test
+     */
+    public function numChildren(): void
     {
         $this->assertSame(1, $this->snapshotWithArrayValue->numChildren());
         $this->assertSame(0, $this->snapshotWithScalarValue->numChildren());
@@ -101,8 +125,10 @@ final class SnapshotTest extends UnitTestCase
 
     /**
      * @see https://github.com/kreait/firebase-php/issues/212
+     *
+     * @test
      */
-    public function testGetChildWithKeyStartingWithANonAlphabeticalCharacter(): void
+    public function getChildWithKeyStartingWithANonAlphabeticalCharacter(): void
     {
         $snapshot = new Snapshot($this->reference, [
             '123' => 'value',

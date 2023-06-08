@@ -47,12 +47,18 @@ final class QueryTest extends UnitTestCase
         $this->query = new Query($this->reference, $this->apiClient);
     }
 
-    public function testGetReference(): void
+    /**
+     * @test
+     */
+    public function getReference(): void
     {
         $this->assertSame($this->reference, $this->query->getReference());
     }
 
-    public function testGetSnapshot(): void
+    /**
+     * @test
+     */
+    public function getSnapshot(): void
     {
         $this->apiClient->method('get')->with($this->anything())->willReturn('value');
 
@@ -61,21 +67,30 @@ final class QueryTest extends UnitTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function testGetValue(): void
+    /**
+     * @test
+     */
+    public function getValue(): void
     {
         $this->apiClient->method('get')->with($this->anything())->willReturn('value');
 
         $this->assertSame('value', $this->query->getValue());
     }
 
-    public function testGetUri(): void
+    /**
+     * @test
+     */
+    public function getUri(): void
     {
         $uri = $this->query->getUri();
 
         $this->assertSame((string) $uri, (string) $this->query);
     }
 
-    public function testOnlyOneSorterIsAllowed(): void
+    /**
+     * @test
+     */
+    public function onlyOneSorterIsAllowed(): void
     {
         try {
             $this->query->orderByKey()->orderByValue();
@@ -84,7 +99,10 @@ final class QueryTest extends UnitTestCase
         }
     }
 
-    public function testWrapsApiExceptions(): void
+    /**
+     * @test
+     */
+    public function wrapsApiExceptions(): void
     {
         $exception = new DatabaseError();
 
@@ -98,7 +116,10 @@ final class QueryTest extends UnitTestCase
         $this->query->getSnapshot();
     }
 
-    public function testIndexNotDefined(): void
+    /**
+     * @test
+     */
+    public function indexNotDefined(): void
     {
         $this->apiClient
             ->method('get')->with($this->anything())
@@ -110,7 +131,10 @@ final class QueryTest extends UnitTestCase
         $this->query->getSnapshot();
     }
 
-    public function testWithNonExistingDatabase(): void
+    /**
+     * @test
+     */
+    public function withNonExistingDatabase(): void
     {
         $this->apiClient
             ->method('get')->with($this->anything())

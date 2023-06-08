@@ -27,8 +27,10 @@ final class SetApnsContentAvailableIfNeededTest extends TestCase
      * @param array<mixed> $messageData
      *
      * @see https://github.com/kreait/firebase-php/pull/762
+     *
+     * @test
      */
-    public function testItSetsTheExpectedPushType(bool $expected, array $messageData): void
+    public function itSetsTheExpectedPushType(bool $expected, array $messageData): void
     {
         $message = CloudMessage::fromArray($messageData);
 

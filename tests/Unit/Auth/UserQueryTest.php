@@ -13,7 +13,10 @@ use PHPUnit\Framework\TestCase;
  */
 final class UserQueryTest extends TestCase
 {
-    public function testItCanBeComposed(): void
+    /**
+     * @test
+     */
+    public function itCanBeComposed(): void
     {
         $expected = [
             'returnUserInfo' => true,
@@ -33,7 +36,10 @@ final class UserQueryTest extends TestCase
         $this->assertJsonStringEqualsJsonString(Json::encode($expected), Json::encode($query));
     }
 
-    public function testItCanSortInAscendingOrder(): void
+    /**
+     * @test
+     */
+    public function itCanSortInAscendingOrder(): void
     {
         $expected = [
             'returnUserInfo' => true,
@@ -45,7 +51,10 @@ final class UserQueryTest extends TestCase
         $this->assertJsonStringEqualsJsonString(Json::encode($expected), Json::encode($query));
     }
 
-    public function testItCanSortInDescendingOrder(): void
+    /**
+     * @test
+     */
+    public function itCanSortInDescendingOrder(): void
     {
         $expected = [
             'returnUserInfo' => true,
@@ -57,7 +66,10 @@ final class UserQueryTest extends TestCase
         $this->assertJsonStringEqualsJsonString(Json::encode($expected), Json::encode($query));
     }
 
-    public function testItCanBeCreatedFromAnArray(): void
+    /**
+     * @test
+     */
+    public function itCanBeCreatedFromAnArray(): void
     {
         $data = [
             'returnUserInfo' => true,

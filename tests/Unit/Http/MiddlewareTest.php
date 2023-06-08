@@ -24,7 +24,10 @@ final class MiddlewareTest extends UnitTestCase
         $this->handler = static fn (RequestInterface $request) => $request;
     }
 
-    public function testEnsureJsonSuffix(): void
+    /**
+     * @test
+     */
+    public function ensureJsonSuffix(): void
     {
         $middleware = Middleware::ensureJsonSuffix();
         $handlerClosure = $middleware($this->handler);

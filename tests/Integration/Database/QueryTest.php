@@ -26,7 +26,10 @@ final class QueryTest extends DatabaseTestCase
         $this->ref = self::$db->getReference(self::$refPrefix);
     }
 
-    public function testLimitToLast(): void
+    /**
+     * @test
+     */
+    public function limitToLast(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
 

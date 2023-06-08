@@ -16,7 +16,10 @@ use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
  */
 final class RuleSetTest extends DatabaseTestCase
 {
-    public function testDefault(): void
+    /**
+     * @test
+     */
+    public function default(): void
     {
         $ruleSet = RuleSet::default();
 
@@ -25,7 +28,10 @@ final class RuleSetTest extends DatabaseTestCase
         $this->assertEqualsCanonicalizing($ruleSet->getRules(), self::$db->getRuleSet()->getRules());
     }
 
-    public function testPublic(): void
+    /**
+     * @test
+     */
+    public function public(): void
     {
         $ruleSet = RuleSet::public();
 
@@ -34,7 +40,10 @@ final class RuleSetTest extends DatabaseTestCase
         $this->assertEqualsCanonicalizing($ruleSet->getRules(), self::$db->getRuleSet()->getRules());
     }
 
-    public function testPrivate(): void
+    /**
+     * @test
+     */
+    public function private(): void
     {
         $ruleSet = RuleSet::private();
 
@@ -45,8 +54,10 @@ final class RuleSetTest extends DatabaseTestCase
 
     /**
      * @see https://github.com/kreait/firebase-php/issues/705
+     *
+     * @test
      */
-    public function testRulesAreProperlyEncoded(): void
+    public function rulesAreProperlyEncoded(): void
     {
         $rules = RuleSet::private()->getRules();
         $rules['rules'][self::$refPrefix.__FUNCTION__] = [
@@ -70,7 +81,8 @@ final class RuleSetTest extends DatabaseTestCase
         $response = self::$apiClient
             ->get(
                 self::$db->getReference()->getUri()->withPath('/.settings/rules.json'),
-            );
+            )
+        ;
 
         $this->assertSame(200, $response->getStatusCode());
         // Assert that the returned JSON doesn't contain objects with integer keys instead of lists

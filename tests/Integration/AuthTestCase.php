@@ -41,7 +41,10 @@ abstract class AuthTestCase extends IntegrationTestCase
      */
     protected Auth $auth;
 
-    public function testCreateAnonymousUser(): void
+    /**
+     * @test
+     */
+    public function createAnonymousUser(): void
     {
         $user = $this->auth->createAnonymousUser();
 
@@ -52,7 +55,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testCreateUserWithEmailAndPassword(): void
+    /**
+     * @test
+     */
+    public function createUserWithEmailAndPassword(): void
     {
         $email = self::randomEmail(__FUNCTION__);
         $password = 'foobar';
@@ -67,7 +73,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testChangeUserPassword(): void
+    /**
+     * @test
+     */
+    public function changeUserPassword(): void
     {
         $email = self::randomEmail(__FUNCTION__);
 
@@ -79,7 +88,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function testChangeUserEmail(): void
+    /**
+     * @test
+     */
+    public function changeUserEmail(): void
     {
         $email = self::randomEmail(__FUNCTION__.'_1');
         $newEmail = self::randomEmail(__FUNCTION__.'_2');
@@ -96,7 +108,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testGetEmailVerificationLink(): void
+    /**
+     * @test
+     */
+    public function getEmailVerificationLink(): void
     {
         $user = $this->createUserWithEmailAndPassword();
 
@@ -108,7 +123,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testSendEmailVerificationLink(): void
+    /**
+     * @test
+     */
+    public function sendEmailVerificationLink(): void
     {
         $user = $this->createUserWithEmailAndPassword();
 
@@ -121,13 +139,19 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testSendEmailVerificationLinkToUnknownUser(): void
+    /**
+     * @test
+     */
+    public function sendEmailVerificationLinkToUnknownUser(): void
     {
         $this->expectException(FailedToSendActionLink::class);
         $this->auth->sendEmailVerificationLink(self::randomEmail(__FUNCTION__));
     }
 
-    public function testSendEmailVerificationLinkToDisabledUser(): void
+    /**
+     * @test
+     */
+    public function sendEmailVerificationLinkToDisabledUser(): void
     {
         $user = $this->createUserWithEmailAndPassword();
 
@@ -141,7 +165,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testGetPasswordResetLink(): void
+    /**
+     * @test
+     */
+    public function getPasswordResetLink(): void
     {
         $user = $this->createUserWithEmailAndPassword();
 
@@ -153,7 +180,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testSendPasswordResetLink(): void
+    /**
+     * @test
+     */
+    public function sendPasswordResetLink(): void
     {
         $user = $this->createUserWithEmailAndPassword();
 
@@ -166,7 +196,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testGetSignInWithEmailLink(): void
+    /**
+     * @test
+     */
+    public function getSignInWithEmailLink(): void
     {
         $user = $this->createUserWithEmailAndPassword();
         assert($user->email !== null);
@@ -179,7 +212,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testSendSignInWithEmailLink(): void
+    /**
+     * @test
+     */
+    public function sendSignInWithEmailLink(): void
     {
         $user = $this->createUserWithEmailAndPassword();
 
@@ -192,13 +228,19 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testGetUnsupportedEmailActionLink(): void
+    /**
+     * @test
+     */
+    public function getUnsupportedEmailActionLink(): void
     {
         $this->expectException(FailedToCreateActionLink::class);
         $this->auth->getEmailActionLink('unsupported', self::randomEmail(__FUNCTION__));
     }
 
-    public function testGetLocalizedEmailActionLink(): void
+    /**
+     * @test
+     */
+    public function getLocalizedEmailActionLink(): void
     {
         $user = $this->createUserWithEmailAndPassword();
         $this->assertIsString($user->email);
@@ -212,13 +254,19 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testSendUnsupportedEmailActionLink(): void
+    /**
+     * @test
+     */
+    public function sendUnsupportedEmailActionLink(): void
     {
         $this->expectException(FailedToSendActionLink::class);
         $this->auth->sendEmailActionLink('unsupported', self::randomEmail(__FUNCTION__));
     }
 
-    public function testListUsers(): void
+    /**
+     * @test
+     */
+    public function listUsers(): void
     {
         // We already should have a list of users, but let's add another one,
         // just to be sure
@@ -237,7 +285,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testVerifyIdToken(): void
+    /**
+     * @test
+     */
+    public function verifyIdToken(): void
     {
         $result = $this->auth->signInAnonymously();
 
@@ -259,7 +310,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testRevokeRefreshTokensAfterIdTokenVerification(): void
+    /**
+     * @test
+     */
+    public function revokeRefreshTokensAfterIdTokenVerification(): void
     {
         $idToken = $this->auth->signInAnonymously()->idToken();
         $this->assertIsString($idToken);
@@ -282,7 +336,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testVerifyIdTokenString(): void
+    /**
+     * @test
+     */
+    public function verifyIdTokenString(): void
     {
         $result = $this->auth->signInAnonymously();
 
@@ -300,7 +357,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testCreateSessionCookie(): void
+    /**
+     * @test
+     */
+    public function createSessionCookie(): void
     {
         $signInResult = $this->auth->signInAnonymously();
 
@@ -321,7 +381,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testCreateSessionCookieWithInvalidTTL(): void
+    /**
+     * @test
+     */
+    public function createSessionCookieWithInvalidTTL(): void
     {
         $signInResult = $this->auth->signInAnonymously();
 
@@ -339,7 +402,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testCreateSessionCookieWithInvalidIdToken(): void
+    /**
+     * @test
+     */
+    public function createSessionCookieWithInvalidIdToken(): void
     {
         $this->expectException(FailedToCreateSessionCookie::class);
         $this->expectExceptionMessageMatches('/INVALID_ID_TOKEN/');
@@ -347,7 +413,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->createSessionCookie('invalid', 3600);
     }
 
-    public function testVerifySessionCookie(): void
+    /**
+     * @test
+     */
+    public function verifySessionCookie(): void
     {
         $result = $this->auth->signInAnonymously();
 
@@ -367,7 +436,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testVerifySessionCookieAfterTokenRevocation(): void
+    /**
+     * @test
+     */
+    public function verifySessionCookieAfterTokenRevocation(): void
     {
         $result = $this->auth->signInAnonymously();
 
@@ -395,7 +467,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testDisableAndEnableUser(): void
+    /**
+     * @test
+     */
+    public function disableAndEnableUser(): void
     {
         $user = $this->auth->createUser([]);
 
@@ -408,7 +483,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testGetUser(): void
+    /**
+     * @test
+     */
+    public function getUser(): void
     {
         $user = $this->auth->createUser([]);
 
@@ -419,7 +497,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testGetUsers(): void
+    /**
+     * @test
+     */
+    public function getUsers(): void
     {
         $one = $this->auth->createAnonymousUser();
         $two = $this->auth->createAnonymousUser();
@@ -436,7 +517,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testGetNonExistingUser(): void
+    /**
+     * @test
+     */
+    public function getNonExistingUser(): void
     {
         $user = $this->auth->createUser([]);
         $this->auth->deleteUser($user->uid);
@@ -445,7 +529,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->getUser($user->uid);
     }
 
-    public function testGetUserByNonExistingEmail(): void
+    /**
+     * @test
+     */
+    public function getUserByNonExistingEmail(): void
     {
         $user = $this->auth->createUser([
             'email' => $email = self::randomEmail(__FUNCTION__),
@@ -456,7 +543,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->getUserByEmail($email);
     }
 
-    public function testGetUserByPhoneNumber(): void
+    /**
+     * @test
+     */
+    public function getUserByPhoneNumber(): void
     {
         $phoneNumber = '+1234567'.random_int(1000, 9999);
 
@@ -471,7 +561,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testGetUserByNonExistingPhoneNumber(): void
+    /**
+     * @test
+     */
+    public function getUserByNonExistingPhoneNumber(): void
     {
         $phoneNumber = '+1234567'.random_int(1000, 9999);
 
@@ -484,7 +577,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->getUserByPhoneNumber($phoneNumber);
     }
 
-    public function testCreateUser(): void
+    /**
+     * @test
+     */
+    public function createUser(): void
     {
         $uid = bin2hex(random_bytes(5));
         $userRecord = $this->auth->createUser([
@@ -501,7 +597,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->deleteUser($uid);
     }
 
-    public function testUpdateUserWithUidAsAdditionalArgument(): void
+    /**
+     * @test
+     */
+    public function updateUserWithUidAsAdditionalArgument(): void
     {
         $user = $this->auth->createUser([]);
         $this->auth->updateUser($user->uid, []);
@@ -509,7 +608,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function testDeleteNonExistingUser(): void
+    /**
+     * @test
+     */
+    public function deleteNonExistingUser(): void
     {
         $user = $this->auth->createUser([]);
 
@@ -519,7 +621,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testBatchDeleteDisabledUsers(): void
+    /**
+     * @test
+     */
+    public function batchDeleteDisabledUsers(): void
     {
         $enabledOne = $this->auth->createAnonymousUser();
         $enabledTwo = $this->auth->createAnonymousUser();
@@ -536,7 +641,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->assertCount(2, $result->rawErrors());
     }
 
-    public function testBatchForceDeleteUsers(): void
+    /**
+     * @test
+     */
+    public function batchForceDeleteUsers(): void
     {
         $enabledOne = $this->auth->createAnonymousUser();
         $enabledTwo = $this->auth->createAnonymousUser();
@@ -553,7 +661,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->assertCount(0, $result->rawErrors());
     }
 
-    public function testSetCustomUserClaims(): void
+    /**
+     * @test
+     */
+    public function setCustomUserClaims(): void
     {
         $user = $this->auth->createAnonymousUser();
 
@@ -570,7 +681,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testUnlinkProvider(): void
+    /**
+     * @test
+     */
+    public function unlinkProvider(): void
     {
         $uid = self::randomString(__FUNCTION__);
 
@@ -587,7 +701,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testVerifyPasswordResetCode(): void
+    /**
+     * @test
+     */
+    public function verifyPasswordResetCode(): void
     {
         $user = $this->createUserWithEmailAndPassword();
         assert(is_string($user->email));
@@ -604,13 +721,19 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testVerifyPasswordWithInvalidOobCode(): void
+    /**
+     * @test
+     */
+    public function verifyPasswordWithInvalidOobCode(): void
     {
         $this->expectException(InvalidOobCode::class);
         $this->auth->verifyPasswordResetCode('invalid');
     }
 
-    public function testConfirmPasswordReset(): void
+    /**
+     * @test
+     */
+    public function confirmPasswordReset(): void
     {
         $user = $this->createUserWithEmailAndPassword();
 
@@ -627,7 +750,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testConfirmPasswordResetAndInvalidateRefreshTokens(): void
+    /**
+     * @test
+     */
+    public function confirmPasswordResetAndInvalidateRefreshTokens(): void
     {
         $user = $this->createUserWithEmailAndPassword();
         assert(is_string($user->email));
@@ -649,13 +775,19 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testConfirmPasswordResetWithInvalidOobCode(): void
+    /**
+     * @test
+     */
+    public function confirmPasswordResetWithInvalidOobCode(): void
     {
         $this->expectException(InvalidOobCode::class);
         $this->auth->confirmPasswordReset('invalid', 'newPassword123');
     }
 
-    public function testSignInAsUser(): void
+    /**
+     * @test
+     */
+    public function signInAsUser(): void
     {
         $user = $this->auth->createAnonymousUser();
 
@@ -669,7 +801,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testSignInWithCustomToken(): void
+    /**
+     * @test
+     */
+    public function signInWithCustomToken(): void
     {
         $user = $this->auth->createAnonymousUser();
 
@@ -685,7 +820,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testSignInWithRefreshToken(): void
+    /**
+     * @test
+     */
+    public function signInWithRefreshToken(): void
     {
         $user = $this->auth->createAnonymousUser();
 
@@ -703,7 +841,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testSignInWithEmailAndPassword(): void
+    /**
+     * @test
+     */
+    public function signInWithEmailAndPassword(): void
     {
         $email = self::randomEmail(__FUNCTION__);
         $password = 'my-perfect-password';
@@ -720,7 +861,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testSignInWithEmailAndOobCode(): void
+    /**
+     * @test
+     */
+    public function signInWithEmailAndOobCode(): void
     {
         $email = self::randomEmail(__FUNCTION__);
         $password = 'my-perfect-password';
@@ -741,7 +885,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testSignInAnonymously(): void
+    /**
+     * @test
+     */
+    public function signInAnonymously(): void
     {
         $result = $this->auth->signInAnonymously();
 
@@ -761,7 +908,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testSignInWithIdpAccessToken(): void
+    /**
+     * @test
+     */
+    public function signInWithIdpAccessToken(): void
     {
         // I don't know how to retrieve a current user access token programmatically, so we'll
         // test the failure case only here
@@ -769,7 +919,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->signInWithIdpAccessToken('google.com', 'invalid', Utils::uriFor('http://localhost'));
     }
 
-    public function testSignInWithIdpIdToken(): void
+    /**
+     * @test
+     */
+    public function signInWithIdpIdToken(): void
     {
         // I don't know how to retrieve a current user access token programmatically, so we'll
         // test the failure case only here
@@ -777,7 +930,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         $this->auth->signInWithIdpIdToken('google.com', 'invalid', 'http://localhost');
     }
 
-    public function testRemoveEmailFromUser(): void
+    /**
+     * @test
+     */
+    public function removeEmailFromUser(): void
     {
         $user = $this->createUserWithEmailAndPassword();
 
@@ -795,7 +951,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testVerifyIdTokenAcceptsResultFromParseToken(): void
+    /**
+     * @test
+     */
+    public function verifyIdTokenAcceptsResultFromParseToken(): void
     {
         $signInResult = $this->auth->signInAnonymously();
         $uid = $signInResult->firebaseUserId();
@@ -814,7 +973,10 @@ abstract class AuthTestCase extends IntegrationTestCase
         }
     }
 
-    public function testItDownloadsOnlyAsManyAccountsAsItIsSupposedTo(): void
+    /**
+     * @test
+     */
+    public function itDownloadsOnlyAsManyAccountsAsItIsSupposedTo(): void
     {
         // Make sure we have at least two users present
         $first = $this->auth->createAnonymousUser();

@@ -15,7 +15,10 @@ use function assert;
  */
 final class FactoryTest extends IntegrationTestCase
 {
-    public function testItSupportsExtendingTheHttpClientConfig(): void
+    /**
+     * @test
+     */
+    public function itSupportsExtendingTheHttpClientConfig(): void
     {
         if (self::$rtdbUrl === null) {
             $this->markTestSkipped('The HTTP client Config extension test requires a database URL');
@@ -28,7 +31,8 @@ final class FactoryTest extends IntegrationTestCase
                 HttpClientOptions::default()->withGuzzleConfigOption('sink', $sink),
             )
             ->withDatabaseUri(self::$rtdbUrl)
-            ->createDatabase();
+            ->createDatabase()
+        ;
 
         assert(file_exists($sink) === false);
 
@@ -42,7 +46,10 @@ final class FactoryTest extends IntegrationTestCase
         }
     }
 
-    public function testItSupportsAddingAdditionalHttpClientMiddlewares(): void
+    /**
+     * @test
+     */
+    public function itSupportsAddingAdditionalHttpClientMiddlewares(): void
     {
         if (self::$rtdbUrl === null) {
             $this->markTestSkipped('The HTTP client middleware extension test requires a database URL');
@@ -63,7 +70,8 @@ final class FactoryTest extends IntegrationTestCase
                 HttpClientOptions::default()->withGuzzleMiddleware($middleware),
             )
             ->withDatabaseUri(self::$rtdbUrl)
-            ->createDatabase();
+            ->createDatabase()
+        ;
 
         // We're only interested in the file, not the actual result
         $db->getReference(__FUNCTION__)->shallow()->getSnapshot();

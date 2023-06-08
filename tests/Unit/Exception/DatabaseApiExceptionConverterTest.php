@@ -31,7 +31,10 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->request = new Request('GET', 'https://my-project.firebaseio.com');
     }
 
-    public function testItConvertsARequestExceptionThatDoesNotIncludeValidJson(): void
+    /**
+     * @test
+     */
+    public function itConvertsARequestExceptionThatDoesNotIncludeValidJson(): void
     {
         $requestException = new RequestException(
             'Error without valid json',
@@ -45,7 +48,10 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->assertSame($responseBody, $convertedError->getMessage());
     }
 
-    public function testItConvertsAConnectException(): void
+    /**
+     * @test
+     */
+    public function itConvertsAConnectException(): void
     {
         $connectException = new ConnectException(
             'curl error xx',
@@ -57,8 +63,10 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
 
     /**
      * @see https://github.com/kreait/firebase-php/issues/295
+     *
+     * @test
      */
-    public function testItHandlesAnExtendedErrorFormatInAResponse(): void
+    public function itHandlesAnExtendedErrorFormatInAResponse(): void
     {
         // see https://firebase.google.com/docs/reference/rest/auth/#section-error-response
         $e = new ClientException(
@@ -73,7 +81,10 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->assertSame($e, $result->getPrevious());
     }
 
-    public function testItConvertsA401ResponseToAPermissionDeniedError(): void
+    /**
+     * @test
+     */
+    public function itConvertsA401ResponseToAPermissionDeniedError(): void
     {
         $e = new ClientException(
             'Foo',
@@ -86,7 +97,10 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf(PermissionDenied::class, $result);
     }
 
-    public function testItConvertsA403ResponseToAPermissionDeniedError(): void
+    /**
+     * @test
+     */
+    public function itConvertsA403ResponseToAPermissionDeniedError(): void
     {
         $e = new ClientException(
             'Foo',
@@ -99,7 +113,10 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf(PermissionDenied::class, $result);
     }
 
-    public function testItConvertsA404ResponseToADatabaseNotFoundError(): void
+    /**
+     * @test
+     */
+    public function itConvertsA404ResponseToADatabaseNotFoundError(): void
     {
         $e = new ClientException(
             'Foo',
@@ -112,7 +129,10 @@ final class DatabaseApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf(DatabaseNotFound::class, $result);
     }
 
-    public function testItUsesTheResponseBodyAsMessageWhenNoJsonIsPresent(): void
+    /**
+     * @test
+     */
+    public function itUsesTheResponseBodyAsMessageWhenNoJsonIsPresent(): void
     {
         $e = new ClientException(
             'Foo',

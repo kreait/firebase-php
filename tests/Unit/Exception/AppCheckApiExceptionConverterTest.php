@@ -30,7 +30,10 @@ final class AppCheckApiExceptionConverterTest extends TestCase
         $this->converter = new AppCheckApiExceptionConverter();
     }
 
-    public function testItConvertsAConnectException(): void
+    /**
+     * @test
+     */
+    public function itConvertsAConnectException(): void
     {
         $connectException = new ConnectException(
             'curl error xx',
@@ -44,8 +47,10 @@ final class AppCheckApiExceptionConverterTest extends TestCase
      * @dataProvider exceptions
      *
      * @param class-string<object> $expectedClass
+     *
+     * @test
      */
-    public function testItConvertsExceptions(Throwable $e, string $expectedClass): void
+    public function itConvertsExceptions(Throwable $e, string $expectedClass): void
     {
         $converted = $this->converter->convertException($e);
 

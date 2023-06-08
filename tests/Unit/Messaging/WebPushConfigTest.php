@@ -20,15 +20,20 @@ final class WebPushConfigTest extends UnitTestCase
      * @dataProvider validDataProvider
      *
      * @param array<string, mixed> $data
+     *
+     * @test
      */
-    public function testCreateFromValidPayload(array $data): void
+    public function createFromValidPayload(array $data): void
     {
         $config = WebPushConfig::fromArray($data);
 
         $this->assertEqualsCanonicalizing($data, $config->jsonSerialize());
     }
 
-    public function testItCanHaveAPriority(): void
+    /**
+     * @test
+     */
+    public function itCanHaveAPriority(): void
     {
         $config = WebPushConfig::new()->withVeryLowUrgency();
         $this->assertSame('very-low', $config->jsonSerialize()['headers']['Urgency']);
@@ -47,8 +52,10 @@ final class WebPushConfigTest extends UnitTestCase
      * @dataProvider validHeaders
      *
      * @param WebPushHeadersShape $headers
+     *
+     * @test
      */
-    public function testItAcceptsValidHeaders(array $headers): void
+    public function itAcceptsValidHeaders(array $headers): void
     {
         WebPushConfig::fromArray(['headers' => $headers]);
 
@@ -59,8 +66,10 @@ final class WebPushConfigTest extends UnitTestCase
      * @dataProvider invalidHeaders
      *
      * @param WebPushHeadersShape $headers
+     *
+     * @test
      */
-    public function testItRejectsInvalidHeaders(array $headers): void
+    public function itRejectsInvalidHeaders(array $headers): void
     {
         $this->expectException(InvalidArgument::class);
 

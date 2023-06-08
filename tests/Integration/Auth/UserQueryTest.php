@@ -28,7 +28,10 @@ final class UserQueryTest extends IntegrationTestCase
         $this->auth = self::$factory->createAuth();
     }
 
-    public function testSortByField(): void
+    /**
+     * @test
+     */
+    public function sortByField(): void
     {
         $user = $this->createUserWithEmailAndPassword();
 
@@ -46,7 +49,10 @@ final class UserQueryTest extends IntegrationTestCase
         }
     }
 
-    public function testAscendingSortOrder(): void
+    /**
+     * @test
+     */
+    public function ascendingSortOrder(): void
     {
         // Create two users just in case there are no others in the database
         $first = $this->createUserWithEmailAndPassword();
@@ -70,7 +76,10 @@ final class UserQueryTest extends IntegrationTestCase
         }
     }
 
-    public function testDescendingSortOrder(): void
+    /**
+     * @test
+     */
+    public function descendingSortOrder(): void
     {
         // Create two users just in case there are no others in the database
         $first = $this->createUserWithEmailAndPassword();
@@ -94,7 +103,10 @@ final class UserQueryTest extends IntegrationTestCase
         }
     }
 
-    public function testLimit(): void
+    /**
+     * @test
+     */
+    public function limit(): void
     {
         // Create two users just in case there are no others in the database
         $firstUser = $this->createUserWithEmailAndPassword();
@@ -114,7 +126,10 @@ final class UserQueryTest extends IntegrationTestCase
         }
     }
 
-    public function testFilterByUid(): void
+    /**
+     * @test
+     */
+    public function filterByUid(): void
     {
         $user = $this->createUserWithEmailAndPassword();
 
@@ -137,7 +152,10 @@ final class UserQueryTest extends IntegrationTestCase
         }
     }
 
-    public function testFilterByEmail(): void
+    /**
+     * @test
+     */
+    public function filterByEmail(): void
     {
         $user = $this->createUserWithEmailAndPassword();
 
@@ -160,7 +178,10 @@ final class UserQueryTest extends IntegrationTestCase
         }
     }
 
-    public function testFilterByPhoneNumber(): void
+    /**
+     * @test
+     */
+    public function filterByPhoneNumber(): void
     {
         $user = $this->auth->createUser([
             'phoneNumber' => '+49'.random_int(90_000_000_000, 99_999_999_999),

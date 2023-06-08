@@ -12,7 +12,10 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 final class AppCheckTokenTest extends UnitTestCase
 {
-    public function testCreateFromValidArray(): void
+    /**
+     * @test
+     */
+    public function createFromValidArray(): void
     {
         $options = AppCheckToken::fromArray([
             'ttl' => $ttl = '300',

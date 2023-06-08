@@ -16,8 +16,10 @@ final class SignInResultTest extends UnitTestCase
      * @dataProvider fullResponse
      *
      * @param array<string, mixed> $input
+     *
+     * @test
      */
-    public function testItCanBeCreated(array $input): void
+    public function itCanBeCreated(array $input): void
     {
         $result = SignInResult::fromData($input);
 
@@ -37,7 +39,10 @@ final class SignInResultTest extends UnitTestCase
         ], $result->asTokenResponse());
     }
 
-    public function testItUsesTheLocalIdWhenTheFirebaseUidIsNotPresent(): void
+    /**
+     * @test
+     */
+    public function itUsesTheLocalIdWhenTheFirebaseUidIsNotPresent(): void
     {
         $result = SignInResult::fromData(['localId' => 'some-id']);
 

@@ -18,14 +18,20 @@ use PHPUnit\Framework\TestCase;
  */
 final class DefaultValueTest extends TestCase
 {
-    public function testCreateInAppDefaultValue(): void
+    /**
+     * @test
+     */
+    public function createInAppDefaultValue(): void
     {
         $defaultValue = DefaultValue::useInAppDefault();
 
         $this->assertEqualsCanonicalizing(['useInAppDefault' => true], $defaultValue->jsonSerialize());
     }
 
-    public function testCreate(): void
+    /**
+     * @test
+     */
+    public function create(): void
     {
         $defaultValue = DefaultValue::with('foo');
 
@@ -37,8 +43,10 @@ final class DefaultValueTest extends TestCase
      *
      * @param RemoteConfigInAppDefaultValueShape $expected
      * @param RemoteConfigInAppDefaultValueShape $data
+     *
+     * @test
      */
-    public function testCreateFromArray(array $expected, array $data): void
+    public function createFromArray(array $expected, array $data): void
     {
         $defaultValue = DefaultValue::fromArray($data);
 

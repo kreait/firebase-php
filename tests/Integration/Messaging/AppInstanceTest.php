@@ -22,7 +22,10 @@ final class AppInstanceTest extends IntegrationTestCase
         $this->messaging = self::$factory->createMessaging();
     }
 
-    public function testItIsSubscribedToTopics(): void
+    /**
+     * @test
+     */
+    public function itIsSubscribedToTopics(): void
     {
         $token = $this->getTestRegistrationToken();
 

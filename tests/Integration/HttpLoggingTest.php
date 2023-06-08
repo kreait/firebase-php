@@ -41,7 +41,10 @@ final class HttpLoggingTest extends IntegrationTestCase
         $this->authWithDebugLogger = self::$factory->withHttpDebugLogger($this->debugLogger)->createAuth();
     }
 
-    public function testItLogsSuccesses(): void
+    /**
+     * @test
+     */
+    public function itLogsSuccesses(): void
     {
         $user = $this->auth->createAnonymousUser();
 
@@ -53,7 +56,10 @@ final class HttpLoggingTest extends IntegrationTestCase
         }
     }
 
-    public function testItLogsFailures(): void
+    /**
+     * @test
+     */
+    public function itLogsFailures(): void
     {
         $this->debugLogger->expects($this->atLeastOnce())->method('log');
 
@@ -64,7 +70,10 @@ final class HttpLoggingTest extends IntegrationTestCase
         }
     }
 
-    public function testItUsesAHttpDebugLogger(): void
+    /**
+     * @test
+     */
+    public function itUsesAHttpDebugLogger(): void
     {
         $user = $this->auth->createAnonymousUser();
 

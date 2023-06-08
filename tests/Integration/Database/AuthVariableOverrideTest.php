@@ -34,7 +34,10 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
         parent::tearDown();
     }
 
-    public function testItCanAccessAReferenceThatBelongsToTheSameUser(): void
+    /**
+     * @test
+     */
+    public function itCanAccessAReferenceThatBelongsToTheSameUser(): void
     {
         $uid = $this->auth->signInAnonymously()->firebaseUserId();
         assert(is_string($uid));
@@ -51,7 +54,10 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
         }
     }
 
-    public function testItCanNotAccessAReferenceThatRequiresAnotherUser(): void
+    /**
+     * @test
+     */
+    public function itCanNotAccessAReferenceThatRequiresAnotherUser(): void
     {
         $uid = $this->auth->signInAnonymously()->firebaseUserId();
         assert(is_string($uid));
@@ -68,7 +74,10 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
         }
     }
 
-    public function testItCanAccessAPublicReferenceWhenAuthOverrideIsSetToBeUnauthenticated(): void
+    /**
+     * @test
+     */
+    public function itCanAccessAPublicReferenceWhenAuthOverrideIsSetToBeUnauthenticated(): void
     {
         $uid = $this->auth->signInAnonymously()->firebaseUserId();
         assert(is_string($uid));
@@ -88,7 +97,10 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
         }
     }
 
-    public function testWhenUnauthenticatedItCanNotAccessAReferenceThatRequiresAuthentication(): void
+    /**
+     * @test
+     */
+    public function whenUnauthenticatedItCanNotAccessAReferenceThatRequiresAuthentication(): void
     {
         $uid = $this->auth->signInAnonymously()->firebaseUserId();
         assert(is_string($uid));
@@ -129,6 +141,7 @@ final class AuthVariableOverrideTest extends DatabaseTestCase
         return self::$factory
             ->withDatabaseUri(self::$rtdbUrl)
             ->withDatabaseAuthVariableOverride($override)
-            ->createDatabase();
+            ->createDatabase()
+        ;
     }
 }

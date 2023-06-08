@@ -74,7 +74,8 @@ final class Middleware
                 }
 
                 return $response;
-            });
+            })
+        ;
     }
 
     public static function log(LoggerInterface $logger, MessageFormatter $formatter, string $logLevel, string $errorLogLevel): callable

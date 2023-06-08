@@ -24,7 +24,10 @@ final class TransactionTest extends DatabaseTestCase
         $this->ref = self::$db->getReference(self::$refPrefix);
     }
 
-    public function testAValueCanBeWritten(): void
+    /**
+     * @test
+     */
+    public function aValueCanBeWritten(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
 
@@ -37,7 +40,10 @@ final class TransactionTest extends DatabaseTestCase
         $this->assertSame('new value', $ref->getValue());
     }
 
-    public function testATransactionPreventsAChangeWhenTheRemoteHasChanged(): void
+    /**
+     * @test
+     */
+    public function aTransactionPreventsAChangeWhenTheRemoteHasChanged(): void
     {
         $firstRef = $this->ref->getChild(__FUNCTION__);
         $firstRef->set(['key' => 'value']);
@@ -56,7 +62,10 @@ final class TransactionTest extends DatabaseTestCase
         });
     }
 
-    public function testATransactionKeepsTrackOfMultipleReferences(): void
+    /**
+     * @test
+     */
+    public function aTransactionKeepsTrackOfMultipleReferences(): void
     {
         $firstRef = $this->ref->getChild(__FUNCTION__.'_first');
         $secondRef = $this->ref->getChild(__FUNCTION__.'_second');
@@ -90,7 +99,10 @@ final class TransactionTest extends DatabaseTestCase
         });
     }
 
-    public function testAValueCanBeDeleted(): void
+    /**
+     * @test
+     */
+    public function aValueCanBeDeleted(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
 
@@ -103,7 +115,10 @@ final class TransactionTest extends DatabaseTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function testATransactionPreventsADeletionWhenTheRemoteHasChanged(): void
+    /**
+     * @test
+     */
+    public function aTransactionPreventsADeletionWhenTheRemoteHasChanged(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
         $ref->set(['key' => 'value']);

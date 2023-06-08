@@ -42,7 +42,10 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $this->converter = new AuthApiExceptionConverter();
     }
 
-    public function testItConvertsARequestExceptionThatDoesNotIncludeValidJson(): void
+    /**
+     * @test
+     */
+    public function itConvertsARequestExceptionThatDoesNotIncludeValidJson(): void
     {
         $requestException = new RequestException(
             'Error without valid json',
@@ -56,7 +59,10 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $this->assertSame($responseBody, $convertedError->getMessage());
     }
 
-    public function testItConvertsAConnectException(): void
+    /**
+     * @test
+     */
+    public function itConvertsAConnectException(): void
     {
         $connectException = new ConnectException(
             'curl error xx',
@@ -66,7 +72,10 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf(ApiConnectionFailed::class, $this->converter->convertException($connectException));
     }
 
-    public function testItCanHandleUnknownExceptions(): void
+    /**
+     * @test
+     */
+    public function itCanHandleUnknownExceptions(): void
     {
         $this->assertInstanceOf(AuthError::class, $this->converter->convertException(new RuntimeException()));
     }
@@ -75,8 +84,10 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
      * @dataProvider requestErrors
      *
      * @param class-string<object> $expectedClass
+     *
+     * @test
      */
-    public function testItConvertsRequestExceptionsBecause(string $identifier, string $expectedClass): void
+    public function itConvertsRequestExceptionsBecause(string $identifier, string $expectedClass): void
     {
         $requestException = new RequestException(
             'Firebase Error Test',

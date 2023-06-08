@@ -13,7 +13,10 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 final class AppCheckTokenOptionsTest extends UnitTestCase
 {
-    public function testFromArrayWithOmittedOptions(): void
+    /**
+     * @test
+     */
+    public function fromArrayWithOmittedOptions(): void
     {
         $options = AppCheckTokenOptions::fromArray([]);
 
@@ -22,8 +25,10 @@ final class AppCheckTokenOptionsTest extends UnitTestCase
 
     /**
      * @dataProvider validOptions
+     *
+     * @test
      */
-    public function testFromArrayWithValidOptions(?int $ttl): void
+    public function fromArrayWithValidOptions(?int $ttl): void
     {
         $options = AppCheckTokenOptions::fromArray([
             'ttl' => $ttl,
@@ -34,8 +39,10 @@ final class AppCheckTokenOptionsTest extends UnitTestCase
 
     /**
      * @dataProvider invalidOptions
+     *
+     * @test
      */
-    public function testFromArrayWithInvalidOptions(int $ttl): void
+    public function fromArrayWithInvalidOptions(int $ttl): void
     {
         $this->expectException(InvalidAppCheckTokenOptions::class);
 
