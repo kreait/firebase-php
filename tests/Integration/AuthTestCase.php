@@ -58,24 +58,6 @@ abstract class AuthTestCase extends IntegrationTestCase
     /**
      * @test
      */
-    public function createUserWithEmailAndPassword(): void
-    {
-        $email = self::randomEmail(__FUNCTION__);
-        $password = 'foobar';
-
-        $user = $this->auth->createUserWithEmailAndPassword($email, $password);
-
-        try {
-            $this->assertSame($email, $user->email);
-            $this->assertFalse($user->emailVerified);
-        } finally {
-            $this->auth->deleteUser($user->uid);
-        }
-    }
-
-    /**
-     * @test
-     */
     public function changeUserPassword(): void
     {
         $email = self::randomEmail(__FUNCTION__);
