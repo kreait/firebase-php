@@ -44,8 +44,8 @@
         "riverline/multipart-parser": "^2.0.9"
     },
     "require-dev": {
-        "beste/php-cs-fixer-config": "~2.0.0",
-        "friendsofphp/php-cs-fixer": "~3.16.0",
+        "beste/php-cs-fixer-config": "^2.1",
+        "friendsofphp/php-cs-fixer": "^3.16",
         "google/cloud-firestore": "^1.31.0",
         "phpstan/extension-installer": "^1.3",
         "phpstan/phpstan": "^1.10.14",
