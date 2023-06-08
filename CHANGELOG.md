@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+* Removed direct dependency to `psr/http-message`
+
 ## [7.3.0] - 2023-06-03
 
 ### Added
