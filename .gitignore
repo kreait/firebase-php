@@ -11,5 +11,4 @@
 /.phpunit.result.cache
 /composer.lock
 /phpstan.neon
-/phpstan-for-rector.neon
 /phpunit.xml
