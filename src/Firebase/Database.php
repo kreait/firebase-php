@@ -22,15 +22,11 @@ use function trim;
  */
 final class Database implements Contract\Database
 {
-    private ApiClient $client;
-    private UrlBuilder $urlBuilder;
-    private UriInterface $uri;
-
-    public function __construct(UriInterface $uri, ApiClient $client, UrlBuilder $urlBuilder)
-    {
-        $this->uri = $uri;
-        $this->client = $client;
-        $this->urlBuilder = $urlBuilder;
+    public function __construct(
+        private readonly UriInterface $uri,
+        private readonly ApiClient $client,
+        private readonly UrlBuilder $urlBuilder,
+    ) {
     }
 
     public function getReference(?string $path = null): Reference

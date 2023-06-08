@@ -28,8 +28,8 @@ use function is_numeric;
  */
 class MessagingApiExceptionConverter
 {
-    private ErrorResponseParser $responseParser;
-    private ClockInterface $clock;
+    private readonly ErrorResponseParser $responseParser;
+    private readonly ClockInterface $clock;
 
     public function __construct(?ClockInterface $clock = null)
     {

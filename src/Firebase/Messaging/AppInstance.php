@@ -12,22 +12,14 @@ use Kreait\Firebase\Util\DT;
  */
 final class AppInstance implements JsonSerializable
 {
-    private RegistrationToken $registrationToken;
-
-    /**
-     * @var array<string, mixed>
-     */
-    private array $rawData;
-    private TopicSubscriptions $topicSubscriptions;
-
     /**
      * @param array<string, mixed> $rawData
      */
-    private function __construct(RegistrationToken $registrationToken, TopicSubscriptions $topicSubscriptions, array $rawData)
-    {
-        $this->registrationToken = $registrationToken;
-        $this->topicSubscriptions = $topicSubscriptions;
-        $this->rawData = $rawData;
+    private function __construct(
+        private readonly RegistrationToken $registrationToken,
+        private readonly TopicSubscriptions $topicSubscriptions,
+        private readonly array $rawData,
+    ) {
     }
 
     /**

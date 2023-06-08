@@ -12,8 +12,6 @@ use function preg_match;
 
 final class SendReport
 {
-    private MessageTarget $target;
-
     /**
      * @var array<array-key, scalar>|null
      */
@@ -21,9 +19,8 @@ final class SendReport
     private ?Message $message = null;
     private ?Throwable $error = null;
 
-    private function __construct(MessageTarget $target)
+    private function __construct(private readonly MessageTarget $target)
     {
-        $this->target = $target;
     }
 
     /**

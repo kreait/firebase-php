@@ -24,7 +24,7 @@ use function rewind;
 final class ResponseWithSubResponses implements HasSubResponses, ResponseInterface
 {
     use WrappedPsr7Response;
-    private Responses $subResponses;
+    private readonly Responses $subResponses;
 
     public function __construct(ResponseInterface $response)
     {

@@ -19,7 +19,7 @@ use Throwable;
  */
 class DatabaseApiExceptionConverter
 {
-    private ErrorResponseParser $responseParser;
+    private readonly ErrorResponseParser $responseParser;
 
     public function __construct()
     {

@@ -32,7 +32,7 @@ use function mb_stripos;
  */
 class AuthApiExceptionConverter
 {
-    private ErrorResponseParser $responseParser;
+    private readonly ErrorResponseParser $responseParser;
 
     public function __construct()
     {

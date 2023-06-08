@@ -24,7 +24,6 @@ use Kreait\Firebase\Util;
 use Psr\Http\Message\RequestInterface;
 use UnexpectedValueException;
 
-use function array_merge;
 use function http_build_query;
 use function str_replace;
 
@@ -48,13 +47,11 @@ final class GuzzleHandler implements Handler
     private static array $defaultHeaders = [
         'Content-Type' => 'application/json; charset=UTF-8',
     ];
-    private string $projectId;
-    private ClientInterface $client;
 
-    public function __construct(string $projectId, ClientInterface $client)
-    {
-        $this->projectId = $projectId;
-        $this->client = $client;
+    public function __construct(
+        private readonly string $projectId,
+        private readonly ClientInterface $client,
+    ) {
     }
 
     public function handle(SignIn $action): SignInResult
@@ -108,9 +105,9 @@ final class GuzzleHandler implements Handler
     {
         $url = AuthResourceUrlBuilder::create()->getUrl('/accounts:signInWithCustomToken');
 
-        $body = Utils::streamFor(Json::encode(array_merge($this->prepareBody($action), [
-            'token' => $action->customToken(),
-        ]), JSON_FORCE_OBJECT));
+        $body = Utils::streamFor(
+            Json::encode([...$this->prepareBody($action), 'token' => $action->customToken()], JSON_FORCE_OBJECT),
+        );
 
         $headers = self::$defaultHeaders;
 
@@ -121,11 +118,14 @@ final class GuzzleHandler implements Handler
     {
         $url = AuthResourceUrlBuilder::create()->getUrl('/accounts:signInWithPassword');
 
-        $body = Utils::streamFor(Json::encode(array_merge($this->prepareBody($action), [
-            'email' => $action->email(),
-            'password' => $action->clearTextPassword(),
-            'returnSecureToken' => true,
-        ]), JSON_FORCE_OBJECT));
+        $body = Utils::streamFor(
+            Json::encode([
+                ...$this->prepareBody($action),
+                'email' => $action->email(),
+                'password' => $action->clearTextPassword(),
+                'returnSecureToken' => true,
+            ], JSON_FORCE_OBJECT),
+        );
 
         $headers = self::$defaultHeaders;
 
@@ -136,11 +136,14 @@ final class GuzzleHandler implements Handler
     {
         $url = AuthResourceUrlBuilder::create()->getUrl('/accounts:signInWithEmailLink');
 
-        $body = Utils::streamFor(Json::encode(array_merge($this->prepareBody($action), [
-            'email' => $action->email(),
-            'oobCode' => $action->oobCode(),
-            'returnSecureToken' => true,
-        ]), JSON_FORCE_OBJECT));
+        $body = Utils::streamFor(
+            Json::encode([
+                ...$this->prepareBody($action),
+                'email' => $action->email(),
+                'oobCode' => $action->oobCode(),
+                'returnSecureToken' => true,
+            ], JSON_FORCE_OBJECT),
+        );
 
         $headers = self::$defaultHeaders;
 
@@ -165,11 +168,12 @@ final class GuzzleHandler implements Handler
             $postBody['nonce'] = $rawNonce;
         }
 
-        $rawBody = array_merge($this->prepareBody($action), [
+        $rawBody = [
+            ...$this->prepareBody($action),
             'postBody' => http_build_query($postBody),
             'returnIdpCredential' => true,
             'requestUri' => $action->requestUri(),
-        ]);
+        ];
 
         if ($action->linkingIdToken()) {
             $rawBody['idToken'] = $action->linkingIdToken();

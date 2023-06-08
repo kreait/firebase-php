@@ -16,25 +16,13 @@ use function is_string;
 class ConditionalValue implements JsonSerializable
 {
     /**
-     * @var non-empty-string
-     */
-    private string $conditionName;
-
-    /**
-     * @var RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape|string
-     */
-    private string|array $data;
-
-    /**
      * @internal
      *
      * @param non-empty-string $conditionName
      * @param RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape|string $data
      */
-    public function __construct(string $conditionName, array|string $data)
+    public function __construct(private readonly string $conditionName, private readonly array|string $data)
     {
-        $this->conditionName = $conditionName;
-        $this->data = $data;
     }
 
     /**

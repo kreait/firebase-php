@@ -51,7 +51,7 @@ final class SignInResult
      * @var non-empty-string|null
      */
     private ?string $tenantId = null;
-    private Parser $parser;
+    private readonly Parser $parser;
 
     private function __construct()
     {

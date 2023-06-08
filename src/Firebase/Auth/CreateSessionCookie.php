@@ -20,17 +20,13 @@ final class CreateSessionCookie
 {
     private const FIVE_MINUTES = 'PT5M';
     private const TWO_WEEKS = 'P14D';
-    private string $idToken;
-    private ?string $tenantId;
-    private DateInterval $ttl;
-    private ClockInterface $clock;
 
-    private function __construct(string $idToken, ?string $tenantId, DateInterval $ttl, ClockInterface $clock)
-    {
-        $this->idToken = $idToken;
-        $this->tenantId = $tenantId;
-        $this->ttl = $ttl;
-        $this->clock = $clock;
+    private function __construct(
+        private readonly string $idToken,
+        private readonly ?string $tenantId,
+        private readonly DateInterval $ttl,
+        private readonly ClockInterface $clock,
+    ) {
     }
 
     /**

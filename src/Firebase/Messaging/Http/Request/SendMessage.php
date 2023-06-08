@@ -17,7 +17,7 @@ use Psr\Http\Message\RequestInterface;
 final class SendMessage implements MessageRequest, RequestInterface
 {
     use WrappedPsr7Request;
-    private Message $message;
+    private readonly Message $message;
 
     public function __construct(string $projectId, Message $message, bool $validateOnly = false)
     {

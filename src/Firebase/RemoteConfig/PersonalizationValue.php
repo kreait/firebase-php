@@ -14,16 +14,10 @@ use JsonSerializable;
 final class PersonalizationValue implements JsonSerializable
 {
     /**
-     * @var RemoteConfigPersonalizationValueShape
-     */
-    private array $data;
-
-    /**
      * @param RemoteConfigPersonalizationValueShape $data
      */
-    public function __construct(array $data)
+    public function __construct(private readonly array $data)
     {
-        $this->data = $data;
     }
 
     /**

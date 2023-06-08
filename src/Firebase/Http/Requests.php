@@ -21,7 +21,7 @@ final class Requests implements IteratorAggregate
     /**
      * @var RequestInterface[]
      */
-    private array $requests;
+    private readonly array $requests;
 
     public function __construct(RequestInterface ...$requests)
     {

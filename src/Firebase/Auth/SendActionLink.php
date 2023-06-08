@@ -9,14 +9,10 @@ namespace Kreait\Firebase\Auth;
  */
 final class SendActionLink
 {
-    private CreateActionLink $action;
-    private ?string $locale;
     private ?string $idTokenString = null;
 
-    public function __construct(CreateActionLink $action, ?string $locale = null)
+    public function __construct(private CreateActionLink $action, private readonly ?string $locale = null)
     {
-        $this->action = $action;
-        $this->locale = $locale;
     }
 
     public function type(): string

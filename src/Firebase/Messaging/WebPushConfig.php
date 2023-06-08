@@ -80,16 +80,10 @@ final class WebPushConfig implements JsonSerializable
     ];
 
     /**
-     * @var WebPushConfigShape
-     */
-    private array $config;
-
-    /**
      * @param WebPushConfigShape $config
      */
-    private function __construct(array $config)
+    private function __construct(private array $config)
     {
-        $this->config = $config;
     }
 
     public static function new(): self

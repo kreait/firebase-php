@@ -6,13 +6,14 @@ namespace Kreait\Firebase\Messaging;
 
 use JsonSerializable;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
+use Stringable;
 
 use function mb_strtolower;
 use function mb_substr_count;
 use function sprintf;
 use function str_replace;
 
-final class Condition implements JsonSerializable
+final class Condition implements JsonSerializable, Stringable
 {
     /**
      * @param non-empty-string $value
@@ -24,7 +25,7 @@ final class Condition implements JsonSerializable
     /**
      * @return non-empty-string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->value;
     }

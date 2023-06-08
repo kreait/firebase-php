@@ -13,7 +13,7 @@ use function trim;
 
 final class TransactionFailed extends RuntimeException implements DatabaseException
 {
-    private Reference $reference;
+    private readonly Reference $reference;
 
     public function __construct(Reference $query, string $message = '', int $code = 0, ?Throwable $previous = null)
     {

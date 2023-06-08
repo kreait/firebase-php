@@ -128,9 +128,15 @@ final class Factory
 
         $googleApplicationCredentials = Util::getenv('GOOGLE_APPLICATION_CREDENTIALS');
 
-        if ($googleApplicationCredentials !== null && str_starts_with($googleApplicationCredentials, '{')) {
-            $this->serviceAccount = Json::decode($googleApplicationCredentials, true);
+        if ($googleApplicationCredentials === null) {
+            return;
         }
+
+        if (!str_starts_with($googleApplicationCredentials, '{')) {
+            return;
+        }
+
+        $this->serviceAccount = Json::decode($googleApplicationCredentials, true);
     }
 
     /**
@@ -502,7 +508,7 @@ final class Factory
         $config ??= [];
         $middlewares ??= [];
 
-        $config = array_merge($this->httpClientOptions->guzzleConfig(), $config);
+        $config = [...$this->httpClientOptions->guzzleConfig(), ...$config];
 
         $handler = HandlerStack::create();
 

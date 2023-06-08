@@ -82,7 +82,11 @@ final class UpdateUser implements Request
                 case 'deleteattribute':
                 case 'deleteattributes':
                     foreach ((array) $value as $deleteAttribute) {
-                        if (!is_string($deleteAttribute) || $deleteAttribute === '') {
+                        if (!is_string($deleteAttribute)) {
+                            continue;
+                        }
+
+                        if ($deleteAttribute === '') {
                             continue;
                         }
 

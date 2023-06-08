@@ -6,13 +6,14 @@ namespace Kreait\Firebase\Messaging;
 
 use JsonSerializable;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
+use Stringable;
 
 use function preg_match;
 use function preg_replace;
 use function sprintf;
 use function trim;
 
-final class Topic implements JsonSerializable
+final class Topic implements JsonSerializable, Stringable
 {
     /**
      * @param non-empty-string $value

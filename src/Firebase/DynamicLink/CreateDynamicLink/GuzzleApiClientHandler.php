@@ -14,11 +14,8 @@ use Kreait\Firebase\DynamicLink\CreateDynamicLink;
  */
 final class GuzzleApiClientHandler implements Handler
 {
-    private ClientInterface $apiClient;
-
-    public function __construct(ClientInterface $client)
+    public function __construct(private readonly ClientInterface $apiClient)
     {
-        $this->apiClient = $client;
     }
 
     /**

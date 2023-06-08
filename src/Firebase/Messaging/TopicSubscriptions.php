@@ -19,7 +19,7 @@ final class TopicSubscriptions implements Countable, IteratorAggregate
     /**
      * @var list<TopicSubscription>
      */
-    private array $subscriptions;
+    private readonly array $subscriptions;
 
     public function __construct(TopicSubscription ...$subscriptions)
     {

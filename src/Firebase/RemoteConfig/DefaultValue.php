@@ -17,16 +17,10 @@ use JsonSerializable;
 class DefaultValue implements JsonSerializable
 {
     /**
-     * @var RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape
-     */
-    private array $data;
-
-    /**
      * @param RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape $data
      */
-    private function __construct(array $data)
+    private function __construct(private readonly array $data)
     {
-        $this->data = $data;
     }
 
     public static function useInAppDefault(): self

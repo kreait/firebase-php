@@ -19,13 +19,11 @@ use function array_filter;
  */
 class ApiClient
 {
-    private ClientInterface $client;
-    private RemoteConfigApiExceptionConverter $errorHandler;
-    private string $baseUri;
+    private readonly RemoteConfigApiExceptionConverter $errorHandler;
+    private readonly string $baseUri;
 
-    public function __construct(string $projectId, ClientInterface $client)
+    public function __construct(string $projectId, private readonly ClientInterface $client)
     {
-        $this->client = $client;
         $this->baseUri = "https://firebaseremoteconfig.googleapis.com/v1/projects/{$projectId}/remoteConfig";
         $this->errorHandler = new RemoteConfigApiExceptionConverter();
     }

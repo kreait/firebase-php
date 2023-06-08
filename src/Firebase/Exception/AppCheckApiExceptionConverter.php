@@ -17,7 +17,7 @@ use Throwable;
  */
 final class AppCheckApiExceptionConverter
 {
-    private ErrorResponseParser $responseParser;
+    private readonly ErrorResponseParser $responseParser;
 
     public function __construct()
     {

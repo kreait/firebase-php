@@ -9,6 +9,7 @@ use GuzzleHttp\Psr7\Utils;
 use JsonSerializable;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
+use Stringable;
 
 use function trim;
 
@@ -26,7 +27,7 @@ use function trim;
  *     warning?: list<DynamicLinkWarningShape>
  * }
  */
-final class DynamicLink implements JsonSerializable
+final class DynamicLink implements JsonSerializable, Stringable
 {
     /**
      * @param DynamicLinkShape $data

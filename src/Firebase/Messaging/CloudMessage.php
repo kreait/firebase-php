@@ -28,7 +28,6 @@ use function implode;
  */
 final class CloudMessage implements Message
 {
-    private MessageTarget $target;
     private MessageData $data;
     private Notification $notification;
     private AndroidConfig $androidConfig;
@@ -37,9 +36,8 @@ final class CloudMessage implements Message
     private FcmOptions $fcmOptions;
 
     private function __construct(
-        MessageTarget $messageTarget,
+        private MessageTarget $target,
     ) {
-        $this->target = $messageTarget;
         $this->data = MessageData::fromArray([]);
         $this->notification = Notification::fromArray([]);
         $this->androidConfig = AndroidConfig::fromArray([]);

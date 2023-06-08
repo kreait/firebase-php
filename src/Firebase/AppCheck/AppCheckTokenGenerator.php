@@ -15,7 +15,7 @@ use Psr\Clock\ClockInterface;
 final class AppCheckTokenGenerator
 {
     private const APP_CHECK_AUDIENCE = 'https://firebaseappcheck.googleapis.com/google.firebase.appcheck.v1.TokenExchangeService';
-    private ClockInterface $clock;
+    private readonly ClockInterface $clock;
 
     /**
      * @param non-empty-string $clientEmail

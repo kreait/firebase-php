@@ -14,11 +14,8 @@ use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink;
  */
 final class GuzzleApiClientHandler implements Handler
 {
-    private ClientInterface $apiClient;
-
-    public function __construct(ClientInterface $client)
+    public function __construct(private readonly ClientInterface $apiClient)
     {
-        $this->apiClient = $client;
     }
 
     public function handle(GetStatisticsForDynamicLink $action): DynamicLinkStatistics

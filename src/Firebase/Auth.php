@@ -61,7 +61,7 @@ use function trim;
  */
 final class Auth implements Contract\Auth
 {
-    private Parser $jwtParser;
+    private readonly Parser $jwtParser;
 
     public function __construct(
         private readonly ApiClient $client,

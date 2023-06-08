@@ -16,8 +16,8 @@ final class HttpClientOptions
      * @param list<array{middleware: callable, name: string}> $guzzleMiddlewares
      */
     private function __construct(
-        private array $guzzleConfig,
-        private array $guzzleMiddlewares,
+        private readonly array $guzzleConfig,
+        private readonly array $guzzleMiddlewares,
     ) {
     }
 

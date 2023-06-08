@@ -19,13 +19,10 @@ use Throwable;
  */
 class AppInstanceApiClient
 {
-    private ClientInterface $client;
-    private MessagingApiExceptionConverter $errorHandler;
-
-    public function __construct(ClientInterface $client, MessagingApiExceptionConverter $errorHandler)
-    {
-        $this->client = $client;
-        $this->errorHandler = $errorHandler;
+    public function __construct(
+        private readonly ClientInterface $client,
+        private readonly MessagingApiExceptionConverter $errorHandler,
+    ) {
     }
 
     /**

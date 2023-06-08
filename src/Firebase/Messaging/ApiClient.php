@@ -18,13 +18,10 @@ use Throwable;
  */
 class ApiClient
 {
-    private ClientInterface $client;
-    private MessagingApiExceptionConverter $errorHandler;
-
-    public function __construct(ClientInterface $client, MessagingApiExceptionConverter $errorHandler)
-    {
-        $this->client = $client;
-        $this->errorHandler = $errorHandler;
+    public function __construct(
+        private readonly ClientInterface $client,
+        private readonly MessagingApiExceptionConverter $errorHandler,
+    ) {
     }
 
     /**
@@ -48,7 +45,7 @@ class ApiClient
     public function sendAsync(RequestInterface $request, array $options = []): PromiseInterface
     {
         return $this->client->sendAsync($request, $options)
-            ->then(null, function (Throwable $e): void {
+            ->then(null, function (Throwable $e): never {
                 throw $this->errorHandler->convertException($e);
             })
         ;

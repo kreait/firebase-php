@@ -28,16 +28,11 @@ use function trim;
  */
 class Snapshot
 {
-    private Reference $reference;
-    private mixed $value;
-
     /**
      * @internal
      */
-    public function __construct(Reference $reference, mixed $value)
+    public function __construct(private readonly Reference $reference, private readonly mixed $value)
     {
-        $this->reference = $reference;
-        $this->value = $value;
     }
 
     /**

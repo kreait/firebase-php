@@ -22,12 +22,7 @@ use function is_string;
  */
 class Parameter implements JsonSerializable
 {
-    /**
-     * @var non-empty-string
-     */
-    private string $name;
     private ?string $description = '';
-    private ?DefaultValue $defaultValue;
 
     /**
      * @var list<ConditionalValue>
@@ -37,10 +32,10 @@ class Parameter implements JsonSerializable
     /**
      * @param non-empty-string $name
      */
-    private function __construct(string $name, ?DefaultValue $defaultValue = null)
-    {
-        $this->name = $name;
-        $this->defaultValue = $defaultValue;
+    private function __construct(
+        private readonly string $name,
+        private ?DefaultValue $defaultValue = null,
+    ) {
     }
 
     /**

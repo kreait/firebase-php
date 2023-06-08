@@ -18,7 +18,7 @@ final class Responses implements IteratorAggregate
     /**
      * @var ResponseInterface[]
      */
-    private array $responses;
+    private readonly array $responses;
 
     public function __construct(ResponseInterface ...$responses)
     {

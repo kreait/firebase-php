@@ -22,7 +22,7 @@ final class RegistrationTokens implements Countable, IteratorAggregate
     /**
      * @var list<RegistrationToken>
      */
-    private array $tokens;
+    private readonly array $tokens;
 
     /**
      * @internal
