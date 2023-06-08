@@ -21,16 +21,8 @@ use Throwable;
 final class QueryTest extends UnitTestCase
 {
     protected Uri $uri;
-
-    /**
-     * @var Reference|MockObject
-     */
-    protected $reference;
-
-    /**
-     * @var ApiClient|MockObject
-     */
-    protected $apiClient;
+    protected Reference&MockObject $reference;
+    protected ApiClient&MockObject $apiClient;
     protected Query $query;
 
     protected function setUp(): void

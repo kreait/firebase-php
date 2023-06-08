@@ -16,15 +16,8 @@ use Throwable;
  */
 final class HttpLoggingTest extends IntegrationTestCase
 {
-    /**
-     * @var MockObject|LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var MockObject|LoggerInterface
-     */
-    private $debugLogger;
+    private LoggerInterface&MockObject $logger;
+    private LoggerInterface&MockObject $debugLogger;
     private Auth $auth;
     private Auth $authWithLogger;
     private Auth $authWithDebugLogger;

@@ -19,10 +19,7 @@ use Throwable;
  */
 final class TransactionTest extends TestCase
 {
-    /**
-     * @var ApiClient|MockObject
-     */
-    private $apiClient;
+    private ApiClient&MockObject $apiClient;
     private Transaction $transaction;
 
     protected function setUp(): void
