@@ -32,8 +32,6 @@ final class TopicSubscriptions implements Countable, IteratorAggregate
     }
 
     /**
-     * @codeCoverageIgnore
-     *
      * @return Traversable<TopicSubscription>
      */
     public function getIterator(): Traversable

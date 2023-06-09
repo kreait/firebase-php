@@ -65,8 +65,6 @@ final class RegistrationTokens implements Countable, IteratorAggregate
     }
 
     /**
-     * @codeCoverageIgnore
-     *
      * @return Traversable<RegistrationToken>
      */
     public function getIterator(): Traversable

@@ -44,8 +44,6 @@ final class Requests implements IteratorAggregate
     }
 
     /**
-     * @codeCoverageIgnore
-     *
      * @return Traversable<RequestInterface>|RequestInterface[]
      */
     public function getIterator(): Traversable

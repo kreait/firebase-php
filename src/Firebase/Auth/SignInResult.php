@@ -92,11 +92,9 @@ final class SignInResult
      */
     public function firebaseUserId(): ?string
     {
-        // @codeCoverageIgnoreStart
         if ($this->firebaseUserId) {
             return $this->firebaseUserId;
         }
-        // @codeCoverageIgnoreEnd
 
         if ($this->idToken) {
             $idToken = $this->parser->parse($this->idToken);

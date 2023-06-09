@@ -452,8 +452,6 @@ final class Factory
     }
 
     /**
-     * @codeCoverageIgnore
-     *
      * @return array{
      *     credentialsType: string|null,
      *     databaseUrl: string,

@@ -117,8 +117,6 @@ final class EventStatistics implements Countable, IteratorAggregate
     }
 
     /**
-     * @codeCoverageIgnore
-     *
      * @return Traversable<EventStatisticsShape>
      */
     public function getIterator(): Traversable

@@ -303,11 +303,7 @@ final class Auth implements Contract\Auth
             }
 
             if (!($idToken = $signInResult->idToken())) {
-                // @codeCoverageIgnoreStart
-                // This only happens if the response on Google's side has changed
-                // If it does, the tests will fail, but we don't have to cover that
                 throw new FailedToSendActionLink("Failed to send action link: Unable to retrieve ID token for user assigned to email {$email}");
-                // @codeCoverageIgnoreEnd
             }
         }
 

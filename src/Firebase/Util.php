@@ -10,8 +10,6 @@ use function putenv;
 
 /**
  * @internal
- *
- * @codeCoverageIgnore
  */
 final class Util
 {

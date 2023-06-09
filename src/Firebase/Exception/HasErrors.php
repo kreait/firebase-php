@@ -6,8 +6,6 @@ namespace Kreait\Firebase\Exception;
 
 /**
  * @internal
- *
- * @codeCoverageIgnore
  */
 trait HasErrors
 {
