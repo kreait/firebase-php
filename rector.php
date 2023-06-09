@@ -18,7 +18,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->cacheDirectory(__DIR__.'/.build/rector');
 
-    // $rectorConfig->importNames();
+    $rectorConfig->importNames();
 
     // register a single rule
     // $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);

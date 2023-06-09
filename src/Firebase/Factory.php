@@ -24,6 +24,8 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Utils as GuzzleUtils;
+use Kreait\Firebase\AppCheck\AppCheckTokenGenerator;
+use Kreait\Firebase\AppCheck\AppCheckTokenVerifier;
 use Kreait\Firebase\Auth\ApiClient;
 use Kreait\Firebase\Auth\CustomTokenViaGoogleCredentials;
 use Kreait\Firebase\Auth\SignIn\GuzzleHandler;
@@ -334,12 +336,12 @@ final class Factory
 
         return new AppCheck(
             new AppCheck\ApiClient($http),
-            new AppCheck\AppCheckTokenGenerator(
+            new AppCheckTokenGenerator(
                 $this->serviceAccount['client_email'],
                 $this->serviceAccount['private_key'],
                 $this->clock,
             ),
-            new AppCheck\AppCheckTokenVerifier($projectId, $keySet),
+            new AppCheckTokenVerifier($projectId, $keySet),
         );
     }
 
