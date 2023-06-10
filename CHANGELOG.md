@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [6.9.6] - 2023-06-10
+
 ### Changed
 
 * Removed direct dependency to `psr/http-message`
@@ -361,7 +363,8 @@ methods.
     * `Kreait\Firebase\Value\Uid`
     * `Kreait\Firebase\Value\Url`
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/6.9.5...6.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/6.9.6...6.x
+[6.9.6]: https://github.com/kreait/firebase-php/compare/6.9.5...6.9.6
 [6.9.5]: https://github.com/kreait/firebase-php/compare/6.9.4...6.9.5
 [6.9.4]: https://github.com/kreait/firebase-php/compare/6.9.3...6.9.4
 [6.9.3]: https://github.com/kreait/firebase-php/compare/6.9.2...6.9.3
