@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [Unreleased]
+## [5.26.5]
 ### Changed
 * Removed direct dependency to `psr/http-message`
 
@@ -352,7 +353,8 @@ to upgrade from a 4.x release to 5.0 without changes to your code.**
 * Support for PHP `<7.2`
 * Deprecated methods and classes
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/5.26.4...5.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/5.26.5...5.x
+[5.26.5]: https://github.com/kreait/firebase-php/compare/5.26.4...5.26.5
 [5.26.4]: https://github.com/kreait/firebase-php/compare/5.26.3...5.26.4
 [5.26.3]: https://github.com/kreait/firebase-php/compare/5.26.2...5.26.3
 [5.26.2]: https://github.com/kreait/firebase-php/compare/5.26.1...5.26.2
