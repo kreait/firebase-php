@@ -39,7 +39,6 @@
         "lcobucci/jwt": "^4.1",
         "mtdowling/jmespath.php": "^2.6.1",
         "psr/cache": "^1.0.1|^2.0|^3.0",
-        "psr/http-message": "^1.0.1",
         "psr/log": "^1.1|^2.0|^3.0",
         "riverline/multipart-parser": "^2.0.8",
         "symfony/polyfill-php80": "^1.23",
