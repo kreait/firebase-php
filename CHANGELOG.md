@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [7.3.1] - 2023-06-10
+
 ### Changed
 
 * Removed direct dependency to `psr/http-message`
@@ -84,7 +86,8 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.x/CHANGELOG.md
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/7.3.0...7.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/7.3.1...7.x
+[7.3.1]: https://github.com/kreait/firebase-php/compare/7.3.0...7.3.1
 [7.3.0]: https://github.com/kreait/firebase-php/compare/7.2.1...7.3.0
 [7.2.1]: https://github.com/kreait/firebase-php/compare/7.2.0...7.2.1
 [7.2.0]: https://github.com/kreait/firebase-php/compare/7.1.0...7.2.0
