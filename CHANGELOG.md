@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## [Unreleased]
+### Changed
+* Removed direct dependency to `psr/http-message`
 
 ## [5.26.4]
 ### Fixed
