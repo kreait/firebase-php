@@ -36,7 +36,9 @@ final class TemplateTest extends UnitTestCase
     #[Test]
     public function createWithInvalidConditionalValue(): void
     {
-        $parameter = Parameter::named('foo')->withConditionalValue(new ConditionalValue('non_existing_condition', 'false'));
+        $parameter = Parameter::named('foo')
+            ->withConditionalValue(ConditionalValue::basedOn('non_existing_condition'))
+        ;
 
         $this->expectException(InvalidArgumentException::class);
         Template::new()->withParameter($parameter);
@@ -77,7 +79,7 @@ final class TemplateTest extends UnitTestCase
         ;
 
         $germanWelcomeMessage = ConditionalValue::basedOn($german)->withValue('Willkommen!');
-        $frenchWelcomeMessage = new ConditionalValue('lang_french', 'Bienvenu!');
+        $frenchWelcomeMessage = ConditionalValue::basedOn($french)->withValue('Bienvenu!');
 
         $welcomeMessageParameter = Parameter::named('welcome_message')
             ->withDefaultValue('Welcome!')

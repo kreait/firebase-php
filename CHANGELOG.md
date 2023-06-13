@@ -2,15 +2,16 @@
 
 ## [Unreleased]
 
-### Changed
+### Added
+* 
+* Added support for [Parameter Value Types](https://firebase.google.com/docs/reference/remote-config/rest/v1/RemoteConfig#parametervaluetype)
+  when getting and setting a RemoteConfig template.
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/remote-config.html#parameter-value-types))
 
-#### RemoteConfig
+### Deprecated
 
-* Introduced `Kreait\Firebase\RemoteConfig\ParameterValue` to be used instead of the explicit classes 
-  `Kreait\Firebase\RemoteConfig\ExplicitValue` and `Kreait\Firebase\RemoteConfig\DefaultValue`
-  * `Kreait\Firebase\RemoteConfig\DefaultValue` should be regarded as deprecated, it is kept to not
-    create a breaking change
-  * `Kreait\Firebase\RemoteConfig\ExplicitValue` is deprecated
+* `Kreait\Firebase\RemoteConfig\ExplicitValue` is deprecated
+* `Kreait\Firebase\RemoteConfig\DefaultValue` should be regarded as deprecated, it is kept to not create a breaking changes
 
 ## [7.3.1] - 2023-06-10
 

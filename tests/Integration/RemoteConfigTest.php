@@ -11,6 +11,7 @@ use Kreait\Firebase\Exception\RemoteConfig\VersionMismatch;
 use Kreait\Firebase\Exception\RemoteConfig\VersionNotFound;
 use Kreait\Firebase\RemoteConfig\FindVersions;
 use Kreait\Firebase\RemoteConfig\Parameter;
+use Kreait\Firebase\RemoteConfig\ParameterValueType;
 use Kreait\Firebase\RemoteConfig\Template;
 use Kreait\Firebase\RemoteConfig\UpdateOrigin;
 use Kreait\Firebase\RemoteConfig\UpdateType;
@@ -56,6 +57,29 @@ final class RemoteConfigTest extends IntegrationTestCase
                         }
                     },
                     "description": "This is a welcome message"
+                },
+                "no_value_type": {
+                    "defaultValue": "1"
+                },
+                "unspecified_value_type": {
+                    "defaultValue": "1",
+                    "valueType": "STRING"
+                },
+                "string_value_type": {
+                    "defaultValue": "1",
+                    "valueType": "STRING"
+                },
+                "numeric_value_type": {
+                    "defaultValue": "1",
+                    "valueType": "NUMBER"
+                },
+                "boolean_value_type": {
+                    "defaultValue": "true",
+                    "valueType": "BOOLEAN"
+                },
+                "json_value_type": {
+                    "defaultValue": "{\"key\": \"value\"}",
+                    "valueType": "JSON"
                 }
             },
             "parameterGroups": {
@@ -111,16 +135,22 @@ final class RemoteConfigTest extends IntegrationTestCase
 
         $check = $this->remoteConfig->get();
 
-        $this->assertEqualsCanonicalizing($this->template->jsonSerialize(), $check->jsonSerialize());
+        $parameters = $check->parameters();
+        $this->assertSameSize($this->template->parameters(), $parameters);
+        $this->assertSame(ParameterValueType::STRING, $parameters['no_value_type']->valueType());
+        $this->assertSame(ParameterValueType::STRING, $parameters['unspecified_value_type']->valueType());
+        $this->assertSame(ParameterValueType::STRING, $parameters['string_value_type']->valueType());
+        $this->assertSame(ParameterValueType::NUMBER, $parameters['numeric_value_type']->valueType());
+        $this->assertSame(ParameterValueType::BOOL, $parameters['boolean_value_type']->valueType());
+        $this->assertSame(ParameterValueType::JSON, $parameters['json_value_type']->valueType());
+
+        $this->assertSameSize($this->template->conditions(), $check->conditions());
+        $this->assertSameSize($this->template->conditionNames(), $check->conditionNames());
 
         $version = $check->version();
 
-        if (!$version instanceof Version) {
-            $this->fail('The template has no version');
-        }
-
-        $this->assertTrue($version->updateType()->equalsTo(UpdateType::FORCED_UPDATE));
-        $this->assertTrue($version->updateOrigin()->equalsTo(UpdateOrigin::REST_API));
+        $this->assertSame(UpdateType::FORCED_UPDATE, (string) $version?->updateType());
+        $this->assertSame(UpdateOrigin::REST_API, (string) $version?->updateOrigin());
     }
 
     #[Test]
@@ -264,7 +294,7 @@ final class RemoteConfigTest extends IntegrationTestCase
         $query = [
             'startingAt' => $currentVersionUpdateDate->modify('-2 months'),
             'endingAt' => $currentVersionUpdateDate,
-            'upToVersion' => $currentVersion->versionNumber(),
+            'lastVersionBeing' => $currentVersion->versionNumber(),
             'pageSize' => 1,
             'limit' => $limit = 2,
         ];
