@@ -10,6 +10,7 @@ use JsonSerializable;
  * @phpstan-import-type RemoteConfigParameterValueShape from ParameterValue
  *
  * @todo Deprecate/Remove in 8.0
+ * @see ParameterValue
  */
 class DefaultValue implements JsonSerializable
 {

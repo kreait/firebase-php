@@ -13,26 +13,24 @@ use function is_string;
  * @phpstan-import-type RemoteConfigParameterValueShape from ParameterValue
  *
  * @phpstan-type RemoteConfigParameterShape array{
- *     defaultValue?: RemoteConfigParameterValueShape,
- *     conditionalValues?: array<non-empty-string, RemoteConfigParameterValueShape>,
- *     description?: string
+ *     description?: string|null,
+ *     defaultValue?: RemoteConfigParameterValueShape|null,
+ *     conditionalValues?: array<non-empty-string, RemoteConfigParameterValueShape>|null,
+ *     valueType?: non-empty-string|null
  * }
  */
 class Parameter implements JsonSerializable
 {
-    private ?string $description = '';
-
-    /**
-     * @var list<ConditionalValue>
-     */
-    private array $conditionalValues = [];
-
     /**
      * @param non-empty-string $name
+     * @param list<ConditionalValue> $conditionalValues
      */
     private function __construct(
         private readonly string $name,
-        private ?ParameterValue $defaultValue = null,
+        private readonly string $description,
+        private readonly ?ParameterValue $defaultValue,
+        private readonly array $conditionalValues,
+        private readonly ParameterValueType $valueType,
     ) {
     }
 
@@ -40,25 +38,41 @@ class Parameter implements JsonSerializable
      * @param non-empty-string $name
      * @param DefaultValue|RemoteConfigParameterValueShape|string|bool|null $defaultValue
      */
-    public static function named(string $name, $defaultValue = null): self
+    public static function named(string $name, $defaultValue = null, ?ParameterValueType $valueType = null): self
+    {
+        $defaultValue = self::mapDefaultValue($defaultValue);
+
+        return new self(
+            name: $name,
+            description: '',
+            defaultValue: $defaultValue,
+            conditionalValues: [],
+            valueType: $valueType ?? ParameterValueType::UNSPECIFIED,
+        );
+    }
+
+    /**
+     * @param DefaultValue|RemoteConfigParameterValueShape|string|bool|null $defaultValue
+     */
+    private static function mapDefaultValue($defaultValue): ?ParameterValue
     {
         if ($defaultValue === null) {
-            return new self($name, null);
+            return null;
         }
 
         if ($defaultValue instanceof DefaultValue) {
-            return new self($name, ParameterValue::fromArray($defaultValue->toArray()));
+            return ParameterValue::fromArray($defaultValue->toArray());
         }
 
         if (is_string($defaultValue)) {
-            return new self($name, ParameterValue::withValue($defaultValue));
+            return ParameterValue::withValue($defaultValue);
         }
 
         if (is_bool($defaultValue)) {
-            return new self($name, ParameterValue::inAppDefault());
+            return ParameterValue::inAppDefault();
         }
 
-        return new self($name, ParameterValue::fromArray($defaultValue));
+        return ParameterValue::fromArray($defaultValue);
     }
 
     /**
@@ -71,15 +85,18 @@ class Parameter implements JsonSerializable
 
     public function description(): string
     {
-        return $this->description ?: '';
+        return $this->description;
     }
 
     public function withDescription(string $description): self
     {
-        $parameter = clone $this;
-        $parameter->description = $description;
-
-        return $parameter;
+        return new self(
+            name: $this->name,
+            description: $description,
+            defaultValue: $this->defaultValue,
+            conditionalValues: $this->conditionalValues,
+            valueType: $this->valueType,
+        );
     }
 
     /**
@@ -87,9 +104,20 @@ class Parameter implements JsonSerializable
      */
     public function withDefaultValue($defaultValue): self
     {
-        return self::named($this->name, $defaultValue);
+        $defaultValue = self::mapDefaultValue($defaultValue);
+
+        return new self(
+            name: $this->name,
+            description: $this->description,
+            defaultValue: $defaultValue,
+            conditionalValues: $this->conditionalValues,
+            valueType: $this->valueType,
+        );
     }
 
+    /**
+     * @todo 8.0 Replace with `ParameterValue`
+     */
     public function defaultValue(): ?DefaultValue
     {
         if ($this->defaultValue === null) {
@@ -101,10 +129,16 @@ class Parameter implements JsonSerializable
 
     public function withConditionalValue(ConditionalValue $conditionalValue): self
     {
-        $parameter = clone $this;
-        $parameter->conditionalValues[] = $conditionalValue;
+        $conditionalValues = $this->conditionalValues;
+        $conditionalValues[] = $conditionalValue;
 
-        return $parameter;
+        return new self(
+            name: $this->name,
+            description: $this->description,
+            defaultValue: $this->defaultValue,
+            conditionalValues: $conditionalValues,
+            valueType: $this->valueType,
+        );
     }
 
     /**
@@ -113,6 +147,22 @@ class Parameter implements JsonSerializable
     public function conditionalValues(): array
     {
         return $this->conditionalValues;
+    }
+
+    public function withValueType(ParameterValueType $valueType): self
+    {
+        return new self(
+            name: $this->name,
+            description: $this->description,
+            defaultValue: $this->defaultValue,
+            conditionalValues: $this->conditionalValues,
+            valueType: $valueType,
+        );
+    }
+
+    public function valueType(): ParameterValueType
+    {
+        return $this->valueType;
     }
 
     /**
@@ -136,9 +186,11 @@ class Parameter implements JsonSerializable
             $array['conditionalValues'] = $conditionalValues;
         }
 
-        if ($this->description !== null && $this->description !== '') {
+        if ($this->description !== '') {
             $array['description'] = $this->description;
         }
+
+        $array['valueType'] = $this->valueType->value;
 
         return $array;
     }

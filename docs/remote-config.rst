@@ -103,11 +103,40 @@ Add a parameter
 .. code-block:: php
 
     use Kreait\Firebase\RemoteConfig;
+    use Kreait\Firebase\RemoteConfig\ParameterValueType;
 
     $welcomeMessageParameter = RemoteConfig\Parameter::named('welcome_message')
             ->withDefaultValue('Welcome!')
             ->withDescription('This is a welcome message') // optional
+            ->withValueType(ParameterValueType $valueType): self
     ;
+
+Parameter Value Types
+---------------------
+
+.. note::
+    Support for Parameter Value Types has been added in version 7.4.0 of the SDK
+
+.. code-block:: php
+
+    use Kreait\Firebase\RemoteConfig\Parameter;
+    use Kreait\Firebase\RemoteConfig\ParameterValueType;
+
+    Parameter::named('string_parameter')
+        ->withDefaultValue('Welcome!')
+        ->withValueType(ParameterValueType::STRING);
+
+    Parameter::named('boolean_parameter')
+        ->withDefaultValue('true')
+        ->withValueType(ParameterValueType::BOOL);
+
+    Parameter::named('numeric_parameter')
+        ->withDefaultValue('5')
+        ->withValueType(ParameterValueType::NUMBER);
+
+    Parameter::named('json_parameter')
+        ->withDefaultValue('{"foo": "bar"}')
+        ->withValueType(ParameterValueType::JSON);
 
 ******************
 Conditional values

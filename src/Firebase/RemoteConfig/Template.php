@@ -226,9 +226,12 @@ class Template implements JsonSerializable
      */
     private static function buildParameter(string $name, array $data): Parameter
     {
+        $valueType = ParameterValueType::tryFrom($data['valueType'] ?? '') ?? ParameterValueType::UNSPECIFIED;
+
         $parameter = Parameter::named($name)
             ->withDescription((string) ($data['description'] ?? ''))
             ->withDefaultValue($data['defaultValue'] ?? null)
+            ->withValueType($valueType)
         ;
 
         foreach ((array) ($data['conditionalValues'] ?? []) as $key => $conditionalValueData) {
