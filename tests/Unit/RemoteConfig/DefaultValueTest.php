@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\RemoteConfig;
 
 use Kreait\Firebase\RemoteConfig\DefaultValue;
-use Kreait\Firebase\RemoteConfig\ExplicitValue;
-use Kreait\Firebase\RemoteConfig\PersonalizationValue;
+use Kreait\Firebase\RemoteConfig\ParameterValue;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -14,9 +13,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  *
- * @phpstan-import-type RemoteConfigPersonalizationValueShape from PersonalizationValue
- * @phpstan-import-type RemoteConfigExplicitValueShape from ExplicitValue
- * @phpstan-import-type RemoteConfigInAppDefaultValueShape from DefaultValue
+ * @phpstan-import-type RemoteConfigParameterValueShape from ParameterValue
  */
 final class DefaultValueTest extends TestCase
 {
@@ -37,8 +34,8 @@ final class DefaultValueTest extends TestCase
     }
 
     /**
-     * @param RemoteConfigInAppDefaultValueShape $expected
-     * @param RemoteConfigInAppDefaultValueShape $data
+     * @param RemoteConfigParameterValueShape $expected
+     * @param RemoteConfigParameterValueShape $data
      */
     #[DataProvider('arrayValueProvider')]
     #[Test]
@@ -50,7 +47,7 @@ final class DefaultValueTest extends TestCase
     }
 
     /**
-     * @return iterable<non-empty-string, array<RemoteConfigInAppDefaultValueShape|RemoteConfigExplicitValueShape|RemoteConfigPersonalizationValueShape>>
+     * @return iterable<non-empty-string, array<RemoteConfigParameterValueShape>>
      */
     public static function arrayValueProvider(): iterable
     {
@@ -60,13 +57,13 @@ final class DefaultValueTest extends TestCase
         ];
 
         yield 'explicit' => [
-            ['value' => '1'],
-            ['value' => '1'],
+            ['value' => 'value'],
+            ['value' => 'value'],
         ];
 
         yield 'personalization' => [
-            ['personalizationId' => 'pid'],
-            ['personalizationId' => 'pid'],
+            ['personalizationValue' => ['personalizationId' => 'pid']],
+            ['personalizationValue' => ['personalizationId' => 'pid']],
         ];
     }
 }
