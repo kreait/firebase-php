@@ -6,12 +6,11 @@ namespace Kreait\Firebase\RemoteConfig;
 
 use JsonSerializable;
 
+use function is_array;
 use function is_string;
 
 /**
- * @phpstan-import-type RemoteConfigPersonalizationValueShape from PersonalizationValue
- * @phpstan-import-type RemoteConfigExplicitValueShape from ExplicitValue
- * @phpstan-import-type RemoteConfigInAppDefaultValueShape from DefaultValue
+ * @phpstan-import-type RemoteConfigParameterValueShape from ParameterValue
  */
 class ConditionalValue implements JsonSerializable
 {
@@ -19,9 +18,8 @@ class ConditionalValue implements JsonSerializable
      * @internal
      *
      * @param non-empty-string $conditionName
-     * @param RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape|string $data
      */
-    public function __construct(private readonly string $conditionName, private readonly array|string $data)
+    public function __construct(private readonly string $conditionName, private readonly ParameterValue $value)
     {
     }
 
@@ -40,37 +38,52 @@ class ConditionalValue implements JsonSerializable
     {
         $name = $condition instanceof Condition ? $condition->name() : $condition;
 
-        return new self($name, ['value' => '']);
+        return new self($name, ParameterValue::withValue(''));
     }
 
     /**
-     * @return RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape|string
+     * @return RemoteConfigParameterValueShape|string
      */
     public function value()
     {
-        return $this->data;
+        $data = $this->value->toArray();
+
+        $valueString = $data['value'] ?? null;
+
+        if ($valueString !== null) {
+            return $valueString;
+        }
+
+        return $data;
     }
 
     /**
-     * @param RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape|string $value
+     * @param ParameterValue|RemoteConfigParameterValueShape|string $value
      */
     public function withValue($value): self
     {
+        if (is_string($value)) {
+            return new self($this->conditionName, ParameterValue::withValue($value));
+        }
+
+        if (is_array($value)) {
+            return new self($this->conditionName, ParameterValue::fromArray($value));
+        }
+
         return new self($this->conditionName, $value);
     }
 
     /**
-     * @return RemoteConfigExplicitValueShape|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape
+     * @return RemoteConfigParameterValueShape
      */
     public function toArray(): array
     {
-        if (is_string($this->data)) {
-            return ExplicitValue::fromString($this->data)->toArray();
-        }
-
-        return $this->data;
+        return $this->value->toArray();
     }
 
+    /**
+     * @return RemoteConfigParameterValueShape
+     */
     public function jsonSerialize(): array
     {
         return $this->toArray();

@@ -10,13 +10,11 @@ use function is_bool;
 use function is_string;
 
 /**
- * @phpstan-import-type RemoteConfigPersonalizationValueShape from PersonalizationValue
- * @phpstan-import-type RemoteConfigExplicitValueShape from ExplicitValue
- * @phpstan-import-type RemoteConfigInAppDefaultValueShape from DefaultValue
+ * @phpstan-import-type RemoteConfigParameterValueShape from ParameterValue
  *
  * @phpstan-type RemoteConfigParameterShape array{
- *     defaultValue?: RemoteConfigInAppDefaultValueShape|RemoteConfigExplicitValueShape|RemoteConfigPersonalizationValueShape,
- *     conditionalValues?: array<non-empty-string, RemoteConfigInAppDefaultValueShape|RemoteConfigExplicitValueShape|RemoteConfigPersonalizationValueShape>,
+ *     defaultValue?: RemoteConfigParameterValueShape,
+ *     conditionalValues?: array<non-empty-string, RemoteConfigParameterValueShape>,
  *     description?: string
  * }
  */
@@ -34,13 +32,13 @@ class Parameter implements JsonSerializable
      */
     private function __construct(
         private readonly string $name,
-        private ?DefaultValue $defaultValue = null,
+        private ?ParameterValue $defaultValue = null,
     ) {
     }
 
     /**
      * @param non-empty-string $name
-     * @param DefaultValue|RemoteConfigInAppDefaultValueShape|RemoteConfigPersonalizationValueShape|RemoteConfigExplicitValueShape|string|bool|null $defaultValue
+     * @param DefaultValue|RemoteConfigParameterValueShape|string|bool|null $defaultValue
      */
     public static function named(string $name, $defaultValue = null): self
     {
@@ -49,18 +47,18 @@ class Parameter implements JsonSerializable
         }
 
         if ($defaultValue instanceof DefaultValue) {
-            return new self($name, $defaultValue);
+            return new self($name, ParameterValue::fromArray($defaultValue->toArray()));
         }
 
         if (is_string($defaultValue)) {
-            return new self($name, DefaultValue::fromArray(['value' => $defaultValue]));
+            return new self($name, ParameterValue::withValue($defaultValue));
         }
 
         if (is_bool($defaultValue)) {
-            return new self($name, DefaultValue::fromArray(['useInAppDefault' => $defaultValue]));
+            return new self($name, ParameterValue::inAppDefault());
         }
 
-        return new self($name, DefaultValue::fromArray($defaultValue));
+        return new self($name, ParameterValue::fromArray($defaultValue));
     }
 
     /**
@@ -85,21 +83,20 @@ class Parameter implements JsonSerializable
     }
 
     /**
-     * @param DefaultValue|string $defaultValue
+     * @param DefaultValue|RemoteConfigParameterValueShape|string|bool|null $defaultValue
      */
     public function withDefaultValue($defaultValue): self
     {
-        $defaultValue = $defaultValue instanceof DefaultValue ? $defaultValue : DefaultValue::with($defaultValue);
-
-        $parameter = clone $this;
-        $parameter->defaultValue = $defaultValue;
-
-        return $parameter;
+        return self::named($this->name, $defaultValue);
     }
 
     public function defaultValue(): ?DefaultValue
     {
-        return $this->defaultValue;
+        if ($this->defaultValue === null) {
+            return null;
+        }
+
+        return DefaultValue::fromArray($this->defaultValue->toArray());
     }
 
     public function withConditionalValue(ConditionalValue $conditionalValue): self
@@ -146,6 +143,9 @@ class Parameter implements JsonSerializable
         return $array;
     }
 
+    /**
+     * @return RemoteConfigParameterShape
+     */
     public function jsonSerialize(): array
     {
         return $this->toArray();

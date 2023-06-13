@@ -8,7 +8,6 @@ use JsonSerializable;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 
 use function array_filter;
-use function array_key_exists;
 use function array_map;
 use function array_unique;
 use function array_values;
@@ -227,15 +226,13 @@ class Template implements JsonSerializable
      */
     private static function buildParameter(string $name, array $data): Parameter
     {
-        $parameter = Parameter::named($name)->withDescription((string) ($data['description'] ?? ''));
-
-        // @phpstan-ignore-next-line
-        if (array_key_exists('defaultValue', $data) && $data['defaultValue'] !== null) {
-            $parameter = $parameter->withDefaultValue(DefaultValue::fromArray($data['defaultValue']));
-        }
+        $parameter = Parameter::named($name)
+            ->withDescription((string) ($data['description'] ?? ''))
+            ->withDefaultValue($data['defaultValue'] ?? null)
+        ;
 
         foreach ((array) ($data['conditionalValues'] ?? []) as $key => $conditionalValueData) {
-            $parameter = $parameter->withConditionalValue(new ConditionalValue($key, $conditionalValueData));
+            $parameter = $parameter->withConditionalValue(new ConditionalValue($key, ParameterValue::fromArray($conditionalValueData)));
         }
 
         return $parameter;

@@ -7,6 +7,10 @@ namespace Kreait\Firebase\RemoteConfig;
 use JsonSerializable;
 
 /**
+ * @deprecated 7.4.0
+ *
+ * @codeCoverageIgnore
+ *
  * @phpstan-type RemoteConfigExplicitValueShape array{
  *     value: string
  * }
