@@ -2,8 +2,10 @@
 
 ## [Unreleased]
 
+## [7.4.0] - 2023-06-18
+
 ### Added
-* 
+
 * Added support for [Parameter Value Types](https://firebase.google.com/docs/reference/remote-config/rest/v1/RemoteConfig#parametervaluetype)
   when getting and setting a RemoteConfig template.
   ([Documentation](https://firebase-php.readthedocs.io/en/latest/remote-config.html#parameter-value-types))
@@ -97,7 +99,8 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.x/CHANGELOG.md
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/7.3.1...7.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/7.4.0...7.x
+[7.4.0]: https://github.com/kreait/firebase-php/compare/7.3.1...7.4.0
 [7.3.1]: https://github.com/kreait/firebase-php/compare/7.3.0...7.3.1
 [7.3.0]: https://github.com/kreait/firebase-php/compare/7.2.1...7.3.0
 [7.2.1]: https://github.com/kreait/firebase-php/compare/7.2.0...7.2.1
