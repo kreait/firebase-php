@@ -13,10 +13,6 @@ body:
         This issue form is for feature requests only. Please provide as much information as possible. If your feature request refers to existing functionality in other Firebase Admin SDKs, please include links to the relevant documentation and code.
 
         Requests for features that are usually only available in Client SDKs are usually considered out of scope of this SDK.
-
-        Feature requests by [GitHub Sponsors in a _Firebase_ tier](https://github.com/sponsors/jeromegamez) will be prioritised. If you are not a Sponsor, your feature request may be queued until it is backed by a GitHub Sponsor.
-
-        You can learn more about the reasoning for this project's Terms of Support at [What the FOSS](https://jerome.gamez.name/what-the-foss/).
   - type: textarea
     attributes:
       label: Describe the feature you would like to see

@@ -13,10 +13,6 @@ body:
         This issue form is for reporting bugs only. Please provide as much information as possible. If a problem cannot be reproduced or understood, your issue may be closed as non-actionable.
 
         This project is covered with unit- and integration tests and successfully used in many projects. If an error seemingly related to this library occurs in your project, it's most likely not because of this library.
-
-        You can request custom support if you are a [GitHub Sponsor in a _Firebase_ tier](https://github.com/sponsors/jeromegamez). If this issue does not describe a bug and you are not a GitHub sponsor, your issue may be closed.
-
-        You can learn more about the reasoning for this project's Terms of Support at [What the FOSS](https://jerome.gamez.name/what-the-foss/).
   - type: markdown
     attributes:
       value: |
