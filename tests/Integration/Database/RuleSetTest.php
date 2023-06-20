@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration\Database;
 
-use Beste\Json;
 use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
 use PHPUnit\Framework\Attributes\Group;
