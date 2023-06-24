@@ -118,11 +118,13 @@ final class Factory
      * @var non-empty-string|null
      */
     private ?string $tenantId = null;
+    private HttpFactory $httpFactory;
     private HttpClientOptions $httpClientOptions;
 
     public function __construct()
     {
         $this->clock = SystemClock::create();
+        $this->httpFactory = new HttpFactory();
         $this->verifierCache = new MemoryCacheItemPool();
         $this->authTokenCache = new MemoryCacheItemPool();
         $this->keySetCache = new MemoryCacheItemPool();
@@ -328,7 +330,7 @@ final class Factory
         $keySet = new CachedKeySet(
             'https://firebaseappcheck.googleapis.com/v1/jwks',
             new Client(),
-            new HttpFactory(),
+            $this->httpFactory,
             $this->keySetCache,
             21600,
             true,
@@ -394,9 +396,10 @@ final class Factory
         $errorHandler = new MessagingApiExceptionConverter($this->clock);
 
         $messagingApiClient = new Messaging\ApiClient(
-            $this->createApiClient([
-                'base_uri' => 'https://fcm.googleapis.com/v1/projects/'.$projectId,
-            ]),
+            $this->createApiClient(),
+            $projectId,
+            $this->httpFactory,
+            $this->httpFactory,
             $errorHandler,
         );
 
