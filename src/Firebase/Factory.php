@@ -545,8 +545,6 @@ final class Factory
 
         $handler->push(new AuthTokenMiddleware($credentials, $authTokenHandler));
 
-        $handler->push(Middleware::responseWithSubResponses());
-
         $config['handler'] = $handler;
         $config['auth'] = 'google_auth';
 
