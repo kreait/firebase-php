@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase;
 
-use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use Kreait\Firebase\DynamicLink\ApiClient;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink;
-use Kreait\Firebase\DynamicLink\CreateDynamicLink\GuzzleApiClientHandler;
+use Kreait\Firebase\DynamicLink\CreateDynamicLink\FailedToCreateDynamicLink;
 use Kreait\Firebase\DynamicLink\DynamicLinkStatistics;
 use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink;
+use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink\FailedToGetStatisticsForDynamicLink;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
+use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink\FailedToShortenLongDynamicLink;
 use Kreait\Firebase\Value\Url;
+use Psr\Http\Client\ClientExceptionInterface;
 use Stringable;
 
 use function is_array;
@@ -28,11 +32,11 @@ final class DynamicLinks implements Contract\DynamicLinks
      */
     private function __construct(
         private readonly ?string $defaultDynamicLinksDomain,
-        private readonly ClientInterface $apiClient,
+        private readonly ApiClient $apiClient,
     ) {
     }
 
-    public static function withApiClient(ClientInterface $apiClient): self
+    public static function withApiClient(ApiClient $apiClient): self
     {
         return new self(null, $apiClient);
     }
@@ -40,7 +44,7 @@ final class DynamicLinks implements Contract\DynamicLinks
     /**
      * @param Stringable|non-empty-string $dynamicLinksDomain
      */
-    public static function withApiClientAndDefaultDomain(ClientInterface $apiClient, Stringable|string $dynamicLinksDomain): self
+    public static function withApiClientAndDefaultDomain(ApiClient $apiClient, Stringable|string $dynamicLinksDomain): self
     {
         $domainUrl = Url::fromString($dynamicLinksDomain)->value;
 
@@ -71,7 +75,19 @@ final class DynamicLinks implements Contract\DynamicLinks
             $action = $action->withUnguessableSuffix();
         }
 
-        return (new GuzzleApiClientHandler($this->apiClient))->handle($action);
+        $request = $this->apiClient->createDynamicLinkRequest($action);
+
+        try {
+            $response = $this->apiClient->send($request, ['http_errors' => false]);
+        } catch (ClientExceptionInterface $e) {
+            throw new FailedToCreateDynamicLink('Failed to create dynamic link: '.$e->getMessage(), $e->getCode(), $e);
+        }
+
+        if ($response->getStatusCode() === 200) {
+            return DynamicLink::fromApiResponse($response);
+        }
+
+        throw FailedToCreateDynamicLink::withActionAndResponse($action, $response);
     }
 
     public function shortenLongDynamicLink($longDynamicLinkOrAction, ?string $suffixType = null): DynamicLink
@@ -84,7 +100,19 @@ final class DynamicLinks implements Contract\DynamicLinks
             $action = $action->withUnguessableSuffix();
         }
 
-        return (new ShortenLongDynamicLink\GuzzleApiClientHandler($this->apiClient))->handle($action);
+        $request = $this->apiClient->createShortenLinkRequest($action);
+
+        try {
+            $response = $this->apiClient->send($request, ['http_errors' => false]);
+        } catch (GuzzleException $e) {
+            throw new FailedToShortenLongDynamicLink('Failed to shorten long dynamic link: '.$e->getMessage(), $e->getCode(), $e);
+        }
+
+        if ($response->getStatusCode() === 200) {
+            return DynamicLink::fromApiResponse($response);
+        }
+
+        throw FailedToShortenLongDynamicLink::withActionAndResponse($action, $response);
     }
 
     /**
@@ -99,7 +127,19 @@ final class DynamicLinks implements Contract\DynamicLinks
             $action = $action->withDurationInDays($durationInDays);
         }
 
-        return (new DynamicLink\GetStatisticsForDynamicLink\GuzzleApiClientHandler($this->apiClient))->handle($action);
+        $request = $this->apiClient->createStatisticsRequest($action);
+
+        try {
+            $response = $this->apiClient->send($request, ['http_errors' => false]);
+        } catch (GuzzleException $e) {
+            throw new FailedToGetStatisticsForDynamicLink('Failed to get statistics for Dynamic Link: '.$e->getMessage(), $e->getCode(), $e);
+        }
+
+        if ($response->getStatusCode() === 200) {
+            return DynamicLinkStatistics::fromApiResponse($response);
+        }
+
+        throw FailedToGetStatisticsForDynamicLink::withActionAndResponse($action, $response);
     }
 
     /**

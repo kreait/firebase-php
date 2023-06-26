@@ -7,6 +7,8 @@
 * Replaced calls to deprecated FCM batch endpoints with asynchronous requests
   to the HTTP V1 API
   ([#804](https://github.com/kreait/firebase-php/pull/804)/[#805](https://github.com/kreait/firebase-php/pull/805))
+* Simplified convoluted Dynamic Link operations
+  ([#810](https://github.com/kreait/firebase-php/pull/810)
 
 ### Removed
 

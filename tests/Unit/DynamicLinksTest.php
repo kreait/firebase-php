@@ -9,11 +9,13 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\DynamicLink\AnalyticsInfo;
 use Kreait\Firebase\DynamicLink\AnalyticsInfo\GooglePlayAnalytics;
 use Kreait\Firebase\DynamicLink\AnalyticsInfo\ITunesConnectAnalytics;
 use Kreait\Firebase\DynamicLink\AndroidInfo;
+use Kreait\Firebase\DynamicLink\ApiClient;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink\FailedToCreateDynamicLink;
 use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink;
@@ -42,8 +44,11 @@ final class DynamicLinksTest extends TestCase
     {
         $this->httpHandler = new MockHandler();
         $httpClient = new Client(['handler' => HandlerStack::create($this->httpHandler)]);
+        $httpFactory = new HttpFactory();
 
-        $this->service = DynamicLinks::withApiClientAndDefaultDomain($httpClient, $this->dynamicLinksDomain);
+        $apiClient = new ApiClient($httpClient, $httpFactory, $httpFactory);
+
+        $this->service = DynamicLinks::withApiClientAndDefaultDomain($apiClient, $this->dynamicLinksDomain);
     }
 
     #[Test]
