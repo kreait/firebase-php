@@ -21,7 +21,7 @@ use const JSON_FORCE_OBJECT;
 /**
  * @internal
  */
-final class GuzzleApiClientHandler implements Handler
+final class GuzzleApiClientHandler
 {
     /**
      * @param non-empty-string $projectId

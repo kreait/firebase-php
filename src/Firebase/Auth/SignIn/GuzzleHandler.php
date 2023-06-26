@@ -32,7 +32,7 @@ use const JSON_FORCE_OBJECT;
 /**
  * @internal
  */
-final class GuzzleHandler implements Handler
+final class GuzzleHandler
 {
     /**
      * @var array<non-empty-string, mixed>

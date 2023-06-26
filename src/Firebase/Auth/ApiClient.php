@@ -8,7 +8,7 @@ use Beste\Json;
 use DateInterval;
 use GuzzleHttp\ClientInterface;
 use Kreait\Firebase\Auth\CreateSessionCookie\GuzzleApiClientHandler;
-use Kreait\Firebase\Auth\SignIn\Handler as SignInHandler;
+use Kreait\Firebase\Auth\SignIn\GuzzleHandler;
 use Kreait\Firebase\Exception\Auth\EmailNotFound;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
@@ -46,7 +46,7 @@ class ApiClient
         private readonly string $projectId,
         private readonly ?string $tenantId,
         private readonly ClientInterface $client,
-        private readonly SignInHandler $signInHandler,
+        private readonly GuzzleHandler $signInHandler,
         private readonly ClockInterface $clock,
     ) {
         $this->errorHandler = new AuthApiExceptionConverter();
