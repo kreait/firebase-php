@@ -5,27 +5,25 @@ declare(strict_types=1);
 namespace Kreait\Firebase;
 
 use Beste\Json;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\Utils;
+use Iterator;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Exception\MessagingException;
-use Kreait\Firebase\Http\ResponseWithSubResponses;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\AppInstance;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
 use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\Http\Request\SendMessage;
-use Kreait\Firebase\Messaging\Http\Request\SendMessages;
-use Kreait\Firebase\Messaging\Http\Request\SendMessageToTokens;
 use Kreait\Firebase\Messaging\Message;
-use Kreait\Firebase\Messaging\Messages;
 use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\MulticastSendReport;
 use Kreait\Firebase\Messaging\Processor\SetApnsContentAvailableIfNeeded;
 use Kreait\Firebase\Messaging\Processor\SetApnsPushTypeIfNeeded;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Messaging\RegistrationTokens;
+use Kreait\Firebase\Messaging\SendReport;
 use Kreait\Firebase\Messaging\Topic;
 use Throwable;
 
@@ -38,7 +36,7 @@ use function array_map;
  */
 final class Messaging implements Contract\Messaging
 {
-    public function __construct(private readonly string $projectId, private readonly ApiClient $messagingApi, private readonly AppInstanceApiClient $appInstanceApi)
+    public function __construct(private readonly ApiClient $messagingApi, private readonly AppInstanceApiClient $appInstanceApi)
     {
     }
 
@@ -50,7 +48,7 @@ final class Messaging implements Contract\Messaging
             throw new InvalidArgument('The given message is missing a target');
         }
 
-        $request = new SendMessage($this->projectId, $message, $validateOnly);
+        $request = $this->messagingApi->createSendRequestForMessage($message, $validateOnly);
 
         try {
             $response = $this->messagingApi->send($request);
@@ -69,31 +67,58 @@ final class Messaging implements Contract\Messaging
 
     public function sendMulticast($message, $registrationTokens, bool $validateOnly = false): MulticastSendReport
     {
-        $message = $this->makeMessage($message);
+        $message = CloudMessage::fromArray(
+            Json::decode(Json::encode($this->makeMessage($message)), true),
+        );
         $registrationTokens = RegistrationTokens::fromValue($registrationTokens);
 
-        $request = new SendMessageToTokens($this->projectId, $message, $registrationTokens, $validateOnly);
+        $messages = [];
 
-        /** @var ResponseWithSubResponses $response */
-        $response = $this->messagingApi->send($request);
+        foreach ($registrationTokens as $registrationToken) {
+            $messages[] = $message->withChangedTarget(MessageTarget::TOKEN, $registrationToken->value());
+        }
 
-        return MulticastSendReport::fromRequestsAndResponses($request->subRequests(), $response->subResponses());
+        return $this->sendAll($messages, $validateOnly);
     }
 
     public function sendAll($messages, bool $validateOnly = false): MulticastSendReport
     {
-        $ensuredMessages = [];
-
-        foreach ($messages as $message) {
-            $ensuredMessages[] = $this->makeMessage($message);
+        if ($this->countIterable($messages) > self::BATCH_MESSAGE_LIMIT) {
+            throw new InvalidArgument('Only '.self::BATCH_MESSAGE_LIMIT.' can be sent at a time.');
         }
 
-        $request = new SendMessages($this->projectId, new Messages(...$ensuredMessages), $validateOnly);
+        $messages = $this->ensureMessages($messages);
+        $promises = $this->createMessageRequestPromises($messages(), $validateOnly);
 
-        /** @var ResponseWithSubResponses $response */
-        $response = $this->messagingApi->send($request);
+        $sendReports = Utils::settle($promises())
+            ->then(static function (array $responses) use ($messages) {
+                $messages = $messages();
+                $sendReports = [];
 
-        return MulticastSendReport::fromRequestsAndResponses($request->subRequests(), $response->subResponses());
+                foreach ($responses as $response) {
+                    $message = CloudMessage::fromArray(
+                        Json::decode(Json::encode($messages->current()), true),
+                    );
+
+                    if ($response['state'] === PromiseInterface::FULFILLED) {
+                        $json = Json::decode((string) $response['value']->getBody(), true);
+
+                        $sendReports[] = SendReport::success($message->target(), $json, $message);
+                    }
+
+                    if ($response['state'] === PromiseInterface::REJECTED) {
+                        $sendReports[] = SendReport::failure($message->target(), $response['reason'], $message);
+                    }
+
+                    $messages->next();
+                }
+
+                return $sendReports;
+            })
+            ->wait()
+        ;
+
+        return MulticastSendReport::withItems($sendReports);
     }
 
     public function validate($message): array
@@ -199,6 +224,38 @@ final class Messaging implements Contract\Messaging
     }
 
     /**
+     * @param iterable<Message|array<non-empty-string, mixed>> $messages
+     *
+     * @return callable(): Iterator<Message>
+     */
+    private function ensureMessages(iterable $messages): callable
+    {
+        return function () use ($messages) {
+            foreach ($messages as $message) {
+                if ($message instanceof Message) {
+                    yield $message;
+                } else {
+                    yield $this->makeMessage($message);
+                }
+            }
+        };
+    }
+
+    /**
+     * @param iterable<mixed> $items
+     */
+    private function countIterable(iterable $items): int
+    {
+        $count = 0;
+
+        foreach ($items as $item) {
+            ++$count;
+        }
+
+        return $count;
+    }
+
+    /**
      * @param Message|array<non-empty-string, mixed> $message
      *
      * @throws InvalidArgumentException
@@ -210,6 +267,20 @@ final class Messaging implements Contract\Messaging
         $message = (new SetApnsPushTypeIfNeeded())($message);
 
         return (new SetApnsContentAvailableIfNeeded())($message);
+    }
+
+    /**
+     * @param iterable<Message> $messages
+     */
+    private function createMessageRequestPromises(iterable $messages, bool $validateOnly): callable
+    {
+        return function () use ($messages, $validateOnly) {
+            foreach ($messages as $message) {
+                $request = $this->messagingApi->createSendRequestForMessage($message, $validateOnly);
+
+                yield $this->messagingApi->sendAsync($request);
+            }
+        };
     }
 
     private function messageHasTarget(Message $message): bool

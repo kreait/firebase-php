@@ -33,7 +33,7 @@ final class RegistrationTokens implements Countable, IteratorAggregate
     }
 
     /**
-     * @param RegistrationTokens|RegistrationToken|list<RegistrationToken|string>|non-empty-string $values
+     * @param RegistrationTokens|RegistrationToken|array<RegistrationToken|string>|non-empty-string $values
      *
      * @throws InvalidArgument
      */

@@ -413,7 +413,7 @@ final class Factory
             $errorHandler,
         );
 
-        return new Messaging($projectId, $messagingApiClient, $appInstanceApiClient);
+        return new Messaging($messagingApiClient, $appInstanceApiClient);
     }
 
     /**
