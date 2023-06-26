@@ -83,10 +83,6 @@ final class Messaging implements Contract\Messaging
 
     public function sendAll($messages, bool $validateOnly = false): MulticastSendReport
     {
-        if ($this->countIterable($messages) > self::BATCH_MESSAGE_LIMIT) {
-            throw new InvalidArgument('Only '.self::BATCH_MESSAGE_LIMIT.' can be sent at a time.');
-        }
-
         $messages = $this->ensureMessages($messages);
         $promises = $this->createMessageRequestPromises($messages(), $validateOnly);
 
@@ -239,20 +235,6 @@ final class Messaging implements Contract\Messaging
                 }
             }
         };
-    }
-
-    /**
-     * @param iterable<mixed> $items
-     */
-    private function countIterable(iterable $items): int
-    {
-        $count = 0;
-
-        foreach ($items as $item) {
-            ++$count;
-        }
-
-        return $count;
     }
 
     /**

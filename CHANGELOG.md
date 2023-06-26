@@ -7,6 +7,10 @@
 * Replaced calls to deprecated FCM batch endpoints with asynchronous requests
   to the HTTP V1 API
   ([#804](https://github.com/kreait/firebase-php/pull/804)/[#805](https://github.com/kreait/firebase-php/pull/805))
+* Removed message limit when sending multiple FCM messages
+  * The message limit was needed when using the FCM batch endpoints because they used multipart requests and responses.
+    The limit prevented these messages to become too large. Since we're now using asynchronous calls to send one
+    request per message, this limitation is not needed anymore.
 * Simplified convoluted Dynamic Link operations
   ([#810](https://github.com/kreait/firebase-php/pull/810)
 
