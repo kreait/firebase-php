@@ -13,9 +13,14 @@
 ### Removed
 
 * Removed obsolete internal classes
+  * `Kreait\Firebase\Http\HasSubRequests`
+  * `Kreait\Firebase\Http\HasSubResponses`
+  * `Kreait\Firebase\Http\Requests`
   * `Kreait\Firebase\Http\RequestWithSubRequests`
+  * `Kreait\Firebase\Http\Responses`
   * `Kreait\Firebase\Http\ResponseWithSubResponses`
   * `Kreait\Firebase\Http\WrappedPsr7Response`
+  * `Kreait\Firebase\Http\WrappedPsr7Request`
   * `Kreait\Firebase\Messaging\Http\Request\MessageRequest`
   * `Kreait\Firebase\Messaging\Http\Request\SendMessage`
   * `Kreait\Firebase\Messaging\Http\Request\SendMessageToTokens`
