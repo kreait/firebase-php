@@ -16,8 +16,6 @@ use Psr\Log\LoggerInterface;
 
 use function array_merge;
 use function ltrim;
-use function mb_stristr;
-use function preg_match_all;
 use function str_ends_with;
 
 /**
@@ -57,25 +55,6 @@ final class Middleware
 
             return $handler($request->withUri($uri), $options ?: []);
         };
-    }
-
-    /**
-     * Parses multi-requests and multi-responses.
-     */
-    public static function responseWithSubResponses(): callable
-    {
-        return static fn (callable $handler) => static fn (RequestInterface $request, ?array $options = null) => $handler($request, $options ?: [])
-            ->then(static function (ResponseInterface $response) {
-                $isMultiPart = mb_stristr($response->getHeaderLine('Content-Type'), 'multipart') !== false;
-                $hasMultipleStartLines = ((int) preg_match_all('@http/[\S]+\s@i', (string) $response->getBody())) >= 1;
-
-                if ($isMultiPart && $hasMultipleStartLines) {
-                    return new ResponseWithSubResponses($response);
-                }
-
-                return $response;
-            })
-        ;
     }
 
     public static function log(LoggerInterface $logger, MessageFormatter $formatter, string $logLevel, string $errorLogLevel): callable

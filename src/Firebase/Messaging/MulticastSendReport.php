@@ -8,10 +8,8 @@ use Countable;
 
 use function array_filter;
 use function array_map;
-use function array_pop;
 use function array_values;
 use function count;
-use function explode;
 
 final class MulticastSendReport implements Countable
 {

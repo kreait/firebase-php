@@ -8,6 +8,22 @@
   to the HTTP V1 API
   ([#804](https://github.com/kreait/firebase-php/pull/804)/[#805](https://github.com/kreait/firebase-php/pull/805))
 
+### Removed
+
+* Removed obsolete internal classes
+  * `Kreait\Firebase\Http\RequestWithSubRequests`
+  * `Kreait\Firebase\Http\ResponseWithSubResponses`
+  * `Kreait\Firebase\Http\WrappedPsr7Response`
+  * `Kreait\Firebase\Messaging\Http\Request\MessageRequest`
+  * `Kreait\Firebase\Messaging\Http\Request\SendMessage`
+  * `Kreait\Firebase\Messaging\Http\Request\SendMessageToTokens`
+  * `Kreait\Firebase\Messaging\Http\Request\SendMessages`
+
+* Removed obsolete internal methods
+  * `Kreait\Firebase\Http\Middleware::responseWithSubResponses()`
+
+* Removed obsolete Composer dependency `riverline/multipart-parser`
+
 ## [7.4.0] - 2023-06-18
 
 ### Added
