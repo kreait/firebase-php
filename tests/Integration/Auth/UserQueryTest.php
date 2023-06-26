@@ -13,7 +13,6 @@ use PHPUnit\Framework\Attributes\Test;
 use function array_values;
 use function current;
 use function random_int;
-use function usleep;
 
 /**
  * @internal
@@ -52,9 +51,8 @@ final class UserQueryTest extends IntegrationTestCase
     public function ascendingSortOrder(): void
     {
         // Create two users just in case there are no others in the database
-        $first = $this->createUserWithEmailAndPassword();
-        usleep(1000);
-        $second = $this->createUserWithEmailAndPassword();
+        $earlier = $this->createUserWithEmailAndPassword();
+        $later = $this->createUserWithEmailAndPassword();
 
         $query = [
             'sortBy' => UserQuery::FIELD_CREATED_AT,
@@ -66,20 +64,18 @@ final class UserQueryTest extends IntegrationTestCase
 
         try {
             $this->assertCount(2, $result);
-            $this->assertTrue($result[1]->metadata->createdAt >= $result[0]->metadata->createdAt);
+            $this->assertGreaterThanOrEqual($result[0]->metadata->createdAt, $result[1]->metadata->createdAt);
         } finally {
-            $this->auth->deleteUser($first->uid);
-            $this->auth->deleteUser($second->uid);
+            $this->auth->deleteUser($earlier->uid);
+            $this->auth->deleteUser($later->uid);
         }
     }
 
     #[Test]
     public function descendingSortOrder(): void
     {
-        // Create two users just in case there are no others in the database
-        $first = $this->createUserWithEmailAndPassword();
-        usleep(1000);
-        $second = $this->createUserWithEmailAndPassword();
+        $earlier = $this->createUserWithEmailAndPassword('descendingSortOrderEarlier@example.com');
+        $later = $this->createUserWithEmailAndPassword('descendingSortOrderLater@example.com');
 
         $query = [
             'sortBy' => UserQuery::FIELD_CREATED_AT,
@@ -91,10 +87,11 @@ final class UserQueryTest extends IntegrationTestCase
 
         try {
             $this->assertCount(2, $result);
-            $this->assertLessThanOrEqual($result[0]->metadata->createdAt, $result[1]->metadata->createdAt);
+            $this->assertSame($later->email, $result[0]->email);
+            $this->assertSame($earlier->email, $result[1]->email);
         } finally {
-            $this->auth->deleteUser($first->uid);
-            $this->auth->deleteUser($second->uid);
+            $this->auth->deleteUser($earlier->uid);
+            $this->auth->deleteUser($later->uid);
         }
     }
 
