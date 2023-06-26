@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Changed
+
+* Replaced calls to deprecated FCM batch endpoints with asynchronous requests
+  to the HTTP V1 API
+  ([#804](https://github.com/kreait/firebase-php/pull/804)/[#805](https://github.com/kreait/firebase-php/pull/805))
+
 ## [7.4.0] - 2023-06-18
 
 ### Added

@@ -27,7 +27,7 @@ final class MessagingTest extends UnitTestCase
         $messagingApi = $this->createMock(ApiClient::class);
         $appInstanceApi = $this->createMock(AppInstanceApiClient::class);
 
-        $this->messaging = new Messaging('project-id', $messagingApi, $appInstanceApi);
+        $this->messaging = new Messaging($messagingApi, $appInstanceApi);
     }
 
     #[Test]
