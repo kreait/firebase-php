@@ -421,7 +421,7 @@ final class Factory
      */
     public function createDynamicLinksService($defaultDynamicLinksDomain = null): Contract\DynamicLinks
     {
-        $apiClient = new \Kreait\Firebase\DynamicLink\ApiClient(
+        $apiClient = new DynamicLink\ApiClient(
             $this->createApiClient(),
             $this->httpFactory,
             $this->httpFactory,

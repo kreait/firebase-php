@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase;
 
-use GuzzleHttp\Exception\GuzzleException;
 use Kreait\Firebase\DynamicLink\ApiClient;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink\FailedToCreateDynamicLink;
@@ -104,7 +103,7 @@ final class DynamicLinks implements Contract\DynamicLinks
 
         try {
             $response = $this->apiClient->send($request, ['http_errors' => false]);
-        } catch (GuzzleException $e) {
+        } catch (ClientExceptionInterface $e) {
             throw new FailedToShortenLongDynamicLink('Failed to shorten long dynamic link: '.$e->getMessage(), $e->getCode(), $e);
         }
 
@@ -131,7 +130,7 @@ final class DynamicLinks implements Contract\DynamicLinks
 
         try {
             $response = $this->apiClient->send($request, ['http_errors' => false]);
-        } catch (GuzzleException $e) {
+        } catch (ClientExceptionInterface $e) {
             throw new FailedToGetStatisticsForDynamicLink('Failed to get statistics for Dynamic Link: '.$e->getMessage(), $e->getCode(), $e);
         }
 
