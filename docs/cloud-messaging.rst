@@ -178,7 +178,9 @@ Each of the Firebase client SDKs are able to generate these registration tokens:
 Send messages to multiple devices (Multicast)
 *********************************************
 
-You can send one message to up to 500 devices:
+.. note::
+    If you need to send a message to more than a few devices, consider sending the message
+    to a topic instead.
 
 .. code-block:: php
 
@@ -223,15 +225,17 @@ methods to determine the successes and failures of the multicasted message:
 Send multiple messages at once
 ******************************
 
-You can send up to 500 prepared messages (each message has a token, topic or condition as a target) in one go:
+.. note::
+    If you need to send a message to more than a few devices, consider sending the message
+    to a topic instead.
 
 .. code-block:: php
 
     use Kreait\Firebase\Messaging\CloudMessage;
 
     $messages = [
-        // Up to 500 items, either objects implementing Kreait\Firebase\Messaging\Message
-        // or arrays that can be used to create valid to Kreait\Firebase\Messaging\Cloudmessage instances
+        // Either objects implementing Kreait\Firebase\Messaging\Message
+        // or arrays that can be used to create valid to Kreait\Firebase\Messaging\CloudMessage instances
     ];
 
     $message = CloudMessage::new(); // Any instance of Kreait\Messaging\Message
