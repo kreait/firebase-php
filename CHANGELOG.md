@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [7.5.1] - 2023-06-29
+
 ### Fixed
 
 * The cached KeySet used by the AppCheck component didn't use the same Guzzle Config Options as the other clients
@@ -19,7 +21,7 @@
     The limit prevented these messages to become too large. Since we're now using asynchronous calls to send one
     request per message, this limitation is not needed anymore.
 * Simplified convoluted Dynamic Link operations
-  ([#810](https://github.com/kreait/firebase-php/pull/810)
+  ([#810](https://github.com/kreait/firebase-php/pull/810))
 
 ### Removed
 
@@ -139,7 +141,8 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.x/CHANGELOG.md
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/7.5.0...7.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/7.5.1...7.x
+[7.5.1]: https://github.com/kreait/firebase-php/compare/7.5.0...7.5.1
 [7.5.0]: https://github.com/kreait/firebase-php/compare/7.3.1...7.5.0
 [7.4.0]: https://github.com/kreait/firebase-php/compare/7.3.1...7.4.0
 [7.3.1]: https://github.com/kreait/firebase-php/compare/7.3.0...7.3.1
