@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* The cached KeySet used by the AppCheck component didn't use the same Guzzle Config Options as the other clients
+  ([#812](https://github.com/kreait/firebase-php/issues/812))
+
 ## [7.5.0] - 2023-06-27
 
 ### Changed

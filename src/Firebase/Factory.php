@@ -329,7 +329,7 @@ final class Factory
 
         $keySet = new CachedKeySet(
             'https://firebaseappcheck.googleapis.com/v1/jwks',
-            new Client(),
+            new Client($this->httpClientOptions->guzzleConfig()),
             $this->httpFactory,
             $this->keySetCache,
             21600,
