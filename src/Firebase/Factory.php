@@ -150,15 +150,9 @@ final class Factory
     {
         $serviceAccount = $value;
 
-        if (is_string($value) && str_starts_with($value, '{')) {
+        if (is_string($value)) {
             try {
-                $serviceAccount = Json::decode($value, true);
-            } catch (UnexpectedValueException $e) {
-                throw new InvalidArgumentException('Invalid service account: '.$e->getMessage(), $e->getCode(), $e);
-            }
-        } elseif (is_string($value)) {
-            try {
-                $serviceAccount = Json::decodeFile($value, true);
+                $serviceAccount = str_starts_with($value, '{') ? Json::decode($value, true) : Json::decodeFile($value, true);
             } catch (UnexpectedValueException $e) {
                 throw new InvalidArgumentException('Invalid service account: '.$e->getMessage(), $e->getCode(), $e);
             }
