@@ -14,8 +14,8 @@
 
 - [Overview](#overview)
 - [Installation](#installation)
-- [Documentation](#documentation)
-- [Support](#support)
+- [Supported Versions](#supported-versions)
+- [Fund this project](#fund-this-project)
 - [License](#license)
 
 ## Overview
@@ -24,39 +24,59 @@
 
 For more information, visit the [Firebase Admin PHP SDK documentation](https://firebase-php.readthedocs.io/).
 
+
 ## Installation
 
 The Firebase Admin PHP SDK is available on Packagist as [`kreait/firebase-php`](https://packagist.org/packages/kreait/firebase-php):
 
 ```bash
-composer require kreait/firebase-php
+composer require "kreait/firebase-php:^7.0" 
 ```
 
-Integrations for Laravel, Lumen and Symfony are available:
+## Supported Versions
 
-- [kreait/laravel-firebase](https://packagist.org/packages/kreait/laravel-firebase)
-- [kreait/firebase-bundle](https://packagist.org/packages/kreait/firebase-bundle)
+**Only the latest version is actively supported.**
 
-## Documentation
+Earlier versions will receive security fixes as long as their **lowest** PHP requirement receives security fixes. For
+example, when a version supports PHP 7.4 and PHP 8.0, security support will end when security support for PHP 7.4 ends.
 
-- [App Check Guide](https://firebase-php.readthedocs.io/en/stable/app-check.html)
-- [Authentication Guide](https://firebase-php.readthedocs.io/en/stable/authentication.html)
-- [Firestore Guide](https://firebase-php.readthedocs.io/en/stable/cloud-firestore.html)
-- [Cloud Messaging Guide](https://firebase-php.readthedocs.io/en/stable/cloud-messaging.html)
-- [Cloud Storage Guide](https://firebase-php.readthedocs.io/en/stable/cloud-storage.html)
-- [Dynamic Links Guide](https://firebase-php.readthedocs.io/en/stable/dynamic-links.html)
-- [Firestore Guide](https://firebase-php.readthedocs.io/en/stable/cloud-firestore.html)
-- [Realtime Database Guide](https://firebase-php.readthedocs.io/en/stable/realtime-database.html)
-- [Remote Config Guide](https://firebase-php.readthedocs.io/en/stable/remote-config.html)
+| Version | Initial Release | Supported PHP Versions | Status                                 |
+|---------|-----------------|------------------------|----------------------------------------|
+| `7.x`   | 20 Dec 2022     | `~8.1.0, ~8.2.0`       | Active support                         |
+| `6.x`   | 01 Jul 2022     | `^7.4, ^8.0`           | Security support<br/>until 26 Nov 2023 |
+| `5.x`   | 01 Apr 2020     | `^7.2`                 | End of life                            |
+| `4.x`   | 14 Feb 2018     | `^7.0`                 | End of life                            |
+| `3.x`   | 22 Apr 2017     | `^7.0`                 | End of life                            |
+| `2.x`   | 06 Nov 2016     | `^7.0`                 | End of life                            |
+| `1.x`   | 15 Jul 2016     | `^5.5, ^7.0`           | End of life                            |
+| `0.x`   | 09 Jan 2015     | `>=5.4`                | End of life                            |
 
-## Support
+See [Support for older versions of the SDK](#support-for-older-versions-of-the-sdk) if you need support for an older version.
 
-- [Issue Tracker](https://github.com/kreait/firebase-php/issues/)
-- [Stack Overflow](https://stackoverflow.com/questions/tagged/firebase+php)
+## Fund this project
 
-_If you or your team rely on this project and me maintaining it, please consider becoming a
-[Sponsor](https://github.com/sponsors/jeromegamez/) 🙏. Higher tiers enable access to extended
-support._
+This project has been downloaded millions of times and is used in many commercial projects. Support its development
+and keep it sustainable by becoming a [GitHub Sponsor](https://github.com/sponsors/jeromegamez).
+
+If you have feature requests and support questions other than bugfix reports, you can ask them by becoming a 
+[GitHub Sponsor with an at least $50+ monthly tier](https://github.com/sponsors/jeromegamez?frequency=recurring),
+and creating a new issue. Support questions must be discussed publicly, I do not provide free 1:1 support in non-public
+channels.
+
+Sponsorships are regarded as appreciation for the time and work I invested into this project, with no strings attached. 
+
+Please contact [@jeromegamez](https://github.com/jeromegamez) to discuss alternatives to GitHub sponsorships.
+
+### Support for older versions of the SDK
+
+If you are a [GitHub Sponsor with an at least $100+ monthly tier](https://github.com/sponsors/jeromegamez?frequency=recurring),
+**all issues** created by you will be addressed with priority, including issues related to an earlier version.
+
+After making a [one-time 100$ sponsorship](https://github.com/sponsors/jeromegamez?frequency=one-time),
+**one** issue created by you will be addressed with priority, including issues related to an earlier version.
+
+If an issue or feature request requires changes in an earlier version, we can discuss a one-time sponsorship amount for
+implementing it.
 
 ## License
 
