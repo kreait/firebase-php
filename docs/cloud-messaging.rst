@@ -638,7 +638,6 @@ The result is an array with three keys containing the checked tokens:
 * ``unknown`` contains all tokens that are valid, but **not** registered to the current Firebase project
 * ``invalid`` contains all invalid (=malformed) tokens
 
-
 ****************
 Topic management
 ****************
@@ -743,4 +742,144 @@ You can retrieve all topic subscriptions for an app instance with the ``topicSub
 
     foreach ($subscriptions as $subscription) {
         echo "{$subscription->registrationToken()} is subscribed to {$subscription->topic()}\n";
+    }
+
+**************
+Error Handling
+**************
+
+Errors returned by the Firebase FCM API are converted to exceptions implementing the
+``Kreait\Firebase\Exception\MessagingException``. Each implementation of this interface
+has an ``errors()`` method that provides additional information about the error.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Exception\MessagingException;
+
+    try {
+        $messaging->send($message);
+    catch (MessagingException $e) {
+        echo $e->getMessage();
+        print_r($e->errors());
+    }
+
+Malformatted messages
+---------------------
+
+Messages built with the ``CloudMessage`` builder should be automatically valid, but if you
+implement your own ``Kreait\Firebase\Messaging\Message`` implementation or if you use the
+``Kreait\Firebase\Messaging\RawMessageFromArray`` class, the message could be invalid, for
+example when you forget to add a message target.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Exception\Messaging\InvalidMessage;
+
+    try {
+        $messaging->send($message);
+    catch (InvalidMessage $e) {
+        echo $e->getMessage();
+        print_r($e->errors());
+    }
+
+Unknown registration tokens
+---------------------------
+
+If a message can't be delivered to a given registration token although the token is
+syntactically correct, this usually has one of the following reasons:
+
+* The token has been unregistered from the project. This can happen when a user
+  has logged out from the application on the given client, or if they have
+  uninstalled or re-installed the application.
+* The token has been registered to a different Firebase project than the project
+  you are using to send the message. A common reason for this is when you work
+  with different application environments and are sending a message from one
+  environment to a device in another environment.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Exception\Messaging\NotFound;
+
+    try {
+        $messaging->send($message);
+    catch (NotFound $e) {
+        echo $e->getMessage();
+        print_r($e->errors());
+    }
+
+Quota exceeded
+--------------
+
+The frequency of new subscriptions is rate-limited per project. If you send too many subscription requests
+in a short period of time, FCM servers will respond with a 429 RESOURCE_EXHAUSTED ("quota exceeded") response.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Exception\Messaging\QuotaExceeded;
+
+    try {
+        $messaging->subscribeToTopic($topic, $registrationTokenOrTokens);
+    catch (QuotaExceeded $e) {
+        echo $e->getMessage();
+        print_r($e->errors());
+        $retryAfter= $e->retryAfter();
+    }
+
+The ``QuotaExceeded`` exception provides a ``retryAfter()`` method which returns a ``DateTimeImmutable`` instance
+indicating when you can retry sending a subscription request.
+
+Server errors
+-------------
+
+Sometimes, the Firebase servers are unavailable. If the server is kaputt, this will throw a ``ServerError`` exception,
+if it is "just" unavailable for the moment, this will throw a ``ServerUnavailable`` exception that provides a
+``retryAfter()`` method which returns a ``DateTimeImmutable`` instance indicating when you can retry sending the
+request.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Exception\Messaging\ServerError;
+    use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
+
+    try {
+        $messaging->send($message);
+    catch (ServerUnavailable $e) {
+        echo 'The FCM servers are currently unavailable: '.$e->getMessage();
+        print_r($e->errors());
+        $retryAfter= $e->retryAfter();
+    } catch (ServerError $e) {
+        echo 'The FCM servers are broken: '.$e->getMessage();
+        print_r($e->errors());
+    }
+
+Error handling example
+----------------------
+
+.. code-block:: php
+
+    use Kreait\Firebase\Exception\Messaging as MessagingErrors;
+    use Kreait\Firebase\Exception\MessagingException;
+
+    try {
+        $messaging->send($message);
+    catch (MessagingErrors\NotFound $e) {
+        echo 'The target device could not be found: ';
+    } catch (MessagingErrors\InvalidMessage $e) {
+        echo 'The given message is malformatted.'
+    } catch (MessagingErrors\ServerUnavailable $e) {
+        $retryAfter = $e->retryAfter();
+
+        echo 'The FCM servers are currently unavailable. Retrying at '.$retryAfter->format(\DATE_ATOM);
+
+        // This is just an example. Using `sleep()` will block your script execution, don't do this.
+        while ($retryAfter <= new DateTimeImmutable()) {
+            sleep(1);
+        }
+
+        $messaging->send($message);
+    } catch (MessagingErrors\ServerError $e) {
+        echo 'The FCM servers are down.'
+    } catch (MessagingException $e) {
+        // Fallback handling
+        echo 'Unable to send message: '.$e->getMessage();
     }
