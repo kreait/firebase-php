@@ -80,6 +80,15 @@ sponsorships of $100 per estimated hour.
 
 Please don't create Pull Requests for earlier versions of the SDK, as they will not be accepted.
 
+<table>
+    <body>
+        <tr>
+            <td><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="50" alt="JetBrains Logo"></td>
+            <td>A big thank you to <a href="https://www.jetbrains.com">JetBrains</a> for supporting this project with free open-source licences of their IDEs.</td>
+        </tr>
+    </body>
+</table>
+
 ## License
 
 Firebase Admin PHP SDK is licensed under the [MIT License](LICENSE).
