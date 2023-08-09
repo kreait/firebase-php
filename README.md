@@ -72,11 +72,13 @@ Please contact [@jeromegamez](https://github.com/jeromegamez) to discuss alterna
 If you are a [GitHub Sponsor with an at least $100+ monthly tier](https://github.com/sponsors/jeromegamez?frequency=recurring),
 **all issues** created by you will be addressed with priority, including issues related to an earlier version.
 
-After making a [one-time 100$ sponsorship](https://github.com/sponsors/jeromegamez?frequency=one-time),
+After making a [one-time $100 sponsorship](https://github.com/sponsors/jeromegamez?frequency=one-time),
 **one** issue created by you will be addressed with priority, including issues related to an earlier version.
 
-If an issue or feature request requires changes in an earlier version, we can discuss a one-time sponsorship amount for
-implementing it.
+If an issue or feature request requires changes in an earlier version, implementing them can be done for one-time
+sponsorships of $100 per estimated hour.
+
+Please don't create Pull Requests for earlier versions of the SDK, as they will not be accepted.
 
 ## License
 
