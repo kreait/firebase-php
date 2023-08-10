@@ -10,6 +10,7 @@
 /.github export-ignore
 /.gitignore export-ignore
 /.php-cs-fixer.dist.php export-ignore
+/.readthedocs.yaml export-ignore
 /codecov.yml export-ignore
 /firebase.json export-ignore
 /phpstan.neon.dist export-ignore
