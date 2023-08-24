@@ -14,27 +14,26 @@
 
 ## The future of the Firebase Admin PHP SDK
 
-Development of this SDK has cost thousands of hours of work and the vast majority
-of work has been done by one, mostly unpaid, contributor, [@jeromegamez](https://github.com/jeromegamez).
+Development of this SDK has cost thousands of hours of work and the vast majority of work has been done by one,
+mostly unpaid, contributor, [@jeromegamez](https://github.com/jeromegamez).
 
-The number of monthly downloads shows that many corporate/agency users rely heavily
-on the SDK; however, very few have contributed, and none have given back and 
-funded this project.
+The number of monthly downloads shows that many corporate/agency users rely heavily on the SDK; however, very few have
+contributed, and none have given back and funded this project.
 
 **Unless funding is found to continue maintaining the SDK, maintenance will be halted.**
 
-The funding goal is a **recurring $5,000/month**. Reaching and maintaining this goal will allow me
-to continue maintaining and developing the SDK. You can see the current progress on reaching this
-goal on [@jeromegamez's Sponsor Page](https://github.com/sponsors/jeromegamez). Funding outside of
-GitHub will reduce the goal.
+The funding goal is a **recurring $5,000/month**. Reaching and maintaining this goal will allow the continuation of
+maintaining and developing the SDK. You can see the current progress on reaching this goal on
+[@jeromegamez's Sponsor Page](https://github.com/sponsors/jeromegamez). 
 
-This is a call to action for the business users of the SDK to figure out a way to
-fund the continued maintenance and development of the SDK, as the one person
-on which the whole project leans is done with the current status quo.
+The goal will be reduced when funding is provided outside of GitHub. A fork of the SDK with continued support
+will be made available to all $500+ sponsors.
 
-If you want to help change the situation, please reach out to
-[@jeromegamez](https://github.com/jeromegamez) to discuss,
-and/or [become a GitHub Sponsor](https://github.com/sponsors/jeromegamez).
+This is a call to action for the business users of the SDK to figure out a way to fund the continued maintenance
+and development of the SDK, as the one person on which the whole project leans is done with the current status quo.
+
+If you want to help change the situation, please reach out to [@jeromegamez](https://github.com/jeromegamez) to
+discuss, and/or [become a GitHub Sponsor](https://github.com/sponsors/jeromegamez).
 
 _(This text is based on a similar announcement by [@jrfnl](https://github.com/jrfnl) on
 the [WordpressCS 3.0 Release Page](https://make.wordpress.org/core/2023/08/21/wordpresscs-3-0-0-is-now-available/)_)
