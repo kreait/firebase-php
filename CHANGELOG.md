@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [7.5.2] - 2023-06-29
+
+### Added
+
+* Added FCM error handling to the documentation
+
+### The future of the Firebase Admin PHP SDK
+
+**Unless funding is found to continue maintaining this project and the underlying SDK, maintenance will be halted.** [You can find more information in the project's GitHub Repo.](https://github.com/kreait/firebase-php)
+
 ## [7.5.1] - 2023-06-29
 
 ### Fixed
@@ -141,7 +151,8 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.x/CHANGELOG.md
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/7.5.1...7.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/7.5.2...7.x
+[7.5.2]: https://github.com/kreait/firebase-php/compare/7.5.1...7.5.2
 [7.5.1]: https://github.com/kreait/firebase-php/compare/7.5.0...7.5.1
 [7.5.0]: https://github.com/kreait/firebase-php/compare/7.3.1...7.5.0
 [7.4.0]: https://github.com/kreait/firebase-php/compare/7.3.1...7.4.0
