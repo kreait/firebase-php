@@ -19,11 +19,6 @@ Interact with `Google Firebase <https://firebase.google.com>`_ from your PHP app
    :target: https://github.com/sponsors/jeromegamez
    :alt: Sponsoring
 
-.. warning::
-    **Unless funding is found to continue maintaining this project and the underlying SDK, maintenance will be halted.**
-
-    `You can find more information in the project's GitHub Repo. <https://github.com/kreait/firebase-php>`_
-
 .. note::
     If you are interested in using the PHP Admin SDK as a client for end-user access
     (for example, in a web application), as opposed to admin access from a

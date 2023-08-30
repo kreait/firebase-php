@@ -14,29 +14,30 @@
 
 ## The future of the Firebase Admin PHP SDK
 
-Development of this SDK has cost thousands of hours of work and the vast majority of work has been done by one,
-mostly unpaid, contributor, [@jeromegamez](https://github.com/jeromegamez).
+The SDK has [nearly 2,000 Stars on GitHub](https://github.com/kreait/firebase-php/stargazers),
+is included in [more than 6,000 GitHub repositories](https://github.com/kreait/firebase-php/network/dependents),
+and is [downloaded more than 450,000 times per month and counting](https://packagist.org/packages/kreait/firebase-php/stats).
+Integrations for [Laravel](https://github.com/kreait/laravel-firebase) and
+[Symfony](https://github.com/kreait/firebase-bundle) increase these numbers. If a PHP project uses Firebase, there's
+a good chance it's using this SDK.
 
-The number of monthly downloads shows that many corporate/agency users rely heavily on the SDK; however, very few have
-contributed, and none have given back and funded this project.
+The high number of downloads is a clear sign that the SDK is used in many CI/CD pipeline runs, indicating that a
+large number of enterprise and agency users rely on it to sustain their business. They use the SDK for free while 
+making money from it - however, none of them have provided funding for me, the developer of the SDK.
 
-**Unless funding is found to continue maintaining the SDK, maintenance will be halted.**
+Over the last 8+ years, I've spent thousands of hours maintaining and developing the SDK, keeping up with
+new features and changes to Firebase Services, providing support to users of the SDK and integrations (here and
+on [StackOverflow](https://stackoverflow.com/users/284325/jeromegamez), and making significant contributions to
+the official Google PHP libraries, so that not only SDK users can use up-to-date dependencies in their projects.
 
-The funding goal is a **recurring $5,000/month**. Reaching and maintaining this goal will allow the continuation of
-maintaining and developing the SDK. You can see the current progress on reaching this goal on
-[@jeromegamez's Sponsor Page](https://github.com/sponsors/jeromegamez). 
+I have plans to improve and expand the SDK, such as adding better support for using multiple Firebase 
+projects, tests without an integration environment, integrating Firebase's ML capabilities. Also, as I added more
+features while trying to keep the breaking changes at a minimum, there are many opportunities to improve the code
+base in general; but I hope you can understand that the current situation is very frustrating and feels increasingly
+unsustainable to me.
 
-The goal will be reduced when funding is provided outside of GitHub. A fork of the SDK with continued support
-will be made available to all $500+ sponsors.
-
-This is a call to action for the business users of the SDK to figure out a way to fund the continued maintenance
-and development of the SDK, as the one person on which the whole project leans is done with the current status quo.
-
-If you want to help change the situation, please reach out to [@jeromegamez](https://github.com/jeromegamez) to
-discuss, and/or [become a GitHub Sponsor](https://github.com/sponsors/jeromegamez).
-
-_(This text is based on a similar announcement by [@jrfnl](https://github.com/jrfnl) on
-the [WordpressCS 3.0 Release Page](https://make.wordpress.org/core/2023/08/21/wordpresscs-3-0-0-is-now-available/)_)
+If the SDK is valuable to you and you would like to help change the situation, please contact me at 
+_funding@jerome.gamez.name_ to discuss.
 
 ---
 
@@ -69,7 +70,7 @@ example, when a version supports PHP 7.4 and PHP 8.0, security support will end 
 
 | Version | Initial Release | Supported PHP Versions | Status      |
 |---------|-----------------|------------------------|-------------|
-| `7.x`   | 20 Dec 2022     | `~8.1.0, ~8.2.0`       | Halted      |
+| `7.x`   | 20 Dec 2022     | `~8.1.0, ~8.2.0`       | Active      |
 | `6.x`   | 01 Jul 2022     | `^7.4, ^8.0`           | End of life |
 | `5.x`   | 01 Apr 2020     | `^7.2`                 | End of life |
 | `4.x`   | 14 Feb 2018     | `^7.0`                 | End of life |
