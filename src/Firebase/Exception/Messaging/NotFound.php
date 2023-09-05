@@ -12,15 +12,13 @@ final class NotFound extends RuntimeException implements MessagingException
 {
     use HasErrors;
 
-    private string $token;
+    private ?string $token = null;
 
     /**
      * @param array<mixed> $errors
      */
     public static function becauseTokenNotFound(string $token, array $errors = []): self
     {
-        $this->token = $token;
-        
         $message = <<<MESSAGE
 
 
@@ -43,6 +41,7 @@ final class NotFound extends RuntimeException implements MessagingException
 
         $notFound = new self($message);
         $notFound->errors = $errors;
+        $notFound->token = $token;
 
         return $notFound;
     }
@@ -60,7 +59,7 @@ final class NotFound extends RuntimeException implements MessagingException
         return $new;
     }
 
-    public function token(): string
+    public function token(): ?string
     {
         return $this->token;
     }

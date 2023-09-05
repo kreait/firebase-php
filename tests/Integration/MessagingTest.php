@@ -382,6 +382,20 @@ final class MessagingTest extends IntegrationTestCase
     }
 
     #[Test]
+    public function getTokenFromNotFoundException(): void
+    {
+        $this->expectException(NotFound::class);
+
+        try {
+            $this->messaging->send(['token' => self::$unknownToken]);
+        } catch (NotFound $e) {
+            $this->assertSame(self::$unknownToken, $e->token());
+
+            throw $e;
+        }
+    }
+
+    #[Test]
     public function getAppInstanceForUnknownToken(): void
     {
         $this->expectException(NotFound::class);
