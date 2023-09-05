@@ -60,7 +60,7 @@ final class NotFound extends RuntimeException implements MessagingException
         return $new;
     }
 
-    public function getToken(): string
+    public function token(): string
     {
         return $this->token;
     }
