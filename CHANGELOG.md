@@ -1,6 +1,13 @@
 # CHANGELOG
 
+## The future of the Firebase Admin PHP SDK
+
+Please read about the future of the Firebase Admin PHP SDK on the
+[SDK's GitHub Repository](https://github.com/kreait/firebase-php).
+
 ## [Unreleased]
+
+## [7.6.0] - 2023-09-07
 
 ### Added
 
@@ -157,7 +164,8 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.x/CHANGELOG.md
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/7.5.2...7.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/7.6.0...7.x
+[7.6.0]: https://github.com/kreait/firebase-php/compare/7.5.2...7.6.0
 [7.5.2]: https://github.com/kreait/firebase-php/compare/7.5.1...7.5.2
 [7.5.1]: https://github.com/kreait/firebase-php/compare/7.5.0...7.5.1
 [7.5.0]: https://github.com/kreait/firebase-php/compare/7.3.1...7.5.0
