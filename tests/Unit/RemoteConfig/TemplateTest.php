@@ -151,8 +151,7 @@ final class TemplateTest extends UnitTestCase
         $this->assertNotNull($defaultValue = $parameters['foo']->defaultValue());
 
         $this->assertArrayHasKey('personalizationValue', $array = $defaultValue->toArray());
-        $this->assertArrayHasKey('personalizationId', $personalizationIdArray = $array['personalizationValue']);
-        $this->assertSame('id', $personalizationIdArray['personalizationId']);
+        $this->assertSame('id', $array['personalizationValue']['personalizationId']);
     }
 
     #[Test]
@@ -185,8 +184,7 @@ final class TemplateTest extends UnitTestCase
         $this->assertArrayHasKey(0, $conditionalValues);
 
         $this->assertArrayHasKey('personalizationValue', $array = $conditionalValues[0]->toArray());
-        $this->assertArrayHasKey('personalizationId', $personalizationIdArray = $array['personalizationValue']);
-        $this->assertSame('id', $personalizationIdArray['personalizationId']);
+        $this->assertSame('id', $array['personalizationValue']['personalizationId']);
     }
 
     #[Test]
