@@ -12,6 +12,8 @@ final class NotFound extends RuntimeException implements MessagingException
 {
     use HasErrors;
 
+    private ?string $token = null;
+
     /**
      * @param array<mixed> $errors
      */
@@ -39,6 +41,7 @@ final class NotFound extends RuntimeException implements MessagingException
 
         $notFound = new self($message);
         $notFound->errors = $errors;
+        $notFound->token = $token;
 
         return $notFound;
     }
@@ -54,5 +57,10 @@ final class NotFound extends RuntimeException implements MessagingException
         $new->errors = $errors;
 
         return $new;
+    }
+
+    public function token(): ?string
+    {
+        return $this->token;
     }
 }
