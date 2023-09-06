@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Added
+
+* The `Kreait\Firebase\Exception\Messaging\NotFound` exception now exposes the token that hasn't been found 
+  with the `token()` method.
+  ([#825](https://github.com/kreait/firebase-php/issues/825))
+
 ## [7.5.2] - 2023-06-29
 
 ### Added

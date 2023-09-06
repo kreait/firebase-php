@@ -805,6 +805,8 @@ syntactically correct, this usually has one of the following reasons:
     catch (NotFound $e) {
         echo $e->getMessage();
         print_r($e->errors());
+        // If the message was send to a token, you can retrieve the unknown token
+        $echo $e->token();
     }
 
 Quota exceeded
