@@ -44,15 +44,15 @@
     },
     "require-dev": {
         "beste/php-cs-fixer-config": "^2.2",
-        "friendsofphp/php-cs-fixer": "^3.18",
-        "google/cloud-firestore": "^1.34.0",
+        "friendsofphp/php-cs-fixer": "^3.25.1",
+        "google/cloud-firestore": "^1.37.0",
         "phpstan/extension-installer": "^1.3.1",
-        "phpstan/phpstan": "^1.10.20",
-        "phpstan/phpstan-phpunit": "^1.3.13",
-        "phpunit/phpunit": "^10.2.2",
-        "rector/rector": "~0.17.0",
+        "phpstan/phpstan": "^1.10.33",
+        "phpstan/phpstan-phpunit": "^1.3.14",
+        "phpunit/phpunit": "^10.3.3",
+        "rector/rector": "~0.17.13",
         "roave/backward-compatibility-check": "^8.3",
-        "symfony/var-dumper": "^6.3.0"
+        "symfony/var-dumper": "^6.3.4"
     },
     "suggest": {
         "google/cloud-firestore": "^1.0 to use the Firestore component"
