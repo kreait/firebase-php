@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Http;
 
 use Beste\Json;
 use Exception;
+use Fig\Http\Message\StatusCodeInterface as StatusCode;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Promise\Create;
@@ -62,7 +63,7 @@ final class Middleware
         return static fn (callable $handler) => static fn ($request, array $options) => $handler($request, $options)->then(
             static function (ResponseInterface $response) use ($logger, $request, $formatter, $logLevel, $errorLogLevel) {
                 $message = $formatter->format($request, $response);
-                $messageLogLevel = $response->getStatusCode() >= 400 ? $errorLogLevel : $logLevel;
+                $messageLogLevel = $response->getStatusCode() >= StatusCode::STATUS_BAD_REQUEST ? $errorLogLevel : $logLevel;
 
                 $logger->log($messageLogLevel, $message);
 
