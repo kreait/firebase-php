@@ -14,6 +14,15 @@ return (new PhpCsFixer\Config())
         'concat_space' => [
             'spacing' => 'none',
         ],
+        'no_unused_imports' => true,
+        'ordered_imports' => [
+            'imports_order' => [
+                'class',
+                'function',
+                'const',
+            ],
+            'sort_algorithm' => 'alpha',
+        ],
         'php_unit_method_casing' => [
             'case' => 'camel_case',
         ],
