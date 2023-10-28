@@ -38,7 +38,7 @@ final class EmailTest extends TestCase
     public static function validValues(): array
     {
         return [
-            'user@domain.tld' => ['user@domain.tld'],
+            'user@domain.example' => ['user@domain.example'],
         ];
     }
 

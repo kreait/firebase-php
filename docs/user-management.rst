@@ -18,7 +18,7 @@ following signature:
 
     {
         "uid": "jEazVdPDhqec0tnEOG7vM5wbDyU2",
-        "email": "user@domain.tld",
+        "email": "user@domain.example",
         "emailVerified": true,
         "displayName": null,
         "photoUrl": null,
@@ -32,10 +32,10 @@ following signature:
         },
         "providerData": [
             {
-                "uid": "user@domain.tld",
+                "uid": "user@domain.example",
                 "displayName": null,
                 "screenName": null,
-                "email": "user@domain.tld",
+                "email": "user@domain.example",
                 "photoUrl": null,
                 "providerId": "password",
                 "phoneNumber": null
@@ -142,7 +142,7 @@ Get information about a specific user
 
     try {
         $user = $auth->getUser('some-uid');
-        $user = $auth->getUserByEmail('user@domain.tld');
+        $user = $auth->getUserByEmail('user@domain.example');
         $user = $auth->getUserByPhoneNumber('+49-123-456789');
     } catch (\Kreait\Firebase\Exception\Auth\UserNotFound $e) {
         echo $e->getMessage();
@@ -299,7 +299,7 @@ Change a user's email
 
     $uid = 'some-uid';
 
-    $updatedUser = $auth->changeUserEmail($uid, 'user@domain.tld');
+    $updatedUser = $auth->changeUserEmail($uid, 'user@domain.example');
 
 **************
 Disable a user

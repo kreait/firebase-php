@@ -1,9 +1,5 @@
-^https://my-server/
 ^https://example\.page\.link/
-^https://domain\.tld/
-^https://\S+\.domain\.tld/
 ^https://\S+\.firebaseio\.com/
 ^https://www\.googleapis\.com/
 ^https://oauth2\.googleapis\.com/
 ^project-id-xyz@beste-firebase\.iam\.gserviceaccount\.com$
-\S+@domain\.tld$

@@ -84,7 +84,7 @@ final class WebPushConfigTest extends UnitTestCase
                 'notification' => [
                     'title' => '$GOOGLE up 1.43% on the day',
                     'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
-                    'icon' => 'https://my-server/icon.png',
+                    'icon' => 'https://my-server.example/icon.png',
                 ],
             ],
         ];

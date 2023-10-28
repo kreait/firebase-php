@@ -91,11 +91,11 @@ final class MessagingTest extends IntegrationTestCase
                 'notification' => [
                     'title' => '$GOOGLE up 1.43% on the day',
                     'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
-                    'icon' => 'https://my-server/icon.png',
+                    'icon' => 'https://my-server.example/icon.png',
                 ],
                 'fcm_options' => [
                     // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushfcmoptions
-                    'link' => 'https://my-server/path/to/target',
+                    'link' => 'https://my-server.example/path/to/target',
                 ],
             ],
             'fcm_options' => [

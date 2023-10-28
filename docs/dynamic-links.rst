@@ -122,7 +122,7 @@ you can convert it to a short link:
 
     use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink\FailedToShortenLongDynamicLink;
 
-    $longLink = 'https://example.page.link?link=https://domain.tld/some/path';
+    $longLink = 'https://example.page.link?link=https://domain.example/some/path';
 
     try {
         $link = $dynamicLinks->shortenLongDynamicLink($longLink);
@@ -244,13 +244,13 @@ action. The following code shows all available building components:
                 ->withAppStoreId('appStoreId')
                 ->withBundleId('bundleId')
                 ->withCustomScheme('customScheme')
-                ->withFallbackLink('https://fallback.domain.tld')
+                ->withFallbackLink('https://fallback.domain.example')
                 ->withIPadBundleId('iPadBundleId')
-                ->withIPadFallbackLink('https://ipad-fallback.domain.tld')
+                ->withIPadFallbackLink('https://ipad-fallback.domain.example')
         )
         ->withAndroidInfo(
             AndroidInfo::new()
-                ->withFallbackLink('https://fallback.domain.tld')
+                ->withFallbackLink('https://fallback.domain.example')
                 ->withPackageName('packageName')
                 ->withMinPackageVersionCode('minPackageVersionCode')
         )
@@ -258,7 +258,7 @@ action. The following code shows all available building components:
             SocialMetaTagInfo::new()
                 ->withDescription('Social Meta Tag description')
                 ->withTitle('Social Meta Tag title')
-                ->withImageLink('https://domain.tld/image.jpg')
+                ->withImageLink('https://domain.example/image.jpg')
         );
 
     $link = $dynamicLinks->createDynamicLink($action);
@@ -278,7 +278,7 @@ or validated by the SDK, you have to make sure that the parameter structure matc
     $parameters = [
         'dynamicLinkInfo' => [
             'domainUriPrefix' => 'https://example.page.link',
-            'link' => 'https://domain.tld/some/path',
+            'link' => 'https://domain.example/some/path',
         ],
         'suffix' => ['option' => 'SHORT'],
     ];

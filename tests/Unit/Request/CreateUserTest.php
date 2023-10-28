@@ -45,24 +45,24 @@ final class CreateUserTest extends TestCase
 
         return [
             'email' => [
-                $given + ['email' => 'user@domain.tld'],
-                $expected + ['email' => 'user@domain.tld'],
+                $given + ['email' => 'user@domain.example'],
+                $expected + ['email' => 'user@domain.example'],
             ],
             'unverified_email_through_flag' => [
-                $given + ['email' => 'user@domain.tld', 'emailVerified' => false],
-                $expected + ['email' => 'user@domain.tld', 'emailVerified' => false],
+                $given + ['email' => 'user@domain.example', 'emailVerified' => false],
+                $expected + ['email' => 'user@domain.example', 'emailVerified' => false],
             ],
             'unverified_email' => [
-                $given + ['unverifiedEmail' => 'user@domain.tld'],
-                $expected + ['email' => 'user@domain.tld', 'emailVerified' => false],
+                $given + ['unverifiedEmail' => 'user@domain.example'],
+                $expected + ['email' => 'user@domain.example', 'emailVerified' => false],
             ],
             'verified_email_through_flag' => [
-                $given + ['email' => 'user@domain.tld', 'emailVerified' => true],
-                $expected + ['email' => 'user@domain.tld', 'emailVerified' => true],
+                $given + ['email' => 'user@domain.example', 'emailVerified' => true],
+                $expected + ['email' => 'user@domain.example', 'emailVerified' => true],
             ],
             'verified_email' => [
-                $given + ['verifiedEmail' => 'user@domain.tld'],
-                $expected + ['email' => 'user@domain.tld', 'emailVerified' => true],
+                $given + ['verifiedEmail' => 'user@domain.example'],
+                $expected + ['email' => 'user@domain.example', 'emailVerified' => true],
             ],
             'no_email_but_verification_flag' => [
                 $given + ['emailVerified' => true],
@@ -117,12 +117,12 @@ final class CreateUserTest extends TestCase
                 $expected + ['phoneNumber' => '+123456789'],
             ],
             'photo' => [
-                $given + ['photo' => 'https://domain.tld/photo.jpg'],
-                $expected + ['photoUrl' => 'https://domain.tld/photo.jpg'],
+                $given + ['photo' => 'https://domain.example/photo.jpg'],
+                $expected + ['photoUrl' => 'https://domain.example/photo.jpg'],
             ],
             'photoUrl' => [
-                $given + ['photoUrl' => 'https://domain.tld/photo.jpg'],
-                $expected + ['photoUrl' => 'https://domain.tld/photo.jpg'],
+                $given + ['photoUrl' => 'https://domain.example/photo.jpg'],
+                $expected + ['photoUrl' => 'https://domain.example/photo.jpg'],
             ],
             'password' => [
                 $given + ['password' => 'secret'],
