@@ -18,7 +18,7 @@ and will return a URL like ``https://example.page.link/wXYZ``.
 
 Before you start, please read about Dynamic Links in the official documentation:
 
-- `Dynamic Links Product Page <https://firebase.google.com/products/dynamic-links/>`_
+- `Dynamic Links Product Page <https://firebase.google.com/docs/dynamic-links>`_
 - `Create Dynamic Links with the REST API <https://firebase.google.com/docs/dynamic-links/rest>`_
 - `Long Dynamic Links <https://firebase.google.com/docs/dynamic-links/create-manually>`_
 - `Dynamic Link API Reference <https://firebase.google.com/docs/reference/dynamic-links/link-shortener>`_

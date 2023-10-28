@@ -8,7 +8,7 @@ Before you start, please read about Firebase Authentication in the official docu
 * `Create custom tokens <https://firebase.google.com/docs/auth/admin/create-custom-tokens>`_
 * `Verify ID Tokens <https://firebase.google.com/docs/auth/admin/verify-id-tokens>`_
 * `Manage Session Cookies <https://firebase.google.com/docs/auth/admin/manage-cookies>`_
-* `Revoke refresh tokens <https://firebase.google.com/docs/reference/admin/node/admin.auth.Auth#revokeRefreshTokens>`_
+* `Revoke refresh tokens <https://firebase.google.com/docs/reference/admin/node/firebase-admin.auth.baseauth.md#baseauthrevokerefreshtokens>`_
 
 Before you can access the Firebase Realtime Database from a server using the Firebase Admin SDK,
 you must authenticate your server with Firebase. When you authenticate a server, rather than
