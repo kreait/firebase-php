@@ -1,0 +1,23 @@
+name: Docs
+
+on:
+  push:
+    tags-ignore:
+      - '**'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  links:
+    name: Links
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Run Lychee
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: "--verbose --no-progress './**/*.md' './**/*.html' './**/*.rst'"
+          output: ${{ runner.temp }}/lychee/out.md
+          fail: true
