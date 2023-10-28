@@ -102,7 +102,7 @@ You need to install the OpenSSL PHP Extension: http://php.net/openssl
 Default sound not played on message delivery
 ********************************************
 
-If you specified ``'sound' => 'default'`` in the message payload, try chaning it
+If you specified ``'sound' => 'default'`` in the message payload, try changing it
 to ``'sound' => "default"`` - although single or double quotes shouldn't™ make
 a difference, `it has been reported that this can solve the issue <https://github.com/kreait/firebase-php/issues/454#issuecomment-706771776>`_.
 
