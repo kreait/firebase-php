@@ -1,8 +1,7 @@
-^https://domain\.example/
-^https://\S+\.domain\.example/
+^https://[^/]+\.example/
 \S+@domain\.example$
 ^https://example\.page\.link/
-^https://\S+\.firebaseio\.com/
+^https://[^/]+\.firebaseio\.com/
 ^https://www\.googleapis\.com/
 ^https://oauth2\.googleapis\.com/
 ^project-id-xyz@beste-firebase\.iam\.gserviceaccount\.com$
