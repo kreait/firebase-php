@@ -29,7 +29,7 @@ final class Middleware
      */
     public static function ensureJsonSuffix(): callable
     {
-        return static fn (callable $handler) => static function (RequestInterface $request, ?array $options = null) use ($handler) {
+        return static fn(callable $handler) => static function (RequestInterface $request, ?array $options = null) use ($handler) {
             $uri = $request->getUri();
             $path = '/'.ltrim($uri->getPath(), '/');
 
@@ -47,7 +47,7 @@ final class Middleware
      */
     public static function addDatabaseAuthVariableOverride(?array $override): callable
     {
-        return static fn (callable $handler) => static function (RequestInterface $request, ?array $options = null) use ($handler, $override) {
+        return static fn(callable $handler) => static function (RequestInterface $request, ?array $options = null) use ($handler, $override) {
             $uri = $request->getUri();
 
             $uri = $uri->withQuery(Query::build(
@@ -60,7 +60,7 @@ final class Middleware
 
     public static function log(LoggerInterface $logger, MessageFormatter $formatter, string $logLevel, string $errorLogLevel): callable
     {
-        return static fn (callable $handler) => static fn ($request, array $options) => $handler($request, $options)->then(
+        return static fn(callable $handler) => static fn($request, array $options) => $handler($request, $options)->then(
             static function (ResponseInterface $response) use ($logger, $request, $formatter, $logLevel, $errorLogLevel) {
                 $message = $formatter->format($request, $response);
                 $messageLogLevel = $response->getStatusCode() >= StatusCode::STATUS_BAD_REQUEST ? $errorLogLevel : $logLevel;

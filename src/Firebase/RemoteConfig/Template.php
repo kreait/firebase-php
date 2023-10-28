@@ -179,7 +179,7 @@ class Template implements JsonSerializable
     public function conditionNames(): array
     {
         return array_values(array_unique(
-            array_map(static fn (Condition $c) => $c->name(), $this->conditions),
+            array_map(static fn(Condition $c) => $c->name(), $this->conditions),
         ));
     }
 
@@ -190,7 +190,7 @@ class Template implements JsonSerializable
     {
         $template = clone $this;
         $template->conditions = array_values(
-            array_filter($this->conditions, static fn (Condition $c) => $c->name() !== $name),
+            array_filter($this->conditions, static fn(Condition $c) => $c->name() !== $name),
         );
 
         return $template;
@@ -260,7 +260,7 @@ class Template implements JsonSerializable
 
     private function assertThatAllConditionalValuesAreValid(Parameter $parameter): void
     {
-        $conditionNames = array_map(static fn (Condition $c) => $c->name(), $this->conditions);
+        $conditionNames = array_map(static fn(Condition $c) => $c->name(), $this->conditions);
 
         foreach ($parameter->conditionalValues() as $conditionalValue) {
             if (!in_array($conditionalValue->conditionName(), $conditionNames, true)) {
