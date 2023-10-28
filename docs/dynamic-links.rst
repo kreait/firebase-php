@@ -158,7 +158,7 @@ or programmatically.
 If ``getStatistics()`` is called without a second parameter, stats will include the statistics of the past 7 days.
 
 The returned object will be an instance of ``Kreait\Firebase\DynamicLink\DynamicLinkStatistics``, which currently
-only includes event statistics. You can access the raw returned data with `$stats->rawData()`.
+only includes event statistics. You can access the raw returned data with ``$stats->rawData()``.
 
 Event Statistics
 ----------------
