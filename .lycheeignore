@@ -1,0 +1,12 @@
+^https://my-server/
+^https://app\.domain\.tld/
+^https://domain\.tld/
+^https://example\.page\.link/
+^https://fallback\.domain\.tld/
+^https://ipad-fallback\.domain\.tld/
+^https://my-project-default-rtdb\.firebaseio\.com/
+^https://my-project\.firebaseio\.com/
+^https://project-id-default-rtdb\.firebaseio\.com/
+^https://www\.googleapis\.com/
+^project-id-xyz@beste-firebase\.iam\.gserviceaccount\.com$
+.+@domain\.tld$
