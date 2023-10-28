@@ -43,12 +43,12 @@ final class MulticastSendReport implements Countable
 
     public function successes(): self
     {
-        return $this->filter(static fn (SendReport $item) => $item->isSuccess());
+        return $this->filter(static fn(SendReport $item) => $item->isSuccess());
     }
 
     public function failures(): self
     {
-        return $this->filter(static fn (SendReport $item) => $item->isFailure());
+        return $this->filter(static fn(SendReport $item) => $item->isFailure());
     }
 
     public function hasFailures(): bool
@@ -77,8 +77,8 @@ final class MulticastSendReport implements Countable
     public function validTokens(): array
     {
         return $this->successes()
-            ->filter(static fn (SendReport $report) => $report->target()->type() === MessageTarget::TOKEN)
-            ->map(static fn (SendReport $report) => $report->target()->value())
+            ->filter(static fn(SendReport $report) => $report->target()->type() === MessageTarget::TOKEN)
+            ->map(static fn(SendReport $report) => $report->target()->value())
         ;
     }
 
@@ -90,8 +90,8 @@ final class MulticastSendReport implements Countable
     public function unknownTokens(): array
     {
         return $this
-            ->filter(static fn (SendReport $report) => $report->messageWasSentToUnknownToken())
-            ->map(static fn (SendReport $report) => $report->target()->value())
+            ->filter(static fn(SendReport $report) => $report->messageWasSentToUnknownToken())
+            ->map(static fn(SendReport $report) => $report->target()->value())
         ;
     }
 
@@ -103,8 +103,8 @@ final class MulticastSendReport implements Countable
     public function invalidTokens(): array
     {
         return $this
-            ->filter(static fn (SendReport $report) => $report->messageTargetWasInvalid())
-            ->map(static fn (SendReport $report) => $report->target()->value())
+            ->filter(static fn(SendReport $report) => $report->messageTargetWasInvalid())
+            ->map(static fn(SendReport $report) => $report->target()->value())
         ;
     }
 

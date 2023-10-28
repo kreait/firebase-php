@@ -47,7 +47,7 @@ class AppInstanceApiClient
                         'registration_tokens' => $tokenStrings,
                     ],
                 ])
-                ->then(static fn (ResponseInterface $response) => Json::decode((string) $response->getBody(), true))
+                ->then(static fn(ResponseInterface $response) => Json::decode((string) $response->getBody(), true))
             ;
         }
 
@@ -114,7 +114,7 @@ class AppInstanceApiClient
                         'registration_tokens' => $tokenStrings,
                     ],
                 ])
-                ->then(static fn (ResponseInterface $response) => Json::decode((string) $response->getBody(), true))
+                ->then(static fn(ResponseInterface $response) => Json::decode((string) $response->getBody(), true))
             ;
         }
 
@@ -170,7 +170,7 @@ class AppInstanceApiClient
 
                 return AppInstance::fromRawData($registrationToken, $data);
             })
-            ->otherwise(fn (Throwable $e) => Create::rejectionFor($this->errorHandler->convertException($e)))
+            ->otherwise(fn(Throwable $e) => Create::rejectionFor($this->errorHandler->convertException($e)))
         ;
     }
 

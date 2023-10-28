@@ -175,7 +175,7 @@ final class ApnsConfig implements JsonSerializable
      */
     public function toArray(): array
     {
-        $filter = static fn ($value): bool => $value !== null && $value !== [];
+        $filter = static fn($value): bool => $value !== null && $value !== [];
 
         return array_filter([
             'headers' => array_filter($this->headers, $filter),
