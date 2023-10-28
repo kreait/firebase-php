@@ -63,7 +63,7 @@ jobs:
         run: vendor/bin/phpunit --testsuite=integration --coverage-clover=coverage.xml --log-junit=test-report.xml --testdox
 
       - name: Upload code coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v4-beta
         with:
           flags: integration
         if: github.repository_owner == 'kreait'
