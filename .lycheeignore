@@ -1,3 +1,6 @@
+^https://domain\.example/
+^https://\S+\.domain\.example/
+\S+@domain\.example$
 ^https://example\.page\.link/
 ^https://\S+\.firebaseio\.com/
 ^https://www\.googleapis\.com/
