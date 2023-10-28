@@ -74,8 +74,8 @@ final class UserQueryTest extends IntegrationTestCase
     #[Test]
     public function descendingSortOrder(): void
     {
-        $earlier = $this->createUserWithEmailAndPassword('descendingSortOrderEarlier@example.com');
-        $later = $this->createUserWithEmailAndPassword('descendingSortOrderLater@example.com');
+        $earlier = $this->createUserWithEmailAndPassword();
+        $later = $this->createUserWithEmailAndPassword();
 
         $query = [
             'sortBy' => UserQuery::FIELD_CREATED_AT,
