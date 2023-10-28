@@ -158,7 +158,7 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 ## 6.x Changelog
 
-https://github.com/kreait/firebase-php/blob/6.x/CHANGELOG.md
+https://github.com/kreait/firebase-php/blob/6.9.6/CHANGELOG.md
 
 [Unreleased]: https://github.com/kreait/firebase-php/compare/7.6.0...7.x
 [7.6.0]: https://github.com/kreait/firebase-php/compare/7.5.2...7.6.0

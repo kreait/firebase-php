@@ -270,7 +270,7 @@ are both optional.
 
     $title = 'My Notification Title';
     $body = 'My Notification Body';
-    $imageUrl = 'http://lorempixel.com/400/200/';
+    $imageUrl = 'https://picsum.photos/400/200';
 
     $notification = Notification::fromArray([
         'title' => $title,
@@ -283,7 +283,7 @@ are both optional.
     $changedNotification = $notification
         ->withTitle('Changed title')
         ->withBody('Changed body')
-        ->withImageUrl('http://lorempixel.com/200/400/');
+        ->withImageUrl('https://picsum.photos/200/400');
 
 Once you have created a message with one of the methods described below,
 you can attach the notification to it:
