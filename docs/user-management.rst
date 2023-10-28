@@ -164,9 +164,9 @@ Result:
 .. code-block:: text
 
     [
-       'some-uid' => <UserRecord>,
-       'another-uid' => <UserRecord>,
-       'non-existing-uid' => null
+        'some-uid' => <UserRecord>,
+        'another-uid' => <UserRecord>,
+        'non-existing-uid' => null
     ]
 
 *************
@@ -222,10 +222,10 @@ Any combination of the following properties can be provided:
 ================= ======= ===========
 Property          Type    Description
 ================= ======= ===========
-``uid``	          string  The uid to assign to the newly created user. Must be a string between 1 and 128 characters long, inclusive. If not provided, a random uid will be automatically generated.
+``uid``           string  The uid to assign to the newly created user. Must be a string between 1 and 128 characters long, inclusive. If not provided, a random uid will be automatically generated.
 ``email``         string  The user's primary email. Must be a valid email address.
 ``emailVerified`` boolean Whether or not the user's primary email is verified. If not provided, the default is false.
-``phoneNumber``	  string  The user's primary phone number. Must be a valid E.164 spec compliant phone number.
+``phoneNumber``   string  The user's primary phone number. Must be a valid E.164 spec compliant phone number.
 ``password``      string  The user's raw, unhashed password. Must be at least six characters long.
 ``displayName``   string  The users' display name.
 ``photoURL``      string  The user's photo URL.
@@ -467,8 +467,8 @@ for email actions.
 ========================= =========== ===========
 Parameter                 Type        Description
 ========================= =========== ===========
-``continueUrl``	          string|null Sets the continue URL
-``url``	                  string|null Alias for ``continueUrl``
+``continueUrl``           string|null Sets the continue URL
+``url``                   string|null Alias for ``continueUrl``
 ``handleCodeInApp``       bool|null    | Whether the email action link will be opened in a mobile app or a web link first.
                                        | The default is false. When set to true, the action code link will be be sent
                                        | as a Universal Link or Android App Link and will be opened by the app if

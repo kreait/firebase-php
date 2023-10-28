@@ -35,7 +35,7 @@ The emulator suite must be running otherwise the PHP SDK can't connect to it.
 Auth Emulator
 -------------
 
-If not already present, create a `firebase.json` file in the root of your project and make sure that at least the
+If not already present, create a ``firebase.json`` file in the root of your project and make sure that at least the
 following fields are set (the port number can be changed to your requirements):
 
 .. code-block:: js
@@ -66,7 +66,7 @@ real Firebase project ID; the Authentication emulator will accept any project ID
 Realtime Database Emulator
 --------------------------
 
-If not already present, create a `firebase.json` file in the root of your project and make sure that at least the
+If not already present, create a ``firebase.json`` file in the root of your project and make sure that at least the
 following fields are set (the port number can be changed to your requirements):
 
 .. code-block:: js

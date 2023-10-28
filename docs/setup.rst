@@ -178,7 +178,7 @@ HTTP Client Options
 *******************
 
 You can configure the behavior of the Guzzle HTTP Client performing the API requests by passing an
-instance of `Kreait\Firebase\Http\HttpClientOptions` to the factory before creating a
+instance of ``Kreait\Firebase\Http\HttpClientOptions`` to the factory before creating a
 service.
 
 .. code-block:: php

@@ -38,10 +38,10 @@ lexers['php-annotations'] = PhpLexer(startinline=True, linenos=1)
 ### Integrations
 
 html_context = {
-  "display_github": True,
-  "github_user": "kreait",
-  "github_repo": "firebase-php",
-  "github_version": "7.x",
-  "conf_py_path": "/docs/",
-  "source_suffix": ".rst",
+    'display_github': True,
+    'github_user': 'kreait',
+    'github_repo': 'firebase-php',
+    'github_version': '7.x',
+    'conf_py_path': '/docs/',
+    'source_suffix': '.rst',
 }
