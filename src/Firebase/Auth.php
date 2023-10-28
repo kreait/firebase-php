@@ -88,7 +88,7 @@ final class Auth implements Contract\Auth
 
     public function getUsers(array $uids): array
     {
-        $uids = array_map(static fn ($uid) => Uid::fromString($uid)->value, $uids);
+        $uids = array_map(static fn($uid) => Uid::fromString($uid)->value, $uids);
 
         $users = array_fill_keys($uids, null);
 
@@ -490,7 +490,7 @@ final class Auth implements Contract\Auth
         $provider = array_values(
             array_filter(
                 array_map('strval', (array) $provider),
-                static fn (string $value) => $value !== '',
+                static fn(string $value) => $value !== '',
             ),
         );
 

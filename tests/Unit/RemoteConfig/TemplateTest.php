@@ -101,7 +101,7 @@ final class TemplateTest extends UnitTestCase
             ->withParameterGroup($uiColors)
         ;
 
-        $conditionNames = array_map(static fn (Condition $c) => $c->name(), $template->conditions());
+        $conditionNames = array_map(static fn(Condition $c) => $c->name(), $template->conditions());
 
         $this->assertContains('lang_german', $conditionNames);
         $this->assertContains('lang_french', $conditionNames);

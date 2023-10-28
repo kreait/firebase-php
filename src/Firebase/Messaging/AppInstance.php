@@ -64,7 +64,7 @@ final class AppInstance implements JsonSerializable
         $topic = $topic instanceof Topic ? $topic : Topic::fromValue($topic);
 
         return $this->topicSubscriptions
-            ->filter(static fn (TopicSubscription $subscription) => $topic->value() === $subscription->topic()->value())
+            ->filter(static fn(TopicSubscription $subscription) => $topic->value() === $subscription->topic()->value())
             ->count() > 0
         ;
     }
