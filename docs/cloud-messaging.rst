@@ -877,10 +877,10 @@ Error handling example
 
     try {
         $messaging->send($message);
-    catch (MessagingErrors\NotFound $e) {
-        echo 'The target device could not be found: ';
+    } catch (MessagingErrors\NotFound $e) {
+        echo 'The target device could not be found.';
     } catch (MessagingErrors\InvalidMessage $e) {
-        echo 'The given message is malformatted.'
+        echo 'The given message is malformatted.';
     } catch (MessagingErrors\ServerUnavailable $e) {
         $retryAfter = $e->retryAfter();
 
@@ -893,7 +893,7 @@ Error handling example
 
         $messaging->send($message);
     } catch (MessagingErrors\ServerError $e) {
-        echo 'The FCM servers are down.'
+        echo 'The FCM servers are down.';
     } catch (MessagingException $e) {
         // Fallback handling
         echo 'Unable to send message: '.$e->getMessage();
