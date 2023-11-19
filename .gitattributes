@@ -9,6 +9,7 @@
 /.gitattributes export-ignore
 /.github export-ignore
 /.gitignore export-ignore
+/.lycheeignore export-ignore
 /.php-cs-fixer.dist.php export-ignore
 /.readthedocs.yaml export-ignore
 /codecov.yml export-ignore
