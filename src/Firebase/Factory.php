@@ -121,6 +121,11 @@ final class Factory
     private HttpFactory $httpFactory;
     private HttpClientOptions $httpClientOptions;
 
+    /**
+     * @var array<non-empty-string, mixed>
+     */
+    private array $firestoreClientConfig = [];
+
     public function __construct()
     {
         $this->clock = SystemClock::create();
@@ -224,6 +229,25 @@ final class Factory
     {
         $factory = clone $this;
         $factory->databaseAuthVariableOverrideMiddleware = Middleware::addDatabaseAuthVariableOverride($override);
+
+        return $factory;
+    }
+
+    /**
+     * @param non-empty-string $database
+     */
+    public function withFirestoreDatabase(string $database): self
+    {
+        return $this->withFirestoreClientConfig(['database' => $database]);
+    }
+
+    /**
+     * @param array<non-empty-string, mixed> $config
+     */
+    public function withFirestoreClientConfig(array $config): self
+    {
+        $factory = clone $this;
+        $factory->firestoreClientConfig = array_merge($this->firestoreClientConfig, $config);
 
         return $factory;
     }
@@ -438,8 +462,10 @@ final class Factory
 
     public function createFirestore(): Contract\Firestore
     {
+        $config = $this->googleCloudClientConfig() + $this->firestoreClientConfig;
+
         try {
-            $firestoreClient = new FirestoreClient($this->googleCloudClientConfig());
+            $firestoreClient = new FirestoreClient($config);
         } catch (Throwable $e) {
             throw new RuntimeException('Unable to create a FirestoreClient: '.$e->getMessage(), $e->getCode(), $e);
         }

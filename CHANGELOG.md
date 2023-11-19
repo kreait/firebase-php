@@ -7,6 +7,13 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 ## [Unreleased]
 
+### Added
+
+* Added `Kreait\Firebase\Factory::withFirestoreClientConfig()` to support setting additional options when 
+  creating the Firestore component.
+* Added `Kreait\Firebase\Factory::withFirestoreDatabase()` to specify the database used when creating the Firestore 
+  component.
+
 ## [7.7.0] - 2023-11-25
 
 ### Changed
@@ -26,7 +33,7 @@ Please read about the future of the Firebase Admin PHP SDK on the
   }
 }
 ```
-    
+
 
 ## [7.6.0] - 2023-09-07
 
