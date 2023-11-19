@@ -37,7 +37,7 @@ use Psr\Http\Message\RequestInterface;
 final class DynamicLinksTest extends TestCase
 {
     private MockHandler $httpHandler;
-    private string $dynamicLinksDomain = 'https://link.domain.tld';
+    private string $dynamicLinksDomain = 'https://link.domain.example';
     private DynamicLinks $service;
 
     protected function setUp(): void
@@ -65,7 +65,7 @@ final class DynamicLinksTest extends TestCase
             ])),
         );
 
-        $action = $this->createDynamicLinkAction('https://domain.tld');
+        $action = $this->createDynamicLinkAction('https://domain.example');
 
         $dynamicLink = $this->service->createDynamicLink($action);
 
@@ -90,7 +90,7 @@ final class DynamicLinksTest extends TestCase
             ])),
         );
 
-        $dynamicLink = $this->service->createDynamicLink(['link' => 'https://domain.tld']);
+        $dynamicLink = $this->service->createDynamicLink(['link' => 'https://domain.example']);
 
         $this->assertFalse($dynamicLink->hasWarnings());
         $this->assertCount(0, $dynamicLink->warnings());
@@ -109,7 +109,7 @@ final class DynamicLinksTest extends TestCase
         $this->httpHandler->append($connectionError);
 
         $this->expectException(FailedToCreateDynamicLink::class);
-        $this->service->createDynamicLink('https://domain.tld/irrelevant');
+        $this->service->createDynamicLink('https://domain.example/irrelevant');
     }
 
     #[Test]
@@ -117,7 +117,7 @@ final class DynamicLinksTest extends TestCase
     {
         $this->httpHandler->append($response = new Response(400, [], '{}'));
 
-        $action = $this->createDynamicLinkAction('https://domain.tld/irrelevant')
+        $action = $this->createDynamicLinkAction('https://domain.example/irrelevant')
             ->withDynamicLinkDomain('https://page.link.tld') // preventing the action from being changed
         ;
 
@@ -136,7 +136,7 @@ final class DynamicLinksTest extends TestCase
         $this->httpHandler->append(new Response(400, [], 'probably html'));
 
         $this->expectException(FailedToCreateDynamicLink::class);
-        $this->service->createDynamicLink('https://domain.tld/irrelevant');
+        $this->service->createDynamicLink('https://domain.example/irrelevant');
     }
 
     #[Test]
@@ -149,7 +149,7 @@ final class DynamicLinksTest extends TestCase
             ])),
         );
 
-        $dynamicLink = $this->service->shortenLongDynamicLink(['longDynamicLink' => 'https://domain.tld']);
+        $dynamicLink = $this->service->shortenLongDynamicLink(['longDynamicLink' => 'https://domain.example']);
 
         $this->assertFalse($dynamicLink->hasWarnings());
         $this->assertCount(0, $dynamicLink->warnings());
@@ -168,7 +168,7 @@ final class DynamicLinksTest extends TestCase
         $this->httpHandler->append($connectionError);
 
         $this->expectException(FailedToShortenLongDynamicLink::class);
-        $this->service->shortenLongDynamicLink('https://domain.tld/irrelevant');
+        $this->service->shortenLongDynamicLink('https://domain.example/irrelevant');
     }
 
     #[Test]
@@ -176,7 +176,7 @@ final class DynamicLinksTest extends TestCase
     {
         $this->httpHandler->append($response = new Response(400, [], '{}'));
 
-        $action = ShortenLongDynamicLink::forLongDynamicLink('https://domain.tld/irrelevant')->withShortSuffix();
+        $action = ShortenLongDynamicLink::forLongDynamicLink('https://domain.example/irrelevant')->withShortSuffix();
 
         try {
             $this->service->shortenLongDynamicLink($action);
@@ -193,7 +193,7 @@ final class DynamicLinksTest extends TestCase
         $this->httpHandler->append(new Response(400, [], 'probably html'));
 
         $this->expectException(FailedToShortenLongDynamicLink::class);
-        $this->service->shortenLongDynamicLink('https://domain.tld/irrelevant');
+        $this->service->shortenLongDynamicLink('https://domain.example/irrelevant');
     }
 
     #[Test]
@@ -275,7 +275,7 @@ final class DynamicLinksTest extends TestCase
         $this->httpHandler->append($connectionError);
 
         $this->expectException(FailedToGetStatisticsForDynamicLink::class);
-        $this->service->getStatistics('https://domain.tld');
+        $this->service->getStatistics('https://domain.example');
     }
 
     #[DataProvider('provideCodeAndExpectedMessageRegExForFailingStatisticsRetrieval')]
@@ -289,14 +289,14 @@ final class DynamicLinksTest extends TestCase
         $this->expectExceptionMessageMatches($expectedMessageRegex);
 
         $this->service->getStatistics(
-            GetStatisticsForDynamicLink::forLink('https://domain.tld'),
+            GetStatisticsForDynamicLink::forLink('https://domain.example'),
         );
     }
 
     #[Test]
     public function linkStatExceptionsProvideTheActionAndTheResponse(): void
     {
-        $action = GetStatisticsForDynamicLink::forLink('https://domain.tld');
+        $action = GetStatisticsForDynamicLink::forLink('https://domain.example');
         $response = new Response(418, [], '{"key": "value"}');
 
         $this->httpHandler->append($response);
@@ -380,13 +380,13 @@ final class DynamicLinksTest extends TestCase
                     ->withAppStoreId('appStoreId')
                     ->withBundleId('bundleId')
                     ->withCustomScheme('customScheme')
-                    ->withFallbackLink('https://fallback.domain.tld')
+                    ->withFallbackLink('https://fallback.domain.example')
                     ->withIPadBundleId('iPadBundleId')
-                    ->withIPadFallbackLink('https://ipad-fallback.domain.tld'),
+                    ->withIPadFallbackLink('https://ipad-fallback.domain.example'),
             )
             ->withAndroidInfo(
                 AndroidInfo::new()
-                    ->withFallbackLink('https://fallback.domain.tld')
+                    ->withFallbackLink('https://fallback.domain.example')
                     ->withPackageName('packageName')
                     ->withMinPackageVersionCode('minPackageVersionCode'),
             )
@@ -394,7 +394,7 @@ final class DynamicLinksTest extends TestCase
                 SocialMetaTagInfo::new()
                     ->withDescription('Social Meta Tag description')
                     ->withTitle('Social Meta Tag title')
-                    ->withImageLink('https://domain.tld/image.jpg'),
+                    ->withImageLink('https://domain.example/image.jpg'),
             )
         ;
     }

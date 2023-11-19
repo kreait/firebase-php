@@ -311,10 +311,10 @@ a website might be set as follows:
         ->set([
             'name' => 'My Application',
             'emails' => [
-                'support' => 'support@domain.tld',
-                'sales' => 'sales@domain.tld',
+                'support' => 'support@domain.example',
+                'sales' => 'sales@domain.example',
             ],
-            'website' => 'https://app.domain.tld',
+            'website' => 'https://app.domain.example',
         ]);
 
     $database->getReference('config/website/name')->set('New name');

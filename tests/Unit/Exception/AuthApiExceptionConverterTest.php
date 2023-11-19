@@ -49,7 +49,7 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
     {
         $requestException = new RequestException(
             'Error without valid json',
-            new Request('GET', 'https://domain.tld'),
+            new Request('GET', 'https://domain.example'),
             new Response(400, [], $responseBody = '{"what is this"'),
         );
 
@@ -85,7 +85,7 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
     {
         $requestException = new RequestException(
             'Firebase Error Test',
-            new Request('GET', 'https://domain.tld'),
+            new Request('GET', 'https://domain.example'),
             new Response(400, [], Json::encode([
                 'error' => [
                     'errors' => [

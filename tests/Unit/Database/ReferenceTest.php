@@ -27,7 +27,7 @@ final class ReferenceTest extends UnitTestCase
         parent::setUp();
 
         $this->apiClient = $this->createMock(ApiClient::class);
-        $url = 'https://project.domain.tld/parent/key';
+        $url = 'https://project.domain.example/parent/key';
 
         $this->reference = new Reference(
             new Uri($url),

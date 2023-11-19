@@ -38,8 +38,8 @@ final class UrlBuilderTest extends UnitTestCase
     public static function invalidUrls(): array
     {
         return [
-            'wrong scheme' => ['http://domain.tld'],
-            'no scheme' => ['domain.tld'],
+            'wrong scheme' => ['http://domain.example'],
+            'no scheme' => ['domain.example'],
         ];
     }
 

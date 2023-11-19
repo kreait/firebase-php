@@ -21,8 +21,8 @@ final class MiddlewareTest extends UnitTestCase
 
     protected function setUp(): void
     {
-        $this->request = new Request('GET', 'http://domain.tld');
-        $this->handler = static fn(RequestInterface $request) => $request;
+        $this->request = new Request('GET', 'http://domain.example');
+        $this->handler = static fn (RequestInterface $request) => $request;
     }
 
     #[Test]

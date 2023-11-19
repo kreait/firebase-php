@@ -61,7 +61,7 @@ final class AppCheckApiExceptionConverterTest extends TestCase
     public static function exceptions(): array
     {
         return [
-            'connection error' => [new ConnectException('Connection Failed', new Request('GET', 'https://domain.tld')), ApiConnectionFailed::class],
+            'connection error' => [new ConnectException('Connection Failed', new Request('GET', 'https://domain.example')), ApiConnectionFailed::class],
             '401' => [self::createRequestException(401, 'Unauthenticated'), PermissionDenied::class],
             '403' => [self::createRequestException(403, 'Unauthorized'), PermissionDenied::class],
             'runtime error' => [new RuntimeException('Something else'), AppCheckError::class],
@@ -72,7 +72,7 @@ final class AppCheckApiExceptionConverterTest extends TestCase
     {
         return new RequestException(
             'Firebase Error Test',
-            new Request('GET', 'https://domain.tld'),
+            new Request('GET', 'https://domain.example'),
             new Response($code, [], Json::encode([
                 'error' => [
                     'errors' => [
