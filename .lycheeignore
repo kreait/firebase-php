@@ -1,7 +1,8 @@
-^https://[^/]+\.example/
 \S+@domain\.example$
-^https://example\.page\.link/
+^https://[^/]+\.example/
 ^https://[^/]+\.firebaseio\.com/
-^https://www\.googleapis\.com/
+^https://example\.page\.link/
+^https://github.com/kreait/firebase-php/[compare|pull|issues]
 ^https://oauth2\.googleapis\.com/
+^https://www\.googleapis\.com/
 ^project-id-xyz@beste-firebase\.iam\.gserviceaccount\.com$
