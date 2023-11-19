@@ -75,4 +75,30 @@ final class FactoryTest extends IntegrationTestCase
 
         $this->assertTrue($check);
     }
+
+    #[Test]
+    public function itSupportsOverridingTheDefaultFirestoreDatabase(): void
+    {
+        $firestore = self::$factory
+            ->withFirestoreDatabase(__FUNCTION__)
+            ->createFirestore();
+
+        $db = $firestore->database();
+        $name = $db->collection('irrelevant')->name();
+
+        $this->assertStringContainsString(__FUNCTION__, $name);
+    }
+
+    #[Test]
+    public function itSupportsAdditionalFirestoreConfig(): void
+    {
+        $firestore = self::$factory
+            ->withFirestoreClientConfig(['database' => __FUNCTION__])
+            ->createFirestore();
+
+        $db = $firestore->database();
+        $name = $db->collection('irrelevant')->name();
+
+        $this->assertStringContainsString(__FUNCTION__, $name);
+    }
 }
