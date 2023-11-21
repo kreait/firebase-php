@@ -27,9 +27,8 @@ body:
     attributes:
       label: Installed packages
       description: |
-        Please paste the full content of your `composer.json` file.
+        You can generate a list with `composer show`.
         This can help with finding outdated dependencies or known conflicts.
-        Remove identifying information like the project name, description to your discretion.
       render: json
     validations:
       required: true
