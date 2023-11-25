@@ -25,6 +25,7 @@
     "require": {
         "php": "~8.1.0|~8.2.0",
         "ext-ctype": "*",
+        "ext-filter": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
@@ -36,10 +37,16 @@
         "google/cloud-core": "^1.48.1",
         "google/cloud-storage": "^1.30.1",
         "guzzlehttp/guzzle": "^7.5",
+        "guzzlehttp/promises": "^2.0",
+        "guzzlehttp/psr7": "^2.6",
         "kreait/firebase-tokens": "^4.2",
         "lcobucci/jwt": "^4.3.0|^5.0",
         "mtdowling/jmespath.php": "^2.6.1",
         "psr/cache": "^1.0.1|^2.0|^3.0",
+        "psr/clock": "^1.0",
+        "psr/http-client": "^1.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-message": "^2.0",
         "psr/log": "^1.1|^2.0|^3.0"
     },
     "require-dev": {
