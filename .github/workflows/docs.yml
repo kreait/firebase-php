@@ -7,7 +7,7 @@ on:
       - '.github/workflows/docs.yml'
       - 'CHANGELOG.md'
   push:
-    branches: ['7.x']
+    branches: ['8.x']
     paths:
       - 'docs/**'
       - '.github/workflows/docs.yml'

@@ -6,8 +6,12 @@ Overview
 Requirements
 ************
 
-* PHP 8.1.x or 8.2.x
-* The `mbstring PHP extension <http://php.net/manual/en/book.mbstring.php>`_
+* PHP 8.2. or 8.3 with the following PHP extensions:
+  * `ctype<http://php.net/manual/en/book.ctype.php>`_
+  * `filter<http://php.net/manual/en/book.filter.php>`_
+  * `json<http://php.net/manual/en/book.json.php>`_
+  * `mbstring<http://php.net/manual/en/book.mbstring.php>`_
+  * `openssl<http://php.net/manual/en/book.openssl.php>`_
 * A Firebase project - create a new project in the `Firebase console <https://firebase.google.com/console/>`_,
   if you don't already have one.
 * A Google service account, follow the instructions in the
