@@ -1,10 +1,19 @@
 name: Tests
 
 on:
-  push:
-    tags-ignore:
-      - '**'
   pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/tests.yml'
+      - 'composer.json'
+  push:
+    branches: ['7.x']
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/tests.yml'
+      - 'composer.json'
   workflow_dispatch:
 
 jobs:
