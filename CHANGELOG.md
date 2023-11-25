@@ -7,6 +7,27 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 ## [Unreleased]
 
+## [7.7.0] - 2023-11-25
+
+### Changed
+
+* Required transitive dependencies directly ([#842](https://github.com/kreait/firebase-php/issues/842))
+```json5
+{
+  "require": {
+    // ...
+    "ext-filter": "*",
+    "guzzlehttp/promises": "^2.0",
+    "guzzlehttp/psr7": "^2.6",
+    "psr/clock": "^1.0",
+    "psr/http-client": "^1.0",
+    "psr/http-factory": "^1.0",
+    "psr/http-message": "^2.0",
+  }
+}
+```
+    
+
 ## [7.6.0] - 2023-09-07
 
 ### Added
