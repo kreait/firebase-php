@@ -5,11 +5,15 @@ on:
     paths:
       - 'docs/**'
       - '.github/workflows/docs.yml'
+      - 'CHANGELOG.md'
   push:
     branches: ['7.x']
     paths:
       - 'docs/**'
       - '.github/workflows/docs.yml'
+      - 'CHANGELOG.md'
+  release:
+    types: [published]
   workflow_dispatch:
 
 jobs:
