@@ -7,12 +7,16 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 ## [Unreleased]
 
+## [7.8.0] - 2023-11-25
+
 ### Added
 
 * Added `Kreait\Firebase\Factory::withFirestoreClientConfig()` to support setting additional options when 
   creating the Firestore component.
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-firestore.html#add-firestore-configuration-options))
 * Added `Kreait\Firebase\Factory::withFirestoreDatabase()` to specify the database used when creating the Firestore 
   component.
+  ([Documentation](https://firebase-php.readthedocs.io/en/latest/cloud-firestore.html#use-another-firestore-database))
 
 ## [7.7.0] - 2023-11-25
 
@@ -188,7 +192,9 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.9.6/CHANGELOG.md
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/7.6.0...7.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/7.8.0...7.x
+[7.8.0]: https://github.com/kreait/firebase-php/compare/7.7.0...7.8.0
+[7.7.0]: https://github.com/kreait/firebase-php/compare/7.6.0...7.7.0
 [7.6.0]: https://github.com/kreait/firebase-php/compare/7.5.2...7.6.0
 [7.5.2]: https://github.com/kreait/firebase-php/compare/7.5.1...7.5.2
 [7.5.1]: https://github.com/kreait/firebase-php/compare/7.5.0...7.5.1
