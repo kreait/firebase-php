@@ -68,6 +68,7 @@ jobs:
       - name: Upload code coverage
         uses: codecov/codecov-action@v4-beta
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           flags: unit
 
   bc-checks:
