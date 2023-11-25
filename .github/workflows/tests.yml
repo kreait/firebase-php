@@ -81,11 +81,11 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: 8.2
           extensions: grpc
 
-      - name: Install dependencies
-        run: composer install
+      - name: Install roave/backward-compatibility-check.
+        run: composer require --dev roave/backward-compatibility-check
 
       - name: Check for BC breaks
         run: vendor/bin/roave-backward-compatibility-check --format=github-actions
