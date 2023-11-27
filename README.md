@@ -70,7 +70,8 @@ example, when a version supports PHP 7.4 and PHP 8.0, security support will end 
 
 | Version | Initial Release | Supported PHP Versions | Status      |
 |---------|-----------------|------------------------|-------------|
-| `7.x`   | 20 Dec 2022     | `~8.1.0, ~8.2.0`       | Active      |
+| `8.x`   | x Dec 2023      | `~8.2.0, ~8.3.0`       | Active      |
+| `7.x`   | 20 Dec 2022     | `~8.1.0, ~8.2.0`       | End of life |
 | `6.x`   | 01 Jul 2022     | `^7.4, ^8.0`           | End of life |
 | `5.x`   | 01 Apr 2020     | `^7.2`                 | End of life |
 | `4.x`   | 14 Feb 2018     | `^7.0`                 | End of life |

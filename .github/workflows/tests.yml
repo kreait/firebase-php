@@ -24,8 +24,8 @@ jobs:
     strategy:
       matrix:
         php:
-          - "8.1"
           - "8.2"
+          - "8.3"
 
     env:
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
@@ -91,7 +91,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.3
           extensions: grpc
 
       - name: Install roave/backward-compatibility-check.
