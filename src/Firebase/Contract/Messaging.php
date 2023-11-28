@@ -23,11 +23,6 @@ use Kreait\Firebase\Messaging\Topic;
 interface Messaging
 {
     /**
-     * @deprecated 7.5.0
-     */
-    public const BATCH_MESSAGE_LIMIT = 500;
-
-    /**
      * @param Message|MessageInputShape $message
      *
      * @throws MessagingException
