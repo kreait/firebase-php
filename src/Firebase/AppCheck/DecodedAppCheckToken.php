@@ -14,7 +14,7 @@ namespace Kreait\Firebase\AppCheck;
  *     sub: non-empty-string,
  * }
  */
-final class DecodedAppCheckToken
+final readonly class DecodedAppCheckToken
 {
     /**
      * @param non-empty-string $app_id
@@ -22,12 +22,12 @@ final class DecodedAppCheckToken
      * @param non-empty-string $sub
      */
     private function __construct(
-        public readonly string $app_id,
-        public readonly array $aud,
-        public readonly int $exp,
-        public readonly int $iat,
-        public readonly string $iss,
-        public readonly string $sub,
+        public string $app_id,
+        public array $aud,
+        public int $exp,
+        public int $iat,
+        public string $iss,
+        public string $sub,
     ) {
     }
 

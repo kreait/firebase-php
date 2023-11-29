@@ -10,12 +10,12 @@ use Beste\Json;
  * @phpstan-import-type MessageInputShape from Message
  * @phpstan-import-type MessageOutputShape from Message
  */
-final class RawMessageFromArray implements Message
+final readonly class RawMessageFromArray implements Message
 {
     /**
      * @param MessageInputShape $data
      */
-    public function __construct(private readonly array $data)
+    public function __construct(private array $data)
     {
     }
 

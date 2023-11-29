@@ -13,12 +13,12 @@ use JsonSerializable;
  *     socialImageLink?: non-empty-string
  * }
  */
-final class SocialMetaTagInfo implements JsonSerializable
+final readonly class SocialMetaTagInfo implements JsonSerializable
 {
     /**
      * @param SocialMetaTagInfoShape $data
      */
-    private function __construct(private readonly array $data)
+    private function __construct(private array $data)
     {
     }
 

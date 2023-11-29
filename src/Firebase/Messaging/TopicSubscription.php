@@ -9,12 +9,12 @@ use JsonSerializable;
 
 use const DATE_ATOM;
 
-final class TopicSubscription implements JsonSerializable
+final readonly class TopicSubscription implements JsonSerializable
 {
     public function __construct(
-        private readonly Topic $topic,
-        private readonly RegistrationToken $registrationToken,
-        private readonly DateTimeImmutable $subscribedAt,
+        private Topic $topic,
+        private RegistrationToken $registrationToken,
+        private DateTimeImmutable $subscribedAt,
     ) {
     }
 

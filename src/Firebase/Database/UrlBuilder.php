@@ -18,7 +18,7 @@ use function trim;
 /**
  * @internal
  */
-final class UrlBuilder
+final readonly class UrlBuilder
 {
     private const EXPECTED_URL_FORMAT = '@^https://(?P<namespace>[^.]+)\.(?P<host>.+)$@';
 
@@ -28,9 +28,9 @@ final class UrlBuilder
      * @param array<string, string> $defaultQueryParams
      */
     private function __construct(
-        private readonly string $scheme,
-        private readonly string $host,
-        private readonly array $defaultQueryParams,
+        private string $scheme,
+        private string $host,
+        private array $defaultQueryParams,
     ) {
     }
 

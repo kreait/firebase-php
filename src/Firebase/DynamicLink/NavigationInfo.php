@@ -11,12 +11,12 @@ use JsonSerializable;
  *     enableForcedRedirect?: bool
  * }
  */
-final class NavigationInfo implements JsonSerializable
+final readonly class NavigationInfo implements JsonSerializable
 {
     /**
      * @param NavigationInfoShape $data
      */
-    private function __construct(private readonly array $data)
+    private function __construct(private array $data)
     {
     }
 

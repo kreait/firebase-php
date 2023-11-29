@@ -17,7 +17,7 @@ use function array_key_exists;
  *     personalizationValue?: RemoteConfigPersonalizationValueShape
  * }
  */
-final class ParameterValue implements JsonSerializable
+final readonly class ParameterValue implements JsonSerializable
 {
     private function __construct(
         private ?string $value = null,

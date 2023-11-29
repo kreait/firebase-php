@@ -14,12 +14,12 @@ use function mb_detect_order;
 use function mb_strtolower;
 use function str_starts_with;
 
-final class MessageData implements JsonSerializable
+final readonly class MessageData implements JsonSerializable
 {
     /**
      * @param array<non-empty-string, string> $data
      */
-    private function __construct(private readonly array $data)
+    private function __construct(private array $data)
     {
     }
 

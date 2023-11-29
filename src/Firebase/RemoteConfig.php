@@ -22,9 +22,9 @@ use function is_string;
  *
  * @phpstan-import-type RemoteConfigTemplateShape from Template
  */
-final class RemoteConfig implements Contract\RemoteConfig
+final readonly class RemoteConfig implements Contract\RemoteConfig
 {
-    public function __construct(private readonly ApiClient $client)
+    public function __construct(private ApiClient $client)
     {
     }
 

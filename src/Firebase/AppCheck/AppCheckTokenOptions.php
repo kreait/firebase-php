@@ -11,10 +11,10 @@ use Kreait\Firebase\Exception\AppCheck\InvalidAppCheckTokenOptions;
  *     ttl: int|null,
  * }
  */
-final class AppCheckTokenOptions
+final readonly class AppCheckTokenOptions
 {
     private function __construct(
-        public readonly ?int $ttl = null,
+        public ?int $ttl = null,
     ) {
     }
 

@@ -14,16 +14,16 @@ use Psr\Http\Message\UriInterface;
  *     imageUrl?: non-empty-string
  * }
  */
-final class User
+final readonly class User
 {
     /**
      * @param non-empty-string|null $name
      * @param non-empty-string|null $email
      */
     private function __construct(
-        private readonly ?string $name,
-        private readonly ?string $email,
-        private readonly ?UriInterface $imageUri,
+        private ?string $name,
+        private ?string $email,
+        private ?UriInterface $imageUri,
     ) {
     }
 

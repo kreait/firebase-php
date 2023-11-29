@@ -17,13 +17,13 @@ use function array_key_exists;
  *     lastRefreshAt?: non-empty-string
  * }
  */
-final class UserMetaData
+final readonly class UserMetaData
 {
     public function __construct(
-        public readonly DateTimeImmutable $createdAt,
-        public readonly ?DateTimeImmutable $lastLoginAt,
-        public readonly ?DateTimeImmutable $passwordUpdatedAt,
-        public readonly ?DateTimeImmutable $lastRefreshAt,
+        public DateTimeImmutable $createdAt,
+        public ?DateTimeImmutable $lastLoginAt,
+        public ?DateTimeImmutable $passwordUpdatedAt,
+        public ?DateTimeImmutable $lastRefreshAt,
     ) {
     }
 

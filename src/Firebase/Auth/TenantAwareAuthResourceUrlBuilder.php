@@ -13,7 +13,7 @@ use function strtr;
 /**
  * @internal
  */
-final class TenantAwareAuthResourceUrlBuilder
+final readonly class TenantAwareAuthResourceUrlBuilder
 {
     private const URL_FORMAT = 'https://identitytoolkit.googleapis.com/{version}/projects/{projectId}/tenants/{tenantId}{api}';
     private const EMULATOR_URL_FORMAT = 'http://{host}/identitytoolkit.googleapis.com/{version}/projects/{projectId}/tenants/{tenantId}{api}';
@@ -26,10 +26,10 @@ final class TenantAwareAuthResourceUrlBuilder
      * @param non-empty-string $urlFormat
      */
     private function __construct(
-        private readonly string $projectId,
-        private readonly string $tenantId,
-        private readonly string $apiVersion,
-        private readonly string $urlFormat,
+        private string $projectId,
+        private string $tenantId,
+        private string $apiVersion,
+        private string $urlFormat,
     ) {
     }
 

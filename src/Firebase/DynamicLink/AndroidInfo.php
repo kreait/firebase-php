@@ -13,12 +13,12 @@ use JsonSerializable;
  *     androidMinPackageVersionCode?: non-empty-string
  * }
  */
-final class AndroidInfo implements JsonSerializable
+final readonly class AndroidInfo implements JsonSerializable
 {
     /**
      * @param AndroidInfoShape $data
      */
-    private function __construct(private readonly array $data)
+    private function __construct(private array $data)
     {
     }
 

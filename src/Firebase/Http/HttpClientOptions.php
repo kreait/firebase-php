@@ -9,15 +9,15 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
 
 use function is_callable;
 
-final class HttpClientOptions
+final readonly class HttpClientOptions
 {
     /**
      * @param array<non-empty-string, mixed> $guzzleConfig
      * @param list<array{middleware: callable, name: string}> $guzzleMiddlewares
      */
     private function __construct(
-        private readonly array $guzzleConfig,
-        private readonly array $guzzleMiddlewares,
+        private array $guzzleConfig,
+        private array $guzzleMiddlewares,
     ) {
     }
 

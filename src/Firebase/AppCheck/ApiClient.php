@@ -17,12 +17,12 @@ use Throwable;
  *
  * @phpstan-import-type AppCheckTokenShape from AppCheckToken
  */
-final class ApiClient
+final readonly class ApiClient
 {
-    private readonly AppCheckApiExceptionConverter $errorHandler;
+    private AppCheckApiExceptionConverter $errorHandler;
 
     public function __construct(
-        private readonly ClientInterface $client,
+        private ClientInterface $client,
     ) {
         $this->errorHandler = new AppCheckApiExceptionConverter();
     }

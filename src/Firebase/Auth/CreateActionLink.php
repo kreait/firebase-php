@@ -11,14 +11,14 @@ use Stringable;
 /**
  * @internal
  */
-final class CreateActionLink
+final readonly class CreateActionLink
 {
     private function __construct(
-        private readonly ?string $tenantId,
-        private readonly ?string $locale,
-        private readonly string $type,
-        private readonly string $email,
-        private readonly ActionCodeSettings $settings,
+        private ?string $tenantId,
+        private ?string $locale,
+        private string $type,
+        private string $email,
+        private ActionCodeSettings $settings,
     ) {
     }
 

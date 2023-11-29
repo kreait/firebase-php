@@ -31,7 +31,7 @@ use Stringable;
  *     }
  * }
  */
-final class CreateDynamicLink implements JsonSerializable
+final readonly class CreateDynamicLink implements JsonSerializable
 {
     public const WITH_UNGUESSABLE_SUFFIX = 'UNGUESSABLE';
     public const WITH_SHORT_SUFFIX = 'SHORT';
@@ -39,7 +39,7 @@ final class CreateDynamicLink implements JsonSerializable
     /**
      * @param CreateDynamicLinkShape $data
      */
-    private function __construct(private readonly array $data)
+    private function __construct(private array $data)
     {
     }
 

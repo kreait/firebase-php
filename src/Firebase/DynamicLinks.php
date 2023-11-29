@@ -24,14 +24,14 @@ use function is_array;
  * @phpstan-import-type CreateDynamicLinkShape from CreateDynamicLink
  * @phpstan-import-type ShortenLongDynamicLinkShape from ShortenLongDynamicLink
  */
-final class DynamicLinks implements Contract\DynamicLinks
+final readonly class DynamicLinks implements Contract\DynamicLinks
 {
     /**
      * @param non-empty-string|null $defaultDynamicLinksDomain
      */
     private function __construct(
-        private readonly ?string $defaultDynamicLinksDomain,
-        private readonly ApiClient $apiClient,
+        private ?string $defaultDynamicLinksDomain,
+        private ApiClient $apiClient,
     ) {
     }
 

@@ -18,12 +18,12 @@ use Stringable;
 /**
  * @internal
  */
-final class CustomTokenViaGoogleCredentials
+final readonly class CustomTokenViaGoogleCredentials
 {
-    private readonly JoseEncoder $encoder;
-    private readonly Parser $parser;
+    private JoseEncoder $encoder;
+    private Parser $parser;
 
-    public function __construct(private readonly SignBlobInterface $signer, private readonly ?string $tenantId = null)
+    public function __construct(private SignBlobInterface $signer, private ?string $tenantId = null)
     {
         $this->encoder = new JoseEncoder();
         $this->parser = new Parser($this->encoder);

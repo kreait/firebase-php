@@ -59,16 +59,16 @@ use function trim;
 /**
  * @internal
  */
-final class Auth implements Contract\Auth
+final readonly class Auth implements Contract\Auth
 {
-    private readonly Parser $jwtParser;
+    private Parser $jwtParser;
 
     public function __construct(
-        private readonly ApiClient $client,
-        private readonly ?CustomTokenViaGoogleCredentials $tokenGenerator,
-        private readonly IdTokenVerifier $idTokenVerifier,
-        private readonly SessionCookieVerifier $sessionCookieVerifier,
-        private readonly ClockInterface $clock,
+        private ApiClient $client,
+        private ?CustomTokenViaGoogleCredentials $tokenGenerator,
+        private IdTokenVerifier $idTokenVerifier,
+        private SessionCookieVerifier $sessionCookieVerifier,
+        private ClockInterface $clock,
     ) {
         $this->jwtParser = new Parser(new JoseEncoder());
     }

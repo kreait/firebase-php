@@ -17,13 +17,13 @@ use function array_key_exists;
  *     enrolledAt?: non-empty-string
  * }
  */
-final class MfaInfo
+final readonly class MfaInfo
 {
     private function __construct(
-        public readonly string $mfaEnrollmentId,
-        public readonly ?string $displayName,
-        public readonly ?string $phoneInfo,
-        public readonly ?DateTimeImmutable $enrolledAt,
+        public string $mfaEnrollmentId,
+        public ?string $displayName,
+        public ?string $phoneInfo,
+        public ?DateTimeImmutable $enrolledAt,
     ) {
     }
 

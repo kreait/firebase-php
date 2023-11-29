@@ -19,7 +19,7 @@ use function str_starts_with;
  *
  * @phpstan-import-type DecodedAppCheckTokenShape from DecodedAppCheckToken
  */
-final class AppCheckTokenVerifier
+final readonly class AppCheckTokenVerifier
 {
     private const APP_CHECK_ISSUER_PREFIX = 'https://firebaseappcheck.googleapis.com/';
 
@@ -27,8 +27,8 @@ final class AppCheckTokenVerifier
      * @param non-empty-string $projectId
      */
     public function __construct(
-        private readonly string $projectId,
-        private readonly CachedKeySet $keySet,
+        private string $projectId,
+        private CachedKeySet $keySet,
     ) {
     }
 

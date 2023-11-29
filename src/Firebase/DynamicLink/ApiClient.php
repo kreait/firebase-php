@@ -17,12 +17,12 @@ use const JSON_FORCE_OBJECT;
 /**
  * @internal
  */
-final class ApiClient
+final readonly class ApiClient
 {
     public function __construct(
-        private readonly ClientInterface $client,
-        private readonly RequestFactoryInterface $requestFactory,
-        private readonly StreamFactoryInterface $streamFactory,
+        private ClientInterface $client,
+        private RequestFactoryInterface $requestFactory,
+        private StreamFactoryInterface $streamFactory,
     ) {
     }
 

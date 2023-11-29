@@ -16,7 +16,7 @@ use Stringable;
  *     }
  * }
  */
-final class ShortenLongDynamicLink implements JsonSerializable
+final readonly class ShortenLongDynamicLink implements JsonSerializable
 {
     public const WITH_UNGUESSABLE_SUFFIX = 'UNGUESSABLE';
     public const WITH_SHORT_SUFFIX = 'SHORT';
@@ -24,7 +24,7 @@ final class ShortenLongDynamicLink implements JsonSerializable
     /**
      * @param ShortenLongDynamicLinkShape $data
      */
-    private function __construct(private readonly array $data)
+    private function __construct(private array $data)
     {
     }
 

@@ -247,7 +247,7 @@ final class Factory
     public function withFirestoreClientConfig(array $config): self
     {
         $factory = clone $this;
-        $factory->firestoreClientConfig = array_merge($this->firestoreClientConfig, $config);
+        $factory->firestoreClientConfig = [...$this->firestoreClientConfig, ...$config];
 
         return $factory;
     }

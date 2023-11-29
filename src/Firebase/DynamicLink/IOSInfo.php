@@ -16,12 +16,12 @@ use JsonSerializable;
  *     iosAppStoreId?: non-empty-string
  * }
  */
-final class IOSInfo implements JsonSerializable
+final readonly class IOSInfo implements JsonSerializable
 {
     /**
      * @param IOSInfoShape $data
      */
-    private function __construct(private readonly array $data)
+    private function __construct(private array $data)
     {
     }
 

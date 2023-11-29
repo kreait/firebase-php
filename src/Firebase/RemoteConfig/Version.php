@@ -22,16 +22,16 @@ use function array_key_exists;
  *    rollbackSource?: non-empty-string
  * }
  */
-final class Version
+final readonly class Version
 {
     private function __construct(
-        private readonly VersionNumber $versionNumber,
-        private readonly User $user,
-        private readonly string $description,
-        private readonly DateTimeImmutable $updatedAt,
-        private readonly UpdateOrigin $updateOrigin,
-        private readonly UpdateType $updateType,
-        private readonly ?VersionNumber $rollbackSource,
+        private VersionNumber $versionNumber,
+        private User $user,
+        private string $description,
+        private DateTimeImmutable $updatedAt,
+        private UpdateOrigin $updateOrigin,
+        private UpdateType $updateType,
+        private ?VersionNumber $rollbackSource,
     ) {
     }
 

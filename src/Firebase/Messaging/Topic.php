@@ -13,12 +13,12 @@ use function preg_replace;
 use function sprintf;
 use function trim;
 
-final class Topic implements JsonSerializable, Stringable
+final readonly class Topic implements JsonSerializable, Stringable
 {
     /**
      * @param non-empty-string $value
      */
-    private function __construct(private readonly string $value)
+    private function __construct(private string $value)
     {
     }
 

@@ -11,14 +11,14 @@ use Stringable;
 /**
  * @internal
  */
-final class DeleteUsersRequest
+final readonly class DeleteUsersRequest
 {
     private const MAX_BATCH_SIZE = 1000;
 
     private function __construct(
         /** @var list<string> $uids */
-        private readonly array $uids,
-        private readonly bool $enabledUsersShouldBeForceDeleted,
+        private array $uids,
+        private bool $enabledUsersShouldBeForceDeleted,
     ) {
     }
 

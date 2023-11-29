@@ -11,12 +11,12 @@ use JsonSerializable;
  *    personalizationId: string
  * }
  */
-final class PersonalizationValue implements JsonSerializable
+final readonly class PersonalizationValue implements JsonSerializable
 {
     /**
      * @param RemoteConfigPersonalizationValueShape $data
      */
-    public function __construct(private readonly array $data)
+    public function __construct(private array $data)
     {
     }
 

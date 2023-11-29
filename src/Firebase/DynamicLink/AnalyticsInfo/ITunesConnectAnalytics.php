@@ -18,12 +18,12 @@ use JsonSerializable;
  *     pt?: non-empty-string
  * }
  */
-final class ITunesConnectAnalytics implements JsonSerializable
+final readonly class ITunesConnectAnalytics implements JsonSerializable
 {
     /**
      * @param ITunesConnectAnalyticsShape $data
      */
-    private function __construct(private readonly array $data)
+    private function __construct(private array $data)
     {
     }
 

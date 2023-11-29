@@ -12,11 +12,11 @@ use Psr\Http\Message\UriInterface;
 /**
  * @internal
  */
-final class StartAt implements Filter
+final readonly class StartAt implements Filter
 {
     use ModifierTrait;
 
-    public function __construct(private readonly int|float|string|bool $value)
+    public function __construct(private int|float|string|bool $value)
     {
     }
 

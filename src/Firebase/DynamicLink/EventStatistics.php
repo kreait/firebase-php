@@ -24,7 +24,7 @@ use function array_filter;
  *
  * @implements IteratorAggregate<array>
  */
-final class EventStatistics implements Countable, IteratorAggregate
+final readonly class EventStatistics implements Countable, IteratorAggregate
 {
     public const PLATFORM_ANDROID = 'ANDROID';
     public const PLATFORM_DESKTOP = 'DESKTOP';
@@ -49,7 +49,7 @@ final class EventStatistics implements Countable, IteratorAggregate
     /**
      * @param list<EventStatisticsShape> $events
      */
-    private function __construct(private readonly array $events)
+    private function __construct(private array $events)
     {
     }
 

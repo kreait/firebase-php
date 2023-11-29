@@ -12,11 +12,11 @@ use Psr\Http\Message\UriInterface;
 /**
  * @internal
  */
-final class EqualTo implements Filter
+final readonly class EqualTo implements Filter
 {
     use ModifierTrait;
 
-    public function __construct(private readonly bool|float|int|string $value)
+    public function __construct(private bool|float|int|string $value)
     {
     }
 

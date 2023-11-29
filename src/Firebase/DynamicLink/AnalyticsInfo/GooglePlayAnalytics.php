@@ -16,12 +16,12 @@ use JsonSerializable;
  *     gclid?: non-empty-string
  * }
  */
-final class GooglePlayAnalytics implements JsonSerializable
+final readonly class GooglePlayAnalytics implements JsonSerializable
 {
     /**
      * @param GooglePlayAnalyticsShape $data
      */
-    private function __construct(private readonly array $data)
+    private function __construct(private array $data)
     {
     }
 

@@ -17,11 +17,11 @@ use function uasort;
 /**
  * @internal
  */
-final class OrderByChild implements Sorter
+final readonly class OrderByChild implements Sorter
 {
     use ModifierTrait;
 
-    public function __construct(private readonly string $childKey)
+    public function __construct(private string $childKey)
     {
     }
 

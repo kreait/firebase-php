@@ -12,14 +12,14 @@ namespace Kreait\Firebase\AppCheck;
  *     token: DecodedAppCheckTokenShape,
  * }
  */
-final class VerifyAppCheckTokenResponse
+final readonly class VerifyAppCheckTokenResponse
 {
     /**
      * @param non-empty-string $appId
      */
     public function __construct(
-        public readonly string $appId,
-        public readonly DecodedAppCheckToken $token,
+        public string $appId,
+        public DecodedAppCheckToken $token,
     ) {
     }
 }

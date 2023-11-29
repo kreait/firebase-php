@@ -10,12 +10,12 @@ use Stringable;
 
 use function ctype_digit;
 
-final class VersionNumber implements JsonSerializable, Stringable
+final readonly class VersionNumber implements JsonSerializable, Stringable
 {
     /**
      * @param non-empty-string $value
      */
-    private function __construct(private readonly string $value)
+    private function __construct(private string $value)
     {
     }
 

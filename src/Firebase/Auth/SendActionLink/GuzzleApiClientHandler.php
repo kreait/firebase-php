@@ -21,14 +21,14 @@ use const JSON_FORCE_OBJECT;
 /**
  * @internal
  */
-final class GuzzleApiClientHandler
+final readonly class GuzzleApiClientHandler
 {
     /**
      * @param non-empty-string $projectId
      */
     public function __construct(
-        private readonly ClientInterface $client,
-        private readonly string $projectId,
+        private ClientInterface $client,
+        private string $projectId,
     ) {
     }
 

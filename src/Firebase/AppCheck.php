@@ -16,12 +16,12 @@ use function is_array;
 /**
  * @internal
  */
-final class AppCheck implements Contract\AppCheck
+final readonly class AppCheck implements Contract\AppCheck
 {
     public function __construct(
-        private readonly ApiClient $client,
-        private readonly AppCheckTokenGenerator $tokenGenerator,
-        private readonly AppCheckTokenVerifier $tokenVerifier,
+        private ApiClient $client,
+        private AppCheckTokenGenerator $tokenGenerator,
+        private AppCheckTokenVerifier $tokenVerifier,
     ) {
     }
 

@@ -10,7 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 use function count;
 use function is_countable;
 
-final class DeleteUsersResult
+final readonly class DeleteUsersResult
 {
     /**
      * @param array{
@@ -20,9 +20,9 @@ final class DeleteUsersResult
      * } $rawErrors
      */
     private function __construct(
-        private readonly int $successCount,
-        private readonly int $failureCount,
-        private readonly array $rawErrors,
+        private int $successCount,
+        private int $failureCount,
+        private array $rawErrors,
     ) {
     }
 

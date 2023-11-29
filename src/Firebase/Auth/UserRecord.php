@@ -37,7 +37,7 @@ use function array_map;
  *     validSince?: non-empty-string
  * }
  */
-final class UserRecord
+final readonly class UserRecord
 {
     /**
      * @param non-empty-string $uid
@@ -52,21 +52,21 @@ final class UserRecord
      * @param non-empty-string|null $tenantId
      */
     public function __construct(
-        public readonly string $uid,
-        public readonly ?string $email,
-        public readonly bool $emailVerified,
-        public readonly ?string $displayName,
-        public readonly ?string $phoneNumber,
-        public readonly ?string $photoUrl,
-        public readonly bool $disabled,
-        public readonly UserMetaData $metadata,
-        public readonly array $providerData,
-        public readonly ?MfaInfo $mfaInfo,
-        public readonly ?string $passwordHash,
-        public readonly ?string $passwordSalt,
-        public readonly array $customClaims,
-        public readonly ?string $tenantId,
-        public readonly ?DateTimeImmutable $tokensValidAfterTime,
+        public string $uid,
+        public ?string $email,
+        public bool $emailVerified,
+        public ?string $displayName,
+        public ?string $phoneNumber,
+        public ?string $photoUrl,
+        public bool $disabled,
+        public UserMetaData $metadata,
+        public array $providerData,
+        public ?MfaInfo $mfaInfo,
+        public ?string $passwordHash,
+        public ?string $passwordSalt,
+        public array $customClaims,
+        public ?string $tenantId,
+        public ?DateTimeImmutable $tokensValidAfterTime,
     ) {
     }
 

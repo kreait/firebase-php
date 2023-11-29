@@ -16,16 +16,16 @@ use function is_int;
 /**
  * @internal
  */
-final class CreateSessionCookie
+final readonly class CreateSessionCookie
 {
     private const FIVE_MINUTES = 'PT5M';
     private const TWO_WEEKS = 'P14D';
 
     private function __construct(
-        private readonly string $idToken,
-        private readonly ?string $tenantId,
-        private readonly DateInterval $ttl,
-        private readonly ClockInterface $clock,
+        private string $idToken,
+        private ?string $tenantId,
+        private DateInterval $ttl,
+        private ClockInterface $clock,
     ) {
     }
 

@@ -19,11 +19,11 @@ use function array_key_exists;
  *     itunesConnectAnalytics?: ITunesConnectAnalyticsShape
  * }
  */
-final class AnalyticsInfo implements JsonSerializable
+final readonly class AnalyticsInfo implements JsonSerializable
 {
     private function __construct(
-        private readonly ?GooglePlayAnalytics $googlePlayAnalytics,
-        private readonly ?ITunesConnectAnalytics $iTunesConnectAnalytics,
+        private ?GooglePlayAnalytics $googlePlayAnalytics,
+        private ?ITunesConnectAnalytics $iTunesConnectAnalytics,
     ) {
     }
 

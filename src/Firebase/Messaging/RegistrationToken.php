@@ -7,12 +7,12 @@ namespace Kreait\Firebase\Messaging;
 use JsonSerializable;
 use Stringable;
 
-final class RegistrationToken implements JsonSerializable, Stringable
+final readonly class RegistrationToken implements JsonSerializable, Stringable
 {
     /**
      * @param non-empty-string $value
      */
-    private function __construct(private readonly string $value)
+    private function __construct(private string $value)
     {
     }
 

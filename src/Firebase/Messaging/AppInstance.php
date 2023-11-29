@@ -10,15 +10,15 @@ use Kreait\Firebase\Util\DT;
 /**
  * @see https://developers.google.com/instance-id/reference/server#results
  */
-final class AppInstance implements JsonSerializable
+final readonly class AppInstance implements JsonSerializable
 {
     /**
      * @param array<string, mixed> $rawData
      */
     private function __construct(
-        private readonly RegistrationToken $registrationToken,
-        private readonly TopicSubscriptions $topicSubscriptions,
-        private readonly array $rawData,
+        private RegistrationToken $registrationToken,
+        private TopicSubscriptions $topicSubscriptions,
+        private array $rawData,
     ) {
     }
 

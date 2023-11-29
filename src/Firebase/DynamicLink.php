@@ -27,12 +27,12 @@ use function trim;
  *     warning?: list<DynamicLinkWarningShape>
  * }
  */
-final class DynamicLink implements JsonSerializable, Stringable
+final readonly class DynamicLink implements JsonSerializable, Stringable
 {
     /**
      * @param DynamicLinkShape $data
      */
-    private function __construct(private readonly array $data)
+    private function __construct(private array $data)
     {
     }
 
