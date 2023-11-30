@@ -433,7 +433,7 @@ You can find the full FCM Options configuration reference in the official docume
         ->withAnalyticsLabel('my-analytics-label');
     // or
     $fcmOptions = [
-        'analytics_label' => 'my-analytics-label';
+        'analytics_label' => 'my-analytics-label'
     ];
 
     $message = $message->withFcmOptions($fcmOptions);
