@@ -68,16 +68,16 @@ composer require "kreait/firebase-php:^7.0"
 Earlier versions will receive security fixes as long as their **lowest** PHP requirement receives security fixes. For
 example, when a version supports PHP 7.4 and PHP 8.0, security support will end when security support for PHP 7.4 ends.
 
-| Version | Initial Release | Supported PHP Versions | Status      |
-|---------|-----------------|------------------------|-------------|
-| `7.x`   | 20 Dec 2022     | `~8.1.0, ~8.2.0`       | Active      |
-| `6.x`   | 01 Jul 2022     | `^7.4, ^8.0`           | End of life |
-| `5.x`   | 01 Apr 2020     | `^7.2`                 | End of life |
-| `4.x`   | 14 Feb 2018     | `^7.0`                 | End of life |
-| `3.x`   | 22 Apr 2017     | `^7.0`                 | End of life |
-| `2.x`   | 06 Nov 2016     | `^7.0`                 | End of life |
-| `1.x`   | 15 Jul 2016     | `^5.5, ^7.0`           | End of life |
-| `0.x`   | 09 Jan 2015     | `>=5.4`                | End of life |
+| Version | Initial Release | Supported PHP Versions   | Status      |
+|---------|-----------------|--------------------------|-------------|
+| `7.x`   | 20 Dec 2022     | `~8.1.0, ~8.2.0, ~8.3.0` | Active      |
+| `6.x`   | 01 Jul 2022     | `^7.4, ^8.0`             | End of life |
+| `5.x`   | 01 Apr 2020     | `^7.2`                   | End of life |
+| `4.x`   | 14 Feb 2018     | `^7.0`                   | End of life |
+| `3.x`   | 22 Apr 2017     | `^7.0`                   | End of life |
+| `2.x`   | 06 Nov 2016     | `^7.0`                   | End of life |
+| `1.x`   | 15 Jul 2016     | `^5.5, ^7.0`             | End of life |
+| `0.x`   | 09 Jan 2015     | `>=5.4`                  | End of life |
 
 <table>
     <body>
