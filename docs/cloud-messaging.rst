@@ -667,7 +667,7 @@ You can subscribe one or multiple devices to one or multiple messaging topics wi
 
     $result = $messaging->unsubscribeFromAllTopics($registrationTokenOrTokens);
 
-The result will return an array win which the keys are the topic names, and the values are the operation
+The result will return an array in which the keys are the topic names, and the values are the operation
 results for the individual tokens.
 
 .. note::
