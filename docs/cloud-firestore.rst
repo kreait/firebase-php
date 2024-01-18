@@ -124,4 +124,4 @@ In fact, the ``withFirestoreDatabase()`` method is a shortcut for the ``withFire
 
     $firestore = $factory->->withFirestoreDatabase('another-database');
     // is a shortcut for
-    $firestore = $factory->withFirestoreClientConfig(['database' => 'another-database]);
+    $firestore = $factory->withFirestoreClientConfig(['database' => 'another-database']);
