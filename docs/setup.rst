@@ -214,7 +214,7 @@ In addition to the explicit settings above, you can fully customize the configur
         ->withGuzzleConfigOption('single', 'value')
         ->withGuzzleConfigOptions([
             'first' => 'value',
-            'second' => 'value,
+            'second' => 'value',
         ]);
 
 .. note::
