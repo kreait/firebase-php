@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Messaging;
 
 use JsonSerializable;
+use Stringable;
 
 /**
  * @phpstan-import-type AndroidConfigShape from AndroidConfig
@@ -17,7 +18,7 @@ use JsonSerializable;
  *     token?: non-empty-string,
  *     topic?: non-empty-string,
  *     condition?: non-empty-string,
- *     data?: MessageData|array<non-empty-string, \Stringable|string>,
+ *     data?: MessageData|array<non-empty-string, Stringable|string>,
  *     notification?: Notification|NotificationShape,
  *     android?: AndroidConfigShape,
  *     apns?: ApnsConfig|ApnsConfigShape,

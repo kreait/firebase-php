@@ -642,7 +642,7 @@ abstract class AuthTestCase extends IntegrationTestCase
 
         $url = $this->auth->getPasswordResetLink($user->email);
 
-        parse_str(parse_url($url, PHP_URL_QUERY), $query);
+        parse_str((string) parse_url($url, PHP_URL_QUERY), $query);
 
         $email = $this->auth->confirmPasswordReset($query['oobCode'], 'newPassword123');
 
@@ -663,7 +663,7 @@ abstract class AuthTestCase extends IntegrationTestCase
 
         $queryString = parse_url($url, PHP_URL_QUERY);
 
-        parse_str($queryString, $query);
+        parse_str((string) $queryString, $query);
 
         $email = $this->auth->confirmPasswordReset($query['oobCode'], 'newPassword123', true);
         sleep(1); // wait for a second

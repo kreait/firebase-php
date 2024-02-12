@@ -20,9 +20,9 @@ use function array_key_exists;
 final class ParameterValue implements JsonSerializable
 {
     private function __construct(
-        private ?string $value = null,
-        private ?bool $useInAppDefault = null,
-        private ?PersonalizationValue $personalizationValue = null,
+        private readonly ?string $value = null,
+        private readonly ?bool $useInAppDefault = null,
+        private readonly ?PersonalizationValue $personalizationValue = null,
     ) {
     }
 
