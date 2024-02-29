@@ -35,7 +35,6 @@
         "fig/http-message-util": "^1.1.5",
         "firebase/php-jwt": "^6.3.2",
         "google/auth": "^1.24",
-        "google/cloud-core": "^1.48.1",
         "google/cloud-storage": "^1.30.1",
         "guzzlehttp/guzzle": "^7.5",
         "guzzlehttp/promises": "^2.0",
