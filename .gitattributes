@@ -13,6 +13,7 @@
 /.php-cs-fixer.dist.php export-ignore
 /.readthedocs.yaml export-ignore
 /codecov.yml export-ignore
+/composer-dependency-analyser.php export-ignore
 /firebase.json export-ignore
 /phpstan.neon.dist export-ignore
 /phpunit.xml.dist export-ignore
