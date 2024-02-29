@@ -196,12 +196,23 @@ class Template implements JsonSerializable
         return $template;
     }
 
+    /**
+     * @return array{
+     *      conditions: list<RemoteConfigConditionShape>|null,
+     *      parameters: array<non-empty-string, RemoteConfigParameterShape>|null,
+     *      parameterGroups: array<non-empty-string, RemoteConfigParameterGroupShape>|null
+     *  }
+     */
     public function jsonSerialize(): array
     {
+        $conditions = array_map(fn(Condition $c) => $c->jsonSerialize(), $this->conditions);
+        $parameters = array_map(fn(Parameter $p) => $p->jsonSerialize(), $this->parameters);
+        $parameterGroups = array_map(fn(ParameterGroup $p) => $p->jsonSerialize(), $this->parameterGroups);
+
         return [
-            'conditions' => empty($this->conditions) ? null : array_values($this->conditions),
-            'parameters' => empty($this->parameters) ? null : $this->parameters,
-            'parameterGroups' => empty($this->parameterGroups) ? null : $this->parameterGroups,
+            'conditions' => $conditions !== [] ? $conditions : null,
+            'parameters' => $parameters !== [] ? $parameters : null,
+            'parameterGroups' => $parameterGroups !== [] ? $parameterGroups : null,
         ];
     }
 

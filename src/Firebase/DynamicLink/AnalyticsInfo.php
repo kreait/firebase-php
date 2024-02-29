@@ -68,11 +68,14 @@ final class AnalyticsInfo implements JsonSerializable
         return new self($this->googlePlayAnalytics, $icInfo);
     }
 
+    /**
+     * @return AnalyticsInfoShape
+     */
     public function jsonSerialize(): array
     {
         return array_filter([
-            'googlePlayAnalytics' => $this->googlePlayAnalytics,
-            'itunesConnectAnalytics' => $this->iTunesConnectAnalytics,
+            'googlePlayAnalytics' => $this->googlePlayAnalytics?->jsonSerialize(),
+            'itunesConnectAnalytics' => $this->iTunesConnectAnalytics?->jsonSerialize(),
         ]);
     }
 }

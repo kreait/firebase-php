@@ -108,6 +108,9 @@ class Condition implements JsonSerializable
         return $array;
     }
 
+    /**
+     * @return RemoteConfigConditionShape
+     */
     public function jsonSerialize(): array
     {
         return $this->toArray();

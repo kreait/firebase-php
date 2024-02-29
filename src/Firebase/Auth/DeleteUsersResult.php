@@ -13,11 +13,11 @@ use function is_countable;
 final class DeleteUsersResult
 {
     /**
-     * @param array{
+     * @param list<array{
      *     index: int,
      *     localId: string,
      *     message: string
-     * } $rawErrors
+     * }> $rawErrors
      */
     private function __construct(
         private readonly int $successCount,
@@ -51,11 +51,11 @@ final class DeleteUsersResult
     }
 
     /**
-     * @return array{
-     *                index: int,
-     *                localId: string,
-     *                message: string
-     *                }
+     * @return list<array{
+     *     index: int,
+     *     localId: string,
+     *     message: string
+     * }>
      */
     public function rawErrors(): array
     {
