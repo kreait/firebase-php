@@ -15,7 +15,7 @@ final class MessagingError extends RuntimeException implements MessagingExceptio
     /**
      * @internal
      *
-     * @param array<non-empty-string> $errors
+     * @param array<mixed> $errors
      */
     public function withErrors(array $errors): self
     {

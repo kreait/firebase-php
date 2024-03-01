@@ -17,7 +17,7 @@ final class ServerUnavailable extends RuntimeException implements MessagingExcep
     /**
      * @internal
      *
-     * @param array<non-empty-string> $errors
+     * @param array<mixed> $errors
      */
     public function withErrors(array $errors): self
     {

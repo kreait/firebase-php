@@ -17,7 +17,7 @@ final class QuotaExceeded extends RuntimeException implements MessagingException
     /**
      * @internal
      *
-     * @param array<non-empty-string> $errors
+     * @param array<mixed> $errors
      */
     public function withErrors(array $errors): self
     {

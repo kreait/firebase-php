@@ -15,7 +15,7 @@ final class AuthenticationError extends RuntimeException implements MessagingExc
     /**
      * @internal
      *
-     * @param array<non-empty-string> $errors
+     * @param array<mixed> $errors
      */
     public function withErrors(array $errors): self
     {
