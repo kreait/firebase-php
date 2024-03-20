@@ -45,7 +45,7 @@ jobs:
           key: ${{ env.key }}
 
       - name: Cache extensions
-        uses: actions/cache@v4.0.1
+        uses: actions/cache@v4.0.2
         with:
           path: ${{ steps.extcache.outputs.dir }}
           key: ${{ steps.extcache.outputs.key }}
