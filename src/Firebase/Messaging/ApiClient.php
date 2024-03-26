@@ -48,6 +48,7 @@ class ApiClient
         $body = $this->streamFactory->createStream(Json::encode($payload));
 
         return $request
+            ->withProtocolVersion('2.0')
             ->withBody($body)
             ->withHeader('Content-Type', 'application/json; charset=UTF-8')
             ->withHeader('Content-Length', (string) $body->getSize())
