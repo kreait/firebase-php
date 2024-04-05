@@ -242,7 +242,7 @@ You can also add middlewares to the Guzzle HTTP Client:
         # Alternative notation:
         ['middleware' => $myMiddleware]
         # Providing a named middleware
-        ['middleware' => $myMiddleware, 'name' => 'my_middleware],
+        ['middleware' => $myMiddleware, 'name' => 'my_middleware'],
     ]);
 
 .. note::
