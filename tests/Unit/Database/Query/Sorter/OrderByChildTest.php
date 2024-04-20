@@ -39,12 +39,12 @@ final class OrderByChildTest extends UnitTestCase
     {
         return [
             'scalar' => [
-                'key' => 'key',
+                'childKey' => 'key',
                 'expected' => 'scalar',
                 'given' => 'scalar',
             ],
             'array' => [
-                'key' => 'key',
+                'childKey' => 'key',
                 'expected' => [
                     'third' => ['key' => 1],
                     'fourth' => ['key' => 2],
@@ -59,7 +59,7 @@ final class OrderByChildTest extends UnitTestCase
                 ],
             ],
             'nested' => [
-                'key' => 'child/grandchild',
+                'childKey' => 'child/grandchild',
                 'expected' => [
                     'third' => ['child' => ['grandchild' => 1]],
                     'fourth' => ['child' => ['grandchild' => 2]],
@@ -74,7 +74,7 @@ final class OrderByChildTest extends UnitTestCase
                 ],
             ],
             'super_nested' => [
-                'key' => 'child/grandchild/great_grandchild',
+                'childKey' => 'child/grandchild/great_grandchild',
                 'expected' => [
                     'third' => ['child' => ['grandchild' => ['great_grandchild' => 1]]],
                     'fourth' => ['child' => ['grandchild' => ['great_grandchild' => 2]]],

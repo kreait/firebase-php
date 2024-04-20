@@ -71,12 +71,12 @@ final class WebPushConfigTest extends UnitTestCase
     }
 
     /**
-     * @return array<string, array<WebPushConfigShape>>
+     * @return iterable<array<WebPushConfigShape>>
      */
-    public static function validDataProvider(): array
+    public static function validDataProvider(): iterable
     {
-        return [
-            'full_config' => [
+        yield 'full_config' => [
+            [
                 // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#webpush_specific_fields
                 'headers' => [
                     'Urgency' => 'normal',

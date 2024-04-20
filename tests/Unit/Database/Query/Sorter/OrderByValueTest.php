@@ -35,9 +35,9 @@ final class OrderByValueTest extends UnitTestCase
 
     #[DataProvider('valueProvider')]
     #[Test]
-    public function modifyValue(mixed $expected, mixed $value): void
+    public function modifyValue(mixed $expected, mixed $given): void
     {
-        $this->assertSame($expected, $this->sorter->modifyValue($value));
+        $this->assertSame($expected, $this->sorter->modifyValue($given));
     }
 
     /**
