@@ -34,7 +34,7 @@ interface Messaging
      * @throws FirebaseException
      * @throws InvalidArgumentException
      *
-     * @return array<non-empty-string, mixed>
+     * @return array<array-key, mixed>
      */
     public function send(Message|array $message, bool $validateOnly = false): array;
 
