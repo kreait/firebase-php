@@ -95,14 +95,14 @@ final class Messaging implements Contract\Messaging
 
                 $json = Json::decode((string) $response->getBody(), true);
 
-                $sendReports[] = SendReport::success($message->target(), $json, $message);
+                $sendReports[$index] = SendReport::success($message->target(), $json, $message);
             },
             'rejected' => function (RequestException $reason, int $index) use ($messages, &$sendReports) {
                 $message = $messages[$index];
 
                 $error = $this->exceptionConverter->convertException($reason);
 
-                $sendReports[] = SendReport::failure($message->target(), $error, $message);
+                $sendReports[$index] = SendReport::failure($message->target(), $error, $message);
             },
         ];
 
