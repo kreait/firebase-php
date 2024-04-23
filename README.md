@@ -14,9 +14,9 @@
 
 ## The future of the Firebase Admin PHP SDK
 
-The SDK has [nearly 2,100 Stars on GitHub](https://github.com/kreait/firebase-php/stargazers),
-is included in [more than 7,000 GitHub repositories](https://github.com/kreait/firebase-php/network/dependents),
-and is [downloaded more than 600,000 times per month and counting](https://packagist.org/packages/kreait/firebase-php/stats).
+The SDK has [over 2,100 Stars on GitHub](https://github.com/kreait/firebase-php/stargazers),
+is included in [more than 7,700 GitHub repositories](https://github.com/kreait/firebase-php/network/dependents),
+and is [downloaded more than 500,000 times per month and counting](https://packagist.org/packages/kreait/firebase-php/stats).
 Integrations for [Laravel](https://github.com/kreait/laravel-firebase) and
 [Symfony](https://github.com/kreait/firebase-bundle) increase these numbers. If a PHP project uses Firebase, there's
 a good chance it's using this SDK.
