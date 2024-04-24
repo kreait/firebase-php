@@ -108,6 +108,11 @@ final class Messaging implements Contract\Messaging
 
         $this->messagingApi->pool($requests(), $config)->wait();
 
+        // $sendReports has the same size as $messages, and each key is set by the `fulfilled` and `rejected`
+        // handlers above. The only way I could imagine a `null` value in the reports is when a request
+        // didn't return a response at all. I don't think it's possible, so letting PHPStan know.
+        assert(!in_array(null, $sendReports, true));
+
         return MulticastSendReport::withItems($sendReports);
     }
 
