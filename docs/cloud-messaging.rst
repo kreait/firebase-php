@@ -771,7 +771,7 @@ has an ``errors()`` method that provides additional information about the error.
 
     try {
         $messaging->send($message);
-    catch (MessagingException $e) {
+    } catch (MessagingException $e) {
         echo $e->getMessage();
         print_r($e->errors());
     }
@@ -790,7 +790,7 @@ example when you forget to add a message target.
 
     try {
         $messaging->send($message);
-    catch (InvalidMessage $e) {
+    } catch (InvalidMessage $e) {
         echo $e->getMessage();
         print_r($e->errors());
     }
@@ -815,11 +815,11 @@ syntactically correct, this usually has one of the following reasons:
 
     try {
         $messaging->send($message);
-    catch (NotFound $e) {
+    } catch (NotFound $e) {
         echo $e->getMessage();
         print_r($e->errors());
         // If the message was send to a token, you can retrieve the unknown token
-        $echo $e->token();
+        echo $e->token();
     }
 
 Quota exceeded
@@ -834,7 +834,7 @@ in a short period of time, FCM servers will respond with a 429 RESOURCE_EXHAUSTE
 
     try {
         $messaging->subscribeToTopic($topic, $registrationTokenOrTokens);
-    catch (QuotaExceeded $e) {
+    } catch (QuotaExceeded $e) {
         echo $e->getMessage();
         print_r($e->errors());
         $retryAfter= $e->retryAfter();
@@ -858,7 +858,7 @@ request.
 
     try {
         $messaging->send($message);
-    catch (ServerUnavailable $e) {
+    } catch (ServerUnavailable $e) {
         echo 'The FCM servers are currently unavailable: '.$e->getMessage();
         print_r($e->errors());
         $retryAfter= $e->retryAfter();
