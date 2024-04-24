@@ -44,7 +44,7 @@ final class ValidatedActionSettingsTest extends TestCase
      */
     public static function validInputs(): array
     {
-        $continueUrl = 'https://domain.example';
+        $continueUrl = 'https://example.com';
 
         return [
             'full' => [

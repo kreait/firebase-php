@@ -27,7 +27,7 @@ final class DynamicLinksTest extends IntegrationTestCase
     #[Test]
     public function itCreatesAnUnguessableLink(): void
     {
-        $link = $this->service->createUnguessableLink('https://domain.example');
+        $link = $this->service->createUnguessableLink('https://example.com');
 
         $this->assertSame($this->domain, $link->domain());
         $this->assertSame(17, mb_strlen($link->suffix()));
@@ -36,7 +36,7 @@ final class DynamicLinksTest extends IntegrationTestCase
     #[Test]
     public function itCreatesAShortLink(): void
     {
-        $link = $this->service->createShortLink('https://domain.example');
+        $link = $this->service->createShortLink('https://example.com');
 
         $this->assertSame($this->domain, $link->domain());
         $this->assertSame(4, mb_strlen($link->suffix()));
@@ -45,7 +45,7 @@ final class DynamicLinksTest extends IntegrationTestCase
     #[Test]
     public function itCreatesAnUnguessableLinkByDefault(): void
     {
-        $link = $this->service->createUnguessableLink('https://domain.example');
+        $link = $this->service->createUnguessableLink('https://example.com');
 
         $this->assertSame($this->domain, $link->domain());
         $this->assertSame(17, mb_strlen($link->suffix()));
@@ -54,7 +54,7 @@ final class DynamicLinksTest extends IntegrationTestCase
     #[Test]
     public function itShortensALongDynamicLinkToAnUnguessableLinkByDefault(): void
     {
-        $link = $this->service->shortenLongDynamicLink($this->domain.'/?link=https://domain.example');
+        $link = $this->service->shortenLongDynamicLink($this->domain.'/?link=https://example.com');
 
         $this->assertSame($this->domain, $link->domain());
         $this->assertSame(17, mb_strlen($link->suffix()));
@@ -64,7 +64,7 @@ final class DynamicLinksTest extends IntegrationTestCase
     public function itShortensALongDynamicLinkToAShortLink(): void
     {
         $link = $this->service->shortenLongDynamicLink(
-            $this->domain.'/?link=https://domain.example',
+            $this->domain.'/?link=https://example.com',
             ShortenLongDynamicLink::WITH_SHORT_SUFFIX,
         );
 
@@ -76,7 +76,7 @@ final class DynamicLinksTest extends IntegrationTestCase
     public function itShortensALongDynamicLinkToAnUnguessableShortLink(): void
     {
         $link = $this->service->shortenLongDynamicLink(
-            $this->domain.'/?link=https://domain.example',
+            $this->domain.'/?link=https://example.com',
             ShortenLongDynamicLink::WITH_UNGUESSABLE_SUFFIX,
         );
 

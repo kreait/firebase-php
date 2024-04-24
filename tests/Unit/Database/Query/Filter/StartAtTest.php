@@ -21,7 +21,7 @@ final class StartAtTest extends UnitTestCase
     {
         $filter = new StartAt($given);
 
-        $this->assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://domain.example')));
+        $this->assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://example.com')));
     }
 
     /**

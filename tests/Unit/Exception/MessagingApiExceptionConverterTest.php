@@ -72,7 +72,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
     public static function exceptions(): array
     {
         return [
-            'connection error' => [new ConnectException('Connection Failed', new Request('GET', 'https://domain.example')), ApiConnectionFailed::class],
+            'connection error' => [new ConnectException('Connection Failed', new Request('GET', 'https://example.com')), ApiConnectionFailed::class],
             '400' => [self::createRequestException(400, 'Bad request'), InvalidMessage::class],
             '401' => [self::createRequestException(401, 'Unauthenticated'), AuthenticationError::class],
             '403' => [self::createRequestException(403, 'Unauthorized'), AuthenticationError::class],
@@ -89,7 +89,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
     {
         return new RequestException(
             'Firebase Error Test',
-            new Request('GET', 'https://domain.example'),
+            new Request('GET', 'https://example.com'),
             new Response($code, [], Json::encode([
                 'error' => [
                     'errors' => [

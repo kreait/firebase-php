@@ -96,7 +96,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
      */
     protected static function randomEmail(string $suffix = ''): string
     {
-        return self::randomString($suffix.'@domain.example');
+        return self::randomString($suffix.'@example.com');
     }
 
     protected static function authIsEmulated(): bool

@@ -21,7 +21,7 @@ final class EqualToTest extends UnitTestCase
     {
         $filter = new EqualTo($given);
 
-        $this->assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://domain.example')));
+        $this->assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://example.com')));
     }
 
     /**

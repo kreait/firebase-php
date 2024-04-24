@@ -41,7 +41,7 @@ final class UrlTest extends TestCase
     public static function validValues(): array
     {
         return [
-            'string' => ['https://domain.example'],
+            'string' => ['https://example.com'],
         ];
     }
 
@@ -51,7 +51,7 @@ final class UrlTest extends TestCase
     public static function invalidValues(): array
     {
         return [
-            'https:///domain.example' => ['https:///domain.example'],
+            'https:///example.com' => ['https:///example.com'],
             'http://:80' => ['http://:80'],
             '(empty)' => [''],
         ];

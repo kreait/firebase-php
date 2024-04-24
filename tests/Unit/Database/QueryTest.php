@@ -28,7 +28,7 @@ final class QueryTest extends UnitTestCase
 
     protected function setUp(): void
     {
-        $this->uri = new Uri('http://domain.example/some/path');
+        $this->uri = new Uri('http://example.com/some/path');
 
         $reference = $this->createMock(Reference::class);
         $reference->method('getURI')->willReturn($this->uri);

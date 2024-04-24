@@ -27,7 +27,7 @@ final class ValidatorTest extends UnitTestCase
     {
         parent::setUp();
 
-        $this->uri = new Uri('http://domain.example');
+        $this->uri = new Uri('http://example.com');
         $this->validator = new Validator();
     }
 
