@@ -87,7 +87,7 @@ final class Messaging implements Contract\Messaging
     {
         $messages = $this->ensureMessages($messages);
         $requests = $this->createSendRequests($messages, $validateOnly);
-        $sendReports = [];
+        $sendReports = array_fill(0, count($messages), null);
 
         $config = [
             'fulfilled' => function (ResponseInterface $response, int $index) use ($messages, &$sendReports) {

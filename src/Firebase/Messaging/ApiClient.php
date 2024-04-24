@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging;
 
-use Iterator;
 use Beste\Json;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Promise\PromiseInterface;
+use Iterator;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
