@@ -7,6 +7,8 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 ## [Unreleased]
 
+## [7.10.0] - 2024-04-25
+
 ### Changed
 
 * FCM Messages are now sent asynchronously using HTTP connection pooling with HTTP/2. This should improve performance 
@@ -211,7 +213,8 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.9.6/CHANGELOG.md
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/7.9.1...7.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/7.10.0...7.x
+[7.10.0]: https://github.com/kreait/firebase-php/compare/7.9.1...7.10.0
 [7.9.1]: https://github.com/kreait/firebase-php/compare/7.9.0...7.9.1
 [7.9.0]: https://github.com/kreait/firebase-php/compare/7.8.0...7.9.0
 [7.8.0]: https://github.com/kreait/firebase-php/compare/7.7.0...7.8.0
