@@ -1,5 +1,3 @@
-\S+@domain\.example$
-^https://[^/]+\.example/
 ^https://[^/]+\.firebaseio\.com/
 ^https://example\.page\.link/
 ^https://github.com/kreait/firebase-php/(compare|pull|issues)
