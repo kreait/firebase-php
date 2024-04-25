@@ -7,6 +7,12 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 ## [Unreleased]
 
+### Changed
+
+* FCM Messages are now sent asynchronously using HTTP connection pooling with HTTP/2. This should improve performance 
+  when sending messages to many devices. 
+  ([#874](https://github.com/kreait/firebase-php/pull/874))
+
 ## [7.9.1] - 2023-12-04
 
 ### Changed

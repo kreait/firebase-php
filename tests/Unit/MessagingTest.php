@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Tests\Unit;
 
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
+use Kreait\Firebase\Exception\MessagingApiExceptionConverter;
 use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
@@ -24,8 +25,9 @@ final class MessagingTest extends UnitTestCase
     {
         $messagingApi = $this->createMock(ApiClient::class);
         $appInstanceApi = $this->createMock(AppInstanceApiClient::class);
+        $exceptionConverter = new MessagingApiExceptionConverter();
 
-        $this->messaging = new Messaging($messagingApi, $appInstanceApi);
+        $this->messaging = new Messaging($messagingApi, $appInstanceApi, $exceptionConverter);
     }
 
     #[Test]

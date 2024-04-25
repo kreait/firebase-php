@@ -424,7 +424,6 @@ final class Factory
             $projectId,
             $this->httpFactory,
             $this->httpFactory,
-            $errorHandler,
         );
 
         $appInstanceApiClient = new AppInstanceApiClient(
@@ -437,7 +436,7 @@ final class Factory
             $errorHandler,
         );
 
-        return new Messaging($messagingApiClient, $appInstanceApiClient);
+        return new Messaging($messagingApiClient, $appInstanceApiClient, $errorHandler);
     }
 
     /**

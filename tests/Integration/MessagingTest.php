@@ -209,6 +209,7 @@ final class MessagingTest extends IntegrationTestCase
 
         $failure = $report->failures()->getItems()[0];
         $this->assertSame($invalid, $failure->target()->value());
+        $this->assertTrue($failure->messageWasInvalid());
         $this->assertInstanceOf(MessagingException::class, $failure->error());
     }
 
