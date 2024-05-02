@@ -82,7 +82,7 @@ jobs:
         run: firebase emulators:exec --only auth,database --project beste-firebase 'XDEBUG_MODE=coverage vendor/bin/phpunit --group=emulator --coverage-clover=coverage.xml --log-junit=test-report.xml'
 
       - name: Upload code coverage
-        uses: codecov/codecov-action@v4.3.0
+        uses: codecov/codecov-action@v4.3.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: emulator
