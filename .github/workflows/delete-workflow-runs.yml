@@ -1,0 +1,26 @@
+name: 'Delete old Workflow Runs'
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  delete_runs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete workflow runs
+        uses: dmvict/clean-workflow-runs@v1
+        with:
+          save_period: 14
+          save_min_runs_number: 2
+
+  delete_failed_runs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete failed workflow runs
+        uses: dmvict/clean-workflow-runs@v1
+        with:
+          run_conclusions: 'cancelled,failure,skipped,stale,timed_out'
+          save_period: 7
+          save_min_runs_number: 0
