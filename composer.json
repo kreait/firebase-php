@@ -39,7 +39,7 @@
         "guzzlehttp/guzzle": "^7.5",
         "guzzlehttp/promises": "^2.0",
         "guzzlehttp/psr7": "^2.6",
-        "kreait/firebase-tokens": "^4.2",
+        "kreait/firebase-tokens": "^5.1",
         "lcobucci/jwt": "^4.3.0|^5.0",
         "mtdowling/jmespath.php": "^2.6.1",
         "psr/cache": "^1.0.1|^2.0|^3.0",
