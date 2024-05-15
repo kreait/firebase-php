@@ -7,6 +7,13 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 ## [Unreleased]
 
+## [7.11.0] - 2024-05-16
+
+### Added
+
+* It is now possible to get a Remote Config template by its version number.
+  ([#890](https://github.com/kreait/firebase-php/pull/890))
+
 ## [7.10.0] - 2024-04-25
 
 ### Changed
@@ -213,7 +220,8 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.9.6/CHANGELOG.md
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/7.10.0...7.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/7.11.0...7.x
+[7.11.0]: https://github.com/kreait/firebase-php/compare/7.10.0...7.11.0
 [7.10.0]: https://github.com/kreait/firebase-php/compare/7.9.1...7.10.0
 [7.9.1]: https://github.com/kreait/firebase-php/compare/7.9.0...7.9.1
 [7.9.0]: https://github.com/kreait/firebase-php/compare/7.8.0...7.9.0
