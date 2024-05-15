@@ -28,7 +28,7 @@ final class RemoteConfig implements Contract\RemoteConfig
     {
     }
 
-    public function get(VersionNumber|int|string $versionNumber = null): Template
+    public function get(Version|VersionNumber|int|string|null $versionNumber = null): Template
     {
         if ($versionNumber !== null) {
             $versionNumber = $this->ensureVersionNumber($versionNumber);
@@ -118,9 +118,17 @@ final class RemoteConfig implements Contract\RemoteConfig
     /**
      * @param VersionNumber|positive-int|non-empty-string $value
      */
-    private function ensureVersionNumber(VersionNumber|int|string $value): VersionNumber
+    private function ensureVersionNumber(Version|VersionNumber|int|string $value): VersionNumber
     {
-        return $value instanceof VersionNumber ? $value : VersionNumber::fromValue($value);
+        if ($value instanceof VersionNumber) {
+            return $value;
+        }
+
+        if ($value instanceof Version) {
+            return $value->versionNumber();
+        }
+
+        return VersionNumber::fromValue($value);
     }
 
     private function buildTemplateFromResponse(ResponseInterface $response): Template

@@ -25,11 +25,11 @@ use Traversable;
 interface RemoteConfig
 {
     /**
-     * @param VersionNumber|positive-int|non-empty-string|null $versionNumber
+     * @param Version|VersionNumber|positive-int|non-empty-string $versionNumber
      *
      * @throws RemoteConfigException if something went wrong
      */
-    public function get(VersionNumber|int|string $versionNumber = null): Template;
+    public function get(Version|VersionNumber|int|string|null $versionNumber = null): Template;
 
     /**
      * Validates the given template without publishing it.
