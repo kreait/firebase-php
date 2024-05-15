@@ -28,9 +28,13 @@ final class RemoteConfig implements Contract\RemoteConfig
     {
     }
 
-    public function get(): Template
+    public function get(VersionNumber|int|string $versionNumber = null): Template
     {
-        return $this->buildTemplateFromResponse($this->client->getTemplate());
+        if ($versionNumber !== null) {
+            $versionNumber = $this->ensureVersionNumber($versionNumber);
+        }
+
+        return $this->buildTemplateFromResponse($this->client->getTemplate($versionNumber));
     }
 
     public function validate($template): void
