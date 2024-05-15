@@ -60,6 +60,7 @@ Get the Remote Config
 
     $template = $remoteConfig->get(); // Returns a Kreait\Firebase\RemoteConfig\Template
     $version = $template->version(); // Returns a Kreait\Firebase\RemoteConfig\Version
+    $template = $remoteConfig->get($version->versionNumber()); // Returns a Kreait\Firebase\RemoteConfig\Template with the specified version
 
 **************************
 Create a new Remote Config

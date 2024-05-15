@@ -29,11 +29,17 @@ class ApiClient
     }
 
     /**
+     * @see https://firebase.google.com/docs/reference/remote-config/rest/v1/projects/getRemoteConfig
+     *
      * @throws RemoteConfigException
      */
-    public function getTemplate(): ResponseInterface
+    public function getTemplate(VersionNumber|int|string $versionNumber = null): ResponseInterface
     {
-        return $this->requestApi('GET', 'remoteConfig');
+        return $this->requestApi('GET', 'remoteConfig', [
+            'query' => array_filter([
+                'version_number' => (string) $versionNumber,
+            ]),
+        ]);
     }
 
     /**
