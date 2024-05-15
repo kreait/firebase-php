@@ -154,6 +154,42 @@ final class RemoteConfigTest extends IntegrationTestCase
     }
 
     #[Test]
+    public function getTemplateWithVersion(): void
+    {
+        $template = $this->remoteConfig->get();
+        $version = $template->version();
+        assert($version !== null);
+
+        $check = $this->remoteConfig->get($version);
+
+        $this->assertTrue($version->versionNumber()->equalsTo($check->version()?->versionNumber()));
+    }
+
+    #[Test]
+    public function getTemplateWithVersionNumber(): void
+    {
+        $template = $this->remoteConfig->get();
+        $version = $template->version();
+        assert($version !== null);
+
+        $check = $this->remoteConfig->get($version->versionNumber());
+
+        $this->assertTrue($version->versionNumber()->equalsTo($check->version()?->versionNumber()));
+    }
+
+    #[Test]
+    public function getTemplateWithVersionNumberString(): void
+    {
+        $template = $this->remoteConfig->get();
+        $version = $template->version();
+        assert($version !== null);
+
+        $check = $this->remoteConfig->get((string) $version->versionNumber());
+
+        $this->assertTrue($version->versionNumber()->equalsTo($check->version()?->versionNumber()));
+    }
+
+    #[Test]
     public function publishOutdatedConfig(): void
     {
         $this->remoteConfig->publish($this->template);
