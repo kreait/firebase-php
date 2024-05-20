@@ -14,6 +14,7 @@ use Kreait\Firebase\Messaging\RawMessageFromArray;
 use Kreait\Firebase\Messaging\WebPushConfig;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\Test;
 
 /**
@@ -394,5 +395,19 @@ final class MessagingTest extends IntegrationTestCase
 
             throw $e;
         }
+    }
+
+    #[Test]
+    #[DoesNotPerformAssertions]
+    public function sendWebPushNotificationWithAnEmptyTitle(): void
+    {
+        $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
+            ->withWebPushConfig(WebPushConfig::fromArray([
+                'notification' => [
+                    'title' => '',
+                ],
+            ]));
+
+        $this->messaging->send($message);
     }
 }

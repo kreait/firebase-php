@@ -34,16 +34,16 @@ final class WebPushConfigTest extends UnitTestCase
     public function itCanHaveAPriority(): void
     {
         $config = WebPushConfig::new()->withVeryLowUrgency();
-        $this->assertSame('very-low', $config->jsonSerialize()['headers']['Urgency']);
+        $this->assertSame('very-low', $config->jsonSerialize()['headers']['Urgency'] ?? null);
 
         $config = WebPushConfig::new()->withLowUrgency();
-        $this->assertSame('low', $config->jsonSerialize()['headers']['Urgency']);
+        $this->assertSame('low', $config->jsonSerialize()['headers']['Urgency'] ?? null);
 
         $config = WebPushConfig::new()->withNormalUrgency();
-        $this->assertSame('normal', $config->jsonSerialize()['headers']['Urgency']);
+        $this->assertSame('normal', $config->jsonSerialize()['headers']['Urgency'] ?? null);
 
         $config = WebPushConfig::new()->withHighUrgency();
-        $this->assertSame('high', $config->jsonSerialize()['headers']['Urgency']);
+        $this->assertSame('high', $config->jsonSerialize()['headers']['Urgency'] ?? null);
     }
 
     /**
