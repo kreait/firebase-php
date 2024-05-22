@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kreait\Firebase;
 
 use Beste\Json;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\Utils;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
@@ -97,7 +96,7 @@ final class Messaging implements Contract\Messaging
 
                 $sendReports[$index] = SendReport::success($message->target(), $json, $message);
             },
-            'rejected' => function (RequestException $reason, int $index) use ($messages, &$sendReports) {
+            'rejected' => function (Throwable $reason, int $index) use ($messages, &$sendReports) {
                 $message = $messages[$index];
 
                 $error = $this->exceptionConverter->convertException($reason);
