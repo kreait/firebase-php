@@ -304,16 +304,15 @@ final class RemoteConfigTest extends IntegrationTestCase
     #[Test]
     public function listVersionsWithoutFilters(): void
     {
+        $count = 0;
         // We only need to know that the first returned value is a version,
         // no need to iterate through all of them
         foreach ($this->remoteConfig->listVersions() as $version) {
-            // @phpstan-ignore-next-line
-            $this->assertInstanceOf(Version::class, $version);
-
-            return;
+            ++$count;
+            break;
         }
 
-        $this->fail('Expected a version to be returned, but got none');
+        $this->assertSame(1, $count);
     }
 
     #[Test]

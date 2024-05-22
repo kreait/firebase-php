@@ -37,10 +37,14 @@ use const PHP_URL_QUERY;
  */
 abstract class AuthTestCase extends IntegrationTestCase
 {
-    /**
-     * @phpstan-ignore-next-line
-     */
     protected Auth $auth;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->auth = self::$factory->createAuth();
+    }
 
     #[Test]
     public function createAnonymousUser(): void
