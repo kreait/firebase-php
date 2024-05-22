@@ -96,9 +96,10 @@ final class WebPushConfig implements JsonSerializable
      */
     public static function fromArray(array $config): self
     {
-        // @phpstan-ignore-next-line
-        if (array_key_exists('headers', $config) && is_array($config['headers'])) {
-            $config['headers'] = self::ensureValidHeaders($config['headers']);
+        $headers = $config['headers'] ?? null;
+
+        if (is_array($headers)) {
+            $config['headers'] = self::ensureValidHeaders($headers);
 
             if ($config['headers'] === []) {
                 unset($config['headers']);
@@ -143,7 +144,7 @@ final class WebPushConfig implements JsonSerializable
 
     public function jsonSerialize(): array
     {
-        // @phpstan-ignore-next-line
+        // @phpstan-ignore notIdentical.alwaysTrue
         return array_filter($this->config, static fn($value) => $value !== null);
     }
 

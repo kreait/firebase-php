@@ -47,7 +47,7 @@ abstract class IntegrationTestCase extends FirebaseTestCase
     protected static ?string $appId;
 
     /**
-     * @var list<string>
+     * @var list<non-empty-string>
      */
     protected static array $registrationTokens = [];
     protected static string $unknownToken = 'd_RTtLHR_JgI4r4tbYM9CA:APA91bEzb2Tb3WlKwddpEPYY2ZAx7AOmjOhiw-jVq6J9ekJGpBAefAgMb1muDJcKBMsrMq7zSCfBzl0Ll7JCZ0o8QI9zLVG1F18nqW9AOFKDXi8-MyT3R5Stt6GGKnq9rd9l5kopGEbO';
@@ -73,6 +73,9 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         self::$appId = self::appId();
     }
 
+    /**
+     * @return non-empty-string
+     */
     protected function getTestRegistrationToken(): string
     {
         if (empty(self::$registrationTokens)) {
