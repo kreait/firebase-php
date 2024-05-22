@@ -51,7 +51,7 @@ final class RegistrationTokens implements Countable, IteratorAggregate
             foreach ($values as $value) {
                 if ($value instanceof RegistrationToken) {
                     $tokens[] = $value;
-                } elseif (is_string($value) && $value !== '') { // @phpstan-ignore-line
+                } elseif ($value !== '') {
                     $tokens[] = RegistrationToken::fromValue($value);
                 }
             }
