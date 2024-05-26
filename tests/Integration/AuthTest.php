@@ -12,5 +12,4 @@ use PHPUnit\Framework\Attributes\Group;
 #[Group('emulator')]
 final class AuthTest extends AuthTestCase
 {
-
 }

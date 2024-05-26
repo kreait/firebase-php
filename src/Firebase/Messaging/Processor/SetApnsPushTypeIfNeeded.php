@@ -11,7 +11,6 @@ use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\MessageData;
 use Kreait\Firebase\Messaging\Notification;
 
-use function array_key_exists;
 use function is_array;
 
 /**
