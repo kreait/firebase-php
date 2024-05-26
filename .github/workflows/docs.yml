@@ -1,4 +1,4 @@
-name: Docs
+name: Check links
 
 on:
   pull_request:
@@ -18,15 +18,18 @@ on:
 
 jobs:
   links:
-    name: Links
+    name: Check Links
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Run Lychee
         uses: lycheeverse/lychee-action@v1
         with:
           args: "--verbose --no-progress './**/*.md' './**/*.html' './**/*.rst'"
           output: ${{ runner.temp }}/lychee/out.md
+          format: markdown
+          jobSummary: true
           fail: true

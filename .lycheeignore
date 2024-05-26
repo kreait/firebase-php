@@ -1,6 +1,0 @@
-^https://[^/]+\.firebaseio\.com/
-^https://example\.page\.link/
-^https://github.com/kreait/firebase-php/(compare|pull|issues)
-^https://oauth2\.googleapis\.com/
-^https://www\.googleapis\.com/
-^project-id-xyz@beste-firebase\.iam\.gserviceaccount\.com$
