@@ -7,6 +7,13 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 ## [Unreleased]
 
+### Fixed
+
+* Fix `WebPushNotification` Shape
+  ([#895](https://github.com/kreait/firebase-php/pull/895))
+* Catch `Throwable` and let the exception converter handle details
+  ([#896](https://github.com/kreait/firebase-php/pull/896))
+
 ## [7.11.0] - 2024-05-16
 
 ### Added
