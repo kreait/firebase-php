@@ -92,6 +92,11 @@
             "lychee *.md",
             "lychee docs/*.rst"
         ],
+        "pre-push": [
+            "@cs",
+            "@test",
+            "@test-bc"
+        ],
         "rector": [
             "vendor/bin/rector --dry-run"
         ],
