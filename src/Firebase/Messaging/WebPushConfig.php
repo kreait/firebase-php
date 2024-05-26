@@ -35,26 +35,24 @@ use function sprintf;
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification#syntax WebPush Notification Syntax
  *
  * @phpstan-type WebPushNotificationShape array{
- *     title: non-empty-string,
- *     options?: array{
- *         dir?: 'ltr'|'rtl'|'auto',
- *         lang?: string,
- *         badge?: non-empty-string,
- *         body?: non-empty-string,
- *         tag?: non-empty-string,
- *         icon?: non-empty-string,
- *         image?: non-empty-string,
- *         data?: mixed,
- *         vibrate?: list<positive-int>,
- *         renotify?: bool,
- *         requireInteraction?: bool,
- *         actions?: list<array{
- *             action: non-empty-string,
- *             title: non-empty-string,
- *             icon: non-empty-string
- *         }>,
- *         silent?: bool
- *     }
+ *     title: string|null,
+ *     dir?: 'ltr'|'rtl'|'auto',
+ *     lang?: string,
+ *     badge?: non-empty-string,
+ *     body?: non-empty-string,
+ *     tag?: non-empty-string,
+ *     icon?: non-empty-string,
+ *     image?: non-empty-string,
+ *     data?: mixed,
+ *     vibrate?: list<positive-int>,
+ *     renotify?: bool,
+ *     requireInteraction?: bool,
+ *     actions?: list<array{
+ *         action: non-empty-string,
+ *         title: non-empty-string,
+ *         icon: non-empty-string
+ *     }>,
+ *     silent?: bool
  * }
  *
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig WebPush Config Syntax
@@ -142,6 +140,9 @@ final class WebPushConfig implements JsonSerializable
         return $config;
     }
 
+    /**
+     * @return WebPushConfigShape
+     */
     public function jsonSerialize(): array
     {
         // @phpstan-ignore notIdentical.alwaysTrue
