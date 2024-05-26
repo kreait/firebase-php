@@ -10,7 +10,6 @@ use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Tests\IntegrationTestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-use function array_values;
 use function current;
 use function random_int;
 
@@ -60,11 +59,14 @@ final class UserQueryTest extends IntegrationTestCase
             'limit' => 2,
         ];
 
-        $result = array_values($this->auth->queryUsers($query));
+        $result = $this->auth->queryUsers($query);
+        $firstResult = array_shift($result);
+        $secondResult = array_shift($result);
 
         try {
-            $this->assertCount(2, $result);
-            $this->assertGreaterThanOrEqual($result[0]->metadata->createdAt, $result[1]->metadata->createdAt);
+            $this->assertInstanceOf(UserRecord::class, $firstResult);
+            $this->assertInstanceOf(UserRecord::class, $secondResult);
+            $this->assertGreaterThanOrEqual($firstResult->metadata->createdAt, $secondResult->metadata->createdAt);
         } finally {
             $this->auth->deleteUser($earlier->uid);
             $this->auth->deleteUser($later->uid);
@@ -74,6 +76,7 @@ final class UserQueryTest extends IntegrationTestCase
     #[Test]
     public function descendingSortOrder(): void
     {
+        // Create two users just in case there are no others in the database
         $earlier = $this->createUserWithEmailAndPassword();
         $later = $this->createUserWithEmailAndPassword();
 
@@ -83,12 +86,14 @@ final class UserQueryTest extends IntegrationTestCase
             'limit' => 2,
         ];
 
-        $result = array_values($this->auth->queryUsers($query));
+        $result = $this->auth->queryUsers($query);
+        $firstResult = array_shift($result);
+        $secondResult = array_shift($result);
 
         try {
-            $this->assertCount(2, $result);
-            $this->assertSame($later->email, $result[0]->email);
-            $this->assertSame($earlier->email, $result[1]->email);
+            $this->assertInstanceOf(UserRecord::class, $firstResult);
+            $this->assertInstanceOf(UserRecord::class, $secondResult);
+            $this->assertLessThanOrEqual($firstResult->metadata->createdAt, $secondResult->metadata->createdAt);
         } finally {
             $this->auth->deleteUser($earlier->uid);
             $this->auth->deleteUser($later->uid);
