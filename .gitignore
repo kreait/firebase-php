@@ -4,7 +4,7 @@
 /vendor
 /docs/_build
 /docs/*.pyc
-/tests/_fixtures/test_*
+/tests/.env
 
 /.firebaserc
 /.php-cs-fixer.cache

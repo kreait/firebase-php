@@ -4,56 +4,40 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
-use Beste\Json;
 use Kreait\Firebase\Factory;
+use Kreait\Firebase\Tests\IntegrationTestCase;
 use Kreait\Firebase\Util;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\TestCase;
 
 use function assert;
 
 /**
  * @internal
  */
-final class ServiceAccountTest extends TestCase
+final class ServiceAccountTest extends IntegrationTestCase
 {
     /**
      * @var non-empty-string
      */
     private static string $credentialsPath;
-    private static bool $credentialsPathIsTemporary = false;
 
     public static function setUpBeforeClass(): void
     {
-        $credentialsFromEnvironment = Util::getenv('GOOGLE_APPLICATION_CREDENTIALS');
+        parent::setUpBeforeClass();
 
-        if ($credentialsFromEnvironment !== null && str_starts_with($credentialsFromEnvironment, '{')) {
-            // Don't overwrite the fixtures file
-            $credentialsPath = __DIR__.'/test_credentials.json';
-            self::$credentialsPathIsTemporary = true;
-
-            $result = file_put_contents($credentialsPath, $credentialsFromEnvironment);
-
-            if ($result === false) {
-                self::fail("Unable to write credentials to file `{$credentialsPath}`");
-            }
-
-            Util::putenv('GOOGLE_APPLICATION_CREDENTIALS', $credentialsPath);
-        } elseif (!file_exists($credentialsPath = __DIR__.'/../_fixtures/test_credentials.json')) {
-            self::markTestSkipped('The integration tests require credentials');
-        }
-
-        self::$credentialsPath = $credentialsPath;
+        self::$credentialsPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.'test_credentials.json';
+        file_put_contents(self::$credentialsPath, json_encode(self::$serviceAccount));
+        Util::putenv('GOOGLE_APPLICATION_CREDENTIALS', self::$credentialsPath);
     }
 
     public static function tearDownAfterClass(): void
     {
-        if (self::$credentialsPathIsTemporary) {
-            unlink(self::$credentialsPath);
-        }
+        unlink(self::$credentialsPath);
     }
 
     #[Test]
+    #[DoesNotPerformAssertions]
     public function withPathToServiceAccount(): void
     {
         $factory = (new Factory())->withServiceAccount(self::$credentialsPath);
@@ -62,6 +46,7 @@ final class ServiceAccountTest extends TestCase
     }
 
     #[Test]
+    #[DoesNotPerformAssertions]
     public function withJsonString(): void
     {
         $json = file_get_contents(self::$credentialsPath);
@@ -73,19 +58,16 @@ final class ServiceAccountTest extends TestCase
     }
 
     #[Test]
+    #[DoesNotPerformAssertions]
     public function withArray(): void
     {
-        $json = file_get_contents(self::$credentialsPath);
-        assert($json !== false && $json !== '');
-
-        $array = Json::decode($json, true);
-
-        $factory = (new Factory())->withServiceAccount($array);
+        $factory = (new Factory())->withServiceAccount(self::$serviceAccount);
 
         $this->assertFunctioningConnection($factory);
     }
 
     #[Test]
+    #[DoesNotPerformAssertions]
     public function withGoogleApplicationCredentialsAsFilePath(): void
     {
         Util::putenv('GOOGLE_APPLICATION_CREDENTIALS', self::$credentialsPath);
@@ -94,6 +76,7 @@ final class ServiceAccountTest extends TestCase
     }
 
     #[Test]
+    #[DoesNotPerformAssertions]
     public function withGoogleApplicationCredentialsAsJsonString(): void
     {
         $json = file_get_contents(self::$credentialsPath);
@@ -111,7 +94,6 @@ final class ServiceAccountTest extends TestCase
 
         try {
             $user = $auth->createAnonymousUser();
-            $this->addToAssertionCount(1);
         } finally {
             if ($user !== null) {
                 $auth->deleteUser($user->uid);
