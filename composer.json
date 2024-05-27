@@ -58,7 +58,8 @@
         "phpunit/phpunit": "^10.5.20",
         "rector/rector": "^1.0.5",
         "shipmonk/composer-dependency-analyser": "^1.5.3",
-        "symfony/var-dumper": "^6.3.5 || ^7.0.7"
+        "symfony/var-dumper": "^6.3.5 || ^7.0.7",
+        "vlucas/phpdotenv": "^5.6"
     },
     "suggest": {
         "google/cloud-firestore": "^1.0 to use the Firestore component"
