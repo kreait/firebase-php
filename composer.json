@@ -104,6 +104,9 @@
         "rector-fix": [
             "vendor/bin/rector"
         ],
+        "reset-project": [
+            "tests/bin/reset-project"
+        ],
         "test": [
             "@analyze",
             "@test-dependencies",
