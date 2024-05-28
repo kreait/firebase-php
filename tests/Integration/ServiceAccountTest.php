@@ -21,10 +21,13 @@ final class ServiceAccountTest extends IntegrationTestCase
      * @var non-empty-string
      */
     private static string $credentialsPath;
+    private static ?string $originalCredentials;
 
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
+
+        self::$originalCredentials = Util::getenv('GOOGLE_APPLICATION_CREDENTIALS');
 
         self::$credentialsPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.'test_credentials.json';
         file_put_contents(self::$credentialsPath, json_encode(self::$serviceAccount));
@@ -34,6 +37,7 @@ final class ServiceAccountTest extends IntegrationTestCase
     public static function tearDownAfterClass(): void
     {
         unlink(self::$credentialsPath);
+        Util::putenv('GOOGLE_APPLICATION_CREDENTIALS', self::$originalCredentials);
     }
 
     #[Test]
