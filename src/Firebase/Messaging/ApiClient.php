@@ -43,12 +43,19 @@ class ApiClient
 
         $body = $this->streamFactory->createStream(Json::encode($payload));
 
-        return $request
-            ->withProtocolVersion('2.0')
+        $request = $request
             ->withBody($body)
             ->withHeader('Content-Type', 'application/json; charset=UTF-8')
             ->withHeader('Content-Length', (string) $body->getSize())
         ;
+
+        // @codeCoverageIgnoreStart
+        if (defined('CURL_HTTP_VERSION_2') || defined('CURL_HTTP_VERSION_2_0')) {
+            $request = $request->withProtocolVersion('2.0');
+        }
+        // @codeCoverageIgnoreEnd
+
+        return $request;
     }
 
     /**
