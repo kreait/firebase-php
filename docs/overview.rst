@@ -59,7 +59,7 @@ Issues/Support
 **************
 
 - For bugs and past issues: `Github issue tracker <https://github.com/kreait/firebase-php/issues/>`_
-- For questions about Firebase in general: `Stack Overflow <https://stackoverflow.com/questions/tagged/firebase>`_ and the `Firebase Slack Community <https://firebase.community>`_.
+- For questions about Firebase in general: `Stack Overflow <https://stackoverflow.com/questions/tagged/firebase>`_.
 
 
 *******
