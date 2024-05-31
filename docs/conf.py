@@ -3,7 +3,6 @@
 ### General settings
 
 extensions = []
-templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 project = u'Firebase Admin SDK for PHP'
