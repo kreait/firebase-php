@@ -12,39 +12,32 @@
 
 ---
 
-## The future of the Firebase Admin PHP SDK
-
-The SDK has [over 2,100 Stars on GitHub](https://github.com/kreait/firebase-php/stargazers),
-is included in [more than 7,700 GitHub repositories](https://github.com/kreait/firebase-php/network/dependents),
-and is [downloaded more than 500,000 times per month and counting](https://packagist.org/packages/kreait/firebase-php/stats).
-Integrations for [Laravel](https://github.com/kreait/laravel-firebase) and
-[Symfony](https://github.com/kreait/firebase-bundle) increase these numbers. If a PHP project uses Firebase, there's
-a good chance it's using this SDK.
-
-The high number of downloads is a clear sign that the SDK is used in many CI/CD pipeline runs, indicating that a
-large number of enterprise and agency users rely on it to sustain their business. They use the SDK for free while 
-making money from it - however, none of them have provided funding for me, the developer of the SDK.
-
-Over the last 8+ years, I've spent thousands of hours maintaining and developing the SDK, keeping up with
-new features and changes to Firebase Services, providing support to users of the SDK and integrations (here and
-on [StackOverflow](https://stackoverflow.com/users/284325/jeromegamez), and making significant contributions to
-the official Google PHP libraries, so that not only SDK users can use up-to-date dependencies in their projects.
-
-I have plans to improve and expand the SDK, such as adding better support for using multiple Firebase 
-projects, tests without an integration environment, integrating Firebase's ML capabilities. Also, as I added more
-features while trying to keep the breaking changes at a minimum, there are many opportunities to improve the code
-base in general; but I hope you can understand that the current situation is very frustrating and feels increasingly
-unsustainable to me.
-
-If the SDK is valuable to you and you would like to help change the situation, please contact me at 
-_funding@jerome.gamez.name_ to discuss.
+> [!IMPORTANT]
+> The SDK, along with its [Laravel Package](https://github.com/kreait/laravel-firebase) and 
+> [Symfony Bundle](https://github.com/kreait/firebase-bundle), has garnered over 3,200 stars on GitHub. The SDK alone is
+> [downloaded more than 650,000 times a month](https://packagist.org/packages/kreait/firebase-php/stats),
+highlighting its significant impact and widespread use in the PHP community.
+> 
+> If your PHP project utilizes Firebase, there’s a high likelihood it’s leveraging this SDK. The impressive number of
+> downloads underscores its integration into numerous CI/CD pipelines, signifying its critical role for many enterprises
+> and agencies. 
+>
+> Despite its extensive use and the value it provides, the development and maintenance of this SDK have largely been unfunded.
+>
+> Over the past nine years, I have dedicated countless hours to developing and maintaining this SDK. This includes staying
+> current with Firebase updates, supporting users, and [contributing significantly to official Google PHP libraries](https://github.com/pulls?user=googleapis&q=sort%3Acomments-desc+author%3Ajeromegamez&user=googleapis),
+> ensuring all users benefit from up-to-date dependencies.
+>
+> While I am passionate about this work and thrilled by its utility to many, the lack of sponsorship has become
+> increasingly challenging. To continue delivering high-quality updates and support, I need your help.
+>
+> If this SDK is valuable to your business, please consider [showing your appreciation through sponsorship](https://github.com/sponsors/jeromegamez).
+>
+> Your support will motivate me to continue enhancing and maintaining the SDK, ensuring it remains a valuable resource for everyone.
+>
+> To discuss additional sponsorship opportunities, please reach out to me at [funding@jerome.gamez.name](mailto:funding@jerome.gamez.name).
 
 ---
-
-- [Overview](#overview)
-- [Installation](#installation)
-- [Supported Versions](#supported-versions)
-- [License](#license)
 
 ## Overview
 
