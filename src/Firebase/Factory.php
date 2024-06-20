@@ -48,7 +48,6 @@ use Throwable;
 use UnexpectedValueException;
 
 use function array_filter;
-use function is_array;
 use function is_string;
 use function sprintf;
 use function trim;
@@ -134,18 +133,6 @@ final class Factory
         $this->authTokenCache = new InMemoryCache($this->clock);
         $this->keySetCache = new InMemoryCache($this->clock);
         $this->httpClientOptions = HttpClientOptions::default();
-
-        $googleApplicationCredentials = Util::getenv('GOOGLE_APPLICATION_CREDENTIALS');
-
-        if ($googleApplicationCredentials === null) {
-            return;
-        }
-
-        if (!str_starts_with($googleApplicationCredentials, '{')) {
-            return;
-        }
-
-        $this->serviceAccount = Json::decode($googleApplicationCredentials, true);
     }
 
     /**
@@ -342,8 +329,9 @@ final class Factory
     public function createAppCheck(): Contract\AppCheck
     {
         $projectId = $this->getProjectId();
+        $serviceAccount = $this->getServiceAccount();
 
-        if ($this->serviceAccount === null) {
+        if ($serviceAccount === null) {
             throw new RuntimeException('Unable to use AppCheck without credentials');
         }
 
@@ -363,8 +351,8 @@ final class Factory
         return new AppCheck(
             new AppCheck\ApiClient($http),
             new AppCheckTokenGenerator(
-                $this->serviceAccount['client_email'],
-                $this->serviceAccount['private_key'],
+                $serviceAccount['client_email'],
+                $serviceAccount['private_key'],
                 $this->clock,
             ),
             new AppCheckTokenVerifier($projectId, $keySet),
@@ -524,7 +512,7 @@ final class Factory
             'databaseUrl' => $databaseUrl,
             'defaultStorageBucket' => $this->defaultStorageBucket,
             'projectId' => $projectId,
-            'serviceAccount' => $this->serviceAccount,
+            'serviceAccount' => $this->getServiceAccount(),
             'tenantId' => $this->tenantId,
             'tokenCacheType' => $this->authTokenCache::class,
             'verifierCacheType' => $this->verifierCache::class,
@@ -600,8 +588,10 @@ final class Factory
             $config['credentialsFetcher'] = $credentials;
         }
 
-        if (is_array($this->serviceAccount)) {
-            $config['keyFile'] = $this->serviceAccount;
+        $serviceAccount = $this->getServiceAccount();
+
+        if ($serviceAccount !== null) {
+            $config['keyFile'] = $serviceAccount;
         }
 
         return $config;
@@ -682,14 +672,38 @@ final class Factory
         return SessionCookieVerifier::createWithProjectIdAndCache($this->getProjectId(), $this->verifierCache);
     }
 
+    /**
+     * @return ServiceAccountShape|null
+     */
+    private function getServiceAccount(): ?array
+    {
+        if ($this->serviceAccount === null) {
+            $googleApplicationCredentials = Util::getenv('GOOGLE_APPLICATION_CREDENTIALS');
+
+            if ($googleApplicationCredentials === null) {
+                return null;
+            }
+
+            if (!str_starts_with($googleApplicationCredentials, '{')) {
+                return null;
+            }
+
+            $this->serviceAccount = Json::decode($googleApplicationCredentials, true);
+        }
+
+        return $this->serviceAccount;
+    }
+
     private function getGoogleAuthTokenCredentials(): ?FetchAuthTokenInterface
     {
         if ($this->googleAuthTokenCredentials !== null) {
             return $this->googleAuthTokenCredentials;
         }
 
-        if ($this->serviceAccount !== null) {
-            return $this->googleAuthTokenCredentials = new ServiceAccountCredentials(self::API_CLIENT_SCOPES, $this->serviceAccount);
+        $serviceAccount = $this->getServiceAccount();
+
+        if ($serviceAccount !== null) {
+            return $this->googleAuthTokenCredentials = new ServiceAccountCredentials(self::API_CLIENT_SCOPES, $serviceAccount);
         }
 
         try {

@@ -7,6 +7,11 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 ## [Unreleased]
 
+### Changed
+
+* Service Account auto-discovery was done on instantiation of the Factory, causing it to fail when credentials weren't
+  ready yet. It will now be done the first time a component is to be instantiated.
+
 ## [7.12.0] - 2024-05-26
 
 ### Fixed
