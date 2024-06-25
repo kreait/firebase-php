@@ -118,7 +118,7 @@ final class DynamicLinksTest extends TestCase
         $this->httpHandler->append($response = new Response(400, [], '{}'));
 
         $action = $this->createDynamicLinkAction('https://example.com/irrelevant')
-            ->withDynamicLinkDomain('https://page.link.tld') // preventing the action from being changed
+            ->withDynamicLinkDomain('https://page-link.example.com') // preventing the action from being changed
         ;
 
         try {

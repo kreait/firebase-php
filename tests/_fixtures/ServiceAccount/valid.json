@@ -3,10 +3,10 @@
     "project_id": "project",
     "private_key_id": "private_key_id",
     "private_key": "-----BEGIN PRIVATE KEY-----\nsome gibberish\n-----END PRIVATE KEY-----\n",
-    "client_email": "client@email.tld",
+    "client_email": "client@example.com",
     "client_id": "1234567890",
-    "auth_uri": "https://some.google.tld/o/oauth2/auth",
-    "token_uri": "https://some.google.tld/o/oauth2/token",
-    "auth_provider_x509_cert_url": "https://some.google.tld/oauth2/v1/certs",
-    "client_x509_cert_url": "https://some.google.tld/robot/v1/metadata/x509/user%40project.iam.gserviceaccount.com"
+    "auth_uri": "https://google.example.com/o/oauth2/auth",
+    "token_uri": "https://google.example.com/o/oauth2/token",
+    "auth_provider_x509_cert_url": "https://google.example.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://google.example.com/robot/v1/metadata/x509/user%40project.iam.gserviceaccount.com"
 }

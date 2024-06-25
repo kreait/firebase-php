@@ -77,7 +77,7 @@ final class UrlBuilderTest extends UnitTestCase
      */
     public static function realUrls(): array
     {
-        $baseUrl = 'https://project.region.db.tld';
+        $baseUrl = 'https://project.region.example.com';
 
         return [
             'empty path, empty query' => [
@@ -125,7 +125,7 @@ final class UrlBuilderTest extends UnitTestCase
     public static function emulatedUrls(): array
     {
         $namespace = 'namespace';
-        $baseUrl = 'https://'.$namespace.'.db.tld';
+        $baseUrl = 'https://'.$namespace.'.example.com';
         $emulatorHost = 'localhost:9000';
 
         return [

@@ -15,7 +15,7 @@ use Psr\Http\Message\UriInterface;
 /**
  * The Firebase Realtime Database.
  *
- * @see https://firebase.google.com/docs/reference/js/firebase.database.Database
+ * @see https://firebase.google.com/docs/reference/rest/database
  */
 interface Database
 {
@@ -24,16 +24,12 @@ interface Database
     /**
      * Returns a Reference to the root or the specified path.
      *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.Database#ref
-     *
      * @throws InvalidArgumentException
      */
     public function getReference(?string $path = null): Reference;
 
     /**
      * Returns a reference to the root or the path specified in url.
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.Database#refFromURL
      *
      * @param string|UriInterface $uri
      *

@@ -26,7 +26,7 @@ final class DatabaseTest extends UnitTestCase
 
     protected function setUp(): void
     {
-        $this->url = 'https://database.firebaseio.tld';
+        $this->url = 'https://database.firebaseio.com';
         $this->uri = new Uri($this->url);
         $this->apiClient = $this->createMock(ApiClient::class);
 
@@ -65,7 +65,7 @@ final class DatabaseTest extends UnitTestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->database->getReferenceFromUrl('http://non-matching.tld');
+        $this->database->getReferenceFromUrl('http://non-matching.example.com');
     }
 
     #[Test]

@@ -21,13 +21,13 @@ final class HttpClientOptionsTest extends TestCase
             ->withConnectTimeout(1.1)
             ->withReadTimeout(2.2)
             ->withTimeout(3.3)
-            ->withProxy('https://proxy.tld')
+            ->withProxy('https://proxy.example.com')
         ;
 
         $this->assertSame(1.1, $options->connectTimeout());
         $this->assertSame(2.2, $options->readTimeout());
         $this->assertSame(3.3, $options->timeout());
-        $this->assertSame('https://proxy.tld', $options->proxy());
+        $this->assertSame('https://proxy.example.com', $options->proxy());
     }
 
     #[Test]

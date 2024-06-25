@@ -9,7 +9,6 @@ use JsonSerializable;
 /**
  * @see https://www.macstories.net/tutorials/a-comprehensive-guide-to-the-itunes-affiliate-program/
  * @see https://blog.geni.us/parameter-cheat-sheet-for-itunes-and-app-store-links/
- * @see https://affiliate.itunes.apple.com/resources/documentation/basic_affiliate_link_guidelines_for_the_phg_network/
  *
  * @phpstan-type ITunesConnectAnalyticsShape array{
  *     at?: non-empty-string,

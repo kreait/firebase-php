@@ -23,8 +23,6 @@ use function trim;
  *
  * Alternatively, you can traverse into the snapshot by calling {@see getChild()}
  * to return child snapshots (which you could then call {@see getValue()} on).
- *
- * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot
  */
 class Snapshot
 {
@@ -42,8 +40,6 @@ class Snapshot
      * the /users/ada/ node. Accessing the key on any Snapshot will return the key for the
      * location that generated it. However, accessing the key on the root URL of a database
      * will return null.
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#key
      */
     public function getKey(): ?string
     {
@@ -52,8 +48,6 @@ class Snapshot
 
     /**
      * Returns the Reference for the location that generated this Snapshot.
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#ref
      */
     public function getReference(): Reference
     {
@@ -67,8 +61,6 @@ class Snapshot
      * at the specified relative path. The relative path can either be a simple child name (e.g. "ada") or a
      * deeper, slash-separated path (e.g. "ada/name/first"). If the child location has no data, an empty
      * Snapshot (that is, a Snapshot whose value is null) is returned.
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#child
      *
      * @throws InvalidArgumentException if the given child path is invalid
      */
@@ -86,8 +78,6 @@ class Snapshot
      * Returns true if this Snapshot contains any data.
      *
      * It is a convenience method for `$snapshot->getValue() !== null`.
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#exists
      */
     public function exists(): bool
     {
@@ -96,8 +86,6 @@ class Snapshot
 
     /**
      * Returns true if the specified child path has (non-null) data.
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#hasChild
      */
     public function hasChild(string $path): bool
     {
@@ -114,8 +102,6 @@ class Snapshot
      * you can enumerate them using foreach(). If it does not, then either this snapshot
      * contains a primitive value (which can be retrieved with {@see getValue()}) or
      * it is empty (in which case {@see getValue()} will return null).
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#hasChildren
      */
     public function hasChildren(): bool
     {
@@ -124,8 +110,6 @@ class Snapshot
 
     /**
      * Returns the number of child properties of this Snapshot.
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#numChildren
      */
     public function numChildren(): int
     {
