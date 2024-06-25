@@ -89,9 +89,7 @@
             "vendor/bin/php-cs-fixer fix --diff --verbose"
         ],
         "docs": [
-            "cd docs && make html",
-            "lychee *.md",
-            "lychee docs/*.rst"
+            "cd docs && make html"
         ],
         "pre-push": [
             "@cs",
