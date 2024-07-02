@@ -406,12 +406,15 @@ final class Factory
         $projectId = $this->getProjectId();
 
         $errorHandler = new MessagingApiExceptionConverter($this->clock);
+        $requestFactory = new Messaging\RequestFactory(
+            requestFactory: $this->httpFactory,
+            streamFactory: $this->httpFactory,
+        );
 
         $messagingApiClient = new Messaging\ApiClient(
             $this->createApiClient(),
             $projectId,
-            $this->httpFactory,
-            $this->httpFactory,
+            $requestFactory,
         );
 
         $appInstanceApiClient = new AppInstanceApiClient(
