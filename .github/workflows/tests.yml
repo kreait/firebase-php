@@ -18,7 +18,7 @@ on:
 
 jobs:
   tests:
-    name: PHP ${{ matrix.php }}
+    name: "PHP ${{ matrix.php }}, ${{ matrix.dependencies }} deps"
     runs-on: ubuntu-latest
 
     strategy:
@@ -27,6 +27,9 @@ jobs:
           - "8.1"
           - "8.2"
           - "8.3"
+        dependencies:
+          - "lowest"
+          - "highest"
 
     env:
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
@@ -62,6 +65,7 @@ jobs:
       - uses: "ramsey/composer-install@v3"
         with:
           composer-options: "${{ matrix.composer-options }}"
+          dependency-versions: "${{ matrix.dependencies }}"
 
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
