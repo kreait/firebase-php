@@ -9,7 +9,7 @@ Specifically, you can send messages to individual devices, named topics, or cond
     Sending messages to Device Groups is only possible with legacy protocols which are not supported
     by this SDK.
 
-Before you start, please read about Firebase Remote Config in the official documentation:
+Before you start, please read about Firebase Cloud Messaging in the official documentation:
 
 - `Introduction to Firebase Cloud Messaging <https://firebase.google.com/docs/cloud-messaging/>`_
 - `Introduction to Admin FCM API <https://firebase.google.com/docs/cloud-messaging/admin/>`_
