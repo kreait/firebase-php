@@ -26,6 +26,8 @@ use function sprintf;
  *     version?: RemoteConfigVersionShape,
  *     parameterGroups?: array<non-empty-string, RemoteConfigParameterGroupShape>
  * }
+ *
+ * @see https://firebase.google.com/docs/reference/remote-config/rest/v1/RemoteConfig
  */
 class Template implements JsonSerializable
 {
