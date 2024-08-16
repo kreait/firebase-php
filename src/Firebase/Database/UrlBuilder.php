@@ -81,9 +81,7 @@ final class UrlBuilder
         }
 
         $namespace = $matches['namespace'];
-        assert($namespace !== '');
         $host = $matches['host'];
-        assert($host !== '');
 
         $emulatorHost = Util::rtdbEmulatorHost();
 
