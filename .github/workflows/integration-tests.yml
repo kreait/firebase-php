@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      php-version: '8.2'
+      php-version: '8.3'
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
       key: cache-integration-7x-${{ matrix.php }}-v1
 
