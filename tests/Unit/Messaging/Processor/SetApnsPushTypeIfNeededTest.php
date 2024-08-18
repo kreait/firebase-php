@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Messaging\Processor;
 
 use Beste\Json;
+use Iterator;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\Processor\SetApnsPushTypeIfNeeded;
@@ -25,26 +26,32 @@ final class SetApnsPushTypeIfNeededTest extends TestCase
     }
 
     /**
-     * @param non-empty-string|null $expected
+     * @param non-empty-string $expected
      * @param array<mixed> $messageData
      */
     #[DataProvider('provideMessagesWithExpectedPushType')]
     #[Test]
-    public function itSetsTheExpectedPushType(?string $expected, array $messageData): void
+    public function itSetsTheExpectedPushType(string $expected, array $messageData): void
     {
         $message = CloudMessage::fromArray($messageData);
 
-        if ($expected === null) {
-            $this->assertMessageHasNoPushType($message);
-        } else {
-            $this->assertMessageHasPushType($message, $expected);
-        }
+        $processed = Json::decode(Json::encode(($this->processor)($message)), true);
+
+        $this->assertArrayHasKey('apns-push-type', $processed['apns']['headers']);
+        $this->assertSame($expected, $processed['apns']['headers']['apns-push-type']);
     }
 
-    /**
-     * @return iterable<string, array{0: non-empty-string|null, 1: array<mixed>}>
-     */
-    public static function provideMessagesWithExpectedPushType(): iterable
+    #[Test]
+    public function itDoesNotSetThePushType(): void
+    {
+        $message = CloudMessage::fromArray($given = ['topic' => 'test']);
+
+        $processed = Json::decode(Json::encode(($this->processor)($message)), true);
+
+        $this->assertSame($given, $processed);
+    }
+
+    public static function provideMessagesWithExpectedPushType(): Iterator
     {
         yield 'message data at root level -> background' => [
             'background',
@@ -159,34 +166,5 @@ final class SetApnsPushTypeIfNeededTest extends TestCase
                 ],
             ],
         ];
-
-        yield 'no data -> none' => [
-            null,
-            [
-                'data' => [],
-                'apns' => [
-                    'payload' => [
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @param non-empty-string $type
-     */
-    private function assertMessageHasPushType(Message $message, string $type): void
-    {
-        $processed = Json::decode(Json::encode(($this->processor)($message)), true);
-
-        $this->assertTrue(isset($processed['apns']['headers']['apns-push-type']));
-        $this->assertSame($type, $processed['apns']['headers']['apns-push-type']);
-    }
-
-    private function assertMessageHasNoPushType(Message $message): void
-    {
-        $processed = Json::decode(Json::encode(($this->processor)($message)), true);
-
-        $this->assertFalse(isset($processed['apns']['headers']['apns-push-type']));
     }
 }
