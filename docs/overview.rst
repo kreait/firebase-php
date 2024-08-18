@@ -6,7 +6,7 @@ Overview
 Requirements
 ************
 
-* PHP 8.1, 8.2, or 8.3
+* PHP 8.1, 8.2, 8.3 or 8.4
 * The `mbstring PHP extension <http://php.net/manual/en/book.mbstring.php>`_
 * A Firebase project - create a new project in the `Firebase console <https://firebase.google.com/console/>`_,
   if you don't already have one.

@@ -7,6 +7,10 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 ## [Unreleased]
 
+### Added
+
+* Added support for PHP 8.4
+
 ## [7.13.1] - 2024-07-02
 
 ### Fixed
