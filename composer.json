@@ -100,7 +100,8 @@
             "vendor/bin/rector --dry-run"
         ],
         "rector-fix": [
-            "vendor/bin/rector"
+            "vendor/bin/rector",
+            "@cs"
         ],
         "reset-project": [
             "tests/bin/reset-project"
