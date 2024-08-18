@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Messaging\Processor;
 
 use Beste\Json;
+use Iterator;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Processor\SetApnsContentAvailableIfNeeded;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -30,27 +31,29 @@ final class SetApnsContentAvailableIfNeededTest extends TestCase
      */
     #[DataProvider('provideMessagesWithExpectedContentAvailable')]
     #[Test]
-    public function itSetsTheExpectedPushType(bool $expected, array $messageData): void
+    public function itSetsTheExpectedPushType(array $messageData): void
     {
         $message = CloudMessage::fromArray($messageData);
 
         $processed = Json::decode(Json::encode(($this->processor)($message)), true);
 
-        if ($expected === true) {
-            $this->assertTrue(isset($processed['apns']['payload']['aps']['content-available']));
-            $this->assertSame(1, $processed['apns']['payload']['aps']['content-available']);
-        } else {
-            $this->assertFalse(isset($processed['apns']['payload']['aps']['content-available']));
-        }
+        $this->assertArrayHasKey('content-available', $processed['apns']['payload']['aps']);
+        $this->assertSame(1, $processed['apns']['payload']['aps']['content-available']);
     }
 
-    /**
-     * @return iterable<string, array{0: bool, 1: array<mixed>}>
-     */
-    public static function provideMessagesWithExpectedContentAvailable(): iterable
+    #[Test]
+    public function itDoesNotSetThePushType(): void
     {
-        yield 'message data at root level -> true' => [
-            true,
+        $message = CloudMessage::fromArray($given = ['topic' => 'test']);
+
+        $processed = Json::decode(Json::encode(($this->processor)($message)), true);
+
+        $this->assertSame($given, $processed);
+    }
+
+    public static function provideMessagesWithExpectedContentAvailable(): Iterator
+    {
+        yield 'message data at root level' => [
             [
                 'data' => [
                     'key' => 'value',
@@ -58,8 +61,7 @@ final class SetApnsContentAvailableIfNeededTest extends TestCase
             ],
         ];
 
-        yield 'message data at apns level -> true' => [
-            true,
+        yield 'message data at apns level' => [
             [
                 'apns' => [
                     'payload' => [
@@ -71,8 +73,7 @@ final class SetApnsContentAvailableIfNeededTest extends TestCase
             ],
         ];
 
-        yield 'both message and apns data -> true' => [
-            true,
+        yield 'both message and apns data' => [
             [
                 'data' => [
                     'key' => 'value',
@@ -82,17 +83,6 @@ final class SetApnsContentAvailableIfNeededTest extends TestCase
                         'data' => [
                             'key' => 'value',
                         ],
-                    ],
-                ],
-            ],
-        ];
-
-        yield 'no data -> false' => [
-            false,
-            [
-                'data' => [],
-                'apns' => [
-                    'payload' => [
                     ],
                 ],
             ],
