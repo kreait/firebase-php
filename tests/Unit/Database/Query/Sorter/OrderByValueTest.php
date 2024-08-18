@@ -40,29 +40,24 @@ final class OrderByValueTest extends UnitTestCase
         $this->assertSame($expected, $this->sorter->modifyValue($given));
     }
 
-    /**
-     * @return array<string, array<string, mixed>>
-     */
-    public static function valueProvider()
+    public static function valueProvider(): \Iterator
     {
-        return [
-            'scalar' => [
-                'expected' => 'scalar',
-                'given' => 'scalar',
+        yield 'scalar' => [
+            'expected' => 'scalar',
+            'given' => 'scalar',
+        ];
+        yield 'array' => [
+            'expected' => [
+                'third' => 1,
+                'fourth' => 2,
+                'first' => 3,
+                'second' => 4,
             ],
-            'array' => [
-                'expected' => [
-                    'third' => 1,
-                    'fourth' => 2,
-                    'first' => 3,
-                    'second' => 4,
-                ],
-                'given' => [
-                    'first' => 3,
-                    'second' => 4,
-                    'third' => 1,
-                    'fourth' => 2,
-                ],
+            'given' => [
+                'first' => 3,
+                'second' => 4,
+                'third' => 1,
+                'fourth' => 2,
             ],
         ];
     }

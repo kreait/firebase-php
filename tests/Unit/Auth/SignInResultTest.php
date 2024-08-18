@@ -47,24 +47,19 @@ final class SignInResultTest extends UnitTestCase
         $this->assertSame('some-id', $result->firebaseUserId());
     }
 
-    /**
-     * @return array<string, array<int, array<string, mixed>>>
-     */
-    public static function fullResponse(): array
+    public static function fullResponse(): \Iterator
     {
-        return [
-            'snake_cased' => [[
-                'idToken' => 'idToken',
-                'refreshToken' => 'refreshToken',
-                'accessToken' => 'accessToken',
-                'expiresIn' => 3600,
-            ]],
-            'camel_cased' => [[
-                'id_token' => 'idToken',
-                'refresh_token' => 'refreshToken',
-                'access_token' => 'accessToken',
-                'expires_in' => 3600,
-            ]],
-        ];
+        yield 'snake_cased' => [[
+            'idToken' => 'idToken',
+            'refreshToken' => 'refreshToken',
+            'accessToken' => 'accessToken',
+            'expiresIn' => 3600,
+        ]];
+        yield 'camel_cased' => [[
+            'id_token' => 'idToken',
+            'refresh_token' => 'refreshToken',
+            'access_token' => 'accessToken',
+            'expires_in' => 3600,
+        ]];
     }
 }

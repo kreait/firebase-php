@@ -32,61 +32,56 @@ final class OrderByChildTest extends UnitTestCase
         $this->assertSame($expected, $sut->modifyValue($given));
     }
 
-    /**
-     * @return array<string, array<string, mixed>>
-     */
-    public static function valueProvider(): array
+    public static function valueProvider(): \Iterator
     {
-        return [
-            'scalar' => [
-                'childKey' => 'key',
-                'expected' => 'scalar',
-                'given' => 'scalar',
+        yield 'scalar' => [
+            'childKey' => 'key',
+            'expected' => 'scalar',
+            'given' => 'scalar',
+        ];
+        yield 'array' => [
+            'childKey' => 'key',
+            'expected' => [
+                'third' => ['key' => 1],
+                'fourth' => ['key' => 2],
+                'first' => ['key' => 3],
+                'second' => ['key' => 4],
             ],
-            'array' => [
-                'childKey' => 'key',
-                'expected' => [
-                    'third' => ['key' => 1],
-                    'fourth' => ['key' => 2],
-                    'first' => ['key' => 3],
-                    'second' => ['key' => 4],
-                ],
-                'given' => [
-                    'first' => ['key' => 3],
-                    'second' => ['key' => 4],
-                    'third' => ['key' => 1],
-                    'fourth' => ['key' => 2],
-                ],
+            'given' => [
+                'first' => ['key' => 3],
+                'second' => ['key' => 4],
+                'third' => ['key' => 1],
+                'fourth' => ['key' => 2],
             ],
-            'nested' => [
-                'childKey' => 'child/grandchild',
-                'expected' => [
-                    'third' => ['child' => ['grandchild' => 1]],
-                    'fourth' => ['child' => ['grandchild' => 2]],
-                    'first' => ['child' => ['grandchild' => 3]],
-                    'second' => ['child' => ['grandchild' => 4]],
-                ],
-                'given' => [
-                    'first' => ['child' => ['grandchild' => 3]],
-                    'second' => ['child' => ['grandchild' => 4]],
-                    'third' => ['child' => ['grandchild' => 1]],
-                    'fourth' => ['child' => ['grandchild' => 2]],
-                ],
+        ];
+        yield 'nested' => [
+            'childKey' => 'child/grandchild',
+            'expected' => [
+                'third' => ['child' => ['grandchild' => 1]],
+                'fourth' => ['child' => ['grandchild' => 2]],
+                'first' => ['child' => ['grandchild' => 3]],
+                'second' => ['child' => ['grandchild' => 4]],
             ],
-            'super_nested' => [
-                'childKey' => 'child/grandchild/great_grandchild',
-                'expected' => [
-                    'third' => ['child' => ['grandchild' => ['great_grandchild' => 1]]],
-                    'fourth' => ['child' => ['grandchild' => ['great_grandchild' => 2]]],
-                    'first' => ['child' => ['grandchild' => ['great_grandchild' => 3]]],
-                    'second' => ['child' => ['grandchild' => ['great_grandchild' => 4]]],
-                ],
-                'given' => [
-                    'first' => ['child' => ['grandchild' => ['great_grandchild' => 3]]],
-                    'second' => ['child' => ['grandchild' => ['great_grandchild' => 4]]],
-                    'third' => ['child' => ['grandchild' => ['great_grandchild' => 1]]],
-                    'fourth' => ['child' => ['grandchild' => ['great_grandchild' => 2]]],
-                ],
+            'given' => [
+                'first' => ['child' => ['grandchild' => 3]],
+                'second' => ['child' => ['grandchild' => 4]],
+                'third' => ['child' => ['grandchild' => 1]],
+                'fourth' => ['child' => ['grandchild' => 2]],
+            ],
+        ];
+        yield 'super_nested' => [
+            'childKey' => 'child/grandchild/great_grandchild',
+            'expected' => [
+                'third' => ['child' => ['grandchild' => ['great_grandchild' => 1]]],
+                'fourth' => ['child' => ['grandchild' => ['great_grandchild' => 2]]],
+                'first' => ['child' => ['grandchild' => ['great_grandchild' => 3]]],
+                'second' => ['child' => ['grandchild' => ['great_grandchild' => 4]]],
+            ],
+            'given' => [
+                'first' => ['child' => ['grandchild' => ['great_grandchild' => 3]]],
+                'second' => ['child' => ['grandchild' => ['great_grandchild' => 4]]],
+                'third' => ['child' => ['grandchild' => ['great_grandchild' => 1]]],
+                'fourth' => ['child' => ['grandchild' => ['great_grandchild' => 2]]],
             ],
         ];
     }

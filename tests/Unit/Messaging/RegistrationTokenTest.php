@@ -25,13 +25,8 @@ final class RegistrationTokenTest extends TestCase
         $this->assertSame('"'.$token.'"', Json::encode($token));
     }
 
-    /**
-     * @return array<string, array<int, string>>
-     */
-    public static function valueProvider(): array
+    public static function valueProvider(): \Iterator
     {
-        return [
-            'foo' => ['foo', 'foo'],
-        ];
+        yield 'foo' => ['foo', 'foo'];
     }
 }

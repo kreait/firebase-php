@@ -35,107 +35,101 @@ final class CreateUserTest extends TestCase
         $this->assertEqualsCanonicalizing($expected, $request->jsonSerialize());
     }
 
-    /**
-     * @return array<string, array<array<string|mixed>>>
-     */
-    public static function propertiesProvider(): array
+    public static function propertiesProvider(): \Iterator
     {
         $given = ['uid' => 'some-uid'];
         $expected = ['localId' => 'some-uid'];
-
-        return [
-            'email' => [
-                $given + ['email' => 'user@example.com'],
-                $expected + ['email' => 'user@example.com'],
-            ],
-            'unverified_email_through_flag' => [
-                $given + ['email' => 'user@example.com', 'emailVerified' => false],
-                $expected + ['email' => 'user@example.com', 'emailVerified' => false],
-            ],
-            'unverified_email' => [
-                $given + ['unverifiedEmail' => 'user@example.com'],
-                $expected + ['email' => 'user@example.com', 'emailVerified' => false],
-            ],
-            'verified_email_through_flag' => [
-                $given + ['email' => 'user@example.com', 'emailVerified' => true],
-                $expected + ['email' => 'user@example.com', 'emailVerified' => true],
-            ],
-            'verified_email' => [
-                $given + ['verifiedEmail' => 'user@example.com'],
-                $expected + ['email' => 'user@example.com', 'emailVerified' => true],
-            ],
-            'no_email_but_verification_flag' => [
-                $given + ['emailVerified' => true],
-                $expected + ['emailVerified' => true],
-            ],
-            'disabled_1' => [
-                $given + ['disabled' => true],
-                $expected + ['disableUser' => true],
-            ],
-            'disabled_2' => [
-                $given + ['isDisabled' => true],
-                $expected + ['disableUser' => true],
-            ],
-            'disabled_3' => [
-                $given + ['isDisabled' => null],
-                $expected,
-            ],
-            'disableUser_1' => [
-                $given + ['disableUser' => true],
-                $expected + ['disableUser' => true],
-            ],
-            'disableUser_2' => [
-                $given + ['disableUser' => false],
-                $expected + ['disableUser' => false],
-            ],
-            'explicitly_enabled_user_1' => [
-                $given + ['enabled' => true],
-                $expected + ['disableUser' => false],
-            ],
-            'explicitly_enabled_user_2' => [
-                $given + ['isEnabled' => true],
-                $expected + ['disableUser' => false],
-            ],
-            'explicitly_disabled_user_1' => [
-                $given + ['enabled' => false],
-                $expected + ['disableUser' => true],
-            ],
-            'enableUser' => [
-                $given + ['enableUser' => true],
-                $expected + ['disableUser' => false],
-            ],
-            'displayName' => [
-                $given + ['displayName' => 'Äöüß Èâç!'],
-                $expected + ['displayName' => 'Äöüß Èâç!'],
-            ],
-            'phone' => [
-                $given + ['phone' => '+123456789'],
-                $expected + ['phoneNumber' => '+123456789'],
-            ],
-            'phoneNumber' => [
-                $given + ['phoneNumber' => '+123456789'],
-                $expected + ['phoneNumber' => '+123456789'],
-            ],
-            'photo' => [
-                $given + ['photo' => 'https://example.com/photo.jpg'],
-                $expected + ['photoUrl' => 'https://example.com/photo.jpg'],
-            ],
-            'photoUrl' => [
-                $given + ['photoUrl' => 'https://example.com/photo.jpg'],
-                $expected + ['photoUrl' => 'https://example.com/photo.jpg'],
-            ],
-            'password' => [
-                $given + ['password' => 'secret'],
-                $expected + ['password' => 'secret'],
-            ],
-            'clearTextPassword' => [
-                $given + ['clearTextPassword' => 'secret'],
-                $expected + ['password' => 'secret'],
-            ],
-            'clearTextPasswordObject' => [
-                $given + ['clearTextPassword' => ClearTextPassword::fromString('secret')->value],
-                $expected + ['password' => 'secret'],
-            ],
+        yield 'email' => [
+            $given + ['email' => 'user@example.com'],
+            $expected + ['email' => 'user@example.com'],
+        ];
+        yield 'unverified_email_through_flag' => [
+            $given + ['email' => 'user@example.com', 'emailVerified' => false],
+            $expected + ['email' => 'user@example.com', 'emailVerified' => false],
+        ];
+        yield 'unverified_email' => [
+            $given + ['unverifiedEmail' => 'user@example.com'],
+            $expected + ['email' => 'user@example.com', 'emailVerified' => false],
+        ];
+        yield 'verified_email_through_flag' => [
+            $given + ['email' => 'user@example.com', 'emailVerified' => true],
+            $expected + ['email' => 'user@example.com', 'emailVerified' => true],
+        ];
+        yield 'verified_email' => [
+            $given + ['verifiedEmail' => 'user@example.com'],
+            $expected + ['email' => 'user@example.com', 'emailVerified' => true],
+        ];
+        yield 'no_email_but_verification_flag' => [
+            $given + ['emailVerified' => true],
+            $expected + ['emailVerified' => true],
+        ];
+        yield 'disabled_1' => [
+            $given + ['disabled' => true],
+            $expected + ['disableUser' => true],
+        ];
+        yield 'disabled_2' => [
+            $given + ['isDisabled' => true],
+            $expected + ['disableUser' => true],
+        ];
+        yield 'disabled_3' => [
+            $given + ['isDisabled' => null],
+            $expected,
+        ];
+        yield 'disableUser_1' => [
+            $given + ['disableUser' => true],
+            $expected + ['disableUser' => true],
+        ];
+        yield 'disableUser_2' => [
+            $given + ['disableUser' => false],
+            $expected + ['disableUser' => false],
+        ];
+        yield 'explicitly_enabled_user_1' => [
+            $given + ['enabled' => true],
+            $expected + ['disableUser' => false],
+        ];
+        yield 'explicitly_enabled_user_2' => [
+            $given + ['isEnabled' => true],
+            $expected + ['disableUser' => false],
+        ];
+        yield 'explicitly_disabled_user_1' => [
+            $given + ['enabled' => false],
+            $expected + ['disableUser' => true],
+        ];
+        yield 'enableUser' => [
+            $given + ['enableUser' => true],
+            $expected + ['disableUser' => false],
+        ];
+        yield 'displayName' => [
+            $given + ['displayName' => 'Äöüß Èâç!'],
+            $expected + ['displayName' => 'Äöüß Èâç!'],
+        ];
+        yield 'phone' => [
+            $given + ['phone' => '+123456789'],
+            $expected + ['phoneNumber' => '+123456789'],
+        ];
+        yield 'phoneNumber' => [
+            $given + ['phoneNumber' => '+123456789'],
+            $expected + ['phoneNumber' => '+123456789'],
+        ];
+        yield 'photo' => [
+            $given + ['photo' => 'https://example.com/photo.jpg'],
+            $expected + ['photoUrl' => 'https://example.com/photo.jpg'],
+        ];
+        yield 'photoUrl' => [
+            $given + ['photoUrl' => 'https://example.com/photo.jpg'],
+            $expected + ['photoUrl' => 'https://example.com/photo.jpg'],
+        ];
+        yield 'password' => [
+            $given + ['password' => 'secret'],
+            $expected + ['password' => 'secret'],
+        ];
+        yield 'clearTextPassword' => [
+            $given + ['clearTextPassword' => 'secret'],
+            $expected + ['password' => 'secret'],
+        ];
+        yield 'clearTextPasswordObject' => [
+            $given + ['clearTextPassword' => ClearTextPassword::fromString('secret')->value],
+            $expected + ['password' => 'secret'],
         ];
     }
 }

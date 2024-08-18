@@ -30,29 +30,19 @@ final class TopicTest extends TestCase
         Topic::fromValue($value);
     }
 
-    /**
-     * @return array<string, array<int, string>>
-     */
-    public static function valueProvider(): array
+    public static function valueProvider(): \Iterator
     {
-        return [
-            'no slashes' => ['foo', 'foo'],
-            'leading slash' => ['foo', '/foo'],
-            'trailing slash' => ['foo', 'foo/'],
-            'with topic prefix' => ['foo', '/topic/foo'],
-        ];
+        yield 'no slashes' => ['foo', 'foo'];
+        yield 'leading slash' => ['foo', '/foo'];
+        yield 'trailing slash' => ['foo', 'foo/'];
+        yield 'with topic prefix' => ['foo', '/topic/foo'];
     }
 
-    /**
-     * @return array<string, array<int, string>>
-     */
-    public static function invalidValueProvider(): array
+    public static function invalidValueProvider(): \Iterator
     {
-        return [
-            '$' => ['$'],
-            'ä' => ['ä'],
-            'é' => ['é'],
-            '(empty)' => [''],
-        ];
+        yield '$' => ['$'];
+        yield 'ä' => ['ä'];
+        yield 'é' => ['é'];
+        yield '(empty)' => [''];
     }
 }

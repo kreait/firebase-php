@@ -66,23 +66,18 @@ final class MessagingApiExceptionConverterTest extends TestCase
         $this->assertInstanceOf($expectedClass, $converted);
     }
 
-    /**
-     * @return array<array<Throwable|class-string>>
-     */
-    public static function exceptions(): array
+    public static function exceptions(): \Iterator
     {
-        return [
-            'connection error' => [new ConnectException('Connection Failed', new Request('GET', 'https://example.com')), ApiConnectionFailed::class],
-            '400' => [self::createRequestException(400, 'Bad request'), InvalidMessage::class],
-            '401' => [self::createRequestException(401, 'Unauthenticated'), AuthenticationError::class],
-            '403' => [self::createRequestException(403, 'Unauthorized'), AuthenticationError::class],
-            '404' => [self::createRequestException(404, 'Not Found'), NotFound::class],
-            '429' => [self::createRequestException(429, 'Too Many Requests'), QuotaExceeded::class],
-            '500' => [self::createRequestException(500, 'Server broken'), ServerError::class],
-            '503' => [self::createRequestException(503, 'Server unavailable'), ServerUnavailable::class],
-            '418' => [self::createRequestException(418, 'Some tea'), MessagingError::class],
-            'runtime error' => [new RuntimeException('Something else'), MessagingError::class],
-        ];
+        yield 'connection error' => [new ConnectException('Connection Failed', new Request('GET', 'https://example.com')), ApiConnectionFailed::class];
+        yield '400' => [self::createRequestException(400, 'Bad request'), InvalidMessage::class];
+        yield '401' => [self::createRequestException(401, 'Unauthenticated'), AuthenticationError::class];
+        yield '403' => [self::createRequestException(403, 'Unauthorized'), AuthenticationError::class];
+        yield '404' => [self::createRequestException(404, 'Not Found'), NotFound::class];
+        yield '429' => [self::createRequestException(429, 'Too Many Requests'), QuotaExceeded::class];
+        yield '500' => [self::createRequestException(500, 'Server broken'), ServerError::class];
+        yield '503' => [self::createRequestException(503, 'Server unavailable'), ServerUnavailable::class];
+        yield '418' => [self::createRequestException(418, 'Some tea'), MessagingError::class];
+        yield 'runtime error' => [new RuntimeException('Something else'), MessagingError::class];
     }
 
     public static function createRequestException(int $code, string $identifier): RequestException

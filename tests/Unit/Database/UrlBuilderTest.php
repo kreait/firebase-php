@@ -32,15 +32,10 @@ final class UrlBuilderTest extends UnitTestCase
         UrlBuilder::create($url);
     }
 
-    /**
-     * @return array<non-empty-string, array<non-empty-string>>
-     */
-    public static function invalidUrls(): array
+    public static function invalidUrls(): \Iterator
     {
-        return [
-            'wrong scheme' => ['http://example.com'],
-            'no scheme' => ['example.com'],
-        ];
+        yield 'wrong scheme' => ['http://example.com'];
+        yield 'no scheme' => ['example.com'];
     }
 
     /**
@@ -72,105 +67,93 @@ final class UrlBuilderTest extends UnitTestCase
         $this->assertSame($expected, $url);
     }
 
-    /**
-     * @return array<array-key, array<array-key, string|array<string, string>>>
-     */
-    public static function realUrls(): array
+    public static function realUrls(): \Iterator
     {
         $baseUrl = 'https://project.region.example.com';
-
-        return [
-            'empty path, empty query' => [
-                $baseUrl,
-                '',
-                [],
-                $baseUrl.'/',
-            ],
-            'path without trailing slash, empty query' => [
-                $baseUrl,
-                '/path/to/child',
-                [],
-                $baseUrl.'/path/to/child',
-            ],
-            'path with trailing slash, empty query' => [
-                $baseUrl,
-                '/path/to/child/',
-                [],
-                $baseUrl.'/path/to/child',
-            ],
-            'path without trailing slash, non-empty query' => [
-                $baseUrl,
-                '/path/to/child',
-                ['one' => 'two', 'three' => 'four'],
-                $baseUrl.'/path/to/child?one=two&three=four',
-            ],
-            'path with trailing slash, non-empty query' => [
-                $baseUrl,
-                '/path/to/child/',
-                ['one' => 'two', 'three' => 'four'],
-                $baseUrl.'/path/to/child?one=two&three=four',
-            ],
-            'empty path, non-empty query' => [
-                $baseUrl,
-                '',
-                ['one' => 'two', 'three' => 'four'],
-                $baseUrl.'/?one=two&three=four',
-            ],
+        yield 'empty path, empty query' => [
+            $baseUrl,
+            '',
+            [],
+            $baseUrl.'/',
+        ];
+        yield 'path without trailing slash, empty query' => [
+            $baseUrl,
+            '/path/to/child',
+            [],
+            $baseUrl.'/path/to/child',
+        ];
+        yield 'path with trailing slash, empty query' => [
+            $baseUrl,
+            '/path/to/child/',
+            [],
+            $baseUrl.'/path/to/child',
+        ];
+        yield 'path without trailing slash, non-empty query' => [
+            $baseUrl,
+            '/path/to/child',
+            ['one' => 'two', 'three' => 'four'],
+            $baseUrl.'/path/to/child?one=two&three=four',
+        ];
+        yield 'path with trailing slash, non-empty query' => [
+            $baseUrl,
+            '/path/to/child/',
+            ['one' => 'two', 'three' => 'four'],
+            $baseUrl.'/path/to/child?one=two&three=four',
+        ];
+        yield 'empty path, non-empty query' => [
+            $baseUrl,
+            '',
+            ['one' => 'two', 'three' => 'four'],
+            $baseUrl.'/?one=two&three=four',
         ];
     }
 
-    /**
-     * @return array<array-key, array<array-key, string|array<string, string>>>
-     */
-    public static function emulatedUrls(): array
+    public static function emulatedUrls(): \Iterator
     {
         $namespace = 'namespace';
         $baseUrl = 'https://'.$namespace.'.example.com';
         $emulatorHost = 'localhost:9000';
-
-        return [
-            'empty path, empty query' => [
-                $emulatorHost,
-                $baseUrl,
-                '',
-                [],
-                'http://'.$emulatorHost.'/?ns=namespace',
-            ],
-            'path without trailing slash, empty query' => [
-                $emulatorHost,
-                $baseUrl,
-                '/path/to/child',
-                [],
-                'http://'.$emulatorHost.'/path/to/child?ns=namespace',
-            ],
-            'path with trailing slash, empty query' => [
-                $emulatorHost,
-                $baseUrl,
-                '/path/to/child/',
-                [],
-                'http://'.$emulatorHost.'/path/to/child?ns=namespace',
-            ],
-            'path without trailing slash, non-empty query' => [
-                $emulatorHost,
-                $baseUrl,
-                '/path/to/child',
-                ['one' => 'two', 'three' => 'four'],
-                'http://'.$emulatorHost.'/path/to/child?ns=namespace&one=two&three=four',
-            ],
-            'path with trailing slash, non-empty query' => [
-                $emulatorHost,
-                $baseUrl,
-                '/path/to/child/',
-                ['one' => 'two', 'three' => 'four'],
-                'http://'.$emulatorHost.'/path/to/child?ns=namespace&one=two&three=four',
-            ],
-            'empty path, non-empty query' => [
-                $emulatorHost,
-                $baseUrl,
-                '',
-                ['one' => 'two', 'three' => 'four'],
-                'http://'.$emulatorHost.'/?ns=namespace&one=two&three=four',
-            ],
+        yield 'empty path, empty query' => [
+            $emulatorHost,
+            $baseUrl,
+            '',
+            [],
+            'http://'.$emulatorHost.'/?ns=namespace',
+        ];
+        yield 'path without trailing slash, empty query' => [
+            $emulatorHost,
+            $baseUrl,
+            '/path/to/child',
+            [],
+            'http://'.$emulatorHost.'/path/to/child?ns=namespace',
+        ];
+        yield 'path with trailing slash, empty query' => [
+            $emulatorHost,
+            $baseUrl,
+            '/path/to/child/',
+            [],
+            'http://'.$emulatorHost.'/path/to/child?ns=namespace',
+        ];
+        yield 'path without trailing slash, non-empty query' => [
+            $emulatorHost,
+            $baseUrl,
+            '/path/to/child',
+            ['one' => 'two', 'three' => 'four'],
+            'http://'.$emulatorHost.'/path/to/child?ns=namespace&one=two&three=four',
+        ];
+        yield 'path with trailing slash, non-empty query' => [
+            $emulatorHost,
+            $baseUrl,
+            '/path/to/child/',
+            ['one' => 'two', 'three' => 'four'],
+            'http://'.$emulatorHost.'/path/to/child?ns=namespace&one=two&three=four',
+        ];
+        yield 'empty path, non-empty query' => [
+            $emulatorHost,
+            $baseUrl,
+            '',
+            ['one' => 'two', 'three' => 'four'],
+            'http://'.$emulatorHost.'/?ns=namespace&one=two&three=four',
         ];
     }
 }

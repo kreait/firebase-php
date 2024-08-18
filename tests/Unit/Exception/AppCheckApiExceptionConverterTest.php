@@ -55,17 +55,12 @@ final class AppCheckApiExceptionConverterTest extends TestCase
         $this->assertInstanceOf($expectedClass, $converted);
     }
 
-    /**
-     * @return array<array<Throwable|class-string>>
-     */
-    public static function exceptions(): array
+    public static function exceptions(): \Iterator
     {
-        return [
-            'connection error' => [new ConnectException('Connection Failed', new Request('GET', 'https://example.com')), ApiConnectionFailed::class],
-            '401' => [self::createRequestException(401, 'Unauthenticated'), PermissionDenied::class],
-            '403' => [self::createRequestException(403, 'Unauthorized'), PermissionDenied::class],
-            'runtime error' => [new RuntimeException('Something else'), AppCheckError::class],
-        ];
+        yield 'connection error' => [new ConnectException('Connection Failed', new Request('GET', 'https://example.com')), ApiConnectionFailed::class];
+        yield '401' => [self::createRequestException(401, 'Unauthenticated'), PermissionDenied::class];
+        yield '403' => [self::createRequestException(403, 'Unauthorized'), PermissionDenied::class];
+        yield 'runtime error' => [new RuntimeException('Something else'), AppCheckError::class];
     }
 
     public static function createRequestException(int $code, string $identifier): RequestException

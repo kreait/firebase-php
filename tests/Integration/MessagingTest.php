@@ -32,7 +32,7 @@ final class MessagingTest extends IntegrationTestCase
     }
 
     /**
-     * @return array<string, array<string, mixed>>
+     * @return array<string, mixed>
      */
     public static function createFullMessageData(): array
     {
@@ -154,14 +154,9 @@ final class MessagingTest extends IntegrationTestCase
         $this->addToAssertionCount(1);
     }
 
-    /**
-     * @return array<string, string[]>
-     */
-    public static function reservedKeywordsThatStillAreAccepted(): array
+    public static function reservedKeywordsThatStillAreAccepted(): \Iterator
     {
-        return [
-            'notification' => ['notification'],
-        ];
+        yield 'notification' => ['notification'];
     }
 
     #[Test]

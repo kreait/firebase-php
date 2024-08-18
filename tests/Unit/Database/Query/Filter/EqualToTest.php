@@ -24,14 +24,9 @@ final class EqualToTest extends UnitTestCase
         $this->assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://example.com')));
     }
 
-    /**
-     * @return array<string, array<int, int|string>>
-     */
-    public static function valueProvider()
+    public static function valueProvider(): \Iterator
     {
-        return [
-            'int' => [1, 'equalTo=1'],
-            'string' => ['value', 'equalTo=%22value%22'],
-        ];
+        yield 'int' => [1, 'equalTo=1'];
+        yield 'string' => ['value', 'equalTo=%22value%22'];
     }
 }

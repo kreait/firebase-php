@@ -153,17 +153,12 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertIsInt($value['updatedAt']);
     }
 
-    /**
-     * @return array<string, array<int, mixed>>
-     */
-    public static function validValues()
+    public static function validValues(): \Iterator
     {
-        return [
-            'string' => ['string', 'value'],
-            'int' => ['int', 1],
-            'bool_true' => ['true', true],
-            'bool_false' => ['false', false],
-            'array' => ['array', ['first' => 'value', 'second' => 'value']],
-        ];
+        yield 'string' => ['string', 'value'];
+        yield 'int' => ['int', 1];
+        yield 'bool_true' => ['true', true];
+        yield 'bool_false' => ['false', false];
+        yield 'array' => ['array', ['first' => 'value', 'second' => 'value']];
     }
 }
