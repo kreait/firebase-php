@@ -161,29 +161,24 @@ final class CloudMessageTest extends TestCase
         $this->assertSame($serializedFromObject, $serializedFromArray);
     }
 
-    /**
-     * @return array<string, array<int, array<string, string>>>
-     */
-    public static function multipleTargets(): array
+    public static function multipleTargets(): \Iterator
     {
-        return [
-            'condition and token' => [[
-                MessageTarget::CONDITION => 'something',
-                MessageTarget::TOKEN => 'something else',
-            ]],
-            'condition and topic' => [[
-                MessageTarget::CONDITION => 'something',
-                MessageTarget::TOPIC => 'something else',
-            ]],
-            'token and topic' => [[
-                MessageTarget::TOKEN => 'something',
-                MessageTarget::TOPIC => 'something else',
-            ]],
-            'all of them' => [[
-                MessageTarget::CONDITION => 'something',
-                MessageTarget::TOKEN => 'something else',
-                MessageTarget::TOPIC => 'something different',
-            ]],
-        ];
+        yield 'condition and token' => [[
+            MessageTarget::CONDITION => 'something',
+            MessageTarget::TOKEN => 'something else',
+        ]];
+        yield 'condition and topic' => [[
+            MessageTarget::CONDITION => 'something',
+            MessageTarget::TOPIC => 'something else',
+        ]];
+        yield 'token and topic' => [[
+            MessageTarget::TOKEN => 'something',
+            MessageTarget::TOPIC => 'something else',
+        ]];
+        yield 'all of them' => [[
+            MessageTarget::CONDITION => 'something',
+            MessageTarget::TOKEN => 'something else',
+            MessageTarget::TOPIC => 'something different',
+        ]];
     }
 }

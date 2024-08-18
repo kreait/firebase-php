@@ -39,42 +39,36 @@ final class ValidatedActionSettingsTest extends TestCase
         $this->assertEmpty(ValidatedActionCodeSettings::empty()->toArray());
     }
 
-    /**
-     * @return array<string, array<int, array<string, mixed>>>
-     */
-    public static function validInputs(): array
+    public static function validInputs(): \Iterator
     {
         $continueUrl = 'https://example.com';
-
-        return [
-            'full' => [
-                [
-                    'continueUrl' => $continueUrl,
-                    'handleCodeInApp' => true,
-                    'dynamicLinkDomain' => 'https://dynamic.example.com',
-                    'androidPackageName' => 'locale.vendor.name',
-                    'androidMinimumVersion' => '1.0',
-                    'androidInstallApp' => true,
-                    'iOSBundleId' => 'id.tld.domain.subdomain',
-                ],
-                [
-                    'continueUrl' => $continueUrl,
-                    'canHandleCodeInApp' => true,
-                    'dynamicLinkDomain' => 'https://dynamic.example.com',
-                    'androidPackageName' => 'locale.vendor.name',
-                    'androidMinimumVersion' => '1.0',
-                    'androidInstallApp' => true,
-                    'iOSBundleId' => 'id.tld.domain.subdomain',
-                ],
+        yield 'full' => [
+            [
+                'continueUrl' => $continueUrl,
+                'handleCodeInApp' => true,
+                'dynamicLinkDomain' => 'https://dynamic.example.com',
+                'androidPackageName' => 'locale.vendor.name',
+                'androidMinimumVersion' => '1.0',
+                'androidInstallApp' => true,
+                'iOSBundleId' => 'id.tld.domain.subdomain',
             ],
-            'url_alias' => [
-                ['url' => $continueUrl],
-                ['continueUrl' => $continueUrl],
+            [
+                'continueUrl' => $continueUrl,
+                'canHandleCodeInApp' => true,
+                'dynamicLinkDomain' => 'https://dynamic.example.com',
+                'androidPackageName' => 'locale.vendor.name',
+                'androidMinimumVersion' => '1.0',
+                'androidInstallApp' => true,
+                'iOSBundleId' => 'id.tld.domain.subdomain',
             ],
-            'handle_to_can_handle' => [
-                ['handleCodeInApp' => false],
-                ['canHandleCodeInApp' => false],
-            ],
+        ];
+        yield 'url_alias' => [
+            ['url' => $continueUrl],
+            ['continueUrl' => $continueUrl],
+        ];
+        yield 'handle_to_can_handle' => [
+            ['handleCodeInApp' => false],
+            ['canHandleCodeInApp' => false],
         ];
     }
 }

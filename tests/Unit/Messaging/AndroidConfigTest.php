@@ -83,55 +83,40 @@ final class AndroidConfigTest extends UnitTestCase
         ]);
     }
 
-    /**
-     * @return array<array-key, list<AndroidConfigShape>>
-     */
-    public static function validDataProvider(): array
+    public static function validDataProvider(): \Iterator
     {
-        return [
-            'full_config' => [[
-                // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#android_specific_fields
-                'ttl' => '3600s',
-                'priority' => 'normal',
-                'notification' => [
-                    'title' => '$GOOGLE up 1.43% on the day',
-                    'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
-                    'icon' => 'stock_ticker_update',
-                    'color' => '#f45342',
-                    'sound' => 'default',
-                ],
-            ]],
-        ];
+        yield 'full_config' => [[
+            // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#android_specific_fields
+            'ttl' => '3600s',
+            'priority' => 'normal',
+            'notification' => [
+                'title' => '$GOOGLE up 1.43% on the day',
+                'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                'icon' => 'stock_ticker_update',
+                'color' => '#f45342',
+                'sound' => 'default',
+            ],
+        ]];
     }
 
-    /**
-     * @return array<string, list<int|string|null>>
-     */
-    public static function validTtlValues(): array
+    public static function validTtlValues(): \Iterator
     {
-        return [
-            'positive int' => [1],
-            'positive numeric string' => ['1'],
-            'expected string' => ['1s'],
-            'zero' => [0],
-            'zero string' => ['0'],
-            'zero string with suffix' => ['0s'],
-            'null (#719)' => [null],
-        ];
+        yield 'positive int' => [1];
+        yield 'positive numeric string' => ['1'];
+        yield 'expected string' => ['1s'];
+        yield 'zero' => [0];
+        yield 'zero string' => ['0'];
+        yield 'zero string with suffix' => ['0s'];
+        yield 'null (#719)' => [null];
     }
 
-    /**
-     * @return array<string, list<mixed>>
-     */
-    public static function invalidTtlValues(): array
+    public static function invalidTtlValues(): \Iterator
     {
-        return [
-            'float' => [1.2],
-            'wrong suffix' => ['1m'],
-            'not numeric' => [true],
-            'negative int' => [-1],
-            'negative string' => ['-1'],
-            'negative string with suffix' => ['-1s'],
-        ];
+        yield 'float' => [1.2];
+        yield 'wrong suffix' => ['1m'];
+        yield 'not numeric' => [true];
+        yield 'negative int' => [-1];
+        yield 'negative string' => ['-1'];
+        yield 'negative string with suffix' => ['-1s'];
     }
 }

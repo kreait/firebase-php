@@ -24,14 +24,9 @@ final class StartAfterTest extends UnitTestCase
         $this->assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://example.com')));
     }
 
-    /**
-     * @return array<string, array<int, int|string>>
-     */
-    public static function valueProvider()
+    public static function valueProvider(): \Iterator
     {
-        return [
-            'int' => [1, 'startAfter=1'],
-            'string' => ['value', 'startAfter=%22value%22'],
-        ];
+        yield 'int' => [1, 'startAfter=1'];
+        yield 'string' => ['value', 'startAfter=%22value%22'];
     }
 }

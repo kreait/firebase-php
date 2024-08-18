@@ -53,69 +53,59 @@ final class MessageDataTest extends TestCase
         $this->assertSame($data->toArray(), $output);
     }
 
-    /**
-     * @return array<string, array<int, array<string, mixed>>>
-     */
-    public static function validData(): array
+    public static function validData(): \Iterator
     {
-        return [
-            'integer' => [
-                ['key' => 1],
-            ],
-            'float' => [
-                ['key' => 1.23],
-            ],
-            'true' => [
-                ['key' => true],
-            ],
-            'false' => [
-                ['key' => false],
-            ],
-            'null' => [
-                ['key' => null],
-            ],
-            'object with __toString()' => [
-                ['key' => new class() {
-                    public function __toString()
-                    {
-                        return 'value';
-                    }
-                }],
-            ],
-            'UTF-8 string' => [
-                ['key' => 'Jérôme'],
-            ],
+        yield 'integer' => [
+            ['key' => 1],
+        ];
+        yield 'float' => [
+            ['key' => 1.23],
+        ];
+        yield 'true' => [
+            ['key' => true],
+        ];
+        yield 'false' => [
+            ['key' => false],
+        ];
+        yield 'null' => [
+            ['key' => null],
+        ];
+        yield 'object with __toString()' => [
+            ['key' => new class {
+                public function __toString()
+                {
+                    return 'value';
+                }
+            }],
+        ];
+        yield 'UTF-8 string' => [
+            ['key' => 'Jérôme'],
         ];
     }
 
-    /**
-     * @return array<string, array<int, array<string, mixed>>>
-     */
-    public static function invalidData(): array
+    public static function invalidData(): \Iterator
     {
-        return [
-            // @see https://github.com/kreait/firebase-php/issues/441
-            'binary data' => [
-                ['key' => hex2bin('81612bcffb')], // generated with \openssl_random_pseudo_bytes(5)
-            ],
-            'reserved_key_from' => [
-                ['from' => 'any'],
-            ],
-            // According to the docs, "notification" is reserved, but it's still accepted ¯\_(ツ)_/¯
-            /*
-            'reserved_key_notification' => [
-                ['notification' => 'any'],
-            ],
-            */
-            'reserved_key_message_type' => [
-                ['message_type' => 'any'],
-            ],
-            'reserved_key_prefix_google' => [
-                ['google_is_reserved' => 'any'],
-            ],
-            'reserved_key_prefix_gcm' => [
-                ['gcm_is_reserved' => 'any'],
-            ],
+        // @see https://github.com/kreait/firebase-php/issues/441
+        yield 'binary data' => [
+            ['key' => hex2bin('81612bcffb')], // generated with \openssl_random_pseudo_bytes(5)
+        ];
+        yield 'reserved_key_from' => [
+            ['from' => 'any'],
+        ];
+        // According to the docs, "notification" is reserved, but it's still accepted ¯\_(ツ)_/¯
+        /*
+        'reserved_key_notification' => [
+            ['notification' => 'any'],
+        ],
+        */
+        yield 'reserved_key_message_type' => [
+            ['message_type' => 'any'],
+        ];
+        yield 'reserved_key_prefix_google' => [
+            ['google_is_reserved' => 'any'],
+        ];
+        yield 'reserved_key_prefix_gcm' => [
+            ['gcm_is_reserved' => 'any'],
         ];
     }
 }

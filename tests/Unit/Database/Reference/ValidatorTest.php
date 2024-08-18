@@ -59,17 +59,12 @@ final class ValidatorTest extends UnitTestCase
         $this->validator->validateUri($uri);
     }
 
-    /**
-     * @return array<string, array<int, string>>
-     */
-    public static function invalidChars(): array
+    public static function invalidChars(): \Iterator
     {
-        return [
-            '.' => ['.'],
-            '$' => ['$'],
-            '#' => ['#'],
-            '[' => ['['],
-            ']' => [']'],
-        ];
+        yield '.' => ['.'];
+        yield '$' => ['$'];
+        yield '#' => ['#'];
+        yield '[' => ['['];
+        yield ']' => [']'];
     }
 }

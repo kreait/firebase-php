@@ -52,13 +52,8 @@ final class NotificationTest extends UnitTestCase
         $this->assertEqualsCanonicalizing($array, $notification->jsonSerialize());
     }
 
-    /**
-     * @return array<string, array<int, array<string, mixed>>>
-     */
-    public function invalidDataProvider(): array
+    public function invalidDataProvider(): \Iterator
     {
-        return [
-            'empty_title_and_body' => [['title' => null, 'body' => null]],
-        ];
+        yield 'empty_title_and_body' => [['title' => null, 'body' => null]];
     }
 }

@@ -104,28 +104,23 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf($expectedClass, $convertedError);
     }
 
-    /**
-     * @return array<string, array<int, string>>
-     */
-    public static function requestErrors(): array
+    public static function requestErrors(): \Iterator
     {
-        return [
-            'credentials mismatch' => ['CREDENTIALS_MISMATCH', CredentialsMismatch::class],
-            'an email already exists' => ['EMAIL_EXISTS', EmailExists::class],
-            'an email was not found' => ['EMAIL_NOT_FOUND', EmailNotFound::class],
-            'a custom token is invalid' => ['INVALID_CUSTOM_TOKEN', InvalidCustomToken::class],
-            'a password is invalid' => ['INVALID_PASSWORD', InvalidPassword::class],
-            'a password is missing' => ['MISSING_PASSWORD', MissingPassword::class],
-            'an operation is not allowed' => ['OPERATION_NOT_ALLOWED', OperationNotAllowed::class],
-            'a user is disabled' => ['USER_DISABLED', UserDisabled::class],
-            'a user was not found' => ['USER_NOT_FOUND', UserNotFound::class],
-            'a password is too weak' => ['WEAK_PASSWORD', WeakPassword::class],
-            'a phone number already exists' => ['PHONE_NUMBER_EXISTS', PhoneNumberExists::class],
-            'an idp credential is invalid' => ['INVALID_IDP_RESPONSE', ProviderLinkFailed::class],
-            'an idp credential is already linked' => ['FEDERATED_USER_ID_ALREADY_LINKED', ProviderLinkFailed::class],
-            'an id token is invalid or expired' => ['INVALID_ID_TOKEN', ProviderLinkFailed::class],
-            'an oob code is expired' => ['EXPIRED_OOB_CODE', ExpiredOobCode::class],
-            'an oob code is invalid' => ['INVALID_OOB_CODE', InvalidOobCode::class],
-        ];
+        yield 'credentials mismatch' => ['CREDENTIALS_MISMATCH', CredentialsMismatch::class];
+        yield 'an email already exists' => ['EMAIL_EXISTS', EmailExists::class];
+        yield 'an email was not found' => ['EMAIL_NOT_FOUND', EmailNotFound::class];
+        yield 'a custom token is invalid' => ['INVALID_CUSTOM_TOKEN', InvalidCustomToken::class];
+        yield 'a password is invalid' => ['INVALID_PASSWORD', InvalidPassword::class];
+        yield 'a password is missing' => ['MISSING_PASSWORD', MissingPassword::class];
+        yield 'an operation is not allowed' => ['OPERATION_NOT_ALLOWED', OperationNotAllowed::class];
+        yield 'a user is disabled' => ['USER_DISABLED', UserDisabled::class];
+        yield 'a user was not found' => ['USER_NOT_FOUND', UserNotFound::class];
+        yield 'a password is too weak' => ['WEAK_PASSWORD', WeakPassword::class];
+        yield 'a phone number already exists' => ['PHONE_NUMBER_EXISTS', PhoneNumberExists::class];
+        yield 'an idp credential is invalid' => ['INVALID_IDP_RESPONSE', ProviderLinkFailed::class];
+        yield 'an idp credential is already linked' => ['FEDERATED_USER_ID_ALREADY_LINKED', ProviderLinkFailed::class];
+        yield 'an id token is invalid or expired' => ['INVALID_ID_TOKEN', ProviderLinkFailed::class];
+        yield 'an oob code is expired' => ['EXPIRED_OOB_CODE', ExpiredOobCode::class];
+        yield 'an oob code is invalid' => ['INVALID_OOB_CODE', InvalidOobCode::class];
     }
 }

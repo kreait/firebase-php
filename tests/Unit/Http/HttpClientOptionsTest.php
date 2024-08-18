@@ -24,9 +24,9 @@ final class HttpClientOptionsTest extends TestCase
             ->withProxy('https://proxy.example.com')
         ;
 
-        $this->assertSame(1.1, $options->connectTimeout());
-        $this->assertSame(2.2, $options->readTimeout());
-        $this->assertSame(3.3, $options->timeout());
+        $this->assertEqualsWithDelta(1.1, $options->connectTimeout(), PHP_FLOAT_EPSILON);
+        $this->assertEqualsWithDelta(2.2, $options->readTimeout(), PHP_FLOAT_EPSILON);
+        $this->assertEqualsWithDelta(3.3, $options->timeout(), PHP_FLOAT_EPSILON);
         $this->assertSame('https://proxy.example.com', $options->proxy());
     }
 

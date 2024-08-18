@@ -32,24 +32,14 @@ final class EmailTest extends TestCase
         Email::fromString($value);
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
-    public static function validValues(): array
+    public static function validValues(): \Iterator
     {
-        return [
-            'user@example.com' => ['user@example.com'],
-        ];
+        yield 'user@example.com' => ['user@example.com'];
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
-    public static function invalidValues(): array
+    public static function invalidValues(): \Iterator
     {
-        return [
-            'empty string' => [''],
-            'invalid' => ['invalid'],
-        ];
+        yield 'empty string' => [''];
+        yield 'invalid' => ['invalid'];
     }
 }

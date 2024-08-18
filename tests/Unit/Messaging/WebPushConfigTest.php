@@ -90,29 +90,19 @@ final class WebPushConfigTest extends UnitTestCase
         ];
     }
 
-    /**
-     * @return array<string, array<WebPushHeadersShape>>
-     */
-    public static function validHeaders(): array
+    public static function validHeaders(): \Iterator
     {
-        return [
-            'positive int ttl' => [['TTL' => 1]],
-            'positive string ttl' => [['TTL' => '1']],
-            'null (#719)' => [['TTL' => null]],
-        ];
+        yield 'positive int ttl' => [['TTL' => 1]];
+        yield 'positive string ttl' => [['TTL' => '1']];
+        yield 'null (#719)' => [['TTL' => null]];
     }
 
-    /**
-     * @return array<string, array<array<string, mixed>>>
-     */
-    public static function invalidHeaders(): array
+    public static function invalidHeaders(): \Iterator
     {
-        return [
-            'negative int ttl' => [['TTL' => -1]],
-            'negative string ttl' => [['TTL' => '-1']],
-            'zero int ttl' => [['TTL' => 0]],
-            'zero string ttl' => [['TTL' => '0']],
-            'unsupported urgency' => [['Urgency' => 'unsupported']],
-        ];
+        yield 'negative int ttl' => [['TTL' => -1]];
+        yield 'negative string ttl' => [['TTL' => '-1']];
+        yield 'zero int ttl' => [['TTL' => 0]];
+        yield 'zero string ttl' => [['TTL' => '0']];
+        yield 'unsupported urgency' => [['Urgency' => 'unsupported']];
     }
 }

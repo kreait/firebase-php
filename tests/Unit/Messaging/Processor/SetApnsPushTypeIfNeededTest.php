@@ -7,7 +7,6 @@ namespace Kreait\Firebase\Tests\Unit\Messaging\Processor;
 use Beste\Json;
 use Iterator;
 use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\Processor\SetApnsPushTypeIfNeeded;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;

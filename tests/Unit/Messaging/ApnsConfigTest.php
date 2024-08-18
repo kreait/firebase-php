@@ -94,28 +94,23 @@ final class ApnsConfigTest extends UnitTestCase
         );
     }
 
-    /**
-     * @return array<string, array<int, array<string, mixed>>>
-     */
-    public static function validDataProvider()
+    public static function validDataProvider(): \Iterator
     {
-        return [
-            'full_config' => [[
-                // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#apns_specific_fields
-                'headers' => [
-                    'apns-priority' => '10',
-                ],
-                'payload' => [
-                    'aps' => [
-                        'alert' => [
-                            'title' => '$GOOGLE up 1.43% on the day',
-                            'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
-                        ],
-                        'badge' => 42,
-                        'sound' => 'default',
+        yield 'full_config' => [[
+            // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#apns_specific_fields
+            'headers' => [
+                'apns-priority' => '10',
+            ],
+            'payload' => [
+                'aps' => [
+                    'alert' => [
+                        'title' => '$GOOGLE up 1.43% on the day',
+                        'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
                     ],
+                    'badge' => 42,
+                    'sound' => 'default',
                 ],
-            ]],
-        ];
+            ],
+        ]];
     }
 }

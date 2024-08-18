@@ -32,24 +32,14 @@ final class UidTest extends TestCase
         Uid::fromString($uid);
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
-    public static function validValues(): array
+    public static function validValues(): \Iterator
     {
-        return [
-            'uid' => ['uid'],
-        ];
+        yield 'uid' => ['uid'];
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
-    public static function invalidValues(): array
+    public static function invalidValues(): \Iterator
     {
-        return [
-            'empty string' => [''],
-            'too long' => [str_repeat('x', 129)],
-        ];
+        yield 'empty string' => [''];
+        yield 'too long' => [str_repeat('x', 129)];
     }
 }

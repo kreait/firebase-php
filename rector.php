@@ -14,6 +14,7 @@ return RectorConfig::configure()
     ->withPhpSets()
     ->withPreparedSets(
         earlyReturn: true,
+        phpunitCodeQuality: true,
         phpunit: true,
     )
 ;

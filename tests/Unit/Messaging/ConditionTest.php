@@ -43,25 +43,15 @@ final class ConditionTest extends TestCase
         Condition::fromValue($invalid);
     }
 
-    /**
-     * @return array<string, array<int, string>>
-     */
-    public static function valueProvider(): array
+    public static function valueProvider(): \Iterator
     {
-        return [
-            'single quotes' => ["'dogs' in topics || 'cats' in topics", "'dogs' in topics || 'cats' in topics"],
-            'double quotes' => ["'dogs' in topics || 'cats' in topics", '"dogs" in topics || "cats" in topics'],
-        ];
+        yield 'single quotes' => ["'dogs' in topics || 'cats' in topics", "'dogs' in topics || 'cats' in topics"];
+        yield 'double quotes' => ["'dogs' in topics || 'cats' in topics", '"dogs" in topics || "cats" in topics'];
     }
 
-    /**
-     * @return array<string, array<int, string>>
-     */
-    public static function invalidValueProvider(): array
+    public static function invalidValueProvider(): \Iterator
     {
-        return [
-            'single quotes' => ["'dogs in Topics"],
-            'double quotes' => ["'dogs in Topics || 'cats' in topics"],
-        ];
+        yield 'single quotes' => ["'dogs in Topics"];
+        yield 'double quotes' => ["'dogs in Topics || 'cats' in topics"];
     }
 }

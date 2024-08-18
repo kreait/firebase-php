@@ -35,25 +35,15 @@ final class UrlTest extends TestCase
         Url::fromString($value);
     }
 
-    /**
-     * @return array<non-empty-string, array<string>>
-     */
-    public static function validValues(): array
+    public static function validValues(): \Iterator
     {
-        return [
-            'string' => ['https://example.com'],
-        ];
+        yield 'string' => ['https://example.com'];
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
-    public static function invalidValues(): array
+    public static function invalidValues(): \Iterator
     {
-        return [
-            'https:///example.com' => ['https:///example.com'],
-            'http://:80' => ['http://:80'],
-            '(empty)' => [''],
-        ];
+        yield 'https:///example.com' => ['https:///example.com'];
+        yield 'http://:80' => ['http://:80'];
+        yield '(empty)' => [''];
     }
 }

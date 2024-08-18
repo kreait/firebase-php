@@ -36,136 +36,130 @@ final class UpdateUserTest extends TestCase
         UpdateUser::withProperties([])->jsonSerialize();
     }
 
-    /**
-     * @return array<string, array<array<string|mixed>>>
-     */
-    public static function propertiesProvider(): array
+    public static function propertiesProvider(): \Iterator
     {
         // All non-mentioned attributes are already tested through the CreateUserTest
         $given = ['uid' => 'some-uid'];
         $expected = ['localId' => 'some-uid'];
-
-        return [
-            'deletephoto' => [
-                $given + ['deletephoto' => true],
-                $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
-            ],
-            'deletephotourl' => [
-                $given + ['deletephotourl' => true],
-                $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
-            ],
-            'removephoto' => [
-                $given + ['removephoto' => true],
-                $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
-            ],
-            'removephotourl' => [
-                $given + ['removephotourl' => true],
-                $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
-            ],
-            'deleteAttribute photo' => [
-                $given + ['deleteAttribute' => 'photo'],
-                $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
-            ],
-            'deleteAttribute photourl' => [
-                $given + ['deleteAttribute' => 'photourl'],
-                $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
-            ],
-            'deleteAttributes photo' => [
-                $given + ['deleteAttributes' => ['photo']],
-                $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
-            ],
-            'deleteAttributes photourl' => [
-                $given + ['deleteAttributes' => ['photourl']],
-                $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
-            ],
-            'deleteDisplayName' => [
-                $given + ['deleteDisplayName' => true],
-                $expected + ['deleteAttribute' => [UpdateUser::DISPLAY_NAME]],
-            ],
-            'removeDisplayName' => [
-                $given + ['removeDisplayName' => true],
-                $expected + ['deleteAttribute' => [UpdateUser::DISPLAY_NAME]],
-            ],
-            'deleteAttribute email' => [
-                $given + ['deleteAttribute' => 'email'],
-                $expected + ['deleteAttribute' => [UpdateUser::EMAIL]],
-            ],
-            'deleteEmail' => [
-                $given + ['deleteEmail' => true],
-                $expected + ['deleteAttribute' => [UpdateUser::EMAIL]],
-            ],
-            'removeEmail' => [
-                $given + ['removeEmail' => true],
-                $expected + ['deleteAttribute' => [UpdateUser::EMAIL]],
-            ],
-            'deletephone' => [
-                $given + ['deletephone' => true],
-                $expected + ['deleteProvider' => ['phone']],
-            ],
-            'deletephonenumber' => [
-                $given + ['deletephonenumber' => true],
-                $expected + ['deleteProvider' => ['phone']],
-            ],
-            'removephone' => [
-                $given + ['removephone' => true],
-                $expected + ['deleteProvider' => ['phone']],
-            ],
-            'removephonenumber' => [
-                $given + ['removephonenumber' => true],
-                $expected + ['deleteProvider' => ['phone']],
-            ],
-            'phone is null' => [
-                $given + ['phone' => null],
-                $expected + ['deleteProvider' => ['phone']],
-            ],
-            'phonenumber is null' => [
-                $given + ['phonenumber' => null],
-                $expected + ['deleteProvider' => ['phone']],
-            ],
-            'deleteprovider phone' => [
-                $given + ['deleteprovider' => 'phone'],
-                $expected + ['deleteProvider' => ['phone']],
-            ],
-            'deleteproviders phone, password' => [
-                $given + ['deleteproviders' => ['phone', 'password']],
-                $expected + ['deleteProvider' => ['phone', 'password']],
-            ],
-            'removeprovider phone' => [
-                $given + ['removeprovider' => 'phone'],
-                $expected + ['deleteProvider' => ['phone']],
-            ],
-            'removeproviders phone, password' => [
-                $given + ['removeproviders' => ['phone', 'password']],
-                $expected + ['deleteProvider' => ['phone', 'password']],
-            ],
-            'deleteAttribute displayname' => [
-                $given + ['deleteAttribute' => 'displayname'],
-                $expected + ['deleteAttribute' => [UpdateUser::DISPLAY_NAME]],
-            ],
-            'deleteAttributes displayname' => [
-                $given + ['deleteAttributes' => ['displayname']],
-                $expected + ['deleteAttribute' => [UpdateUser::DISPLAY_NAME]],
-            ],
-            'emailVerified true' => [
-                $given + ['emailVerified' => true],
-                $expected + ['emailVerified' => true],
-            ],
-            'emailVerified false' => [
-                $given + ['emailVerified' => false],
-                $expected + ['emailVerified' => false],
-            ],
-            'emailVerified null' => [
-                $given + ['emailVerified' => null],
-                $expected,
-            ],
-            'customClaims' => [
-                $given + ['customClaims' => $claims = ['admin' => true, 'groupId' => '1234']],
-                $expected + ['customAttributes' => Json::encode($claims)],
-            ],
-            'customAttributes' => [
-                $given + ['customAttributes' => $claims = ['admin' => true, 'groupId' => '1234']],
-                $expected + ['customAttributes' => Json::encode($claims)],
-            ],
+        yield 'deletephoto' => [
+            $given + ['deletephoto' => true],
+            $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
+        ];
+        yield 'deletephotourl' => [
+            $given + ['deletephotourl' => true],
+            $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
+        ];
+        yield 'removephoto' => [
+            $given + ['removephoto' => true],
+            $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
+        ];
+        yield 'removephotourl' => [
+            $given + ['removephotourl' => true],
+            $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
+        ];
+        yield 'deleteAttribute photo' => [
+            $given + ['deleteAttribute' => 'photo'],
+            $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
+        ];
+        yield 'deleteAttribute photourl' => [
+            $given + ['deleteAttribute' => 'photourl'],
+            $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
+        ];
+        yield 'deleteAttributes photo' => [
+            $given + ['deleteAttributes' => ['photo']],
+            $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
+        ];
+        yield 'deleteAttributes photourl' => [
+            $given + ['deleteAttributes' => ['photourl']],
+            $expected + ['deleteAttribute' => [UpdateUser::PHOTO_URL]],
+        ];
+        yield 'deleteDisplayName' => [
+            $given + ['deleteDisplayName' => true],
+            $expected + ['deleteAttribute' => [UpdateUser::DISPLAY_NAME]],
+        ];
+        yield 'removeDisplayName' => [
+            $given + ['removeDisplayName' => true],
+            $expected + ['deleteAttribute' => [UpdateUser::DISPLAY_NAME]],
+        ];
+        yield 'deleteAttribute email' => [
+            $given + ['deleteAttribute' => 'email'],
+            $expected + ['deleteAttribute' => [UpdateUser::EMAIL]],
+        ];
+        yield 'deleteEmail' => [
+            $given + ['deleteEmail' => true],
+            $expected + ['deleteAttribute' => [UpdateUser::EMAIL]],
+        ];
+        yield 'removeEmail' => [
+            $given + ['removeEmail' => true],
+            $expected + ['deleteAttribute' => [UpdateUser::EMAIL]],
+        ];
+        yield 'deletephone' => [
+            $given + ['deletephone' => true],
+            $expected + ['deleteProvider' => ['phone']],
+        ];
+        yield 'deletephonenumber' => [
+            $given + ['deletephonenumber' => true],
+            $expected + ['deleteProvider' => ['phone']],
+        ];
+        yield 'removephone' => [
+            $given + ['removephone' => true],
+            $expected + ['deleteProvider' => ['phone']],
+        ];
+        yield 'removephonenumber' => [
+            $given + ['removephonenumber' => true],
+            $expected + ['deleteProvider' => ['phone']],
+        ];
+        yield 'phone is null' => [
+            $given + ['phone' => null],
+            $expected + ['deleteProvider' => ['phone']],
+        ];
+        yield 'phonenumber is null' => [
+            $given + ['phonenumber' => null],
+            $expected + ['deleteProvider' => ['phone']],
+        ];
+        yield 'deleteprovider phone' => [
+            $given + ['deleteprovider' => 'phone'],
+            $expected + ['deleteProvider' => ['phone']],
+        ];
+        yield 'deleteproviders phone, password' => [
+            $given + ['deleteproviders' => ['phone', 'password']],
+            $expected + ['deleteProvider' => ['phone', 'password']],
+        ];
+        yield 'removeprovider phone' => [
+            $given + ['removeprovider' => 'phone'],
+            $expected + ['deleteProvider' => ['phone']],
+        ];
+        yield 'removeproviders phone, password' => [
+            $given + ['removeproviders' => ['phone', 'password']],
+            $expected + ['deleteProvider' => ['phone', 'password']],
+        ];
+        yield 'deleteAttribute displayname' => [
+            $given + ['deleteAttribute' => 'displayname'],
+            $expected + ['deleteAttribute' => [UpdateUser::DISPLAY_NAME]],
+        ];
+        yield 'deleteAttributes displayname' => [
+            $given + ['deleteAttributes' => ['displayname']],
+            $expected + ['deleteAttribute' => [UpdateUser::DISPLAY_NAME]],
+        ];
+        yield 'emailVerified true' => [
+            $given + ['emailVerified' => true],
+            $expected + ['emailVerified' => true],
+        ];
+        yield 'emailVerified false' => [
+            $given + ['emailVerified' => false],
+            $expected + ['emailVerified' => false],
+        ];
+        yield 'emailVerified null' => [
+            $given + ['emailVerified' => null],
+            $expected,
+        ];
+        yield 'customClaims' => [
+            $given + ['customClaims' => $claims = ['admin' => true, 'groupId' => '1234']],
+            $expected + ['customAttributes' => Json::encode($claims)],
+        ];
+        yield 'customAttributes' => [
+            $given + ['customAttributes' => $claims = ['admin' => true, 'groupId' => '1234']],
+            $expected + ['customAttributes' => Json::encode($claims)],
         ];
     }
 }
