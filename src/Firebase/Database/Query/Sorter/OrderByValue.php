@@ -23,7 +23,7 @@ final class OrderByValue implements Sorter
         return $this->appendQueryParam($uri, 'orderBy', '"$value"');
     }
 
-    public function modifyValue($value): mixed
+    public function modifyValue(mixed $value): mixed
     {
         if (!is_array($value)) {
             return $value;

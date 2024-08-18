@@ -14,7 +14,7 @@ use function array_merge;
  */
 trait ModifierTrait
 {
-    public function modifyValue($value): mixed
+    public function modifyValue(mixed $value): mixed
     {
         return $value;
     }

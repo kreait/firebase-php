@@ -18,8 +18,6 @@ interface Modifier
 
     /**
      * Modifies the given value and returns it.
-     *
-     * @param mixed $value
      */
-    public function modifyValue($value): mixed;
+    public function modifyValue(mixed $value): mixed;
 }
