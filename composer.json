@@ -92,7 +92,7 @@
             "cd docs && make html"
         ],
         "pre-push": [
-            "@cs",
+            "@rector-fix",
             "@test",
             "@test-bc"
         ],
