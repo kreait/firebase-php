@@ -8,6 +8,9 @@ use Kreait\Firebase\AppCheck\AppCheckToken;
 use Kreait\Firebase\AppCheck\AppCheckTokenOptions;
 use Kreait\Firebase\AppCheck\VerifyAppCheckTokenResponse;
 use Kreait\Firebase\Exception;
+use Kreait\Firebase\Exception\AppCheck\FailedToVerifyAppCheckToken;
+use Kreait\Firebase\Exception\AppCheck\InvalidAppCheckToken;
+use Kreait\Firebase\Exception\AppCheck\InvalidAppCheckTokenOptions;
 
 /**
  * @phpstan-import-type AppCheckTokenOptionsShape from AppCheckTokenOptions
@@ -18,7 +21,7 @@ interface AppCheck
      * @param non-empty-string $appId
      * @param AppCheckTokenOptions|AppCheckTokenOptionsShape|null $options
      *
-     * @throws Exception\AppCheck\InvalidAppCheckTokenOptions
+     * @throws InvalidAppCheckTokenOptions
      * @throws Exception\AppCheckException
      * @throws Exception\FirebaseException
      */
@@ -27,8 +30,8 @@ interface AppCheck
     /**
      * @param non-empty-string $appCheckToken
      *
-     * @throws Exception\AppCheck\InvalidAppCheckToken
-     * @throws Exception\AppCheck\FailedToVerifyAppCheckToken
+     * @throws InvalidAppCheckToken
+     * @throws FailedToVerifyAppCheckToken
      * @throws Exception\AppCheckException
      * @throws Exception\FirebaseException
      */

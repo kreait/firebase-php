@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Request;
 
+use Iterator;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Value\ClearTextPassword;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -35,7 +36,7 @@ final class CreateUserTest extends TestCase
         $this->assertEqualsCanonicalizing($expected, $request->jsonSerialize());
     }
 
-    public static function propertiesProvider(): \Iterator
+    public static function propertiesProvider(): Iterator
     {
         $given = ['uid' => 'some-uid'];
         $expected = ['localId' => 'some-uid'];

@@ -19,4 +19,5 @@ return RectorConfig::configure()
         phpunitCodeQuality: true,
         phpunit: true,
     )
+    ->withImportNames(removeUnusedImports: true)
 ;

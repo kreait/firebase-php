@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
+use Iterator;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\Condition;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -43,13 +44,13 @@ final class ConditionTest extends TestCase
         Condition::fromValue($invalid);
     }
 
-    public static function valueProvider(): \Iterator
+    public static function valueProvider(): Iterator
     {
         yield 'single quotes' => ["'dogs' in topics || 'cats' in topics", "'dogs' in topics || 'cats' in topics"];
         yield 'double quotes' => ["'dogs' in topics || 'cats' in topics", '"dogs" in topics || "cats" in topics'];
     }
 
-    public static function invalidValueProvider(): \Iterator
+    public static function invalidValueProvider(): Iterator
     {
         yield 'single quotes' => ["'dogs in Topics"];
         yield 'double quotes' => ["'dogs in Topics || 'cats' in topics"];

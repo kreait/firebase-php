@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
 use Beste\Json;
+use Iterator;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
@@ -83,7 +84,7 @@ final class AndroidConfigTest extends UnitTestCase
         ]);
     }
 
-    public static function validDataProvider(): \Iterator
+    public static function validDataProvider(): Iterator
     {
         yield 'full_config' => [[
             // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#android_specific_fields
@@ -99,7 +100,7 @@ final class AndroidConfigTest extends UnitTestCase
         ]];
     }
 
-    public static function validTtlValues(): \Iterator
+    public static function validTtlValues(): Iterator
     {
         yield 'positive int' => [1];
         yield 'positive numeric string' => ['1'];
@@ -110,7 +111,7 @@ final class AndroidConfigTest extends UnitTestCase
         yield 'null (#719)' => [null];
     }
 
-    public static function invalidTtlValues(): \Iterator
+    public static function invalidTtlValues(): Iterator
     {
         yield 'float' => [1.2];
         yield 'wrong suffix' => ['1m'];

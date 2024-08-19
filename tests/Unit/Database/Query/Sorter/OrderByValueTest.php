@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Database\Query\Sorter;
 
 use GuzzleHttp\Psr7\Uri;
+use Iterator;
 use Kreait\Firebase\Database\Query\Sorter\OrderByValue;
 use Kreait\Firebase\Tests\UnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -40,7 +41,7 @@ final class OrderByValueTest extends UnitTestCase
         $this->assertSame($expected, $this->sorter->modifyValue($given));
     }
 
-    public static function valueProvider(): \Iterator
+    public static function valueProvider(): Iterator
     {
         yield 'scalar' => [
             'expected' => 'scalar',

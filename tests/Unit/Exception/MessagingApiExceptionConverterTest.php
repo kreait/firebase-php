@@ -11,6 +11,7 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Iterator;
 use Kreait\Firebase\Exception\Messaging\ApiConnectionFailed;
 use Kreait\Firebase\Exception\Messaging\AuthenticationError;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
@@ -66,7 +67,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
         $this->assertInstanceOf($expectedClass, $converted);
     }
 
-    public static function exceptions(): \Iterator
+    public static function exceptions(): Iterator
     {
         yield 'connection error' => [new ConnectException('Connection Failed', new Request('GET', 'https://example.com')), ApiConnectionFailed::class];
         yield '400' => [self::createRequestException(400, 'Bad request'), InvalidMessage::class];

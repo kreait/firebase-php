@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Iterator;
 use Kreait\Firebase\Exception\Auth\ApiConnectionFailed;
 use Kreait\Firebase\Exception\Auth\AuthError;
 use Kreait\Firebase\Exception\Auth\CredentialsMismatch;
@@ -104,7 +105,7 @@ final class AuthApiExceptionConverterTest extends UnitTestCase
         $this->assertInstanceOf($expectedClass, $convertedError);
     }
 
-    public static function requestErrors(): \Iterator
+    public static function requestErrors(): Iterator
     {
         yield 'credentials mismatch' => ['CREDENTIALS_MISMATCH', CredentialsMismatch::class];
         yield 'an email already exists' => ['EMAIL_EXISTS', EmailExists::class];

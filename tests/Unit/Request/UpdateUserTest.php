@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Request;
 
 use Beste\Json;
+use Iterator;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Request\UpdateUser;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -36,7 +37,7 @@ final class UpdateUserTest extends TestCase
         UpdateUser::withProperties([])->jsonSerialize();
     }
 
-    public static function propertiesProvider(): \Iterator
+    public static function propertiesProvider(): Iterator
     {
         // All non-mentioned attributes are already tested through the CreateUserTest
         $given = ['uid' => 'some-uid'];

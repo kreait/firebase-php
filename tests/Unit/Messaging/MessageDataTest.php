@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
 use InvalidArgumentException;
+use Iterator;
 use Kreait\Firebase\Messaging\MessageData;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -53,7 +54,7 @@ final class MessageDataTest extends TestCase
         $this->assertSame($data->toArray(), $output);
     }
 
-    public static function validData(): \Iterator
+    public static function validData(): Iterator
     {
         yield 'integer' => [
             ['key' => 1],
@@ -83,7 +84,7 @@ final class MessageDataTest extends TestCase
         ];
     }
 
-    public static function invalidData(): \Iterator
+    public static function invalidData(): Iterator
     {
         // @see https://github.com/kreait/firebase-php/issues/441
         yield 'binary data' => [

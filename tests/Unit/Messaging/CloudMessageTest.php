@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
 use Beste\Json;
+use Iterator;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\FcmOptions;
@@ -161,7 +162,7 @@ final class CloudMessageTest extends TestCase
         $this->assertSame($serializedFromObject, $serializedFromArray);
     }
 
-    public static function multipleTargets(): \Iterator
+    public static function multipleTargets(): Iterator
     {
         yield 'condition and token' => [[
             MessageTarget::CONDITION => 'something',

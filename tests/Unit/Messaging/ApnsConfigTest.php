@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
 use Beste\Json;
+use Iterator;
 use Kreait\Firebase\Messaging\ApnsConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -94,7 +95,7 @@ final class ApnsConfigTest extends UnitTestCase
         );
     }
 
-    public static function validDataProvider(): \Iterator
+    public static function validDataProvider(): Iterator
     {
         yield 'full_config' => [[
             // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#apns_specific_fields

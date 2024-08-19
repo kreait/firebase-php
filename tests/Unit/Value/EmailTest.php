@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Value;
 
+use Iterator;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\Email;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -32,12 +33,12 @@ final class EmailTest extends TestCase
         Email::fromString($value);
     }
 
-    public static function validValues(): \Iterator
+    public static function validValues(): Iterator
     {
         yield 'user@example.com' => ['user@example.com'];
     }
 
-    public static function invalidValues(): \Iterator
+    public static function invalidValues(): Iterator
     {
         yield 'empty string' => [''];
         yield 'invalid' => ['invalid'];

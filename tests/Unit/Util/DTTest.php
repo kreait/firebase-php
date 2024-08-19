@@ -7,6 +7,7 @@ namespace Kreait\Firebase\Tests\Unit\Util;
 use DateTimeImmutable;
 use DateTimeZone;
 use InvalidArgumentException;
+use Iterator;
 use Kreait\Firebase\Util\DT;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -49,7 +50,7 @@ final class DTTest extends TestCase
         DT::toUTCDateTimeImmutable($value);
     }
 
-    public static function validFixedValues(): \Iterator
+    public static function validFixedValues(): Iterator
     {
         yield 'seconds' => ['1234567890.000000', 1_234_567_890];
         yield 'milliseconds_1' => ['1234567890.000000', 1_234_567_890_000];
@@ -59,7 +60,7 @@ final class DTTest extends TestCase
         yield 'timezone_2' => ['345328496.789012', new DateTimeImmutable('10.12.1980 12:34:56.789012', new DateTimeZone('America/Los_Angeles'))];
     }
 
-    public static function validVariableValues(): \Iterator
+    public static function validVariableValues(): Iterator
     {
         yield 'null' => [null];
         yield 'zero' => [0];
@@ -72,7 +73,7 @@ final class DTTest extends TestCase
         yield 'now in Bangkok' => [new DateTimeImmutable('now', new DateTimeZone('Asia/Bangkok'))];
     }
 
-    public static function invalidValues(): \Iterator
+    public static function invalidValues(): Iterator
     {
         yield 'string' => ['foo'];
         yield 'object' => [new stdClass()];

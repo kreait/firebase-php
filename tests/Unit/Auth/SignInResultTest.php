@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Auth;
 
+use Iterator;
 use Kreait\Firebase\Auth\SignInResult;
 use Kreait\Firebase\Tests\UnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -47,7 +48,7 @@ final class SignInResultTest extends UnitTestCase
         $this->assertSame('some-id', $result->firebaseUserId());
     }
 
-    public static function fullResponse(): \Iterator
+    public static function fullResponse(): Iterator
     {
         yield 'snake_cased' => [[
             'idToken' => 'idToken',

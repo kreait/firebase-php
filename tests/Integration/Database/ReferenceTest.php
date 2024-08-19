@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration\Database;
 
+use Iterator;
 use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
@@ -150,7 +151,7 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertIsInt($value['updatedAt']);
     }
 
-    public static function validValues(): \Iterator
+    public static function validValues(): Iterator
     {
         yield 'string' => ['string', 'value'];
         yield 'int' => ['int', 1];

@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Iterator;
 use Kreait\Firebase\Exception\AppCheck\ApiConnectionFailed;
 use Kreait\Firebase\Exception\AppCheck\AppCheckError;
 use Kreait\Firebase\Exception\AppCheck\PermissionDenied;
@@ -55,7 +56,7 @@ final class AppCheckApiExceptionConverterTest extends TestCase
         $this->assertInstanceOf($expectedClass, $converted);
     }
 
-    public static function exceptions(): \Iterator
+    public static function exceptions(): Iterator
     {
         yield 'connection error' => [new ConnectException('Connection Failed', new Request('GET', 'https://example.com')), ApiConnectionFailed::class];
         yield '401' => [self::createRequestException(401, 'Unauthenticated'), PermissionDenied::class];
