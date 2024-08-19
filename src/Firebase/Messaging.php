@@ -89,14 +89,14 @@ final class Messaging implements Contract\Messaging
         $sendReports = array_fill(0, count($messages), null);
 
         $config = [
-            'fulfilled' => function (ResponseInterface $response, int $index) use ($messages, &$sendReports) {
+            'fulfilled' => function (ResponseInterface $response, int $index) use ($messages, &$sendReports): void {
                 $message = $messages[$index];
 
                 $json = Json::decode((string) $response->getBody(), true);
 
                 $sendReports[$index] = SendReport::success($message->target(), $json, $message);
             },
-            'rejected' => function (Throwable $reason, int $index) use ($messages, &$sendReports) {
+            'rejected' => function (Throwable $reason, int $index) use ($messages, &$sendReports): void {
                 $message = $messages[$index];
 
                 $error = $this->exceptionConverter->convertException($reason);
@@ -159,7 +159,7 @@ final class Messaging implements Contract\Messaging
     public function unsubscribeFromTopics(array $topics, RegistrationTokens|RegistrationToken|array|string $registrationTokenOrTokens): array
     {
         $topics = array_map(
-            static fn($topic) => $topic instanceof Topic ? $topic : Topic::fromValue($topic),
+            static fn($topic): Topic => $topic instanceof Topic ? $topic : Topic::fromValue($topic),
             $topics,
         );
 
@@ -177,7 +177,7 @@ final class Messaging implements Contract\Messaging
         foreach ($tokens as $token) {
             $promises[$token->value()] = $this->appInstanceApi
                 ->getAppInstanceAsync($token)
-                ->then(function (AppInstance $appInstance) use ($token) {
+                ->then(function (AppInstance $appInstance) use ($token): array {
                     $topics = [];
 
                     foreach ($appInstance->topicSubscriptions() as $subscription) {
@@ -186,7 +186,7 @@ final class Messaging implements Contract\Messaging
 
                     return array_keys($this->unsubscribeFromTopics($topics, $token));
                 })
-                ->otherwise(static fn(Throwable $e) => $e->getMessage())
+                ->otherwise(static fn(Throwable $e): string => $e->getMessage())
             ;
         }
 

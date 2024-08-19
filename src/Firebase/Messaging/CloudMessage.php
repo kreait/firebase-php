@@ -250,7 +250,7 @@ final class CloudMessage implements Message
 
         return array_filter(
             $data,
-            static fn($value) => $value !== null && $value !== [],
+            static fn($value): bool => $value !== null && $value !== [],
         );
     }
 

@@ -38,7 +38,7 @@ final class OrderByChild implements Sorter
 
         $expression = str_replace('/', '.', $this->childKey);
 
-        uasort($value, static fn($a, $b) => search($expression, $a) <=> search($expression, $b));
+        uasort($value, static fn($a, $b): int => search($expression, $a) <=> search($expression, $b));
 
         return $value;
     }
