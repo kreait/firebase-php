@@ -78,7 +78,11 @@ final class RuleSetTest extends DatabaseTestCase
         ;
 
         $this->assertSame(200, $response->getStatusCode());
+
         // Assert that the returned JSON doesn't contain objects with integer keys instead of lists
-        $this->assertStringNotMatchesFormat('/\d:/', (string) $response->getBody());
+        $this->assertThat(
+            (string) $response->getBody(),
+            $this->logicalNot($this->matchesRegularExpression('/\d:/')),
+        );
     }
 }
