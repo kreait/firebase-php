@@ -58,7 +58,7 @@ final class MessageData implements JsonSerializable
 
     public function jsonSerialize(): array
     {
-        return $this->toArray();
+        return $this->data;
     }
 
     private static function isBinary(string $value): bool

@@ -17,7 +17,7 @@ use function rawurlencode;
  */
 final class OrderByValueTest extends UnitTestCase
 {
-    protected OrderByValue $sorter;
+    private OrderByValue $sorter;
 
     protected function setUp(): void
     {

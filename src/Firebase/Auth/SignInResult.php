@@ -180,10 +180,10 @@ final class SignInResult
     {
         return [
             'token_type' => 'Bearer',
-            'access_token' => $this->accessToken(),
+            'access_token' => $this->accessToken,
             'id_token' => $this->idToken,
-            'refresh_token' => $this->refreshToken(),
-            'expires_in' => $this->ttl(),
+            'refresh_token' => $this->refreshToken,
+            'expires_in' => $this->ttl,
         ];
     }
 }
