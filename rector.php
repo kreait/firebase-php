@@ -13,6 +13,7 @@ return RectorConfig::configure()
     ])
     ->withPhpSets()
     ->withPreparedSets(
+        deadCode: true,
         privatization: true,
         earlyReturn: true,
         phpunitCodeQuality: true,
