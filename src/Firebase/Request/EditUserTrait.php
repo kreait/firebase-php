@@ -160,7 +160,7 @@ trait EditUserTrait
             'phoneNumber' => $this->phoneNumber,
             'photoUrl' => $this->photoUrl,
             'password' => $this->clearTextPassword,
-        ], static fn($value) => $value !== null);
+        ], static fn($value): bool => $value !== null);
     }
 
     public function hasUid(): bool

@@ -73,7 +73,7 @@ final class MessageDataTest extends TestCase
         ];
         yield 'object with __toString()' => [
             ['key' => new class {
-                public function __toString()
+                public function __toString(): string
                 {
                     return 'value';
                 }

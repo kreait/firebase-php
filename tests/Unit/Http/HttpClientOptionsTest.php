@@ -96,7 +96,7 @@ final class HttpClientOptionsTest extends TestCase
     #[Test]
     public function itAcceptsSingleCallableMiddlewares(): void
     {
-        $options = HttpClientOptions::default()->withGuzzleMiddleware(static fn() => 'Foo', 'name');
+        $options = HttpClientOptions::default()->withGuzzleMiddleware(static fn(): string => 'Foo', 'name');
 
         $middlewares = $options->guzzleMiddlewares();
 
@@ -110,8 +110,8 @@ final class HttpClientOptionsTest extends TestCase
     {
         $options = HttpClientOptions::default()
             ->withGuzzleMiddlewares([
-                static fn() => 'Foo',
-                ['middleware' => static fn() => 'Foo', 'name' => 'Foo'],
+                static fn(): string => 'Foo',
+                ['middleware' => static fn(): string => 'Foo', 'name' => 'Foo'],
             ])
         ;
 
