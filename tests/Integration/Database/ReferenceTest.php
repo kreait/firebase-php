@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration\Database;
 
-use DateTimeImmutable;
 use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
@@ -141,8 +140,6 @@ final class ReferenceTest extends DatabaseTestCase
     #[Test]
     public function setServerTimestamp(): void
     {
-        $now = new DateTimeImmutable();
-
         $value = $this->ref->getChild(__FUNCTION__)
             ->push(['updatedAt' => Database::SERVER_TIMESTAMP])
             ->getSnapshot()->getValue()
