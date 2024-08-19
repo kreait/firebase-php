@@ -41,6 +41,6 @@ final class PersonalizationValue implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return $this->toArray();
+        return $this->data;
     }
 }

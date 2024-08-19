@@ -195,7 +195,7 @@ final class UserQueryTest extends IntegrationTestCase
         }
     }
 
-    protected function createUserWithEmailAndPassword(?string $email = null, ?string $password = null): UserRecord
+    private function createUserWithEmailAndPassword(?string $email = null, ?string $password = null): UserRecord
     {
         $email ??= self::randomEmail();
         $password ??= self::randomString();

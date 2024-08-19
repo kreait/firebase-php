@@ -14,7 +14,7 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 final class RequestFactory
 {
-    private bool $environmentSupportsHTTP2;
+    private readonly bool $environmentSupportsHTTP2;
 
     public function __construct(
         private readonly RequestFactoryInterface $requestFactory,
