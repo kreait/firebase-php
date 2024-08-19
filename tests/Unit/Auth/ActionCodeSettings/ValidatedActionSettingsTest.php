@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Auth\ActionCodeSettings;
 
 use InvalidArgumentException;
+use Iterator;
 use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -39,7 +40,7 @@ final class ValidatedActionSettingsTest extends TestCase
         $this->assertEmpty(ValidatedActionCodeSettings::empty()->toArray());
     }
 
-    public static function validInputs(): \Iterator
+    public static function validInputs(): Iterator
     {
         $continueUrl = 'https://example.com';
         yield 'full' => [

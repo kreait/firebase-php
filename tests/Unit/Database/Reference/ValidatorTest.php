@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Database\Reference;
 
 use GuzzleHttp\Psr7\Uri;
+use Iterator;
 use Kreait\Firebase\Database\Reference\Validator;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
@@ -59,7 +60,7 @@ final class ValidatorTest extends UnitTestCase
         $this->validator->validateUri($uri);
     }
 
-    public static function invalidChars(): \Iterator
+    public static function invalidChars(): Iterator
     {
         yield '.' => ['.'];
         yield '$' => ['$'];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
+use Iterator;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\Topic;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -30,7 +31,7 @@ final class TopicTest extends TestCase
         Topic::fromValue($value);
     }
 
-    public static function valueProvider(): \Iterator
+    public static function valueProvider(): Iterator
     {
         yield 'no slashes' => ['foo', 'foo'];
         yield 'leading slash' => ['foo', '/foo'];
@@ -38,7 +39,7 @@ final class TopicTest extends TestCase
         yield 'with topic prefix' => ['foo', '/topic/foo'];
     }
 
-    public static function invalidValueProvider(): \Iterator
+    public static function invalidValueProvider(): Iterator
     {
         yield '$' => ['$'];
         yield 'ä' => ['ä'];

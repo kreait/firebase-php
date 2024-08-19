@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
 use InvalidArgumentException;
+use Iterator;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Messaging\RegistrationTokens;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -44,7 +45,7 @@ final class RegistrationTokensTest extends TestCase
         $this->assertEqualsCanonicalizing(['foo', 'foo'], $tokens->asStrings());
     }
 
-    public static function validValuesWithExpectedCounts(): \Iterator
+    public static function validValuesWithExpectedCounts(): Iterator
     {
         $foo = RegistrationToken::fromValue('foo');
         yield 'string' => [1, 'foo'];
@@ -53,7 +54,7 @@ final class RegistrationTokensTest extends TestCase
         yield 'array with mixed values' => [2, [$foo, 'bar']];
     }
 
-    public static function invalidValues(): \Iterator
+    public static function invalidValues(): Iterator
     {
         yield 'invalid object' => [new stdClass()];
     }

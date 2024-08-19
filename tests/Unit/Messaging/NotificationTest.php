@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
+use Iterator;
 use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Tests\UnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
@@ -52,7 +53,7 @@ final class NotificationTest extends UnitTestCase
         $this->assertEqualsCanonicalizing($array, $notification->jsonSerialize());
     }
 
-    public function invalidDataProvider(): \Iterator
+    public function invalidDataProvider(): Iterator
     {
         yield 'empty_title_and_body' => [['title' => null, 'body' => null]];
     }

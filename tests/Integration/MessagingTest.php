@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use Iterator;
 use Kreait\Firebase\Contract\Messaging;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
@@ -154,7 +155,7 @@ final class MessagingTest extends IntegrationTestCase
         $this->addToAssertionCount(1);
     }
 
-    public static function reservedKeywordsThatStillAreAccepted(): \Iterator
+    public static function reservedKeywordsThatStillAreAccepted(): Iterator
     {
         yield 'notification' => ['notification'];
     }

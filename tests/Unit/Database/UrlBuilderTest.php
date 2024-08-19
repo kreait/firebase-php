@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Database;
 
 use InvalidArgumentException;
+use Iterator;
 use Kreait\Firebase\Database\UrlBuilder;
 use Kreait\Firebase\Tests\UnitTestCase;
 use Kreait\Firebase\Util;
@@ -32,7 +33,7 @@ final class UrlBuilderTest extends UnitTestCase
         UrlBuilder::create($url);
     }
 
-    public static function invalidUrls(): \Iterator
+    public static function invalidUrls(): Iterator
     {
         yield 'wrong scheme' => ['http://example.com'];
         yield 'no scheme' => ['example.com'];
@@ -67,7 +68,7 @@ final class UrlBuilderTest extends UnitTestCase
         $this->assertSame($expected, $url);
     }
 
-    public static function realUrls(): \Iterator
+    public static function realUrls(): Iterator
     {
         $baseUrl = 'https://project.region.example.com';
         yield 'empty path, empty query' => [
@@ -108,7 +109,7 @@ final class UrlBuilderTest extends UnitTestCase
         ];
     }
 
-    public static function emulatedUrls(): \Iterator
+    public static function emulatedUrls(): Iterator
     {
         $namespace = 'namespace';
         $baseUrl = 'https://'.$namespace.'.example.com';

@@ -38,6 +38,7 @@ use Kreait\Firebase\Http\Middleware;
 use Kreait\Firebase\JWT\IdTokenVerifier;
 use Kreait\Firebase\JWT\SessionCookieVerifier;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
+use Kreait\Firebase\Messaging\RequestFactory;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Clock\ClockInterface;
 use Psr\Http\Message\UriInterface;
@@ -406,7 +407,7 @@ final class Factory
         $projectId = $this->getProjectId();
 
         $errorHandler = new MessagingApiExceptionConverter($this->clock);
-        $requestFactory = new Messaging\RequestFactory(
+        $requestFactory = new RequestFactory(
             requestFactory: $this->httpFactory,
             streamFactory: $this->httpFactory,
         );

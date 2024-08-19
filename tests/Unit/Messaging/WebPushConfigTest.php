@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
+use Iterator;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\WebPushConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
@@ -90,14 +91,14 @@ final class WebPushConfigTest extends UnitTestCase
         ];
     }
 
-    public static function validHeaders(): \Iterator
+    public static function validHeaders(): Iterator
     {
         yield 'positive int ttl' => [['TTL' => 1]];
         yield 'positive string ttl' => [['TTL' => '1']];
         yield 'null (#719)' => [['TTL' => null]];
     }
 
-    public static function invalidHeaders(): \Iterator
+    public static function invalidHeaders(): Iterator
     {
         yield 'negative int ttl' => [['TTL' => -1]];
         yield 'negative string ttl' => [['TTL' => '-1']];
