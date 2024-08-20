@@ -9,7 +9,11 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 ### Added
 
-* Added support for PHP 8.4
+* Added support for PHP 8.4.
+  * Please note: While the SDK supports PHP 8.4, not all dependencies support it. If you want to use the SDK with
+    PHP 8.4, you probably will need to ignore platform requirements when working with Composer, by setting the
+    [appropriate environment variables](https://getcomposer.org/doc/03-cli.md#composer-ignore-platform-req-or-composer-ignore-platform-reqs) 
+    or [`composer` CLI options]() when running `composer install/update/require`.
 
 ### Deprecated
 
