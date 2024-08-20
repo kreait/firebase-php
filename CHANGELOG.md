@@ -11,6 +11,13 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 * Added support for PHP 8.4
 
+### Deprecated
+
+* Firebase Dynamic Links is deprecated and should not be used in new projects. The service will shut down on 
+  August 25, 2025. The component will remain in the SDK until then, but as the Firebase service is deprecated,
+  this component is also deprecated.
+  ([Dynamic Links Deprecation FAQ](https://firebase.google.com/support/dynamic-links-faq))
+
 ## [7.13.1] - 2024-07-02
 
 ### Fixed
