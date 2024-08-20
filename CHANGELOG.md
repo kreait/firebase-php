@@ -7,6 +7,8 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 ## [Unreleased]
 
+## [7.14.0] - 2024-08-21
+
 ### Added
 
 * Added support for PHP 8.4.
@@ -258,7 +260,8 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.9.6/CHANGELOG.md
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/7.13.1...7.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/7.14.0...7.x
+[7.14.0]: https://github.com/kreait/firebase-php/compare/7.13.1...7.14.0
 [7.13.1]: https://github.com/kreait/firebase-php/compare/7.13.0...7.13.1
 [7.13.0]: https://github.com/kreait/firebase-php/compare/7.12.0...7.13.0
 [7.12.0]: https://github.com/kreait/firebase-php/compare/7.11.0...7.12.0
