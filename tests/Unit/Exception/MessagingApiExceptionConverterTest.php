@@ -127,6 +127,7 @@ final class MessagingApiExceptionConverterTest extends TestCase
         $this->assertSame($expected->getTimestamp(), $converted->retryAfter()->getTimestamp());
     }
 
+    #[Test]
     public function it_does_not_know_when_to_retry_when_it_does_not_have_to(): void
     {
         $response = new Response(503); // no Retry-After

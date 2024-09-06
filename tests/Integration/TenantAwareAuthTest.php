@@ -58,6 +58,7 @@ final class TenantAwareAuthTest extends AuthTestCase
         }
     }
 
+    #[Test]
     public function it_can_sign_in_anonymously(): void
     {
         $user = $this->auth->createAnonymousUser();

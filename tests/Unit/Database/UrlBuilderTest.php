@@ -45,6 +45,7 @@ final class UrlBuilderTest extends UnitTestCase
      * @param non-empty-string $expected
      */
     #[DataProvider('realUrls')]
+    #[Test]
     public function getGetUrl(string $baseUrl, string $path, array $queryParams, string $expected): void
     {
         $url = UrlBuilder::create($baseUrl)->getUrl($path, $queryParams);
