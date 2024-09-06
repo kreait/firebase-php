@@ -94,16 +94,6 @@ abstract class IntegrationTestCase extends FirebaseTestCase
         return self::randomString($suffix.'@example.com');
     }
 
-    protected static function authIsEmulated(): bool
-    {
-        return Util::authEmulatorHost() !== null;
-    }
-
-    protected static function databaseIsEmulated(): bool
-    {
-        return Util::rtdbEmulatorHost() !== null;
-    }
-
     /**
      * @return non-empty-string|null
      */

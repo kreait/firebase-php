@@ -19,6 +19,7 @@ use Kreait\Firebase\Exception\Auth\RevokedIdToken;
 use Kreait\Firebase\Exception\Auth\RevokedSessionCookie;
 use Kreait\Firebase\Exception\Auth\UserNotFound;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use Kreait\Firebase\Util;
 use PHPUnit\Framework\Attributes\Test;
 
 use function assert;
@@ -208,7 +209,7 @@ abstract class AuthTestCase extends IntegrationTestCase
 
         $link = $this->auth->getEmailVerificationLink($user->email, null, 'fr');
 
-        if (self::authIsEmulated()) {
+        if (Util::authEmulatorHost() !== null) {
             $this->assertStringNotContainsString('lang=fr', $link);
         } else {
             $this->assertStringContainsString('lang=fr', $link);
