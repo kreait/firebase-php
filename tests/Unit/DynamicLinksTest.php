@@ -9,11 +9,13 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Response;
 use Kreait\Firebase\DynamicLink\AnalyticsInfo;
 use Kreait\Firebase\DynamicLink\AnalyticsInfo\GooglePlayAnalytics;
 use Kreait\Firebase\DynamicLink\AnalyticsInfo\ITunesConnectAnalytics;
 use Kreait\Firebase\DynamicLink\AndroidInfo;
+use Kreait\Firebase\DynamicLink\ApiClient;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink;
 use Kreait\Firebase\DynamicLink\CreateDynamicLink\FailedToCreateDynamicLink;
 use Kreait\Firebase\DynamicLink\GetStatisticsForDynamicLink;
@@ -24,29 +26,39 @@ use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink;
 use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink\FailedToShortenLongDynamicLink;
 use Kreait\Firebase\DynamicLink\SocialMetaTagInfo;
 use Kreait\Firebase\DynamicLinks;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 
 /**
+ * @deprecated 7.14.0 Firebase Dynamic Links is deprecated and should not be used in new projects. The service will
+ *                    shut down on August 25, 2025. The component will remain in the SDK until then, but as the
+ *                    Firebase service is deprecated, this component is also deprecated
+ *
+ * @see https://firebase.google.com/support/dynamic-links-faq Dynamic Links Deprecation FAQ
+ *
  * @internal
  */
 final class DynamicLinksTest extends TestCase
 {
     private MockHandler $httpHandler;
-
-    private string $dynamicLinksDomain = 'https://link.domain.tld';
-
+    private string $dynamicLinksDomain = 'https://link.example.com';
     private DynamicLinks $service;
 
     protected function setUp(): void
     {
         $this->httpHandler = new MockHandler();
         $httpClient = new Client(['handler' => HandlerStack::create($this->httpHandler)]);
+        $httpFactory = new HttpFactory();
 
-        $this->service = DynamicLinks::withApiClientAndDefaultDomain($httpClient, $this->dynamicLinksDomain);
+        $apiClient = new ApiClient($httpClient, $httpFactory, $httpFactory);
+
+        $this->service = DynamicLinks::withApiClientAndDefaultDomain($apiClient, $this->dynamicLinksDomain);
     }
 
-    public function testItCreatesADynamicLink(): void
+    #[Test]
+    public function itCreatesADynamicLink(): void
     {
         $this->httpHandler->append(
             new Response(200, [], Json::encode($responseData = [
@@ -56,34 +68,35 @@ final class DynamicLinksTest extends TestCase
                     ['warningCode' => 'WARNING_CODE_1', 'warningMessage' => 'Warning Message 1'],
                     ['warningCode' => 'WARNING_CODE_2', 'warningMessage' => 'Warning Message 2'],
                 ],
-            ]))
+            ])),
         );
 
-        $action = $this->createDynamicLinkAction('https://domain.tld');
+        $action = $this->createDynamicLinkAction('https://example.com');
 
         $dynamicLink = $this->service->createDynamicLink($action);
 
         $this->assertTrue($dynamicLink->hasWarnings());
         $this->assertCount(2, $dynamicLink->warnings());
-        $this->assertEquals($warnings, $dynamicLink->warnings());
+        $this->assertSame($warnings, $dynamicLink->warnings());
         $this->assertSame($shortLink, (string) $dynamicLink->uri());
         $this->assertSame($shortLink, (string) $dynamicLink);
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, \json_decode(Json::encode($dynamicLink), true));
+        $this->assertEqualsCanonicalizing($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
-    public function testItCreatesADynamicLinkFromAnArrayOfParameters(): void
+    #[Test]
+    public function itCreatesADynamicLinkFromAnArrayOfParameters(): void
     {
         $this->httpHandler->append(
             new Response(200, [], Json::encode($responseData = [
                 'shortLink' => $shortLink = $this->dynamicLinksDomain.'/'.($suffix = 'short'),
                 'previewLink' => $previewLink = $shortLink.'?d=1',
-            ]))
+            ])),
         );
 
-        $dynamicLink = $this->service->createDynamicLink(['link' => 'https://domain.tld']);
+        $dynamicLink = $this->service->createDynamicLink(['link' => 'https://example.com']);
 
         $this->assertFalse($dynamicLink->hasWarnings());
         $this->assertCount(0, $dynamicLink->warnings());
@@ -92,24 +105,26 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, \json_decode(Json::encode($dynamicLink), true));
+        $this->assertEqualsCanonicalizing($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
-    public function testCreationFailsIfNoConnectionIsAvailable(): void
+    #[Test]
+    public function creationFailsIfNoConnectionIsAvailable(): void
     {
         $connectionError = new ConnectException('Connection error', $this->createMock(RequestInterface::class));
         $this->httpHandler->append($connectionError);
 
         $this->expectException(FailedToCreateDynamicLink::class);
-        $this->service->createDynamicLink('https://domain.tld/irrelevant');
+        $this->service->createDynamicLink('https://example.com/irrelevant');
     }
 
-    public function testCreationFailsOnUnsuccessfulResponse(): void
+    #[Test]
+    public function creationFailsOnUnsuccessfulResponse(): void
     {
         $this->httpHandler->append($response = new Response(400, [], '{}'));
 
-        $action = $this->createDynamicLinkAction('https://domain.tld/irrelevant')
-            ->withDynamicLinkDomain('https://page.link.tld') // preventing the action from being changed
+        $action = $this->createDynamicLinkAction('https://example.com/irrelevant')
+            ->withDynamicLinkDomain('https://page-link.example.com') // preventing the action from being changed
         ;
 
         try {
@@ -121,24 +136,26 @@ final class DynamicLinksTest extends TestCase
         }
     }
 
-    public function testCreationFailsGracefullyIfAnUnsuccessfulResponseCannotBeParsed(): void
+    #[Test]
+    public function creationFailsGracefullyIfAnUnsuccessfulResponseCannotBeParsed(): void
     {
         $this->httpHandler->append(new Response(400, [], 'probably html'));
 
         $this->expectException(FailedToCreateDynamicLink::class);
-        $this->service->createDynamicLink('https://domain.tld/irrelevant');
+        $this->service->createDynamicLink('https://example.com/irrelevant');
     }
 
-    public function testItShortensALonkLinkFromAnArrayOfParameters(): void
+    #[Test]
+    public function itShortensALongLinkFromAnArrayOfParameters(): void
     {
         $this->httpHandler->append(
             new Response(200, [], Json::encode($responseData = [
                 'shortLink' => $shortLink = $this->dynamicLinksDomain.'/'.($suffix = 'short'),
                 'previewLink' => $previewLink = $shortLink.'?d=1',
-            ]))
+            ])),
         );
 
-        $dynamicLink = $this->service->shortenLongDynamicLink(['longDynamicLink' => 'https://domain.tld']);
+        $dynamicLink = $this->service->shortenLongDynamicLink(['longDynamicLink' => 'https://example.com']);
 
         $this->assertFalse($dynamicLink->hasWarnings());
         $this->assertCount(0, $dynamicLink->warnings());
@@ -147,23 +164,25 @@ final class DynamicLinksTest extends TestCase
         $this->assertSame($previewLink, (string) $dynamicLink->previewUri());
         $this->assertSame($this->dynamicLinksDomain, $dynamicLink->domain());
         $this->assertSame($suffix, $dynamicLink->suffix());
-        $this->assertEquals($responseData, \json_decode(Json::encode($dynamicLink), true));
+        $this->assertEqualsCanonicalizing($responseData, Json::decode(Json::encode($dynamicLink), true));
     }
 
-    public function testShorteningFailsIfNoConnectionIsAvailable(): void
+    #[Test]
+    public function shorteningFailsIfNoConnectionIsAvailable(): void
     {
         $connectionError = new ConnectException('Connection error', $this->createMock(RequestInterface::class));
         $this->httpHandler->append($connectionError);
 
         $this->expectException(FailedToShortenLongDynamicLink::class);
-        $this->service->shortenLongDynamicLink('https://domain.tld/irrelevant');
+        $this->service->shortenLongDynamicLink('https://example.com/irrelevant');
     }
 
-    public function testShorteningFailsOnUnsuccessfulResponse(): void
+    #[Test]
+    public function shorteningFailsOnUnsuccessfulResponse(): void
     {
         $this->httpHandler->append($response = new Response(400, [], '{}'));
 
-        $action = ShortenLongDynamicLink::forLongDynamicLink('https://domain.tld/irrelevant')->withShortSuffix();
+        $action = ShortenLongDynamicLink::forLongDynamicLink('https://example.com/irrelevant')->withShortSuffix();
 
         try {
             $this->service->shortenLongDynamicLink($action);
@@ -174,15 +193,17 @@ final class DynamicLinksTest extends TestCase
         }
     }
 
-    public function testShorteningFailsGracefullyIfAnUnsuccessfulResponseCannotBeParsed(): void
+    #[Test]
+    public function shorteningFailsGracefullyIfAnUnsuccessfulResponseCannotBeParsed(): void
     {
         $this->httpHandler->append(new Response(400, [], 'probably html'));
 
         $this->expectException(FailedToShortenLongDynamicLink::class);
-        $this->service->shortenLongDynamicLink('https://domain.tld/irrelevant');
+        $this->service->shortenLongDynamicLink('https://example.com/irrelevant');
     }
 
-    public function testItGetsLinkStatistics(): void
+    #[Test]
+    public function itGetsLinkStatistics(): void
     {
         $this->httpHandler->append(
             new Response(200, [], Json::encode($responseData = [
@@ -203,13 +224,13 @@ final class DynamicLinksTest extends TestCase
                     ['platform' => 'ANDROID', 'count' => '10', 'event' => 'APP_RE_OPEN'],
                     ['platform' => 'IOS', 'count' => '20', 'event' => 'APP_RE_OPEN'],
                 ],
-            ]))
+            ])),
         );
 
         $stats = $this->service->getStatistics($this->dynamicLinksDomain.'/abcd');
         $eventStats = $stats->eventStatistics();
 
-        $this->assertEquals($responseData, $stats->rawData());
+        $this->assertEqualsCanonicalizing($responseData, $stats->rawData());
         $this->assertCount(180, $eventStats);
 
         $this->assertCount(60, $eventStats->clicks());
@@ -253,19 +274,19 @@ final class DynamicLinksTest extends TestCase
         $this->assertCount(20, $eventStats->onIOS()->appReOpens());
     }
 
-    public function testLinkStatsFailIfNoConnectionIsAvailable(): void
+    #[Test]
+    public function linkStatsFailIfNoConnectionIsAvailable(): void
     {
         $connectionError = new ConnectException('Connection error', $this->createMock(RequestInterface::class));
         $this->httpHandler->append($connectionError);
 
         $this->expectException(FailedToGetStatisticsForDynamicLink::class);
-        $this->service->getStatistics('anything');
+        $this->service->getStatistics('https://example.com');
     }
 
-    /**
-     * @dataProvider provideCodeAndExpectedMessageRegExForFailingStatisticsRetrieval
-     */
-    public function testLinkStatsFailOnUnsuccessfulResponse(int $code, string $expectedMessageRegex): void
+    #[DataProvider('provideCodeAndExpectedMessageRegExForFailingStatisticsRetrieval')]
+    #[Test]
+    public function linkStatsFailOnUnsuccessfulResponse(int $code, string $expectedMessageRegex): void
     {
         $this->httpHandler->append(new Response($code, [], '{"the body does": "not matter here"}'));
 
@@ -274,16 +295,18 @@ final class DynamicLinksTest extends TestCase
         $this->expectExceptionMessageMatches($expectedMessageRegex);
 
         $this->service->getStatistics(
-            GetStatisticsForDynamicLink::forLink('anything')
+            GetStatisticsForDynamicLink::forLink('https://example.com'),
         );
     }
 
-    public function testLinkStatExceptionsProvideTheActionAndTheResponse(): void
+    #[Test]
+    public function linkStatExceptionsProvideTheActionAndTheResponse(): void
     {
-        $action = GetStatisticsForDynamicLink::forLink('anything');
+        $action = GetStatisticsForDynamicLink::forLink('https://example.com');
         $response = new Response(418, [], '{"key": "value"}');
 
         $this->httpHandler->append($response);
+
         try {
             $this->service->getStatistics($action);
             $this->fail('An exception should have been thrown');
@@ -293,12 +316,10 @@ final class DynamicLinksTest extends TestCase
         }
     }
 
-    public function testDynamicLinkComponentsCanBeCreatedNewOrFromArrays(): void
+    #[Test]
+    public function dynamicLinkComponentsCanBeCreatedNewOrFromArrays(): void
     {
         $this->assertNotEmpty(CreateDynamicLink::new()->jsonSerialize()); // has defaults
-        $this->assertEmpty(CreateDynamicLink::fromArray([])->jsonSerialize());
-
-        $this->assertEmpty(ShortenLongDynamicLink::fromArray([])->jsonSerialize());
 
         $this->assertEmpty(AnalyticsInfo::fromArray([])->jsonSerialize());
         $this->assertEmpty(AnalyticsInfo::new()->jsonSerialize());
@@ -322,6 +343,16 @@ final class DynamicLinksTest extends TestCase
         $this->assertEmpty(SocialMetaTagInfo::new()->jsonSerialize());
     }
 
+    /**
+     * @return iterable<string, array{0: int, 1: string}>
+     */
+    public static function provideCodeAndExpectedMessageRegExForFailingStatisticsRetrieval(): iterable
+    {
+        yield '403' => [403, '/missing permissions/i'];
+
+        yield '418' => [418, '/response.+details/'];
+    }
+
     private function createDynamicLinkAction(string $url): CreateDynamicLink
     {
         return CreateDynamicLink::forUrl($url)
@@ -335,52 +366,42 @@ final class DynamicLinksTest extends TestCase
                             ->withUtmContent('utmContent')
                             ->withUtmMedium('utmMedium')
                             ->withUtmSource('utmSource')
-                            ->withUtmTerm('utmTerm')
+                            ->withUtmTerm('utmTerm'),
                     )
                     ->withItunesConnectAnalytics(
                         ITunesConnectAnalytics::new()
                             ->withAffiliateToken('affiliateToken')
                             ->withCampaignToken('campaignToken')
                             ->withMediaType('8')
-                            ->withProviderToken('providerToken')
-                    )
+                            ->withProviderToken('providerToken'),
+                    ),
             )
             ->withNavigationInfo(
                 NavigationInfo::new()
                     ->withForcedRedirect()
-                    ->withoutForcedRedirect() // cheating the code coverage :)
+                    ->withoutForcedRedirect(), // cheating the code coverage :)
             )
             ->withIOSInfo(
                 IOSInfo::new()
                     ->withAppStoreId('appStoreId')
                     ->withBundleId('bundleId')
                     ->withCustomScheme('customScheme')
-                    ->withFallbackLink('https://fallback.domain.tld')
+                    ->withFallbackLink('https://fallback.example.com')
                     ->withIPadBundleId('iPadBundleId')
-                    ->withIPadFallbackLink('https://ipad-fallback.domain.tld')
+                    ->withIPadFallbackLink('https://ipad-fallback.example.com'),
             )
             ->withAndroidInfo(
                 AndroidInfo::new()
-                    ->withFallbackLink('https://fallback.domain.tld')
+                    ->withFallbackLink('https://fallback.example.com')
                     ->withPackageName('packageName')
-                    ->withMinPackageVersionCode('minPackageVersionCode')
+                    ->withMinPackageVersionCode('minPackageVersionCode'),
             )
             ->withSocialMetaTagInfo(
                 SocialMetaTagInfo::new()
                     ->withDescription('Social Meta Tag description')
                     ->withTitle('Social Meta Tag title')
-                    ->withImageLink('https://domain.tld/image.jpg')
+                    ->withImageLink('https://example.com/image.jpg'),
             )
         ;
-    }
-
-
-    /**
-     * @return iterable<string, array{0: int, 1: string}>
-     */
-    public function provideCodeAndExpectedMessageRegExForFailingStatisticsRetrieval(): iterable
-    {
-        yield '403' => [403, '/missing permissions/i'];
-        yield '418' => [418, '/response.+details/'];
     }
 }

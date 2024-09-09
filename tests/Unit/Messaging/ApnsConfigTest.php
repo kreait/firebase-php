@@ -4,20 +4,26 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
+use Beste\Json;
+use Iterator;
 use Kreait\Firebase\Messaging\ApnsConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class ApnsConfigTest extends UnitTestCase
 {
-    public function testItIsEmptyWhenItIsEmpty(): void
+    #[Test]
+    public function itIsEmptyWhenItIsEmpty(): void
     {
-        $this->assertSame('[]', \json_encode(ApnsConfig::new()));
+        $this->assertSame('[]', Json::encode(ApnsConfig::new()));
     }
 
-    public function testItHasADefaultSound(): void
+    #[Test]
+    public function itHasADefaultSound(): void
     {
         $expected = [
             'payload' => [
@@ -28,12 +34,13 @@ final class ApnsConfigTest extends UnitTestCase
         ];
 
         $this->assertJsonStringEqualsJsonString(
-            \json_encode($expected),
-            \json_encode(ApnsConfig::new()->withDefaultSound())
+            Json::encode($expected),
+            Json::encode(ApnsConfig::new()->withDefaultSound()),
         );
     }
 
-    public function testItHasABadge(): void
+    #[Test]
+    public function itHasABadge(): void
     {
         $expected = [
             'payload' => [
@@ -44,24 +51,25 @@ final class ApnsConfigTest extends UnitTestCase
         ];
 
         $this->assertJsonStringEqualsJsonString(
-            \json_encode($expected),
-            \json_encode(ApnsConfig::new()->withBadge(123))
+            Json::encode($expected),
+            Json::encode(ApnsConfig::new()->withBadge(123)),
         );
     }
 
     /**
-     * @dataProvider validDataProvider
-     *
      * @param array<string, mixed> $data
      */
-    public function testItCanBeCreatedFromAnArray(array $data): void
+    #[DataProvider('validDataProvider')]
+    #[Test]
+    public function itCanBeCreatedFromAnArray(array $data): void
     {
         $config = ApnsConfig::fromArray($data);
 
-        $this->assertEquals($data, $config->jsonSerialize());
+        $this->assertEqualsCanonicalizing($data, $config->jsonSerialize());
     }
 
-    public function testItCanHaveAPriority(): void
+    #[Test]
+    public function itCanHaveAPriority(): void
     {
         $config = ApnsConfig::new()->withImmediatePriority();
         $this->assertSame('10', $config->jsonSerialize()['headers']['apns-priority']);
@@ -70,7 +78,8 @@ final class ApnsConfigTest extends UnitTestCase
         $this->assertSame('5', $config->jsonSerialize()['headers']['apns-priority']);
     }
 
-    public function testItHasASubtitle(): void
+    #[Test]
+    public function itHasASubtitle(): void
     {
         $expected = [
             'payload' => [
@@ -81,33 +90,28 @@ final class ApnsConfigTest extends UnitTestCase
         ];
 
         $this->assertJsonStringEqualsJsonString(
-            \json_encode($expected),
-            \json_encode(ApnsConfig::new()->withSubtitle('i am a subtitle'))
+            Json::encode($expected),
+            Json::encode(ApnsConfig::new()->withSubtitle('i am a subtitle')),
         );
     }
 
-    /**
-     * @return array<string, array<int, array<string, mixed>>>
-     */
-    public function validDataProvider()
+    public static function validDataProvider(): Iterator
     {
-        return [
-            'full_config' => [[
-                // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#apns_specific_fields
-                'headers' => [
-                    'apns-priority' => '10',
-                ],
-                'payload' => [
-                    'aps' => [
-                        'alert' => [
-                            'title' => '$GOOG up 1.43% on the day',
-                            'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
-                        ],
-                        'badge' => 42,
-                        'sound' => 'default',
+        yield 'full_config' => [[
+            // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#apns_specific_fields
+            'headers' => [
+                'apns-priority' => '10',
+            ],
+            'payload' => [
+                'aps' => [
+                    'alert' => [
+                        'title' => '$GOOGLE up 1.43% on the day',
+                        'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
                     ],
+                    'badge' => 42,
+                    'sound' => 'default',
                 ],
-            ]],
-        ];
+            ],
+        ]];
     }
 }

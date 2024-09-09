@@ -7,17 +7,25 @@ namespace Kreait\Firebase\Messaging;
 use JsonSerializable;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 
+use function array_filter;
+use function array_key_exists;
+use function is_int;
+use function is_string;
+use function preg_match;
+use function sprintf;
+
 /**
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidconfig
  * @see https://firebase.google.com/docs/cloud-messaging/concept-options#setting-the-priority-of-a-message
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidmessagepriority Android Message Priorities
- *
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidfcmoptions Android FCM Options Syntax
+ *
  * @phpstan-type AndroidFcmOptionsShape array{
  *     analytics_label?: non-empty-string
  * }
  *
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#LightSettings Android FCM Light Settings Syntax
+ *
  * @phpstan-type AndroidFcmLightSettingsShape array{
  *     color: array{
  *         red: float,
@@ -30,6 +38,7 @@ use Kreait\Firebase\Exception\Messaging\InvalidArgument;
  * }
  *
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#AndroidNotification Android Notification Syntax
+ *
  * @phpstan-type AndroidNotificationShape array{
  *     title?: non-empty-string,
  *     body?: non-empty-string,
@@ -58,6 +67,7 @@ use Kreait\Firebase\Exception\Messaging\InvalidArgument;
  * }
  *
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidconfig Android Config Syntax
+ *
  * @phpstan-type AndroidConfigShape array{
  *     collapse_key?: non-empty-string,
  *     priority?: self::MESSAGE_PRIORITY_*,
@@ -73,27 +83,21 @@ final class AndroidConfig implements JsonSerializable
 {
     private const MESSAGE_PRIORITY_NORMAL = 'normal';
     private const MESSAGE_PRIORITY_HIGH = 'high';
-
     private const NOTIFICATION_PRIORITY_UNSPECIFIED = 'PRIORITY_UNSPECIFIED';
     private const NOTIFICATION_PRIORITY_MIN = 'PRIORITY_MIN';
     private const NOTIFICATION_PRIORITY_LOW = 'PRIORITY_LOW';
     private const NOTIFICATION_PRIORITY_DEFAULT = 'PRIORITY_DEFAULT';
     private const NOTIFICATION_PRIORITY_HIGH = 'PRIORITY_HIGH';
     private const NOTIFICATION_PRIORITY_MAX = 'PRIORITY_MAX';
-
     private const NOTIFICATION_VISIBILITY_PRIVATE = 'PRIVATE';
     private const NOTIFICATION_VISIBILITY_PUBLIC = 'PUBLIC';
     private const NOTIFICATION_VISIBILITY_SECRET = 'SECRET';
 
-    /** @var AndroidConfigShape */
-    private array $config;
-
     /**
      * @param AndroidConfigShape $config
      */
-    private function __construct(array $config)
+    private function __construct(private array $config)
     {
-        $this->config = $config;
     }
 
     public static function new(): self
@@ -113,37 +117,6 @@ final class AndroidConfig implements JsonSerializable
         }
 
         return new self($config);
-    }
-
-    /**
-     * @param mixed $value
-     *
-     * @throws InvalidArgument
-     *
-     * @return non-empty-string
-     */
-    private static function ensureValidTtl($value): string
-    {
-        $expectedPattern = '/^\d+s$/';
-        $errorMessage = "The TTL of an AndroidConfig must be an positive integer or string matching $expectedPattern";
-
-        if (is_int($value) && $value >= 0) {
-            return sprintf('%ds', $value);
-        }
-
-        if (!is_string($value)) {
-            throw new InvalidArgument($errorMessage);
-        }
-
-        if (preg_match('/^\d+$/', $value) === 1) {
-            return sprintf('%ds', $value);
-        }
-
-        if (preg_match($expectedPattern, $value) === 1) {
-            return sprintf('%s', $value);
-        }
-
-        throw new InvalidArgument($errorMessage);
     }
 
     public function withDefaultSound(): self
@@ -167,40 +140,14 @@ final class AndroidConfig implements JsonSerializable
         return $config;
     }
 
-    /**
-     * @deprecated 6.4.0 Use {@see withHighMessagePriority()} instead
-     */
-    public function withHighPriority(): self
-    {
-        return $this->withMessagePriority(self::MESSAGE_PRIORITY_HIGH);
-    }
-
     public function withHighMessagePriority(): self
     {
         return $this->withMessagePriority(self::MESSAGE_PRIORITY_HIGH);
     }
 
-    /**
-     * @deprecated 6.4.0 Use {@see withNormalMessagePriority()} instead
-     */
-    public function withNormalPriority(): self
-    {
-        return $this->withMessagePriority(self::MESSAGE_PRIORITY_NORMAL);
-    }
-
     public function withNormalMessagePriority(): self
     {
         return $this->withMessagePriority(self::MESSAGE_PRIORITY_NORMAL);
-    }
-
-    /**
-     * @deprecated 6.4.0 Use {@see withMessagePriority()} instead
-     *
-     * @param self::MESSAGE_PRIORITY_* $priority
-     */
-    public function withPriority(string $priority): self
-    {
-        return $this->withMessagePriority($priority);
     }
 
     /**
@@ -285,11 +232,39 @@ final class AndroidConfig implements JsonSerializable
         return $config;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function jsonSerialize(): array
     {
-        return \array_filter($this->config, static fn ($value) => $value !== null && $value !== []);
+        return array_filter($this->config, static fn($value): bool => $value !== null && $value !== []);
+    }
+
+    /**
+     * @param int|string $value
+     *
+     * @throws InvalidArgument
+     *
+     * @return non-empty-string
+     */
+    private static function ensureValidTtl($value): string
+    {
+        $expectedPattern = '/^\d+s$/';
+        $errorMessage = "The TTL of an AndroidConfig must be an positive integer or string matching {$expectedPattern}";
+
+        if (is_int($value) && $value >= 0) {
+            return sprintf('%ds', $value);
+        }
+
+        if (!is_string($value) || $value === '') {
+            throw new InvalidArgument($errorMessage);
+        }
+
+        if (preg_match('/^\d+$/', $value) === 1) {
+            return sprintf('%ds', $value);
+        }
+
+        if (preg_match($expectedPattern, $value) === 1) {
+            return $value;
+        }
+
+        throw new InvalidArgument($errorMessage);
     }
 }

@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Auth;
 
+/**
+ * @internal
+ */
 final class SignInWithRefreshToken implements IsTenantAware, SignIn
 {
-    private string $refreshToken;
     private ?string $tenantId = null;
 
-    private function __construct(string $refreshToken)
+    private function __construct(private readonly string $refreshToken)
     {
-        $this->refreshToken = $refreshToken;
     }
 
     public static function fromValue(string $refreshToken): self

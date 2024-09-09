@@ -3,13 +3,12 @@
 ### General settings
 
 extensions = []
-templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 project = u'Firebase Admin SDK for PHP'
 author = u'Jérôme Gamez'
 copyright = u'Jérôme Gamez'
-version = u'6.x'
+version = u'7.x'
 html_title = u'Firebase Admin SDK for PHP Documentation'
 html_short_title = u'Firebase Admin SDK for PHP'
 
@@ -38,10 +37,10 @@ lexers['php-annotations'] = PhpLexer(startinline=True, linenos=1)
 ### Integrations
 
 html_context = {
-  "display_github": True,
-  "github_user": "kreait",
-  "github_repo": "firebase-php",
-  "github_version": "6.x",
-  "conf_py_path": "/docs/",
-  "source_suffix": ".rst",
+    'display_github': True,
+    'github_user': 'kreait',
+    'github_repo': 'firebase-php',
+    'github_version': '7.x',
+    'conf_py_path': '/docs/',
+    'source_suffix': '.rst',
 }

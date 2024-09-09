@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Messaging;
 
+use JsonSerializable;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+
+use function array_filter;
 
 /**
  * @phpstan-type NotificationShape array{
@@ -13,20 +16,16 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
  *     imageUrl?: string
  * }
  */
-final class Notification implements \JsonSerializable
+final class Notification implements JsonSerializable
 {
-    private ?string $title;
-    private ?string $body;
-    private ?string $imageUrl;
-
     /**
      * @throws InvalidArgumentException if both title and body are null
      */
-    private function __construct(?string $title = null, ?string $body = null, ?string $imageUrl = null)
-    {
-        $this->title = $title;
-        $this->body = $body;
-        $this->imageUrl = $imageUrl;
+    private function __construct(
+        private ?string $title = null,
+        private ?string $body = null,
+        private ?string $imageUrl = null,
+    ) {
     }
 
     /**
@@ -51,7 +50,7 @@ final class Notification implements \JsonSerializable
         return new self(
             $data['title'] ?? null,
             $data['body'] ?? null,
-            $data['image'] ?? null
+            $data['image'] ?? null,
         );
     }
 
@@ -94,15 +93,12 @@ final class Notification implements \JsonSerializable
         return $this->imageUrl;
     }
 
-    /**
-     * @return array<string, string>
-     */
     public function jsonSerialize(): array
     {
-        return \array_filter([
+        return array_filter([
             'title' => $this->title,
             'body' => $this->body,
             'image' => $this->imageUrl,
-        ], static fn ($value) => $value !== null);
+        ], static fn($value): bool => $value !== null);
     }
 }

@@ -4,54 +4,88 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\RemoteConfig;
 
-class ConditionalValue implements \JsonSerializable
+use JsonSerializable;
+
+use function is_array;
+use function is_string;
+
+/**
+ * @phpstan-import-type RemoteConfigParameterValueShape from ParameterValue
+ */
+class ConditionalValue implements JsonSerializable
 {
-    private string $conditionName;
-
-    private string $value;
-
     /**
      * @internal
+     *
+     * @param non-empty-string $conditionName
      */
-    public function __construct(string $conditionName, string $value)
+    public function __construct(private readonly string $conditionName, private readonly ParameterValue $value)
     {
-        $this->conditionName = $conditionName;
-        $this->value = $value;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function conditionName(): string
     {
         return $this->conditionName;
     }
 
     /**
-     * @param string|Condition $condition
+     * @param non-empty-string|Condition $condition
      */
     public static function basedOn($condition): self
     {
         $name = $condition instanceof Condition ? $condition->name() : $condition;
 
-        return new self($name, '');
-    }
-
-    public function value(): string
-    {
-        return $this->value;
-    }
-
-    public function withValue(string $value): self
-    {
-        $conditionalValue = clone $this;
-        $conditionalValue->value = $value;
-
-        return $conditionalValue;
+        return new self($name, ParameterValue::withValue(''));
     }
 
     /**
-     * @return array<string, string>
+     * @return RemoteConfigParameterValueShape|non-empty-string
+     */
+    public function value()
+    {
+        $data = $this->value->toArray();
+
+        $valueString = $data['value'] ?? null;
+
+        if (is_string($valueString) && $valueString !== '') {
+            return $valueString;
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param ParameterValue|RemoteConfigParameterValueShape|string $value
+     */
+    public function withValue($value): self
+    {
+        if (is_string($value)) {
+            return new self($this->conditionName, ParameterValue::withValue($value));
+        }
+
+        if (is_array($value)) {
+            return new self($this->conditionName, ParameterValue::fromArray($value));
+        }
+
+        return new self($this->conditionName, $value);
+    }
+
+    /**
+     * @return RemoteConfigParameterValueShape
+     */
+    public function toArray(): array
+    {
+        return $this->value->toArray();
+    }
+
+    /**
+     * @return RemoteConfigParameterValueShape
      */
     public function jsonSerialize(): array
     {
-        return ['value' => $this->value];
+        return $this->toArray();
     }
 }

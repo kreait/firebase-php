@@ -4,59 +4,66 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration\Database;
 
-use Beste\Json;
 use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
+#[Group('database-emulator')]
+#[Group('emulator')]
 final class RuleSetTest extends DatabaseTestCase
 {
-    public function testDefault(): void
+    #[Test]
+    public function default(): void
     {
         $ruleSet = RuleSet::default();
 
         self::$db->updateRules($ruleSet);
 
-        $this->assertEquals($ruleSet, self::$db->getRuleSet());
+        $this->assertEqualsCanonicalizing($ruleSet->getRules(), self::$db->getRuleSet()->getRules());
     }
 
-    public function testPublic(): void
+    #[Test]
+    public function public(): void
     {
         $ruleSet = RuleSet::public();
 
         self::$db->updateRules($ruleSet);
 
-        $this->assertEquals($ruleSet, self::$db->getRuleSet());
+        $this->assertEqualsCanonicalizing($ruleSet->getRules(), self::$db->getRuleSet()->getRules());
     }
 
-    public function testPrivate(): void
+    #[Test]
+    public function private(): void
     {
         $ruleSet = RuleSet::private();
 
         self::$db->updateRules($ruleSet);
 
-        $this->assertEquals($ruleSet, self::$db->getRuleSet());
+        $this->assertEqualsCanonicalizing($ruleSet->getRules(), self::$db->getRuleSet()->getRules());
     }
 
     /**
      * @see https://github.com/kreait/firebase-php/issues/705
      */
-    public function testRulesAreProperlyEncoded(): void
+    #[Test]
+    public function rulesAreProperlyEncoded(): void
     {
         $rules = RuleSet::private()->getRules();
         $rules['rules'][self::$refPrefix.__FUNCTION__] = [
             'value1' => [
                 '.indexOn' => [
-                    'ab'
-                ]
+                    'ab',
+                ],
             ],
             'value2' => [
                 '.indexOn' => [
                     'cd',
-                    'ef'
-                ]
+                    'ef',
+                ],
             ],
         ];
 
@@ -66,11 +73,16 @@ final class RuleSetTest extends DatabaseTestCase
 
         $response = self::$apiClient
             ->get(
-                self::$db->getReference()->getUri()->withPath('/.settings/rules.json')
-            );
+                self::$db->getReference()->getUri()->withPath('/.settings/rules.json'),
+            )
+        ;
 
         $this->assertSame(200, $response->getStatusCode());
+
         // Assert that the returned JSON doesn't contain objects with integer keys instead of lists
-        $this->assertStringNotMatchesFormat('/\d:/', (string) $response->getBody());
+        $this->assertThat(
+            (string) $response->getBody(),
+            $this->logicalNot($this->matchesRegularExpression('/\d:/')),
+        );
     }
 }

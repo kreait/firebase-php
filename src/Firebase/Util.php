@@ -4,45 +4,72 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase;
 
+use function getenv;
+use function in_array;
+use function putenv;
+
 /**
  * @internal
- *
- * @codeCoverageIgnore
  */
 final class Util
 {
+    /**
+     * @param non-empty-string $name
+     *
+     * @return non-empty-string|null
+     */
     public static function getenv(string $name): ?string
     {
-        $value = $_SERVER[$name] ?? $_ENV[$name] ?? \getenv($name);
+        $value = trim((string) ($_SERVER[$name] ?? $_ENV[$name] ?? getenv($name)));
 
-        if ($value !== false && $value !== null) {
-            return (string) $value;
+        return $value !== '' ? $value : null;
+    }
+
+    /**
+     * @param non-empty-string $name
+     * @param non-empty-string $value
+     */
+    public static function putenv(string $name, string $value): void
+    {
+        $_ENV[$name] = $value;
+        $_SERVER[$name] = $value;
+        putenv("{$name}={$value}");
+    }
+
+    /**
+     * @param non-empty-string $name
+     */
+    public static function rmenv(string $name): void
+    {
+        unset($_ENV[$name], $_SERVER[$name]);
+        putenv($name);
+    }
+
+    /**
+     * @return non-empty-string|null
+     */
+    public static function authEmulatorHost(): ?string
+    {
+        $emulatorHost = self::getenv('FIREBASE_AUTH_EMULATOR_HOST');
+
+        if (!in_array($emulatorHost, [null, ''], true)) {
+            return $emulatorHost;
         }
 
         return null;
     }
 
-    public static function putenv(string $name, string $value): void
+    /**
+     * @return non-empty-string|null
+     */
+    public static function rtdbEmulatorHost(): ?string
     {
-        $_ENV[$name] = $value;
-        $_SERVER[$name] = $value;
-        \putenv("{$name}={$value}");
-    }
+        $emulatorHost = self::getenv('FIREBASE_DATABASE_EMULATOR_HOST');
 
-    public static function rmenv(string $name): void
-    {
-        unset($_ENV[$name], $_SERVER[$name]);
-        \putenv($name);
-    }
-
-    public static function authEmulatorHost(): string
-    {
-        $emulatorHost = self::getenv('FIREBASE_AUTH_EMULATOR_HOST');
-
-        if (!\in_array($emulatorHost, [null, ''], true)) {
+        if (!in_array($emulatorHost, [null, ''], true)) {
             return $emulatorHost;
         }
 
-        return '';
+        return null;
     }
 }

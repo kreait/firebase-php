@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
 use Beste\Json;
-use Kreait\Firebase\Exception\InvalidArgumentException;
+use Iterator;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\FcmOptions;
+use Kreait\Firebase\Messaging\MessageData;
 use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\Notification;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,18 +21,14 @@ use PHPUnit\Framework\TestCase;
  */
 final class CloudMessageTest extends TestCase
 {
-    public function testEmptyMessage(): void
+    #[Test]
+    public function emptyMessage(): void
     {
-        $this->assertSame('[]', \json_encode(CloudMessage::new()));
+        $this->assertSame('[]', Json::encode(CloudMessage::new()));
     }
 
-    public function testInvalidTargetCausesError(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        CloudMessage::withTarget('invalid_target', 'foo');
-    }
-
-    public function testWithChangedTarget(): void
+    #[Test]
+    public function withChangedTarget(): void
     {
         $original = CloudMessage::withTarget(MessageTarget::TOKEN, 'bar')
             ->withData(['foo' => 'bar'])
@@ -38,25 +37,27 @@ final class CloudMessageTest extends TestCase
 
         $changed = $original->withChangedTarget(MessageTarget::TOKEN, 'baz');
 
-        $encodedOriginal = \json_decode(Json::encode($original), true);
+        $encodedOriginal = Json::decode(Json::encode($original), true);
         $encodedOriginal[MessageTarget::TOKEN] = 'baz';
 
-        $encodedChanged = \json_decode(Json::encode($changed), true);
+        $encodedChanged = Json::decode(Json::encode($changed), true);
 
         $this->assertSame($encodedOriginal, $encodedChanged);
     }
 
-    public function testAnEmptyMessageHasNotTarget(): void
+    #[Test]
+    public function anEmptyMessageHasNotTarget(): void
     {
         $this->assertFalse(CloudMessage::new()->hasTarget());
     }
 
-    public function testWithChangedFcmOptions(): void
+    #[Test]
+    public function withChangedFcmOptions(): void
     {
         $options = FcmOptions::create()->withAnalyticsLabel($label = 'my-label');
         $message = CloudMessage::new()->withFcmOptions($options);
 
-        $messageData = \json_decode(Json::encode($message), true);
+        $messageData = Json::decode(Json::encode($message), true);
 
         $this->assertArrayHasKey('fcm_options', $messageData);
         $this->assertArrayHasKey('analytics_label', $messageData['fcm_options']);
@@ -64,17 +65,18 @@ final class CloudMessageTest extends TestCase
     }
 
     /**
-     * @dataProvider multipleTargets
-     *
      * @param array<string, string> $data
      */
-    public function testAMessageCanOnlyHaveOneTarget(array $data): void
+    #[DataProvider('multipleTargets')]
+    #[Test]
+    public function aMessageCanOnlyHaveOneTarget(array $data): void
     {
         $this->expectException(InvalidArgument::class);
         CloudMessage::fromArray($data);
     }
 
-    public function testWithDefaultSounds(): void
+    #[Test]
+    public function withDefaultSounds(): void
     {
         $expected = [
             'android' => [
@@ -92,16 +94,17 @@ final class CloudMessageTest extends TestCase
         ];
 
         $this->assertJsonStringEqualsJsonString(
-            \json_encode($expected),
-            \json_encode(CloudMessage::new()->withDefaultSounds()->jsonSerialize())
+            Json::encode($expected),
+            Json::encode(CloudMessage::new()->withDefaultSounds()->jsonSerialize()),
         );
     }
 
-    public function testWithLowestPossiblePriority(): void
+    #[Test]
+    public function withLowestPossiblePriority(): void
     {
         $message = CloudMessage::new()->withLowestPossiblePriority();
 
-        $payload = \json_decode(\json_encode($message), true);
+        $payload = Json::decode(Json::encode($message), true);
 
         $this->assertArrayHasKey('android', $payload);
         $this->assertArrayHasKey('priority', $payload['android']);
@@ -118,11 +121,12 @@ final class CloudMessageTest extends TestCase
         $this->assertSame('very-low', $payload['webpush']['headers']['Urgency']);
     }
 
-    public function testWithHighesPossiblePriority(): void
+    #[Test]
+    public function withHighestPossiblePriority(): void
     {
         $message = CloudMessage::new()->withHighestPossiblePriority();
 
-        $payload = \json_decode(\json_encode($message), true);
+        $payload = Json::decode(Json::encode($message), true);
 
         $this->assertArrayHasKey('android', $payload);
         $this->assertArrayHasKey('priority', $payload['android']);
@@ -140,28 +144,42 @@ final class CloudMessageTest extends TestCase
     }
 
     /**
-     * @return array<string, array<int, array<string, string>>>
+     * @see https://github.com/kreait/firebase-php/issues/768
      */
-    public function multipleTargets(): array
+    #[Test]
+    public function messageDataCanBeSetWithAnObjectOrAnArray(): void
     {
-        return [
-            'condition and token' => [[
-                MessageTarget::CONDITION => 'something',
-                MessageTarget::TOKEN => 'something else',
-            ]],
-            'condition and topic' => [[
-                MessageTarget::CONDITION => 'something',
-                MessageTarget::TOPIC => 'something else',
-            ]],
-            'token and topic' => [[
-                MessageTarget::TOKEN => 'something',
-                MessageTarget::TOPIC => 'something else',
-            ]],
-            'all of them' => [[
-                MessageTarget::CONDITION => 'something',
-                MessageTarget::TOKEN => 'something else',
-                MessageTarget::TOPIC => 'something even elser',
-            ]],
-        ];
+        $data = ['key' => 'value'];
+
+        $fromObject = CloudMessage::new()->withData(MessageData::fromArray($data));
+        $serializedFromObject = Json::decode(Json::encode($fromObject), true);
+        $this->assertSame('value', $serializedFromObject['data']['key']);
+
+        $fromArray = CloudMessage::new()->withData($data);
+        $serializedFromArray = Json::decode(Json::encode($fromArray), true);
+        $this->assertSame('value', $serializedFromArray['data']['key']);
+
+        $this->assertSame($serializedFromObject, $serializedFromArray);
+    }
+
+    public static function multipleTargets(): Iterator
+    {
+        yield 'condition and token' => [[
+            MessageTarget::CONDITION => 'something',
+            MessageTarget::TOKEN => 'something else',
+        ]];
+        yield 'condition and topic' => [[
+            MessageTarget::CONDITION => 'something',
+            MessageTarget::TOPIC => 'something else',
+        ]];
+        yield 'token and topic' => [[
+            MessageTarget::TOKEN => 'something',
+            MessageTarget::TOPIC => 'something else',
+        ]];
+        yield 'all of them' => [[
+            MessageTarget::CONDITION => 'something',
+            MessageTarget::TOKEN => 'something else',
+            MessageTarget::TOPIC => 'something different',
+        ]];
     }
 }

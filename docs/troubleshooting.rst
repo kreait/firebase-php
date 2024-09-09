@@ -4,7 +4,7 @@ Troubleshooting
 
 .. note::
     This SDK works with immutable objects until noted otherwise. You can recognize these
-    objects when they have a ˚`with*``method. In that case, please keep in mind that in
+    objects when they have a ``with*`` method. In that case, please keep in mind that in
     order to get hold of the changes you made, you will have to use the result of
     that method, e.g. ``$changedObject = $object->withChangedProperty();``.
 
@@ -102,7 +102,7 @@ You need to install the OpenSSL PHP Extension: http://php.net/openssl
 Default sound not played on message delivery
 ********************************************
 
-If you specified ``'sound' => 'default'`` in the message payload, try chaning it
+If you specified ``'sound' => 'default'`` in the message payload, try changing it
 to ``'sound' => "default"`` - although single or double quotes shouldn't™ make
 a difference, `it has been reported that this can solve the issue <https://github.com/kreait/firebase-php/issues/454#issuecomment-706771776>`_.
 

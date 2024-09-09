@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use Beste\Json;
 use Kreait\Firebase\Contract\RemoteConfig;
 use Kreait\Firebase\Exception\RemoteConfig\ValidationFailed;
 use Kreait\Firebase\Exception\RemoteConfig\VersionMismatch;
 use Kreait\Firebase\Exception\RemoteConfig\VersionNotFound;
 use Kreait\Firebase\RemoteConfig\FindVersions;
 use Kreait\Firebase\RemoteConfig\Parameter;
+use Kreait\Firebase\RemoteConfig\ParameterValueType;
 use Kreait\Firebase\RemoteConfig\Template;
 use Kreait\Firebase\RemoteConfig\UpdateOrigin;
 use Kreait\Firebase\RemoteConfig\UpdateType;
 use Kreait\Firebase\RemoteConfig\Version;
 use Kreait\Firebase\RemoteConfig\VersionNumber;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use Throwable;
 
 /**
@@ -23,7 +26,9 @@ use Throwable;
  */
 final class RemoteConfigTest extends IntegrationTestCase
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private const TEMPLATE_CONFIG = <<<'CONFIG'
         {
             "conditions": [
@@ -52,6 +57,29 @@ final class RemoteConfigTest extends IntegrationTestCase
                         }
                     },
                     "description": "This is a welcome message"
+                },
+                "no_value_type": {
+                    "defaultValue": "1"
+                },
+                "unspecified_value_type": {
+                    "defaultValue": "1",
+                    "valueType": "STRING"
+                },
+                "string_value_type": {
+                    "defaultValue": "1",
+                    "valueType": "STRING"
+                },
+                "numeric_value_type": {
+                    "defaultValue": "1",
+                    "valueType": "NUMBER"
+                },
+                "boolean_value_type": {
+                    "defaultValue": "true",
+                    "valueType": "BOOLEAN"
+                },
+                "json_value_type": {
+                    "defaultValue": "{\"key\": \"value\"}",
+                    "valueType": "JSON"
                 }
             },
             "parameterGroups": {
@@ -91,36 +119,78 @@ final class RemoteConfigTest extends IntegrationTestCase
             }
         }
         CONFIG;
-
     private Template $template;
-
     private RemoteConfig $remoteConfig;
 
     protected function setUp(): void
     {
         $this->remoteConfig = self::$factory->createRemoteConfig();
-        $this->template = Template::fromArray(\json_decode(self::TEMPLATE_CONFIG, true));
+        $this->template = Template::fromArray(Json::decode(self::TEMPLATE_CONFIG, true));
     }
 
-    public function testForcePublishAndGet(): void
+    #[Test]
+    public function forcePublishAndGet(): void
     {
         $this->remoteConfig->publish($this->template);
 
         $check = $this->remoteConfig->get();
 
-        $this->assertEquals($this->template->jsonSerialize(), $check->jsonSerialize());
+        $parameters = $check->parameters();
+        $this->assertSameSize($this->template->parameters(), $parameters);
+        $this->assertSame(ParameterValueType::STRING, $parameters['no_value_type']->valueType());
+        $this->assertSame(ParameterValueType::STRING, $parameters['unspecified_value_type']->valueType());
+        $this->assertSame(ParameterValueType::STRING, $parameters['string_value_type']->valueType());
+        $this->assertSame(ParameterValueType::NUMBER, $parameters['numeric_value_type']->valueType());
+        $this->assertSame(ParameterValueType::BOOL, $parameters['boolean_value_type']->valueType());
+        $this->assertSame(ParameterValueType::JSON, $parameters['json_value_type']->valueType());
+
+        $this->assertSameSize($this->template->conditions(), $check->conditions());
+        $this->assertSameSize($this->template->conditionNames(), $check->conditionNames());
 
         $version = $check->version();
 
-        if (!$version instanceof Version) {
-            $this->fail('The template has no version');
-        }
-
-        $this->assertTrue($version->updateType()->equalsTo(UpdateType::FORCED_UPDATE));
-        $this->assertTrue($version->updateOrigin()->equalsTo(UpdateOrigin::REST_API));
+        $this->assertSame(UpdateType::FORCED_UPDATE, (string) $version?->updateType());
+        $this->assertSame(UpdateOrigin::REST_API, (string) $version?->updateOrigin());
     }
 
-    public function testPublishOutdatedConfig(): void
+    #[Test]
+    public function getTemplateWithVersion(): void
+    {
+        $template = $this->remoteConfig->get();
+        $version = $template->version();
+        assert($version !== null);
+
+        $check = $this->remoteConfig->get($version);
+
+        $this->assertTrue($version->versionNumber()->equalsTo($check->version()?->versionNumber()));
+    }
+
+    #[Test]
+    public function getTemplateWithVersionNumber(): void
+    {
+        $template = $this->remoteConfig->get();
+        $version = $template->version();
+        assert($version !== null);
+
+        $check = $this->remoteConfig->get($version->versionNumber());
+
+        $this->assertTrue($version->versionNumber()->equalsTo($check->version()?->versionNumber()));
+    }
+
+    #[Test]
+    public function getTemplateWithVersionNumberString(): void
+    {
+        $template = $this->remoteConfig->get();
+        $version = $template->version();
+        assert($version !== null);
+
+        $check = $this->remoteConfig->get((string) $version->versionNumber());
+
+        $this->assertTrue($version->versionNumber()->equalsTo($check->version()?->versionNumber()));
+    }
+
+    #[Test]
+    public function publishOutdatedConfig(): void
     {
         $this->remoteConfig->publish($this->template);
 
@@ -134,13 +204,15 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->remoteConfig->publish($published);
     }
 
-    public function testValidateValidTemplate(): void
+    #[Test]
+    public function validateValidTemplate(): void
     {
         $this->remoteConfig->validate($this->template);
         $this->addToAssertionCount(1);
     }
 
-    public function testValidateInvalidTemplate(): void
+    #[Test]
+    public function validateInvalidTemplate(): void
     {
         $template = $this->templateWithTooManyParameters();
 
@@ -148,7 +220,8 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->remoteConfig->validate($template);
     }
 
-    public function testPublishInvalidTemplate(): void
+    #[Test]
+    public function publishInvalidTemplate(): void
     {
         $version = $this->remoteConfig->get()->version();
 
@@ -175,11 +248,12 @@ final class RemoteConfigTest extends IntegrationTestCase
 
         $this->assertTrue(
             $currentVersionNumber->equalsTo($refetchedVersion->versionNumber()),
-            "Expected the template version to be {$currentVersionNumber}, got {$refetchedVersion->versionNumber()}"
+            "Expected the template version to be {$currentVersionNumber}, got {$refetchedVersion->versionNumber()}",
         );
     }
 
-    public function testRollback(): void
+    #[Test]
+    public function rollback(): void
     {
         $initialVersion = $this->remoteConfig->get()->version();
 
@@ -195,6 +269,7 @@ final class RemoteConfigTest extends IntegrationTestCase
         ;
 
         $targetVersionNumber = null;
+
         foreach ($this->remoteConfig->listVersions($query) as $version) {
             $versionNumber = $version->versionNumber();
 
@@ -226,20 +301,22 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->assertTrue($rollbackSource->equalsTo($targetVersionNumber));
     }
 
-    public function testListVersionsWithoutFilters(): void
+    #[Test]
+    public function listVersionsWithoutFilters(): void
     {
+        $count = 0;
         // We only need to know that the first returned value is a version,
         // no need to iterate through all of them
         foreach ($this->remoteConfig->listVersions() as $version) {
-            $this->assertInstanceOf(Version::class, $version);
-
-            return;
+            ++$count;
+            break;
         }
 
-        $this->fail('Expected a version to be returned, but got none');
+        $this->assertSame(1, $count);
     }
 
-    public function testFindVersionsWithFilters(): void
+    #[Test]
+    public function findVersionsWithFilters(): void
     {
         $currentVersion = $this->remoteConfig->get()->version();
 
@@ -252,7 +329,7 @@ final class RemoteConfigTest extends IntegrationTestCase
         $query = [
             'startingAt' => $currentVersionUpdateDate->modify('-2 months'),
             'endingAt' => $currentVersionUpdateDate,
-            'upToVersion' => $currentVersion->versionNumber(),
+            'lastVersionBeing' => $currentVersion->versionNumber(),
             'pageSize' => 1,
             'limit' => $limit = 2,
         ];
@@ -271,7 +348,8 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->assertLessThanOrEqual($limit, $counter);
     }
 
-    public function testGetVersion(): void
+    #[Test]
+    public function getVersion(): void
     {
         $currentVersion = $this->remoteConfig->get()->version();
 
@@ -286,7 +364,8 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->assertTrue($check->versionNumber()->equalsTo($currentVersionNumber));
     }
 
-    public function testGetNonExistingVersion(): void
+    #[Test]
+    public function getNonExistingVersion(): void
     {
         $currentVersion = $this->remoteConfig->get()->version();
 
@@ -300,7 +379,8 @@ final class RemoteConfigTest extends IntegrationTestCase
         $this->remoteConfig->getVersion($nextButNonExisting);
     }
 
-    public function testValidateEmptyTemplate(): void
+    #[Test]
+    public function validateEmptyTemplate(): void
     {
         $this->remoteConfig->validate(Template::new());
         $this->addToAssertionCount(1);
@@ -311,7 +391,7 @@ final class RemoteConfigTest extends IntegrationTestCase
         $template = Template::new();
 
         for ($i = 0; $i < 3001; ++$i) {
-            $template = $template->withParameter(Parameter::named('i_'.$i));
+            $template = $template->withParameter(Parameter::named('i_'.$i, 'v_'.$i));
         }
 
         return $template;

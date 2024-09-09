@@ -9,29 +9,36 @@ use GuzzleHttp\ClientInterface;
 use Kreait\Firebase\Exception\RemoteConfigApiExceptionConverter;
 use Kreait\Firebase\Exception\RemoteConfigException;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
 use Throwable;
+
+use function array_filter;
 
 /**
  * @internal
  */
 class ApiClient
 {
-    private ClientInterface $client;
-    private RemoteConfigApiExceptionConverter $errorHandler;
+    private readonly RemoteConfigApiExceptionConverter $errorHandler;
+    private readonly string $baseUri;
 
-    public function __construct(ClientInterface $client)
+    public function __construct(string $projectId, private readonly ClientInterface $client)
     {
-        $this->client = $client;
+        $this->baseUri = "https://firebaseremoteconfig.googleapis.com/v1/projects/{$projectId}/remoteConfig";
         $this->errorHandler = new RemoteConfigApiExceptionConverter();
     }
 
     /**
+     * @see https://firebase.google.com/docs/reference/remote-config/rest/v1/projects/getRemoteConfig
+     *
      * @throws RemoteConfigException
      */
-    public function getTemplate(): ResponseInterface
+    public function getTemplate(VersionNumber|int|string $versionNumber = null): ResponseInterface
     {
-        return $this->requestApi('GET', 'remoteConfig');
+        return $this->requestApi('GET', 'remoteConfig', [
+            'query' => array_filter([
+                'version_number' => (string) $versionNumber,
+            ]),
+        ]);
     }
 
     /**
@@ -72,20 +79,20 @@ class ApiClient
      */
     public function listVersions(FindVersions $query, ?string $nextPageToken = null): ResponseInterface
     {
-        $uri = \rtrim((string) $this->client->getConfig('base_uri'), '/').':listVersions';
+        $uri = $this->baseUri.':listVersions';
 
         $since = $query->since();
         $until = $query->until();
         $lastVersionNumber = $query->lastVersionNumber();
         $pageSize = $query->pageSize();
 
-        $since = $since !== null ? $since->format('Y-m-d\TH:i:s.v\Z') : null;
-        $until = $until !== null ? $until->format('Y-m-d\TH:i:s.v\Z') : null;
+        $since = $since?->format('Y-m-d\TH:i:s.v\Z');
+        $until = $until?->format('Y-m-d\TH:i:s.v\Z');
         $lastVersionNumber = $lastVersionNumber !== null ? (string) $lastVersionNumber : null;
         $pageSize = $pageSize ? (string) $pageSize : null;
 
         return $this->requestApi('GET', $uri, [
-            'query' => \array_filter([
+            'query' => array_filter([
                 'startTime' => $since,
                 'endTime' => $until,
                 'endVersionNumber' => $lastVersionNumber,
@@ -100,7 +107,7 @@ class ApiClient
      */
     public function rollbackToVersion(VersionNumber $versionNumber): ResponseInterface
     {
-        $uri = \rtrim((string) $this->client->getConfig('base_uri'), '/').':rollback';
+        $uri = $this->baseUri.':rollback';
 
         return $this->requestApi('POST', $uri, [
             'json' => [
@@ -110,12 +117,13 @@ class ApiClient
     }
 
     /**
-     * @param string|UriInterface $uri
+     * @param non-empty-string $method
+     * @param non-empty-string $uri
      * @param array<string, mixed>|null $options
      *
      * @throws RemoteConfigException
      */
-    private function requestApi(string $method, $uri, ?array $options = null): ResponseInterface
+    private function requestApi(string $method, string $uri, ?array $options = null): ResponseInterface
     {
         $options ??= [];
         $options['decode_content'] = 'gzip';

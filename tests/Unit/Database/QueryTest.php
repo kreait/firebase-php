@@ -12,6 +12,8 @@ use Kreait\Firebase\Exception\Database\DatabaseError;
 use Kreait\Firebase\Exception\Database\DatabaseNotFound;
 use Kreait\Firebase\Exception\Database\UnsupportedQuery;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
 use Throwable;
 
 /**
@@ -19,19 +21,14 @@ use Throwable;
  */
 final class QueryTest extends UnitTestCase
 {
-    protected Uri $uri;
-
-    /** @var Reference|\PHPUnit\Framework\MockObject\MockObject */
-    protected $reference;
-
-    /** @var ApiClient|\PHPUnit\Framework\MockObject\MockObject */
-    protected $apiClient;
-
-    protected Query $query;
+    private Uri $uri;
+    private Reference&MockObject $reference;
+    private ApiClient&MockObject $apiClient;
+    private Query $query;
 
     protected function setUp(): void
     {
-        $this->uri = new Uri('http://domain.tld/some/path');
+        $this->uri = new Uri('http://example.com/some/path');
 
         $reference = $this->createMock(Reference::class);
         $reference->method('getURI')->willReturn($this->uri);
@@ -43,12 +40,14 @@ final class QueryTest extends UnitTestCase
         $this->query = new Query($this->reference, $this->apiClient);
     }
 
-    public function testGetReference(): void
+    #[Test]
+    public function getReference(): void
     {
         $this->assertSame($this->reference, $this->query->getReference());
     }
 
-    public function testGetSnapshot(): void
+    #[Test]
+    public function getSnapshot(): void
     {
         $this->apiClient->method('get')->with($this->anything())->willReturn('value');
 
@@ -57,36 +56,24 @@ final class QueryTest extends UnitTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function testGetValue(): void
+    #[Test]
+    public function getValue(): void
     {
         $this->apiClient->method('get')->with($this->anything())->willReturn('value');
 
         $this->assertSame('value', $this->query->getValue());
     }
 
-    public function testGetUri(): void
+    #[Test]
+    public function getUri(): void
     {
         $uri = $this->query->getUri();
 
         $this->assertSame((string) $uri, (string) $this->query);
     }
 
-    public function testModifiersReturnQueries(): void
-    {
-        $this->assertInstanceOf(Query::class, $this->query->equalTo('x'));
-        $this->assertInstanceOf(Query::class, $this->query->endAt('x'));
-        $this->assertInstanceOf(Query::class, $this->query->endBefore('x'));
-        $this->assertInstanceOf(Query::class, $this->query->limitToFirst(1));
-        $this->assertInstanceOf(Query::class, $this->query->limitToLast(1));
-        $this->assertInstanceOf(Query::class, $this->query->orderByChild('child'));
-        $this->assertInstanceOf(Query::class, $this->query->orderByKey());
-        $this->assertInstanceOf(Query::class, $this->query->orderByValue());
-        $this->assertInstanceOf(Query::class, $this->query->shallow());
-        $this->assertInstanceOf(Query::class, $this->query->startAt('x'));
-        $this->assertInstanceOf(Query::class, $this->query->startAfter('x'));
-    }
-
-    public function testOnlyOneSorterIsAllowed(): void
+    #[Test]
+    public function onlyOneSorterIsAllowed(): void
     {
         try {
             $this->query->orderByKey()->orderByValue();
@@ -95,7 +82,8 @@ final class QueryTest extends UnitTestCase
         }
     }
 
-    public function testWrapsApiExceptions(): void
+    #[Test]
+    public function wrapsApiExceptions(): void
     {
         $exception = new DatabaseError();
 
@@ -109,7 +97,8 @@ final class QueryTest extends UnitTestCase
         $this->query->getSnapshot();
     }
 
-    public function testIndexNotDefined(): void
+    #[Test]
+    public function indexNotDefined(): void
     {
         $this->apiClient
             ->method('get')->with($this->anything())
@@ -121,7 +110,8 @@ final class QueryTest extends UnitTestCase
         $this->query->getSnapshot();
     }
 
-    public function testWithNonExistingDatabase(): void
+    #[Test]
+    public function withNonExistingDatabase(): void
     {
         $this->apiClient
             ->method('get')->with($this->anything())

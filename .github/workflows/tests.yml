@@ -1,35 +1,47 @@
 name: Tests
 
 on:
-  push:
   pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/tests.yml'
+      - 'composer.json'
+  push:
+    branches: ['7.x']
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/tests.yml'
+      - 'composer.json'
   workflow_dispatch:
 
 jobs:
   tests:
-    # Don't run the tests on internal PRs
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
-
-    name: PHP ${{ matrix.php }} (${{ matrix.dependencies }})
+    name: "PHP ${{ matrix.php }}, ${{ matrix.dependencies }} deps"
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         php:
-          - "7.4"
-          - "8.0"
           - "8.1"
+          - "8.2"
+          - "8.3"
         dependencies:
           - "lowest"
           - "highest"
+        include:
+          - php: "8.4"
+            composer-options: "--ignore-platform-reqs"
+            dependencies: "highest"
 
     env:
       extensions: ctype, dom, grpc, json, mbstring, openssl, xml, zip, zlib
-      key: cache-unit-6x-${{ matrix.php }}-${{ matrix.dependencies }}-v1
+      key: cache-unit-7x-${{ matrix.php }}-v1
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup cache environment
         id: extcache
@@ -40,7 +52,7 @@ jobs:
           key: ${{ env.key }}
 
       - name: Cache extensions
-        uses: actions/cache@v2
+        uses: actions/cache@v4.0.2
         with:
           path: ${{ steps.extcache.outputs.dir }}
           key: ${{ steps.extcache.outputs.key }}
@@ -54,25 +66,45 @@ jobs:
           tools: composer, pecl
           coverage: xdebug
 
-      - uses: "ramsey/composer-install@v2"
+      - uses: "ramsey/composer-install@v3"
         with:
-          dependency-versions: "${{ matrix.dependencies }}"
           composer-options: "${{ matrix.composer-options }}"
+          dependency-versions: "${{ matrix.dependencies }}"
 
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
       - name: Run PHPStan
-        if: matrix.stability == 'prefer-stable'
-        run: vendor/bin/phpstan analyse --no-progress
+        run: XDEBUG_MODE=off vendor/bin/phpstan analyse --no-progress
 
       - name: Setup Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Run PHPUnit
-        run: vendor/bin/phpunit --testsuite=unit --coverage-clover=coverage.xml --log-junit=test-report.xml --verbose
+        run: vendor/bin/phpunit --testsuite=unit --coverage-clover=coverage.xml --log-junit=test-report.xml --testdox
 
       - name: Upload code coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4.5.0
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           flags: unit
+
+  bc-checks:
+    name: Backward Compatibility Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: grpc
+
+      - name: Install roave/backward-compatibility-check.
+        run: composer require --dev roave/backward-compatibility-check
+
+      - name: Check for BC breaks
+        run: vendor/bin/roave-backward-compatibility-check --format=github-actions

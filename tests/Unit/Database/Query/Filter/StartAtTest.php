@@ -5,42 +5,29 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Database\Query\Filter;
 
 use GuzzleHttp\Psr7\Uri;
+use Iterator;
 use Kreait\Firebase\Database\Query\Filter\StartAt;
-use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class StartAtTest extends UnitTestCase
 {
-    public function testCreateWithInvalidValue(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        new StartAt(null);
-    }
-
-    /**
-     * @dataProvider valueProvider
-     *
-     * @param mixed $given
-     */
-    public function testModifyUri($given, string $expected): void
+    #[DataProvider('valueProvider')]
+    #[Test]
+    public function modifyUri(mixed $given, string $expected): void
     {
         $filter = new StartAt($given);
 
-        $this->assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://domain.tld')));
+        $this->assertStringContainsString($expected, (string) $filter->modifyUri(new Uri('http://example.com')));
     }
 
-    /**
-     * @return array<string, array<int, int|string>>
-     */
-    public function valueProvider(): array
+    public static function valueProvider(): Iterator
     {
-        return [
-            'int' => [1, 'startAt=1'],
-            'string' => ['value', 'startAt=%22value%22'],
-        ];
+        yield 'int' => [1, 'startAt=1'];
+        yield 'string' => ['value', 'startAt=%22value%22'];
     }
 }

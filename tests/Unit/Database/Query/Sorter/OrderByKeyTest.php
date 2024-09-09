@@ -5,63 +5,60 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Database\Query\Sorter;
 
 use GuzzleHttp\Psr7\Uri;
+use Iterator;
 use Kreait\Firebase\Database\Query\Sorter\OrderByKey;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+
+use function rawurlencode;
 
 /**
  * @internal
  */
 final class OrderByKeyTest extends UnitTestCase
 {
-    protected OrderByKey $sorter;
+    private OrderByKey $sorter;
 
     protected function setUp(): void
     {
         $this->sorter = new OrderByKey();
     }
 
-    public function testModifyUri(): void
+    #[Test]
+    public function modifyUri(): void
     {
         $this->assertStringContainsString(
-            'orderBy='.\rawurlencode('"$key"'),
-            (string) $this->sorter->modifyUri(new Uri('http://domain.tld'))
+            'orderBy='.rawurlencode('"$key"'),
+            (string) $this->sorter->modifyUri(new Uri('http://example.com')),
         );
     }
 
-    /**
-     * @dataProvider valueProvider
-     *
-     * @param mixed $expected
-     * @param mixed $value
-     */
-    public function testModifyValue($expected, $value): void
+    #[DataProvider('valueProvider')]
+    #[Test]
+    public function modifyValue(mixed $expected, mixed $given): void
     {
-        $this->assertSame($expected, $this->sorter->modifyValue($value));
+        $this->assertSame($expected, $this->sorter->modifyValue($given));
     }
 
-    /**
-     * @return array<string, array<string, mixed>>
-     */
-    public function valueProvider(): array
+    public static function valueProvider(): Iterator
     {
-        return [
-            'scalar' => [
-                'expected' => 'scalar',
-                'given' => 'scalar',
+        yield 'scalar' => [
+            'expected' => 'scalar',
+            'given' => 'scalar',
+        ];
+        yield 'array' => [
+            'expected' => [
+                'a' => 'any',
+                'b' => 'any',
+                'c' => 'any',
+                'd' => 'any',
             ],
-            'array' => [
-                'expected' => [
-                    'a' => 'any',
-                    'b' => 'any',
-                    'c' => 'any',
-                    'd' => 'any',
-                ],
-                'given' => [
-                    'c' => 'any',
-                    'a' => 'any',
-                    'd' => 'any',
-                    'b' => 'any',
-                ],
+            'given' => [
+                'c' => 'any',
+                'a' => 'any',
+                'd' => 'any',
+                'b' => 'any',
             ],
         ];
     }

@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Value;
 
+use Iterator;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\ClearTextPassword;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -13,49 +16,31 @@ use PHPUnit\Framework\TestCase;
  */
 final class ClearTextPasswordTest extends TestCase
 {
-    /**
-     * @dataProvider validValues
-     *
-     * @param mixed $value
-     */
-    public function testWithValidValue($value): void
+    #[DataProvider('validValues')]
+    #[Test]
+    public function withValidValue(mixed $value): void
     {
-        $password = new ClearTextPassword($value);
+        $password = ClearTextPassword::fromString($value)->value;
 
-        $this->assertSame($value, (string) $password);
-        $this->assertSame($value, $password->jsonSerialize());
-        $this->assertTrue($password->equalsTo($value));
+        $this->assertSame($value, $password);
     }
 
-    /**
-     * @dataProvider invalidValues
-     *
-     * @param mixed $value
-     */
-    public function testWithInvalidValue($value): void
+    #[DataProvider('invalidValues')]
+    #[Test]
+    public function withInvalidValue(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new ClearTextPassword($value);
+        ClearTextPassword::fromString($value);
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
-    public function validValues(): array
+    public static function validValues(): Iterator
     {
-        return [
-            'long enough' => ['long enough'],
-        ];
+        yield 'long enough' => ['long enough'];
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
-    public function invalidValues(): array
+    public static function invalidValues(): Iterator
     {
-        return [
-            'empty string' => [''],
-            'less than 6 chars' => ['short'],
-        ];
+        yield 'empty string' => [''];
+        yield 'less than 6 chars' => ['short'];
     }
 }

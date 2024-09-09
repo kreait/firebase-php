@@ -9,9 +9,13 @@ use Kreait\Firebase\Value\ClearTextPassword;
 use Kreait\Firebase\Value\Email;
 use Kreait\Firebase\Value\Uid;
 use Kreait\Firebase\Value\Url;
+use Stringable;
+
+use function array_filter;
+use function mb_strtolower;
+use function preg_replace;
 
 /**
- * @codeCoverageIgnore
  * @template T
  */
 trait EditUserTrait
@@ -27,128 +31,37 @@ trait EditUserTrait
     protected ?string $clearTextPassword = null;
 
     /**
-     * @param T $request
-     * @param array<string, mixed> $properties
-     *
-     * @throws InvalidArgumentException when invalid properties have been provided
-     *
-     * @return T
-     */
-    protected static function withEditableProperties(self $request, array $properties): self
-    {
-        foreach ($properties as $key => $value) {
-            switch (\mb_strtolower((string) \preg_replace('/[^a-z]/i', '', $key))) {
-                case 'uid':
-                case 'localid':
-                    $request = $request->withUid($value);
-
-                    break;
-                case 'email':
-                    $request = $request->withEmail($value);
-
-                    break;
-                case 'unverifiedemail':
-                    $request = $request->withUnverifiedEmail($value);
-
-                    break;
-                case 'verifiedemail':
-                    $request = $request->withVerifiedEmail($value);
-
-                    break;
-                case 'emailverified':
-                    if ($value === true) {
-                        $request = $request->markEmailAsVerified();
-                    } elseif ($value === false) {
-                        $request = $request->markEmailAsUnverified();
-                    }
-
-                    break;
-                case 'displayname':
-                    $request = $request->withDisplayName($value);
-
-                    break;
-                case 'phone':
-                case 'phonenumber':
-                    $request = $request->withPhoneNumber($value);
-
-                    break;
-                case 'photo':
-                case 'photourl':
-                    $request = $request->withPhotoUrl($value);
-
-                    break;
-                case 'disableuser':
-                case 'disabled':
-                case 'isdisabled':
-                    if ($value === true) {
-                        $request = $request->markAsDisabled();
-                    } elseif ($value === false) {
-                        $request = $request->markAsEnabled();
-                    }
-
-                    break;
-                case 'enableuser':
-                case 'enabled':
-                case 'isenabled':
-                    if ($value === true) {
-                        $request = $request->markAsEnabled();
-                    } elseif ($value === false) {
-                        $request = $request->markAsDisabled();
-                    }
-
-                    break;
-                case 'password':
-                case 'cleartextpassword':
-                    $request = $request->withClearTextPassword($value);
-
-                    break;
-            }
-        }
-
-        return $request;
-    }
-
-    /**
-     * @param \Stringable|mixed $uid
+     * @param Stringable|mixed $uid
      */
     public function withUid($uid): self
     {
         $request = clone $this;
-        $request->uid = (string) (new Uid((string) $uid));
+        $request->uid = Uid::fromString($uid)->value;
 
         return $request;
     }
 
-    /**
-     * @param \Stringable|string $email
-     */
-    public function withEmail($email): self
+    public function withEmail(Stringable|string $email): self
     {
         $request = clone $this;
-        $request->email = (string) (new Email((string) $email));
+        $request->email = Email::fromString((string) $email)->value;
 
         return $request;
     }
 
-    /**
-     * @param \Stringable|string $email
-     */
-    public function withVerifiedEmail($email): self
+    public function withVerifiedEmail(Stringable|string $email): self
     {
         $request = clone $this;
-        $request->email = (string) (new Email((string) $email));
+        $request->email = Email::fromString((string) $email)->value;
         $request->emailIsVerified = true;
 
         return $request;
     }
 
-    /**
-     * @param \Stringable|string $email
-     */
-    public function withUnverifiedEmail($email): self
+    public function withUnverifiedEmail(Stringable|string $email): self
     {
         $request = clone $this;
-        $request->email = (string) (new Email((string) $email));
+        $request->email = Email::fromString((string) $email)->value;
         $request->emailIsVerified = false;
 
         return $request;
@@ -163,7 +76,7 @@ trait EditUserTrait
     }
 
     /**
-     * @param \Stringable|string|null $phoneNumber
+     * @param Stringable|string|null $phoneNumber
      */
     public function withPhoneNumber($phoneNumber): self
     {
@@ -175,13 +88,10 @@ trait EditUserTrait
         return $request;
     }
 
-    /**
-     * @param \Stringable|string $url
-     */
-    public function withPhotoUrl($url): self
+    public function withPhotoUrl(Stringable|string $url): self
     {
         $request = clone $this;
-        $request->photoUrl = (string) Url::fromValue((string) $url);
+        $request->photoUrl = Url::fromString($url)->value;
 
         return $request;
     }
@@ -220,13 +130,10 @@ trait EditUserTrait
         return $request;
     }
 
-    /**
-     * @param \Stringable|string $clearTextPassword
-     */
-    public function withClearTextPassword($clearTextPassword): self
+    public function withClearTextPassword(Stringable|string $clearTextPassword): self
     {
         $request = clone $this;
-        $request->clearTextPassword = (string) (new ClearTextPassword((string) $clearTextPassword));
+        $request->clearTextPassword = ClearTextPassword::fromString($clearTextPassword)->value;
 
         return $request;
     }
@@ -237,13 +144,14 @@ trait EditUserTrait
     public function prepareJsonSerialize(): array
     {
         $disableUser = null;
+
         if ($this->markAsDisabled) {
             $disableUser = true;
         } elseif ($this->markAsEnabled) {
             $disableUser = false;
         }
 
-        return \array_filter([
+        return array_filter([
             'localId' => $this->uid,
             'disableUser' => $disableUser,
             'displayName' => $this->displayName,
@@ -252,11 +160,103 @@ trait EditUserTrait
             'phoneNumber' => $this->phoneNumber,
             'photoUrl' => $this->photoUrl,
             'password' => $this->clearTextPassword,
-        ], static fn ($value) => $value !== null);
+        ], static fn($value): bool => $value !== null);
     }
 
     public function hasUid(): bool
     {
         return (bool) $this->uid;
+    }
+
+    /**
+     * @param T $request
+     * @param array<string, mixed> $properties
+     *
+     * @throws InvalidArgumentException when invalid properties have been provided
+     *
+     * @return T
+     */
+    protected static function withEditableProperties(self $request, array $properties): self
+    {
+        foreach ($properties as $key => $value) {
+            switch (mb_strtolower((string) preg_replace('/[^a-z]/i', '', $key))) {
+                case 'uid':
+                case 'localid':
+                    $request = $request->withUid($value);
+
+                    break;
+
+                case 'email':
+                    $request = $request->withEmail($value);
+
+                    break;
+
+                case 'unverifiedemail':
+                    $request = $request->withUnverifiedEmail($value);
+
+                    break;
+
+                case 'verifiedemail':
+                    $request = $request->withVerifiedEmail($value);
+
+                    break;
+
+                case 'emailverified':
+                    if ($value === true) {
+                        $request = $request->markEmailAsVerified();
+                    } elseif ($value === false) {
+                        $request = $request->markEmailAsUnverified();
+                    }
+
+                    break;
+
+                case 'displayname':
+                    $request = $request->withDisplayName($value);
+
+                    break;
+
+                case 'phone':
+                case 'phonenumber':
+                    $request = $request->withPhoneNumber($value);
+
+                    break;
+
+                case 'photo':
+                case 'photourl':
+                    $request = $request->withPhotoUrl($value);
+
+                    break;
+
+                case 'disableuser':
+                case 'disabled':
+                case 'isdisabled':
+                    if ($value === true) {
+                        $request = $request->markAsDisabled();
+                    } elseif ($value === false) {
+                        $request = $request->markAsEnabled();
+                    }
+
+                    break;
+
+                case 'enableuser':
+                case 'enabled':
+                case 'isenabled':
+                    if ($value === true) {
+                        $request = $request->markAsEnabled();
+                    } elseif ($value === false) {
+                        $request = $request->markAsDisabled();
+                    }
+
+                    break;
+
+                case 'password':
+                case 'cleartextpassword':
+                    $request = $request->withClearTextPassword($value);
+
+                    break;
+            }
+        }
+
+        return $request;
     }
 }

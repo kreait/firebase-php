@@ -6,7 +6,7 @@ Overview
 Requirements
 ************
 
-* PHP >= 7.4
+* PHP 8.1, 8.2, 8.3 or 8.4
 * The `mbstring PHP extension <http://php.net/manual/en/book.mbstring.php>`_
 * A Firebase project - create a new project in the `Firebase console <https://firebase.google.com/console/>`_,
   if you don't already have one.
@@ -50,9 +50,7 @@ Please continue to the :ref:`Setup section <setup>` to learn more about connecti
 Usage examples
 **************
 
-You can find usage examples at
-`https://github.com/jeromegamez/firebase-php-examples <https://github.com/jeromegamez/firebase-php-examples>`_
-and in the `tests directory <https://github.com/kreait/firebase-php/tree/master/tests>`_
+You can find usage examples in the `tests directory <https://github.com/kreait/firebase-php/tree/master/tests>`_
 of this project's `GitHub repository <https://github.com/kreait/firebase-php/>`_.
 
 
@@ -61,7 +59,7 @@ Issues/Support
 **************
 
 - For bugs and past issues: `Github issue tracker <https://github.com/kreait/firebase-php/issues/>`_
-- For questions about Firebase in general: `Stack Overflow <https://stackoverflow.com/questions/tagged/firebase>`_ and the `Firebase Slack Community <https://firebase.community>`_.
+- For questions about Firebase in general: `Stack Overflow <https://stackoverflow.com/questions/tagged/firebase>`_.
 
 
 *******
@@ -98,7 +96,7 @@ Guidelines
 ==========
 
 #. The SDK utilizes PSR-4, PSR-7 and PSR-12.
-#. This SDK has a minimum PHP version requirement of PHP 7.4.
+#. This SDK has a minimum PHP version requirement of PHP 8.1.
 #. All pull requests should include unit tests to ensure the change works as
    expected and to prevent regressions.
 

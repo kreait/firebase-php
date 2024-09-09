@@ -15,7 +15,7 @@ package. You can enable the component in the SDK by adding the package to your p
     projects aim to provide support for Firestore without the need to install the gRPC PHP extension, but have to
     be set up separately:
 
-    - `ahsankhatri/firestore-php <https://github.com/ahsankhatri/firestore-php>`_
+    - `bensontrent/firestore-php <https://github.com/bensontrent/firestore-php>`_
     - `morrislaptop/firestore-php <https://github.com/morrislaptop/firestore-php>`_
 
 Before you start, please read about Firestore in the official documentation:
@@ -65,3 +65,63 @@ Getting started
 
 ``$database`` is an instance of ``Google\Cloud\Firestore\FirestoreClient``. Please refer to the links above for
 guidance on how to proceed from here.
+
+******************************
+Use another Firestore Database
+******************************
+
+If you don't specify a database, the Firestore Client will connect to the ``(default)`` database.
+
+If you want to connect to another database, you can specify its name with the factory. You can work with multiple
+Firestore Databases simultaneously.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Factory;
+
+    $factory = new Factory();
+
+    $defaultDatabase = $factory
+        ->createFirestore()
+        ->database();
+
+    $otherDatabase = $factory
+        ->withFirestoreDatabase('another-database')
+        ->createFirestore()
+        ->database();
+
+    $thirdDatabase = $factory
+        ->withFirestoreDatabase('third-database')
+        ->createFirestore()
+        ->database();
+
+***********************************
+Add Firestore configuration options
+***********************************
+
+You can add additional configuration options for the Firestore Client used by the Firestore component:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Factory;
+
+    $factory = new Factory();
+
+    $firestore = $factory
+        ->withFirestoreClientConfig([...])
+        ->createFirestore();
+
+You can find all configuration options in the source code of the ``FirestoreClient`` class of the
+`official Google Firestore PHP library <https://github.com/googleapis/google-cloud-php-firestore/blob/4186f2a2f2a8bdaedf19376a35ccb0ffad17f4e1/src/FirestoreClient.php#L138>`_.
+
+In fact, the ``withFirestoreDatabase()`` method is a shortcut for the ``withFirestoreClientConfig()`` method:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Factory;
+
+    $factory = new Factory();
+
+    $firestore = $factory->->withFirestoreDatabase('another-database');
+    // is a shortcut for
+    $firestore = $factory->withFirestoreClientConfig(['database' => 'another-database']);

@@ -7,6 +7,9 @@ namespace Kreait\Firebase\Messaging;
 use JsonSerializable;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 
+use function array_filter;
+use function array_key_exists;
+
 /**
  * @see https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/generating_a_remote_notification
  * @see https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/sending_notification_requests_to_apns
@@ -26,30 +29,16 @@ final class ApnsConfig implements JsonSerializable
     private const PRIORITY_CONSERVE_POWER = '5';
     private const PRIORITY_IMMEDIATE = '10';
 
-    /** @var array<non-empty-string, non-empty-string> */
-    private array $headers;
-
-    /** @var array<non-empty-string, mixed> */
-    private array $payload;
-
-    /**
-     * @var array{
-     *     analytics_label?: string,
-     *     image?: string
-     * }
-     */
-    private array $fcmOptions = [];
-
     /**
      * @param array<non-empty-string, non-empty-string> $headers
      * @param array<non-empty-string, mixed> $payload
      * @param array<non-empty-string, string> $fcmOptions
      */
-    private function __construct(array $headers, array $payload, array $fcmOptions)
-    {
-        $this->headers = $headers;
-        $this->payload = $payload;
-        $this->fcmOptions = $fcmOptions;
+    private function __construct(
+        private array $headers,
+        private array $payload,
+        private readonly array $fcmOptions,
+    ) {
     }
 
     public static function new(): self
@@ -88,9 +77,8 @@ final class ApnsConfig implements JsonSerializable
 
     /**
      * @param non-empty-string $key
-     * @param mixed $value
      */
-    public function withApsField(string $key, $value): self
+    public function withApsField(string $key, mixed $value): self
     {
         $config = clone $this;
         $config->payload['aps'] ??= [];
@@ -101,9 +89,8 @@ final class ApnsConfig implements JsonSerializable
 
     /**
      * @param non-empty-string $name
-     * @param mixed $value
      */
-    public function withDataField(string $name, $value): self
+    public function withDataField(string $name, mixed $value): self
     {
         if ($name === 'aps') {
             throw new InvalidArgument('"aps" is a reserved field name');
@@ -168,8 +155,7 @@ final class ApnsConfig implements JsonSerializable
         return
             isset($this->payload['aps']['alert'])
             || isset($this->payload['aps']['badge'])
-            || isset($this->payload['aps']['sound'])
-        ;
+            || isset($this->payload['aps']['sound']);
     }
 
     /**
@@ -189,7 +175,7 @@ final class ApnsConfig implements JsonSerializable
      */
     public function toArray(): array
     {
-        $filter = static fn ($value): bool => $value !== null && $value !== [];
+        $filter = static fn($value): bool => $value !== null && $value !== [];
 
         return array_filter([
             'headers' => array_filter($this->headers, $filter),
@@ -198,9 +184,6 @@ final class ApnsConfig implements JsonSerializable
         ], $filter);
     }
 
-    /**
-     * @return array<non-empty-string, mixed>
-     */
     public function jsonSerialize(): array
     {
         return $this->toArray();

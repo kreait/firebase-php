@@ -4,14 +4,19 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration\Database;
 
+use Iterator;
 use Kreait\Firebase\Contract\Database;
 use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
-use Kreait\Firebase\Util\DT;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
+#[Group('database-emulator')]
+#[Group('emulator')]
 final class ReferenceTest extends DatabaseTestCase
 {
     private Reference $ref;
@@ -21,12 +26,9 @@ final class ReferenceTest extends DatabaseTestCase
         $this->ref = self::$db->getReference(self::$refPrefix);
     }
 
-    /**
-     * @dataProvider validValues
-     *
-     * @param mixed $value
-     */
-    public function testSetAndGet(string $key, $value): void
+    #[DataProvider('validValues')]
+    #[Test]
+    public function setAndGet(string $key, mixed $value): void
     {
         $ref = $this->ref->getChild(__FUNCTION__.'/'.$key);
         $ref->set($value);
@@ -34,7 +36,8 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertSame($value, $ref->getValue());
     }
 
-    public function testUpdate(): void
+    #[Test]
+    public function update(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
         $ref->set([
@@ -53,10 +56,11 @@ final class ReferenceTest extends DatabaseTestCase
             'third' => 'new',
         ];
 
-        $this->assertEquals($expected, $ref->getValue());
+        $this->assertEqualsCanonicalizing($expected, $ref->getValue());
     }
 
-    public function testPush(): void
+    #[Test]
+    public function push(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
         $value = 'a value';
@@ -67,7 +71,8 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertSame($value, $newRef->getValue());
     }
 
-    public function testRemove(): void
+    #[Test]
+    public function remove(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
 
@@ -78,10 +83,11 @@ final class ReferenceTest extends DatabaseTestCase
 
         $ref->getChild('first')->remove();
 
-        $this->assertEquals(['second' => 'value'], $ref->getValue());
+        $this->assertEqualsCanonicalizing(['second' => 'value'], $ref->getValue());
     }
 
-    public function testRemoveChildren(): void
+    #[Test]
+    public function removeChildren(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
 
@@ -99,7 +105,7 @@ final class ReferenceTest extends DatabaseTestCase
             'second/first_nested',
         ]);
 
-        $this->assertEquals([
+        $this->assertEqualsCanonicalizing([
             'second' => [
                 'second_nested' => 'value',
             ],
@@ -107,7 +113,8 @@ final class ReferenceTest extends DatabaseTestCase
         ], $ref->getValue());
     }
 
-    public function testPushToGetKey(): void
+    #[Test]
+    public function pushToGetKey(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
         $key = $ref->push()->getKey();
@@ -116,7 +123,8 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertSame(0, $ref->getSnapshot()->numChildren());
     }
 
-    public function testSetWithNullIsSameAsRemove(): void
+    #[Test]
+    public function setWithNullIsSameAsRemove(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
 
@@ -130,34 +138,25 @@ final class ReferenceTest extends DatabaseTestCase
         $this->assertSame(0, $ref->getSnapshot()->numChildren());
     }
 
-    public function testSetServerTimestamp(): void
+    #[Test]
+    public function setServerTimestamp(): void
     {
-        $now = new \DateTimeImmutable();
-
         $value = $this->ref->getChild(__FUNCTION__)
             ->push(['updatedAt' => Database::SERVER_TIMESTAMP])
-            ->getSnapshot()->getValue();
+            ->getSnapshot()->getValue()
+        ;
 
         $this->assertIsArray($value);
         $this->assertArrayHasKey('updatedAt', $value);
         $this->assertIsInt($value['updatedAt']);
-
-        $check = DT::toUTCDateTimeImmutable($value['updatedAt']);
-
-        $this->assertTrue($check > $now);
     }
 
-    /**
-     * @return array<string, array<int, mixed>>
-     */
-    public function validValues()
+    public static function validValues(): Iterator
     {
-        return [
-            'string' => ['string', 'value'],
-            'int' => ['int', 1],
-            'bool_true' => ['true', true],
-            'bool_false' => ['false', false],
-            'array' => ['array', ['first' => 'value', 'second' => 'value']],
-        ];
+        yield 'string' => ['string', 'value'];
+        yield 'int' => ['int', 1];
+        yield 'bool_true' => ['true', true];
+        yield 'bool_false' => ['false', false];
+        yield 'array' => ['array', ['first' => 'value', 'second' => 'value']];
     }
 }

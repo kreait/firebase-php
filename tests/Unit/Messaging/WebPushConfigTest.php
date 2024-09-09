@@ -4,50 +4,55 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
+use Iterator;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\WebPushConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
+ *
  * @phpstan-import-type WebPushConfigShape from WebPushConfig
  * @phpstan-import-type WebPushHeadersShape from WebPushConfig
  */
 final class WebPushConfigTest extends UnitTestCase
 {
     /**
-     * @dataProvider validDataProvider
-     *
      * @param array<string, mixed> $data
      */
-    public function testCreateFromValidPayload(array $data): void
+    #[DataProvider('validDataProvider')]
+    #[Test]
+    public function createFromValidPayload(array $data): void
     {
         $config = WebPushConfig::fromArray($data);
 
-        $this->assertEquals($data, $config->jsonSerialize());
+        $this->assertEqualsCanonicalizing($data, $config->jsonSerialize());
     }
 
-    public function testItCanHaveAPriority(): void
+    #[Test]
+    public function itCanHaveAPriority(): void
     {
         $config = WebPushConfig::new()->withVeryLowUrgency();
-        $this->assertSame('very-low', $config->jsonSerialize()['headers']['Urgency']);
+        $this->assertSame('very-low', $config->jsonSerialize()['headers']['Urgency'] ?? null);
 
         $config = WebPushConfig::new()->withLowUrgency();
-        $this->assertSame('low', $config->jsonSerialize()['headers']['Urgency']);
+        $this->assertSame('low', $config->jsonSerialize()['headers']['Urgency'] ?? null);
 
         $config = WebPushConfig::new()->withNormalUrgency();
-        $this->assertSame('normal', $config->jsonSerialize()['headers']['Urgency']);
+        $this->assertSame('normal', $config->jsonSerialize()['headers']['Urgency'] ?? null);
 
         $config = WebPushConfig::new()->withHighUrgency();
-        $this->assertSame('high', $config->jsonSerialize()['headers']['Urgency']);
+        $this->assertSame('high', $config->jsonSerialize()['headers']['Urgency'] ?? null);
     }
 
     /**
-     * @dataProvider validHeaders
-     *
      * @param WebPushHeadersShape $headers
      */
-    public function testItAcceptsValidHeaders(array $headers): void
+    #[DataProvider('validHeaders')]
+    #[Test]
+    public function itAcceptsValidHeaders(array $headers): void
     {
         WebPushConfig::fromArray(['headers' => $headers]);
 
@@ -55,11 +60,11 @@ final class WebPushConfigTest extends UnitTestCase
     }
 
     /**
-     * @dataProvider invalidHeaders
-     *
      * @param WebPushHeadersShape $headers
      */
-    public function testItRejectsInvalidHeaders(array $headers): void
+    #[DataProvider('invalidHeaders')]
+    #[Test]
+    public function itRejectsInvalidHeaders(array $headers): void
     {
         $this->expectException(InvalidArgument::class);
 
@@ -67,48 +72,38 @@ final class WebPushConfigTest extends UnitTestCase
     }
 
     /**
-     * @return array<string, array<WebPushConfigShape>>
+     * @return iterable<array<WebPushConfigShape>>
      */
-    public function validDataProvider(): array
+    public static function validDataProvider(): iterable
     {
-        return [
-            'full_config' => [
+        yield 'full_config' => [
+            [
                 // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#webpush_specific_fields
                 'headers' => [
                     'Urgency' => 'normal',
                 ],
                 'notification' => [
-                    'title' => '$GOOG up 1.43% on the day',
-                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
-                    'icon' => 'https://my-server/icon.png',
+                    'title' => '$GOOGLE up 1.43% on the day',
+                    'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                    'icon' => 'https://my-server.example/icon.png',
                 ],
             ],
         ];
     }
 
-    /**
-     * @return array<string, array<WebPushHeadersShape>>
-     */
-    public function validHeaders(): array
+    public static function validHeaders(): Iterator
     {
-        return [
-            'positive int ttl' => [['TTL' => 1]],
-            'positive string ttl' => [['TTL' => '1']],
-            'null (#719)' => [['TTL' => null]],
-        ];
+        yield 'positive int ttl' => [['TTL' => 1]];
+        yield 'positive string ttl' => [['TTL' => '1']];
+        yield 'null (#719)' => [['TTL' => null]];
     }
 
-    /**
-     * @return array<string, array<array<string, mixed>>>
-     */
-    public function invalidHeaders(): array
+    public static function invalidHeaders(): Iterator
     {
-        return [
-            'negative int ttl' => [['TTL' => -1]],
-            'negative string ttl' => [['TTL' => '-1']],
-            'zero int ttl' => [['TTL' => 0]],
-            'zero string ttl' => [['TTL' => '0']],
-            'unsupported urgency' => [['Urgency' => 'unsupported']],
-        ];
+        yield 'negative int ttl' => [['TTL' => -1]];
+        yield 'negative string ttl' => [['TTL' => '-1']];
+        yield 'zero int ttl' => [['TTL' => 0]];
+        yield 'zero string ttl' => [['TTL' => '0']];
+        yield 'unsupported urgency' => [['Urgency' => 'unsupported']];
     }
 }

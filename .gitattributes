@@ -1,19 +1,20 @@
 *.php diff=php
 
+/.opensource export-ignore
 /docs export-ignore
 /tests export-ignore
 
 /.editorconfig export-ignore
-/firebase.json export-ignore
+/.git-blame-ignore-revs export-ignore
 /.gitattributes export-ignore
 /.github export-ignore
 /.gitignore export-ignore
-/.opensource export-ignore
+/.php-cs-fixer.dist.php export-ignore
+/.readthedocs.yaml export-ignore
 /codecov.yml export-ignore
-/ecs.php export-ignore
-/Makefile export-ignore
+/composer-dependency-analyser.php export-ignore
+/firebase.json export-ignore
+/lychee.toml export-ignore
 /phpstan.neon.dist export-ignore
 /phpunit.xml.dist export-ignore
 /rector.php export-ignore
-/test_credentials.json.enc export-ignore
-/test_devices.json.enc export-ignore

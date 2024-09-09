@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging\Processor;
 
-use Kreait\Firebase\Messaging\ApnsConfig;
+use Beste\Json;
+use Iterator;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Processor\SetApnsPushTypeIfNeeded;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-class SetApnsPushTypeIfNeededTest extends TestCase
+final class SetApnsPushTypeIfNeededTest extends TestCase
 {
     private SetApnsPushTypeIfNeeded $processor;
 
@@ -21,73 +24,146 @@ class SetApnsPushTypeIfNeededTest extends TestCase
         $this->processor = new SetApnsPushTypeIfNeeded();
     }
 
-    public function testItDoesNotOverridePreexistingPushHeaders(): void
-    {
-        $input = CloudMessage::new()
-            ->withNotification(['title' => 'Title']) // This would normally lead to the 'alert' push type
-            ->withApnsConfig(
-                ApnsConfig::new()->withHeader('apns-push-type', $pushType = 'location')
-            );
-
-        $result = ($this->processor)($input);
-        assert($result instanceof CloudMessage);
-
-        $this->assertHeader($result, 'apns-push-type', $pushType);
-    }
-
-    public function testAMessageWithoutAnythingOfRelevanceHasNoPushType(): void
-    {
-        $input = CloudMessage::new();
-
-        $result = ($this->processor)($input);
-        assert($result instanceof CloudMessage);
-
-        $this->assertMissingHeader($result, 'apns-push-type');
-    }
-
-    public function testABackgroundMessageReceivesAnAccordingPushType(): void
-    {
-        $input = CloudMessage::new()->withData(['foo' => 'bar']);
-
-        $result = ($this->processor)($input);
-        assert($result instanceof CloudMessage);
-
-        $this->assertHeader($result, 'apns-push-type', 'background');
-    }
-
-    public function testANotificationMessageReceivesAnAccordingPushType(): void
-    {
-        $input = CloudMessage::new()->withNotification(['title' => 'Title']);
-
-        $result = ($this->processor)($input);
-        assert($result instanceof CloudMessage);
-
-        $this->assertHeader($result, 'apns-push-type', 'alert');
-    }
-
     /**
-     * @param mixed $expected
+     * @param non-empty-string $expected
+     * @param array<mixed> $messageData
      */
-    private function assertHeader(CloudMessage $message, string $name, $expected): void
+    #[DataProvider('provideMessagesWithExpectedPushType')]
+    #[Test]
+    public function itSetsTheExpectedPushType(string $expected, array $messageData): void
     {
-        $config = invade($message)->apnsConfig;
-        assert($config instanceof ApnsConfig);
+        $message = CloudMessage::fromArray($messageData);
 
-        $headers = invade($config)->headers;
-        assert(is_array($headers));
+        $processed = Json::decode(Json::encode(($this->processor)($message)), true);
 
-        $this->assertArrayHasKey($name, $headers);
-        $this->assertSame($expected, $headers[$name]);
+        $this->assertArrayHasKey('apns-push-type', $processed['apns']['headers']);
+        $this->assertSame($expected, $processed['apns']['headers']['apns-push-type']);
     }
 
-    private function assertMissingHeader(CloudMessage $message, string $name): void
+    #[Test]
+    public function itDoesNotSetThePushType(): void
     {
-        $config = invade($message)->apnsConfig;
-        assert($config instanceof ApnsConfig);
+        $message = CloudMessage::fromArray($given = ['topic' => 'test']);
 
-        $headers = invade($config)->headers;
-        assert(is_array($headers));
+        $processed = Json::decode(Json::encode(($this->processor)($message)), true);
 
-        $this->assertArrayNotHasKey($name, $headers);
+        $this->assertSame($given, $processed);
+    }
+
+    public static function provideMessagesWithExpectedPushType(): Iterator
+    {
+        yield 'message data at root level -> background' => [
+            'background',
+            [
+                'data' => [
+                    'key' => 'value',
+                ],
+            ],
+        ];
+
+        yield 'message data at apns level -> background' => [
+            'background',
+            [
+                'apns' => [
+                    'payload' => [
+                        'data' => [
+                            'key' => 'value',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'both message and apns data -> background' => [
+            'background',
+            [
+                'data' => [
+                    'key' => 'value',
+                ],
+                'apns' => [
+                    'payload' => [
+                        'data' => [
+                            'key' => 'value',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'notification at root level -> alert' => [
+            'alert',
+            [
+                'notification' => [
+                    'title' => 'Alert',
+                ],
+            ],
+        ];
+
+        yield 'notification at apns level -> alert' => [
+            'alert',
+            [
+                'apns' => [
+                    'payload' => [
+                        'aps' => [
+                            'alert' => [
+                                'title' => 'Alert',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'notification both at root apns level -> alert' => [
+            'alert',
+            [
+                'notification' => [
+                    'title' => 'Alert',
+                ],
+                'apns' => [
+                    'payload' => [
+                        'aps' => [
+                            'alert' => [
+                                'title' => 'Alert',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'data at root, notification at apns level -> alert' => [
+            'alert',
+            [
+                'data' => [
+                    'key' => 'value',
+                ],
+                'apns' => [
+                    'payload' => [
+                        'aps' => [
+                            'alert' => [
+                                'title' => 'Alert',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'notification at root, data at apns level -> alert' => [
+            'alert',
+            [
+                'notification' => [
+                    'title' => 'Alert',
+                ],
+                'apns' => [
+                    'payload' => [
+                        'data' => [
+                            'key' => 'value',
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 }

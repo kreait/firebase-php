@@ -7,44 +7,56 @@ namespace Kreait\Firebase\Messaging;
 use JsonSerializable;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 
+use function array_filter;
+use function array_key_exists;
+use function implode;
+use function in_array;
+use function is_array;
+use function is_int;
+use function is_string;
+use function preg_match;
+use function sprintf;
+
 /**
  * @see https://tools.ietf.org/html/rfc8030#section-5.3 Web Push Message Urgency
+ *
  * @phpstan-type WebPushHeadersShape array{
  *     TTL?: positive-int|numeric-string|null,
  *     Urgency?: self::URGENCY_*
  * }
  *
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushfcmoptions WebPush FCM Options
+ *
  * @phpstan-type WebPushFcmOptionsShape array{
  *     link?: non-empty-string,
  *     analytics_label?: non-empty-string
  * }
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification#syntax WebPush Notification Syntax
+ *
  * @phpstan-type WebPushNotificationShape array{
- *     title: non-empty-string,
- *     options?: array{
- *         dir?: 'ltr'|'rtl'|'auto',
- *         lang?: string,
- *         badge?: non-empty-string,
- *         body?: non-empty-string,
- *         tag?: non-empty-string,
- *         icon?: non-empty-string,
- *         image?: non-empty-string,
- *         data?: mixed,
- *         vibrate?: list<positive-int>,
- *         renotify?: bool,
- *         requireInteraction?: bool,
- *         actions?: list<array{
- *             action: non-empty-string,
- *             title: non-empty-string,
- *             icon: non-empty-string
- *         }>,
- *         silent?: bool
- *     }
+ *     title: string|null,
+ *     dir?: 'ltr'|'rtl'|'auto',
+ *     lang?: string,
+ *     badge?: non-empty-string,
+ *     body?: non-empty-string,
+ *     tag?: non-empty-string,
+ *     icon?: non-empty-string,
+ *     image?: non-empty-string,
+ *     data?: mixed,
+ *     vibrate?: list<positive-int>,
+ *     renotify?: bool,
+ *     requireInteraction?: bool,
+ *     actions?: list<array{
+ *         action: non-empty-string,
+ *         title: non-empty-string,
+ *         icon: non-empty-string
+ *     }>,
+ *     silent?: bool
  * }
  *
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig WebPush Config Syntax
+ *
  * @phpstan-type WebPushConfigShape array{
  *     headers?: WebPushHeadersShape,
  *     data?: array<non-empty-string, non-empty-string>,
@@ -58,7 +70,6 @@ final class WebPushConfig implements JsonSerializable
     private const URGENCY_LOW = 'low';
     private const URGENCY_NORMAL = 'normal';
     private const URGENCY_HIGH = 'high';
-
     private const VALID_URGENCIES = [
         self::URGENCY_VERY_LOW,
         self::URGENCY_LOW,
@@ -67,16 +78,10 @@ final class WebPushConfig implements JsonSerializable
     ];
 
     /**
-     * @var WebPushConfigShape
-     */
-    private array $config;
-
-    /**
      * @param WebPushConfigShape $config
      */
-    private function __construct(array $config)
+    private function __construct(private array $config)
     {
-        $this->config = $config;
     }
 
     public static function new(): self
@@ -89,8 +94,10 @@ final class WebPushConfig implements JsonSerializable
      */
     public static function fromArray(array $config): self
     {
-        if (array_key_exists('headers', $config) && is_array($config['headers'])) {
-            $config['headers'] = self::ensureValidHeaders($config['headers']);
+        $headers = $config['headers'] ?? null;
+
+        if (is_array($headers)) {
+            $config['headers'] = self::ensureValidHeaders($headers);
 
             if ($config['headers'] === []) {
                 unset($config['headers']);
@@ -98,39 +105,6 @@ final class WebPushConfig implements JsonSerializable
         }
 
         return new self($config);
-    }
-
-    /**
-     * @param WebPushHeadersShape $headers
-     *
-     * @return WebPushHeadersShape
-     */
-    private static function ensureValidHeaders(array $headers): array
-    {
-        if (array_key_exists('TTL', $headers)) {
-            if (is_int($headers['TTL'])) {
-                $headers['TTL'] = (string) $headers['TTL'];
-            }
-
-            if (is_string($headers['TTL']) && (preg_match('/^[1-9]\d*$/', $headers['TTL']) !== 1)) {
-                throw new InvalidArgument('The TTL in the WebPushConfig must must be a positive int');
-            }
-
-            if ($headers['TTL'] === null) {
-                unset($headers['TTL']);
-            }
-        }
-
-        if (array_key_exists('Urgency', $headers)) {
-            if (!in_array($headers['Urgency'], self::VALID_URGENCIES, true)) {
-                throw new InvalidArgument(sprintf(
-                    'The Urgency in the WebPushConfig header must must be one of %s',
-                    implode(',', self::VALID_URGENCIES)
-                ));
-            }
-        }
-
-        return $headers;
     }
 
     public function withHighUrgency(): self
@@ -167,10 +141,46 @@ final class WebPushConfig implements JsonSerializable
     }
 
     /**
-     * @return array<string, mixed>
+     * @return WebPushConfigShape
      */
     public function jsonSerialize(): array
     {
-        return \array_filter($this->config, static fn ($value) => $value !== null);
+        // @phpstan-ignore notIdentical.alwaysTrue
+        return array_filter($this->config, static fn($value): bool => $value !== null);
+    }
+
+    /**
+     * @param WebPushHeadersShape $headers
+     *
+     * @return WebPushHeadersShape
+     */
+    private static function ensureValidHeaders(array $headers): array
+    {
+        if (array_key_exists('TTL', $headers)) {
+            if (is_int($headers['TTL'])) {
+                $headers['TTL'] = (string) $headers['TTL'];
+            }
+
+            if (is_string($headers['TTL']) && (preg_match('/^[1-9]\d*$/', $headers['TTL']) !== 1)) {
+                throw new InvalidArgument('The TTL in the WebPushConfig must must be a positive int');
+            }
+
+            if ($headers['TTL'] === null) {
+                unset($headers['TTL']);
+            }
+        }
+
+        if (!array_key_exists('Urgency', $headers)) {
+            return $headers;
+        }
+
+        if (in_array($headers['Urgency'], self::VALID_URGENCIES, true)) {
+            return $headers;
+        }
+
+        throw new InvalidArgument(sprintf(
+            'The Urgency in the WebPushConfig header must must be one of %s',
+            implode(',', self::VALID_URGENCIES),
+        ));
     }
 }

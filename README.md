@@ -10,13 +10,34 @@
 [![codecov](https://codecov.io/gh/kreait/firebase-php/branch/main/graph/badge.svg)](https://codecov.io/gh/kreait/firebase-php)
 [![Sponsor](https://img.shields.io/static/v1?logo=GitHub&label=Sponsor&message=%E2%9D%A4&color=ff69b4)](https://github.com/sponsors/jeromegamez)
 
-## Table of Contents
+---
 
-- [Overview](#overview)
-- [Installation](#installation)
-- [Documentation](#documentation)
-- [Support](#support)
-- [License](#license)
+> [!IMPORTANT]
+> The SDK, along with its [Laravel Package](https://github.com/kreait/laravel-firebase) and 
+> [Symfony Bundle](https://github.com/kreait/firebase-bundle), has garnered over 3,200 stars on GitHub. The SDK alone is
+> [downloaded more than 650,000 times a month](https://packagist.org/packages/kreait/firebase-php/stats),
+highlighting its significant impact and widespread use in the PHP community.
+> 
+> If your PHP project utilizes Firebase, there’s a high likelihood it’s leveraging this SDK. The impressive number of
+> downloads underscores its integration into numerous CI/CD pipelines, signifying its critical role for many enterprises
+> and agencies. 
+>
+> Despite its extensive use and the value it provides, the development and maintenance of this SDK have largely been unfunded.
+>
+> Over the past nine years, I have dedicated countless hours to developing and maintaining this SDK. This includes staying
+> current with Firebase updates, supporting users, and [contributing significantly to official Google PHP libraries](https://github.com/pulls?user=googleapis&q=sort%3Acomments-desc+author%3Ajeromegamez&user=googleapis),
+> ensuring all users benefit from up-to-date dependencies.
+>
+> While I am passionate about this work and thrilled by its utility to many, the lack of sponsorship has become
+> increasingly challenging. To continue delivering high-quality updates and support, I need your help.
+>
+> If this SDK is valuable to your business, please consider [showing your appreciation through sponsorship](https://github.com/sponsors/jeromegamez).
+>
+> Your support will motivate me to continue enhancing and maintaining the SDK, ensuring it remains a valuable resource for everyone.
+>
+> To discuss additional sponsorship opportunities, please reach out to me at [funding@jerome.gamez.name](mailto:funding@jerome.gamez.name).
+
+---
 
 ## Overview
 
@@ -24,37 +45,38 @@
 
 For more information, visit the [Firebase Admin PHP SDK documentation](https://firebase-php.readthedocs.io/).
 
+
 ## Installation
 
 The Firebase Admin PHP SDK is available on Packagist as [`kreait/firebase-php`](https://packagist.org/packages/kreait/firebase-php):
 
 ```bash
-composer require kreait/firebase-php
+composer require "kreait/firebase-php:^7.0" 
 ```
 
-Integrations for Laravel, Lumen and Symfony are available:
+## Supported Versions
 
-- [kreait/laravel-firebase](https://packagist.org/packages/kreait/laravel-firebase)
-- [kreait/firebase-bundle](https://packagist.org/packages/kreait/firebase-bundle)
+**Only the latest version is actively supported.**
 
-## Documentation
+| Version | Initial Release | Supported PHP Versions           | Status       |
+|---------|-----------------|----------------------------------|--------------|
+| `7.x`   | 20 Dec 2022     | `~8.1.0, ~8.2.0, ~8.3.0, ~8.4.0` | Active       |
+| `6.x`   | 01 Jul 2022     | `^7.4, ^8.0`                     | Paid support |
+| `5.x`   | 01 Apr 2020     | `^7.2`                           | End of life  |
+| `4.x`   | 14 Feb 2018     | `^7.0`                           | End of life  |
+| `3.x`   | 22 Apr 2017     | `^7.0`                           | End of life  |
+| `2.x`   | 06 Nov 2016     | `^7.0`                           | End of life  |
+| `1.x`   | 15 Jul 2016     | `^5.5, ^7.0`                     | End of life  |
+| `0.x`   | 09 Jan 2015     | `>=5.4`                          | End of life  |
 
-- [Authentication Guide](https://firebase-php.readthedocs.io/en/stable/authentication.html)
-- [Cloud Messaging Guide](https://firebase-php.readthedocs.io/en/stable/cloud-messaging.html)
-- [Cloud Storage Guide](https://firebase-php.readthedocs.io/en/stable/cloud-storage.html)
-- [Dynamic Links Guide](https://firebase-php.readthedocs.io/en/stable/dynamic-links.html)
-- [Firestore Guide](https://firebase-php.readthedocs.io/en/stable/cloud-firestore.html)
-- [Realtime Database Guide](https://firebase-php.readthedocs.io/en/stable/realtime-database.html)
-- [Remote Config Guide](https://firebase-php.readthedocs.io/en/stable/remote-config.html)
-
-## Support
-
-- [Issue Tracker](https://github.com/kreait/firebase-php/issues/)
-- [Stack Overflow](https://stackoverflow.com/questions/tagged/firebase+php)
-
-_If you or your team rely on this project and me maintaining it, please consider becoming a
-[Sponsor](https://github.com/sponsors/jeromegamez/) 🙏. Higher tiers enable access to extended
-support._
+<table>
+    <body>
+        <tr>
+            <td><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="50" alt="JetBrains Logo"></td>
+            <td>A big thank you to <a href="https://www.jetbrains.com">JetBrains</a> for supporting this project with free open-source licences of their IDEs.</td>
+        </tr>
+    </body>
+</table>
 
 ## License
 

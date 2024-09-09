@@ -8,8 +8,10 @@ use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database;
 use Kreait\Firebase\Database\ApiClient;
 use Kreait\Firebase\Database\RuleSet;
+use Kreait\Firebase\Database\UrlBuilder;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -17,61 +19,66 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 final class DatabaseTest extends UnitTestCase
 {
-    /** @var ApiClient|MockObject */
-    private $apiClient;
-
+    private ApiClient&MockObject $apiClient;
+    private string $url;
     private Uri $uri;
-
     private Database $database;
 
     protected function setUp(): void
     {
-        $this->uri = new Uri('https://database-uri.tld');
+        $this->url = 'https://database.firebaseio.com';
+        $this->uri = new Uri($this->url);
         $this->apiClient = $this->createMock(ApiClient::class);
 
-        $this->database = new Database($this->uri, $this->apiClient);
+        $this->database = new Database($this->uri, $this->apiClient, UrlBuilder::create($this->url));
     }
 
-    public function testGetReference(): void
+    #[Test]
+    public function getReference(): void
     {
         $this->assertSame('any', $this->database->getReference('any')->getPath());
     }
 
-    public function testGetRootReference(): void
+    #[Test]
+    public function getRootReference(): void
     {
         $this->assertSame('/', $this->database->getReference()->getUri()->getPath());
     }
 
-    public function testGetReferenceWithInvalidPath(): void
+    #[Test]
+    public function getReferenceWithInvalidPath(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->database->getReference('#');
     }
 
-    public function testGetReferenceFromUrl(): void
+    #[Test]
+    public function getReferenceFromUrl(): void
     {
-        $url = 'https://database-uri.tld/foo/bar';
+        $url = $this->url.'/foo/bar';
 
         $this->assertSame($url, (string) $this->database->getReferenceFromUrl($url)->getUri());
     }
 
-    public function testGetReferenceFromNonMatchingUrl(): void
+    #[Test]
+    public function getReferenceFromNonMatchingUrl(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $this->database->getReferenceFromUrl('http://non-matching.tld');
+        $this->database->getReferenceFromUrl('http://non-matching.example.com');
     }
 
-    public function testGetRuleSet(): void
+    #[Test]
+    public function getRuleSet(): void
     {
         $this->apiClient
             ->method('get')
-            ->with($this->uri->withPath('/.settings/rules'))
+            ->with('/.settings/rules')
             ->willReturn($expected = RuleSet::default()->getRules())
         ;
 
         $ruleSet = $this->database->getRuleSet();
 
-        $this->assertEquals($expected, $ruleSet->getRules());
+        $this->assertEqualsCanonicalizing($expected, $ruleSet->getRules());
     }
 }

@@ -8,6 +8,12 @@ use Kreait\Firebase\Database\Query\ModifierTrait;
 use Kreait\Firebase\Database\Query\Sorter;
 use Psr\Http\Message\UriInterface;
 
+use function is_array;
+use function ksort;
+
+/**
+ * @internal
+ */
 final class OrderByKey implements Sorter
 {
     use ModifierTrait;
@@ -17,13 +23,13 @@ final class OrderByKey implements Sorter
         return $this->appendQueryParam($uri, 'orderBy', '"$key"');
     }
 
-    public function modifyValue($value)
+    public function modifyValue(mixed $value): mixed
     {
-        if (!\is_array($value)) {
+        if (!is_array($value)) {
             return $value;
         }
 
-        \ksort($value);
+        ksort($value);
 
         return $value;
     }

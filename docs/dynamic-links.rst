@@ -18,7 +18,7 @@ and will return a URL like ``https://example.page.link/wXYZ``.
 
 Before you start, please read about Dynamic Links in the official documentation:
 
-- `Dynamic Links Product Page <https://firebase.google.com/products/dynamic-links/>`_
+- `Dynamic Links Product Page <https://firebase.google.com/docs/dynamic-links>`_
 - `Create Dynamic Links with the REST API <https://firebase.google.com/docs/dynamic-links/rest>`_
 - `Long Dynamic Links <https://firebase.google.com/docs/dynamic-links/create-manually>`_
 - `Dynamic Link API Reference <https://firebase.google.com/docs/reference/dynamic-links/link-shortener>`_
@@ -122,7 +122,7 @@ you can convert it to a short link:
 
     use Kreait\Firebase\DynamicLink\ShortenLongDynamicLink\FailedToShortenLongDynamicLink;
 
-    $longLink = 'https://example.page.link?link=https://domain.tld/some/path';
+    $longLink = 'https://example.page.link?link=https://example.com/some/path';
 
     try {
         $link = $dynamicLinks->shortenLongDynamicLink($longLink);
@@ -158,7 +158,7 @@ or programmatically.
 If ``getStatistics()`` is called without a second parameter, stats will include the statistics of the past 7 days.
 
 The returned object will be an instance of ``Kreait\Firebase\DynamicLink\DynamicLinkStatistics``, which currently
-only includes event statistics. You can access the raw returned data with `$stats->rawData()`.
+only includes event statistics. You can access the raw returned data with ``$stats->rawData()``.
 
 Event Statistics
 ----------------
@@ -244,13 +244,13 @@ action. The following code shows all available building components:
                 ->withAppStoreId('appStoreId')
                 ->withBundleId('bundleId')
                 ->withCustomScheme('customScheme')
-                ->withFallbackLink('https://fallback.domain.tld')
+                ->withFallbackLink('https://fallback.example.com')
                 ->withIPadBundleId('iPadBundleId')
-                ->withIPadFallbackLink('https://ipad-fallback.domain.tld')
+                ->withIPadFallbackLink('https://ipad-fallback.example.com')
         )
         ->withAndroidInfo(
             AndroidInfo::new()
-                ->withFallbackLink('https://fallback.domain.tld')
+                ->withFallbackLink('https://fallback.example.com')
                 ->withPackageName('packageName')
                 ->withMinPackageVersionCode('minPackageVersionCode')
         )
@@ -258,7 +258,7 @@ action. The following code shows all available building components:
             SocialMetaTagInfo::new()
                 ->withDescription('Social Meta Tag description')
                 ->withTitle('Social Meta Tag title')
-                ->withImageLink('https://domain.tld/image.jpg')
+                ->withImageLink('https://example.com/image.jpg')
         );
 
     $link = $dynamicLinks->createDynamicLink($action);
@@ -278,7 +278,7 @@ or validated by the SDK, you have to make sure that the parameter structure matc
     $parameters = [
         'dynamicLinkInfo' => [
             'domainUriPrefix' => 'https://example.page.link',
-            'link' => 'https://domain.tld/some/path',
+            'link' => 'https://example.com/some/path',
         ],
         'suffix' => ['option' => 'SHORT'],
     ];

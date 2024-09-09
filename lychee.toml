@@ -1,0 +1,26 @@
+exclude_path = ["./vendor", "./docs/_build"]
+
+headers = ["accept=*/*"]
+
+scheme = ["https"]
+
+exclude = [
+    "firebaseio.com",
+    "example",
+    "github.com/kreait/firebase-php/(compare|pull|issues)",
+    "oauth2.googleapis.com",
+    "googleapis.com",
+    "gserviceaccount.com",
+    ".link",
+    '^https://firebase-php\.readthedocs\.io/?$',
+    '^https://github.com/pulls'
+]
+
+exclude_paths = [
+    "./docs/_build",
+    ".vendor"
+]
+
+exclude_all_private = false
+
+include_mail = false

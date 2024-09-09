@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
+use Iterator;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\Topic;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -13,45 +16,34 @@ use PHPUnit\Framework\TestCase;
  */
 final class TopicTest extends TestCase
 {
-    /**
-     * @dataProvider valueProvider
-     */
-    public function testFromValue(string $expected, string $value): void
+    #[DataProvider('valueProvider')]
+    #[Test]
+    public function fromValue(string $expected, string $value): void
     {
         $this->assertSame($expected, Topic::fromValue($value)->value());
     }
 
-    /**
-     * @dataProvider invalidValueProvider
-     */
-    public function testFromInvalidValue(string $value): void
+    #[DataProvider('invalidValueProvider')]
+    #[Test]
+    public function fromInvalidValue(string $value): void
     {
         $this->expectException(InvalidArgument::class);
         Topic::fromValue($value);
     }
 
-    /**
-     * @return array<string, array<int, string>>
-     */
-    public function valueProvider(): array
+    public static function valueProvider(): Iterator
     {
-        return [
-            'no slashes' => ['foo', 'foo'],
-            'leading slash' => ['foo', '/foo'],
-            'trailing slash' => ['foo', 'foo/'],
-            'with topic prefix' => ['foo', '/topic/foo'],
-        ];
+        yield 'no slashes' => ['foo', 'foo'];
+        yield 'leading slash' => ['foo', '/foo'];
+        yield 'trailing slash' => ['foo', 'foo/'];
+        yield 'with topic prefix' => ['foo', '/topic/foo'];
     }
 
-    /**
-     * @return array<string, array<int, string>>
-     */
-    public function invalidValueProvider(): array
+    public static function invalidValueProvider(): Iterator
     {
-        return [
-            '$' => ['$'],
-            'ä' => ['ä'],
-            'é' => ['é'],
-        ];
+        yield '$' => ['$'];
+        yield 'ä' => ['ä'];
+        yield 'é' => ['é'];
+        yield '(empty)' => [''];
     }
 }

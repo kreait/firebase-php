@@ -4,63 +4,47 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Value;
 
-use GuzzleHttp\Psr7\Uri;
+use Iterator;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\Url;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\UriInterface;
+use Stringable;
 
 /**
  * @internal
  */
 final class UrlTest extends TestCase
 {
-    /**
-     * @dataProvider validValues
-     *
-     * @param \Stringable|string $value
-     */
-    public function testWithValidValue($value): void
+    #[DataProvider('validValues')]
+    #[Test]
+    public function withValidValue(Stringable|string $value): void
     {
-        $url = Url::fromValue($value);
+        $url = Url::fromString($value)->value;
 
         $check = (string) $value;
 
-        $this->assertSame($check, (string) $url);
-        $this->assertSame($check, (string) $url->toUri());
-        $this->assertSame($check, $url->jsonSerialize());
-        $this->assertTrue($url->equalsTo($check));
+        $this->assertSame($check, $url);
     }
 
-    /**
-     * @dataProvider invalidValues
-     */
-    public function testWithInvalidValue(string $value): void
+    #[DataProvider('invalidValues')]
+    #[Test]
+    public function withInvalidValue(string $value): void
     {
         $this->expectException(InvalidArgumentException::class);
-        Url::fromValue($value);
+        Url::fromString($value);
     }
 
-    /**
-     * @return array<string, array<string|\Stringable|UriInterface|Url>>
-     */
-    public function validValues(): array
+    public static function validValues(): Iterator
     {
-        return [
-            'string' => ['https://domain.tld'],
-            'Uri object' => [new Uri('https://domain.tld')],
-            'Url object' => [new Url(new Uri('https://domain.tld'))],
-        ];
+        yield 'string' => ['https://example.com'];
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
-    public function invalidValues(): array
+    public static function invalidValues(): Iterator
     {
-        return [
-            'https:///domain.tld' => ['https:///domain.tld'],
-            'http://:80' => ['http://:80'],
-        ];
+        yield 'https:///example.com' => ['https:///example.com'];
+        yield 'http://:80' => ['http://:80'];
+        yield '(empty)' => [''];
     }
 }

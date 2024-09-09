@@ -11,10 +11,20 @@ Google Service Account
 In order to access a Firebase project using a server SDK, you must authenticate your requests to Firebase with
 `Service Account credentials <https://developers.google.com/identity/protocols/OAuth2ServiceAccount>`_.
 
-To authenticate a service account and authorize it to access Firebase services, you must generate a private
-key file in JSON format.
+The SDK is able to auto-discover the Service Account for your project in the following conditions:
 
-To generate a private key file for your service account:
+#. Your application runs on Google Cloud Engine.
+
+#. The path to the JSON key file or a JSON string (not recommended) is provided by a
+   ``GOOGLE_APPLICATION_CREDENTIALS`` variable.
+
+#. The JSON Key file is located in Google's "well known path"
+
+   * on Linux/MacOS: ``$HOME/.config/gcloud/application_default_credentials.json``
+   * on Windows: ``$APPDATA/gcloud/application_default_credentials.json``
+
+If auto-discovery is not wanted, you can generate a private key file in JSON format and provide it to
+the factory directly. To generate a private key file for your service account:
 
 1. Open https://console.firebase.google.com/project/_/settings/serviceaccounts/adminsdk and select
    the project you want to generate a private key file for.
@@ -43,29 +53,14 @@ Please see `https://github.com/kreait/firebase-bundle#configuration <https://git
 
 Please see `https://github.com/kreait/laravel-firebase#configuration <https://github.com/kreait/laravel-firebase#configuration>`_
 
-With autodiscovery
-==================
-
-The SDK is able to auto-discover the Service Account for your project in the following conditions:
-
-#. Your application runs on Google Cloud Engine.
-
-#. The path to the JSON key file is defined in one of the following environment variables
-
-   * ``GOOGLE_APPLICATION_CREDENTIALS``
-
-#. The JSON Key file is located in Google's "well known path"
-
-   * on Linux/MacOS: ``$HOME/.config/gcloud/application_default_credentials.json``
-   * on Windows: ``$APPDATA/gcloud/application_default_credentials.json``
-
-If you want to use autodiscovery, a Service Account must not be explicitly configured.
-
 **********
 Project ID
 **********
 
-Service Account credentials include the ID of the Google Cloud Project your Firebase project belongs to.
+.. note::
+    It is not necessary to explicitly configure the project ID in most cases.
+
+Service Account credentials usually include the ID of the Google Cloud Project your Firebase project belongs to.
 
 If you use another type of credential, it might be necessary to provide it manually to the Firebase Factory.
 
@@ -77,7 +72,8 @@ If you use another type of credential, it might be necessary to provide it manua
         ->withProjectId('my-project')
         ->withDatabaseUri('https://my-project.firebaseio.com');
 
-You can also set a ``GOOGLE_CLOUD_PROJECT=<project-id>`` environment variable before calling the factory.
+You can also set a ``GOOGLE_CLOUD_PROJECT=<project-id>`` environment variable before instantiating a component with
+the factory.
 
 
 *********************
@@ -181,8 +177,8 @@ want to access directly and suppress warnings triggered by the Google Auth Compo
 HTTP Client Options
 *******************
 
-You can configure the behavior of the HTTP Client performing the API requests by passing an
-instance of `Kreait\Firebase\Http\HttpClientOptions` to the factory before creating a
+You can configure the behavior of the Guzzle HTTP Client performing the API requests by passing an
+instance of ``Kreait\Firebase\Http\HttpClientOptions`` to the factory before creating a
 service.
 
 .. code-block:: php
@@ -205,6 +201,53 @@ service.
     // Newly created services will now use the new HTTP options
     $realtimeDatabase = $factory->createDatabase();
 
+Setting Guzzle Config Options
+=============================
+
+In addition to the explicit settings above, you can fully customize the configuration of the Guzzle HTTP Client:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Http\HttpClientOptions;
+
+    $options = HttpClientOptions::default()
+        ->withGuzzleConfigOption('single', 'value')
+        ->withGuzzleConfigOptions([
+            'first' => 'value',
+            'second' => 'value',
+        ]);
+
+.. note::
+    You can find all Guzzle Config Options at
+    `Guzzle: Request Options <https://docs.guzzlephp.org/en/stable/request-options.html>`_
+
+Adding Guzzle Middlewares
+=========================
+
+You can also add middlewares to the Guzzle HTTP Client:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Http\HttpClientOptions;
+
+    $options = HttpClientOptions::default();
+
+    # Adding a single middleware
+    $options = $options->withGuzzleMiddleware($myMiddleware, 'my_middleware'); // The name can be omitted
+
+    # Adding multiple middlewares
+    $options = $options->withGuzzleMiddlewares([
+        # Just providing the middleware
+        $myMiddleware,
+        # Alternative notation:
+        ['middleware' => $myMiddleware]
+        # Providing a named middleware
+        ['middleware' => $myMiddleware, 'name' => 'my_middleware'],
+    ]);
+
+.. note::
+    You can find more information about Guzzle Middlewares at
+    `Guzzle: Handlers and Middleware <https://docs.guzzlephp.org/en/stable/handlers-and-middleware.html>`_
 
 *******
 Logging

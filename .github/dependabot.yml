@@ -1,0 +1,15 @@
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      include: "scope"
+      prefix: "github-actions"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependency"

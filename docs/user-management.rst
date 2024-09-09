@@ -18,7 +18,7 @@ following signature:
 
     {
         "uid": "jEazVdPDhqec0tnEOG7vM5wbDyU2",
-        "email": "user@domain.tld",
+        "email": "user@example.com",
         "emailVerified": true,
         "displayName": null,
         "photoUrl": null,
@@ -32,10 +32,10 @@ following signature:
         },
         "providerData": [
             {
-                "uid": "user@domain.tld",
+                "uid": "user@example.com",
                 "displayName": null,
                 "screenName": null,
-                "email": "user@domain.tld",
+                "email": "user@example.com",
                 "photoUrl": null,
                 "providerId": "password",
                 "phoneNumber": null
@@ -67,6 +67,73 @@ this methods returns a `Generator <http://php.net/manual/en/language.generators.
     }, iterator_to_array($users));
 
 
+***********
+Query users
+***********
+
+Listing all users with ``listUser()`` is fast an memory-efficient if you want to process a large
+number of users. However, if you prefer paginating over subsets of users with more parameters,
+you can use the ``queryUsers()`` method.
+
+User queries can be created in two ways: by building a ``UserQuery`` object or by passing an array.
+
+The following two snippets show all possible query modifiers with both ways:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Auth\UserQuery;
+
+    # Building a user query object
+    $userQuery = UserQuery::all()
+        ->sortedBy(UserQuery::FIELD_USER_EMAIL)
+        ->inDescendingOrder()
+        // ->inAscendingOrder() # this is the default
+        ->withOffset(1)
+        ->withLimit(499); # The maximum supported limit is 500
+
+    # Using an array
+    $userQuery = [
+        'sortBy' => UserQuery::FIELD_USER_EMAIL,
+        'order' => UserQuery::ORDER_DESC,
+        // 'order' => UserQuery::ORDER_DESC # this is the default
+        'offset' => 1,
+        'limit' => 499, # The maximum supported limit is 500
+    ];
+
+It is possible to sort by the following fields:
+
+* ``UserQuery::FIELD_CREATED_AT``
+* ``UserQuery::FIELD_LAST_LOGIN_AT``
+* ``UserQuery::FIELD_NAME``
+* ``UserQuery::FIELD_USER_EMAIL``
+* ``UserQuery::FIELD_USER_ID``
+
+.. code-block:: php
+
+    $users = $auth->queryUsers($userQuery);
+
+You can also filter by email, phone number or uid:
+
+.. code-block:: php
+
+    use Kreait\Firebase\Auth\UserQuery;
+
+    $userQuery = UserQuery::all()->withFilter(UserQuery::FILTER_EMAIL, '<email>');
+    $userQuery = UserQuery::all()->withFilter(UserQuery::FILTER_PHONE_NUMBER, '<phone number>');
+    $userQuery = UserQuery::all()->withFilter(UserQuery::FILTER_UID, '<uid>');
+
+    $userQuery = ['filter' => [UserQuery::FILTER_EMAIL => '<email>'];
+    $userQuery = ['filter' => [UserQuery::FILTER_PHONE_NUMBER => '<email>'];
+    $userQuery = ['filter' => [UserQuery::FILTER_UID => '<email>'];
+
+A user query will always return an array of ``UserRecord`` s. If none could be found, the array
+will be empty.
+
+.. note::
+    Filters don't support partial matches, and only one filter can be applied at the same time.
+    If you specify multiple filters, only the last one will be submitted.
+
+
 *************************************
 Get information about a specific user
 *************************************
@@ -75,7 +142,7 @@ Get information about a specific user
 
     try {
         $user = $auth->getUser('some-uid');
-        $user = $auth->getUserByEmail('user@domain.tld');
+        $user = $auth->getUserByEmail('user@example.com');
         $user = $auth->getUserByPhoneNumber('+49-123-456789');
     } catch (\Kreait\Firebase\Exception\Auth\UserNotFound $e) {
         echo $e->getMessage();
@@ -97,13 +164,10 @@ Result:
 .. code-block:: text
 
     [
-       'some-uid' => <UserRecord>,
-       'another-uid' => <UserRecord>,
-       'non-existing-uid' => null
+        'some-uid' => <UserRecord>,
+        'another-uid' => <UserRecord>,
+        'non-existing-uid' => null
     ]
-
-
-
 
 *************
 Create a user
@@ -158,10 +222,10 @@ Any combination of the following properties can be provided:
 ================= ======= ===========
 Property          Type    Description
 ================= ======= ===========
-``uid``	          string  The uid to assign to the newly created user. Must be a string between 1 and 128 characters long, inclusive. If not provided, a random uid will be automatically generated.
+``uid``           string  The uid to assign to the newly created user. Must be a string between 1 and 128 characters long, inclusive. If not provided, a random uid will be automatically generated.
 ``email``         string  The user's primary email. Must be a valid email address.
 ``emailVerified`` boolean Whether or not the user's primary email is verified. If not provided, the default is false.
-``phoneNumber``	  string  The user's primary phone number. Must be a valid E.164 spec compliant phone number.
+``phoneNumber``   string  The user's primary phone number. Must be a valid E.164 spec compliant phone number.
 ``password``      string  The user's raw, unhashed password. Must be at least six characters long.
 ``displayName``   string  The users' display name.
 ``photoURL``      string  The user's photo URL.
@@ -235,7 +299,7 @@ Change a user's email
 
     $uid = 'some-uid';
 
-    $updatedUser = $auth->changeUserEmail($uid, 'user@domain.tld');
+    $updatedUser = $auth->changeUserEmail($uid, 'user@example.com');
 
 **************
 Disable a user
@@ -332,6 +396,45 @@ This method always returns an instance of ``Kreait\Firebase\Auth\DeleteUsersResu
     Cloud Functions for Firebase. This is because batch deletes do not trigger a user deletion event on each user.
     Delete users one at a time if you want user deletion events to fire for each deleted user.
 
+**************************************
+Duplicate/Unregistered email addresses
+**************************************
+
+Some Firebase Authentication methods that take email addresses as parameters throw specific errors if the email address
+is unregistered when it must be registered (for example, when signing in with an email address and password), or
+registered when it must be unused (for example, when changing a user's email address).
+
+If you try to create a new user, but the given email address has already been used before, the Firebase API returns
+an ``EMAIL_EXISTS`` error. On the other hand, if you try to sign in a user with an email address that hasn't been
+registered, the API returns an ``EMAIL_NOT_FOUND`` error.
+
+You can handle both cases with the SDK:
+
+.. code-block:: php
+
+    try {
+        $user = $auth->createUser([
+            'email' => $email,
+        ]);
+    } catch (\Kreait\Firebase\Exception\Auth\EmailExists $e) {
+        echo $e->getMessage(); // "The email address is already in use by another account"
+    }
+
+    try {
+        $signInResult = $auth->signInWithEmailAndPassword($email, $password);
+    } catch (\Kreait\Firebase\Exception\Auth\EmailNotFound $e) {
+        echo $e->getMessage(); // "There is no user record corresponding to this identifier. The user may have been deleted."
+    }
+
+.. note::
+    Checking for existing/non-existing email addresses can be helpful for suggesting specific remedies to users, but
+    it can also be abused by malicious actors to discover the email addresses registered by your users.
+
+    To mitigate this risk, Firebase recommends you
+    `enable email enumeration protection <https://cloud.google.com/identity-platform/docs/admin/email-enumeration-protection>`_
+    for your project using the Google Cloud ``gcloud`` tool. Note that enabling this feature changes
+    Firebase Authentication's error reporting behavior: be sure your app doesn't rely on the more specific errors.
+
 
 ************************
 Using Email Action Codes
@@ -364,8 +467,8 @@ for email actions.
 ========================= =========== ===========
 Parameter                 Type        Description
 ========================= =========== ===========
-``continueUrl``	          string|null Sets the continue URL
-``url``	                  string|null Alias for ``continueUrl``
+``continueUrl``           string|null Sets the continue URL
+``url``                   string|null Alias for ``continueUrl``
 ``handleCodeInApp``       bool|null    | Whether the email action link will be opened in a mobile app or a web link first.
                                        | The default is false. When set to true, the action code link will be be sent
                                        | as a Universal Link or Android App Link and will be opened by the app if

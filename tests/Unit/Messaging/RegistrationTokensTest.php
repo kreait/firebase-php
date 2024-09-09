@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
 use InvalidArgumentException;
+use Iterator;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Messaging\RegistrationTokens;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -15,12 +18,9 @@ use stdClass;
  */
 final class RegistrationTokensTest extends TestCase
 {
-    /**
-     * @dataProvider validValuesWithExpectedCounts
-     *
-     * @param mixed $value
-     */
-    public function testItCanBeCreatedFromValues(int $expectedCount, $value): void
+    #[DataProvider('validValuesWithExpectedCounts')]
+    #[Test]
+    public function itCanBeCreatedFromValues(int $expectedCount, mixed $value): void
     {
         $tokens = RegistrationTokens::fromValue($value);
 
@@ -28,48 +28,34 @@ final class RegistrationTokensTest extends TestCase
         $this->assertSame(!$expectedCount, $tokens->isEmpty());
     }
 
-    /**
-     * @dataProvider invalidValues
-     *
-     * @param mixed $value
-     */
-    public function testItRejectsInvalidValues($value): void
+    #[DataProvider('invalidValues')]
+    #[Test]
+    public function itRejectsInvalidValues(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         RegistrationTokens::fromValue($value);
     }
 
-    public function testItReturnsStrings(): void
+    #[Test]
+    public function itReturnsStrings(): void
     {
         $token = RegistrationToken::fromValue('foo');
 
         $tokens = RegistrationTokens::fromValue([$token, $token]);
-        $this->assertEquals(['foo', 'foo'], $tokens->asStrings());
+        $this->assertEqualsCanonicalizing(['foo', 'foo'], $tokens->asStrings());
     }
 
-    /**
-     * @return array<string, array<int, int|mixed>>
-     */
-    public function validValuesWithExpectedCounts(): array
+    public static function validValuesWithExpectedCounts(): Iterator
     {
         $foo = RegistrationToken::fromValue('foo');
-
-        return [
-            'string' => [1, 'foo'],
-            'token object' => [1, $foo],
-            'collection' => [2, new RegistrationTokens($foo, $foo)],
-            'array with mixed values' => [2, [$foo, 'bar']],
-            'array with an invalid value' => [2, [$foo, new stdClass(), 'bar']],
-        ];
+        yield 'string' => [1, 'foo'];
+        yield 'token object' => [1, $foo];
+        yield 'collection' => [2, new RegistrationTokens($foo, $foo)];
+        yield 'array with mixed values' => [2, [$foo, 'bar']];
     }
 
-    /**
-     * @return array<string, array<int, mixed>>
-     */
-    public function invalidValues(): array
+    public static function invalidValues(): Iterator
     {
-        return [
-            'invalid object' => [new stdClass()],
-        ];
+        yield 'invalid object' => [new stdClass()];
     }
 }

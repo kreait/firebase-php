@@ -1,17 +1,16 @@
 *.log
 
 /.xdebug
-/build
+/.build
 /vendor
 /docs/_build
 /docs/*.pyc
-/tests/_fixtures/test_*
+/tests/.env
 
 /.env
 /.firebaserc
+/.php-cs-fixer.cache
 /.phpunit.result.cache
-/cc-test-reporter
 /composer.lock
 /phpstan.neon
 /phpunit.xml
-/google-service-account.json

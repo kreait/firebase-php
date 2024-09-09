@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Value;
 
+use Iterator;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\Email;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -13,45 +16,31 @@ use PHPUnit\Framework\TestCase;
  */
 final class EmailTest extends TestCase
 {
-    /**
-     * @dataProvider validValues
-     */
-    public function testWithValidValue(string $value): void
+    #[DataProvider('validValues')]
+    #[Test]
+    public function withValidValue(string $value): void
     {
-        $email = new Email($value);
+        $email = Email::fromString($value)->value;
 
-        $this->assertSame($value, (string) $email);
-        $this->assertSame($value, $email->jsonSerialize());
-        $this->assertTrue($email->equalsTo($value));
+        $this->assertSame($value, $email);
     }
 
-    /**
-     * @dataProvider invalidValues
-     */
-    public function testWithInvalidValue(string $value): void
+    #[DataProvider('invalidValues')]
+    #[Test]
+    public function withInvalidValue(string $value): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new EMail($value);
+        Email::fromString($value);
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
-    public function validValues(): array
+    public static function validValues(): Iterator
     {
-        return [
-            'user@domain.tld' => ['user@domain.tld'],
-        ];
+        yield 'user@example.com' => ['user@example.com'];
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
-    public function invalidValues(): array
+    public static function invalidValues(): Iterator
     {
-        return [
-            'empty string' => [''],
-            'invalid' => ['invalid'],
-        ];
+        yield 'empty string' => [''];
+        yield 'invalid' => ['invalid'];
     }
 }

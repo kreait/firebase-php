@@ -7,11 +7,11 @@ namespace Kreait\Firebase\Auth\SendActionLink;
 use Beste\Json;
 use InvalidArgumentException;
 use Kreait\Firebase\Auth\SendActionLink;
-use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Exception\AuthException;
+use Kreait\Firebase\Exception\RuntimeException;
 use Psr\Http\Message\ResponseInterface;
-use RuntimeException;
 
-final class FailedToSendActionLink extends RuntimeException implements FirebaseException
+final class FailedToSendActionLink extends RuntimeException implements AuthException
 {
     private ?SendActionLink $action = null;
     private ?ResponseInterface $response = null;
@@ -22,7 +22,7 @@ final class FailedToSendActionLink extends RuntimeException implements FirebaseE
 
         try {
             $message = Json::decode((string) $response->getBody(), true)['error']['message'] ?? $fallbackMessage;
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             $message = $fallbackMessage;
         }
 

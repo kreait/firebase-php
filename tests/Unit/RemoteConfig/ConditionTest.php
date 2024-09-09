@@ -7,50 +7,84 @@ namespace Kreait\Firebase\Tests\Unit\RemoteConfig;
 use Kreait\Firebase\RemoteConfig\Condition;
 use Kreait\Firebase\RemoteConfig\TagColor;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class ConditionTest extends UnitTestCase
 {
-    /**
-     * @dataProvider valueProvider
-     *
-     * @param string|TagColor|null $tagColor
-     */
-    public function testCreateCondition(string $name, ?string $expression = null, $tagColor = null): void
+    #[Test]
+    public function itCanBeNamed(): void
     {
-        $condition = Condition::named($name);
+        $condition = Condition::named('name');
+        $this->assertSame('name', $condition->name());
+    }
 
-        if ($expression) {
-            $condition = $condition->withExpression($expression);
-        }
+    #[Test]
+    public function itsDefaultExpressionIsFalseAsString(): void
+    {
+        $condition = Condition::named('name');
+        $this->assertSame('false', $condition->expression());
+    }
 
-        if ($tagColor) {
-            $condition = $condition->withTagColor($tagColor);
-        }
+    #[Test]
+    public function itsDefaultTagColorIsNotSet(): void
+    {
+        $condition = Condition::named('name');
+        $this->assertNull($condition->tagColor());
+    }
 
-        $this->assertSame($name, $condition->name());
-        $expected = [
-            'name' => $name,
-            'expression' => $expression ?: 'false',
-            'tagColor' => $tagColor ? (string) $tagColor : null,
-        ];
+    #[Test]
+    public function itsTagColorCanBeSetWithAString(): void
+    {
+        $condition = Condition::named('name')->withTagColor('ORANGE');
+        $expectedColor = new TagColor('ORANGE');
 
-        $this->assertEquals(\array_filter($expected), $condition->jsonSerialize());
-        $this->assertEquals($condition, Condition::fromArray($expected));
+        $this->assertNotNull($condition->tagColor());
+        $this->assertSame($condition->tagColor()->value(), $expectedColor->value());
     }
 
     /**
-     * @return array<string, array<int, mixed>>
+     * @param array<mixed> $conditionData
      */
-    public function valueProvider(): array
+    #[DataProvider('valueProvider')]
+    #[Test]
+    public function itCanBeCreatedFromAnArray(string $expectedName, string $expectedExpression, ?TagColor $expectedTagColor, array $conditionData): void
     {
-        return [
-            'color as string' => ['name', 'expression', TagColor::GREEN],
-            'color as object' => ['name', 'expression', new TagColor(TagColor::ORANGE)],
-            'no color' => ['name', 'expression', null],
-            'no expression, no color' => ['name', null, null],
+        $condition = Condition::fromArray($conditionData);
+
+        $this->assertSame($expectedName, $condition->name());
+        $this->assertSame($expectedExpression, $condition->expression());
+        $this->assertSame($expectedTagColor?->value(), $condition->tagColor()?->value());
+    }
+
+    /**
+     * @return iterable<string, mixed>
+     */
+    public static function valueProvider(): iterable
+    {
+        yield 'color string' => [
+            'My Name',
+            'expression',
+            new TagColor('GREEN'),
+            [
+                'name' => 'My Name',
+                'expression' => 'expression',
+                'tagColor' => 'GREEN',
+            ],
+        ];
+
+        yield 'no color' => [
+            'My Name',
+            'expression',
+            null,
+            [
+                'name' => 'My Name',
+                'expression' => 'expression',
+                'tagColor' => null,
+            ],
         ];
     }
 }

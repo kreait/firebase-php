@@ -6,13 +6,11 @@ namespace Kreait\Firebase\Auth\SignIn;
 
 use Beste\Json;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Utils;
 use Kreait\Firebase\Auth\AuthResourceUrlBuilder;
 use Kreait\Firebase\Auth\IsTenantAware;
-use Kreait\Firebase\Auth\ProjectAwareAuthResourceUrlBuilder;
 use Kreait\Firebase\Auth\SignIn;
 use Kreait\Firebase\Auth\SignInAnonymously;
 use Kreait\Firebase\Auth\SignInResult;
@@ -21,32 +19,39 @@ use Kreait\Firebase\Auth\SignInWithEmailAndOobCode;
 use Kreait\Firebase\Auth\SignInWithEmailAndPassword;
 use Kreait\Firebase\Auth\SignInWithIdpCredentials;
 use Kreait\Firebase\Auth\SignInWithRefreshToken;
-use Kreait\Firebase\Auth\TenantAwareAuthResourceUrlBuilder;
 use Kreait\Firebase\Util;
+use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
+use UnexpectedValueException;
+
+use function http_build_query;
+use function str_replace;
+
+use const JSON_FORCE_OBJECT;
 
 /**
  * @internal
  */
-final class GuzzleHandler implements Handler
+final class GuzzleHandler
 {
-    /** @var array<string, mixed> */
+    /**
+     * @var array<non-empty-string, mixed>
+     */
     private static array $defaultBody = [
         'returnSecureToken' => true,
     ];
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array<non-empty-string, mixed>
+     */
     private static array $defaultHeaders = [
         'Content-Type' => 'application/json; charset=UTF-8',
     ];
 
-    private string $projectId;
-    private ClientInterface $client;
-
-    public function __construct(string $projectId, ClientInterface $client)
-    {
-        $this->projectId = $projectId;
-        $this->client = $client;
+    public function __construct(
+        private readonly string $projectId,
+        private readonly ClientInterface $client,
+    ) {
     }
 
     public function handle(SignIn $action): SignInResult
@@ -55,7 +60,7 @@ final class GuzzleHandler implements Handler
 
         try {
             $response = $this->client->send($request, ['http_errors' => false]);
-        } catch (GuzzleException $e) {
+        } catch (ClientExceptionInterface $e) {
             throw FailedToSignIn::fromPrevious($e);
         }
 
@@ -65,7 +70,7 @@ final class GuzzleHandler implements Handler
 
         try {
             $data = Json::decode((string) $response->getBody(), true);
-        } catch (\UnexpectedValueException $e) {
+        } catch (UnexpectedValueException $e) {
             throw FailedToSignIn::fromPrevious($e);
         }
 
@@ -74,22 +79,15 @@ final class GuzzleHandler implements Handler
 
     private function createApiRequest(SignIn $action): RequestInterface
     {
-        switch (true) {
-            case $action instanceof SignInAnonymously:
-                return $this->anonymous($action);
-            case $action instanceof SignInWithCustomToken:
-                return $this->customToken($action);
-            case $action instanceof SignInWithEmailAndPassword:
-                return $this->emailAndPassword($action);
-            case $action instanceof SignInWithEmailAndOobCode:
-                return $this->emailAndOobCode($action);
-            case $action instanceof SignInWithIdpCredentials:
-                return $this->idpCredentials($action);
-            case $action instanceof SignInWithRefreshToken:
-                return $this->refreshToken($action);
-            default:
-                throw new FailedToSignIn(self::class.' does not support '.\get_class($action));
-        }
+        return match (true) {
+            $action instanceof SignInAnonymously => $this->anonymous($action),
+            $action instanceof SignInWithCustomToken => $this->customToken($action),
+            $action instanceof SignInWithEmailAndPassword => $this->emailAndPassword($action),
+            $action instanceof SignInWithEmailAndOobCode => $this->emailAndOobCode($action),
+            $action instanceof SignInWithIdpCredentials => $this->idpCredentials($action),
+            $action instanceof SignInWithRefreshToken => $this->refreshToken($action),
+            default => throw new FailedToSignIn(self::class.' does not support '.$action::class),
+        };
     }
 
     private function anonymous(SignInAnonymously $action): Request
@@ -107,9 +105,9 @@ final class GuzzleHandler implements Handler
     {
         $url = AuthResourceUrlBuilder::create()->getUrl('/accounts:signInWithCustomToken');
 
-        $body = Utils::streamFor(Json::encode(\array_merge($this->prepareBody($action), [
-            'token' => $action->customToken(),
-        ]), JSON_FORCE_OBJECT));
+        $body = Utils::streamFor(
+            Json::encode([...$this->prepareBody($action), 'token' => $action->customToken()], JSON_FORCE_OBJECT),
+        );
 
         $headers = self::$defaultHeaders;
 
@@ -120,11 +118,14 @@ final class GuzzleHandler implements Handler
     {
         $url = AuthResourceUrlBuilder::create()->getUrl('/accounts:signInWithPassword');
 
-        $body = Utils::streamFor(Json::encode(\array_merge($this->prepareBody($action), [
-            'email' => $action->email(),
-            'password' => $action->clearTextPassword(),
-            'returnSecureToken' => true,
-        ]), JSON_FORCE_OBJECT));
+        $body = Utils::streamFor(
+            Json::encode([
+                ...$this->prepareBody($action),
+                'email' => $action->email(),
+                'password' => $action->clearTextPassword(),
+                'returnSecureToken' => true,
+            ], JSON_FORCE_OBJECT),
+        );
 
         $headers = self::$defaultHeaders;
 
@@ -135,11 +136,14 @@ final class GuzzleHandler implements Handler
     {
         $url = AuthResourceUrlBuilder::create()->getUrl('/accounts:signInWithEmailLink');
 
-        $body = Utils::streamFor(Json::encode(\array_merge($this->prepareBody($action), [
-            'email' => $action->email(),
-            'oobCode' => $action->oobCode(),
-            'returnSecureToken' => true,
-        ]), JSON_FORCE_OBJECT));
+        $body = Utils::streamFor(
+            Json::encode([
+                ...$this->prepareBody($action),
+                'email' => $action->email(),
+                'oobCode' => $action->oobCode(),
+                'returnSecureToken' => true,
+            ], JSON_FORCE_OBJECT),
+        );
 
         $headers = self::$defaultHeaders;
 
@@ -164,11 +168,12 @@ final class GuzzleHandler implements Handler
             $postBody['nonce'] = $rawNonce;
         }
 
-        $rawBody = \array_merge($this->prepareBody($action), [
-            'postBody' => \http_build_query($postBody),
+        $rawBody = [
+            ...$this->prepareBody($action),
+            'postBody' => http_build_query($postBody),
             'returnIdpCredential' => true,
             'requestUri' => $action->requestUri(),
-        ]);
+        ];
 
         if ($action->linkingIdToken()) {
             $rawBody['idToken'] = $action->linkingIdToken();
@@ -195,9 +200,9 @@ final class GuzzleHandler implements Handler
 
         $emulatorHost = Util::authEmulatorHost();
 
-        if ($emulatorHost !== '') {
+        if ($emulatorHost !== null) {
             // The emulator host requires an api key query parameter.
-            $url = \str_replace('{host}', $emulatorHost, 'http://{host}/securetoken.googleapis.com/v1/token?key=any');
+            $url = str_replace('{host}', $emulatorHost, 'http://{host}/securetoken.googleapis.com/v1/token?key=any');
         } else {
             $url = 'https://securetoken.googleapis.com/v1/token';
         }
@@ -206,7 +211,7 @@ final class GuzzleHandler implements Handler
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<non-empty-string, mixed>
      */
     private function prepareBody(SignIn $action): array
     {
@@ -219,8 +224,4 @@ final class GuzzleHandler implements Handler
 
         return $body;
     }
-
-    /**
-     * @return AuthResourceUrlBuilder|ProjectAwareAuthResourceUrlBuilder|TenantAwareAuthResourceUrlBuilder
-     */
 }

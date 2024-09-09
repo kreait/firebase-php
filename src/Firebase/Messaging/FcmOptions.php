@@ -15,13 +15,11 @@ use JsonSerializable;
  */
 final class FcmOptions implements JsonSerializable
 {
-    /** @var FcmOptionsShape */
-    private array $data;
-
-    /** @param FcmOptionsShape $data */
-    private function __construct(array $data)
+    /**
+     * @param FcmOptionsShape $data
+     */
+    private function __construct(private array $data)
     {
-        $this->data = $data;
     }
 
     public static function create(): self
@@ -45,9 +43,6 @@ final class FcmOptions implements JsonSerializable
         return $options;
     }
 
-    /**
-     * @return FcmOptionsShape
-     */
     public function jsonSerialize(): array
     {
         return $this->data;

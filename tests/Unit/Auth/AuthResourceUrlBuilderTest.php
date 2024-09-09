@@ -6,7 +6,10 @@ namespace Kreait\Firebase\Tests\Unit\Auth;
 
 use Kreait\Firebase\Auth\AuthResourceUrlBuilder;
 use Kreait\Firebase\Util;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+
+use function putenv;
 
 /**
  * @internal
@@ -23,43 +26,49 @@ final class AuthResourceUrlBuilderTest extends TestCase
         $this->builder = AuthResourceUrlBuilder::create();
     }
 
-    public function testItUsesAnEmulatorHostIfProvidedByEnvironmentVariable(): void
+    #[Test]
+    public function itUsesAnEmulatorHostIfProvidedByEnvironmentVariable(): void
     {
-        \putenv('FIREBASE_AUTH_EMULATOR_HOST=localhost:1234');
+        putenv('FIREBASE_AUTH_EMULATOR_HOST=localhost:1234');
 
         $builder = AuthResourceUrlBuilder::create();
 
         $this->assertStringContainsString('localhost:1234', $builder->getUrl());
     }
 
-    public function testItDoesNotUseTheEmulatorHostWhenItIsEmpty(): void
+    #[Test]
+    public function itDoesNotUseTheEmulatorHostWhenItIsEmpty(): void
     {
-        \putenv('FIREBASE_AUTH_EMULATOR_HOST=');
+        putenv('FIREBASE_AUTH_EMULATOR_HOST=');
 
         $builder = AuthResourceUrlBuilder::create();
 
         $this->assertStringNotContainsString('{host}', $builder->getUrl());
     }
 
-    public function testItReplacesTheApiWithAnEmptyStringWhenItIsNotProvided(): void
+    #[Test]
+    public function itReplacesTheApiWithAnEmptyStringWhenItIsNotProvided(): void
     {
         $this->assertStringNotContainsString('{api}', $this->builder->getUrl());
     }
 
-    public function testItUsesTheRequestedApi(): void
+    #[Test]
+    public function itUsesTheRequestedApi(): void
     {
         $url = $this->builder->getUrl('foo');
         $this->assertStringNotContainsString('{api}', $url);
         $this->assertStringContainsString('foo', $url);
     }
 
-    public function testItUsesTheGivenParameters(): void
+    #[Test]
+    public function itUsesTheGivenParameters(): void
     {
         $url = $this->builder->getUrl('', ['first' => 'value', 'second' => 'value']);
         $this->assertStringContainsString('?first=value&second=value', $url);
     }
 
-    public function testItDoesNotHaveQueryParamsWhenNoneAreProvided(): void
+    #[Test]
+    public function itDoesNotHaveQueryParamsWhenNoneAreProvided(): void
     {
         $url = $this->builder->getUrl();
         $this->assertStringNotContainsString('?', $url);

@@ -7,23 +7,36 @@ namespace Kreait\Firebase\Request;
 use Beste\Json;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Request;
+use Stringable;
+
+use function array_reduce;
+use function array_unique;
+use function is_array;
+use function is_string;
+use function mb_strtolower;
+use function preg_replace;
 
 final class UpdateUser implements Request
 {
     /** @phpstan-use EditUserTrait<self> */
     use EditUserTrait;
-
     public const DISPLAY_NAME = 'DISPLAY_NAME';
     public const PHOTO_URL = 'PHOTO_URL';
     public const EMAIL = 'EMAIL';
 
-    /** @var array<string> */
+    /**
+     * @var array<string>
+     */
     private array $attributesToDelete = [];
 
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     private array $providersToDelete = [];
 
-    /** @var array<string, mixed>|null */
+    /**
+     * @var array<string, mixed>|null
+     */
     private ?array $customAttributes = null;
 
     private function __construct()
@@ -45,7 +58,7 @@ final class UpdateUser implements Request
         $request = self::withEditableProperties(new self(), $properties);
 
         foreach ($properties as $key => $value) {
-            switch (\mb_strtolower((string) \preg_replace('/[^a-z]/i', '', $key))) {
+            switch (mb_strtolower((string) preg_replace('/[^a-z]/i', '', $key))) {
                 case 'deletephoto':
                 case 'deletephotourl':
                 case 'removephoto':
@@ -53,29 +66,48 @@ final class UpdateUser implements Request
                     $request = $request->withRemovedPhotoUrl();
 
                     break;
+
                 case 'deletedisplayname':
                 case 'removedisplayname':
                     $request = $request->withRemovedDisplayName();
 
                     break;
+
                 case 'deleteemail':
                 case 'removeemail':
                     $request = $request->withRemovedEmail();
 
                     break;
+
                 case 'deleteattribute':
                 case 'deleteattributes':
                     foreach ((array) $value as $deleteAttribute) {
-                        switch (\mb_strtolower(\preg_replace('/[^a-z]/i', '', $deleteAttribute))) {
+                        if (!is_string($deleteAttribute)) {
+                            continue;
+                        }
+
+                        if ($deleteAttribute === '') {
+                            continue;
+                        }
+
+                        $deleteAttribute = preg_replace('/[^a-z]/i', '', $deleteAttribute);
+
+                        if ($deleteAttribute === null) {
+                            continue;
+                        }
+
+                        switch (mb_strtolower($deleteAttribute)) {
                             case 'displayname':
                                 $request = $request->withRemovedDisplayName();
 
                                 break;
+
                             case 'photo':
                             case 'photourl':
                                 $request = $request->withRemovedPhotoUrl();
 
                                 break;
+
                             case 'email':
                                 $request = $request->withRemovedEmail();
 
@@ -84,11 +116,13 @@ final class UpdateUser implements Request
                     }
 
                     break;
+
                 case 'customattributes':
                 case 'customclaims':
                     $request = $request->withCustomAttributes($value);
 
                     break;
+
                 case 'phonenumber':
                 case 'phone':
                     if (!$value) {
@@ -96,6 +130,7 @@ final class UpdateUser implements Request
                     }
 
                     break;
+
                 case 'deletephone':
                 case 'deletephonenumber':
                 case 'removephone':
@@ -103,14 +138,15 @@ final class UpdateUser implements Request
                     $request = $request->withRemovedPhoneNumber();
 
                     break;
+
                 case 'deleteprovider':
                 case 'deleteproviders':
                 case 'removeprovider':
                 case 'removeproviders':
-                    $request = \array_reduce(
+                    $request = array_reduce(
                         (array) $value,
-                        static fn (self $request, $provider) => $request->withRemovedProvider($provider),
-                        $request
+                        static fn(self $request, $provider): \Kreait\Firebase\Request\UpdateUser => $request->withRemovedProvider($provider),
+                        $request,
                     );
 
                     break;
@@ -129,7 +165,7 @@ final class UpdateUser implements Request
     }
 
     /**
-     * @param \Stringable|string $provider
+     * @param Stringable|string $provider
      */
     public function withRemovedProvider($provider): self
     {
@@ -177,9 +213,6 @@ final class UpdateUser implements Request
         return $request;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function jsonSerialize(): array
     {
         if (!$this->hasUid()) {
@@ -188,12 +221,12 @@ final class UpdateUser implements Request
 
         $data = $this->prepareJsonSerialize();
 
-        if (\is_array($this->customAttributes)) {
+        if (is_array($this->customAttributes)) {
             $data['customAttributes'] = empty($this->customAttributes) ? '{}' : Json::encode($this->customAttributes);
         }
 
         if (!empty($this->attributesToDelete)) {
-            $data['deleteAttribute'] = \array_unique($this->attributesToDelete);
+            $data['deleteAttribute'] = array_unique($this->attributesToDelete);
         }
 
         if (!empty($this->providersToDelete)) {

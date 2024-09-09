@@ -8,19 +8,20 @@ use Kreait\Firebase\Exception\Database\ReferenceHasNotBeenSnapshotted;
 use Kreait\Firebase\Exception\Database\TransactionFailed;
 use Kreait\Firebase\Exception\DatabaseException;
 
+use function array_key_exists;
+
 class Transaction
 {
-    private ApiClient $apiClient;
-
-    /** @var string[] */
+    /**
+     * @var array<string, string>
+     */
     private array $etags;
 
     /**
      * @internal
      */
-    public function __construct(ApiClient $apiClient)
+    public function __construct(private readonly ApiClient $apiClient)
     {
-        $this->apiClient = $apiClient;
         $this->etags = [];
     }
 
@@ -29,27 +30,25 @@ class Transaction
      */
     public function snapshot(Reference $reference): Snapshot
     {
-        $uri = (string) $reference->getUri();
+        $path = $reference->getPath();
 
-        $result = $this->apiClient->getWithETag($uri);
+        $result = $this->apiClient->getWithETag($path);
 
-        $this->etags[$uri] = $result['etag'];
+        $this->etags[$path] = $result['etag'];
 
         return new Snapshot($reference, $result['value']);
     }
 
     /**
-     * @param mixed $value
-     *
      * @throws ReferenceHasNotBeenSnapshotted
      * @throws TransactionFailed
      */
-    public function set(Reference $reference, $value): void
+    public function set(Reference $reference, mixed $value): void
     {
         $etag = $this->getEtagForReference($reference);
 
         try {
-            $this->apiClient->setWithEtag($reference->getUri(), $value, $etag);
+            $this->apiClient->setWithEtag($reference->getPath(), $value, $etag);
         } catch (DatabaseException $e) {
             throw TransactionFailed::onReference($reference, $e);
         }
@@ -64,7 +63,7 @@ class Transaction
         $etag = $this->getEtagForReference($reference);
 
         try {
-            $this->apiClient->removeWithEtag($reference->getUri(), $etag);
+            $this->apiClient->removeWithEtag($reference->getPath(), $etag);
         } catch (DatabaseException $e) {
             throw TransactionFailed::onReference($reference, $e);
         }
@@ -75,10 +74,10 @@ class Transaction
      */
     private function getEtagForReference(Reference $reference): string
     {
-        $uri = (string) $reference->getUri();
+        $path = $reference->getPath();
 
-        if (\array_key_exists($uri, $this->etags)) {
-            return $this->etags[$uri];
+        if (array_key_exists($path, $this->etags)) {
+            return $this->etags[$path];
         }
 
         throw new ReferenceHasNotBeenSnapshotted($reference);

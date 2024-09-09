@@ -6,13 +6,15 @@ namespace Kreait\Firebase\Tests\Unit\Database;
 
 use Kreait\Firebase\Database\RuleSet;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class RuleSetTest extends UnitTestCase
 {
-    public function testCustomWithMissingRulesKey(): void
+    #[Test]
+    public function customWithMissingRulesKey(): void
     {
         $data = ['rules' => [
             '.read' => 'auth != null',
@@ -21,6 +23,6 @@ final class RuleSetTest extends UnitTestCase
 
         $ruleSet = RuleSet::fromArray($data['rules']);
 
-        $this->assertEquals($data, $ruleSet->getRules());
+        $this->assertEqualsCanonicalizing($data, $ruleSet->getRules());
     }
 }

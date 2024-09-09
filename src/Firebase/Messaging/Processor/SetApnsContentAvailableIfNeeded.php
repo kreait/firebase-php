@@ -11,7 +11,11 @@ use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\MessageData;
 use Kreait\Firebase\Messaging\Notification;
 
+use function is_array;
+
 /**
+ * @internal
+ *
  * @phpstan-import-type ApnsConfigShape from ApnsConfig
  * @phpstan-import-type NotificationShape from Notification
  */
@@ -23,9 +27,9 @@ final class SetApnsContentAvailableIfNeeded
 
         $notification = $this->getNotification($payload);
         $apnsConfig = $this->getApnsConfig($payload);
+        $isAlert = $notification !== null || $apnsConfig->isAlert();
 
-        if ($notification !== null || $apnsConfig->isAlert()) {
-            // This is an alert, no 'content-available' field needed
+        if ($isAlert) {
             return $message;
         }
 
@@ -45,14 +49,13 @@ final class SetApnsContentAvailableIfNeeded
     }
 
     /**
-     * @param array<string, array<string, string>> $payload
+     * @param array<string, mixed> $payload
      */
     public function getNotification(array $payload): ?Notification
     {
-        if (array_key_exists('notification', $payload) && is_array($payload['notification'])) {
-            /** @var NotificationShape $notification */
-            $notification = $payload['notification'];
+        $notification = $payload['notification'] ?? null;
 
+        if (is_array($notification)) {
             return Notification::fromArray($notification);
         }
 
@@ -64,26 +67,26 @@ final class SetApnsContentAvailableIfNeeded
      */
     public function getApnsConfig(array $payload): ApnsConfig
     {
-        if (array_key_exists('apns', $payload) && is_array($payload['apns'])) {
-            /** @var NotificationShape $config */
-            $config = $payload['apns'];
+        $apnsConfig = $payload['apns'] ?? [];
 
-            return ApnsConfig::fromArray($config);
+        if (is_array($apnsConfig)) {
+            return ApnsConfig::fromArray($apnsConfig);
         }
 
         return ApnsConfig::new();
     }
 
     /**
-     * @param array<string, array<string, string>> $payload
+     * @param array<string, mixed> $payload
      */
     public function getMessageData(array $payload): MessageData
     {
-        if (array_key_exists('data', $payload) && is_array($payload['data'])) {
-            $messageData = MessageData::fromArray($payload['data']);
-        } else {
-            $messageData = MessageData::fromArray([]);
+        $data = $payload['data'] ?? null;
+
+        if (!is_array($data)) {
+            return MessageData::fromArray([]);
         }
-        return $messageData;
+
+        return MessageData::fromArray($data);
     }
 }

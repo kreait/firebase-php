@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Messaging\Processor;
 
-use Kreait\Firebase\Messaging\ApnsConfig;
+use Beste\Json;
+use Iterator;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Processor\SetApnsContentAvailableIfNeeded;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  */
-class SetApnsContentAvailableIfNeededTest extends TestCase
+final class SetApnsContentAvailableIfNeededTest extends TestCase
 {
     private SetApnsContentAvailableIfNeeded $processor;
 
@@ -21,110 +24,68 @@ class SetApnsContentAvailableIfNeededTest extends TestCase
         $this->processor = new SetApnsContentAvailableIfNeeded();
     }
 
-    public function testItDoesNotApplyIfItHasANotification(): void
-    {
-        $input = CloudMessage::new()->withNotification(['title' => 'Title']);
-
-        $result = ($this->processor)($input);
-        assert($result instanceof CloudMessage);
-
-        $this->assertMissingContentAvailable($result);
-    }
-
-    public function testItDoesNotApplyIfItHasAnAlert(): void
-    {
-        $input = CloudMessage::new()
-            ->withApnsConfig(
-                ApnsConfig::new()->withSound('default') // sound, badge or alert
-            );
-
-        $result = ($this->processor)($input);
-        assert($result instanceof CloudMessage);
-
-        $this->assertMissingContentAvailable($result);
-    }
-
-    public function testItDoesNotApplyWhenItHasNoMessageData(): void
-    {
-        $input = CloudMessage::new();
-
-        $result = ($this->processor)($input);
-        assert($result instanceof CloudMessage);
-
-        $this->assertMissingContentAvailable($result);
-    }
-
-    public function testItDoesNotApplyWhenItHasNoDataAtAll(): void
-    {
-        // No message data and no ApnsData
-        $input = CloudMessage::new();
-
-        $result = ($this->processor)($input);
-        assert($result instanceof CloudMessage);
-
-        $this->assertMissingContentAvailable($result);
-    }
-
-    public function testItAppliesWithMessageData(): void
-    {
-        $input = CloudMessage::new()->withData(['foo' => 'bar']);
-
-        $result = ($this->processor)($input);
-        assert($result instanceof CloudMessage);
-
-        $this->assertContentAvailable($result);
-    }
-
-    public function testItAppliesWithApnsData(): void
-    {
-        $input = CloudMessage::new()
-            ->withApnsConfig(
-                ApnsConfig::new()->withDataField('foo', 'bar')
-            );
-
-        $result = ($this->processor)($input);
-        assert($result instanceof CloudMessage);
-
-        $this->assertContentAvailable($result);
-    }
-
-    private function assertContentAvailable(CloudMessage $message): void
-    {
-        $this->assertApsField($message, 'content-available', 1);
-    }
-
-    private function assertMissingContentAvailable(CloudMessage $message): void
-    {
-        $this->assertMissingApsField($message, 'content-available');
-    }
-
     /**
-     * @param mixed $expected
+     * @param array<mixed> $messageData
+     *
+     * @see https://github.com/kreait/firebase-php/pull/762
      */
-    private function assertApsField(CloudMessage $message, string $name, $expected): void
+    #[DataProvider('provideMessagesWithExpectedContentAvailable')]
+    #[Test]
+    public function itSetsTheExpectedPushType(array $messageData): void
     {
-        $config = invade($message)->apnsConfig;
-        assert($config instanceof ApnsConfig);
+        $message = CloudMessage::fromArray($messageData);
 
-        $payload = invade($config)->payload;
-        assert(is_array($payload));
+        $processed = Json::decode(Json::encode(($this->processor)($message)), true);
 
-        $aps = $payload['aps'] ?? [];
-
-        $this->assertArrayHasKey($name, $aps);
-        $this->assertSame($expected, $aps[$name]);
+        $this->assertArrayHasKey('content-available', $processed['apns']['payload']['aps']);
+        $this->assertSame(1, $processed['apns']['payload']['aps']['content-available']);
     }
 
-    private function assertMissingApsField(CloudMessage $message, string $name): void
+    #[Test]
+    public function itDoesNotSetThePushType(): void
     {
-        $config = invade($message)->apnsConfig;
-        assert($config instanceof ApnsConfig);
+        $message = CloudMessage::fromArray($given = ['topic' => 'test']);
 
-        $payload = invade($config)->payload;
-        assert(is_array($payload));
+        $processed = Json::decode(Json::encode(($this->processor)($message)), true);
 
-        $aps = $payload['aps'] ?? [];
+        $this->assertSame($given, $processed);
+    }
 
-        $this->assertArrayNotHasKey($name, $aps);
+    public static function provideMessagesWithExpectedContentAvailable(): Iterator
+    {
+        yield 'message data at root level' => [
+            [
+                'data' => [
+                    'key' => 'value',
+                ],
+            ],
+        ];
+
+        yield 'message data at apns level' => [
+            [
+                'apns' => [
+                    'payload' => [
+                        'data' => [
+                            'key' => 'value',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'both message and apns data' => [
+            [
+                'data' => [
+                    'key' => 'value',
+                ],
+                'apns' => [
+                    'payload' => [
+                        'data' => [
+                            'key' => 'value',
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 }

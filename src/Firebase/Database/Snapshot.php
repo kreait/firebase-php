@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Database;
 
-use function JmesPath\search;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+
+use function count;
+use function is_array;
+use function JmesPath\search;
+use function str_replace;
+use function trim;
 
 /**
  * A Snapshot contains data from a database location.
@@ -18,25 +23,14 @@ use Kreait\Firebase\Exception\InvalidArgumentException;
  *
  * Alternatively, you can traverse into the snapshot by calling {@see getChild()}
  * to return child snapshots (which you could then call {@see getValue()} on).
- *
- * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot
  */
 class Snapshot
 {
-    private Reference $reference;
-
-    /** @var mixed mixed */
-    private $value;
-
     /**
      * @internal
-     *
-     * @param mixed $value
      */
-    public function __construct(Reference $reference, $value)
+    public function __construct(private readonly Reference $reference, private readonly mixed $value)
     {
-        $this->reference = $reference;
-        $this->value = $value;
     }
 
     /**
@@ -46,8 +40,6 @@ class Snapshot
      * the /users/ada/ node. Accessing the key on any Snapshot will return the key for the
      * location that generated it. However, accessing the key on the root URL of a database
      * will return null.
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#key
      */
     public function getKey(): ?string
     {
@@ -56,8 +48,6 @@ class Snapshot
 
     /**
      * Returns the Reference for the location that generated this Snapshot.
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#ref
      */
     public function getReference(): Reference
     {
@@ -72,14 +62,12 @@ class Snapshot
      * deeper, slash-separated path (e.g. "ada/name/first"). If the child location has no data, an empty
      * Snapshot (that is, a Snapshot whose value is null) is returned.
      *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#child
-     *
      * @throws InvalidArgumentException if the given child path is invalid
      */
     public function getChild(string $path): self
     {
-        $path = \trim($path, '/');
-        $expression = '"'.\str_replace('/', '"."', $path).'"';
+        $path = trim($path, '/');
+        $expression = '"'.str_replace('/', '"."', $path).'"';
 
         $childValue = search($expression, $this->value);
 
@@ -90,8 +78,6 @@ class Snapshot
      * Returns true if this Snapshot contains any data.
      *
      * It is a convenience method for `$snapshot->getValue() !== null`.
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#exists
      */
     public function exists(): bool
     {
@@ -100,13 +86,11 @@ class Snapshot
 
     /**
      * Returns true if the specified child path has (non-null) data.
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#hasChild
      */
     public function hasChild(string $path): bool
     {
-        $path = \trim($path, '/');
-        $expression = '"'.\str_replace('/', '"."', $path).'"';
+        $path = trim($path, '/');
+        $expression = '"'.str_replace('/', '"."', $path).'"';
 
         return search($expression, $this->value) !== null;
     }
@@ -114,34 +98,28 @@ class Snapshot
     /**
      * Returns true if the Snapshot has any child properties.
      *
-     * You can use {@see hasChildren()} to determine if a Snappshot has any children. If it does,
+     * You can use {@see hasChildren()} to determine if a Snapshot has any children. If it does,
      * you can enumerate them using foreach(). If it does not, then either this snapshot
      * contains a primitive value (which can be retrieved with {@see getValue()}) or
      * it is empty (in which case {@see getValue()} will return null).
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#hasChildren
      */
     public function hasChildren(): bool
     {
-        return \is_array($this->value) && !empty($this->value);
+        return is_array($this->value) && !empty($this->value);
     }
 
     /**
      * Returns the number of child properties of this Snapshot.
-     *
-     * @see https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot#numChildren
      */
     public function numChildren(): int
     {
-        return \is_array($this->value) ? \count($this->value) : 0;
+        return is_array($this->value) ? count($this->value) : 0;
     }
 
     /**
      * Returns the data contained in this Snapshot.
-     *
-     * @return mixed
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }

@@ -4,33 +4,46 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
+
 /**
  * @internal
- *
- * @group emulator
  */
+#[Group('emulator')]
 final class TenantAwareAuthTest extends AuthTestCase
 {
     protected function setUp(): void
     {
-        $this->auth = self::$factory->withTenantId(self::TENANT_ID)->createAuth();
+        parent::setUp();
+
+        if (self::$tenantId === null) {
+            $this->markTestSkipped('Tenant aware tests require a tenant ID');
+        }
+
+        $this->auth = self::$factory
+            ->withTenantId(self::$tenantId)
+            ->createAuth()
+        ;
     }
 
-    public function testNewUsersAreScopedToATenant(): void
+    #[Test]
+    public function newUsersAreScopedToATenant(): void
     {
         $user = $this->auth->createUserWithEmailAndPassword(
             self::randomEmail(__FUNCTION__),
-            'password123'
+            'password123',
         );
 
         try {
-            $this->assertSame(self::TENANT_ID, $user->tenantId);
+            $this->assertSame(self::$tenantId, $user->tenantId);
         } finally {
             $this->auth->deleteUser($user->uid);
         }
     }
 
-    public function testCustomTokensIncludeTheTenant(): void
+    #[Test]
+    public function customTokensIncludeTheTenant(): void
     {
         $user = $this->auth->createAnonymousUser();
 
@@ -39,7 +52,7 @@ final class TenantAwareAuthTest extends AuthTestCase
         $parsed = $this->auth->parseToken($token->toString());
 
         try {
-            $this->assertSame(self::TENANT_ID, $parsed->claims()->get('tenant_id'));
+            $this->assertSame(self::$tenantId, $parsed->claims()->get('tenant_id'));
         } finally {
             $this->auth->deleteUser($user->uid);
         }
@@ -51,19 +64,20 @@ final class TenantAwareAuthTest extends AuthTestCase
         $result = $this->auth->signInAsUser($user);
 
         try {
-            $this->assertSame(self::TENANT_ID, $result->firebaseTenantId());
+            $this->assertSame(self::$tenantId, $result->firebaseTenantId());
         } finally {
             $this->auth->deleteUser($user->uid);
         }
     }
 
-    public function testItCanSignInWithACustomToken(): void
+    #[Test]
+    public function itCanSignInWithACustomToken(): void
     {
         $user = $this->auth->createAnonymousUser();
         $result = $this->auth->signInAsUser($user);
 
         try {
-            $this->assertSame(self::TENANT_ID, $result->firebaseTenantId());
+            $this->assertSame(self::$tenantId, $result->firebaseTenantId());
         } finally {
             $this->auth->deleteUser($user->uid);
         }

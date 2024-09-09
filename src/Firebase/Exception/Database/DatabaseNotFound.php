@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Exception\Database;
 
 use Kreait\Firebase\Exception\DatabaseException;
-use LogicException;
+use Kreait\Firebase\Exception\LogicException;
 use Psr\Http\Message\UriInterface;
+
+use function explode;
+use function str_replace;
 
 final class DatabaseNotFound extends LogicException implements DatabaseException
 {
@@ -15,10 +18,10 @@ final class DatabaseNotFound extends LogicException implements DatabaseException
         $scheme = $uri->getScheme();
         $host = $uri->getHost();
 
-        $databaseName = \explode('.', $host, 2)[0] ?? '';
+        $databaseName = explode('.', $host, 2)[0];
 
         $databaseUri = "{$scheme}://{$host}";
-        $suggestedDatabaseUri = \str_replace($databaseName, $databaseName.'-default-rtdb', $databaseUri);
+        $suggestedDatabaseUri = str_replace($databaseName, $databaseName.'-default-rtdb', $databaseUri);
 
         $message = <<<MESSAGE
 
@@ -43,7 +46,7 @@ final class DatabaseNotFound extends LogicException implements DatabaseException
             suffix.
 
             For instructions on how to set the name of the used Realtime Database, please
-            see https://firebase-php.readthedocs.io/en/6.x/#quick-start
+            see https://firebase-php.readthedocs.io/en/latest/#quick-start
 
 
             MESSAGE;

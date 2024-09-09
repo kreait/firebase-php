@@ -308,14 +308,14 @@ a website might be set as follows:
 .. code-block:: php
 
     $database->getReference('config/website')
-       ->set([
-           'name' => 'My Application',
-           'emails' => [
-               'support' => 'support@domain.tld',
-               'sales' => 'sales@domain.tld',
-           ],
-           'website' => 'https://app.domain.tld',
-          ]);
+        ->set([
+            'name' => 'My Application',
+            'emails' => [
+                'support' => 'support@example.com',
+                'sales' => 'sales@example.com',
+            ],
+            'website' => 'https://app.example.com',
+        ]);
 
     $database->getReference('config/website/name')->set('New name');
 
@@ -352,7 +352,7 @@ to the recent activity feed and the posting user's activity feed using code like
     ];
 
     $database->getReference() // this is the root reference
-       ->update($updates);
+        ->update($updates);
 
 
 Writing lists

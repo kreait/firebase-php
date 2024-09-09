@@ -8,23 +8,26 @@ use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database\Query\Filter\LimitToFirst;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class LimitToFirstTest extends UnitTestCase
 {
-    public function testCreateWithInvalidValue(): void
+    #[Test]
+    public function createWithInvalidValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         new LimitToFirst(0);
     }
 
-    public function testModifyUri(): void
+    #[Test]
+    public function modifyUri(): void
     {
         $filter = new LimitToFirst(3);
 
-        $this->assertStringContainsString('limitToFirst=3', (string) $filter->modifyUri(new Uri('http://domain.tld')));
+        $this->assertStringContainsString('limitToFirst=3', (string) $filter->modifyUri(new Uri('http://example.com')));
     }
 }

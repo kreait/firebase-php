@@ -8,3 +8,5 @@ eventually could not be merged.
 If you want to provide a bugfix, please include tests to 
 prove that the bug exists and that it is fixed.
 
+Support the project's development and keep it sustainable by becoming a
+[GitHub Sponsor](https://github.com/sponsors/jeromegamez).

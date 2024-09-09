@@ -8,23 +8,26 @@ use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database\Query\Filter\LimitToLast;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
 final class LimitToLastTest extends UnitTestCase
 {
-    public function testCreateWithInvalidValue(): void
+    #[Test]
+    public function createWithInvalidValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         new LimitToLast(0);
     }
 
-    public function testModifyUri(): void
+    #[Test]
+    public function modifyUri(): void
     {
         $filter = new LimitToLast(3);
 
-        $this->assertStringContainsString('limitToLast=3', (string) $filter->modifyUri(new Uri('http://domain.tld')));
+        $this->assertStringContainsString('limitToLast=3', (string) $filter->modifyUri(new Uri('http://example.com')));
     }
 }

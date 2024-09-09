@@ -4,57 +4,42 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Http;
 
+use GuzzleHttp\RequestOptions;
 use Kreait\Firebase\Exception\InvalidArgumentException;
+
+use function is_callable;
 
 final class HttpClientOptions
 {
     /**
-     * The amount of seconds to wait while connecting to a server.
-     *
-     * Defaults to indefinitely.
+     * @param array<non-empty-string, mixed> $guzzleConfig
+     * @param list<array{middleware: callable, name: string}> $guzzleMiddlewares
      */
-    private ?float $connectTimeout = null;
-
-    /**
-     * The amount of seconds to wait while reading a streamed body.
-     *
-     * Defaults to the value of the default_socket_timeout PHP ini setting.
-     */
-    private ?float $readTimeout = null;
-
-    /**
-     * The amount of seconds to wait for a full request (connect + transfer + read) to complete.
-     *
-     * Defaults to indefinitely.
-     */
-    private ?float $timeout = null;
-
-    /**
-     * The proxy that all requests should be passed through.
-     */
-    private ?string $proxy = null;
-
-    private function __construct()
-    {
+    private function __construct(
+        private readonly array $guzzleConfig,
+        private readonly array $guzzleMiddlewares,
+    ) {
     }
 
     public static function default(): self
     {
-        return new self();
+        return new self([], []);
     }
 
     /**
      * The amount of seconds to wait while connecting to a server.
      *
-     * Defaults to indefinitely.
+     * @see RequestOptions::CONNECT_TIMEOUT
      */
     public function connectTimeout(): ?float
     {
-        return $this->connectTimeout;
+        return $this->guzzleConfig[RequestOptions::CONNECT_TIMEOUT] ?? null;
     }
 
     /**
      * @param float $value the amount of seconds to wait while connecting to a server
+     *
+     * @see RequestOptions::CONNECT_TIMEOUT
      */
     public function withConnectTimeout(float $value): self
     {
@@ -62,24 +47,23 @@ final class HttpClientOptions
             throw new InvalidArgumentException('The connect timeout cannot be smaller than zero.');
         }
 
-        $options = clone $this;
-        $options->connectTimeout = $value;
-
-        return $options;
+        return $this->withGuzzleConfigOption(RequestOptions::CONNECT_TIMEOUT, $value);
     }
 
     /**
      * The amount of seconds to wait while reading a streamed body.
      *
-     * Defaults to the value of the default_socket_timeout PHP ini setting.
+     * @see RequestOptions::READ_TIMEOUT
      */
     public function readTimeout(): ?float
     {
-        return $this->readTimeout;
+        return $this->guzzleConfig[RequestOptions::READ_TIMEOUT] ?? null;
     }
 
     /**
      * @param float $value the amount of seconds to wait while reading a streamed body
+     *
+     * @see RequestOptions::READ_TIMEOUT
      */
     public function withReadTimeout(float $value): self
     {
@@ -87,24 +71,23 @@ final class HttpClientOptions
             throw new InvalidArgumentException('The read timeout cannot be smaller than zero.');
         }
 
-        $options = clone $this;
-        $options->readTimeout = $value;
-
-        return $options;
+        return $this->withGuzzleConfigOption(RequestOptions::READ_TIMEOUT, $value);
     }
 
     /**
      * The amount of seconds to wait for a full request (connect + transfer + read) to complete.
      *
-     * Defaults to indefinitely.
+     * @see RequestOptions::TIMEOUT
      */
     public function timeout(): ?float
     {
-        return $this->timeout;
+        return $this->guzzleConfig[RequestOptions::TIMEOUT] ?? null;
     }
 
     /**
      * @param float $value the amount of seconds to wait while reading a streamed body
+     *
+     * @see RequestOptions::TIMEOUT
      */
     public function withTimeout(float $value): self
     {
@@ -112,28 +95,99 @@ final class HttpClientOptions
             throw new InvalidArgumentException('The total timeout cannot be smaller than zero.');
         }
 
-        $options = clone $this;
-        $options->timeout = $value;
-
-        return $options;
+        return $this->withGuzzleConfigOption(RequestOptions::TIMEOUT, $value);
     }
 
     /**
      * The proxy that all requests should be passed through.
+     *
+     * @see RequestOptions::PROXY
      */
     public function proxy(): ?string
     {
-        return $this->proxy;
+        return $this->guzzleConfig[RequestOptions::PROXY] ?? null;
     }
 
     /**
-     * @param string $value the proxy that all requests should be passed through
+     * @param non-empty-string $value the proxy that all requests should be passed through
+     *
+     * @see RequestOptions::PROXY
      */
     public function withProxy(string $value): self
     {
-        $options = clone $this;
-        $options->proxy = $value;
+        return $this->withGuzzleConfigOption(RequestOptions::PROXY, $value);
+    }
 
-        return $options;
+    /**
+     * @param non-empty-string $name
+     */
+    public function withGuzzleConfigOption(string $name, mixed $option): self
+    {
+        $config = $this->guzzleConfig;
+        $config[$name] = $option;
+
+        return new self($config, $this->guzzleMiddlewares);
+    }
+
+    /**
+     * @param array<non-empty-string, mixed> $options
+     */
+    public function withGuzzleConfigOptions(array $options): self
+    {
+        $config = $this->guzzleConfig;
+
+        foreach ($options as $name => $option) {
+            $config[$name] = $option;
+        }
+
+        return new self($config, $this->guzzleMiddlewares);
+    }
+
+    /**
+     * @return array<non-empty-string, mixed>
+     */
+    public function guzzleConfig(): array
+    {
+        return $this->guzzleConfig;
+    }
+
+    /**
+     * @return list<array{middleware: callable, name: string}>
+     */
+    public function guzzleMiddlewares(): array
+    {
+        return $this->guzzleMiddlewares;
+    }
+
+    /**
+     * @param non-empty-string|null $name
+     */
+    public function withGuzzleMiddleware(callable $middleware, ?string $name = null): self
+    {
+        $middlewares = $this->guzzleMiddlewares;
+        $middlewares[] = ['middleware' => $middleware, 'name' => $name ?? ''];
+
+        return new self($this->guzzleConfig, $middlewares);
+    }
+
+    /**
+     * @param list<array{
+     *     middleware: callable,
+     *     name: string
+     * }|callable> $middlewares
+     */
+    public function withGuzzleMiddlewares(array $middlewares): self
+    {
+        $newMiddlewares = $this->guzzleMiddlewares;
+
+        foreach ($middlewares as $middleware) {
+            if (is_callable($middleware)) {
+                $middleware = ['middleware' => $middleware, 'name' => ''];
+            }
+
+            $newMiddlewares[] = $middleware;
+        }
+
+        return new self($this->guzzleConfig, $newMiddlewares);
     }
 }

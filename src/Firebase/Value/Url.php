@@ -4,61 +4,42 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Value;
 
-use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Exception\InvalidArgumentException;
-use Psr\Http\Message\UriInterface;
-use Throwable;
+use Stringable;
 
 /**
  * @internal
  */
-final class Url implements \JsonSerializable
+final class Url
 {
-    private UriInterface $value;
+    /**
+     * @var non-empty-string
+     */
+    public readonly string $value;
 
-    public function __construct(UriInterface $value)
+    /**
+     * @param non-empty-string $value
+     */
+    private function __construct(string $value)
     {
+        $startsWithHttp = str_starts_with($value, 'https://') || str_starts_with($value, 'http://');
+        $parsedValue = parse_url($value);
+
+        if (!$startsWithHttp || $parsedValue === false) {
+            throw new InvalidArgumentException('The URL is invalid.');
+        }
+
         $this->value = $value;
     }
 
-    /**
-     * @param \Stringable|string $value
-     *
-     * @throws InvalidArgumentException
-     */
-    public static function fromValue($value): self
+    public static function fromString(Stringable|string $value): self
     {
-        if ($value instanceof UriInterface) {
-            return new self($value);
+        $value = (string) $value;
+
+        if ($value === '') {
+            throw new InvalidArgumentException('The URL cannot be empty.');
         }
 
-        try {
-            return new self(new Uri((string) $value));
-        } catch (Throwable $e) {
-            throw new InvalidArgumentException($e->getMessage());
-        }
-    }
-
-    public function toUri(): UriInterface
-    {
-        return $this->value;
-    }
-
-    public function __toString()
-    {
-        return (string) $this->value;
-    }
-
-    public function jsonSerialize(): string
-    {
-        return (string) $this->value;
-    }
-
-    /**
-     * @param \Stringable|string $other
-     */
-    public function equalsTo($other): bool
-    {
-        return (string) $this->value === (string) $other;
+        return new self($value);
     }
 }

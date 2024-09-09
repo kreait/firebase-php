@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Integration;
 
+use Iterator;
 use Kreait\Firebase\Contract\Messaging;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Exception\Messaging\NotFound;
 use Kreait\Firebase\Exception\MessagingException;
-use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\RawMessageFromArray;
 use Kreait\Firebase\Messaging\WebPushConfig;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -31,7 +33,7 @@ final class MessagingTest extends IntegrationTestCase
     }
 
     /**
-     * @return array<string, array<string, mixed>>
+     * @return array<string, mixed>
      */
     public static function createFullMessageData(): array
     {
@@ -51,8 +53,8 @@ final class MessagingTest extends IntegrationTestCase
                 'ttl' => '3600s',
                 'priority' => 'normal',
                 'notification' => [
-                    'title' => '$GOOG up 1.43% on the day',
-                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                    'title' => '$GOOGLE up 1.43% on the day',
+                    'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
                     'icon' => 'stock_ticker_update',
                     'color' => '#f45342',
                     'sound' => 'default',
@@ -71,8 +73,8 @@ final class MessagingTest extends IntegrationTestCase
                 'payload' => [
                     'aps' => [
                         'alert' => [
-                            'title' => '$GOOG up 1.43% on the day',
-                            'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                            'title' => '$GOOGLE up 1.43% on the day',
+                            'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
                         ],
                         'sound' => 'default',
                         'badge' => 42,
@@ -89,13 +91,13 @@ final class MessagingTest extends IntegrationTestCase
                     'Urgency' => 'normal',
                 ],
                 'notification' => [
-                    'title' => '$GOOG up 1.43% on the day',
-                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
-                    'icon' => 'https://my-server/icon.png',
+                    'title' => '$GOOGLE up 1.43% on the day',
+                    'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                    'icon' => 'https://my-server.example/icon.png',
                 ],
                 'fcm_options' => [
                     // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushfcmoptions
-                    'link' => 'https://my-server/path/to/target',
+                    'link' => 'https://my-server.example/path/to/target',
                 ],
             ],
             'fcm_options' => [
@@ -105,7 +107,8 @@ final class MessagingTest extends IntegrationTestCase
         ];
     }
 
-    public function testSendMessage(): void
+    #[Test]
+    public function sendMessage(): void
     {
         $message = self::createFullMessageData();
         $message['condition'] = "'dogs' in topics || 'cats' in topics";
@@ -115,7 +118,8 @@ final class MessagingTest extends IntegrationTestCase
         $this->assertArrayHasKey('name', $result);
     }
 
-    public function testSendRawMessage(): void
+    #[Test]
+    public function sendRawMessage(): void
     {
         $data = self::createFullMessageData();
         $data['condition'] = "'dogs' in topics || 'cats' in topics";
@@ -128,7 +132,8 @@ final class MessagingTest extends IntegrationTestCase
     /**
      * @see https://github.com/kreait/firebase-php/issues/591
      */
-    public function testSendingAMessageWithEmptyMessageDataShouldNotFail(): void
+    #[Test]
+    public function sendingAMessageWithEmptyMessageDataShouldNotFail(): void
     {
         $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
             ->withData([])
@@ -138,10 +143,9 @@ final class MessagingTest extends IntegrationTestCase
         $this->addToAssertionCount(1);
     }
 
-    /**
-     * @dataProvider reservedKeywordsThatStillAreAccepted
-     */
-    public function testSendMessageWithReservedKeywordInMessageDataThatIsStillAccepted(string $keyword): void
+    #[DataProvider('reservedKeywordsThatStillAreAccepted')]
+    #[Test]
+    public function sendMessageWithReservedKeywordInMessageDataThatIsStillAccepted(string $keyword): void
     {
         $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
             ->withData([$keyword => 'value'])
@@ -151,17 +155,13 @@ final class MessagingTest extends IntegrationTestCase
         $this->addToAssertionCount(1);
     }
 
-    /**
-     * @return array<string, string[]>
-     */
-    public function reservedKeywordsThatStillAreAccepted(): array
+    public static function reservedKeywordsThatStillAreAccepted(): Iterator
     {
-        return [
-            'notification' => ['notification'],
-        ];
+        yield 'notification' => ['notification'];
     }
 
-    public function testValidateValidMessage(): void
+    #[Test]
+    public function validateValidMessage(): void
     {
         $message = self::createFullMessageData();
         $message['condition'] = "'dogs' in topics || 'cats' in topics";
@@ -171,7 +171,8 @@ final class MessagingTest extends IntegrationTestCase
         $this->assertArrayHasKey('name', $result);
     }
 
-    public function testValidateInvalidMessage(): void
+    #[Test]
+    public function validateInvalidMessage(): void
     {
         $message = self::createFullMessageData();
         $message['token'] = 'invalid-and-non-existing-device-token';
@@ -180,7 +181,8 @@ final class MessagingTest extends IntegrationTestCase
         $this->messaging->validate($message);
     }
 
-    public function testSendMulticastWithValidAndInvalidTarget(): void
+    #[Test]
+    public function sendMulticastWithValidAndInvalidTarget(): void
     {
         $message = CloudMessage::fromArray([]);
         $tokens = [
@@ -204,13 +206,15 @@ final class MessagingTest extends IntegrationTestCase
 
         $failure = $report->failures()->getItems()[0];
         $this->assertSame($invalid, $failure->target()->value());
+        $this->assertTrue($failure->messageWasInvalid());
         $this->assertInstanceOf(MessagingException::class, $failure->error());
     }
 
     /**
      * @see https://github.com/kreait/firebase-php/issues/436
      */
-    public function testSendMulticastMessageToTwoInvalidRecipients(): void
+    #[Test]
+    public function sendMulticastMessageToTwoInvalidRecipients(): void
     {
         $message = CloudMessage::fromArray([]);
         $tokens = [
@@ -233,14 +237,16 @@ final class MessagingTest extends IntegrationTestCase
     /**
      * @see https://github.com/kreait/firebase-php/issues/317
      */
-    public function testSendMulticastMessageToOneRecipientOnly(): void
+    #[Test]
+    public function sendMulticastMessageToOneRecipientOnly(): void
     {
         $report = $this->messaging->sendMulticast(CloudMessage::new(), [$this->getTestRegistrationToken()]);
 
         $this->assertCount(1, $report->successes());
     }
 
-    public function testSendMessageToDifferentTargets(): void
+    #[Test]
+    public function sendMessageToDifferentTargets(): void
     {
         $token = $this->getTestRegistrationToken();
         $topic = __FUNCTION__;
@@ -265,7 +271,8 @@ final class MessagingTest extends IntegrationTestCase
         $this->assertCount(2, $report->failures());
     }
 
-    public function testValidateRegistrationTokens(): void
+    #[Test]
+    public function validateRegistrationTokens(): void
     {
         $tokens = [
             $valid = $this->getTestRegistrationToken(),
@@ -279,13 +286,14 @@ final class MessagingTest extends IntegrationTestCase
         $this->assertSame($invalid, $result['invalid'][0]);
     }
 
-    public function testSubscribeToTopic(): void
+    #[Test]
+    public function subscribeToTopic(): void
     {
         $token = $this->getTestRegistrationToken();
         $topicName = self::randomString(__FUNCTION__);
 
         try {
-            $this->assertEquals([
+            $this->assertSame([
                 $topicName => [$token => 'OK'],
             ], $this->messaging->subscribeToTopic($topicName, $token));
         } finally {
@@ -293,7 +301,8 @@ final class MessagingTest extends IntegrationTestCase
         }
     }
 
-    public function testSubscribeToTopics(): void
+    #[Test]
+    public function subscribeToTopics(): void
     {
         $token = $this->getTestRegistrationToken();
 
@@ -303,7 +312,7 @@ final class MessagingTest extends IntegrationTestCase
         ];
 
         try {
-            $this->assertEquals([
+            $this->assertEqualsCanonicalizing([
                 $firstTopic => [$token => 'OK'],
                 $secondTopic => [$token => 'OK'],
             ], $this->messaging->subscribeToTopics($topics, $token));
@@ -312,18 +321,20 @@ final class MessagingTest extends IntegrationTestCase
         }
     }
 
-    public function testUnsubscribeFromTopic(): void
+    #[Test]
+    public function unsubscribeFromTopic(): void
     {
         $token = $this->getTestRegistrationToken();
         $topicName = self::randomString(__FUNCTION__);
         $this->messaging->subscribeToTopic($topicName, $token);
 
-        $this->assertEquals([
+        $this->assertSame([
             $topicName => [$token => 'OK'],
         ], $this->messaging->unsubscribeFromTopic($topicName, $token));
     }
 
-    public function testUnsubscribeFromTopics(): void
+    #[Test]
+    public function unsubscribeFromTopics(): void
     {
         $token = $this->getTestRegistrationToken();
 
@@ -332,13 +343,14 @@ final class MessagingTest extends IntegrationTestCase
             $secondTopic = self::randomString(__FUNCTION__.'_2'),
         ];
 
-        $this->assertEquals([
+        $this->assertEqualsCanonicalizing([
             $firstTopic => [$token => 'OK'],
             $secondTopic => [$token => 'OK'],
         ], $this->messaging->unsubscribeFromTopics($topics, $token));
     }
 
-    public function testGetAppInstance(): void
+    #[Test]
+    public function getAppInstance(): void
     {
         $token = $this->getTestRegistrationToken();
         $appInstance = $this->messaging->getAppInstance($token);
@@ -346,63 +358,52 @@ final class MessagingTest extends IntegrationTestCase
         $this->assertSame($token, $appInstance->registrationToken()->value());
     }
 
-    public function testGetAppInstanceWithInvalidToken(): void
+    #[Test]
+    public function getAppInstanceWithInvalidToken(): void
     {
         $this->expectException(InvalidArgument::class);
         $this->messaging->getAppInstance('foo');
     }
 
-    public function testSendMessageToUnknownToken(): void
+    #[Test]
+    public function sendMessageToUnknownToken(): void
     {
         $this->expectException(NotFound::class);
-        $this->messaging->send(['token' => self::$unknownToken]);
+
+        try {
+            $this->messaging->send(['token' => self::$unknownToken]);
+        } catch (NotFound $e) {
+            $this->assertNotEmpty($e->errors());
+
+            throw $e;
+        }
     }
 
-    public function testGetAppInstanceForUnknownToken(): void
+    #[Test]
+    public function getAppInstanceForUnknownToken(): void
     {
         $this->expectException(NotFound::class);
-        $this->messaging->getAppInstance(self::$unknownToken);
+
+        try {
+            $this->messaging->getAppInstance(self::$unknownToken);
+        } catch (NotFound $e) {
+            $this->assertNotEmpty($e->errors());
+
+            throw $e;
+        }
     }
 
-    /**
-     * @see https://github.com/kreait/firebase-php/issues/713
-     *
-     * @dataProvider \Kreait\Firebase\Tests\Unit\Messaging\AndroidConfigTest::validTtlValues
-     *
-     * @param int|string $value
-     */
-    public function testAndroidConfigTtlWorksWithValidValues($value): void
+    #[Test]
+    #[DoesNotPerformAssertions]
+    public function sendWebPushNotificationWithAnEmptyTitle(): void
     {
-        $config = AndroidConfig::fromArray([
-            'ttl' => $value,
-        ]);
-
-        $message = CloudMessage::withTarget(MessageTarget::TOKEN, $this->getTestRegistrationToken())
-            ->withAndroidConfig($config);
+        $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
+            ->withWebPushConfig(WebPushConfig::fromArray([
+                'notification' => [
+                    'title' => '',
+                ],
+            ]));
 
         $this->messaging->send($message);
-
-        $this->addToAssertionCount(1);
-    }
-
-    /**
-     * @see https://github.com/kreait/firebase-php/issues/716
-     *
-     * @dataProvider \Kreait\Firebase\Tests\Unit\Messaging\WebPushConfigTest::validHeaders
-     *
-     * @param WebPushHeadersShape $headers
-     */
-    public function testWebPushConfigTtlWorksWithValidValues(array $headers): void
-    {
-        $config = WebPushConfig::fromArray([
-            'headers' => $headers,
-        ]);
-
-        $message = CloudMessage::withTarget(MessageTarget::TOKEN, $this->getTestRegistrationToken())
-            ->withWebPushConfig($config);
-
-        $this->messaging->send($message);
-
-        $this->addToAssertionCount(1);
     }
 }

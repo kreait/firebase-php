@@ -8,10 +8,14 @@ use Kreait\Firebase\Database\Reference;
 use Kreait\Firebase\Database\Transaction;
 use Kreait\Firebase\Exception\Database\TransactionFailed;
 use Kreait\Firebase\Tests\Integration\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
  */
+#[Group('database-emulator')]
+#[Group('emulator')]
 final class TransactionTest extends DatabaseTestCase
 {
     private Reference $ref;
@@ -21,7 +25,8 @@ final class TransactionTest extends DatabaseTestCase
         $this->ref = self::$db->getReference(self::$refPrefix);
     }
 
-    public function testAValueCanBeWritten(): void
+    #[Test]
+    public function aValueCanBeWritten(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
 
@@ -34,7 +39,8 @@ final class TransactionTest extends DatabaseTestCase
         $this->assertSame('new value', $ref->getValue());
     }
 
-    public function testATransactionPreventsAChangeWhenTheRemoteHasChanged(): void
+    #[Test]
+    public function aTransactionPreventsAChangeWhenTheRemoteHasChanged(): void
     {
         $firstRef = $this->ref->getChild(__FUNCTION__);
         $firstRef->set(['key' => 'value']);
@@ -53,7 +59,8 @@ final class TransactionTest extends DatabaseTestCase
         });
     }
 
-    public function testATransactionKeepsTrackOfMultipleReferences(): void
+    #[Test]
+    public function aTransactionKeepsTrackOfMultipleReferences(): void
     {
         $firstRef = $this->ref->getChild(__FUNCTION__.'_first');
         $secondRef = $this->ref->getChild(__FUNCTION__.'_second');
@@ -79,7 +86,7 @@ final class TransactionTest extends DatabaseTestCase
             try {
                 $transaction->set($firstRef, $newFirstValue);
                 $this->fail('An exception should have been thrown');
-            } catch (TransactionFailed $e) {
+            } catch (TransactionFailed) {
                 // this is expected
             }
 
@@ -87,7 +94,8 @@ final class TransactionTest extends DatabaseTestCase
         });
     }
 
-    public function testAValueCanBeDeleted(): void
+    #[Test]
+    public function aValueCanBeDeleted(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
 
@@ -100,7 +108,8 @@ final class TransactionTest extends DatabaseTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function testATransactionPreventsADeletionWhenTheRemoteHasChanged(): void
+    #[Test]
+    public function aTransactionPreventsADeletionWhenTheRemoteHasChanged(): void
     {
         $ref = $this->ref->getChild(__FUNCTION__);
         $ref->set(['key' => 'value']);

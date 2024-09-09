@@ -7,51 +7,47 @@ namespace Kreait\Firebase\Auth;
 use DateTimeImmutable;
 use Kreait\Firebase\Util\DT;
 
-class UserMetaData implements \JsonSerializable
+use function array_key_exists;
+
+/**
+ * @phpstan-type UserMetadataResponseShape array{
+ *     createdAt: non-empty-string,
+ *     lastLoginAt?: non-empty-string,
+ *     passwordUpdatedAt?: non-empty-string,
+ *     lastRefreshAt?: non-empty-string
+ * }
+ */
+final class UserMetaData
 {
-    public ?DateTimeImmutable $createdAt = null;
-    public ?DateTimeImmutable $lastLoginAt = null;
-    public ?DateTimeImmutable $passwordUpdatedAt = null;
-
-    /**
-     * The time at which the user was last active (ID token refreshed), or null
-     * if the user was never active.
-     */
-    public ?DateTimeImmutable $lastRefreshAt = null;
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromResponseData(array $data): self
-    {
-        $metadata = new self();
-        $metadata->createdAt = DT::toUTCDateTimeImmutable($data['createdAt']);
-
-        if ($data['lastLoginAt'] ?? null) {
-            $metadata->lastLoginAt = DT::toUTCDateTimeImmutable($data['lastLoginAt']);
-        }
-
-        if ($data['passwordUpdatedAt'] ?? null) {
-            $metadata->passwordUpdatedAt = DT::toUTCDateTimeImmutable($data['passwordUpdatedAt']);
-        }
-
-        if ($data['lastRefreshAt'] ?? null) {
-            $metadata->lastRefreshAt = DT::toUTCDateTimeImmutable($data['lastRefreshAt']);
-        }
-
-        return $metadata;
+    public function __construct(
+        public readonly DateTimeImmutable $createdAt,
+        public readonly ?DateTimeImmutable $lastLoginAt,
+        public readonly ?DateTimeImmutable $passwordUpdatedAt,
+        public readonly ?DateTimeImmutable $lastRefreshAt,
+    ) {
     }
 
     /**
-     * @return array<string, mixed>
+     * @internal
+     *
+     * @param UserMetadataResponseShape $data
      */
-    public function jsonSerialize(): array
+    public static function fromResponseData(array $data): self
     {
-        $data = \get_object_vars($this);
+        $createdAt = DT::toUTCDateTimeImmutable($data['createdAt']);
 
-        $data['createdAt'] = $this->createdAt !== null ? $this->createdAt->format(DATE_ATOM) : null;
-        $data['lastLoginAt'] = $this->lastLoginAt !== null ? $this->lastLoginAt->format(DATE_ATOM) : null;
+        $lastLoginAt = array_key_exists('lastLoginAt', $data)
+            ? DT::toUTCDateTimeImmutable($data['lastLoginAt'])
+            : null;
 
-        return $data;
+        $passwordUpdatedAt = array_key_exists('passwordUpdatedAt', $data)
+            ? DT::toUTCDateTimeImmutable($data['passwordUpdatedAt'])
+            : null;
+
+        $lastRefreshAt = array_key_exists('lastRefreshAt', $data)
+            ? DT::toUTCDateTimeImmutable($data['lastRefreshAt'])
+            : null;
+
+        return new self($createdAt, $lastLoginAt, $passwordUpdatedAt, $lastRefreshAt);
     }
 }

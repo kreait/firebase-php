@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Messaging;
 
 use Beste\Json;
+use Iterator;
 use Kreait\Firebase\Exception\Messaging\InvalidArgument;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -16,12 +19,14 @@ use Kreait\Firebase\Tests\UnitTestCase;
  */
 final class AndroidConfigTest extends UnitTestCase
 {
-    public function testItIsEmptyWhenItIsEmpty(): void
+    #[Test]
+    public function itIsEmptyWhenItIsEmpty(): void
     {
         $this->assertSame('[]', Json::encode(AndroidConfig::new()));
     }
 
-    public function testItHasADefaultSound(): void
+    #[Test]
+    public function itHasADefaultSound(): void
     {
         $expected = [
             'notification' => [
@@ -31,11 +36,12 @@ final class AndroidConfigTest extends UnitTestCase
 
         $this->assertJsonStringEqualsJsonString(
             Json::encode($expected),
-            Json::encode(AndroidConfig::new()->withDefaultSound())
+            Json::encode(AndroidConfig::new()->withDefaultSound()),
         );
     }
 
-    public function testItCanHaveAPriority(): void
+    #[Test]
+    public function itCanHaveAPriority(): void
     {
         $config = AndroidConfig::new()->withNormalMessagePriority();
         $this->assertSame('normal', $config->jsonSerialize()['priority']);
@@ -45,23 +51,20 @@ final class AndroidConfigTest extends UnitTestCase
     }
 
     /**
-     * @dataProvider validDataProvider
-     *
      * @param AndroidConfigShape $data
      */
-    public function testItCanBeCreatedFromAnArray(array $data): void
+    #[DataProvider('validDataProvider')]
+    #[Test]
+    public function itCanBeCreatedFromAnArray(array $data): void
     {
         $config = AndroidConfig::fromArray($data);
 
         $this->assertEqualsCanonicalizing($data, $config->jsonSerialize());
     }
 
-    /**
-     * @dataProvider validTtlValues
-     *
-     * @param int|string $ttl
-     */
-    public function testItAcceptsValidTtls($ttl): void
+    #[DataProvider('validTtlValues')]
+    #[Test]
+    public function itAcceptsValidTTLs(int|string|null $ttl): void
     {
         AndroidConfig::fromArray([
             'ttl' => $ttl,
@@ -70,12 +73,9 @@ final class AndroidConfigTest extends UnitTestCase
         $this->addToAssertionCount(1);
     }
 
-    /**
-     * @dataProvider invalidTtlValues
-     *
-     * @param mixed $ttl
-     */
-    public function testItRejectsInvalidTtls($ttl): void
+    #[DataProvider('invalidTtlValues')]
+    #[Test]
+    public function itRejectsInvalidTTLs(mixed $ttl): void
     {
         $this->expectException(InvalidArgument::class);
 
@@ -84,56 +84,40 @@ final class AndroidConfigTest extends UnitTestCase
         ]);
     }
 
-    /**
-     * @return array<array-key, list<AndroidConfigShape>>
-     */
-    public function validDataProvider(): array
+    public static function validDataProvider(): Iterator
     {
-        return [
-            'full_config' => [[
-                // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#android_specific_fields
-                'ttl' => '3600s',
-                'priority' => 'normal',
-                'notification' => [
-                    'title' => '$GOOG up 1.43% on the day',
-                    'body' => '$GOOG gained 11.80 points to close at 835.67, up 1.43% on the day.',
-                    'icon' => 'stock_ticker_update',
-                    'color' => '#f45342',
-                    'sound' => 'default',
-                ],
-            ]],
-        ];
+        yield 'full_config' => [[
+            // https://firebase.google.com/docs/cloud-messaging/admin/send-messages#android_specific_fields
+            'ttl' => '3600s',
+            'priority' => 'normal',
+            'notification' => [
+                'title' => '$GOOGLE up 1.43% on the day',
+                'body' => '$GOOGLE gained 11.80 points to close at 835.67, up 1.43% on the day.',
+                'icon' => 'stock_ticker_update',
+                'color' => '#f45342',
+                'sound' => 'default',
+            ],
+        ]];
     }
 
-    /**
-     * @return array<string, list<int|string|null>>
-     */
-    public function validTtlValues(): array
+    public static function validTtlValues(): Iterator
     {
-        return [
-            'positive int' => [1],
-            'positive numeric string' => ['1'],
-            'expected string' => ['1s'],
-            'zero' => [0],
-            'zero string' => ['0'],
-            'zero string with suffix' => ['0s'],
-            'null (#719)' => [null],
-        ];
+        yield 'positive int' => [1];
+        yield 'positive numeric string' => ['1'];
+        yield 'expected string' => ['1s'];
+        yield 'zero' => [0];
+        yield 'zero string' => ['0'];
+        yield 'zero string with suffix' => ['0s'];
+        yield 'null (#719)' => [null];
     }
 
-
-    /**
-     * @return array<string, list<mixed>>
-     */
-    public function invalidTtlValues(): array
+    public static function invalidTtlValues(): Iterator
     {
-        return [
-            'float' => [1.2],
-            'wrong suffix' => ['1m'],
-            'not numeric' => [true],
-            'negative int' => [-1],
-            'negative string' => ['-1'],
-            'negative string with suffix' => ['-1s'],
-        ];
+        yield 'float' => [1.2];
+        yield 'wrong suffix' => ['1m'];
+        yield 'not numeric' => [true];
+        yield 'negative int' => [-1];
+        yield 'negative string' => ['-1'];
+        yield 'negative string with suffix' => ['-1s'];
     }
 }

@@ -7,6 +7,11 @@ namespace Kreait\Firebase\Tests\Integration\Request;
 use Kreait\Firebase\Contract\Auth;
 use Kreait\Firebase\Request\CreateUser;
 use Kreait\Firebase\Tests\IntegrationTestCase;
+use PHPUnit\Framework\Attributes\Test;
+
+use function bin2hex;
+use function random_bytes;
+use function random_int;
 
 /**
  * @internal
@@ -20,14 +25,15 @@ final class CreateUserTest extends IntegrationTestCase
         $this->auth = self::$factory->createAuth();
     }
 
-    public function testCreateUser(): void
+    #[Test]
+    public function createUser(): void
     {
         $request = CreateUser::new()
-            ->withUid($uid = \bin2hex(\random_bytes(5)))
+            ->withUid($uid = bin2hex(random_bytes(5)))
             ->withDisplayName($displayName = 'Some display name')
             ->withPhotoUrl($photoUrl = 'https://example.org/photo.jpg')
             ->withClearTextPassword('secret')
-            ->withPhoneNumber($phoneNumber = '+1234567'.\random_int(1000, 9999))
+            ->withPhoneNumber($phoneNumber = '+1234567'.random_int(1000, 9999))
             ->withVerifiedEmail($email = $uid.'@example.org')
         ;
 
@@ -45,10 +51,11 @@ final class CreateUserTest extends IntegrationTestCase
         $this->auth->deleteUser($user->uid);
     }
 
-    public function testCreateUserWithoutEmailButMarkTheEmailAsUnverified(): void
+    #[Test]
+    public function createUserWithoutEmailButMarkTheEmailAsUnverified(): void
     {
         $request = CreateUser::new()
-            ->withUid($uid = \bin2hex(\random_bytes(5)))
+            ->withUid($uid = bin2hex(random_bytes(5)))
             ->markEmailAsUnverified()
         ;
 

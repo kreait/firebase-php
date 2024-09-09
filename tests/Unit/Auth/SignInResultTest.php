@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Auth;
 
+use Iterator;
 use Kreait\Firebase\Auth\SignInResult;
 use Kreait\Firebase\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -13,11 +16,11 @@ use Kreait\Firebase\Tests\UnitTestCase;
 final class SignInResultTest extends UnitTestCase
 {
     /**
-     * @dataProvider fullResponse
-     *
      * @param array<string, mixed> $input
      */
-    public function testItCanBeCreated(array $input): void
+    #[DataProvider('fullResponse')]
+    #[Test]
+    public function itCanBeCreated(array $input): void
     {
         $result = SignInResult::fromData($input);
 
@@ -37,31 +40,27 @@ final class SignInResultTest extends UnitTestCase
         ], $result->asTokenResponse());
     }
 
-    public function testItUsesTheLocalIdWhenTheFirebaseUidIsNotPresent(): void
+    #[Test]
+    public function itUsesTheLocalIdWhenTheFirebaseUidIsNotPresent(): void
     {
         $result = SignInResult::fromData(['localId' => 'some-id']);
 
         $this->assertSame('some-id', $result->firebaseUserId());
     }
 
-    /**
-     * @return array<string, array<int, array<string, mixed>>>
-     */
-    public function fullResponse(): array
+    public static function fullResponse(): Iterator
     {
-        return [
-            'snake_cased' => [[
-                'idToken' => 'idToken',
-                'refreshToken' => 'refreshToken',
-                'accessToken' => 'accessToken',
-                'expiresIn' => 3600,
-            ]],
-            'camel_cased' => [[
-                'id_token' => 'idToken',
-                'refresh_token' => 'refreshToken',
-                'access_token' => 'accessToken',
-                'expires_in' => 3600,
-            ]],
-        ];
+        yield 'snake_cased' => [[
+            'idToken' => 'idToken',
+            'refreshToken' => 'refreshToken',
+            'accessToken' => 'accessToken',
+            'expiresIn' => 3600,
+        ]];
+        yield 'camel_cased' => [[
+            'id_token' => 'idToken',
+            'refresh_token' => 'refreshToken',
+            'access_token' => 'accessToken',
+            'expires_in' => 3600,
+        ]];
     }
 }

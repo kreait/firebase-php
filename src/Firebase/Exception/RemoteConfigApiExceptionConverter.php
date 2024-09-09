@@ -7,16 +7,22 @@ namespace Kreait\Firebase\Exception;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Exception\RemoteConfig\ApiConnectionFailed;
+use Kreait\Firebase\Exception\RemoteConfig\OperationAborted;
+use Kreait\Firebase\Exception\RemoteConfig\PermissionDenied;
 use Kreait\Firebase\Exception\RemoteConfig\RemoteConfigError;
+use Kreait\Firebase\Exception\RemoteConfig\ValidationFailed;
+use Kreait\Firebase\Exception\RemoteConfig\VersionMismatch;
 use Kreait\Firebase\Http\ErrorResponseParser;
 use Throwable;
+
+use function mb_stripos;
 
 /**
  * @internal
  */
 class RemoteConfigApiExceptionConverter
 {
-    private ErrorResponseParser $responseParser;
+    private readonly ErrorResponseParser $responseParser;
 
     public function __construct()
     {
@@ -47,20 +53,20 @@ class RemoteConfigApiExceptionConverter
             $code = $response->getStatusCode();
         }
 
-        if (\mb_stripos($message, 'permission_denied') !== false) {
-            return new RemoteConfig\PermissionDenied($message, $code, $e);
+        if (mb_stripos($message, 'permission_denied') !== false) {
+            return new PermissionDenied($message, $code, $e);
         }
 
-        if (\mb_stripos($message, 'aborted') !== false) {
-            return new RemoteConfig\OperationAborted($message, $code, $e);
+        if (mb_stripos($message, 'aborted') !== false) {
+            return new OperationAborted($message, $code, $e);
         }
 
-        if (\mb_stripos($message, 'version_mismatch') !== false) {
-            return new RemoteConfig\VersionMismatch($message, $code, $e);
+        if (mb_stripos($message, 'version_mismatch') !== false) {
+            return new VersionMismatch($message, $code, $e);
         }
 
-        if (\mb_stripos($message, 'validation_error') !== false) {
-            return new RemoteConfig\ValidationFailed($message, $code, $e);
+        if (mb_stripos($message, 'validation_error') !== false) {
+            return new ValidationFailed($message, $code, $e);
         }
 
         return new RemoteConfigError($message, $code, $e);

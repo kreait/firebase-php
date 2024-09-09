@@ -9,88 +9,96 @@ use JsonSerializable;
 /**
  * @see https://www.macstories.net/tutorials/a-comprehensive-guide-to-the-itunes-affiliate-program/
  * @see https://blog.geni.us/parameter-cheat-sheet-for-itunes-and-app-store-links/
- * @see https://affiliate.itunes.apple.com/resources/documentation/basic_affiliate_link_guidelines_for_the_phg_network/
+ *
+ * @phpstan-type ITunesConnectAnalyticsShape array{
+ *     at?: non-empty-string,
+ *     ct?: non-empty-string,
+ *     mt?: non-empty-string,
+ *     pt?: non-empty-string
+ * }
  */
 final class ITunesConnectAnalytics implements JsonSerializable
 {
-    /** @var array<string, string> */
-    private array $data = [];
-
-    private function __construct()
+    /**
+     * @param ITunesConnectAnalyticsShape $data
+     */
+    private function __construct(private readonly array $data)
     {
     }
 
     /**
-     * @param array<string, string> $data
+     * @param ITunesConnectAnalyticsShape $data
      */
     public static function fromArray(array $data): self
     {
-        $info = new self();
-        $info->data = $data;
-
-        return $info;
+        return new self($data);
     }
 
     public static function new(): self
     {
-        return new self();
+        return new self([]);
     }
 
     /**
      * The iTunes connect/affiliate partner token.
      *
      * @see https://blog.geni.us/parameter-cheat-sheet-for-itunes-and-app-store-links/
+     *
+     * @param non-empty-string $affiliateToken
      */
     public function withAffiliateToken(string $affiliateToken): self
     {
-        $info = clone $this;
-        $info->data['at'] = $affiliateToken;
+        $data = $this->data;
+        $data['at'] = $affiliateToken;
 
-        return $info;
+        return new self($data);
     }
 
     /**
      * The iTunes connect/affiliate partner token.
      *
      * @see https://blog.geni.us/parameter-cheat-sheet-for-itunes-and-app-store-links/
+     *
+     * @param non-empty-string $campaignToken
      */
     public function withCampaignToken(string $campaignToken): self
     {
-        $info = clone $this;
-        $info->data['ct'] = $campaignToken;
+        $data = $this->data;
+        $data['ct'] = $campaignToken;
 
-        return $info;
+        return new self($data);
     }
 
     /**
      * The media type.
      *
      * @see https://blog.geni.us/parameter-cheat-sheet-for-itunes-and-app-store-links/
+     *
+     * @param non-empty-string $mediaType
      */
     public function withMediaType(string $mediaType): self
     {
-        $info = clone $this;
-        $info->data['mt'] = $mediaType;
+        $data = $this->data;
+        $data['mt'] = $mediaType;
 
-        return $info;
+        return new self($data);
     }
 
     /**
      * The provider token.
      *
      * @see https://www.macstories.net/tutorials/a-comprehensive-guide-to-the-itunes-affiliate-program/
+     *
+     * @param non-empty-string $providerToken
      */
     public function withProviderToken(string $providerToken): self
     {
-        $info = clone $this;
-        $info->data['pt'] = $providerToken;
+        $data = $this->data;
+        $data['pt'] = $providerToken;
 
-        return $info;
+        return new self($data);
     }
 
-    /**
-     * @return array<string, string>
-     */
     public function jsonSerialize(): array
     {
         return $this->data;

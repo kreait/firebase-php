@@ -4,58 +4,43 @@ declare(strict_types=1);
 
 namespace Kreait\Firebase\Tests\Unit\Value;
 
+use Iterator;
 use Kreait\Firebase\Exception\InvalidArgumentException;
 use Kreait\Firebase\Value\Uid;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+
+use function str_repeat;
 
 /**
  * @internal
  */
 final class UidTest extends TestCase
 {
-    /**
-     * @dataProvider validValues
-     *
-     * @param mixed $value
-     */
-    public function testWithValidValue($value): void
+    #[DataProvider('validValues')]
+    #[Test]
+    public function withValidValue(string $uid): void
     {
-        $uid = new Uid($value);
-
-        $this->assertSame($value, (string) $uid);
-        $this->assertSame($value, $uid->jsonSerialize());
-        $this->assertTrue($uid->equalsTo($value));
+        $this->assertSame($uid, Uid::fromString($uid)->value);
     }
 
-    /**
-     * @dataProvider invalidValues
-     *
-     * @param mixed $value
-     */
-    public function testWithInvalidValue($value): void
+    #[DataProvider('invalidValues')]
+    #[Test]
+    public function withInvalidValue(string $uid): void
     {
         $this->expectException(InvalidArgumentException::class);
-        new Uid($value);
+        Uid::fromString($uid);
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
-    public function validValues(): array
+    public static function validValues(): Iterator
     {
-        return [
-            'uid' => ['uid'],
-        ];
+        yield 'uid' => ['uid'];
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
-    public function invalidValues(): array
+    public static function invalidValues(): Iterator
     {
-        return [
-            'empty string' => [''],
-            'too long' => [\str_repeat('x', 129)],
-        ];
+        yield 'empty string' => [''];
+        yield 'too long' => [str_repeat('x', 129)];
     }
 }

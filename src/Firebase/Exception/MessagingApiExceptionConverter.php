@@ -6,6 +6,7 @@ namespace Kreait\Firebase\Exception;
 
 use Beste\Clock\SystemClock;
 use DateTimeImmutable;
+use Fig\Http\Message\StatusCodeInterface as StatusCode;
 use GuzzleHttp\Exception\RequestException;
 use Kreait\Firebase\Exception\Messaging\ApiConnectionFailed;
 use Kreait\Firebase\Exception\Messaging\AuthenticationError;
@@ -16,19 +17,20 @@ use Kreait\Firebase\Exception\Messaging\QuotaExceeded;
 use Kreait\Firebase\Exception\Messaging\ServerError;
 use Kreait\Firebase\Exception\Messaging\ServerUnavailable;
 use Kreait\Firebase\Http\ErrorResponseParser;
+use Psr\Clock\ClockInterface;
 use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
-use StellaMaris\Clock\ClockInterface;
 use Throwable;
+
+use function is_numeric;
 
 /**
  * @internal
  */
 class MessagingApiExceptionConverter
 {
-    private ErrorResponseParser $responseParser;
-
-    private ClockInterface $clock;
+    private readonly ErrorResponseParser $responseParser;
+    private readonly ClockInterface $clock;
 
     public function __construct(?ClockInterface $clock = null)
     {
@@ -36,10 +38,7 @@ class MessagingApiExceptionConverter
         $this->clock = $clock ?? SystemClock::create();
     }
 
-    /**
-     * @return MessagingException
-     */
-    public function convertException(Throwable $exception): FirebaseException
+    public function convertException(Throwable $exception): MessagingException
     {
         if ($exception instanceof RequestException) {
             return $this->convertGuzzleRequestException($exception);
@@ -56,7 +55,7 @@ class MessagingApiExceptionConverter
     {
         $code = $response->getStatusCode();
 
-        if ($code < 400) {
+        if ($code < StatusCode::STATUS_BAD_REQUEST) {
             throw new InvalidArgumentException('Cannot convert a non-failed response to an exception');
         }
 
@@ -64,20 +63,23 @@ class MessagingApiExceptionConverter
         $message = $this->responseParser->getErrorReasonFromResponse($response);
 
         switch ($code) {
-            case 400:
+            case StatusCode::STATUS_BAD_REQUEST:
                 $convertedError = new InvalidMessage($message);
 
                 break;
-            case 401:
-            case 403:
+
+            case StatusCode::STATUS_UNAUTHORIZED:
+            case StatusCode::STATUS_FORBIDDEN:
                 $convertedError = new AuthenticationError($message);
 
                 break;
-            case 404:
+
+            case StatusCode::STATUS_NOT_FOUND:
                 $convertedError = new NotFound($message);
 
                 break;
-            case 429:
+
+            case StatusCode::STATUS_TOO_MANY_REQUESTS:
                 $convertedError = new QuotaExceeded($message);
                 $retryAfter = $this->getRetryAfter($response);
 
@@ -86,11 +88,13 @@ class MessagingApiExceptionConverter
                 }
 
                 break;
-            case 500:
+
+            case StatusCode::STATUS_INTERNAL_SERVER_ERROR:
                 $convertedError = new ServerError($message);
 
                 break;
-            case 503:
+
+            case StatusCode::STATUS_SERVICE_UNAVAILABLE:
                 $convertedError = new ServerUnavailable($message);
                 $retryAfter = $this->getRetryAfter($response);
 
@@ -99,6 +103,7 @@ class MessagingApiExceptionConverter
                 }
 
                 break;
+
             default:
                 $convertedError = new MessagingError($message, $code, $previous);
 
@@ -127,13 +132,13 @@ class MessagingApiExceptionConverter
             return null;
         }
 
-        if (\is_numeric($retryAfter)) {
+        if (is_numeric($retryAfter)) {
             return $this->clock->now()->modify("+{$retryAfter} seconds");
         }
 
         try {
             return new DateTimeImmutable($retryAfter);
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             // We can't afford to throw exceptions in an exception handler :)
             // Here, if the Retry-After header doesn't have a numeric value
             // or a date that can be handled by DateTimeImmutable, we just

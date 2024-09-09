@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Auth;
 
 use Beste\Json;
+use DateInterval;
 use GuzzleHttp\ClientInterface;
-use Kreait\Firebase\Auth\SignIn\Handler as SignInHandler;
+use Kreait\Firebase\Auth\CreateSessionCookie\GuzzleApiClientHandler;
+use Kreait\Firebase\Auth\SignIn\GuzzleHandler;
 use Kreait\Firebase\Exception\Auth\EmailNotFound;
 use Kreait\Firebase\Exception\Auth\ExpiredOobCode;
 use Kreait\Firebase\Exception\Auth\InvalidOobCode;
@@ -14,39 +16,39 @@ use Kreait\Firebase\Exception\Auth\OperationNotAllowed;
 use Kreait\Firebase\Exception\Auth\UserDisabled;
 use Kreait\Firebase\Exception\AuthApiExceptionConverter;
 use Kreait\Firebase\Exception\AuthException;
-use Kreait\Firebase\Request;
+use Kreait\Firebase\Request\CreateUser;
+use Kreait\Firebase\Request\UpdateUser;
+use Psr\Clock\ClockInterface;
 use Psr\Http\Message\ResponseInterface;
-use StellaMaris\Clock\ClockInterface;
+use Stringable;
 use Throwable;
+
+use function array_filter;
+use function array_map;
+use function is_array;
+use function str_contains;
+use function time;
 
 /**
  * @internal
  */
 class ApiClient
 {
-    private string $projectId;
-    private ?string $tenantId;
-    /** @var ProjectAwareAuthResourceUrlBuilder|TenantAwareAuthResourceUrlBuilder */
-    private $awareAuthResourceUrlBuilder;
-    private AuthResourceUrlBuilder $authResourceUrlBuilder;
-    private ClientInterface $client;
-    private SignInHandler $signInHandler;
-    private ClockInterface $clock;
+    private readonly ProjectAwareAuthResourceUrlBuilder|TenantAwareAuthResourceUrlBuilder $awareAuthResourceUrlBuilder;
+    private readonly AuthResourceUrlBuilder $authResourceUrlBuilder;
+    private readonly AuthApiExceptionConverter $errorHandler;
 
-    private AuthApiExceptionConverter $errorHandler;
-
+    /**
+     * @param non-empty-string $projectId
+     * @param non-empty-string|null $tenantId
+     */
     public function __construct(
-        string $projectId,
-        ?string $tenantId,
-        ClientInterface $client,
-        SignInHandler $signInHandler,
-        ClockInterface $clock
+        private readonly string $projectId,
+        private readonly ?string $tenantId,
+        private readonly ClientInterface $client,
+        private readonly GuzzleHandler $signInHandler,
+        private readonly ClockInterface $clock,
     ) {
-        $this->projectId = $projectId;
-        $this->tenantId = $tenantId;
-        $this->client = $client;
-        $this->signInHandler = $signInHandler;
-        $this->clock = $clock;
         $this->errorHandler = new AuthApiExceptionConverter();
 
         $this->awareAuthResourceUrlBuilder = $tenantId !== null
@@ -59,25 +61,25 @@ class ApiClient
     /**
      * @throws AuthException
      */
-    public function createUser(Request\CreateUser $request): ResponseInterface
+    public function createUser(CreateUser $request): ResponseInterface
     {
         $url = $this->authResourceUrlBuilder->getUrl('/accounts:signUp');
 
-        return $this->requestApi($url, $request->jsonSerialize());
+        return $this->requestApi($url, Json::decode(Json::encode($request), true));
     }
 
     /**
      * @throws AuthException
      */
-    public function updateUser(Request\UpdateUser $request): ResponseInterface
+    public function updateUser(UpdateUser $request): ResponseInterface
     {
         $url = $this->awareAuthResourceUrlBuilder->getUrl('/accounts:update');
 
-        return $this->requestApi($url, $request->jsonSerialize());
+        return $this->requestApi($url, Json::decode(Json::encode($request), true));
     }
 
     /**
-     * @param array<string, mixed> $claims
+     * @param array<non-empty-string, mixed> $claims
      *
      * @throws AuthException
      */
@@ -94,8 +96,8 @@ class ApiClient
     /**
      * Returns a user for the given email address.
      *
-     * @throws EmailNotFound
      * @throws AuthException
+     * @throws EmailNotFound
      */
     public function getUserByEmail(string $email): ResponseInterface
     {
@@ -121,7 +123,7 @@ class ApiClient
     {
         $batchSize = $batchSize ?: 1000;
 
-        $urlParams = \array_filter([
+        $urlParams = array_filter([
             'maxResults' => (string) $batchSize,
             'nextPageToken' => (string) $nextPageToken,
         ]);
@@ -172,13 +174,13 @@ class ApiClient
     }
 
     /**
-     * @param string|array<string> $uids
+     * @param string|list<non-empty-string> $uids
      *
      * @throws AuthException
      */
-    public function getAccountInfo($uids): ResponseInterface
+    public function getAccountInfo(string|array $uids): ResponseInterface
     {
-        if (!\is_array($uids)) {
+        if (!is_array($uids)) {
             $uids = [$uids];
         }
 
@@ -188,10 +190,20 @@ class ApiClient
     }
 
     /**
+     * @throws AuthException
+     */
+    public function queryUsers(UserQuery $query): ResponseInterface
+    {
+        $url = $this->awareAuthResourceUrlBuilder->getUrl('/accounts:query');
+
+        return $this->requestApi($url, Json::decode(Json::encode($query), true));
+    }
+
+    /**
+     * @throws AuthException
      * @throws ExpiredOobCode
      * @throws InvalidOobCode
      * @throws OperationNotAllowed
-     * @throws AuthException
      */
     public function verifyPasswordResetCode(string $oobCode): ResponseInterface
     {
@@ -201,11 +213,11 @@ class ApiClient
     }
 
     /**
+     * @throws AuthException
      * @throws ExpiredOobCode
      * @throws InvalidOobCode
      * @throws OperationNotAllowed
      * @throws UserDisabled
-     * @throws AuthException
      */
     public function confirmPasswordReset(string $oobCode, string $newPassword): ResponseInterface
     {
@@ -226,19 +238,19 @@ class ApiClient
 
         return $this->requestApi($url, [
             'localId' => $uid,
-            'validSince' => (string) \time(),
+            'validSince' => (string) time(),
         ]);
     }
 
     /**
-     * @param array<int, \Stringable|string> $providers
+     * @param list<Stringable|non-empty-string> $providers
      *
      * @throws AuthException
      */
     public function unlinkProvider(string $uid, array $providers): ResponseInterface
     {
         $url = $this->awareAuthResourceUrlBuilder->getUrl('/accounts:update');
-        $providers = \array_map('strval', $providers);
+        $providers = array_map('strval', $providers);
 
         return $this->requestApi($url, [
             'localId' => $uid,
@@ -246,12 +258,9 @@ class ApiClient
         ]);
     }
 
-    /**
-     * @param int|\DateInterval $ttl
-     */
-    public function createSessionCookie(string $idToken, $ttl): string
+    public function createSessionCookie(string $idToken, int|DateInterval $ttl): string
     {
-        return (new CreateSessionCookie\GuzzleApiClientHandler($this->client, $this->projectId))
+        return (new GuzzleApiClientHandler($this->client, $this->projectId))
             ->handle(CreateSessionCookie::forIdToken($idToken, $this->tenantId, $ttl, $this->clock))
         ;
     }
@@ -260,7 +269,7 @@ class ApiClient
     {
         return (new CreateActionLink\GuzzleApiClientHandler($this->client, $this->projectId))
             ->handle(CreateActionLink::new($type, $email, $actionCodeSettings, $this->tenantId, $locale))
-            ;
+        ;
     }
 
     /**
@@ -291,7 +300,7 @@ class ApiClient
     }
 
     /**
-     * @param array<mixed> $data
+     * @param array<string, mixed> $data
      *
      * @throws AuthException
      */
@@ -300,11 +309,11 @@ class ApiClient
         $options = [];
         $method = 'GET';
 
-        if (!\str_contains($uri, 'projects')) {
+        if (!str_contains($uri, 'projects')) {
             $data['targetProjectId'] = $this->projectId;
         }
 
-        if ($this->tenantId !== null && !\str_contains($uri, 'tenants')) {
+        if ($this->tenantId !== null && !str_contains($uri, 'tenants')) {
             $data['tenantId'] = $this->tenantId;
         }
 

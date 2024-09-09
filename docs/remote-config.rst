@@ -60,6 +60,7 @@ Get the Remote Config
 
     $template = $remoteConfig->get(); // Returns a Kreait\Firebase\RemoteConfig\Template
     $version = $template->version(); // Returns a Kreait\Firebase\RemoteConfig\Version
+    $template = $remoteConfig->get($version->versionNumber()); // Returns a Kreait\Firebase\RemoteConfig\Template with the specified version
 
 **************************
 Create a new Remote Config
@@ -83,7 +84,18 @@ Add a condition
         ->withExpression("device.language in ['de', 'de_AT', 'de_CH']")
         ->withTagColor(TagColor::ORANGE); // The TagColor is optional
 
-    $template = $template->withCondition($germanLanguageCondition);
+    $frenchLanguageCondition = Condition::named('lang_french')
+        ->withExpression("device.language in ['fr', 'fr_CA', 'fr_CH']")
+        ->withTagColor(TagColor::GREEN);
+
+    $template = $template
+        ->withCondition($germanLanguageCondition)
+        ->withCondition($frenchLanguageCondition)
+    ;
+
+    $conditionNames = $template->conditionNames();
+    // Returns ['lang_german', 'lang_french']
+
 
 ***************
 Add a parameter
@@ -92,11 +104,40 @@ Add a parameter
 .. code-block:: php
 
     use Kreait\Firebase\RemoteConfig;
+    use Kreait\Firebase\RemoteConfig\ParameterValueType;
 
     $welcomeMessageParameter = RemoteConfig\Parameter::named('welcome_message')
             ->withDefaultValue('Welcome!')
             ->withDescription('This is a welcome message') // optional
+            ->withValueType(ParameterValueType $valueType): self
     ;
+
+Parameter Value Types
+---------------------
+
+.. note::
+    Support for Parameter Value Types has been added in version 7.4.0 of the SDK
+
+.. code-block:: php
+
+    use Kreait\Firebase\RemoteConfig\Parameter;
+    use Kreait\Firebase\RemoteConfig\ParameterValueType;
+
+    Parameter::named('string_parameter')
+        ->withDefaultValue('Welcome!')
+        ->withValueType(ParameterValueType::STRING);
+
+    Parameter::named('boolean_parameter')
+        ->withDefaultValue('true')
+        ->withValueType(ParameterValueType::BOOL);
+
+    Parameter::named('numeric_parameter')
+        ->withDefaultValue('5')
+        ->withValueType(ParameterValueType::NUMBER);
+
+    Parameter::named('json_parameter')
+        ->withDefaultValue('{"foo": "bar"}')
+        ->withValueType(ParameterValueType::JSON);
 
 ******************
 Conditional values
@@ -109,7 +150,7 @@ Conditional values
     $germanLanguageCondition = RemoteConfig\Condition::named('lang_german')
         ->withExpression("device.language in ['de', 'de_AT', 'de_CH']");
 
-    $germanWelcomeMessage = RemoteConfig\ConditionalValue::basedOn($germanLanguageCondition, 'Willkommen!');
+    $germanWelcomeMessage = RemoteConfig\ConditionalValue::basedOn($germanLanguageCondition)->withValue('Willkommen!');
 
     $welcomeMessageParameter = RemoteConfig\Parameter::named('welcome_message')
             ->withDefaultValue('Welcome!')
@@ -138,6 +179,23 @@ Parameter Groups
 
     $template = $template->withParameterGroup($parameterGroup);
 
+*******************************
+Removing Remote Config Elements
+*******************************
+
+You can remove elements from a Remote Config template with the following methods:
+
+.. code-block:: php
+
+    $template = Template::new()
+        ->withCondition(Condition::named('condition'))
+        ->withParameter(Parameter::named('parameter'))
+        ->withParameterGroup(ParameterGroup::named('group'))
+
+    $template = $template
+        ->withRemovedCondition('condition')
+        ->withRemovedParameter('parameter')
+        ->withRemovedParameterGroup('group');
 
 **********
 Validation

@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Kreait\Firebase\Tests\Unit\Auth\ActionCodeSettings;
 
 use InvalidArgumentException;
+use Iterator;
 use Kreait\Firebase\Auth\ActionCodeSettings\ValidatedActionCodeSettings;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,63 +17,59 @@ use PHPUnit\Framework\TestCase;
 final class ValidatedActionSettingsTest extends TestCase
 {
     /**
-     * @dataProvider validInputs
-     *
      * @param array<string, mixed> $input
      * @param array<string, mixed> $expected
      */
-    public function testItWorksValidSettings(array $input, array $expected): void
+    #[DataProvider('validInputs')]
+    #[Test]
+    public function itWorksValidSettings(array $input, array $expected): void
     {
-        $this->assertEquals($expected, ValidatedActionCodeSettings::fromArray($input)->toArray());
+        $this->assertEqualsCanonicalizing($expected, ValidatedActionCodeSettings::fromArray($input)->toArray());
     }
 
-    public function testItRejectsInvalidSettings(): void
+    #[Test]
+    public function itRejectsInvalidSettings(): void
     {
         $this->expectException(InvalidArgumentException::class);
         ValidatedActionCodeSettings::fromArray(['foo' => 'bar']);
     }
 
-    public function testItCanBeEmpty(): void
+    #[Test]
+    public function itCanBeEmpty(): void
     {
         $this->assertEmpty(ValidatedActionCodeSettings::empty()->toArray());
     }
 
-    /**
-     * @return array<string, array<int, array<string, mixed>>>
-     */
-    public function validInputs(): array
+    public static function validInputs(): Iterator
     {
-        $continueUrl = 'https://domain.tld';
-
-        return [
-            'full' => [
-                [
-                    'continueUrl' => $continueUrl,
-                    'handleCodeInApp' => true,
-                    'dynamicLinkDomain' => 'https://dynamic.tld',
-                    'androidPackageName' => 'locale.vendor.name',
-                    'androidMinimumVersion' => '1.0',
-                    'androidInstallApp' => true,
-                    'iOSBundleId' => 'id.tld.domain.subdomain',
-                ],
-                [
-                    'continueUrl' => $continueUrl,
-                    'canHandleCodeInApp' => true,
-                    'dynamicLinkDomain' => 'https://dynamic.tld',
-                    'androidPackageName' => 'locale.vendor.name',
-                    'androidMinimumVersion' => '1.0',
-                    'androidInstallApp' => true,
-                    'iOSBundleId' => 'id.tld.domain.subdomain',
-                ],
+        $continueUrl = 'https://example.com';
+        yield 'full' => [
+            [
+                'continueUrl' => $continueUrl,
+                'handleCodeInApp' => true,
+                'dynamicLinkDomain' => 'https://dynamic.example.com',
+                'androidPackageName' => 'locale.vendor.name',
+                'androidMinimumVersion' => '1.0',
+                'androidInstallApp' => true,
+                'iOSBundleId' => 'id.tld.domain.subdomain',
             ],
-            'url_alias' => [
-                ['url' => $continueUrl],
-                ['continueUrl' => $continueUrl],
+            [
+                'continueUrl' => $continueUrl,
+                'canHandleCodeInApp' => true,
+                'dynamicLinkDomain' => 'https://dynamic.example.com',
+                'androidPackageName' => 'locale.vendor.name',
+                'androidMinimumVersion' => '1.0',
+                'androidInstallApp' => true,
+                'iOSBundleId' => 'id.tld.domain.subdomain',
             ],
-            'handle_to_can_handle' => [
-                ['handleCodeInApp' => false],
-                ['canHandleCodeInApp' => false],
-            ],
+        ];
+        yield 'url_alias' => [
+            ['url' => $continueUrl],
+            ['continueUrl' => $continueUrl],
+        ];
+        yield 'handle_to_can_handle' => [
+            ['handleCodeInApp' => false],
+            ['canHandleCodeInApp' => false],
         ];
     }
 }
