@@ -89,6 +89,7 @@ You can create a message to a topic in one of the following ways:
 
 .. code-block:: php
 
+    use Kreait\Firebase\Exception\MessagingException;
     use Kreait\Firebase\Messaging\CloudMessage;
 
     $topic = 'a-topic';
@@ -104,7 +105,12 @@ You can create a message to a topic in one of the following ways:
         'data' => [/* data array */], // optional
     ]);
 
-    $messaging->send($message);
+    try {
+        $result = $messaging->send($message);
+        // $result = ['name' => 'projects/<project-id>/messages/6810356097230477954']
+    } catch (MessagingException $e) {
+        // ...
+    }
 
 
 *************************
@@ -185,11 +191,12 @@ and `Unity <https://firebase.google.com/docs/cloud-messaging/unity/client#initia
         'data' => [/* data array */], // optional
     ]);
 
-    $messaging->send($message);
+    $result = $messaging->send($message);
+    // $result = ['name' => 'projects/<project-id>/messages/<message-id>']
 
-*********************************************
-Send messages to multiple devices (Multicast)
-*********************************************
+************************
+Send messages in batches
+************************
 
 .. note::
     If you need to send a message to more than a few devices, consider sending the message
@@ -199,13 +206,27 @@ Send messages to multiple devices (Multicast)
 
     use Kreait\Firebase\Messaging\CloudMessage;
 
-    $deviceTokens = ['...', '...' /* ... */];
+    $messages = [
+        // Either objects implementing Kreait\Firebase\Messaging\Message or arrays that can
+        // be parsed into to Kreait\Firebase\Messaging\CloudMessage objects
+    ];
+
+    /** @var Kreait\Firebase\Messaging\MulticastSendReport $sendReport **/
+    $sendReport = $messaging->sendAll($messages);
+
+The ``sendMulticast()`` message is a convenience method to send one message to multiple devices.
+
+.. code-block:: php
+
+    use Kreait\Firebase\Messaging\CloudMessage;
 
     $message = CloudMessage::new(); // Any instance of Kreait\Messaging\Message
+    $deviceTokens = ['...', '...' /* ... */];
 
+    /** @var Kreait\Firebase\Messaging\MulticastSendReport $sendReport **/
     $sendReport = $messaging->sendMulticast($message, $deviceTokens);
 
-The returned value is an instance of ``Kreait\Firebase\Messaging\MulticastSendReport`` and provides you with
+The returned value ``$sendReport`` is an instance of ``Kreait\Firebase\Messaging\MulticastSendReport`` and provides you with
 methods to determine the successes and failures of the multicasted message:
 
 .. code-block:: php
@@ -233,28 +254,10 @@ methods to determine the successes and failures of the multicasted message:
     // Invalid (=malformed) tokens
     $invalidTargets = $report->invalidTokens(); // string[]
 
-
-******************************
-Send multiple messages at once
-******************************
-
 .. note::
-    If you need to send a message to more than a few devices, consider sending the message
-    to a topic instead.
-
-.. code-block:: php
-
-    use Kreait\Firebase\Messaging\CloudMessage;
-
-    $messages = [
-        // Either objects implementing Kreait\Firebase\Messaging\Message
-        // or arrays that can be used to create valid to Kreait\Firebase\Messaging\CloudMessage instances
-    ];
-
-    $message = CloudMessage::new(); // Any instance of Kreait\Messaging\Message
-
-    /** @var Kreait\Firebase\Messaging\MulticastSendReport $sendReport **/
-    $sendReport = $messaging->sendAll($messages);
+    The ``sendMulticast`` method stems from a time where Firebase had a (now shutdown) dedicated API endpoint
+    for multicast messages. It is now a wrapper for the ``sendAll()`` method. "Legacy" is also the reason why
+    the returned report is named ``MulticastSendReport``.
 
 *********************
 Adding a notification
