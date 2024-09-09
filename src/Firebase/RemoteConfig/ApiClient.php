@@ -32,7 +32,7 @@ class ApiClient
      *
      * @throws RemoteConfigException
      */
-    public function getTemplate(VersionNumber|int|string $versionNumber = null): ResponseInterface
+    public function getTemplate(VersionNumber|int|string|null $versionNumber = null): ResponseInterface
     {
         return $this->requestApi('GET', 'remoteConfig', [
             'query' => array_filter([
