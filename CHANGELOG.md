@@ -7,6 +7,8 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 ## [Unreleased]
 
+## [7.15.0] - 2024-09-11
+
 ### Added
 
 * Added support for [rollout parameter values](https://firebase.google.com/docs/reference/remote-config/rest/v1/RemoteConfig#RolloutValue)
@@ -269,7 +271,8 @@ See **[UPGRADE-7.0](UPGRADE-7.0.md) for more details on the changes between 6.x 
 
 https://github.com/kreait/firebase-php/blob/6.9.6/CHANGELOG.md
 
-[Unreleased]: https://github.com/kreait/firebase-php/compare/7.14.0...7.x
+[Unreleased]: https://github.com/kreait/firebase-php/compare/7.15.0...7.x
+[7.15.0]: https://github.com/kreait/firebase-php/compare/7.14.0...7.15.0
 [7.14.0]: https://github.com/kreait/firebase-php/compare/7.13.1...7.14.0
 [7.13.1]: https://github.com/kreait/firebase-php/compare/7.13.0...7.13.1
 [7.13.0]: https://github.com/kreait/firebase-php/compare/7.12.0...7.13.0
