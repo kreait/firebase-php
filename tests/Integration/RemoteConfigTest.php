@@ -41,6 +41,11 @@ final class RemoteConfigTest extends IntegrationTestCase
                     "name": "lang_french",
                     "expression": "device.language in ['fr', 'fr_CA', 'fr_CH']",
                     "tagColor": "GREEN"
+                },
+                {
+                    "name": "user_exists",
+                    "expression": "true",
+                    "tagColor": "TEAL"
                 }
             ],
             "parameters": {
@@ -63,7 +68,7 @@ final class RemoteConfigTest extends IntegrationTestCase
                 },
                 "unspecified_value_type": {
                     "defaultValue": "1",
-                    "valueType": "STRING"
+                    "valueType": "PARAMETER_VALUE_TYPE_UNSPECIFIED"
                 },
                 "string_value_type": {
                     "defaultValue": "1",
@@ -80,6 +85,20 @@ final class RemoteConfigTest extends IntegrationTestCase
                 "json_value_type": {
                     "defaultValue": "{\"key\": \"value\"}",
                     "valueType": "JSON"
+                },
+                "is_ready_for_rollout": {
+                    "defaultValue": "false",
+                    "valueType": "BOOLEAN",
+                    "conditionalValues": {
+                        "lang_german": {
+                            "value": "false"
+                        },
+                        "user_exists": {
+                            "rollout_id": "rollout_2",
+                            "value": "true",
+                            "percent": 50
+                        }
+                    }
                 }
             },
             "parameterGroups": {

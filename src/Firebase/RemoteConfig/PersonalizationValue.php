@@ -10,6 +10,8 @@ use JsonSerializable;
  * @phpstan-type RemoteConfigPersonalizationValueShape array{
  *    personalizationId: string
  * }
+ *
+ * @see https://firebase.google.com/docs/reference/remote-config/rest/v1/RemoteConfig#personalizationvalue
  */
 final class PersonalizationValue implements JsonSerializable
 {
