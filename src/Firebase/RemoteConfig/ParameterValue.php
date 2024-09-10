@@ -10,12 +10,16 @@ use function array_key_exists;
 
 /**
  * @phpstan-import-type RemoteConfigPersonalizationValueShape from PersonalizationValue
+ * @phpstan-import-type RemoteConfigRolloutValueShape from RolloutValue
  *
  * @phpstan-type RemoteConfigParameterValueShape array{
  *     value?: string,
  *     useInAppDefault?: bool,
- *     personalizationValue?: RemoteConfigPersonalizationValueShape
+ *     personalizationValue?: RemoteConfigPersonalizationValueShape,
+ *     rolloutValue?: RemoteConfigRolloutValueShape
  * }
+ *
+ * @see https://firebase.google.com/docs/reference/remote-config/rest/v1/RemoteConfig#remoteconfigparametervalue
  */
 final class ParameterValue implements JsonSerializable
 {
@@ -23,6 +27,7 @@ final class ParameterValue implements JsonSerializable
         private readonly ?string $value = null,
         private readonly ?bool $useInAppDefault = null,
         private readonly ?PersonalizationValue $personalizationValue = null,
+        private readonly ?RolloutValue $rolloutValue = null,
     ) {
     }
 
@@ -41,6 +46,11 @@ final class ParameterValue implements JsonSerializable
         return new self(personalizationValue: $value);
     }
 
+    public static function withRolloutValue(RolloutValue $value): self
+    {
+        return new self(rolloutValue: $value);
+    }
+
     /**
      * @param RemoteConfigParameterValueShape $data
      */
@@ -56,6 +66,10 @@ final class ParameterValue implements JsonSerializable
 
         if (array_key_exists('personalizationValue', $data)) {
             return self::withPersonalizationValue(PersonalizationValue::fromArray($data['personalizationValue']));
+        }
+
+        if (array_key_exists('rolloutValue', $data)) {
+            return self::withRolloutValue(RolloutValue::fromArray($data['rolloutValue']));
         }
 
         return new self();
@@ -76,6 +90,10 @@ final class ParameterValue implements JsonSerializable
 
         if ($this->personalizationValue !== null) {
             return ['personalizationValue' => $this->personalizationValue->toArray()];
+        }
+
+        if ($this->rolloutValue !== null) {
+            return ['rolloutValue' => $this->rolloutValue->toArray()];
         }
 
         return [];

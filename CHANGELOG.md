@@ -7,6 +7,15 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 ## [Unreleased]
 
+### Added
+
+* Added support for [rollout parameter values](https://firebase.google.com/docs/reference/remote-config/rest/v1/RemoteConfig#RolloutValue)
+  in Remote Config Templates. 
+  ([#923](https://github.com/kreait/firebase-php/pull/923)), ([#927](https://github.com/kreait/firebase-php/pull/927))
+  * Please note that it's not (yet?) possible to create rollouts programmatically via the Firebase API. This means that 
+    you have to manually create a rollout in the Firebase console to be able to reference it in the Remote Config 
+    template.  Rollout IDs are named `rollout_<number>`, and you can find the ID in the URL after clicking on a rollout in the list.
+
 ## [7.14.0] - 2024-08-21
 
 ### Added
