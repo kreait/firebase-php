@@ -8,6 +8,15 @@ Troubleshooting
     order to get hold of the changes you made, you will have to use the result of
     that method, e.g. ``$changedObject = $object->withChangedProperty();``.
 
+*****************************************
+Sending FCM messages doesn't work anymore
+*****************************************
+
+When you are using the FCM component, and sending messages in batches using the
+``sendMulticast()`` or ``sendAll()`` methods result in errors like
+``Operation is not implemented, or supported, or enabled``, this means you are using an outdated
+version of the SDK. Please upgrade to the recent 7.x release of the SDK.
+
 **************
 Error handling
 **************
