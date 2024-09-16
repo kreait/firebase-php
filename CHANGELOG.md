@@ -7,6 +7,12 @@ Please read about the future of the Firebase Admin PHP SDK on the
 
 ## [Unreleased]
 
+### Changed
+
+* The Messaging component doesn't rely on the `CloudMessage` class for message handling anymore. If you provide a
+  message as an array and it has an error, the Firebase API will report it. You can still use the `CloudMessage`
+  class as a message builder
+
 ## [7.15.0] - 2024-09-11
 
 ### Added
