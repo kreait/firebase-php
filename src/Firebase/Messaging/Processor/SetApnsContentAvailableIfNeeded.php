@@ -6,10 +6,10 @@ namespace Kreait\Firebase\Messaging\Processor;
 
 use Beste\Json;
 use Kreait\Firebase\Messaging\ApnsConfig;
-use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\MessageData;
 use Kreait\Firebase\Messaging\Notification;
+use Kreait\Firebase\Messaging\RawMessageFromArray;
 
 use function is_array;
 
@@ -45,7 +45,9 @@ final class SetApnsContentAvailableIfNeeded
 
         $apnsConfig = $apnsConfig->withApsField('content-available', 1);
 
-        return CloudMessage::fromArray($payload)->withApnsConfig($apnsConfig);
+        $payload['apns'] = $apnsConfig->toArray();
+
+        return new RawMessageFromArray($payload);
     }
 
     /**

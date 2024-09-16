@@ -6,10 +6,10 @@ namespace Kreait\Firebase\Messaging\Processor;
 
 use Beste\Json;
 use Kreait\Firebase\Messaging\ApnsConfig;
-use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\MessageData;
 use Kreait\Firebase\Messaging\Notification;
+use Kreait\Firebase\Messaging\RawMessageFromArray;
 
 use function is_array;
 
@@ -24,6 +24,10 @@ final class SetApnsPushTypeIfNeeded
     public function __invoke(Message $message): Message
     {
         $payload = Json::decode(Json::encode($message), true);
+
+        if (!is_array($payload)) {
+            return $message;
+        }
 
         $notification = $this->getNotification($payload);
         $messageData = $this->getMessageData($payload);
@@ -46,9 +50,13 @@ final class SetApnsPushTypeIfNeeded
             $apnsConfig = $apnsConfig->withHeader('apns-push-type', 'alert');
         } elseif ($isBackgroundMessage) {
             $apnsConfig = $apnsConfig->withHeader('apns-push-type', 'background');
+        } else {
+            return $message;
         }
 
-        return CloudMessage::fromArray($payload)->withApnsConfig($apnsConfig);
+        $payload['apns'] = $apnsConfig->toArray();
+
+        return new RawMessageFromArray($payload);
     }
 
     /**

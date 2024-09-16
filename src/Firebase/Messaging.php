@@ -14,12 +14,12 @@ use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\ApiClient;
 use Kreait\Firebase\Messaging\AppInstance;
 use Kreait\Firebase\Messaging\AppInstanceApiClient;
-use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Message;
 use Kreait\Firebase\Messaging\MessageTarget;
 use Kreait\Firebase\Messaging\MulticastSendReport;
 use Kreait\Firebase\Messaging\Processor\SetApnsContentAvailableIfNeeded;
 use Kreait\Firebase\Messaging\Processor\SetApnsPushTypeIfNeeded;
+use Kreait\Firebase\Messaging\RawMessageFromArray;
 use Kreait\Firebase\Messaging\RegistrationToken;
 use Kreait\Firebase\Messaging\RegistrationTokens;
 use Kreait\Firebase\Messaging\SendReport;
@@ -68,15 +68,13 @@ final class Messaging implements Contract\Messaging
 
     public function sendMulticast($message, $registrationTokens, bool $validateOnly = false): MulticastSendReport
     {
-        $message = CloudMessage::fromArray(
-            Json::decode(Json::encode($this->makeMessage($message)), true),
-        );
+        $message = $message instanceof Message ? $message : new RawMessageFromArray($message);
         $registrationTokens = RegistrationTokens::fromValue($registrationTokens);
 
         $messages = [];
 
         foreach ($registrationTokens as $registrationToken) {
-            $messages[] = $message->withChangedTarget(MessageTarget::TOKEN, $registrationToken->value());
+            $messages[] = $this->withChangedTarget($message, MessageTarget::TOKEN, $registrationToken->value());
         }
 
         return $this->sendAll($messages, $validateOnly);
@@ -94,14 +92,14 @@ final class Messaging implements Contract\Messaging
 
                 $json = Json::decode((string) $response->getBody(), true);
 
-                $sendReports[$index] = SendReport::success($message->target(), $json, $message);
+                $sendReports[$index] = SendReport::success($this->getTarget($message), $json, $message);
             },
             'rejected' => function (Throwable $reason, int $index) use ($messages, &$sendReports): void {
                 $message = $messages[$index];
 
                 $error = $this->exceptionConverter->convertException($reason);
 
-                $sendReports[$index] = SendReport::failure($message->target(), $error, $message);
+                $sendReports[$index] = SendReport::failure($this->getTarget($message), $error, $message);
             },
         ];
 
@@ -124,7 +122,7 @@ final class Messaging implements Contract\Messaging
     {
         $tokens = RegistrationTokens::fromValue($registrationTokenOrTokens);
 
-        $report = $this->sendMulticast(CloudMessage::new(), $tokens, true);
+        $report = $this->sendMulticast(new RawMessageFromArray([]), $tokens, true);
 
         return [
             'valid' => $report->validTokens(),
@@ -220,7 +218,7 @@ final class Messaging implements Contract\Messaging
     /**
      * @param iterable<Message|array<non-empty-string, mixed>> $messages
      *
-     * @return list<CloudMessage>
+     * @return list<Message>
      */
     private function ensureMessages(iterable $messages): array
     {
@@ -238,18 +236,17 @@ final class Messaging implements Contract\Messaging
      *
      * @throws InvalidArgumentException
      */
-    private function makeMessage(Message|array $message): CloudMessage
+    private function makeMessage(Message|array $message): Message
     {
-        $message = $message instanceof Message ? $message : CloudMessage::fromArray($message);
+        $message = $message instanceof Message ? $message : new RawMessageFromArray($message);
 
         $message = (new SetApnsPushTypeIfNeeded())($message);
-        $message = (new SetApnsContentAvailableIfNeeded())($message);
 
-        return CloudMessage::fromArray(Json::decode(JSON::encode($message->jsonSerialize()), true));
+        return (new SetApnsContentAvailableIfNeeded())($message);
     }
 
     /**
-     * @param iterable<CloudMessage> $messages
+     * @param iterable<Message> $messages
      * @return callable(): list<RequestInterface>
      */
     private function createSendRequests(iterable $messages, bool $validateOnly): callable
@@ -268,5 +265,43 @@ final class Messaging implements Contract\Messaging
         return array_key_exists(MessageTarget::CONDITION, $check)
             || array_key_exists(MessageTarget::TOKEN, $check)
             || array_key_exists(MessageTarget::TOPIC, $check);
+    }
+
+    private function withChangedTarget(Message $message, string $target, string $value): Message
+    {
+        $message = Json::decode(Json::encode($message), true);
+
+        unset(
+            $message[MessageTarget::CONDITION],
+            $message[MessageTarget::TOKEN],
+            $message[MessageTarget::TOPIC],
+        );
+
+        $message[$target] = $value;
+
+        return new RawMessageFromArray($message);
+    }
+
+    private function getTarget(Message $message): MessageTarget
+    {
+        $message = Json::decode(Json::encode($message), true);
+
+        $condition = $message[MessageTarget::CONDITION] ?? null;
+        $token = $message[MessageTarget::TOKEN] ?? null;
+        $topic = $message[MessageTarget::TOPIC] ?? null;
+
+        if (is_string($condition) && $condition !== '') {
+            return MessageTarget::with(MessageTarget::CONDITION, $condition);
+        }
+
+        if (is_string($token) && $token !== '') {
+            return MessageTarget::with(MessageTarget::TOKEN, $token);
+        }
+
+        if (is_string($topic) && $topic !== '') {
+            return MessageTarget::with(MessageTarget::TOPIC, $topic);
+        }
+
+        return MessageTarget::with(MessageTarget::UNKNOWN, 'unknown');
     }
 }
