@@ -84,7 +84,7 @@ jobs:
         run: vendor/bin/phpunit --testsuite=unit --coverage-clover=coverage.xml --log-junit=test-report.xml --testdox
 
       - name: Upload code coverage
-        uses: codecov/codecov-action@v4.5.0
+        uses: codecov/codecov-action@v4.6.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: unit
