@@ -47,12 +47,14 @@ final class CloudMessage implements Message
     }
 
     /**
+     * @deprecated 7.16.0 Use `CloudMessage::new()` and one of `toToken()`, `toTopic()`, or `toCondition()` instead.
+     *
      * @param MessageTarget::CONDITION|MessageTarget::TOKEN|MessageTarget::TOPIC|MessageTarget::UNKNOWN $type
      * @param non-empty-string $value
      */
     public static function withTarget(string $type, string $value): self
     {
-        return self::new()->withChangedTarget($type, $value);
+        return new self(MessageTarget::with($type, $value));
     }
 
     public static function new(): self
@@ -102,6 +104,8 @@ final class CloudMessage implements Message
     }
 
     /**
+     * @deprecated 7.16.0 Use one of `toToken()`, `toTopic()`, or `toCondition()` instead.
+     *
      * @param MessageTarget::CONDITION|MessageTarget::TOKEN|MessageTarget::TOPIC|MessageTarget::UNKNOWN $type
      * @param non-empty-string $value
      *
@@ -221,11 +225,50 @@ final class CloudMessage implements Message
         return $new;
     }
 
+    /**
+     * @param non-empty-string $token
+     */
+    public function toToken(string $token): self
+    {
+        $new = clone $this;
+        $new->target = MessageTarget::with(MessageTarget::TOKEN, $token);
+
+        return $new;
+    }
+
+    /**
+     * @param non-empty-string $topic
+     */
+    public function toTopic(string $topic): self
+    {
+        $new = clone $this;
+        $new->target = MessageTarget::with(MessageTarget::TOPIC, $topic);
+
+        return $new;
+    }
+
+    /**
+     * @param non-empty-string $condition
+     */
+    public function toCondition(string $condition): self
+    {
+        $new = clone $this;
+        $new->target = MessageTarget::with(MessageTarget::CONDITION, $condition);
+
+        return $new;
+    }
+
+    /**
+     * @deprecated 7.16.0
+     */
     public function hasTarget(): bool
     {
         return $this->target->type() !== MessageTarget::UNKNOWN;
     }
 
+    /**
+     * @deprecated 7.16.0
+     */
     public function target(): MessageTarget
     {
         return $this->target;

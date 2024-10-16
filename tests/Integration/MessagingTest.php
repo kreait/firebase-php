@@ -135,20 +135,25 @@ final class MessagingTest extends IntegrationTestCase
     #[Test]
     public function sendingAMessageWithEmptyMessageDataShouldNotFail(): void
     {
-        $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
+        $message = CloudMessage::new()
             ->withData([])
+            ->toToken($this->getTestRegistrationToken());
         ;
 
         $this->messaging->send($message);
         $this->addToAssertionCount(1);
     }
 
+    /**
+     * @param non-empty-string $keyword
+     */
     #[DataProvider('reservedKeywordsThatStillAreAccepted')]
     #[Test]
     public function sendMessageWithReservedKeywordInMessageDataThatIsStillAccepted(string $keyword): void
     {
-        $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
+        $message = CloudMessage::new()
             ->withData([$keyword => 'value'])
+            ->toToken($this->getTestRegistrationToken());
         ;
 
         $this->messaging->send($message);
@@ -258,10 +263,10 @@ final class MessagingTest extends IntegrationTestCase
         $message = CloudMessage::new()->withNotification(['title' => 'Token Notification', 'body' => 'Token body']);
         $invalidMessage = new RawMessageFromArray(['invalid' => 'message']);
 
-        $tokenMessage = $message->withChangedTarget('token', $token);
-        $topicMessage = $message->withChangedTarget('topic', $topic);
-        $conditionMessage = $message->withChangedTarget('condition', $condition);
-        $invalidToken = $message->withChangedTarget('token', $invalidToken);
+        $tokenMessage = $message->toToken($token);
+        $topicMessage = $message->toTopic($topic);
+        $conditionMessage = $message->toCondition($condition);
+        $invalidToken = $message->toToken($invalidToken);
 
         $messages = [$tokenMessage, $topicMessage, $conditionMessage, $invalidToken, $invalidMessage];
 
@@ -397,12 +402,13 @@ final class MessagingTest extends IntegrationTestCase
     #[DoesNotPerformAssertions]
     public function sendWebPushNotificationWithAnEmptyTitle(): void
     {
-        $message = CloudMessage::withTarget('token', $this->getTestRegistrationToken())
+        $message = CloudMessage::new()
             ->withWebPushConfig(WebPushConfig::fromArray([
                 'notification' => [
                     'title' => '',
                 ],
-            ]));
+            ]))
+            ->toToken($this->getTestRegistrationToken());
 
         $this->messaging->send($message);
     }

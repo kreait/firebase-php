@@ -52,9 +52,13 @@ Getting started
 
     use Kreait\Firebase\Messaging\CloudMessage;
 
-    $message = CloudMessage::withTarget(/* see sections below */)
+    $message = CloudMessage::new()
         ->withNotification(Notification::create('Title', 'Body'))
-        ->withData(['key' => 'value']);
+        ->withData(['key' => 'value'])
+        ->toToken('...')
+        // ->toTopic('...')
+        // ->toCondition('...')
+    ;
 
     $messaging->send($message);
 
@@ -94,9 +98,10 @@ You can create a message to a topic in one of the following ways:
 
     $topic = 'a-topic';
 
-    $message = CloudMessage::withTarget('topic', $topic)
+    $message = CloudMessage::new()
         ->withNotification($notification) // optional
         ->withData($data) // optional
+        ->toTopic($topic)
     ;
 
     $message = CloudMessage::fromArray([
@@ -146,9 +151,10 @@ Likewise, a user who does not subscribe to TopicA does not receive the message. 
 
     $condition = "'TopicA' in topics && ('TopicB' in topics || 'TopicC' in topics)";
 
-    $message = CloudMessage::withTarget('condition', $condition)
+    $message = CloudMessage::new()
         ->withNotification($notification) // optional
         ->withData($data) // optional
+        ->toCondition($condition)
     ;
 
     $message = CloudMessage::fromArray([
@@ -180,9 +186,10 @@ and `Unity <https://firebase.google.com/docs/cloud-messaging/unity/client#initia
 
     $deviceToken = '...';
 
-    $message = CloudMessage::withTarget('token', $deviceToken)
+    $message = CloudMessage::new()
         ->withNotification($notification) // optional
         ->withData($data) // optional
+        ->toToken($deviceToken)
     ;
 
     $message = CloudMessage::fromArray([
@@ -314,28 +321,6 @@ you can attach data to it:
 
     $message = $message->withData($data);
 
-***************************
-Changing the message target
-***************************
-
-You can change the target of an already created message with the ``withChangedTarget()`` method.
-
-.. code-block:: php
-
-    use Kreait\Firebase\Messaging\CloudMessage;
-
-    $deviceToken = '...';
-    $anotherDeviceToken = '...';
-
-    $message = CloudMessage::withTarget('token', $deviceToken)
-        ->withNotification(['title' => 'My title', 'body' => 'My Body'])
-    ;
-
-    $messaging->send($message);
-
-    $sameMessageToDifferentTarget = $message->withChangedTarget('token', $anotherDeviceToken);
-
-
 *********************************************
 Adding target platform specific configuration
 *********************************************
@@ -458,7 +443,7 @@ The SDK provides helper methods to add sounds to messages:
 
 .. code-block:: php
 
-    $message = CloudMessage::withTarget('token', $token)
+    $message = CloudMessage::new()
         ->withNotification(['title' => 'Notification title', 'body' => 'Notification body'])
         ->withDefaultSounds() // Enables default notifications sounds on iOS and Android devices.
         ->withApnsConfig(
@@ -516,7 +501,7 @@ Example
 
 .. code-block:: php
 
-    $message = CloudMessage::withTarget('token', $token)
+    $message = CloudMessage::new()
         ->withNotification([
             'title' => 'If you had an iOS device…',
             'body' => '… you would have received a very important message'

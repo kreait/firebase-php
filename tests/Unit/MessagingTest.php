@@ -56,9 +56,9 @@ final class MessagingTest extends UnitTestCase
     {
         $message = CloudMessage::new();
 
-        $this->assertFalse($message->hasTarget());
-
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/missing a target/');
+
         $this->messaging->send($message);
     }
 }
